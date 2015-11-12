@@ -18,4 +18,4 @@ Essentially, you may use `precession`, but must make reference to our work, and 
 
 |
 
-**Davide Gerosa** University of Cambridge d.gerosa@damtp.cam.ac.uk
+**Davide Gerosa** d.gerosa@damtp.cam.ac.uk
