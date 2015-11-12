@@ -16,6 +16,7 @@ http://creativecommons.org/licenses/by-nc-sa/3.0
 
 Essentially, you may use `precession`, but must make reference to our work, and you must not use it for commercial purposes. Any code where precession is used, must be released under the same licence.  When using precession in any published work, you must cite the papers describing its implementation.
 
+|
 
 **Davide Gerosa**
 
