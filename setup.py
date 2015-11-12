@@ -1,16 +1,26 @@
-import os
-import precession
+'''
+To publish on Pypi type
+    python setup.py sdist
+    python setup.py sdist upload
+'''
 
 from setuptools import setup
 
+# Fill "long_description" using the README file
 def readme():
     with open('README.rst') as f:
         return f.read()
-
+        
+# Extract code version from __init__.py 
+def get_version():
+    with open('precession/__init__.py') as f:
+        for line in f.readlines():
+            if "version" in line:
+                return line.split('"')[1]
 
 setup(
     name='precession',
-    version=0,#precession.__version__,
+    version=get_version(),
     description='Dynamics of precessing black-hole binaries',
     long_description=readme(),
     classifiers=[
@@ -27,10 +37,10 @@ setup(
     author_email='d.gerosa@damtp.cam.ac.uk',
     license='CC by-nc-sa 3.0',
     packages=['precession'],
-    install_requires=[
-          'numpy',
-          'scipy',
-          'parmap',
+    #install_requires=[
+    #      'numpy',
+    #      'scipy',
+    #      'parmap',
       ],
     include_package_data=True,
     zip_safe=False,

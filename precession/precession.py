@@ -1,5 +1,10 @@
 '''
-# POST-NEWTONIAN BLACK-HOLE BINARY DYNAMICS
+# DYNAMICS OF PRECESSING BLACK-HOLE BINARIES
+
+Detailed documentation and results from the code are available at:
+
+- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) 
+- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)
 
 This code is released to the community under the [Creative Commons
 attribution-noncommercial-sharealike
@@ -10,11 +15,6 @@ under the same licence.  When using precession in any published work, you must
 cite the papers describing its implementation:
 
 ADD REFERENCE TO CODE PAPER HERE!
-
-Detailed documentation and results from the code are available at:
-
-- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) 
-- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)
 
 ### INSTALLATION
  
@@ -27,7 +27,7 @@ Prerequisites are `numpy`, `scipy` and `parmap`. All can be installed through
 pip.
 
 
-###THINGS TO KEEP IN MIND
+### THINGS TO KEEP IN MIND
 
 1. **Units**. All quantities in the code are specified in units where c=G=1.
 Moreover, the binary total mass M=m1+m2 is  set to 1, and everything else is
@@ -107,20 +107,6 @@ Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D. Trifiro' and J. Vosmera for
 the help receiving in interpreting the physical results and implementing some of
 the algorithms.
 '''
-
-
-
-__author__ = "Davide Gerosa"
-__email__ = "d.gerosa@damtp.cam.ac.uk"
-__copyright__ = "Copyright (C) 2015 Davide Gerosa"
-__license__ = "CC by-nc-sa 3.0"
-__version__ = "0.0.0.12"
-
-def why():
-    print "\nIt's all about gravity. Go to"
-    print "http://imgs.xkcd.com/comics/python.png\n"
-    sys.exit()
-
 
 ################################
 ########### STARTUP ############
