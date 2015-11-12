@@ -9,9 +9,6 @@ def why():
     print "http://imgs.xkcd.com/comics/python.png\n"
     sys.exit()
 
-
-
-
 from .precession import *
 
 
