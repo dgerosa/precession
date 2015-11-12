@@ -1,8 +1,7 @@
 precession 
 ==========
 
-Dynamics of precessing black-hole binaries
-------------------------------------------
+**Dynamics of precessing black-hole binaries**
 
 This code is released to the community under the Creative Commons
 attribution-noncommercial-sharealike
@@ -22,6 +21,8 @@ Detailed documentation and results from the code are available at:
 - http://davidegerosa.com/spinprecession
 
 
-*Davide Gerosa* 
+**Davide Gerosa**
+
 University of Cambridge
+
 d.gerosa@damtp.cam.ac.uk
