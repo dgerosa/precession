@@ -14,7 +14,7 @@ license
 
 http://creativecommons.org/licenses/by-nc-sa/3.0
 
-When using precession in any published work, please cite the papers describing its implementation
+When using **precession** in any published work, please cite the papers describing its implementation
 
 |
 
