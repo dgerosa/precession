@@ -112,7 +112,15 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2015 Davide Gerosa"
 __license__ = "CC by-nc-sa 3.0"
-__version__ = "0.0.0.18"
+__version__ = "0.0.0.19"
+
+
+__doc__="**Author** "+__author__+"\n\n"+\
+        "**email** "+__email__+"\n\n"+\
+        "**Copyright** "+__copyright__+"\n\n"+\
+        "**Licence** "+__license__+"\n\n"+\
+        "**Version** "+__version__+"\n\n"+\
+        __doc__
 
 def why():
     print "\nIt's all about python and gravity. Go to"
