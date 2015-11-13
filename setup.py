@@ -36,10 +36,11 @@ setup(
     author='Davide Gerosa',
     author_email='d.gerosa@damtp.cam.ac.uk',
     license='CC by-nc-sa 3.0',
-    packages=['precession','precession.tutorial'],
+    packages=['precession'],
     install_requires=[
           'numpy',
           'scipy',
+          'matplotlib',
           'parmap',
       ],
     include_package_data=True,
