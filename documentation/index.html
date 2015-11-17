@@ -1002,6 +1002,7 @@ table {
     <li class="mono"><a href="#precession.Sso_limits">Sso_limits</a></li>
     <li class="mono"><a href="#precession.St_limits">St_limits</a></li>
     <li class="mono"><a href="#precession.St_limits_comp">St_limits_comp</a></li>
+    <li class="mono"><a href="#precession.aligned_configurations">aligned_configurations</a></li>
     <li class="mono"><a href="#precession.alpha_of_S">alpha_of_S</a></li>
     <li class="mono"><a href="#precession.alphaz">alphaz</a></li>
     <li class="mono"><a href="#precession.cutoff">cutoff</a></li>
@@ -1084,7 +1085,7 @@ table {
 <p><strong>email</strong> d.gerosa@damtp.cam.ac.uk</p>
 <p><strong>Copyright</strong> Copyright (C) 2015 Davide Gerosa</p>
 <p><strong>Licence</strong> CC by-nc-sa 3.0</p>
-<p><strong>Version</strong> 0.0.0.19</p>
+<p><strong>Version</strong> 0.0.0.20</p>
 <h1>DYNAMICS OF PRECESSING BLACK-HOLE BINARIES</h1>
 <p>Detailed documentation and results from the code are available at:</p>
 <ul>
@@ -1304,7 +1305,7 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2015 Davide Gerosa"
 __license__ = "CC by-nc-sa 3.0"
-__version__ = "0.0.0.19"
+__version__ = "0.0.0.20"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
@@ -2461,6 +2462,53 @@ def from_the_angles_inf(theta1_inf,theta2_inf,q,S1,S2):
         xi= ((1.+q)*S1*np.cos(theta1_inf)+(1.+q**-1)*S2*np.cos(theta2_inf))*M**-2
         kappa_inf= (S1*np.cos(theta1_inf)+S2*np.cos(theta2_inf))*M**-2
         return xi,kappa_inf
+
+
+    
+def aligned_configurations(q,S1,S2,r):
+
+    '''
+    Values of xi and J corresponding to the four (anti)aligned configuration: up-up (spins of both primary and secondary BH aligned with L); up-up (spins of both primary and secondary BH antialigned with L); up-down (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L); down-up (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L).
+
+    **Call:**
+
+        xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=aligned_configurations(q,S1,S2,r)
+
+    **Parameters:**
+
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+     - `r`: binary separation.
+
+    **Returns:**
+
+    - `xiupup`: xi of the up-up configuration.
+    - `xidowndown`: xi of the down-down configuration.
+    - `xiupdown`: xi of the up-down configuration.
+    - `xidownup`: xi of the down-up configuration.
+    - `Jupup`: J of the up-up configuration.
+    - `Jdowndown`: J of the down-down configuration.
+    - `Jupdown`: J of the up-down configuration.
+    - `Jdownup`: J of the down-up configuration.
+    '''
+
+
+
+    L=(q/(1.+q)**2)*(r*M**3)**.5
+    
+    xiupup=(1.+q)*S1+(1+q**-1)*S2
+    xidowndown=-(1.+q)*S1-(1+q**-1)*S2
+    xiupdown=(1.+q)*S1-(1+q**-1)*S2
+    xidownup=-(1.+q)*S1+(1+q**-1)*S2
+
+    Jupup=L+S1+S2
+    Jdowndown=np.abs(L-S1-S2)
+    Jupdown=np.abs(L+S1-S2)
+    Jdownup=np.abs(L-S1+S2)
+    
+    return xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup
+
 
 
 def updown(q,S1,S2):
@@ -6428,6 +6476,89 @@ precession-averaged integration from infinity in the q=1 limit.</p>
         St_max=min(S1+S2,np.abs( ((1.+4*kappa*u)**0.5+1)/(2.*u)))
 
     return float(St_min),float(St_max)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="precession.aligned_configurations">
+    <p>def <span class="ident">aligned_configurations</span>(</p><p>q, S1, S2, r)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Values of xi and J corresponding to the four (anti)aligned configuration: up-up (spins of both primary and secondary BH aligned with L); up-up (spins of both primary and secondary BH antialigned with L); up-down (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L); down-up (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L).</p>
+<p><strong>Call:</strong></p>
+<pre><code>xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=aligned_configurations(q,S1,S2,r)
+</code></pre>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>q</code>: binary mass ratio. Must be q&lt;=1.</li>
+<li><code>S1</code>: spin magnitude of the primary BH.</li>
+<li><code>S2</code>: spin magnitude of the secondary BH.</li>
+<li><code>r</code>: binary separation.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>xiupup</code>: xi of the up-up configuration.</li>
+<li><code>xidowndown</code>: xi of the down-down configuration.</li>
+<li><code>xiupdown</code>: xi of the up-down configuration.</li>
+<li><code>xidownup</code>: xi of the down-up configuration.</li>
+<li><code>Jupup</code>: J of the up-up configuration.</li>
+<li><code>Jdowndown</code>: J of the down-down configuration.</li>
+<li><code>Jupdown</code>: J of the up-down configuration.</li>
+<li><code>Jdownup</code>: J of the down-up configuration.</li>
+</ul></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.aligned_configurations', this);">Show source &equiv;</a></p>
+  <div id="source-precession.aligned_configurations" class="source">
+    <pre><code>def aligned_configurations(q,S1,S2,r):
+
+    '''
+    Values of xi and J corresponding to the four (anti)aligned configuration: up-up (spins of both primary and secondary BH aligned with L); up-up (spins of both primary and secondary BH antialigned with L); up-down (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L); down-up (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L).
+
+    **Call:**
+
+        xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=aligned_configurations(q,S1,S2,r)
+
+    **Parameters:**
+
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+     - `r`: binary separation.
+
+    **Returns:**
+
+    - `xiupup`: xi of the up-up configuration.
+    - `xidowndown`: xi of the down-down configuration.
+    - `xiupdown`: xi of the up-down configuration.
+    - `xidownup`: xi of the down-up configuration.
+    - `Jupup`: J of the up-up configuration.
+    - `Jdowndown`: J of the down-down configuration.
+    - `Jupdown`: J of the up-down configuration.
+    - `Jdownup`: J of the down-up configuration.
+    '''
+
+
+
+    L=(q/(1.+q)**2)*(r*M**3)**.5
+    
+    xiupup=(1.+q)*S1+(1+q**-1)*S2
+    xidowndown=-(1.+q)*S1-(1+q**-1)*S2
+    xiupdown=(1.+q)*S1-(1+q**-1)*S2
+    xidownup=-(1.+q)*S1+(1+q**-1)*S2
+
+    Jupup=L+S1+S2
+    Jdowndown=np.abs(L-S1-S2)
+    Jupdown=np.abs(L+S1-S2)
+    Jdownup=np.abs(L-S1+S2)
+    
+    return xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup
 </code></pre>
   </div>
 </div>

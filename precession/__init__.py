@@ -112,7 +112,7 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2015 Davide Gerosa"
 __license__ = "CC by-nc-sa 3.0"
-__version__ = "0.0.0.19"
+__version__ = "0.0.0.20"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
@@ -1269,6 +1269,53 @@ def from_the_angles_inf(theta1_inf,theta2_inf,q,S1,S2):
         xi= ((1.+q)*S1*np.cos(theta1_inf)+(1.+q**-1)*S2*np.cos(theta2_inf))*M**-2
         kappa_inf= (S1*np.cos(theta1_inf)+S2*np.cos(theta2_inf))*M**-2
         return xi,kappa_inf
+
+
+    
+def aligned_configurations(q,S1,S2,r):
+
+    '''
+    Values of xi and J corresponding to the four (anti)aligned configuration: up-up (spins of both primary and secondary BH aligned with L); up-up (spins of both primary and secondary BH antialigned with L); up-down (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L); down-up (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L).
+
+    **Call:**
+
+        xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=aligned_configurations(q,S1,S2,r)
+
+    **Parameters:**
+
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+     - `r`: binary separation.
+
+    **Returns:**
+
+    - `xiupup`: xi of the up-up configuration.
+    - `xidowndown`: xi of the down-down configuration.
+    - `xiupdown`: xi of the up-down configuration.
+    - `xidownup`: xi of the down-up configuration.
+    - `Jupup`: J of the up-up configuration.
+    - `Jdowndown`: J of the down-down configuration.
+    - `Jupdown`: J of the up-down configuration.
+    - `Jdownup`: J of the down-up configuration.
+    '''
+
+
+
+    L=(q/(1.+q)**2)*(r*M**3)**.5
+    
+    xiupup=(1.+q)*S1+(1+q**-1)*S2
+    xidowndown=-(1.+q)*S1-(1+q**-1)*S2
+    xiupdown=(1.+q)*S1-(1+q**-1)*S2
+    xidownup=-(1.+q)*S1+(1+q**-1)*S2
+
+    Jupup=L+S1+S2
+    Jdowndown=np.abs(L-S1-S2)
+    Jupdown=np.abs(L+S1-S2)
+    Jdownup=np.abs(L-S1+S2)
+    
+    return xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup
+
 
 
 def updown(q,S1,S2):
