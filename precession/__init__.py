@@ -164,7 +164,9 @@ Directory path to store checkpoints. Deafult is `./precession_checkpoints`.
 def make_temp():
 
     '''
-    Make an empty directory to store checkpoints. Calling this function is typically not necessary, because the checkpoint directory is created when needed.
+    Make an empty directory to store checkpoints. Calling this function is
+    typically not necessary, because the checkpoint directory is created when
+    needed.
 
     **Call:**
 
@@ -193,7 +195,8 @@ def empty_temp():
 
 M=1.
 '''
-The total mass is just a free scale, and we set it to 1. Please, don't change this, because I never checked that the various M factors are all right. 
+The total mass is just a free scale, and we set it to 1. Please, don't change
+this, because I never checked that the various M factors are all right. 
 '''
 
 flags_q1=list(np.zeros((20), dtype=bool)) 
@@ -241,7 +244,8 @@ def get_fixed(q,chi1,chi2):
 def J_lim(q,S1,S2,r, verbose=False):
     
     '''
-    Compute the limits on the magnitude of the total angular momentum J, defined as J=|L+S1+S2|.    
+    Compute the limits on the magnitude of the total angular momentum J, defined
+    as J=|L+S1+S2|.    
 
     **Call:**
 
@@ -282,7 +286,8 @@ def J_lim(q,S1,S2,r, verbose=False):
 def St_limits(J,q,S1,S2,r,verbose=False):
      
     '''
-    Compute the *total* limits on the magnitude of the total spin S. S has to satisfy both S=S1+S2 and S=J-L.
+    Compute the *total* limits on the magnitude of the total spin S. S has to
+    satisfy both S=S1+S2 and S=J-L.
 
     **Call:**
 
@@ -325,8 +330,10 @@ def St_limits(J,q,S1,S2,r,verbose=False):
 def Sso_limits(S1,S2):
     
     '''
-    Compute the *spin-only* limits on the magnitude of the total spin S, considering the single constraint S=S1+S2.  This is needed e.g. to provide initial condition to
-    precession-averaged integration from infinity in the q=1 limit.
+    Compute the *spin-only* limits on the magnitude of the total spin S,
+    considering the single constraint S=S1+S2.  This is needed e.g. to provide
+    initial condition to precession-averaged integration from infinity in the
+    q=1 limit.
 
     **Call:**
 
@@ -349,7 +356,9 @@ def Sso_limits(S1,S2):
 def xi_lim(q,S1,S2):
 
     '''
-    Compute the absolute limits on xi (i.e. regardless of J). Check `precession.xi_allowed` for the limits on xi for a given J. This functions is simply checks -1<cos(theta_i)<1.
+    Compute the absolute limits on xi (i.e. regardless of J). Check
+    `precession.xi_allowed` for the limits on xi for a given J. This functions
+    is simply checks -1<cos(theta_i)<1.
 
     **Call:**
 
@@ -375,7 +384,7 @@ def xi_lim(q,S1,S2):
 def xi_at_Jlim(q,S1,S2,r,more=False):
 
     '''
-    Find the value of xi (and S, optional) when J is either Jmax or Jmin..
+    Find the value of xi (and S, optional) when J is either Jmax or Jmin.
     
     **Call:**
 
@@ -436,7 +445,8 @@ def xi_at_Jlim(q,S1,S2,r,more=False):
 def kappainf_lim(S1,S2):
     
     '''
-    Absolute limits in kappa_inf (asymptotic value of kappa). At large separations, kappa is the projection of the total spin along L.
+    Absolute limits in kappa_inf (asymptotic value of kappa). At large
+    separations, kappa is the projection of the total spin along L.
 
     **Call:**
 
@@ -459,7 +469,8 @@ def kappainf_lim(S1,S2):
 def xiinf_allowed(kappa_inf,q,S1,S2):
  
     '''
-    Limits on xi for a given value of kappa_inf, obtained forcing -1<cos(theta_i)<1.
+    Limits on xi for a given value of kappa_inf, obtained forcing
+    -1<cos(theta_i)<1.
  
     **Call:**
 
@@ -486,7 +497,8 @@ def xiinf_allowed(kappa_inf,q,S1,S2):
 def kappainf_allowed(xi,q,S1,S2):
 
     '''
-    Limits on kappa_inf for a given value of xi, obtained forcing -1<cos(theta_i)<1.
+    Limits on kappa_inf for a given value of xi, obtained forcing
+    -1<cos(theta_i)<1.
  
     **Call:**
 
@@ -520,8 +532,8 @@ def kappainf_allowed(xi,q,S1,S2):
 def xi_contour(varphi,S,J,q,S1,S2,r):
 
     '''
-    Compute the projection of the effective spin xi as a function of the spin-rotation degree of freedom
-    varphi and the total spin magnitude S.
+    Compute the projection of the effective spin xi as a function of the
+    spin-rotation degree of freedom varphi and the total spin magnitude S.
  
     **Call:**
 
@@ -708,7 +720,9 @@ def dxidS_minus(S,J,q,S1,S2,r):
 def get_varphi(xi,S,J,q,S1,S2,r,sign=1):
 
     '''
-    Compute varphi from a given xi. This can be seen as the inverse of xi_contour. If phase==1 (default) return varphi in [0,pi], if sign==-1 return varphi in [-pi,0].    
+    Compute varphi from a given xi. This can be seen as the inverse of
+    xi_contour. If phase==1 (default) return varphi in [0,pi], if sign==-1
+    return varphi in [-pi,0].
 
     WARKNING: Don't run for q=1, as varphi is independent of S in this limit.
 
@@ -752,9 +766,14 @@ def get_varphi(xi,S,J,q,S1,S2,r,sign=1):
 def Sb_limits(xi,J,q,S1,S2,r):
     
     '''
-    Compute the *bounded* limits on S, using xi as a constant of motion. The routine first guesses where the extrema are expected to be, then brakets the solution, and finally runs root finder. In some cases the braketing may fail: this typically happens if the two roots are very close (DeltaS<1e-8) and cannot be distinguished numerically. In this case, assume Sb_min=Sb_max.
+    Compute the *bounded* limits on S, using xi as a constant of motion. The
+    routine first guesses where the extrema are expected to be, then brakets the
+    solution, and finally runs root finder. In some cases the braketing may
+    fail: this typically happens if the two roots are very close (DeltaS<1e-8)
+    and cannot be distinguished numerically. In this case, assume Sb_min=Sb_max.
 
-    WARNING: This function is critical. It is well tested, but is tricky numerical issues may still be present.
+    WARNING: This function is critical. It is well tested, but is tricky
+    numerical issues may still be present.
 
     **Call:**
 
@@ -870,13 +889,15 @@ def Sb_limits(xi,J,q,S1,S2,r):
 def parametric_angles(S,J,xi,q,S1,S2,r):
     
     '''
-    Compute the angles theta1,theta2,deltaphi and theta12, given S, J and xi. 
-    Roundoff errors are fixed forcing cosines to be in [-1,1]. 
-    The thetas are polar angles in [0,pi]. Deltaphi is an azimuthal angle, in principle lies in [-pi,pi]. Here we assumed DeltaPhi to be in [0,pi] as returned by arcccos: one may
-    need to add a sign, depending on the actual application of this function
-    (see e.g. `precession.orbit_angles` below). This function can be seen as the inverse of `precession.from_the_angles`. In the equal-mass limit q=1, S doesn't
-    parametrize the precessional motion; we track the binary precession using
-    varphi explicitly.
+    Compute the angles theta1,theta2,deltaphi and theta12, given S, J and xi.
+    Roundoff errors are fixed forcing cosines to be in [-1,1]. The thetas are
+    polar angles in [0,pi]. Deltaphi is an azimuthal angle, in principle lies in
+    [-pi,pi]. Here we assumed DeltaPhi to be in [0,pi] as returned by arcccos:
+    one may need to add a sign, depending on the actual application of this
+    function (see e.g. `precession.orbit_angles` below). This function can be
+    seen as the inverse of `precession.from_the_angles`. In the equal-mass limit
+    q=1, S doesn't parametrize the precessional motion; we track the binary
+    precession using varphi explicitly.
 
     **Call:**
 
@@ -939,9 +960,9 @@ def parametric_angles(S,J,xi,q,S1,S2,r):
 def from_the_angles(theta1,theta2,deltaphi,q,S1,S2,r):
 
     '''
-    Convert a set of angles theta1,theta2,deltaphi into values of J,xi,S.
-    This function can be seen as the inverse of `precession.parametric_angles`. In the
-    equal-mass limit q=1, S doesn't parametrize the precessional motion; we
+    Convert a set of angles theta1,theta2,deltaphi into values of J,xi,S. This
+    function can be seen as the inverse of `precession.parametric_angles`. In
+    the equal-mass limit q=1, S doesn't parametrize the precessional motion; we
     track the binary precession using varphi explicitly.
 
     **Call:**
@@ -993,17 +1014,17 @@ def xi_allowed(J,q,S1,S2,r, more=False,verbose=False):
     '''
     Find the allowed range of xi for fixed J, corresponding to the extrema of
     the effective potential. Two implementations are presented, and are
-    controlled by the inner flag use_derivative. If False (default, suggested), scipy's
-    fminbound minimization algorithm is applied to the effective potentials
-    `precession.xi_minus` and `precession.xi_plus`. If True, we explicitly look for the zeroes of the
-    derivative of the effective potentials with respect to S. J. Vosmera
-    found that the bisect root finder behaves better than brentq for low mass
-    ratio. We believe both implementation are correct: the former has been
-    tested more extensively, the latter has been found to be more reliable in
-    the q->1 limit. 
-    
-    WARNING: This function is critical. It's tested, but is
-    tricky numerical issues may still be present.
+    controlled by the inner flag use_derivative. If False (default, suggested),
+    scipy's fminbound minimization algorithm is applied to the effective
+    potentials `precession.xi_minus` and `precession.xi_plus`. If True, we
+    explicitly look for the zeroes of the derivative of the effective potentials
+    with respect to S. J. Vosmera found that the bisect root finder behaves
+    better than brentq for low mass ratio. We believe both implementation are
+    correct: the former has been tested more extensively, the latter has been
+    found to be more reliable in the q->1 limit.
+
+    WARNING: This function is critical. It's tested, but is tricky numerical
+    issues may still be present.
 
     **Call:**
 
@@ -1093,7 +1114,13 @@ def xi_allowed(J,q,S1,S2,r, more=False,verbose=False):
 def resonant_finder(xi,q,S1,S2,r, more=False):
 
     '''
-    Find the spin-orbit resonances, for given xi, as extrema of the allowed region in the parameter space. Two resonances are present for DeltaPhi=0 and DeltaPhi=pi. They maximize (0) and minimize (pi) J for fixed xi. This is an alternative (and more powerful) approach to solving the Schnittman equation, given in Eq.(35) of [PRD 70,124020(2004)](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.70.124020).
+    Find the spin-orbit resonances, for given xi, as extrema of the allowed
+    region in the parameter space. Two resonances are present for DeltaPhi=0 and
+    DeltaPhi=pi. They maximize (0) and minimize (pi) J for fixed xi. This is an
+    alternative (and more powerful) approach to solving the Schnittman equation,
+    given in Eq.(35) of [PRD
+    70,124020(2004)](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.70.
+    124020).
     
     **Call:**
 
@@ -1183,7 +1210,8 @@ def resonant_finder(xi,q,S1,S2,r, more=False):
 def J_allowed(xi,q,S1,S2,r):
 
     '''
-    Find allowed values of J for fixed xi, i.e the spin-orbit resonances. See `precession.resonant_finder`.
+    Find allowed values of J for fixed xi, i.e the spin-orbit resonances. See
+    `precession.resonant_finder`.
 
     **Call:**
 
@@ -1210,7 +1238,8 @@ def J_allowed(xi,q,S1,S2,r):
 def thetas_inf(xi,kappa_inf,q,S1,S2):
 
     '''
-    Find the asymptotic (constant) values of theta1 and theta2 given xi and kappa_inf.
+    Find the asymptotic (constant) values of theta1 and theta2 given xi and
+    kappa_inf.
 
     **Call:**
 
@@ -1242,7 +1271,8 @@ def thetas_inf(xi,kappa_inf,q,S1,S2):
 def from_the_angles_inf(theta1_inf,theta2_inf,q,S1,S2):
     
     '''
-    Find xi and kappa_inf given the asymptotic (constant) values of theta1 and theta2.
+    Find xi and kappa_inf given the asymptotic (constant) values of theta1 and
+    theta2.
 
     **Call:**
 
@@ -1275,7 +1305,12 @@ def from_the_angles_inf(theta1_inf,theta2_inf,q,S1,S2):
 def aligned_configurations(q,S1,S2,r):
 
     '''
-    Values of xi and J corresponding to the four (anti)aligned configuration: up-up (spins of both primary and secondary BH aligned with L); up-up (spins of both primary and secondary BH antialigned with L); up-down (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L); down-up (spin of the primary BH aligned with L; spin of the secondary BH antialigned with L).
+    Values of xi and J corresponding to the four (anti)aligned configuration:
+    up-up (spins of both primary and secondary BH aligned with L); up-up (spins
+    of both primary and secondary BH antialigned with L); up-down (spin of the
+    primary BH aligned with L; spin of the secondary BH antialigned with L);
+    down-up (spin of the primary BH aligned with L; spin of the secondary BH
+    antialigned with L).
 
     **Call:**
 
@@ -1321,9 +1356,13 @@ def aligned_configurations(q,S1,S2,r):
 def updown(q,S1,S2):
     
     '''
-    Instability range for up-down aligned binaries. Binaries with the primary (secondary) spin aligned (antialigned) with the angular momentum are unstable between the two separations returned.
-    Hack the code to compute also the function *switch*, for a sanity check on the property of the second threshold (whether that's on `precession.xi_plus` or on `precession.xi_minus`).
-    All up-down binaries are stable in the equal-mass case: if q=1 returns Nones.
+    Instability range for up-down aligned binaries. Binaries with the primary
+    (secondary) spin aligned (antialigned) with the angular momentum are
+    unstable between the two separations returned. Hack the code to compute also
+    the function *switch*, for a sanity check on the property of the second
+    threshold (whether that's on `precession.xi_plus` or on
+    `precession.xi_minus`). All up-down binaries are stable in the equal-mass
+    case: if q=1 returns Nones.
 
     **Call:**
 
@@ -1440,7 +1479,12 @@ def region_selection(varphi,S,J,q,S1,S2,r):
 def phase_checker(q,S1,S2,r,verbose=False):
     
     '''
-    Computes the number of different morphologies you MAY have for a given geometrical configuration (i.e. given the lengths of the vectors L, S1 and S2). These are just geometrical constraints: the actual number of allowed morphologies depends on J, as returned by `precession.phase_xi`, but it can't be out of what returned by this function. This function is basically a sanity check for `precession.phase_xi`.
+    Computes the number of different morphologies you MAY have for a given
+    geometrical configuration (i.e. given the lengths of the vectors L, S1 and
+    S2). These are just geometrical constraints: the actual number of allowed
+    morphologies depends on J, as returned by `precession.phase_xi`, but it
+    can't be out of what returned by this function. This function is basically a
+    sanity check for `precession.phase_xi`.
 
     **Call:**
 
@@ -1491,13 +1535,23 @@ def phase_checker(q,S1,S2,r,verbose=False):
 def phase_xi(J,q,S1,S2,r): 
 
     '''
-    Return an integer number, phases, specifying the number of precessional morphologies that can coexist for a given value of J. Returns:
+    Return an integer number, phases, specifying the number of precessional
+    morphologies that can coexist for a given value of J. Returns:
 
     - 1 if only the DeltaPhi~pi phase is present;
-    - 2 if two DeltaPhi~pi phases and a circulating phase are present;
-    - 3 if a librating DeltaPhi~0, a circulating, and a DeltaPhi~pi phase al all present.
+    - 2 if two DeltaPhi~pi phases
+    and a circulating phase are present;
+    - 3 if a librating DeltaPhi~0, a
+    circulating, and a DeltaPhi~pi phase al all present.
 
-    The latter is *standard* case studied in [our first PRL](http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.114.081103). Additionally, return the values of xi that, for given J, separate the binaries with different morphologies. If there are no transitions (i.e. phase=1), the transition values of xi are returned as Nones. If transitions cannot be found for numerical reasons, assume they coincides with the extrema of xi (see `precession.xi_allowed`). The output of this function can be tested with `precession.phase_checker`.
+    The latter is *standard* case studied in [our first
+    PRL](http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.114.081103).
+    Additionally, return the values of xi that, for given J, separate the
+    binaries with different morphologies. If there are no transitions (i.e.
+    phase=1), the transition values of xi are returned as Nones. If transitions
+    cannot be found for numerical reasons, assume they coincides with the
+    extrema of xi (see `precession.xi_allowed`). The output of this function can
+    be tested with `precession.phase_checker`.
 
     **Call:**
 
@@ -1597,7 +1651,11 @@ def phase_xi(J,q,S1,S2,r):
 def Jframe_projection(xi,S,J,q,S1,S2,r):    
 
     '''
-    Project the three momenta on the reference frame aligned with the total angular momentum J. The z axis points in the J direction, and the x axis lies in the plane spanned by J and L. The y axis complete an orthonormal triad. Note that this is not an inertial frame (not even on the precession time) because it precesses together with L.
+    Project the three momenta on the reference frame aligned with the total
+    angular momentum J. The z axis points in the J direction, and the x axis
+    lies in the plane spanned by J and L. The y axis complete an orthonormal
+    triad. Note that this is not an inertial frame (not even on the precession
+    time) because it precesses together with L.
 
     **Call:**
 
@@ -1687,7 +1745,8 @@ def Jframe_projection(xi,S,J,q,S1,S2,r):
 def Omegaz(S,xi,J,q,S1,S2,r):
 
     '''
-    Compute the (azimuthal) precessional frequency of the orbital angular momentum L about the total angular momentum J.
+    Compute the (azimuthal) precessional frequency of the orbital angular
+    momentum L about the total angular momentum J.
 
     **Call:**
 
@@ -1722,7 +1781,14 @@ def Omegaz(S,xi,J,q,S1,S2,r):
 def dSdt(S,xi,J,q,S1,S2,r,sign=1.):
 
     '''
-    Compute the derivative of S with respect to t (on the precessional time only, i.e. assuming J is constant). Uses the spin-precession equations, but not the radiation reaction equation. The additional sign lets you specifiy the sign of the angle deltaphi: for consistency with what presented in our papers, use sign=1 if you are in the second half of the precession cycle (deltaphi is in [0,pi]) and sign=-1 if you are in the first half of the precession cycle (deltaphi is in [-pi,0]). If q=1, this function computes d(cos(varphi))/dt.
+    Compute the derivative of S with respect to t (on the precessional time
+    only, i.e. assuming J is constant). Uses the spin-precession equations, but
+    not the radiation reaction equation. The additional sign lets you specifiy
+    the sign of the angle deltaphi: for consistency with what presented in our
+    papers, use sign=1 if you are in the second half of the precession cycle
+    (deltaphi is in [0,pi]) and sign=-1 if you are in the first half of the
+    precession cycle (deltaphi is in [-pi,0]). If q=1, this function computes
+    d(cos(varphi))/dt.
 
     **Call:**
 
@@ -1824,7 +1890,15 @@ def dtdS(S,xi,J,q,S1,S2,r,sign=1.):
 def t_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, t_initial=0, sign=1. ):
 
     '''
-    Integrate `precession.dSdt' to find t (time) as a function of S (magnitude of the total spin). Since dS/dt depends on S and not on t, finding t(S) only requires a numnerical integration; finding S(t) would require a ODE solver (straightforward, but it has not been implemented). Sb_min and Sb_max are passed to this function (and not computed within it) for computational efficiency. This function can only integrate over half precession period (i.e. from Sb_min to Sb_max at most). If you want t(S) over more precession periods you should stich different solutions together, consistently with the argument sign (in particular, flip sign every half period).
+    Integrate `precession.dSdt' to find t (time) as a function of S (magnitude
+    of the total spin). Since dS/dt depends on S and not on t, finding t(S) only
+    requires a numnerical integration; finding S(t) would require a ODE solver
+    (straightforward, but it has not been implemented). Sb_min and Sb_max are
+    passed to this function (and not computed within it) for computational
+    efficiency. This function can only integrate over half precession period
+    (i.e. from Sb_min to Sb_max at most). If you want t(S) over more precession
+    periods you should stich different solutions together, consistently with the
+    argument sign (in particular, flip sign every half period).
 
     **Call:**
 
@@ -1883,7 +1957,8 @@ def t_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, t_initial=0, sign=
 def precession_period(xi,J,q,S1,S2,r):
     
     '''
-    Find the period of S, i.e. the precessional timescale. This is `precession.t_of_S` integrated from Sb_min to Sb_max times 2.
+    Find the period of S, i.e. the precessional timescale. This is
+    `precession.t_of_S` integrated from Sb_min to Sb_max times 2.
 
     **Call:**
 
@@ -1956,7 +2031,13 @@ def OmegazdtdS(S,xi,J,q,S1,S2,r,sign=1.):
 def alpha_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, alpha_initial=0, sign=1.):
     
     '''
-    Integrate `precession.Omegaz' to find the precession angle spanned by L about J, phiL, as a function of S. Sb_min and Sb_max are passed to this function (and not computed in it) to speed things up. This function can only integrate over half precession period (i.e. from Sb_min to Sb_max at most). If you want phiL(S) over more precession periods you should stich different solutions together, consistently with the argument sign (in particular, flip sign every half period).
+    Integrate `precession.Omegaz' to find the precession angle spanned by L
+    about J, phiL, as a function of S. Sb_min and Sb_max are passed to this
+    function (and not computed in it) to speed things up. This function can only
+    integrate over half precession period (i.e. from Sb_min to Sb_max at most).
+    If you want phiL(S) over more precession periods you should stich different
+    solutions together, consistently with the argument sign (in particular, flip
+    sign every half period).
 
     **Call:**
 
@@ -2018,7 +2099,8 @@ def alpha_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, alpha_initial=
 def alphaz(xi,J,q,S1,S2,r):
 
     '''
-    Angle spanned by L about J in a single precession cycle. This is `precession.alpha_of_S` integrated from Sb_min to Sb_max times 2.
+    Angle spanned by L about J in a single precession cycle. This is
+    `precession.alpha_of_S` integrated from Sb_min to Sb_max times 2.
 
     **Call:**
 
@@ -2055,12 +2137,16 @@ def alphaz(xi,J,q,S1,S2,r):
 def samplingS(xi,J,q,S1,S2,r):
     
     '''
-    Select a value of S weighted with |dt/dS|. Sampling implemented using the cumulative distribution:
+    Select a value of S weighted with |dt/dS|. Sampling implemented using the
+    cumulative distribution:
     
     1. select a random number epsilon in [0,1];
-    2. find the value of S at which the cumulative probability distribution is equal to epsilon.
+    2. find the value of S at which the cumulative probability distribution is
+    equal to epsilon.
 
-    The cumulative-distribution method is particualry suitable because the probability distribution function |dt/dS| diverges at the extrema Sb_min and Sb_max (and is troubling to apply a hit-or-miss approach).
+    The cumulative-distribution method is particualry suitable because the
+    probability distribution function |dt/dS| diverges at the extrema Sb_min and
+    Sb_max (and is troubling to apply a hit-or-miss approach).
 
     **Call:**
 
@@ -2402,7 +2488,11 @@ def Ssines_comp(S,xi,kappa,q,S1,S2,u):
 def dkappadu(kappa,u,xi,q,S1,S2):    
       
     '''
-    Inspiral ODE to perform precession-averaged inspiral: dkappa/du = S^2_pre. We use variables kappa and u (rather than J and L, see `precession.dJdL`) because this formulation naturally allows for integration from infinitely large separations, i.e. u=0. This function is only the actual equation, not the ODE solver.
+    Inspiral ODE to perform precession-averaged inspiral: dkappa/du = S^2_pre.
+    We use variables kappa and u (rather than J and L, see `precession.dJdL`)
+    because this formulation naturally allows for integration from infinitely
+    large separations, i.e. u=0. This function is only the actual equation, not
+    the ODE solver.
 
     **Call:**
 
@@ -2441,7 +2531,9 @@ def dkappadu(kappa,u,xi,q,S1,S2):
 def dJdr(J,r,xi,q,S1,S2):
 
     '''
-    Inspiral ODE describing the evolution of the magnitude of the total angular momentum vs. the separation r. This function is NOT used by the ODE solvers (see `precession.dkappadu`).
+    Inspiral ODE describing the evolution of the magnitude of the total angular
+    momentum vs. the separation r. This function is NOT used by the ODE solvers
+    (see `precession.dkappadu`).
 
     **Call:**
 
@@ -2473,7 +2565,9 @@ def dJdr(J,r,xi,q,S1,S2):
 def dJdL(J,r,xi,q,S1,S2):
 
     '''
-    Inspiral ODE describing the evolution of the magnitude of the total angular momentum vs. the separation r. This function is NOT used by the ODE solvers (see `precession.dkappadu`).
+    Inspiral ODE describing the evolution of the magnitude of the total angular
+    momentum vs. the separation r. This function is NOT used by the ODE solvers
+    (see `precession.dkappadu`).
 
     **Call:**
 
@@ -2504,13 +2598,23 @@ def dJdL(J,r,xi,q,S1,S2):
 def Jofr(xi,J_initial,r_vals,q,S1,S2):
 
     '''
-    Single integration of the dJ/dL equation to perfom precession-averaged inspiral. Input/output are provided in J and r, but the internal integrator uses kappa and u (see `precession.dkappadu`). Integration is performed using scipy's `odeint`.
+    Single integration of the dJ/dL equation to perfom precession-averaged
+    inspiral. Input/output are provided in J and r, but the internal integrator
+    uses kappa and u (see `precession.dkappadu`). Integration is performed using
+    scipy's `odeint`.
     
     This function integrates to/from FINITE separations only.
     
-    It takes the desired output separations r_vals, and the intial condition for the total angular momentum J_initial. The latter must be consistent with the initial separation (i.e. r_vals[0]) and the value of xi; an error is raised in case of inconsistencies. It doesn't matter if you integrate from large to small separations of the other way round, as long as J_initial is consistent with r_vals[0]. It returns a vector with the values of J at each input separation, the first item being just the initial condition.
+    It takes the desired output separations r_vals, and the intial condition for
+    the total angular momentum J_initial. The latter must be consistent with the
+    initial separation (i.e. r_vals[0]) and the value of xi; an error is raised
+    in case of inconsistencies. It doesn't matter if you integrate from large to
+    small separations of the other way round, as long as J_initial is consistent
+    with r_vals[0]. It returns a vector with the values of J at each input
+    separation, the first item being just the initial condition.
     
-    We recommend to use this function through the wrapper `precession.evolve_J` provided.
+    We recommend to use this function through the wrapper `precession.evolve_J`
+    provided.
 
     **Call:**
 
@@ -2595,7 +2699,15 @@ def Jofr_checkpoint(xi,J_initial,r_vals,q,S1,S2):
 def evolve_J(xi_vals,J_vals,r_vals,q,S1,S2):
 
     '''
-    Wrapper of `precession.Jofr` to enable parallelization through the python `parmap` module; the number of available cores can be specified using the integer global variable `CPUs` (all available cores will be used by default). Evolve a sequence of binaries with the SAME q, S1, S2 but different xi and initial values of J and save outputs at r_vals. Output is a 2D array, where e.g. J_vals[0] is the first binary (1D array at all output separations) and J_vals[0][0] is the first binary at the first output separation (this is a scalar). We strongly reccommend using this function, even for a single binary.
+    Wrapper of `precession.Jofr` to enable parallelization through the python
+    `parmap` module; the number of available cores can be specified using the
+    integer global variable `CPUs` (all available cores will be used by
+    default). Evolve a sequence of binaries with the SAME q, S1, S2 but
+    different xi and initial values of J and save outputs at r_vals. Output is a
+    2D array, where e.g. J_vals[0] is the first binary (1D array at all output
+    separations) and J_vals[0][0] is the first binary at the first output
+    separation (this is a scalar). We strongly reccommend using this function,
+    even for a single binary.
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
@@ -2712,17 +2824,27 @@ def evolve_angles_single(theta1_i,theta2_i,deltaphi_i,r_vals,q,S1,S2):
 def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
 
     '''
-    Binary evolution from the angles theta1, theta2 and deltaphi as initial data (to/from FINITE separations only). This is our so-called *transfer function*. The transfer procedure is implemented as follows:
-    
+    Binary evolution from the angles theta1, theta2 and deltaphi as initial data
+    (to/from FINITE separations only). This is our so-called *transfer
+    function*. The transfer procedure is implemented as follows:
+
     1. Convert theta1,theta2, deltaphi into J, xi and S.
     2. Forget S and evolve J.
-    3. Resample S at the final separation according to dt/dS. 
-    4. Covert J, xi and S back to theta1, theta2 and deltaphi; assign a random sign to deltaphi.
+    3. Resample S at the final separation according to dt/dS.
+    4. Covert J, xi and S back to theta1, theta2 and deltaphi; assign a random
+    sign to deltaphi.
 
-    Parallelization through the python `parmap` module is implemented; the number of available cores can be specified using the integer global variable `CPUs` (all available cores will be used by default). Evolve a sequence of binaries with the SAME q, S1,S2 but different theta1, theta2, deltaphi (assumed to be specified at r_vals[0]) and save outputs at r_vals. Outputs are 2D arrays, where e.g theta1_fvals[0] is the first binary (1D array at all output separations) and theta1_fvals[0][0] is the first binary at the first output separation (this is a scalar).
+    Parallelization through the python `parmap` module is implemented; the
+    number of available cores can be specified using the integer global variable
+    `CPUs` (all available cores will be used by default). Evolve a sequence of
+    binaries with the SAME q, S1,S2 but different theta1, theta2, deltaphi
+    (assumed to be specified at r_vals[0]) and save outputs at r_vals. Outputs
+    are 2D arrays, where e.g theta1_fvals[0] is the first binary (1D array at
+    all output separations) and theta1_fvals[0][0] is the first binary at the
+    first output separation (this is a scalar).
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
- 
+
     **Call:**
 
         theta1f_vals,theta2f_vals,deltaphif_vals=precession.evolve_angles(theta1i_vals,theta2i_vals,deltaphii_vals,r_vals,q,S1,S2)
@@ -2802,13 +2924,24 @@ def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
 def Jofr_infinity(xi,kappa_inf,r_vals,q,S1,S2): 
 
     '''
-    Single integration of the dJ/dL equation to perfom precession-averaged inspiral. Input/output are provided in J and r, but the internal integrator uses kappa and u (see `precession.dkappadu`). Integration is performed using scipy's `odeint`.
-    
-    This function integrates FROM INFINITE separation (u=0) only.    
-    
-    The latter must be consistent with `precession.kappainf_lim`; an error is raised in case of inconsistencies. It assume that the array r_vals is sorted in reversed order, i.e. that you are integrating from large to small separations. It returns a vector with the values of J at each input separation. The initial condition is NOT returned by this function (unlike the `precession.Jofr` for integrations to/from finite separations). If q=1, kappa_inf is degenerate with xi: the required initial condition is assumed to be S (which is constant).
+    Single integration of the dJ/dL equation to perfom precession-averaged
+    inspiral. Input/output are provided in J and r, but the internal integrator
+    uses kappa and u (see `precession.dkappadu`). Integration is performed using
+    scipy's `odeint`.
 
-    We recommend to use this function through the wrapper `precession.evolve_J_infinity` provided.
+    This function integrates FROM INFINITE separation (u=0) only.
+
+    The latter must be consistent with `precession.kappainf_lim`; an error is
+    raised in case of inconsistencies. It assume that the array r_vals is sorted
+    in reversed order, i.e. that you are integrating from large to small
+    separations. It returns a vector with the values of J at each input
+    separation. The initial condition is NOT returned by this function (unlike
+    the `precession.Jofr` for integrations to/from finite separations). If q=1,
+    kappa_inf is degenerate with xi: the required initial condition is assumed
+    to be S (which is constant).
+
+    We recommend to use this function through the wrapper
+    `precession.evolve_J_infinity` provided.
  
     **Call:**
 
@@ -2897,7 +3030,15 @@ def Jofr_infinity_checkpoint(xi,kappa_inf,r_vals,q,S1,S2):
 def evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q,S1,S2):
 
     '''
-    Wrapper of `precession.Jofr_infinity` to enable parallelization through the python `parmap` module; the number of available cores can be specified using the integer global variable `CPUs` (all available cores will be used by default). Evolve a sequence of binaries with the SAME q, S1, S2 but different xi and initial values of J and save outputs at r_vals. Output is a 2D array, where e.g. J_vals[0] is the first binary (1D array at all output separations) and J_vals[0][0] is the first binary at the first output separation (this is a scalar). We strongly reccommend using this function, even for a single binary.
+    Wrapper of `precession.Jofr_infinity` to enable parallelization through the
+    python `parmap` module; the number of available cores can be specified using
+    the integer global variable `CPUs` (all available cores will be used by
+    default). Evolve a sequence of binaries with the SAME q, S1, S2 but
+    different xi and initial values of J and save outputs at r_vals. Output is a
+    2D array, where e.g. J_vals[0] is the first binary (1D array at all output
+    separations) and J_vals[0][0] is the first binary at the first output
+    separation (this is a scalar). We strongly reccommend using this function,
+    even for a single binary.
 
     Checkpointing is implemented: results are stored in `precession.g`.
  
@@ -2959,15 +3100,22 @@ def evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q,S1,S2):
 def kappa_backwards(xi,J,r,q,S1,S2):
 
     '''
-    Single integration of the dJ/dL equation to perfom precession-averaged inspiral. Input/output are provided in J and r, but the internal integrator uses kappa and u (see `precession.dkappadu`). Integration is performed using scipy's `odeint`.
-    
-    This function integrates from some finite separation TO INFINITE separation (u=0) only.    
+    Single integration of the dJ/dL equation to perfom precession-averaged
+    inspiral. Input/output are provided in J and r, but the internal integrator
+    uses kappa and u (see `precession.dkappadu`). Integration is performed using
+    scipy's `odeint`.
 
-    The initial binary is specified at the input separation r through J and xi (S not needed).
-    The binary is evolved backwards to r=infinity (u=0) and the asymptotic value kappa_inf is returned. If q=1, kappa_inf is degenerate with xi: the constant value of S is returned instead.
+    This function integrates from some finite separation TO INFINITE separation
+    (u=0) only.
 
-    We recommend to use this function through the wrapper `precession.evolve_J_backwards` provided.
- 
+    The initial binary is specified at the input separation r through J and xi
+    (S not needed). The binary is evolved backwards to r=infinity (u=0) and the
+    asymptotic value kappa_inf is returned. If q=1, kappa_inf is degenerate with
+    xi: the constant value of S is returned instead.
+
+    We recommend to use this function through the wrapper
+    `precession.evolve_J_backwards` provided.
+
     **Call:**
 
         kappa_inf=precession.kappa_backwards(xi,J,r,q,S1,S2)
@@ -3049,7 +3197,11 @@ def kappa_backwards_checkpoint(xi,J,r,q,S1,S2):
 def evolve_J_backwards(xi_vals,J_vals,r,q,S1,S2):
 
     '''
-    Wrapper of `precession.kappa_backwards` to enable parallelization through the python `parmap` module; the number of available cores can be specified using the integer global variable `CPUs` (all available cores will be used by default). Evolve a sequence of binaries with the SAME q, S1,S2, from the SAME separation r, but different xi and initial kappa_inf.
+    Wrapper of `precession.kappa_backwards` to enable parallelization through
+    the python `parmap` module; the number of available cores can be specified
+    using the integer global variable `CPUs` (all available cores will be used
+    by default). Evolve a sequence of binaries with the SAME q, S1,S2, from the
+    SAME separation r, but different xi and initial kappa_inf.
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
@@ -3119,13 +3271,25 @@ def evolve_J_backwards(xi_vals,J_vals,r,q,S1,S2):
 def orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2):
 
     '''
-    Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where allvars is an array with the cartesian components of the unit vectors L, S1 and S2. This function is only the actual system of equations, not the ODE solver. 
-    
-    Equations are the ones reported in Gerosa et al. [Phys.Rev. D87 (2013) 10, 104028](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.87.104028); see references therein. In particular, the quadrupole-monopole term computed by Racine is included. The results presented in Gerosa et al. 2013 actually use additional unpublished terms, that are not listed in the published equations and are NOT included here. Radiation reaction is included up to 3.5PN. 
-    
-    The internal quadrupole_formula flag switches off all PN corrections in radiation reaction. 
-    
-    The integration is carried over in the orbital velocity v (equivalent to the separation), not in time. If an expression for v(t) is needed, the code can be easiliy modified to return time as well.
+    Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where
+    allvars is an array with the cartesian components of the unit vectors L, S1
+    and S2. This function is only the actual system of equations, not the ODE
+    solver.
+
+    Equations are the ones reported in Gerosa et al. [Phys.Rev. D87 (2013) 10,
+    104028](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.87.104028);
+    see references therein. In particular, the quadrupole-monopole term computed
+    by Racine is included. The results presented in Gerosa et al. 2013 actually
+    use additional unpublished terms, that are not listed in the published
+    equations and are NOT included here. Radiation reaction is included up to
+    3.5PN.
+
+    The internal quadrupole_formula flag switches off all PN corrections in
+    radiation reaction.
+
+    The integration is carried over in the orbital velocity v (equivalent to the
+    separation), not in time. If an expression for v(t) is needed, the code can
+    be easiliy modified to return time as well.
  
     **Call:**
 
@@ -3238,13 +3402,25 @@ def orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2):
 def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     
     '''
-    Single orbit-averaged integration. Integrate the system of ODEs specified in `precession.orbav_eqs`. The initial configuration (at r_vals[0]) is specified through J, xi and S. The components of the unit vectors L, S1 and S2 are returned at the output separations specified by r_vals. The initial values of J and S must be compatible with the initial separation r_vals[0], otherwise an error is raised. Integration is performed in a reference frame in which the z axis is along J and L lies in the x-z plane at the initial separation. Equations are integrated in v (orbital velocity) but outputs are converted to r (separation). 
-    
-    Of course, this can only integrate to/from FINITE separations. 
-    
-    Bear in mind that orbit-averaged integrations are tpically possible from r<10000; integrations from larger separations take a very long time and can occasionally crash. If q=1, the initial binary configuration is specified through cos(varphi), not S.
-    
-    We recommend to use one of the wrappers `precession.orbit_averaged` and `precession.orbit_angles` provided.
+    Single orbit-averaged integration. Integrate the system of ODEs specified in
+    `precession.orbav_eqs`. The initial configuration (at r_vals[0]) is
+    specified through J, xi and S. The components of the unit vectors L, S1 and
+    S2 are returned at the output separations specified by r_vals. The initial
+    values of J and S must be compatible with the initial separation r_vals[0],
+    otherwise an error is raised. Integration is performed in a reference frame
+    in which the z axis is along J and L lies in the x-z plane at the initial
+    separation. Equations are integrated in v (orbital velocity) but outputs are
+    converted to r (separation).
+
+    Of course, this can only integrate to/from FINITE separations.
+
+    Bear in mind that orbit-averaged integrations are tpically possible from
+    r<10000; integrations from larger separations take a very long time and can
+    occasionally crash. If q=1, the initial binary configuration is specified
+    through cos(varphi), not S.
+
+    We recommend to use one of the wrappers `precession.orbit_averaged` and
+    `precession.orbit_angles` provided.
  
     **Call:**
 
@@ -3320,7 +3496,8 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
 def orbav_integrator_checkpoint(J,xi,S,r_vals,q,S1,S2):
 
     '''
-    Auxiliary function, see `precession.orbit_averaged` and `precession.orbit_angles`.
+    Auxiliary function, see `precession.orbit_averaged` and
+    `precession.orbit_angles`.
  
     **Call:**
 
@@ -3377,7 +3554,15 @@ def orbav_integrator_checkpoint(J,xi,S,r_vals,q,S1,S2):
 def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
 
     '''
-    Wrapper of `precession.orbav_integrator` to enable parallelization through the python parmap module; the number of available cores can be specified using the integer global variable `CPUs` (all available cores will be used by default). Input/outputs are given in terms of J, xi and S. Evolve a sequence of binaries with the SAME q, S1,S2 but different xi and initial values of J and S; save outputs at r_vals. The initial configuration must be compatible with r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the first binary (1D array at all output separations) and J_vals[0][0] is the first binary at the first output separation (this is a scalar).
+    Wrapper of `precession.orbav_integrator` to enable parallelization through
+    the python parmap module; the number of available cores can be specified
+    using the integer global variable `CPUs` (all available cores will be used
+    by default). Input/outputs are given in terms of J, xi and S. Evolve a
+    sequence of binaries with the SAME q, S1,S2 but different xi and initial
+    values of J and S; save outputs at r_vals. The initial configuration must be
+    compatible with r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the
+    first binary (1D array at all output separations) and J_vals[0][0] is the
+    first binary at the first output separation (this is a scalar).
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
@@ -3530,8 +3715,16 @@ def orbit_angles_single(theta1_i,theta2_i,deltaphi_i,r_vals,q,S1,S2):
 def orbit_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
 
     '''
-    Wrapper of `precession.orbav_integrator` to enable parallelization through the python parmap module; the number of available cores can be specified using the integer global variable `CPUs` (all available cores will be used by default). Input/outputs are given in terms of the angles theta1, theta2 and deltaphi. Evolve a sequence of binaries with the SAME q, S1,S2 but different initial values for the angles; save outputs at r_vals. Output is a 2D array, where e.g. theta1_vals[0] is the first binary (1D array at all output separations) and theta1_vals[0][0] is the first binary at the first output separation (this is a scalar).
-    
+    Wrapper of `precession.orbav_integrator` to enable parallelization through
+    the python parmap module; the number of available cores can be specified
+    using the integer global variable `CPUs` (all available cores will be used
+    by default). Input/outputs are given in terms of the angles theta1, theta2
+    and deltaphi. Evolve a sequence of binaries with the SAME q, S1,S2 but
+    different initial values for the angles; save outputs at r_vals. Output is a
+    2D array, where e.g. theta1_vals[0] is the first binary (1D array at all
+    output separations) and theta1_vals[0][0] is the first binary at the first
+    output separation (this is a scalar).
+
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
     **Call:**
@@ -3705,12 +3898,24 @@ def hybrid_single(xi,kappa_inf,r_vals,q,S1,S2,r_t):
 def hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t):
  
     '''
-    Hybrid inspiral. Evolve a binary FROM INIFINITELY large separations (as specified by kappa_inf and xi) till the threshold r_transition using the precession-averaged approach, and then from r_transition to the end of the inspiral using an orbit-averaged integration to track the precessional phase. 
-    
-    Parallelization is implemented through the python parmap module; the number of available cores can be specified using the integer global variable `CPUs` (all available cores will be used by default). Evolve a sequence of binaries with the SAME q, S1,S2 but different xi and kappa_inf; save outputs at r_vals. 
-    
-    The initial condition is NOT returned by this function. Outputs are given in terms of the angles theta1, theta2 and deltaphi as 2D arrays, where e.g theta1_fvals[0] is the first binary (1D array at all output separations) and theta1_fvals[0][0] is the first binary at the first output separation (this is a scalar).
- 
+    Hybrid inspiral. Evolve a binary FROM INIFINITELY large separations (as
+    specified by kappa_inf and xi) till the threshold r_transition using the
+    precession-averaged approach, and then from r_transition to the end of the
+    inspiral using an orbit-averaged integration to track the precessional
+    phase.
+
+    Parallelization is implemented through the python parmap module; the number
+    of available cores can be specified using the integer global variable `CPUs`
+    (all available cores will be used by default). Evolve a sequence of binaries
+    with the SAME q, S1,S2 but different xi and kappa_inf; save outputs at
+    r_vals.
+
+    The initial condition is NOT returned by this function. Outputs are given in
+    terms of the angles theta1, theta2 and deltaphi as 2D arrays, where e.g
+    theta1_fvals[0] is the first binary (1D array at all output separations) and
+    theta1_fvals[0][0] is the first binary at the first output separation (this
+    is a scalar).
+
     **Call:**
 
         theta1f_vals,theta2f_vals,deltaphif_vals=precession.hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t)
@@ -3803,9 +4008,9 @@ def ftor(f,M_msun):
     
     '''
     Conversion between binary separation r (in mass unit) and emitted GW
-    frequency f (in Hertz). We use the Newtonian expression:
-    f^2 = G M / (pi^2 r^3) in cgs units. Mass units: r--> GMr/c^2
- 
+    frequency f (in Hertz). We use the Newtonian expression: f^2 = G M / (pi^2
+    r^3) in cgs units. Mass units: r--> GMr/c^2
+
     **Call:**
 
         r=precession.ftor(f,M_msun)
@@ -3832,9 +4037,9 @@ def ftor(f,M_msun):
 def rtof(r,M_msun):
 
     '''
-    Conversion between emitted GW frequency f (in Hertz) and binary
-    separation r (in mass unit). We use the Newtonian expression:
-    f^2 = G M / (pi^2 r^3) in cgs units. Mass units: r--> GMr/c^2
+    Conversion between emitted GW frequency f (in Hertz) and binary separation r
+    (in mass unit). We use the Newtonian expression: f^2 = G M / (pi^2 r^3) in
+    cgs units. Mass units: r--> GMr/c^2
  
     **Call:**
 
@@ -3863,7 +4068,7 @@ def cutoff(detector,M_msun):
     Return the GW frequency and binary separation (in total-mass units) when
     binary enter the sensitivity window of a typical ground-based LIGO-like
     detector or a LISA-like space mission.
- 
+
     **Call:**
 
         r,f=precession.cutoff(detector,M_msun)
