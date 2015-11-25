@@ -1555,7 +1555,7 @@ def phase_xi(J,q,S1,S2,r):
 
     **Call:**
 
-        phases=precession.phase_xi(J,q,S1,S2,r)
+        phase,xi_transit_low,xi_transit_up=precession.phase_xi(J,q,S1,S2,r)
     
     **Parameters:**
 
@@ -1567,7 +1567,9 @@ def phase_xi(J,q,S1,S2,r):
 
     **Returns:**
 
-    - phases: number of coexisting morphologies: 1 if only the DeltaPhi~pi phase is present; 2 if two DeltaPhi~pi phases and a circulating phase are present; 3 if a librating DeltaPhi~0, a circulating, and a DeltaPhi~pi phase al all present.
+    - phase: number of coexisting morphologies: 1 if only the DeltaPhi~pi phase is present; 2 if two DeltaPhi~pi phases and a circulating phase are present; 3 if a librating DeltaPhi~0, a circulating, and a DeltaPhi~pi phase al all present.
+    - xi_transit_low: value of xi marking the transition between the low and the middle phase
+    - xi_transit_up: value of xi marking the transition between the upper and the middle phase
     '''
 
     xi_min,xi_max=xi_allowed(J,q,S1,S2,r)
@@ -1577,6 +1579,7 @@ def phase_xi(J,q,S1,S2,r):
     St_min,St_max=St_limits(J,q,S1,S2,r)
     morph_ximin=find_morphology(xi_plus(St_max,J,q,S1,S2,r),J,q,S1,S2,r)
     morph_ximax=find_morphology(xi_plus(St_min,J,q,S1,S2,r),J,q,S1,S2,r)
+    
     
     # The morphology at xi_max must be librating about pi. The morphology at xi_min can't be circulating.  Check if, because of degeneracies and numerical issues, a different morphology is be detected... 
     if morph_ximax!=1 or morph_ximin==0:
@@ -3304,9 +3307,9 @@ def orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2):
     - `eta`: symmetric mass ratio.
     - `m1`: mass of the primary BH.
     - `m2`: mass of the secondary BH.
-    - `chi1`: dimensionless spin magnitude of the primary BH. Must be 0<chi1<1.
-    - `chi2`: dimensionless spin magnitude of the secondary BH. Must be 0<chi1<1.
-
+    - `chi1`: dimensionless spin magnitude of the primary BH. Must be 0<=chi1<=1
+    - `chi2`: dimensionless spin magnitude of the secondary BH. Must be 0<=chi2<=1
+    
     **Returns:**
 
     - `allders`: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.
