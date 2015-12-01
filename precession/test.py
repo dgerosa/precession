@@ -1,6 +1,6 @@
 '''
 # DYNAMICS OF PRECESSING BLACK-HOLE BINARIES
-precession.tutorial is a submodule containing various tests to illustate the features of precession.
+precession.test is a submodule containing various tests to illustate the features of precession.
 
 PUT MORE MORE
 
@@ -23,8 +23,8 @@ def parameter_selection():
 
     **Run using**
 
-        import precession.tutorial
-        precession.tutorial.parameter_selection()
+        import precession.test
+        precession.test.parameter_selection()
     '''
     print parameter_selection.__doc__
 
@@ -68,14 +68,14 @@ def parameter_selection():
     xi,J,S = precession.from_the_angles(t1,t2,dp,q,S1,S2,r)
     print "From the angles one can go back to"
     print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xi,J,S)
-        
+
     print "\n *Features of spin precession*"
     t1_dp0,t2_dp0,t1_dp180,t2_dp180=precession.resonant_finder(xi,q,S1,S2,r)
     print "The spin-orbit resonances are located at"
     print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=0" %(t1_dp0,t2_dp0)
     print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=pi" %(t1_dp180,t2_dp180)
     tau = precession.precession_period(xi,J,q,S1,S2,r)
-    print "We integrate dt/dS to calculate the precessional period tau=%.3f" %tau
+    print "We integrate dt/dS to calculate the period tau=%.3f" %tau
     alpha = precession.alphaz(xi,J,q,S1,S2,r)
     print "We integrate Omega*dt/dS to find alpha=%.3f" %alpha
     morphology = precession.find_morphology(xi,J,q,S1,S2,r)
@@ -87,11 +87,11 @@ def parameter_selection():
     phase,xi_transit_low,xi_transit_up=precession.phase_xi(J,q,S1,S2,r)
     sys.stdout = sys.__stdout__ # Restore warnings
     if phase==-1: labelp="a single DeltaPhi~pi phase"
-    elif phase==2: labelp="two DeltaPhi~pi phases and a Circulating phase"    
-    elif phase==3: labelp="a DeltaPhi~0, a Circulating, and a DeltaPhi~pi phase"
+    elif phase==2: labelp="two DeltaPhi~pi phases, a Circulating phase"    
+    elif phase==3: labelp="a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase"
     print "The coexisintg phases are: "+labelp
     print "Indeed, the current morphology ("+labelm+") is part of those."
-    
+
     print "\n *Parameter selection at infinitely separation*"
     print "We study a binary with:"
     print "\t mass ratio q= %.3f" %q
@@ -115,6 +115,6 @@ def parameter_selection():
     xi,kappainf = precession.from_the_angles_inf(t1_inf,t2_inf,q,S1,S2)
     print "From the angles one can go back to"
     print "\t (xi,kappa_inf)=(%.3f,%.3f)" %(xi,kappainf)
-   
+
    
 #parameter_selection()

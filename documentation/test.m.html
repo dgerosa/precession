@@ -3,8 +3,9 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>precession.tutorial API documentation</title>
-    <meta name="description" content="" />
+    <title>precession.test API documentation</title>
+    <meta name="description" content="# DYNAMICS OF PRECESSING BLACK-HOLE BINARIES
+precession.test is a submodule containing various tests..." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
   
@@ -969,52 +970,14 @@ table {
   <div id="sidebar">
     <h1>Index</h1>
     <ul id="index">
-    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#precession.tutorial.J">J</a></li>
-    <li class="mono"><a href="#precession.tutorial.J_vals">J_vals</a></li>
-    <li class="mono"><a href="#precession.tutorial.Jmax">Jmax</a></li>
-    <li class="mono"><a href="#precession.tutorial.Jmin">Jmin</a></li>
-    <li class="mono"><a href="#precession.tutorial.M">M</a></li>
-    <li class="mono"><a href="#precession.tutorial.S">S</a></li>
-    <li class="mono"><a href="#precession.tutorial.S1">S1</a></li>
-    <li class="mono"><a href="#precession.tutorial.S2">S2</a></li>
-    <li class="mono"><a href="#precession.tutorial.Sb_max">Sb_max</a></li>
-    <li class="mono"><a href="#precession.tutorial.Sb_min">Sb_min</a></li>
-    <li class="mono"><a href="#precession.tutorial.Sso_max">Sso_max</a></li>
-    <li class="mono"><a href="#precession.tutorial.Sso_min">Sso_min</a></li>
-    <li class="mono"><a href="#precession.tutorial.St_max">St_max</a></li>
-    <li class="mono"><a href="#precession.tutorial.St_min">St_min</a></li>
-    <li class="mono"><a href="#precession.tutorial.alpha">alpha</a></li>
-    <li class="mono"><a href="#precession.tutorial.chi1">chi1</a></li>
-    <li class="mono"><a href="#precession.tutorial.chi2">chi2</a></li>
-    <li class="mono"><a href="#precession.tutorial.deltaphi">deltaphi</a></li>
-    <li class="mono"><a href="#precession.tutorial.kappa_inf">kappa_inf</a></li>
-    <li class="mono"><a href="#precession.tutorial.labelm">labelm</a></li>
-    <li class="mono"><a href="#precession.tutorial.labelp">labelp</a></li>
-    <li class="mono"><a href="#precession.tutorial.m1">m1</a></li>
-    <li class="mono"><a href="#precession.tutorial.m2">m2</a></li>
-    <li class="mono"><a href="#precession.tutorial.morphology">morphology</a></li>
-    <li class="mono"><a href="#precession.tutorial.phase">phase</a></li>
-    <li class="mono"><a href="#precession.tutorial.q">q</a></li>
-    <li class="mono"><a href="#precession.tutorial.r">r</a></li>
-    <li class="mono"><a href="#precession.tutorial.r_final">r_final</a></li>
-    <li class="mono"><a href="#precession.tutorial.tau">tau</a></li>
-    <li class="mono"><a href="#precession.tutorial.theta1">theta1</a></li>
-    <li class="mono"><a href="#precession.tutorial.theta12">theta12</a></li>
-    <li class="mono"><a href="#precession.tutorial.theta2">theta2</a></li>
-    <li class="mono"><a href="#precession.tutorial.xi">xi</a></li>
-    <li class="mono"><a href="#precession.tutorial.xi_low">xi_low</a></li>
-    <li class="mono"><a href="#precession.tutorial.xi_max">xi_max</a></li>
-    <li class="mono"><a href="#precession.tutorial.xi_min">xi_min</a></li>
-    <li class="mono"><a href="#precession.tutorial.xi_transit_low">xi_transit_low</a></li>
-    <li class="mono"><a href="#precession.tutorial.xi_transit_up">xi_transit_up</a></li>
-    <li class="mono"><a href="#precession.tutorial.xi_up">xi_up</a></li>
+    <li class="mono"><a href="#precession.test.parameter_selection">parameter_selection</a></li>
   </ul>
 
     </li>
-
 
 
     </ul>
@@ -1028,428 +991,264 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">precession.tutorial</span> module</h1>
+  <h1 class="title"><span class="name">precession.test</span> module</h1>
+  <h1>DYNAMICS OF PRECESSING BLACK-HOLE BINARIES</h1>
+<p>precession.test is a submodule containing various tests to illustate the features of precession.</p>
+<p>PUT MORE MORE</p>
   
-  
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.tutorial', this);">Show source &equiv;</a></p>
-  <div id="source-precession.tutorial" class="source">
-    <pre><code>__author__ = "Davide Gerosa"
-__email__ = "d.gerosa@damtp.cam.ac.uk"
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test', this);">Show source &equiv;</a></p>
+  <div id="source-precession.test" class="source">
+    <pre><code>'''
+# DYNAMICS OF PRECESSING BLACK-HOLE BINARIES
+precession.test is a submodule containing various tests to illustate the features of precession.
+
+PUT MORE MORE
+
+'''
 
 import sys,os
 import precession  # My module to compute stuff on the precession timescale
 
-# This is a tiny tutorial to learn using my code precession.py
+__author__ = precession.__author__
+__email__ = precession.__email__
+__copyright__ = precession.__copyright__
+__license__ = precession.__license__
+__version__ = precession.__version__
 
 
-q=0.8
-chi1=1.
-chi2=1.
-print "The main parameters here are q="+str(q)+" chi1="+str(chi1)+" and chi2="+str(chi2)
+def parameter_selection():
+    '''
+    Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.
+    All quantities are given in total-mass units c=G=M=1.
 
-M,m1,m2,S1,S2 = precession.get_fixed(q,chi1,chi2)
-print "The magnitude of the two spins in total mass units (M="+str(M)+") are S1="+str(S1)+" S2="+str(S2)
+    **Run using**
 
-r=100*M
-print "The separation is r="+str(r)
+        import precession.test
+        precession.test.parameter_selection()
+    '''
+    print parameter_selection.__doc__
 
-Jmin,Jmax = precession.J_lim(q,S1,S2,r)
-xi_min,xi_max=precession.xi_lim(q,S1,S2)
-Sso_min,Sso_max=precession.Sso_limits(S1,S2)
+    print "\n *Parameter selection at finite separation*"
+    q=0.8   # Must be q<=1. Check documentation for q=1.
+    chi1=1. # Must be chi1<=1
+    chi2=1. # Must be chi2<=1
+    print "We study a binary with:"
+    print "\t mass ratio q= %.3f" %q
+    print "\t dimensionless spins chi1=%.3f and chi2=%.3f" %(chi1,chi2)
+    M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
+    print "\t spin magnitudes S1=%.3f and S2=%.3f" %(S1,S2)
+    r=100*M # Must be r>10M for PN to be valid
+    print "\t separation is r=%.3f" %r
+    xi_min,xi_max=precession.xi_lim(q,S1,S2)
+    Jmin,Jmax=precession.J_lim(q,S1,S2,r)
+    Sso_min,Sso_max=precession.Sso_limits(S1,S2)
+    print "The geometrical limits on xi,J and S are"
+    print "\t %.3f <= xi <= %.3f" %(xi_min,xi_max)
+    print "\t %.3f <= J <= %.3f" %(Jmin,Jmax)
+    print "\t %.3f <= S <= %.3f" %(Sso_min,Sso_max)
+    J= (Jmin+Jmax)/2.
+    print "We select a value of J=%.3f within the limits." %J
+    St_min,St_max=precession.St_limits(J,q,S1,S2,r)
+    print "This constraints the range of S to"
+    print "\t %.3f <= S <= %.3f" %(St_min,St_max)
+    xi_low,xi_up=precession.xi_allowed(J,q,S1,S2,r)
+    print "The allowed values of xi can be found extremizing the effective potentials"
+    print "\t %.3f <= xi <= %.3f" %(xi_low,xi_up)
+    xi=(xi_low+xi_up)/2.
+    print "We select a value of xi=%.3f within the limits." %xi
+    test=(J>=min(precession.J_allowed(xi,q,S1,S2,r)) and J<=max(precession.J_allowed(xi,q,S1,S2,r)))
+    print "Is our couple (xi,J) consistent?", test
+    Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r)
+    print "S oscillates between S-=%.3f and S+=%.3f" %(Sb_min,Sb_max)
+    S=(Sb_min+Sb_max)/2.
+    print "We select a value of S=%.3f between S- and S+" %S
+    t1,t2,dp,t12=precession.parametric_angles(S,J,xi,q,S1,S2,r)
+    print "The angles describing the spin orientations are"
+    print "\t (theta1,theta2,DeltaPhi)=(%.3f,%.3f,%.3f)" %(t1,t2,dp)
+    xi,J,S = precession.from_the_angles(t1,t2,dp,q,S1,S2,r)
+    print "From the angles one can go back to"
+    print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xi,J,S)
 
-print "The geometrical limits in xi,J and S are"
-print "\t "+str(xi_min)+" <= xi <= "+str(xi_max)
-print "\t "+str(Jmin)+" <= J <= "+str(Jmax)
-print "\t "+str(Sso_min)+" <= S <= "+str(Sso_max)
+    print "\n *Features of spin precession*"
+    t1_dp0,t2_dp0,t1_dp180,t2_dp180=precession.resonant_finder(xi,q,S1,S2,r)
+    print "The spin-orbit resonances are located at"
+    print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=0" %(t1_dp0,t2_dp0)
+    print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=pi" %(t1_dp180,t2_dp180)
+    tau = precession.precession_period(xi,J,q,S1,S2,r)
+    print "We integrate dt/dS to calculate the period tau=%.3f" %tau
+    alpha = precession.alphaz(xi,J,q,S1,S2,r)
+    print "We integrate Omega*dt/dS to find alpha=%.3f" %alpha
+    morphology = precession.find_morphology(xi,J,q,S1,S2,r)
+    if morphology==-1: labelm="Librating about DeltaPhi=0"
+    elif morphology==1: labelm="Librating about DeltaPhi=pi"    
+    elif morphology==0: labelm="Circulating"
+    print "The precessional morphology of this binary is: "+labelm
+    sys.stdout = os.devnull # Ignore warnings
+    phase,xi_transit_low,xi_transit_up=precession.phase_xi(J,q,S1,S2,r)
+    sys.stdout = sys.__stdout__ # Restore warnings
+    if phase==-1: labelp="a single DeltaPhi~pi phase"
+    elif phase==2: labelp="two DeltaPhi~pi phases, a Circulating phase"    
+    elif phase==3: labelp="a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase"
+    print "The coexisintg phases are: "+labelp
+    print "Indeed, the current morphology ("+labelm+") is part of those."
 
-J= (Jmin+Jmax)/2.
-print "Let me select a value of J="+str(J)+" within the limits."
+    print "\n *Parameter selection at infinitely separation*"
+    print "We study a binary with:"
+    print "\t mass ratio q= %.3f" %q
+    print "\t dimensionless spins chi1=%.3f and chi2=%.3f" %(chi1,chi2)
+    print "\t at infinitely large separation"
+    kappainf_min,kappainf_max=precession.kappainf_lim(S1,S2)
+    print "The geometrical limits on xi and kappa_inf are"    
+    print "\t %.3f <= xi <= %.3f" %(xi_min,xi_max)
+    print "\t %.3f <= kappa_inf <= %.3f" %(kappainf_min,kappainf_max)
+    print "We select a value of xi=%.3f within the limits." %xi
+    kappainf_low,kappainf_up=precession.kappainf_allowed(xi,q,S1,S2)
+    print "This constraints the range of kappa_inf to"
+    print "\t %.3f <= kappa_inf <= %.3f" %(kappainf_low,kappainf_up)
+    kappainf=(kappainf_low+kappainf_up)/2.
+    print "We select a value of kappa_inf=%.3f within the limits." %kappainf
+    test=(xi>=min(precession.xiinf_allowed(kappainf,q,S1,S2)) and xi<=max(precession.xiinf_allowed(kappainf,q,S1,S2)))
+    print "Is our couple (xi,kappa_inf) consistent?", test 
+    t1_inf,t2_inf=precession.thetas_inf(xi,kappainf,q,S1,S2)
+    print "The asymptotic (constant) values of theta1 and theta2 are"
+    print "\t (theta1_inf,theta2_inf)=(%.3f,%.3f)" %(t1_inf,t2_inf)
+    xi,kappainf = precession.from_the_angles_inf(t1_inf,t2_inf,q,S1,S2)
+    print "From the angles one can go back to"
+    print "\t (xi,kappa_inf)=(%.3f,%.3f)" %(xi,kappainf)
 
-St_min,St_max = precession.St_limits(J,q,S1,S2,r)
-print "This constraints the range of S to"
-print "\t "+str(St_min)+" <= S <= "+str(St_max)
-
-xi_low,xi_up = precession.xi_allowed(J,q,S1,S2,r)
-print "The allowed values of xi can be found extrmizing the effective potentials"
-print "\t "+str(xi_low)+" <= xi <= "+str(xi_up)
-
-xi=(xi_low+xi_up)/2.
-print "Let me select a value of xi="+str(xi)+" within the limits."
-
-Sb_min,Sb_max = precession.Sb_limits(xi,J,q,S1,S2,r)
-print "I have a consisten couple (J,xi). S oscillates between S-="+str(Sb_min)+"and S+="+str(Sb_max)
-
-S=(Sb_min+Sb_max)/2.
-print "Let me select a value of S="+str(S)+" between S- and S+"
-
-theta1,theta2,deltaphi,theta12 = precession.parametric_angles(S,J,xi,q,S1,S2,r)
-print "The angles describing the spin orientations with respect to the orbital plane are"
-print "\t theta1="+str(theta1)
-print "\t theta2="+str(theta2)
-print "\t DeltaPhi="+str(deltaphi)
-
-xi,J,S = precession.from_the_angles(theta1,theta2,deltaphi,q,S1,S2,r)
-print "Of course, from the angles one can go back to"
-print "\t xi="+str(xi)
-print "\t J="+str(J)
-print "\t S="+str(S)
-
-tau = precession.precession_period(xi,J,q,S1,S2,r)
-print "One can integrate dt/dS to find the precessional period tau="+str(tau)
-
-alpha = precession.alphaz(xi,J,q,S1,S2,r)
-print "One can also integrate Omega*dt/dS to find alpha="+str(alpha)
-
-morphology = precession.find_morphology(xi,J,q,S1,S2,r)
-if morphology==-1:
-    labelm="Librating about DeltaPhi=0"
-elif morphology==1:
-    labelm="Librating about DeltaPhi=pi"    
-elif morphology==0:
-    labelm="Circulating"
-print "The precessional morphology of this binary is: "+labelm
-
-sys.stdout = os.devnull # Ignore warnings
-phase,xi_transit_low,xi_transit_up=precession.phase_xi(J,q,S1,S2,r)
-sys.stdout = sys.__stdout__ # Restore warnings
-if phase==-1:
-    labelp="a single DeltaPhi~pi phase"
-elif phase==2:
-    labelp="two DeltaPhi~pi phases and a circulating phase"    
-elif phase==3:
-    labelp="a DeltaPhi~0, a circulating, and a DeltaPhi~pi phase"
-print "At this value of J the coexisintg phases are: "+labelp+". Indeed, the current morphology ("+labelm+") is part of those."
-
-
-r_final=10*M
-J_vals = precession.Jofr(xi,J,[r,r_final],q,S1,S2)
-print "I can integrate dJ/dL from the initial condition J="+str(J_vals[0])+" specified at r="+str(r)+" down to r="+str(r_final)+"  and I find J="+str(J_vals[-1])
-
-kappa_inf = precession.kappa_backwards(xi,J,r,q,S1,S2)
-print "I can also integrate dJ/dL backwards to r=infinity from the same initial conditions finding kappa="+str(kappa_inf)
-
-
-
+   
+#parameter_selection()
 </code></pre>
   </div>
 
   </header>
 
   <section id="section-items">
-    <h2 class="section-title" id="header-variables">Module variables</h2>
-      <div class="item">
-      <p id="precession.tutorial.J" class="name">var <span class="ident">J</span></p>
+
+    <h2 class="section-title" id="header-functions">Functions</h2>
       
+  <div class="item">
+    <div class="name def" id="precession.test.parameter_selection">
+    <p>def <span class="ident">parameter_selection</span>(</p><p>)</p>
+    </div>
+    
+
+    
   
+    <div class="desc"><p>Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.
+All quantities are given in total-mass units c=G=M=1.</p>
+<p><strong>Run using</strong></p>
+<pre><code>import precession.test
+precession.test.parameter_selection()
+</code></pre></div>
   <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.parameter_selection', this);">Show source &equiv;</a></p>
+  <div id="source-precession.test.parameter_selection" class="source">
+    <pre><code>def parameter_selection():
+    '''
+    Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.
+    All quantities are given in total-mass units c=G=M=1.
+
+    **Run using**
+
+        import precession.test
+        precession.test.parameter_selection()
+    '''
+    print parameter_selection.__doc__
+
+    print "\n *Parameter selection at finite separation*"
+    q=0.8   # Must be q<=1. Check documentation for q=1.
+    chi1=1. # Must be chi1<=1
+    chi2=1. # Must be chi2<=1
+    print "We study a binary with:"
+    print "\t mass ratio q= %.3f" %q
+    print "\t dimensionless spins chi1=%.3f and chi2=%.3f" %(chi1,chi2)
+    M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
+    print "\t spin magnitudes S1=%.3f and S2=%.3f" %(S1,S2)
+    r=100*M # Must be r>10M for PN to be valid
+    print "\t separation is r=%.3f" %r
+    xi_min,xi_max=precession.xi_lim(q,S1,S2)
+    Jmin,Jmax=precession.J_lim(q,S1,S2,r)
+    Sso_min,Sso_max=precession.Sso_limits(S1,S2)
+    print "The geometrical limits on xi,J and S are"
+    print "\t %.3f <= xi <= %.3f" %(xi_min,xi_max)
+    print "\t %.3f <= J <= %.3f" %(Jmin,Jmax)
+    print "\t %.3f <= S <= %.3f" %(Sso_min,Sso_max)
+    J= (Jmin+Jmax)/2.
+    print "We select a value of J=%.3f within the limits." %J
+    St_min,St_max=precession.St_limits(J,q,S1,S2,r)
+    print "This constraints the range of S to"
+    print "\t %.3f <= S <= %.3f" %(St_min,St_max)
+    xi_low,xi_up=precession.xi_allowed(J,q,S1,S2,r)
+    print "The allowed values of xi can be found extremizing the effective potentials"
+    print "\t %.3f <= xi <= %.3f" %(xi_low,xi_up)
+    xi=(xi_low+xi_up)/2.
+    print "We select a value of xi=%.3f within the limits." %xi
+    test=(J>=min(precession.J_allowed(xi,q,S1,S2,r)) and J<=max(precession.J_allowed(xi,q,S1,S2,r)))
+    print "Is our couple (xi,J) consistent?", test
+    Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r)
+    print "S oscillates between S-=%.3f and S+=%.3f" %(Sb_min,Sb_max)
+    S=(Sb_min+Sb_max)/2.
+    print "We select a value of S=%.3f between S- and S+" %S
+    t1,t2,dp,t12=precession.parametric_angles(S,J,xi,q,S1,S2,r)
+    print "The angles describing the spin orientations are"
+    print "\t (theta1,theta2,DeltaPhi)=(%.3f,%.3f,%.3f)" %(t1,t2,dp)
+    xi,J,S = precession.from_the_angles(t1,t2,dp,q,S1,S2,r)
+    print "From the angles one can go back to"
+    print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xi,J,S)
+
+    print "\n *Features of spin precession*"
+    t1_dp0,t2_dp0,t1_dp180,t2_dp180=precession.resonant_finder(xi,q,S1,S2,r)
+    print "The spin-orbit resonances are located at"
+    print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=0" %(t1_dp0,t2_dp0)
+    print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=pi" %(t1_dp180,t2_dp180)
+    tau = precession.precession_period(xi,J,q,S1,S2,r)
+    print "We integrate dt/dS to calculate the period tau=%.3f" %tau
+    alpha = precession.alphaz(xi,J,q,S1,S2,r)
+    print "We integrate Omega*dt/dS to find alpha=%.3f" %alpha
+    morphology = precession.find_morphology(xi,J,q,S1,S2,r)
+    if morphology==-1: labelm="Librating about DeltaPhi=0"
+    elif morphology==1: labelm="Librating about DeltaPhi=pi"    
+    elif morphology==0: labelm="Circulating"
+    print "The precessional morphology of this binary is: "+labelm
+    sys.stdout = os.devnull # Ignore warnings
+    phase,xi_transit_low,xi_transit_up=precession.phase_xi(J,q,S1,S2,r)
+    sys.stdout = sys.__stdout__ # Restore warnings
+    if phase==-1: labelp="a single DeltaPhi~pi phase"
+    elif phase==2: labelp="two DeltaPhi~pi phases, a Circulating phase"    
+    elif phase==3: labelp="a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase"
+    print "The coexisintg phases are: "+labelp
+    print "Indeed, the current morphology ("+labelm+") is part of those."
+
+    print "\n *Parameter selection at infinitely separation*"
+    print "We study a binary with:"
+    print "\t mass ratio q= %.3f" %q
+    print "\t dimensionless spins chi1=%.3f and chi2=%.3f" %(chi1,chi2)
+    print "\t at infinitely large separation"
+    kappainf_min,kappainf_max=precession.kappainf_lim(S1,S2)
+    print "The geometrical limits on xi and kappa_inf are"    
+    print "\t %.3f <= xi <= %.3f" %(xi_min,xi_max)
+    print "\t %.3f <= kappa_inf <= %.3f" %(kappainf_min,kappainf_max)
+    print "We select a value of xi=%.3f within the limits." %xi
+    kappainf_low,kappainf_up=precession.kappainf_allowed(xi,q,S1,S2)
+    print "This constraints the range of kappa_inf to"
+    print "\t %.3f <= kappa_inf <= %.3f" %(kappainf_low,kappainf_up)
+    kappainf=(kappainf_low+kappainf_up)/2.
+    print "We select a value of kappa_inf=%.3f within the limits." %kappainf
+    test=(xi>=min(precession.xiinf_allowed(kappainf,q,S1,S2)) and xi<=max(precession.xiinf_allowed(kappainf,q,S1,S2)))
+    print "Is our couple (xi,kappa_inf) consistent?", test 
+    t1_inf,t2_inf=precession.thetas_inf(xi,kappainf,q,S1,S2)
+    print "The asymptotic (constant) values of theta1 and theta2 are"
+    print "\t (theta1_inf,theta2_inf)=(%.3f,%.3f)" %(t1_inf,t2_inf)
+    xi,kappainf = precession.from_the_angles_inf(t1_inf,t2_inf,q,S1,S2)
+    print "From the angles one can go back to"
+    print "\t (xi,kappa_inf)=(%.3f,%.3f)" %(xi,kappainf)
+</code></pre>
+  </div>
 </div>
 
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.J_vals" class="name">var <span class="ident">J_vals</span></p>
-      
+  </div>
   
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.Jmax" class="name">var <span class="ident">Jmax</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.Jmin" class="name">var <span class="ident">Jmin</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.M" class="name">var <span class="ident">M</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.S" class="name">var <span class="ident">S</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.S1" class="name">var <span class="ident">S1</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.S2" class="name">var <span class="ident">S2</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.Sb_max" class="name">var <span class="ident">Sb_max</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.Sb_min" class="name">var <span class="ident">Sb_min</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.Sso_max" class="name">var <span class="ident">Sso_max</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.Sso_min" class="name">var <span class="ident">Sso_min</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.St_max" class="name">var <span class="ident">St_max</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.St_min" class="name">var <span class="ident">St_min</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.alpha" class="name">var <span class="ident">alpha</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.chi1" class="name">var <span class="ident">chi1</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.chi2" class="name">var <span class="ident">chi2</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.deltaphi" class="name">var <span class="ident">deltaphi</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.kappa_inf" class="name">var <span class="ident">kappa_inf</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.labelm" class="name">var <span class="ident">labelm</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.labelp" class="name">var <span class="ident">labelp</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.m1" class="name">var <span class="ident">m1</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.m2" class="name">var <span class="ident">m2</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.morphology" class="name">var <span class="ident">morphology</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.phase" class="name">var <span class="ident">phase</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.q" class="name">var <span class="ident">q</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.r" class="name">var <span class="ident">r</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.r_final" class="name">var <span class="ident">r_final</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.tau" class="name">var <span class="ident">tau</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.theta1" class="name">var <span class="ident">theta1</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.theta12" class="name">var <span class="ident">theta12</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.theta2" class="name">var <span class="ident">theta2</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.xi" class="name">var <span class="ident">xi</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.xi_low" class="name">var <span class="ident">xi_low</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.xi_max" class="name">var <span class="ident">xi_max</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.xi_min" class="name">var <span class="ident">xi_min</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.xi_transit_low" class="name">var <span class="ident">xi_transit_low</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.xi_transit_up" class="name">var <span class="ident">xi_transit_up</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="precession.tutorial.xi_up" class="name">var <span class="ident">xi_up</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-
 
 
   </section>
