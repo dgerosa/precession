@@ -747,8 +747,7 @@ def get_varphi(xi,S,J,q,S1,S2,r,sign=1):
     '''
 
     if q==1:
-        print "[get_varphi] Error: I'm sorry, can't run for q=1. S is degenerate with varphi."
-        sys.exit()
+        assert False, "[get_varphi] Error: I'm sorry, can't run for q=1. S is degenerate with varphi."
 
     L=(q/(1.+q)**2)*(r*M**3)**.5
     t1=(1.+q)/(4.*q*M**2*S**2*L)
@@ -871,8 +870,8 @@ def Sb_limits(xi,J,q,S1,S2,r):
         print "J=", J
         print "L=", (q/(1.+q)**2)*(r*M**3)**.5
         print "r=", r
-        sys.exit()
-
+        assert False, "[Sb_limits] Erorr in case selection"
+    
     btol=1e-8 # Never go to close to the actual limits, because of numerical stabilty
     Sb_min+=btol
     Sb_max-=btol
@@ -1260,8 +1259,7 @@ def thetas_inf(xi,kappa_inf,q,S1,S2):
     '''
     
     if q==1:
-        print "[thetas_inf] Error: I'm sorry, can't run for q=1. The angles theta1 and theta2 are not constant at large separations."
-        sys.exit()
+        assert False, "[thetas_inf] Error: I'm sorry, can't run for q=1. The angles theta1 and theta2 are not constant at large separations."
     else:
         ct1=(-xi + kappa_inf*(1.+q**(-1)))/(S1*(q**(-1)-q))
         ct2=(xi - kappa_inf*(1.+q))/(S2*(q**(-1)-q))
@@ -1293,8 +1291,7 @@ def from_the_angles_inf(theta1_inf,theta2_inf,q,S1,S2):
     '''
     
     if q==1:
-        print "[from_the_angles_inf] Error: I'm sorry, can't run for q=1. The angles theta1 and theta2 are not constant at large separations."
-        sys.exit()
+        assert False, "[from_the_angles_inf] Error: I'm sorry, can't run for q=1. The angles theta1 and theta2 are not constant at large separations."
     else:
         xi= ((1.+q)*S1*np.cos(theta1_inf)+(1.+q**-1)*S2*np.cos(theta2_inf))*M**-2
         kappa_inf= (S1*np.cos(theta1_inf)+S2*np.cos(theta2_inf))*M**-2
@@ -1526,8 +1523,7 @@ def phase_checker(q,S1,S2,r,verbose=False):
         phases=[3,2]
 
     else:
-        print "[phase_checker] Error. You should never be here!"        
-        sys.exit()
+        assert False, "[phase_checker] Error. You should never be here!"        
         
     return phases
 
@@ -1940,8 +1936,7 @@ def t_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, t_initial=0, sign=
             print "[t_of_S] Warning: you are at resonance, varphi is ill defined here."
             return 0.
         elif min(S_initial,S_final) < -1 or max(S_initial,S_final) > 1:
-            print "[t_of_S] Error. You're trying to integrate over more than one (half)period"
-            sys.exit()
+            assert False, "[t_of_S] Error. You're trying to integrate over more than one (half)period"
         else:
             res=sp.integrate.quad(dtdS, S_initial, S_final, args=(xi,J,q,S1,S2,r,sign),full_output=1)
             return t_initial + res[0]
@@ -1949,9 +1944,7 @@ def t_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, t_initial=0, sign=
     if np.abs(Sb_min-Sb_max)<1e-8: # This happens when [Sb_limits] fails in bracketing of the solutions. In practice, this is a resonant binary.
         return 0.
     elif min(S_initial,S_final) < Sb_min or max(S_initial,S_final) > Sb_max:
-        print "[t_of_S] Error. You're trying to integrate over more than one (half)period"
-        print Sb_min,Sb_max
-        sys.exit()
+        assert False, "[t_of_S] Error. You're trying to integrate over more than one (half)period"
     else:
         res=sp.integrate.quad(dtdS, S_initial, S_final, args=(xi,J,q,S1,S2,r,sign),full_output=1)               
         return t_initial + res[0]
@@ -2080,8 +2073,7 @@ def alpha_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, alpha_initial=
             print "[alpha_of_S] Warning: you are at resonance, varphi is ill defined here."
             return 0.
         elif min(S_initial,S_final) < -1 or max(S_initial,S_final) > 1:
-            print "[alpha_of_S] Error. You're trying to integrate over more than one (half)period"
-            sys.exit()
+            assert False, "[alpha_of_S] Error. You're trying to integrate over more than one (half)period"
         else:
             # If q=1, S is constant and therefore Omegaz is also constant. It can be taken out of the integral.
             deltat=t_of_S(S_initial,S_final,Sb_min,Sb_max,xi,J,q,S1,S2,r)
@@ -2090,9 +2082,7 @@ def alpha_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, alpha_initial=
     if np.abs(Sb_min-Sb_max)<1e-8: # This typically happen when [Sb_limits] fails in bracketing of the solutions. In practice, this is a resonant binary.
         return 0.
     elif min(S_initial,S_final) < Sb_min or max(S_initial,S_final) > Sb_max:
-        print "[alpha_of_S] Error. You're trying to integrate over more than one (half)period"
-        print Sb_min,Sb_max
-        sys.exit()
+        assert False, "[alpha_of_S] Error. You're trying to integrate over more than one (half)period"
     else:
         # Actual integration
         res=sp.integrate.quad(OmegazdtdS, S_initial, S_final, args=(xi,J,q,S1,S2,r,sign),full_output=1)               
@@ -2408,8 +2398,8 @@ def Sb_limits_comp(xi,kappa,q,S1,S2,u):
         print "Stmax", St_max
         print "kappa=", kappa
         print "u=", u
-        sys.exit()
-
+        assert False, "[Sb_limits_comp] Erorr in case selection"
+        
     btol=1e-8 # Never go to close to the actual limits, because everything blows up there
     Sb_min+=btol
     Sb_max-=btol
@@ -3841,8 +3831,7 @@ def hybrid_single(xi,kappa_inf,r_vals,q,S1,S2,r_t):
         r_vals_oa=[r for r in r_vals if r<=r_t] # Keep r_t (if present) in the orbit-average part
 
         if not [r for r in r_vals_oa if r==r_t]: # If there's nothing but r_t in the orbit-averaged part
-            print "[hybrid] No output required below r_t. You don't need a hybrid integration, use evolve_J_infinity instead"
-            sys.exit()
+            assert False, "[hybrid] No output required below r_t. You don't need a hybrid integration, use evolve_J_infinity instead"
 
         # Add the threshold at the end of the precession-average part and at the beginning of the orbit-average part
         r_vals_pa.append(r_t)
@@ -4092,10 +4081,8 @@ def cutoff(detector,M_msun):
     elif detector=="space":
         fcut= 1e-5 # Hz
     else:
-        print "[cutoff] Please select 'space' or 'ground'. Otherwise run ftor with the chosen frequency"
-        sys.exit()
+        assert False, "[cutoff] Please select 'space' or 'ground'. Otherwise run ftor with the chosen frequency"
     rcut=ftor(fcut,M_msun)
-
     return rcut, fcut
         
         
