@@ -3431,15 +3431,15 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
 
     **Returns:**
 
-    - `Lhx_vals`: x component of the unit vector L/|L| (array).
-    - `Lhy_vals`: y component of the unit vector L/|L| (array).
-    - `Lhz_vals`: z component of the unit vector L/|L| (array).
-    - `S1hx_vals`: x component of the unit vector S1/|S1| (array).
-    - `S1hy_vals`: y component of the unit vector S1/|S1| (array).
-    - `S1hz_vals`: z component of the unit vector S1/|S1| (array).
-    - `S2hx_vals`: x component of the unit vector S2/|S2| (array).
-    - `S2hy_vals`: y component of the unit vector S2/|S2| (array).
-    - `S2hz_vals`: z component of the unit vector S2/|S2| (array).   
+    - `Lhx_vals`: x component of the unit vector L/|L|.
+    - `Lhy_vals`: y component of the unit vector L/|L|.
+    - `Lhz_vals`: z component of the unit vector L/|L|.
+    - `S1hx_vals`: x component of the unit vector S1/|S1|.
+    - `S1hy_vals`: y component of the unit vector S1/|S1|.
+    - `S1hz_vals`: z component of the unit vector S1/|S1|.
+    - `S2hx_vals`: x component of the unit vector S2/|S2|.
+    - `S2hy_vals`: y component of the unit vector S2/|S2|.
+    - `S2hz_vals`: z component of the unit vector S2/|S2|.
     '''
 
     # Get initial condition in a cartesian frame. Use the frame aligned to J at the initial separation
