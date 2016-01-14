@@ -112,7 +112,7 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2015 Davide Gerosa"
 __license__ = "CC by-nc-sa 3.0"
-__version__ = "0.0.0.23"
+__version__ = "0.0.0.24"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
@@ -241,7 +241,7 @@ def get_fixed(q,chi1,chi2):
     return M,m1,m2,S1,S2
 
 
-def get_fixed(r,q):
+def get_L(r,q):
 
     '''
     Return Newtonian expression for the orbital angular momentum. This function is not called explicitely within the precession module to increase efficiency.
