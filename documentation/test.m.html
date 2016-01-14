@@ -852,6 +852,71 @@ table {
 
   </style>
 
+  <style type="text/css">
+  .codehilite .hll { background-color: #ffffcc }
+.codehilite  { background: #f8f8f8; }
+.codehilite .c { color: #408080; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #FF0000 } /* Error */
+.codehilite .k { color: #008000; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666666 } /* Operator */
+.codehilite .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #BC7A00 } /* Comment.Preproc */
+.codehilite .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #408080; font-style: italic } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .gr { color: #FF0000 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #00A000 } /* Generic.Inserted */
+.codehilite .go { color: #888888 } /* Generic.Output */
+.codehilite .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #0044DD } /* Generic.Traceback */
+.codehilite .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #008000 } /* Keyword.Pseudo */
+.codehilite .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #B00040 } /* Keyword.Type */
+.codehilite .m { color: #666666 } /* Literal.Number */
+.codehilite .s { color: #BA2121 } /* Literal.String */
+.codehilite .na { color: #7D9029 } /* Name.Attribute */
+.codehilite .nb { color: #008000 } /* Name.Builtin */
+.codehilite .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #880000 } /* Name.Constant */
+.codehilite .nd { color: #AA22FF } /* Name.Decorator */
+.codehilite .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.codehilite .nf { color: #0000FF } /* Name.Function */
+.codehilite .nl { color: #A0A000 } /* Name.Label */
+.codehilite .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #19177C } /* Name.Variable */
+.codehilite .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #bbbbbb } /* Text.Whitespace */
+.codehilite .mb { color: #666666 } /* Literal.Number.Bin */
+.codehilite .mf { color: #666666 } /* Literal.Number.Float */
+.codehilite .mh { color: #666666 } /* Literal.Number.Hex */
+.codehilite .mi { color: #666666 } /* Literal.Number.Integer */
+.codehilite .mo { color: #666666 } /* Literal.Number.Oct */
+.codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
+.codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+.codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
+.codehilite .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.codehilite .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.codehilite .sx { color: #008000 } /* Literal.String.Other */
+.codehilite .sr { color: #BB6688 } /* Literal.String.Regex */
+.codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
+.codehilite .ss { color: #19177C } /* Literal.String.Symbol */
+.codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.codehilite .vc { color: #19177C } /* Name.Variable.Class */
+.codehilite .vg { color: #19177C } /* Name.Variable.Global */
+.codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+.codehilite .il { color: #666666 } /* Literal.Number.Integer.Long */
+  </style>
 
   <style type="text/css">
   
@@ -970,11 +1035,19 @@ table {
   <div id="sidebar">
     <h1>Index</h1>
     <ul id="index">
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#precession.test.font">font</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
     <li class="mono"><a href="#precession.test.parameter_selection">parameter_selection</a></li>
+    <li class="mono"><a href="#precession.test.spin_angles">spin_angles</a></li>
   </ul>
 
     </li>
@@ -998,132 +1071,217 @@ table {
   
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test', this);">Show source &equiv;</a></p>
   <div id="source-precession.test" class="source">
-    <pre><code>'''
-# DYNAMICS OF PRECESSING BLACK-HOLE BINARIES
-precession.test is a submodule containing various tests to illustate the features of precession.
+    <div class="codehilite"><pre><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd"># DYNAMICS OF PRECESSING BLACK-HOLE BINARIES</span>
+<span class="sd">precession.test is a submodule containing various tests to illustate the features of precession.</span>
 
-PUT MORE MORE
+<span class="sd">PUT MORE MORE</span>
 
-'''
+<span class="sd">&#39;&#39;&#39;</span>
 
-import sys,os
-import precession  # My module to compute stuff on the precession timescale
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span><span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">precession</span>  <span class="c"># My module to compute stuff on the precession timescale</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">use</span> <span class="c">#Useful when working on SSH</span>
+<span class="n">use</span><span class="p">(</span><span class="s">&#39;Agg&#39;</span><span class="p">)</span> 
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rc</span> <span class="c">#Set plot defaults</span>
+<span class="n">font</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;family&#39;</span><span class="p">:</span><span class="s">&#39;serif&#39;</span><span class="p">,</span><span class="s">&#39;serif&#39;</span><span class="p">:[</span><span class="s">&#39;cmr10&#39;</span><span class="p">],</span><span class="s">&#39;weight&#39;</span> <span class="p">:</span> <span class="s">&#39;medium&#39;</span><span class="p">,</span><span class="s">&#39;size&#39;</span> <span class="p">:</span> <span class="mi">17</span><span class="p">}</span>
+<span class="n">rc</span><span class="p">(</span><span class="s">&#39;font&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">font</span><span class="p">)</span>
+<span class="n">rc</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">,</span><span class="n">usetex</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">rc</span><span class="p">(</span><span class="s">&#39;figure&#39;</span><span class="p">,</span><span class="n">max_open_warning</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pylab</span>
 
-__author__ = precession.__author__
-__email__ = precession.__email__
-__copyright__ = precession.__copyright__
-__license__ = precession.__license__
-__version__ = precession.__version__
+<span class="n">__author__</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">__author__</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">__email__</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">__copyright__</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">__license__</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">__version__</span>
 
 
-def parameter_selection():
-    '''
-    Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.
-    All quantities are given in total-mass units c=G=M=1.
+<span class="k">def</span> <span class="nf">parameter_selection</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.</span>
+<span class="sd">    All quantities are given in total-mass units c=G=M=1.</span>
 
-    **Run using**
+<span class="sd">    **Run using**</span>
 
-        import precession.test
-        precession.test.parameter_selection()
-    '''
-    print parameter_selection.__doc__
+<span class="sd">        import precession.test</span>
+<span class="sd">        precession.test.parameter_selection()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 
-    print "\n *Parameter selection at finite separation*"
-    q=0.8   # Must be q<=1. Check documentation for q=1.
-    chi1=1. # Must be chi1<=1
-    chi2=1. # Must be chi2<=1
-    print "We study a binary with:"
-    print "\t mass ratio q= %.3f" %q
-    print "\t dimensionless spins chi1=%.3f and chi2=%.3f" %(chi1,chi2)
-    M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
-    print "\t spin magnitudes S1=%.3f and S2=%.3f" %(S1,S2)
-    r=100*M # Must be r>10M for PN to be valid
-    print "\t separation is r=%.3f" %r
-    xi_min,xi_max=precession.xi_lim(q,S1,S2)
-    Jmin,Jmax=precession.J_lim(q,S1,S2,r)
-    Sso_min,Sso_max=precession.Sso_limits(S1,S2)
-    print "The geometrical limits on xi,J and S are"
-    print "\t %.3f <= xi <= %.3f" %(xi_min,xi_max)
-    print "\t %.3f <= J <= %.3f" %(Jmin,Jmax)
-    print "\t %.3f <= S <= %.3f" %(Sso_min,Sso_max)
-    J= (Jmin+Jmax)/2.
-    print "We select a value of J=%.3f within the limits." %J
-    St_min,St_max=precession.St_limits(J,q,S1,S2,r)
-    print "This constraints the range of S to"
-    print "\t %.3f <= S <= %.3f" %(St_min,St_max)
-    xi_low,xi_up=precession.xi_allowed(J,q,S1,S2,r)
-    print "The allowed values of xi can be found extremizing the effective potentials"
-    print "\t %.3f <= xi <= %.3f" %(xi_low,xi_up)
-    xi=(xi_low+xi_up)/2.
-    print "We select a value of xi=%.3f within the limits." %xi
-    test=(J>=min(precession.J_allowed(xi,q,S1,S2,r)) and J<=max(precession.J_allowed(xi,q,S1,S2,r)))
-    print "Is our couple (xi,J) consistent?", test
-    Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r)
-    print "S oscillates between S-=%.3f and S+=%.3f" %(Sb_min,Sb_max)
-    S=(Sb_min+Sb_max)/2.
-    print "We select a value of S=%.3f between S- and S+" %S
-    t1,t2,dp,t12=precession.parametric_angles(S,J,xi,q,S1,S2,r)
-    print "The angles describing the spin orientations are"
-    print "\t (theta1,theta2,DeltaPhi)=(%.3f,%.3f,%.3f)" %(t1,t2,dp)
-    xi,J,S = precession.from_the_angles(t1,t2,dp,q,S1,S2,r)
-    print "From the angles one can go back to"
-    print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xi,J,S)
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> *Parameter selection at finite separation*&quot;</span>
+    <span class="n">q</span><span class="o">=</span><span class="mf">0.8</span>   <span class="c"># Must be q&lt;=1. Check documentation for q=1.</span>
+    <span class="n">chi1</span><span class="o">=</span><span class="mf">1.</span> <span class="c"># Must be chi1&lt;=1</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="mf">1.</span> <span class="c"># Must be chi2&lt;=1</span>
+    <span class="k">print</span> <span class="s">&quot;We study a binary with:&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> mass ratio q= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">q</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> dimensionless spins chi1=</span><span class="si">%.3f</span><span class="s"> and chi2=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span>
+    <span class="n">M</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">get_fixed</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span> <span class="c"># Total-mass units M=1</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> spin magnitudes S1=</span><span class="si">%.3f</span><span class="s"> and S2=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="n">r</span><span class="o">=</span><span class="mi">100</span><span class="o">*</span><span class="n">M</span> <span class="c"># Must be r&gt;10M for PN to be valid</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> separation is r=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">r</span>
+    <span class="n">xi_min</span><span class="p">,</span><span class="n">xi_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">xi_lim</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="n">Jmin</span><span class="p">,</span><span class="n">Jmax</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">J_lim</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">Sso_min</span><span class="p">,</span><span class="n">Sso_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">Sso_limits</span><span class="p">(</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The geometrical limits on xi,J and S are&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= xi &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi_min</span><span class="p">,</span><span class="n">xi_max</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= J &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">Jmin</span><span class="p">,</span><span class="n">Jmax</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= S &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">Sso_min</span><span class="p">,</span><span class="n">Sso_max</span><span class="p">)</span>
+    <span class="n">J</span><span class="o">=</span> <span class="p">(</span><span class="n">Jmin</span><span class="o">+</span><span class="n">Jmax</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of J=</span><span class="si">%.3f</span><span class="s"> within the limits.&quot;</span> <span class="o">%</span><span class="n">J</span>
+    <span class="n">St_min</span><span class="p">,</span><span class="n">St_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">St_limits</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;This constraints the range of S to&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= S &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">St_min</span><span class="p">,</span><span class="n">St_max</span><span class="p">)</span>
+    <span class="n">xi_low</span><span class="p">,</span><span class="n">xi_up</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">xi_allowed</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The allowed values of xi can be found extremizing the effective potentials&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= xi &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi_low</span><span class="p">,</span><span class="n">xi_up</span><span class="p">)</span>
+    <span class="n">xi</span><span class="o">=</span><span class="p">(</span><span class="n">xi_low</span><span class="o">+</span><span class="n">xi_up</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of xi=</span><span class="si">%.3f</span><span class="s"> within the limits.&quot;</span> <span class="o">%</span><span class="n">xi</span>
+    <span class="n">test</span><span class="o">=</span><span class="p">(</span><span class="n">J</span><span class="o">&gt;=</span><span class="nb">min</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">J_allowed</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">))</span> <span class="ow">and</span> <span class="n">J</span><span class="o">&lt;=</span><span class="nb">max</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">J_allowed</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)))</span>
+    <span class="k">print</span> <span class="s">&quot;Is our couple (xi,J) consistent?&quot;</span><span class="p">,</span> <span class="n">test</span>
+    <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">Sb_limits</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;S oscillates between S-=</span><span class="si">%.3f</span><span class="s"> and S+=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">)</span>
+    <span class="n">S</span><span class="o">=</span><span class="p">(</span><span class="n">Sb_min</span><span class="o">+</span><span class="n">Sb_max</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of S=</span><span class="si">%.3f</span><span class="s"> between S- and S+&quot;</span> <span class="o">%</span><span class="n">S</span>
+    <span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">,</span><span class="n">t12</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">parametric_angles</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The angles describing the spin orientations are&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> (theta1,theta2,DeltaPhi)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">)</span>
+    <span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">S</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">from_the_angles</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;From the angles one can go back to (xi,J,S)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">S</span><span class="p">)</span>
 
-    print "\n *Features of spin precession*"
-    t1_dp0,t2_dp0,t1_dp180,t2_dp180=precession.resonant_finder(xi,q,S1,S2,r)
-    print "The spin-orbit resonances are located at"
-    print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=0" %(t1_dp0,t2_dp0)
-    print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=pi" %(t1_dp180,t2_dp180)
-    tau = precession.precession_period(xi,J,q,S1,S2,r)
-    print "We integrate dt/dS to calculate the period tau=%.3f" %tau
-    alpha = precession.alphaz(xi,J,q,S1,S2,r)
-    print "We integrate Omega*dt/dS to find alpha=%.3f" %alpha
-    morphology = precession.find_morphology(xi,J,q,S1,S2,r)
-    if morphology==-1: labelm="Librating about DeltaPhi=0"
-    elif morphology==1: labelm="Librating about DeltaPhi=pi"    
-    elif morphology==0: labelm="Circulating"
-    print "The precessional morphology of this binary is: "+labelm
-    sys.stdout = os.devnull # Ignore warnings
-    phase,xi_transit_low,xi_transit_up=precession.phase_xi(J,q,S1,S2,r)
-    sys.stdout = sys.__stdout__ # Restore warnings
-    if phase==-1: labelp="a single DeltaPhi~pi phase"
-    elif phase==2: labelp="two DeltaPhi~pi phases, a Circulating phase"    
-    elif phase==3: labelp="a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase"
-    print "The coexisintg phases are: "+labelp
-    print "Indeed, the current morphology ("+labelm+") is part of those."
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> *Features of spin precession*&quot;</span>
+    <span class="n">t1_dp0</span><span class="p">,</span><span class="n">t2_dp0</span><span class="p">,</span><span class="n">t1_dp180</span><span class="p">,</span><span class="n">t2_dp180</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">resonant_finder</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The spin-orbit resonances are located at&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> (theta1,theta2)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">) for DeltaPhi=0&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t1_dp0</span><span class="p">,</span><span class="n">t2_dp0</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> (theta1,theta2)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">) for DeltaPhi=pi&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t1_dp180</span><span class="p">,</span><span class="n">t2_dp180</span><span class="p">)</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">precession_period</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;We integrate dt/dS to calculate the period tau=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">tau</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">alphaz</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;We integrate Omega*dt/dS to find alpha=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">alpha</span>
+    <span class="n">morphology</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">find_morphology</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">morphology</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;Librating about DeltaPhi=0&quot;</span>
+    <span class="k">elif</span> <span class="n">morphology</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;Librating about DeltaPhi=pi&quot;</span>    
+    <span class="k">elif</span> <span class="n">morphology</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;Circulating&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;The precessional morphology of this binary is: &quot;</span><span class="o">+</span><span class="n">labelm</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">devnull</span> <span class="c"># Ignore warnings</span>
+    <span class="n">phase</span><span class="p">,</span><span class="n">xi_transit_low</span><span class="p">,</span><span class="n">xi_transit_up</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">phase_xi</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">__stdout__</span> <span class="c"># Restore warnings</span>
+    <span class="k">if</span> <span class="n">phase</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelp</span><span class="o">=</span><span class="s">&quot;a single DeltaPhi~pi phase&quot;</span>
+    <span class="k">elif</span> <span class="n">phase</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span> <span class="n">labelp</span><span class="o">=</span><span class="s">&quot;two DeltaPhi~pi phases, a Circulating phase&quot;</span>    
+    <span class="k">elif</span> <span class="n">phase</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span> <span class="n">labelp</span><span class="o">=</span><span class="s">&quot;a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;The coexisintg phases are: &quot;</span><span class="o">+</span><span class="n">labelp</span>
+    <span class="k">print</span> <span class="s">&quot;Indeed, the current morphology (&quot;</span><span class="o">+</span><span class="n">labelm</span><span class="o">+</span><span class="s">&quot;) is part of those.&quot;</span>
 
-    print "\n *Parameter selection at infinitely separation*"
-    print "We study a binary with:"
-    print "\t mass ratio q= %.3f" %q
-    print "\t dimensionless spins chi1=%.3f and chi2=%.3f" %(chi1,chi2)
-    print "\t at infinitely large separation"
-    kappainf_min,kappainf_max=precession.kappainf_lim(S1,S2)
-    print "The geometrical limits on xi and kappa_inf are"    
-    print "\t %.3f <= xi <= %.3f" %(xi_min,xi_max)
-    print "\t %.3f <= kappa_inf <= %.3f" %(kappainf_min,kappainf_max)
-    print "We select a value of xi=%.3f within the limits." %xi
-    kappainf_low,kappainf_up=precession.kappainf_allowed(xi,q,S1,S2)
-    print "This constraints the range of kappa_inf to"
-    print "\t %.3f <= kappa_inf <= %.3f" %(kappainf_low,kappainf_up)
-    kappainf=(kappainf_low+kappainf_up)/2.
-    print "We select a value of kappa_inf=%.3f within the limits." %kappainf
-    test=(xi>=min(precession.xiinf_allowed(kappainf,q,S1,S2)) and xi<=max(precession.xiinf_allowed(kappainf,q,S1,S2)))
-    print "Is our couple (xi,kappa_inf) consistent?", test 
-    t1_inf,t2_inf=precession.thetas_inf(xi,kappainf,q,S1,S2)
-    print "The asymptotic (constant) values of theta1 and theta2 are"
-    print "\t (theta1_inf,theta2_inf)=(%.3f,%.3f)" %(t1_inf,t2_inf)
-    xi,kappainf = precession.from_the_angles_inf(t1_inf,t2_inf,q,S1,S2)
-    print "From the angles one can go back to"
-    print "\t (xi,kappa_inf)=(%.3f,%.3f)" %(xi,kappainf)
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> *Parameter selection at infinitely separation*&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;We study a binary with:&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> mass ratio q= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">q</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> dimensionless spins chi1=</span><span class="si">%.3f</span><span class="s"> and chi2=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> at infinitely large separation&quot;</span>
+    <span class="n">kappainf_min</span><span class="p">,</span><span class="n">kappainf_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">kappainf_lim</span><span class="p">(</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The geometrical limits on xi and kappa_inf are&quot;</span>    
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= xi &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi_min</span><span class="p">,</span><span class="n">xi_max</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= kappa_inf &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">kappainf_min</span><span class="p">,</span><span class="n">kappainf_max</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of xi=</span><span class="si">%.3f</span><span class="s"> within the limits.&quot;</span> <span class="o">%</span><span class="n">xi</span>
+    <span class="n">kappainf_low</span><span class="p">,</span><span class="n">kappainf_up</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">kappainf_allowed</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;This constraints the range of kappa_inf to&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= kappa_inf &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">kappainf_low</span><span class="p">,</span><span class="n">kappainf_up</span><span class="p">)</span>
+    <span class="n">kappainf</span><span class="o">=</span><span class="p">(</span><span class="n">kappainf_low</span><span class="o">+</span><span class="n">kappainf_up</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of kappa_inf=</span><span class="si">%.3f</span><span class="s"> within the limits.&quot;</span> <span class="o">%</span><span class="n">kappainf</span>
+    <span class="n">test</span><span class="o">=</span><span class="p">(</span><span class="n">xi</span><span class="o">&gt;=</span><span class="nb">min</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">xiinf_allowed</span><span class="p">(</span><span class="n">kappainf</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">))</span> <span class="ow">and</span> <span class="n">xi</span><span class="o">&lt;=</span><span class="nb">max</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">xiinf_allowed</span><span class="p">(</span><span class="n">kappainf</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)))</span>
+    <span class="k">print</span> <span class="s">&quot;Is our couple (xi,kappa_inf) consistent?&quot;</span><span class="p">,</span> <span class="n">test</span> 
+    <span class="n">t1_inf</span><span class="p">,</span><span class="n">t2_inf</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">thetas_inf</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">kappainf</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The asymptotic (constant) values of theta1 and theta2 are&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> (theta1_inf,theta2_inf)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t1_inf</span><span class="p">,</span><span class="n">t2_inf</span><span class="p">)</span>
+    <span class="n">xi</span><span class="p">,</span><span class="n">kappainf</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">from_the_angles_inf</span><span class="p">(</span><span class="n">t1_inf</span><span class="p">,</span><span class="n">t2_inf</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;From the angles one can go back to (xi,kappa_inf)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">kappainf</span><span class="p">)</span>
 
-   
-#parameter_selection()
-</code></pre>
+
+<span class="k">def</span> <span class="nf">spin_angles</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Binary dynamics on the precessional timescale. The spin angles theta1,theta2, DeltaPhi and theta12 are computed and plotted against the time variable, which is obtained integrating dS/dt. The morphology is also detected as indicated in the legend of the plot. The output is saved in ./spin_angles.pdf.</span>
+
+<span class="sd">    **Run using**</span>
+
+<span class="sd">        import precession.test</span>
+<span class="sd">        precession.test.spin_angles()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">fig</span><span class="o">=</span><span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span> <span class="c">#Create figure object and axes</span>
+    <span class="n">ax_t1</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.95</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.8</span><span class="p">])</span> <span class="c">#top-left</span>
+    <span class="n">ax_t2</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.95</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.8</span><span class="p">])</span> <span class="c">#top-right</span>
+    <span class="n">ax_dp</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.8</span><span class="p">])</span> <span class="c">#bottom-left</span>
+    <span class="n">ax_t12</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.8</span><span class="p">])</span> <span class="c">#bottom-right</span>
+
+    <span class="n">q</span><span class="o">=</span><span class="mf">0.7</span>   <span class="c"># Mass ratio. Must be q&lt;=1.</span>
+    <span class="n">chi1</span><span class="o">=</span><span class="mf">0.6</span> <span class="c"># Primary spin. Must be chi1&lt;=1</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="mf">1.</span> <span class="c"># Secondary spin. Must be chi2&lt;=1</span>
+    <span class="n">M</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">get_fixed</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span> <span class="c"># Total-mass units M=1</span>
+    <span class="n">r</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">M</span> <span class="c"># Separation. Must be r&gt;10M for PN to be valid</span>
+    <span class="n">J</span><span class="o">=</span><span class="mf">0.94</span> <span class="c"># Magnitude of J: Jmin&lt;J&lt;Jmax as given by J_lim</span>
+    <span class="n">xi_vals</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.41</span><span class="p">,</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span><span class="o">-</span><span class="mf">0.22</span><span class="p">]</span> <span class="c"># Effective spin: xi_low&lt;xi&lt;xi_up as given by xi_allowed</span>
+
+    <span class="k">for</span> <span class="n">xi</span><span class="p">,</span><span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xi_vals</span><span class="p">,[</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="s">&#39;red&#39;</span><span class="p">]):</span> <span class="c"># Loop over three binaries</span>
+
+        <span class="n">tau</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">precession_period</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="c">#Period</span>
+        <span class="n">morphology</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">find_morphology</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="c"># Morphology</span>
+        <span class="k">if</span> <span class="n">morphology</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;${</span><span class="se">\\</span><span class="s">rm L}0$&quot;</span>
+        <span class="k">elif</span> <span class="n">morphology</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;${</span><span class="se">\\</span><span class="s">rm L}</span><span class="se">\\</span><span class="s">pi$&quot;</span>   
+        <span class="k">elif</span> <span class="n">morphology</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;${</span><span class="se">\\</span><span class="s">rm C}$&quot;</span>
+        <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">Sb_limits</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="c"># Limits in S</span>
+        <span class="n">S_vals</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span> <span class="c"># Create array, from S- to S+</span>
+        <span class="n">S_go</span><span class="o">=</span><span class="n">S_vals</span> <span class="c"># First half of the precession cycle: from S- to S+</span>
+        <span class="n">t_go</span><span class="o">=</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">precession</span><span class="o">.</span><span class="n">t_of_S</span><span class="p">(</span><span class="n">S_go</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sign</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span><span class="n">S_go</span><span class="p">)</span> <span class="c"># Compute time values. Assume t=0 at S-      </span>
+        <span class="n">t1_go</span><span class="p">,</span><span class="n">t2_go</span><span class="p">,</span><span class="n">dp_go</span><span class="p">,</span><span class="n">t12_go</span><span class="o">=</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">precession</span><span class="o">.</span><span class="n">parametric_angles</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">S_go</span><span class="p">])</span> <span class="c"># Compute the angles. Assume DeltaPhi&gt;=0 in the first half of the cycle</span>
+        <span class="n">S_back</span><span class="o">=</span><span class="n">S_vals</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c"># Second half of the precession cycle: from S+ to S-</span>
+        <span class="n">t_back</span><span class="o">=</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">precession</span><span class="o">.</span><span class="n">t_of_S</span><span class="p">(</span><span class="n">S_back</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">t_go</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">sign</span><span class="o">=</span><span class="mf">1.</span><span class="p">),</span><span class="n">S_back</span><span class="p">)</span> <span class="c"># Compute time, start from the last point of the first half t_go[-1]</span>
+        <span class="n">t1_back</span><span class="p">,</span><span class="n">t2_back</span><span class="p">,</span><span class="n">dp_back</span><span class="p">,</span><span class="n">t12_back</span><span class="o">=</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">precession</span><span class="o">.</span><span class="n">parametric_angles</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">S_back</span><span class="p">])</span> <span class="c"># Compute the angles.</span>
+        <span class="n">dp_back</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">dp</span> <span class="k">for</span> <span class="n">dp</span> <span class="ow">in</span> <span class="n">dp_back</span><span class="p">]</span> <span class="c"># Assume DeltaPhi&lt;=0 in the second half of the cycle</span>
+
+        <span class="k">for</span> <span class="n">ax</span><span class="p">,</span><span class="n">vec_go</span><span class="p">,</span><span class="n">vec_back</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">ax_t1</span><span class="p">,</span><span class="n">ax_t2</span><span class="p">,</span><span class="n">ax_dp</span><span class="p">,</span><span class="n">ax_t12</span><span class="p">],</span> <span class="p">[</span><span class="n">t1_go</span><span class="p">,</span><span class="n">t2_go</span><span class="p">,</span><span class="n">dp_go</span><span class="p">,</span><span class="n">t12_go</span><span class="p">],</span> <span class="p">[</span><span class="n">t1_back</span><span class="p">,</span><span class="n">t2_back</span><span class="p">,</span><span class="n">dp_back</span><span class="p">,</span><span class="n">t12_back</span><span class="p">]):</span> <span class="c"># Plot all curves</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">t</span><span class="o">/</span><span class="n">tau</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_go</span><span class="p">],</span><span class="n">vec_go</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">labelm</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">t</span><span class="o">/</span><span class="n">tau</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_back</span><span class="p">],</span><span class="n">vec_back</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c"># Options for nice plotting</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ax_t1</span><span class="p">,</span><span class="n">ax_t2</span><span class="p">,</span><span class="n">ax_dp</span><span class="p">,</span><span class="n">ax_t12</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&quot;$t/</span><span class="se">\\</span><span class="s">tau$&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ax_t1</span><span class="p">,</span><span class="n">ax_t2</span><span class="p">,</span><span class="n">ax_t12</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s">&quot;$0$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi/4$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi/2$&quot;</span><span class="p">,</span><span class="s">&quot;$3</span><span class="se">\\</span><span class="s">pi/4$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi$&quot;</span><span class="p">])</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s">&quot;$-</span><span class="se">\\</span><span class="s">pi$&quot;</span><span class="p">,</span><span class="s">&quot;$-</span><span class="se">\\</span><span class="s">pi/2$&quot;</span><span class="p">,</span><span class="s">&quot;$0$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi/2$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi$&quot;</span><span class="p">])</span>
+        <span class="n">ax_t1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">theta_1$&quot;</span><span class="p">)</span>
+        <span class="n">ax_t2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">theta_2$&quot;</span><span class="p">)</span>
+        <span class="n">ax_t12</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">theta_{12}$&quot;</span><span class="p">)</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">Delta</span><span class="se">\\</span><span class="s">Phi$&quot;</span><span class="p">)</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper right&#39;</span><span class="p">)</span> <span class="c"># Fill the legend with the precessional morphology</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;spin_angles.pdf&quot;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s">&#39;tight&#39;</span><span class="p">)</span> <span class="c"># Save pdf file</span>
+
+
+
+<span class="c">#spin_angles()</span>
+<span class="n">parameter_selection</span><span class="p">()</span>
+</pre></div>
+
   </div>
 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="precession.test.font" class="name">var <span class="ident">font</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
@@ -1138,112 +1296,199 @@ def parameter_selection():
     <div class="desc"><p>Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.
 All quantities are given in total-mass units c=G=M=1.</p>
 <p><strong>Run using</strong></p>
-<pre><code>import precession.test
-precession.test.parameter_selection()
-</code></pre></div>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">precession.test</span>
+<span class="n">precession</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">parameter_selection</span><span class="p">()</span>
+</pre></div></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.parameter_selection', this);">Show source &equiv;</a></p>
   <div id="source-precession.test.parameter_selection" class="source">
-    <pre><code>def parameter_selection():
-    '''
-    Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.
-    All quantities are given in total-mass units c=G=M=1.
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">parameter_selection</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.</span>
+<span class="sd">    All quantities are given in total-mass units c=G=M=1.</span>
 
-    **Run using**
+<span class="sd">    **Run using**</span>
 
-        import precession.test
-        precession.test.parameter_selection()
-    '''
-    print parameter_selection.__doc__
+<span class="sd">        import precession.test</span>
+<span class="sd">        precession.test.parameter_selection()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
 
-    print "\n *Parameter selection at finite separation*"
-    q=0.8   # Must be q<=1. Check documentation for q=1.
-    chi1=1. # Must be chi1<=1
-    chi2=1. # Must be chi2<=1
-    print "We study a binary with:"
-    print "\t mass ratio q= %.3f" %q
-    print "\t dimensionless spins chi1=%.3f and chi2=%.3f" %(chi1,chi2)
-    M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
-    print "\t spin magnitudes S1=%.3f and S2=%.3f" %(S1,S2)
-    r=100*M # Must be r>10M for PN to be valid
-    print "\t separation is r=%.3f" %r
-    xi_min,xi_max=precession.xi_lim(q,S1,S2)
-    Jmin,Jmax=precession.J_lim(q,S1,S2,r)
-    Sso_min,Sso_max=precession.Sso_limits(S1,S2)
-    print "The geometrical limits on xi,J and S are"
-    print "\t %.3f <= xi <= %.3f" %(xi_min,xi_max)
-    print "\t %.3f <= J <= %.3f" %(Jmin,Jmax)
-    print "\t %.3f <= S <= %.3f" %(Sso_min,Sso_max)
-    J= (Jmin+Jmax)/2.
-    print "We select a value of J=%.3f within the limits." %J
-    St_min,St_max=precession.St_limits(J,q,S1,S2,r)
-    print "This constraints the range of S to"
-    print "\t %.3f <= S <= %.3f" %(St_min,St_max)
-    xi_low,xi_up=precession.xi_allowed(J,q,S1,S2,r)
-    print "The allowed values of xi can be found extremizing the effective potentials"
-    print "\t %.3f <= xi <= %.3f" %(xi_low,xi_up)
-    xi=(xi_low+xi_up)/2.
-    print "We select a value of xi=%.3f within the limits." %xi
-    test=(J>=min(precession.J_allowed(xi,q,S1,S2,r)) and J<=max(precession.J_allowed(xi,q,S1,S2,r)))
-    print "Is our couple (xi,J) consistent?", test
-    Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r)
-    print "S oscillates between S-=%.3f and S+=%.3f" %(Sb_min,Sb_max)
-    S=(Sb_min+Sb_max)/2.
-    print "We select a value of S=%.3f between S- and S+" %S
-    t1,t2,dp,t12=precession.parametric_angles(S,J,xi,q,S1,S2,r)
-    print "The angles describing the spin orientations are"
-    print "\t (theta1,theta2,DeltaPhi)=(%.3f,%.3f,%.3f)" %(t1,t2,dp)
-    xi,J,S = precession.from_the_angles(t1,t2,dp,q,S1,S2,r)
-    print "From the angles one can go back to"
-    print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xi,J,S)
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> *Parameter selection at finite separation*&quot;</span>
+    <span class="n">q</span><span class="o">=</span><span class="mf">0.8</span>   <span class="c"># Must be q&lt;=1. Check documentation for q=1.</span>
+    <span class="n">chi1</span><span class="o">=</span><span class="mf">1.</span> <span class="c"># Must be chi1&lt;=1</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="mf">1.</span> <span class="c"># Must be chi2&lt;=1</span>
+    <span class="k">print</span> <span class="s">&quot;We study a binary with:&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> mass ratio q= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">q</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> dimensionless spins chi1=</span><span class="si">%.3f</span><span class="s"> and chi2=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span>
+    <span class="n">M</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">get_fixed</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span> <span class="c"># Total-mass units M=1</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> spin magnitudes S1=</span><span class="si">%.3f</span><span class="s"> and S2=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="n">r</span><span class="o">=</span><span class="mi">100</span><span class="o">*</span><span class="n">M</span> <span class="c"># Must be r&gt;10M for PN to be valid</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> separation is r=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">r</span>
+    <span class="n">xi_min</span><span class="p">,</span><span class="n">xi_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">xi_lim</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="n">Jmin</span><span class="p">,</span><span class="n">Jmax</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">J_lim</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">Sso_min</span><span class="p">,</span><span class="n">Sso_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">Sso_limits</span><span class="p">(</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The geometrical limits on xi,J and S are&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= xi &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi_min</span><span class="p">,</span><span class="n">xi_max</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= J &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">Jmin</span><span class="p">,</span><span class="n">Jmax</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= S &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">Sso_min</span><span class="p">,</span><span class="n">Sso_max</span><span class="p">)</span>
+    <span class="n">J</span><span class="o">=</span> <span class="p">(</span><span class="n">Jmin</span><span class="o">+</span><span class="n">Jmax</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of J=</span><span class="si">%.3f</span><span class="s"> within the limits.&quot;</span> <span class="o">%</span><span class="n">J</span>
+    <span class="n">St_min</span><span class="p">,</span><span class="n">St_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">St_limits</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;This constraints the range of S to&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= S &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">St_min</span><span class="p">,</span><span class="n">St_max</span><span class="p">)</span>
+    <span class="n">xi_low</span><span class="p">,</span><span class="n">xi_up</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">xi_allowed</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The allowed values of xi can be found extremizing the effective potentials&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= xi &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi_low</span><span class="p">,</span><span class="n">xi_up</span><span class="p">)</span>
+    <span class="n">xi</span><span class="o">=</span><span class="p">(</span><span class="n">xi_low</span><span class="o">+</span><span class="n">xi_up</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of xi=</span><span class="si">%.3f</span><span class="s"> within the limits.&quot;</span> <span class="o">%</span><span class="n">xi</span>
+    <span class="n">test</span><span class="o">=</span><span class="p">(</span><span class="n">J</span><span class="o">&gt;=</span><span class="nb">min</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">J_allowed</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">))</span> <span class="ow">and</span> <span class="n">J</span><span class="o">&lt;=</span><span class="nb">max</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">J_allowed</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)))</span>
+    <span class="k">print</span> <span class="s">&quot;Is our couple (xi,J) consistent?&quot;</span><span class="p">,</span> <span class="n">test</span>
+    <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">Sb_limits</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;S oscillates between S-=</span><span class="si">%.3f</span><span class="s"> and S+=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">)</span>
+    <span class="n">S</span><span class="o">=</span><span class="p">(</span><span class="n">Sb_min</span><span class="o">+</span><span class="n">Sb_max</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of S=</span><span class="si">%.3f</span><span class="s"> between S- and S+&quot;</span> <span class="o">%</span><span class="n">S</span>
+    <span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">,</span><span class="n">t12</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">parametric_angles</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The angles describing the spin orientations are&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> (theta1,theta2,DeltaPhi)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">)</span>
+    <span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">S</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">from_the_angles</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;From the angles one can go back to (xi,J,S)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">S</span><span class="p">)</span>
 
-    print "\n *Features of spin precession*"
-    t1_dp0,t2_dp0,t1_dp180,t2_dp180=precession.resonant_finder(xi,q,S1,S2,r)
-    print "The spin-orbit resonances are located at"
-    print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=0" %(t1_dp0,t2_dp0)
-    print "\t (theta1,theta2)=(%.3f,%.3f) for DeltaPhi=pi" %(t1_dp180,t2_dp180)
-    tau = precession.precession_period(xi,J,q,S1,S2,r)
-    print "We integrate dt/dS to calculate the period tau=%.3f" %tau
-    alpha = precession.alphaz(xi,J,q,S1,S2,r)
-    print "We integrate Omega*dt/dS to find alpha=%.3f" %alpha
-    morphology = precession.find_morphology(xi,J,q,S1,S2,r)
-    if morphology==-1: labelm="Librating about DeltaPhi=0"
-    elif morphology==1: labelm="Librating about DeltaPhi=pi"    
-    elif morphology==0: labelm="Circulating"
-    print "The precessional morphology of this binary is: "+labelm
-    sys.stdout = os.devnull # Ignore warnings
-    phase,xi_transit_low,xi_transit_up=precession.phase_xi(J,q,S1,S2,r)
-    sys.stdout = sys.__stdout__ # Restore warnings
-    if phase==-1: labelp="a single DeltaPhi~pi phase"
-    elif phase==2: labelp="two DeltaPhi~pi phases, a Circulating phase"    
-    elif phase==3: labelp="a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase"
-    print "The coexisintg phases are: "+labelp
-    print "Indeed, the current morphology ("+labelm+") is part of those."
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> *Features of spin precession*&quot;</span>
+    <span class="n">t1_dp0</span><span class="p">,</span><span class="n">t2_dp0</span><span class="p">,</span><span class="n">t1_dp180</span><span class="p">,</span><span class="n">t2_dp180</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">resonant_finder</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The spin-orbit resonances are located at&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> (theta1,theta2)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">) for DeltaPhi=0&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t1_dp0</span><span class="p">,</span><span class="n">t2_dp0</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> (theta1,theta2)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">) for DeltaPhi=pi&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t1_dp180</span><span class="p">,</span><span class="n">t2_dp180</span><span class="p">)</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">precession_period</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;We integrate dt/dS to calculate the period tau=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">tau</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">alphaz</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;We integrate Omega*dt/dS to find alpha=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">alpha</span>
+    <span class="n">morphology</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">find_morphology</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">morphology</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;Librating about DeltaPhi=0&quot;</span>
+    <span class="k">elif</span> <span class="n">morphology</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;Librating about DeltaPhi=pi&quot;</span>    
+    <span class="k">elif</span> <span class="n">morphology</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;Circulating&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;The precessional morphology of this binary is: &quot;</span><span class="o">+</span><span class="n">labelm</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">devnull</span> <span class="c"># Ignore warnings</span>
+    <span class="n">phase</span><span class="p">,</span><span class="n">xi_transit_low</span><span class="p">,</span><span class="n">xi_transit_up</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">phase_xi</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">__stdout__</span> <span class="c"># Restore warnings</span>
+    <span class="k">if</span> <span class="n">phase</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelp</span><span class="o">=</span><span class="s">&quot;a single DeltaPhi~pi phase&quot;</span>
+    <span class="k">elif</span> <span class="n">phase</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span> <span class="n">labelp</span><span class="o">=</span><span class="s">&quot;two DeltaPhi~pi phases, a Circulating phase&quot;</span>    
+    <span class="k">elif</span> <span class="n">phase</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span> <span class="n">labelp</span><span class="o">=</span><span class="s">&quot;a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;The coexisintg phases are: &quot;</span><span class="o">+</span><span class="n">labelp</span>
+    <span class="k">print</span> <span class="s">&quot;Indeed, the current morphology (&quot;</span><span class="o">+</span><span class="n">labelm</span><span class="o">+</span><span class="s">&quot;) is part of those.&quot;</span>
 
-    print "\n *Parameter selection at infinitely separation*"
-    print "We study a binary with:"
-    print "\t mass ratio q= %.3f" %q
-    print "\t dimensionless spins chi1=%.3f and chi2=%.3f" %(chi1,chi2)
-    print "\t at infinitely large separation"
-    kappainf_min,kappainf_max=precession.kappainf_lim(S1,S2)
-    print "The geometrical limits on xi and kappa_inf are"    
-    print "\t %.3f <= xi <= %.3f" %(xi_min,xi_max)
-    print "\t %.3f <= kappa_inf <= %.3f" %(kappainf_min,kappainf_max)
-    print "We select a value of xi=%.3f within the limits." %xi
-    kappainf_low,kappainf_up=precession.kappainf_allowed(xi,q,S1,S2)
-    print "This constraints the range of kappa_inf to"
-    print "\t %.3f <= kappa_inf <= %.3f" %(kappainf_low,kappainf_up)
-    kappainf=(kappainf_low+kappainf_up)/2.
-    print "We select a value of kappa_inf=%.3f within the limits." %kappainf
-    test=(xi>=min(precession.xiinf_allowed(kappainf,q,S1,S2)) and xi<=max(precession.xiinf_allowed(kappainf,q,S1,S2)))
-    print "Is our couple (xi,kappa_inf) consistent?", test 
-    t1_inf,t2_inf=precession.thetas_inf(xi,kappainf,q,S1,S2)
-    print "The asymptotic (constant) values of theta1 and theta2 are"
-    print "\t (theta1_inf,theta2_inf)=(%.3f,%.3f)" %(t1_inf,t2_inf)
-    xi,kappainf = precession.from_the_angles_inf(t1_inf,t2_inf,q,S1,S2)
-    print "From the angles one can go back to"
-    print "\t (xi,kappa_inf)=(%.3f,%.3f)" %(xi,kappainf)
-</code></pre>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> *Parameter selection at infinitely separation*&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;We study a binary with:&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> mass ratio q= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="n">q</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> dimensionless spins chi1=</span><span class="si">%.3f</span><span class="s"> and chi2=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> at infinitely large separation&quot;</span>
+    <span class="n">kappainf_min</span><span class="p">,</span><span class="n">kappainf_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">kappainf_lim</span><span class="p">(</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The geometrical limits on xi and kappa_inf are&quot;</span>    
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= xi &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi_min</span><span class="p">,</span><span class="n">xi_max</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= kappa_inf &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">kappainf_min</span><span class="p">,</span><span class="n">kappainf_max</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of xi=</span><span class="si">%.3f</span><span class="s"> within the limits.&quot;</span> <span class="o">%</span><span class="n">xi</span>
+    <span class="n">kappainf_low</span><span class="p">,</span><span class="n">kappainf_up</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">kappainf_allowed</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;This constraints the range of kappa_inf to&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> &lt;= kappa_inf &lt;= </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">kappainf_low</span><span class="p">,</span><span class="n">kappainf_up</span><span class="p">)</span>
+    <span class="n">kappainf</span><span class="o">=</span><span class="p">(</span><span class="n">kappainf_low</span><span class="o">+</span><span class="n">kappainf_up</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="k">print</span> <span class="s">&quot;We select a value of kappa_inf=</span><span class="si">%.3f</span><span class="s"> within the limits.&quot;</span> <span class="o">%</span><span class="n">kappainf</span>
+    <span class="n">test</span><span class="o">=</span><span class="p">(</span><span class="n">xi</span><span class="o">&gt;=</span><span class="nb">min</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">xiinf_allowed</span><span class="p">(</span><span class="n">kappainf</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">))</span> <span class="ow">and</span> <span class="n">xi</span><span class="o">&lt;=</span><span class="nb">max</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">xiinf_allowed</span><span class="p">(</span><span class="n">kappainf</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)))</span>
+    <span class="k">print</span> <span class="s">&quot;Is our couple (xi,kappa_inf) consistent?&quot;</span><span class="p">,</span> <span class="n">test</span> 
+    <span class="n">t1_inf</span><span class="p">,</span><span class="n">t2_inf</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">thetas_inf</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">kappainf</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;The asymptotic (constant) values of theta1 and theta2 are&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> (theta1_inf,theta2_inf)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t1_inf</span><span class="p">,</span><span class="n">t2_inf</span><span class="p">)</span>
+    <span class="n">xi</span><span class="p">,</span><span class="n">kappainf</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">from_the_angles_inf</span><span class="p">(</span><span class="n">t1_inf</span><span class="p">,</span><span class="n">t2_inf</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;From the angles one can go back to (xi,kappa_inf)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">kappainf</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="precession.test.spin_angles">
+    <p>def <span class="ident">spin_angles</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Binary dynamics on the precessional timescale. The spin angles theta1,theta2, DeltaPhi and theta12 are computed and plotted against the time variable, which is obtained integrating dS/dt. The morphology is also detected as indicated in the legend of the plot. The output is saved in ./spin_angles.pdf.</p>
+<p><strong>Run using</strong></p>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">precession.test</span>
+<span class="n">precession</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">spin_angles</span><span class="p">()</span>
+</pre></div></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.spin_angles', this);">Show source &equiv;</a></p>
+  <div id="source-precession.test.spin_angles" class="source">
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">spin_angles</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Binary dynamics on the precessional timescale. The spin angles theta1,theta2, DeltaPhi and theta12 are computed and plotted against the time variable, which is obtained integrating dS/dt. The morphology is also detected as indicated in the legend of the plot. The output is saved in ./spin_angles.pdf.</span>
+
+<span class="sd">    **Run using**</span>
+
+<span class="sd">        import precession.test</span>
+<span class="sd">        precession.test.spin_angles()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">fig</span><span class="o">=</span><span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span> <span class="c">#Create figure object and axes</span>
+    <span class="n">ax_t1</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.95</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.8</span><span class="p">])</span> <span class="c">#top-left</span>
+    <span class="n">ax_t2</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.95</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.8</span><span class="p">])</span> <span class="c">#top-right</span>
+    <span class="n">ax_dp</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.8</span><span class="p">])</span> <span class="c">#bottom-left</span>
+    <span class="n">ax_t12</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.6</span><span class="p">,</span><span class="mf">0.8</span><span class="p">])</span> <span class="c">#bottom-right</span>
+
+    <span class="n">q</span><span class="o">=</span><span class="mf">0.7</span>   <span class="c"># Mass ratio. Must be q&lt;=1.</span>
+    <span class="n">chi1</span><span class="o">=</span><span class="mf">0.6</span> <span class="c"># Primary spin. Must be chi1&lt;=1</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="mf">1.</span> <span class="c"># Secondary spin. Must be chi2&lt;=1</span>
+    <span class="n">M</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">get_fixed</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span> <span class="c"># Total-mass units M=1</span>
+    <span class="n">r</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="n">M</span> <span class="c"># Separation. Must be r&gt;10M for PN to be valid</span>
+    <span class="n">J</span><span class="o">=</span><span class="mf">0.94</span> <span class="c"># Magnitude of J: Jmin&lt;J&lt;Jmax as given by J_lim</span>
+    <span class="n">xi_vals</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">0.41</span><span class="p">,</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span><span class="o">-</span><span class="mf">0.22</span><span class="p">]</span> <span class="c"># Effective spin: xi_low&lt;xi&lt;xi_up as given by xi_allowed</span>
+
+    <span class="k">for</span> <span class="n">xi</span><span class="p">,</span><span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xi_vals</span><span class="p">,[</span><span class="s">&#39;blue&#39;</span><span class="p">,</span><span class="s">&#39;green&#39;</span><span class="p">,</span><span class="s">&#39;red&#39;</span><span class="p">]):</span> <span class="c"># Loop over three binaries</span>
+
+        <span class="n">tau</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">precession_period</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="c">#Period</span>
+        <span class="n">morphology</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">find_morphology</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="c"># Morphology</span>
+        <span class="k">if</span> <span class="n">morphology</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;${</span><span class="se">\\</span><span class="s">rm L}0$&quot;</span>
+        <span class="k">elif</span> <span class="n">morphology</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;${</span><span class="se">\\</span><span class="s">rm L}</span><span class="se">\\</span><span class="s">pi$&quot;</span>   
+        <span class="k">elif</span> <span class="n">morphology</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">labelm</span><span class="o">=</span><span class="s">&quot;${</span><span class="se">\\</span><span class="s">rm C}$&quot;</span>
+        <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">Sb_limits</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="c"># Limits in S</span>
+        <span class="n">S_vals</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span> <span class="c"># Create array, from S- to S+</span>
+        <span class="n">S_go</span><span class="o">=</span><span class="n">S_vals</span> <span class="c"># First half of the precession cycle: from S- to S+</span>
+        <span class="n">t_go</span><span class="o">=</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">precession</span><span class="o">.</span><span class="n">t_of_S</span><span class="p">(</span><span class="n">S_go</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">sign</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span><span class="n">S_go</span><span class="p">)</span> <span class="c"># Compute time values. Assume t=0 at S-      </span>
+        <span class="n">t1_go</span><span class="p">,</span><span class="n">t2_go</span><span class="p">,</span><span class="n">dp_go</span><span class="p">,</span><span class="n">t12_go</span><span class="o">=</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">precession</span><span class="o">.</span><span class="n">parametric_angles</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">S_go</span><span class="p">])</span> <span class="c"># Compute the angles. Assume DeltaPhi&gt;=0 in the first half of the cycle</span>
+        <span class="n">S_back</span><span class="o">=</span><span class="n">S_vals</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c"># Second half of the precession cycle: from S+ to S-</span>
+        <span class="n">t_back</span><span class="o">=</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">precession</span><span class="o">.</span><span class="n">t_of_S</span><span class="p">(</span><span class="n">S_back</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">t_go</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">sign</span><span class="o">=</span><span class="mf">1.</span><span class="p">),</span><span class="n">S_back</span><span class="p">)</span> <span class="c"># Compute time, start from the last point of the first half t_go[-1]</span>
+        <span class="n">t1_back</span><span class="p">,</span><span class="n">t2_back</span><span class="p">,</span><span class="n">dp_back</span><span class="p">,</span><span class="n">t12_back</span><span class="o">=</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">precession</span><span class="o">.</span><span class="n">parametric_angles</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">S</span> <span class="ow">in</span> <span class="n">S_back</span><span class="p">])</span> <span class="c"># Compute the angles.</span>
+        <span class="n">dp_back</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">dp</span> <span class="k">for</span> <span class="n">dp</span> <span class="ow">in</span> <span class="n">dp_back</span><span class="p">]</span> <span class="c"># Assume DeltaPhi&lt;=0 in the second half of the cycle</span>
+
+        <span class="k">for</span> <span class="n">ax</span><span class="p">,</span><span class="n">vec_go</span><span class="p">,</span><span class="n">vec_back</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">ax_t1</span><span class="p">,</span><span class="n">ax_t2</span><span class="p">,</span><span class="n">ax_dp</span><span class="p">,</span><span class="n">ax_t12</span><span class="p">],</span> <span class="p">[</span><span class="n">t1_go</span><span class="p">,</span><span class="n">t2_go</span><span class="p">,</span><span class="n">dp_go</span><span class="p">,</span><span class="n">t12_go</span><span class="p">],</span> <span class="p">[</span><span class="n">t1_back</span><span class="p">,</span><span class="n">t2_back</span><span class="p">,</span><span class="n">dp_back</span><span class="p">,</span><span class="n">t12_back</span><span class="p">]):</span> <span class="c"># Plot all curves</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">t</span><span class="o">/</span><span class="n">tau</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_go</span><span class="p">],</span><span class="n">vec_go</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">labelm</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">t</span><span class="o">/</span><span class="n">tau</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_back</span><span class="p">],</span><span class="n">vec_back</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c"># Options for nice plotting</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ax_t1</span><span class="p">,</span><span class="n">ax_t2</span><span class="p">,</span><span class="n">ax_dp</span><span class="p">,</span><span class="n">ax_t12</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&quot;$t/</span><span class="se">\\</span><span class="s">tau$&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ax_t1</span><span class="p">,</span><span class="n">ax_t2</span><span class="p">,</span><span class="n">ax_t12</span><span class="p">]:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s">&quot;$0$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi/4$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi/2$&quot;</span><span class="p">,</span><span class="s">&quot;$3</span><span class="se">\\</span><span class="s">pi/4$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi$&quot;</span><span class="p">])</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s">&quot;$-</span><span class="se">\\</span><span class="s">pi$&quot;</span><span class="p">,</span><span class="s">&quot;$-</span><span class="se">\\</span><span class="s">pi/2$&quot;</span><span class="p">,</span><span class="s">&quot;$0$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi/2$&quot;</span><span class="p">,</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">pi$&quot;</span><span class="p">])</span>
+        <span class="n">ax_t1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">theta_1$&quot;</span><span class="p">)</span>
+        <span class="n">ax_t2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">theta_2$&quot;</span><span class="p">)</span>
+        <span class="n">ax_t12</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">theta_{12}$&quot;</span><span class="p">)</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">Delta</span><span class="se">\\</span><span class="s">Phi$&quot;</span><span class="p">)</span>
+        <span class="n">ax_dp</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper right&#39;</span><span class="p">)</span> <span class="c"># Fill the legend with the precessional morphology</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;spin_angles.pdf&quot;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s">&#39;tight&#39;</span><span class="p">)</span> <span class="c"># Save pdf file</span>
+</pre></div>
+
   </div>
 </div>
 

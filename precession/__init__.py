@@ -112,7 +112,7 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2015 Davide Gerosa"
 __license__ = "CC by-nc-sa 3.0"
-__version__ = "0.0.0.24"
+__version__ = "0.0.0.25"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
@@ -3496,15 +3496,14 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     return Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals
 
 
-def orbav_integrator_checkpoint(J,xi,S,r_vals,q,S1,S2):
+def orbit_averaged_single(J,xi,S,r_vals,q,S1,S2):
 
     '''
-    Auxiliary function, see `precession.orbit_averaged` and
-    `precession.orbit_angles`.
+    Auxiliary function, see `precession.orbit_averaged`.
  
     **Call:**
 
-        savename=precession.orbav_integrator_checkpoint(J,xi,S,r_vals,q,S1,S2)
+        savename=precession.orbit_averaged_single(J,xi,S,r_vals,q,S1,S2)
 
     **Parameters:**
 
@@ -3616,12 +3615,12 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     
     # Parallelization
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(orbav_integrator_checkpoint, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=True) 
+        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=True) 
     elif CPUs==1: # 1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(orbav_integrator_checkpoint, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=False) 
+        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=False) 
     else: # Run on a given number of CPUs        
         p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(orbav_integrator_checkpoint, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,pool=p) 
+        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,pool=p) 
 
     J_fvals=[]
     S_fvals=[]
@@ -3803,6 +3802,151 @@ def orbit_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
         return theta1_fvals[0], theta2_fvals[0], deltaphi_fvals[0]
     else:
         return theta1_fvals, theta2_fvals, deltaphi_fvals
+
+
+
+
+def orbit_vectors_single(J,xi,S,r_vals,q,S1,S2):
+
+    '''
+    Auxiliary function, see `precession.orbit_vector`.
+ 
+    **Call:**
+
+        savename=precession.orbit_vectors_single(J,xi,S,r_vals,q,S1,S2)
+
+    **Parameters:**
+
+    - `J`: magnitude of the total angular momentum.
+    - `xi`: projection of the effective spin along the orbital angular momentum.
+    - `S`: magnitude of the total spin.
+    - `r_vals`: binary separation (array).
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+
+    **Returns:**
+
+    - `savename`: checkpoint filename.
+    '''
+    
+    os.system("mkdir -p "+storedir) 
+    savename= storedir+"/orbvec_"+'_'.join([str(x) for x in (J,xi,S,max(r_vals),min(r_vals),len(r_vals),q,S1,S2)])+".dat"
+
+    if not os.path.isfile(savename):
+        print "[orbit_vectors] Transferring binary. Output:", savename
+        outfilesave = open(savename,"w",0)
+       
+        Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals = orbav_integrator(J,xi,S,r_vals,q,S1,S2)
+
+        for r_f,Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz in zip(r_vals,Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals):                   
+            L_f=(q/(1.+q)**2)*(r_f*M**3)**.5
+            outfilesave.write(str(r_f)+" "+str(Lhx*L_f)+" "+str(Lhy*L_f)+" "+str(Lhz*L_f)+" "+str(S1hx*S1)+" "+str(S1hy*S1)+" "+str(S1hz*S1)+" "+str(S2hx*S2)+" "+str(S2hy*S2)+" "+str(S2hz*S2)+"\n")
+        outfilesave.close()
+
+    #else:
+    #    print "[evolve_J_infinity] Skipping. Output:", savename
+    
+    return savename
+
+
+def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
+
+    '''
+    Wrapper of `precession.orbav_integrator` to enable parallelization through
+    the python parmap module; the number of available cores can be specified
+    using the integer global variable `CPUs` (all available cores will be used
+    by default). Input are given in terms of J, xi and S; outputs are projected
+    on a reference frame such that Jx=Jy=Ly=0 at the initial separation (cf.
+    `Jframe_projection`). Vectors, not unit vectros!, are returned. Evolve a
+    sequence of binaries with the SAME q, S1,S2 but different xi and initial
+    values of J and S; save outputs at r_vals. The initial configuration must be
+    compatible with r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the
+    first binary (1D array at all output separations) and J_vals[0][0] is the
+    first binary at the first output separation (this is a scalar).
+
+    Checkpointing is implemented: results are stored in `precession.storedir`.
+ 
+    **Call:**
+
+        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)
+
+    **Parameters:**
+
+    - `Ji_vals`: initial condition for J (array).
+    - `xii_vals`: initial condition for xi (array).
+    - `Si_vals`: initial condition for S (array).
+    - `r_vals`: binary separation (array).
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+
+    **Returns:**
+    
+    - `Lx_fvals`: x component of the vector L.
+    - `Ly_fvals`: y component of the vector L.
+    - `Lz_fvals`: z component of the vector L.
+    - `S1x_fvals`: x component of the vector S1.
+    - `S1y_fvals`: y component of the vector S1.
+    - `S1z_fvals`: z component of the vector S1.
+    - `S2x_fvals`: x component of the vector S2.
+    - `S2y_fvals`: y component of the vector S2.
+    - `S2z_fvals`: z component of the vector S2.
+    '''
+    
+    global CPUs
+    
+    single_flag=False
+    try: #Convert float to array if you're evolving just one binary
+        len(J_vals)
+        len(xi_vals)
+        len(S_vals)
+    except:
+        J_vals=[J_vals]
+        xi_vals=[xi_vals]
+        S_vals=[S_vals]
+        single_flag=True
+    try: # Set default
+        CPUs
+    except:
+        CPUs=0
+        print "[orbit_vectors] Default parallel computation"
+    
+    # Parallelization
+    if CPUs==0: # Run on all cpus on the current machine! (default option)
+        filelist=parmap.starmap(orbit_vectors_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=True) 
+    elif CPUs==1: # 1 cpus done by explicitely removing parallelization
+        filelist=parmap.starmap(orbit_vectors_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=False) 
+    else: # Run on a given number of CPUs        
+        p = multiprocessing.Pool(CPUs)
+        filelist=parmap.starmap(orbit_vectors_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,pool=p) 
+
+    Lx_fvals=[]
+    Ly_fvals=[]
+    Lz_fvals=[]
+    S1x_fvals=[]
+    S1y_fvals=[]
+    S1z_fvals=[]
+    S2x_fvals=[]
+    S2y_fvals=[]
+    S2z_fvals=[]
+    for index, file in enumerate(filelist):
+        print "[orbit_vectors] Reading:", index, file
+        dummy,Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z= np.loadtxt(file,unpack=True)
+        Lx_fvals.append(Lx)
+        Ly_fvals.append(Ly)
+        Lz_fvals.append(Lz)
+        S1x_fvals.append(S1x)
+        S1y_fvals.append(S1y)
+        S1z_fvals.append(S1z)
+        S2x_fvals.append(S2x)
+        S2y_fvals.append(S2y)
+        S2z_fvals.append(S2z)
+
+    if single_flag==True:
+        return Lx_fvals[0], Ly_fvals[0], Lz_fvals[0], S1x_fvals[0], S1y_fvals[0], S1z_fvals[0], S2x_fvals[0], S2y_fvals[0], S2z_fvals[0]        
+    else:
+        return Lx_fvals, Ly_fvals, Lz_fvals, S1x_fvals, S1y_fvals, S1z_fvals, S2x_fvals, S2y_fvals, S2z_fvals
 
 
 def hybrid_single(xi,kappa_inf,r_vals,q,S1,S2,r_t):
