@@ -1321,7 +1321,7 @@ def aligned_configurations(q,S1,S2,r):
 
     **Call:**
 
-        xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=aligned_configurations(q,S1,S2,r)
+        xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=precession.aligned_configurations(q,S1,S2,r)
 
     **Parameters:**
 
