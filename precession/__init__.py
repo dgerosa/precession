@@ -1959,9 +1959,8 @@ def t_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, t_initial=0, sign=
         res=sp.integrate.quad(dtdS, S_initial, S_final, args=(xi,J,q,S1,S2,r,sign),full_output=1)               
         return t_initial + res[0]
 
-
     
-def S_of_t(t, Sb_min,Sb_max,xi,J,q,S1,S2,r,sign=1.):
+def S_of_t(t, Sb_min,Sb_max,xi,J,q,S1,S2,r):
 
     '''
     Integrate `precession.dSdt' to find S (time) as a function of t (magnitude
@@ -1988,37 +1987,39 @@ def S_of_t(t, Sb_min,Sb_max,xi,J,q,S1,S2,r,sign=1.):
     - `S1`: spin magnitude of the primary BH.
     - `S2`: spin magnitude of the secondary BH.
     - `r`: binary separation.
-    - `sign`: if 1 return angle in [0,pi], if -1 return angle in [-pi,0].
 
     **Returns:**
 
     - `S`: magnitude of the total spin.
     '''
+    tau=precession_period(xi,J,q,S1,S2,r)
 
     global flags_q1
     if q==1:
-        if flags_q1[4]==False: GET NUMBER RIGHT
+        if flags_q1[5]==False:
             print "[S_of_t] Warning q=1: output here is cos(varphi) not S; now computing cos(varphi)(t) )"
-            flags_q1[4]=True
+            flags_q1[5]=True
             
         L=(q/(1.+q)**2)*(r*M**3)**.5
         S = np.sqrt(J**2-L**2-xi*L*M**2)
         S_min,S_max=St_limits(J,q,S1,S2,r)
-        if np.abs(S-S_min)<1e-8 or np.abs(S-S_max)<1e-8:
-            print "[t_of_S] Warning: you are at resonance, varphi is ill defined here."
-            return 0.
 
-    elif np.abs(Sb_min-Sb_max)<1e-8: # This happens when [Sb_limits] fails in bracketing of the solutions. In practice, this is a resonant binary.
-        return np.average(Sb_min,Sb_min)
-    
-    tau=precession_period(xi,J,q,S1,S2,r)
-    
-    if t < 0 or t > tau:
-        assert False, "[S_of_t] Error. You're trying to integrate over more than one (half)period"
-    else:
-        S= sp.optimize.brentq(lambda S:sp.integrate.quad(precession.dtdS, Sb_min, S, args=(xi,J,q,S1,S2,r,-1.))[0] - t , Sb_min, Sb_max)
+        if np.abs(S-S_min)<1e-8 or np.abs(S-S_max)<1e-8:
+            print "[S_of_t] Warning: you are at resonance, varphi is ill defined here."
+            return 0.
+        elif t < 0 or t > tau/2.:
+            assert False, "[S_of_t] Error. You're trying to integrate over more than one (half)period"
+        else:
+            S= sp.optimize.brentq(lambda S:sp.integrate.quad(dtdS, 0, S, args=(xi,J,q,S1,S2,r,1.))[0] - t , Sb_min, Sb_max)
         return S
 
+    if np.abs(Sb_min-Sb_max)<1e-8: # This happens when [Sb_limits] fails in bracketing of the solutions. In practice, this is a resonant binary.
+        return np.average(Sb_min,Sb_min)
+    elif t < 0 or t > tau/2.:
+        assert False, "[S_of_t] Error. You're trying to integrate over more than one (half)period"
+    else:
+        S= sp.optimize.brentq(lambda S:sp.integrate.quad(dtdS, Sb_min, S, args=(xi,J,q,S1,S2,r,-1.))[0] - t , Sb_min, Sb_max)
+        return S
 
 
 def precession_period(xi,J,q,S1,S2,r):
@@ -2083,9 +2084,9 @@ def OmegazdtdS(S,xi,J,q,S1,S2,r,sign=1.):
 
     global flags_q1
     if q==1:
-        if flags_q1[5]==False:
+        if flags_q1[6]==False:
             print "[OmegazdtdS] Warning q=1: input here is cos(varphi), not S; now computing Omegaz * dt / d(cos(varphi))"
-            flags_q1[5]=True
+            flags_q1[6]=True
         cosvarphi=S # The input variable is actually cos(varphi)
         L=(q/(1.+q)**2)*(r*M**3)**.5
         S=np.sqrt(J**2-L**2-xi*L*M**2)
@@ -2132,9 +2133,9 @@ def alpha_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, alpha_initial=
 
     global flags_q1
     if q==1:
-        if flags_q1[6]==False:
+        if flags_q1[7]==False:
             print "[alpha_of_S] Warning q=1: input here is cos(varphi), not S; now computing alpha(cosvarphi)"
-            flags_q1[6]=True
+            flags_q1[7]=True
         
         L=(q/(1.+q)**2)*(r*M**3)**.5
         S = np.sqrt(J**2-L**2-xi*L*M**2)
@@ -2232,9 +2233,9 @@ def samplingS(xi,J,q,S1,S2,r):
 
     global flags_q1
     if q==1:
-        if flags_q1[7]==False:
+        if flags_q1[8]==False:
             print "[samplingS] Warning q=1: sampling is cos(varphi), not S"
-            flags_q1[7]=True
+            flags_q1[8]=True
             
         # If q=1, the limits must be specified in cos(varphi)
         tol=1e-10 # Don't go too close to the actual limits
@@ -2392,9 +2393,9 @@ def Sb_limits_comp(xi,kappa,q,S1,S2,u):
     global flags_q1
     if q==1:
         if u==0:
-            if flags_q1[8]==False:
+            if flags_q1[9]==False:
                 print "[Sb_limits_comp] Warning q=1,u=0: input for kappa means S"
-                flags_q1[8]=True
+                flags_q1[9]=True
             Sb_both=kappa
         else:
            Sb_both=np.sqrt(kappa/u-0.5*xi*M**2/u)
@@ -3030,9 +3031,9 @@ def Jofr_infinity(xi,kappa_inf,r_vals,q,S1,S2):
 
     global flags_q1 
     if q==1:
-        if flags_q1[9]==False:
+        if flags_q1[10]==False:
             print "[Jofr_infinity] Warning q=1: required intial condition is S, not kappa_inf."
-            flags_q1[9]=True # Suppress future warnings
+            flags_q1[10]=True # Suppress future warnings
         S=kappa_inf
         J_vals=[np.sqrt(L**2+S**2+xi*L*M**2) for L in L_vals]
     else:
@@ -3202,9 +3203,9 @@ def kappa_backwards(xi,J,r,q,S1,S2):
 
     global flags_q1
     if q==1:
-        if flags_q1[10]==False:
+        if flags_q1[11]==False:
             print "[kappa_backwards] Warning q=1: sensible output is S, not kappa_inf."
-            flags_q1[10]=True # Suppress future warnings
+            flags_q1[11]=True # Suppress future warnings
         S=np.sqrt(J**2-L**2-xi*L*M**2)
         return S
     
@@ -3516,9 +3517,9 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     # Get initial condition in a cartesian frame. Use the frame aligned to J at the initial separation
     global flags_q1
     if q==1:
-        if flags_q1[11]==False:
+        if flags_q1[12]==False:
             print "[orbav_integrator] Warning q=1: input here is cos(varphi), not S."
-            flags_q1[11]=True
+            flags_q1[12]=True
     
     L_vals=[(q/(1.+q)**2)*(comp*M**3)**.5 for comp in r_vals]
     v_vals=[(M/comp)**0.5 for comp in r_vals]
@@ -3654,9 +3655,9 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     
     global flags_q1 
     if q==1:
-        if flags_q1[12]==False:
+        if flags_q1[13]==False:
             print "[orbit_averaged] Warning q=1: Input/output for S is actually cos(varphi)"       
-            flags_q1[12]=True
+            flags_q1[13]=True
 
     single_flag=False
     try: #Convert float to array if you're evolving just one binary
@@ -4149,9 +4150,9 @@ def hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t):
     global CPUs
     global flags_q1
     if q==1:
-        if flags_q1[13]==False:
+        if flags_q1[14]==False:
             print "[hybrid] Warning q=1: required intial condition is S, not kappa_inf."
-            flags_q1[13]=True # Suppress future warnings
+            flags_q1[14]=True # Suppress future warnings
 
     single_flag=False
 
