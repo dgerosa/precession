@@ -1901,13 +1901,13 @@ def t_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, t_initial=0, sign=
     '''
     Integrate `precession.dSdt' to find t (time) as a function of S (magnitude
     of the total spin). Since dS/dt depends on S and not on t, finding t(S) only
-    requires a numnerical integration; finding S(t) would require a ODE solver
-    (straightforward, but it has not been implemented). Sb_min and Sb_max are
-    passed to this function (and not computed within it) for computational
-    efficiency. This function can only integrate over half precession period
-    (i.e. from Sb_min to Sb_max at most). If you want t(S) over more precession
-    periods you should stich different solutions together, consistently with the
-    argument sign (in particular, flip sign every half period).
+    requires a numnerical integration; S(t) is provided in `precession.t_of_S'.
+    Sb_min and Sb_max are passed to this function (and not computed within it)
+    for computational efficiency. This function can only integrate over half
+    precession period (i.e. from Sb_min to Sb_max at most). If you want t(S)
+    over more precession periods you should stich different solutions together,
+    consistently with the argument sign (in particular, flip sign every half
+    period).
 
     **Call:**
 
@@ -1958,6 +1958,67 @@ def t_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, t_initial=0, sign=
     else:
         res=sp.integrate.quad(dtdS, S_initial, S_final, args=(xi,J,q,S1,S2,r,sign),full_output=1)               
         return t_initial + res[0]
+
+
+    
+def S_of_t(t, Sb_min,Sb_max,xi,J,q,S1,S2,r,sign=1.):
+
+    '''
+    Integrate `precession.dSdt' to find S (time) as a function of t (magnitude
+    of the total spin). In practice, this is done by inverting  `precession.t_of_S'. Sb_min and Sb_max are
+    passed to this function (and not computed within it) for computational
+    efficiency. This function can only integrate over half precession period
+    (i.e. from 0 to tau/2 at most). If you want S(t) over more precession
+    periods you should stich different solutions together, consistently with the
+    argument sign (in particular, flip sign every half period).
+
+    **Call:**
+
+        S=precession.S_of_t(t,Sb_min,Sb_max,xi,J,q,S1,S2,r,t_initial=0,sign=1.)
+    
+    **Parameters:**
+    
+    - `t`: time (in total mass units).
+    - `S_final`: upper edge of the integration domain.
+    - `Sb_min`: minimum value of S from geometrical constraints. This is S- in our papers.
+    - `Sb_max`: maximum value of S from geometrical constraints. This is S+ in our papers.
+    - `xi`: projection of the effective spin along the orbital angular momentum.
+    - `J`: magnitude of the total angular momentum.
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+    - `r`: binary separation.
+    - `sign`: if 1 return angle in [0,pi], if -1 return angle in [-pi,0].
+
+    **Returns:**
+
+    - `S`: magnitude of the total spin.
+    '''
+
+    global flags_q1
+    if q==1:
+        if flags_q1[4]==False: GET NUMBER RIGHT
+            print "[S_of_t] Warning q=1: output here is cos(varphi) not S; now computing cos(varphi)(t) )"
+            flags_q1[4]=True
+            
+        L=(q/(1.+q)**2)*(r*M**3)**.5
+        S = np.sqrt(J**2-L**2-xi*L*M**2)
+        S_min,S_max=St_limits(J,q,S1,S2,r)
+        if np.abs(S-S_min)<1e-8 or np.abs(S-S_max)<1e-8:
+            print "[t_of_S] Warning: you are at resonance, varphi is ill defined here."
+            return 0.
+
+    elif np.abs(Sb_min-Sb_max)<1e-8: # This happens when [Sb_limits] fails in bracketing of the solutions. In practice, this is a resonant binary.
+        return np.average(Sb_min,Sb_min)
+    
+    tau=precession_period(xi,J,q,S1,S2,r)
+    
+    if t < 0 or t > tau:
+        assert False, "[S_of_t] Error. You're trying to integrate over more than one (half)period"
+    else:
+        S= sp.optimize.brentq(lambda S:sp.integrate.quad(precession.dtdS, Sb_min, S, args=(xi,J,q,S1,S2,r,-1.))[0] - t , Sb_min, Sb_max)
+        return S
+
 
 
 def precession_period(xi,J,q,S1,S2,r):
