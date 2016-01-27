@@ -2010,7 +2010,7 @@ def S_of_t(t, Sb_min,Sb_max,xi,J,q,S1,S2,r):
         elif t < 0 or t > tau/2.:
             assert False, "[S_of_t] Error. You're trying to integrate over more than one (half)period"
         else:
-            S= sp.optimize.brentq(lambda S:sp.integrate.quad(dtdS, 0, S, args=(xi,J,q,S1,S2,r,1.))[0] - t , Sb_min, Sb_max)
+            S= sp.optimize.brentq(lambda S:np.abs( sp.integrate.quad(dtdS, 0, S, args=(xi,J,q,S1,S2,r))[0]) - t , Sb_min, Sb_max)
         return S
 
     if np.abs(Sb_min-Sb_max)<1e-8: # This happens when [Sb_limits] fails in bracketing of the solutions. In practice, this is a resonant binary.
@@ -2018,7 +2018,7 @@ def S_of_t(t, Sb_min,Sb_max,xi,J,q,S1,S2,r):
     elif t < 0 or t > tau/2.:
         assert False, "[S_of_t] Error. You're trying to integrate over more than one (half)period"
     else:
-        S= sp.optimize.brentq(lambda S:sp.integrate.quad(dtdS, Sb_min, S, args=(xi,J,q,S1,S2,r,-1.))[0] - t , Sb_min, Sb_max)
+        S= sp.optimize.brentq(lambda S:np.abs( sp.integrate.quad(dtdS, Sb_min, S, args=(xi,J,q,S1,S2,r))[0]) - t , Sb_min, Sb_max)
         return S
 
 
