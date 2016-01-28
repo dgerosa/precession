@@ -276,6 +276,6 @@ def phase_resampling():
 
     fig.savefig("phase_resampling.pdf",bbox_inches='tight') # Save pdf file
 
-phase_resampling()
+#phase_resampling()
 #spin_angles()
 #parameter_selection()
