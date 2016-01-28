@@ -191,5 +191,142 @@ def spin_angles():
 
 
 
+
+
+def phase_resampling():
+    '''
+    COMMENT COMMENT COMMENT
+
+    **Run using**
+
+        import precession.test
+        precession.test.phase_resampling()
+    '''
+
+    fig=pylab.figure(figsize=(6,6)) #Create figure object and axes
+    ax_tS=fig.add_axes([0,0,0.6,0.8]) #bottom-left
+    ax_Sd=fig.add_axes([0.8,0,0.6,0.8]) #bottom-right
+    ax_td=fig.add_axes([0,0.95,0.6,0.8]) #top-left
+
+
+
+
+    q=0.5   # Mass ratio. Must be q<=1.
+    chi1=0.3 # Primary spin. Must be chi1<=1
+    chi2=0.9 # Secondary spin. Must be chi2<=1
+    M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
+    r=200.*M # Separation. Must be r>10M for PN to be valid
+    J=3.14 # Magnitude of J: Jmin<J<Jmax as given by J_lim
+    xi=-0.01 # Effective spin: xi_low<xi<xi_up as given by xi_allowed
+
+    Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r)
+    dimsample=int(1e3)
+    tau=precession.precession_period(xi,J,q,S1,S2,r)
+
+
+
+    filename="phase_resampling_"+str(int(numpy.log10(dimsample)))+"_.dat"
+    if not os.path.isfile(filename):
+        out = open(filename,"w")
+        out.write("# q chi1 chi2 r J xi\n")
+        out.write("# "+str(q)+" "+str(chi1)+" "+str(chi2)+" "+str(r)+" "+str(J)+" "+str(xi)+"\n")
+
+        S_vals=numpy.linspace(Sb_min,Sb_max,dimsample)
+        t_vals=[abs(precession.t_of_S(Sb_min,S,Sb_min,Sb_max,xi,J,q,S1,S2,r)) for S in S_vals]
+
+        S_sample=[precession.samplingS(xi,J,q,S1,S2,r) for i in range(dimsample)]
+        t_sample=[abs(precession.t_of_S(Sb_min,S,Sb_min,Sb_max,xi,J,q,S1,S2,r)) for S in S_sample]
+
+        S_distr=[2.*abs(precession.dtdS(S,xi,J,q,S1,S2,r)/tau) for S in S_vals]
+        t_distr=[2./tau for t in t_vals]
+
+        out.write("# S_vals t_vals S_sample t_sample S_distr t_distr\n")
+        for Sv,tv,Ss,ts,Sd,td in zip(S_vals,t_vals,S_sample,t_sample,S_distr,t_distr):
+            out.write(str(Sv)+" "+str(tv)+" "+str(Ss)+" "+str(ts)+" "+str(Sd)+" "+str(td)+"\n")
+
+    else:
+        S_vals,t_vals,S_sample,t_sample,S_distr,t_distr=numpy.loadtxt(filename,unpack=True)
+
+
+
+    ax_tS.plot(t_vals,S_vals)
+
+
+    ax_tS.scatter(t_sample,S_sample)
+
+
+
+#     Plot the expected continous distribution
+#     Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r)
+#     St_min,St_max=precession.St_limits(J,q,S1,S2,r)
+#     
+#     for S in np.linspace(Sb_min,Sb_max,100):
+#         print S, np.abs(precession.t_of_S(Sb_min,S,Sb_min,Sb_max,xi,J,q,S1,S2,r) / precession.t_of_S(Sb_min,Sb_max,Sb_min,Sb_max,xi,J,q,S1,S2,r))
+# 
+# 
+#     print len(filter(lambda x: x<1e-5, [np.abs(S-Sb_max) for S in S_vals]))
+#     print len(filter(lambda x: x<1e-5, [np.abs(S-Sb_min) for S in S_vals]))
+# 
+#     for S in S_vals:
+#         if np.abs(S-Sb_max)<1e-5 or np.abs(S-Sb_min)<1e-5:
+#             print S, Sb_min, Sb_max, St_min, St_max
+#             if S>Sb_max or S<Sb_min:
+#                 print "troia puttana ladra"
+#                 sys.exit()
+# 
+# 
+
+    
+    
+    ax_Sd.plot(S_distr,S_vals,lw=2.,color='red')
+    ax_td.plot(t_vals,t_distr,lw=2.,color='red')
+
+    # Plot the extracted sample
+    ax_Sd.hist(S_sample, bins=100, range=(Sb_min,Sb_max), normed=True, histtype='stepfilled', color="blue", alpha=0.5,orientation="horizontal")
+    
+    print t_sample
+    
+    ax_td.hist(t_sample, bins=100, range=(0, tau/2.), normed=True, histtype='stepfilled', color="blue", alpha=0.5)
+
+    
+    
+#    ax2.hist(S_vals, bins=10000, range=(Sb_min,Sb_max), normed=True, cumulative=True,histtype='stepfilled', color="blue", alpha=0.5)
+
+#    down=sp.integrate.quad(precession.Ssines, Sb_min, Sb_max, args=(xi,J,q,S1,S2,r), full_output=1)
+#    def time_normalized(S):
+#        up=sp.integrate.quad(precession.Ssines, Sb_min, S, args=(xi,J,q,S1,S2,r), full_output=1)
+#        return up[0]/down[0]
+
+   
+#    ax2.plot(S_lin,[time_normalized(S) for S in S_lin] ,lw=2.,color='red')
+
+    ax_Sd.set_xlim(0,40)
+    #ax2.set_ylim(0.04,0.08)    
+    #ax2.set_xlim(0.2715,0.272)    
+
+    
+    
+    
+#     Cosmetic issues
+#     ax.set_ylim(0, min( np.abs(precession.dtdS(Sb_min+1e-3,xi,J,q,S1,S2,r)/halfperiod) , np.abs(precession.dtdS(Sb_max-1e-3,xi,J,q,S1,S2,r)/halfperiod)) )
+#     ax.set_xlim(Sb_min,Sb_max)
+#     ax.set_xlabel("$S$")
+#     ax.set_ylabel("$2\, |dt/dS| \,/\, \\tau$")
+#     label=  "$"+"\\xi="+str(round(xi,2))+"$"+"\n"+  \
+#             "$"+"J="+str(round(J,2))+"M^2$"+"\n"+ \
+#             "$"+"q="+str(round(q,2))+"$"+"\n"+ \
+#             "$"+"\\chi_1="+str(round(chi1,2))+"$"+"\n"+ \
+#             "$"+"\\chi_2="+str(round(chi2,2))+"$"+"\n"+ \
+#             "$"+"r="+str(round(r,2))+"M$"
+#     ax.text(0.6,0.95, label, horizontalalignment='left',verticalalignment='top', fontsize=15, transform=ax.transAxes)
+# 
+#     Save plot
+#     fig.savefig(filename, format='pdf',bbox_inches='tight')
+#     
+    fig.savefig("phase_resampling.pdf",bbox_inches='tight') # Save pdf file
+
+phase_resampling()
+
+
 #spin_angles()
 #parameter_selection()
