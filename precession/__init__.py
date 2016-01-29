@@ -3588,7 +3588,6 @@ def orbit_averaged_single(J,xi,S,r_vals,q,S1,S2):
     if not os.path.isfile(savename):
         print "[orbit_averaged] Transferring binary. Output:", savename
         outfilesave = open(savename,"w",0)
-       
         Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals = orbav_integrator(J,xi,S,r_vals,q,S1,S2)
 
         for r_f,Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz in zip(r_vals,Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals):        
@@ -3691,8 +3690,8 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
         print "[orbit_averaged] Reading:", index, file
         dummy,J_f,xi_f,S_f= np.loadtxt(file,unpack=True)
         J_fvals.append(J_f)
-        S_fvals.append(S_f)
         xi_vals.append(xi_f)
+        S_fvals.append(S_f)
 
     if single_flag==True:
         return J_fvals[0], xi_vals[0], S_fvals[0]
@@ -3867,7 +3866,6 @@ def orbit_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
 
 
 
-
 def orbit_vectors_single(J,xi,S,r_vals,q,S1,S2):
 
     '''
@@ -3931,7 +3929,7 @@ def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
  
     **Call:**
 
-        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)
+        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)
 
     **Parameters:**
 
@@ -4046,7 +4044,7 @@ def hybrid_single(xi,kappa_inf,r_vals,q,S1,S2,r_t):
         r_vals_pa=[r for r in r_vals if r>r_t]
         r_vals_oa=[r for r in r_vals if r<=r_t] # Keep r_t (if present) in the orbit-average part
 
-        if not [r for r in r_vals_oa if r==r_t]: # If there's nothing but r_t in the orbit-averaged part
+        if not [r for r in r_vals_oa if r!=r_t]: # If there's nothing but r_t in the orbit-averaged part
             assert False, "[hybrid] No output required below r_t. You don't need a hybrid integration, use evolve_J_infinity instead"
 
         # Add the threshold at the end of the precession-average part and at the beginning of the orbit-average part
@@ -4072,7 +4070,7 @@ def hybrid_single(xi,kappa_inf,r_vals,q,S1,S2,r_t):
         Lhx_vals_oa,Lhy_vals_oa,Lhz_vals_oa,S1hx_vals_oa,S1hy_vals_oa,S1hz_vals_oa,S2hx_vals_oa,S2hy_vals_oa,S2hz_vals_oa = orbav_integrator(J_vals_pa[-1],xi,S_t,r_vals_oa,q,S1,S2)
 
         # Store the angles theta1, theta2 and deltaphi (S resampling not needed)
-        # Don't use the first values in the arrays, because you added one value at on top earlier on
+        # Don't use the first values in the arrays, because you added one value on top earlier on
         for r_f,Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz in zip(r_vals_oa[1:],Lhx_vals_oa[1:],Lhy_vals_oa[1:],Lhz_vals_oa[1:],S1hx_vals_oa[1:],S1hy_vals_oa[1:],S1hz_vals_oa[1:],S2hx_vals_oa[1:],S2hy_vals_oa[1:],S2hz_vals_oa[1:]):
             L_f=(q/(1.+q)**2)*(r_f*M**3)**.5
             S_f=((S1*S1hx+S2*S2hx)**2 + (S1*S1hy+S2*S2hy)**2 + (S1*S1hz+S2*S2hz)**2 )**0.5
