@@ -112,7 +112,7 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2015 Davide Gerosa"
 __license__ = "CC by-nc-sa 3.0"
-__version__ = "0.0.0.25"
+__version__ = "0.0.0.26"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
