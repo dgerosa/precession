@@ -264,7 +264,7 @@ def phase_resampling():
     fig.savefig("phase_resampling.pdf",bbox_inches='tight') # Save pdf file
 
 
-def PNevolve():
+def PNwrappers():
         
     q=0.9  # Mass ratio. Must be q<=1.
     chi1=0.5 # Primary spin. Must be chi1<=1
@@ -275,7 +275,7 @@ def PNevolve():
     rt=100.*M  # Intermediate separation for hybrid evolution.
     r_vals=numpy.logspace(numpy.log10(ri),numpy.log10(rf),1000) # Output requested
 
-    t1i=numpy.pi/4.; t2i=numpy.pi/4.; dpi=numpy.pi/4.    
+    t1i=numpy.pi/4.; t2i=numpy.pi/4.; dpi=numpy.pi/4. # Initial configuration
     xii,Ji,Si=precession.from_the_angles(t1i,t2i,dpi,q,S1,S2,ri)
     print "Configuration at r=ri"
     print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xii,Ji,Si)
@@ -287,14 +287,14 @@ def PNevolve():
     print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xif[-1],Jf[-1],Sf[-1])
     t1f,t2f,dpf=precession.orbit_angles(t1i,t2i,dpi,r_vals,q,S1,S2)
     print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
-    Lxf,Lyf,Lzf,S1xf,S1yf,S1zf,S2xf,S2yf,S2zf=precession.orbit_vectors(Ji,xii,Si,r_vals,q,S1,S2)
-    print "\t (Lx,Ly,Lz)=(%.3f,%.3f,%.3f)" %(Lxf[-1],Lyf[-1],Lzf[-1])
-    print "\t (S1x,S1y,S1z)=(%.3f,%.3f,%.3f)" %(S1xf[-1],S1yf[-1],S1zf[-1])
-    print "\t (S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(S2xf[-1],S2yf[-1],S2zf[-1])
-    
+    Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z=precession.orbit_vectors(Ji,xii,Si,r_vals,q,S1,S2)
+    print "\t (Lx,Ly,Lz)=(%.3f,%.3f,%.3f)" %(Lx[-1],Ly[-1],Lz[-1])
+    print "\t (S1x,S1y,S1z)=(%.3f,%.3f,%.3f)" %(S1x[-1],S1y[-1],S1z[-1])
+    print "\t (S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(S2x[-1],S2y[-1],S2z[-1])
+
     print "\n *Orbit-averaged evolution*"  
     print "Evolution ri --> rf"
-    Jf=precession.evolve_J(xii,Ji,r_vals,q,S1,S2) # Integrate dJdr ODE
+    Jf=precession.evolve_J(xii,Ji,r_vals,q,S1,S2)
     print "\t (xi,J,S)=(%.3f,%.3f,-)" %(xii,Jf[-1])
     t1f,t2f,dpf=precession.evolve_angles(t1i,t2i,dpi,r_vals,q,S1,S2)
     print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
@@ -304,9 +304,9 @@ def PNevolve():
     Jf=precession.evolve_J_infinity(xii,kappainf,r_vals,q,S1,S2)
     print "Evolution infinity --> rf"
     print "\t J=%.3f" %Jf[-1] 
-    
+
     print "\n *Hybrid evolution*"  
-    print "Prec.Av. infinity --> rt. Orb. av. rt --> rf"
+    print "Prec.Av. infinity --> rt & Orb.Av. rt --> rf"
     t1f,t2f,dpf=precession.hybrid(xii,kappainf,r_vals,q,S1,S2,rt)
     print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
     
