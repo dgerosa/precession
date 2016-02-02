@@ -292,7 +292,7 @@ def PNwrappers():
     print "\t (S1x,S1y,S1z)=(%.3f,%.3f,%.3f)" %(S1x[-1],S1y[-1],S1z[-1])
     print "\t (S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(S2x[-1],S2y[-1],S2z[-1])
 
-    print "\n *Orbit-averaged evolution*"  
+    print "\n *Precession-averaged evolution*"  
     print "Evolution ri --> rf"
     Jf=precession.evolve_J(xii,Ji,r_vals,q,S1,S2)
     print "\t (xi,J,S)=(%.3f,%.3f,-)" %(xii,Jf[-1])
