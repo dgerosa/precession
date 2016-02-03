@@ -1061,6 +1061,7 @@ table {
     <li class="mono"><a href="#precession.Omegaz">Omegaz</a></li>
     <li class="mono"><a href="#precession.OmegazdtdS">OmegazdtdS</a></li>
     <li class="mono"><a href="#precession.S3sines_comp">S3sines_comp</a></li>
+    <li class="mono"><a href="#precession.S_of_t">S_of_t</a></li>
     <li class="mono"><a href="#precession.Sb_limits">Sb_limits</a></li>
     <li class="mono"><a href="#precession.Sb_limits_comp">Sb_limits_comp</a></li>
     <li class="mono"><a href="#precession.Ssines_comp">Ssines_comp</a></li>
@@ -1134,7 +1135,7 @@ table {
 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
-        <li class="mono"><a href="test.m.html">precession.test</a></li>
+        <li class="mono"><a href="test/index.html">precession.test</a></li>
       </ul>
     </li>
     </ul>
@@ -1153,7 +1154,7 @@ table {
 <p><strong>email</strong> d.gerosa@damtp.cam.ac.uk</p>
 <p><strong>Copyright</strong> Copyright (C) 2015 Davide Gerosa</p>
 <p><strong>Licence</strong> CC by-nc-sa 3.0</p>
-<p><strong>Version</strong> 0.0.0.25</p>
+<p><strong>Version</strong> 0.0.0.29</p>
 <h1>DYNAMICS OF PRECESSING BLACK-HOLE BINARIES</h1>
 <p>Detailed documentation and results from the code are available at:</p>
 <ul>
@@ -1385,7 +1386,7 @@ the algorithms.</p>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s">&quot;d.gerosa@damtp.cam.ac.uk&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;Copyright (C) 2015 Davide Gerosa&quot;</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;CC by-nc-sa 3.0&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.25&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.29&quot;</span>
 
 
 <span class="n">__doc__</span><span class="o">=</span><span class="s">&quot;**Author** &quot;</span><span class="o">+</span><span class="n">__author__</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="o">+</span>\
@@ -2594,7 +2595,7 @@ the algorithms.</p>
 
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=aligned_configurations(q,S1,S2,r)</span>
+<span class="sd">        xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=precession.aligned_configurations(q,S1,S2,r)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -3174,13 +3175,13 @@ the algorithms.</p>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Integrate `precession.dSdt&#39; to find t (time) as a function of S (magnitude</span>
 <span class="sd">    of the total spin). Since dS/dt depends on S and not on t, finding t(S) only</span>
-<span class="sd">    requires a numnerical integration; finding S(t) would require a ODE solver</span>
-<span class="sd">    (straightforward, but it has not been implemented). Sb_min and Sb_max are</span>
-<span class="sd">    passed to this function (and not computed within it) for computational</span>
-<span class="sd">    efficiency. This function can only integrate over half precession period</span>
-<span class="sd">    (i.e. from Sb_min to Sb_max at most). If you want t(S) over more precession</span>
-<span class="sd">    periods you should stich different solutions together, consistently with the</span>
-<span class="sd">    argument sign (in particular, flip sign every half period).</span>
+<span class="sd">    requires a numnerical integration; S(t) is provided in `precession.t_of_S&#39;.</span>
+<span class="sd">    Sb_min and Sb_max are passed to this function (and not computed within it)</span>
+<span class="sd">    for computational efficiency. This function can only integrate over half</span>
+<span class="sd">    precession period (i.e. from Sb_min to Sb_max at most). If you want t(S)</span>
+<span class="sd">    over more precession periods you should stich different solutions together,</span>
+<span class="sd">    consistently with the argument sign (in particular, flip sign every half</span>
+<span class="sd">    period).</span>
 
 <span class="sd">    **Call:**</span>
 
@@ -3231,6 +3232,68 @@ the algorithms.</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">res</span><span class="o">=</span><span class="n">sp</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="n">dtdS</span><span class="p">,</span> <span class="n">S_initial</span><span class="p">,</span> <span class="n">S_final</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">sign</span><span class="p">),</span><span class="n">full_output</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>               
         <span class="k">return</span> <span class="n">t_initial</span> <span class="o">+</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    
+<span class="k">def</span> <span class="nf">S_of_t</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Integrate `precession.dSdt&#39; to find S (time) as a function of t (magnitude</span>
+<span class="sd">    of the total spin). In practice, this is done by inverting  `precession.t_of_S&#39;. Sb_min and Sb_max are</span>
+<span class="sd">    passed to this function (and not computed within it) for computational</span>
+<span class="sd">    efficiency. This function can only integrate over half precession period</span>
+<span class="sd">    (i.e. from 0 to tau/2 at most). If you want S(t) over more precession</span>
+<span class="sd">    periods you should stich different solutions together, consistently with the</span>
+<span class="sd">    argument sign (in particular, flip sign every half period).</span>
+
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        S=precession.S_of_t(t,Sb_min,Sb_max,xi,J,q,S1,S2,r,t_initial=0,sign=1.)</span>
+<span class="sd">    </span>
+<span class="sd">    **Parameters:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `t`: time (in total mass units).</span>
+<span class="sd">    - `S_final`: upper edge of the integration domain.</span>
+<span class="sd">    - `Sb_min`: minimum value of S from geometrical constraints. This is S- in our papers.</span>
+<span class="sd">    - `Sb_max`: maximum value of S from geometrical constraints. This is S+ in our papers.</span>
+<span class="sd">    - `xi`: projection of the effective spin along the orbital angular momentum.</span>
+<span class="sd">    - `J`: magnitude of the total angular momentum.</span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
+<span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+<span class="sd">    - `r`: binary separation.</span>
+
+<span class="sd">    **Returns:**</span>
+
+<span class="sd">    - `S`: magnitude of the total spin.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">tau</span><span class="o">=</span><span class="n">precession_period</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+
+    <span class="k">global</span> <span class="n">flags_q1</span>
+    <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;[S_of_t] Warning q=1: output here is cos(varphi) not S; now computing cos(varphi)(t) )&quot;</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            
+        <span class="n">L</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">J</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">S_min</span><span class="p">,</span><span class="n">S_max</span><span class="o">=</span><span class="n">St_limits</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="o">-</span><span class="n">S_min</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-8</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="o">-</span><span class="n">S_max</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-8</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;[S_of_t] Warning: you are at resonance, varphi is ill defined here.&quot;</span>
+            <span class="k">return</span> <span class="mf">0.</span>
+        <span class="k">elif</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">tau</span><span class="o">/</span><span class="mf">2.</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&quot;[S_of_t] Error. You&#39;re trying to integrate over more than one (half)period&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">S</span><span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">brentq</span><span class="p">(</span><span class="k">lambda</span> <span class="n">S</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span> <span class="n">sp</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="n">dtdS</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">t</span> <span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span> <span class="n">Sb_max</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">S</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Sb_min</span><span class="o">-</span><span class="n">Sb_max</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-8</span><span class="p">:</span> <span class="c"># This happens when [Sb_limits] fails in bracketing of the solutions. In practice, this is a resonant binary.</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_min</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">tau</span><span class="o">/</span><span class="mf">2.</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&quot;[S_of_t] Error. You&#39;re trying to integrate over more than one (half)period&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">S</span><span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">brentq</span><span class="p">(</span><span class="k">lambda</span> <span class="n">S</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span> <span class="n">sp</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="n">dtdS</span><span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">t</span> <span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span> <span class="n">Sb_max</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">S</span>
 
 
 <span class="k">def</span> <span class="nf">precession_period</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
@@ -3295,9 +3358,9 @@ the algorithms.</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[OmegazdtdS] Warning q=1: input here is cos(varphi), not S; now computing Omegaz * dt / d(cos(varphi))&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
         <span class="n">cosvarphi</span><span class="o">=</span><span class="n">S</span> <span class="c"># The input variable is actually cos(varphi)</span>
         <span class="n">L</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
         <span class="n">S</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">J</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -3344,9 +3407,9 @@ the algorithms.</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[alpha_of_S] Warning q=1: input here is cos(varphi), not S; now computing alpha(cosvarphi)&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
         
         <span class="n">L</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
         <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">J</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -3444,9 +3507,9 @@ the algorithms.</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[samplingS] Warning q=1: sampling is cos(varphi), not S&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
             
         <span class="c"># If q=1, the limits must be specified in cos(varphi)</span>
         <span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span> <span class="c"># Don&#39;t go too close to the actual limits</span>
@@ -3604,9 +3667,9 @@ the algorithms.</p>
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">u</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
                 <span class="k">print</span> <span class="s">&quot;[Sb_limits_comp] Warning q=1,u=0: input for kappa means S&quot;</span>
-                <span class="n">flags_q1</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+                <span class="n">flags_q1</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
             <span class="n">Sb_both</span><span class="o">=</span><span class="n">kappa</span>
         <span class="k">else</span><span class="p">:</span>
            <span class="n">Sb_both</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span><span class="o">/</span><span class="n">u</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">xi</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">u</span><span class="p">)</span>
@@ -4242,9 +4305,9 @@ the algorithms.</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span> 
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[Jofr_infinity] Warning q=1: required intial condition is S, not kappa_inf.&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
         <span class="n">S</span><span class="o">=</span><span class="n">kappa_inf</span>
         <span class="n">J_vals</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">S</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">L</span> <span class="ow">in</span> <span class="n">L_vals</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
@@ -4414,9 +4477,9 @@ the algorithms.</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[kappa_backwards] Warning q=1: sensible output is S, not kappa_inf.&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
         <span class="n">S</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">J</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">S</span>
     
@@ -4728,9 +4791,9 @@ the algorithms.</p>
     <span class="c"># Get initial condition in a cartesian frame. Use the frame aligned to J at the initial separation</span>
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[orbav_integrator] Warning q=1: input here is cos(varphi), not S.&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
     
     <span class="n">L_vals</span><span class="o">=</span><span class="p">[(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">comp</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span> <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">r_vals</span><span class="p">]</span>
     <span class="n">v_vals</span><span class="o">=</span><span class="p">[(</span><span class="n">M</span><span class="o">/</span><span class="n">comp</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">r_vals</span><span class="p">]</span>
@@ -4799,7 +4862,6 @@ the algorithms.</p>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">savename</span><span class="p">):</span>
         <span class="k">print</span> <span class="s">&quot;[orbit_averaged] Transferring binary. Output:&quot;</span><span class="p">,</span> <span class="n">savename</span>
         <span class="n">outfilesave</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">savename</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-       
         <span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span> <span class="o">=</span> <span class="n">orbav_integrator</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span><span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">):</span>        
@@ -4866,9 +4928,9 @@ the algorithms.</p>
     
     <span class="k">global</span> <span class="n">flags_q1</span> 
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[orbit_averaged] Warning q=1: Input/output for S is actually cos(varphi)&quot;</span>       
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
 
     <span class="n">single_flag</span><span class="o">=</span><span class="bp">False</span>
     <span class="k">try</span><span class="p">:</span> <span class="c">#Convert float to array if you&#39;re evolving just one binary</span>
@@ -4902,8 +4964,8 @@ the algorithms.</p>
         <span class="k">print</span> <span class="s">&quot;[orbit_averaged] Reading:&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="nb">file</span>
         <span class="n">dummy</span><span class="p">,</span><span class="n">J_f</span><span class="p">,</span><span class="n">xi_f</span><span class="p">,</span><span class="n">S_f</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">J_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">J_f</span><span class="p">)</span>
-        <span class="n">S_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_f</span><span class="p">)</span>
         <span class="n">xi_vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xi_f</span><span class="p">)</span>
+        <span class="n">S_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_f</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">single_flag</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">J_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xi_vals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -5078,7 +5140,6 @@ the algorithms.</p>
 
 
 
-
 <span class="k">def</span> <span class="nf">orbit_vectors_single</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
@@ -5130,19 +5191,19 @@ the algorithms.</p>
 <span class="sd">    the python parmap module; the number of available cores can be specified</span>
 <span class="sd">    using the integer global variable `CPUs` (all available cores will be used</span>
 <span class="sd">    by default). Input are given in terms of J, xi and S; outputs are projected</span>
-<span class="sd">    on a reference frame such that Jx=Jy=Ly=0 at the initial separation.</span>
-<span class="sd">    Vectors, not unit vectros!, are returned. Evolve a sequence of binaries with</span>
-<span class="sd">    the SAME q, S1,S2 but different xi and initial values of J and S; save</span>
-<span class="sd">    outputs at r_vals. The initial configuration must be compatible with</span>
-<span class="sd">    r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the first binary</span>
-<span class="sd">    (1D array at all output separations) and J_vals[0][0] is the first binary at</span>
-<span class="sd">    the first output separation (this is a scalar).</span>
+<span class="sd">    on a reference frame such that Jx=Jy=Ly=0 at the initial separation (cf.</span>
+<span class="sd">    `Jframe_projection`). Vectors, not unit vectros!, are returned. Evolve a</span>
+<span class="sd">    sequence of binaries with the SAME q, S1,S2 but different xi and initial</span>
+<span class="sd">    values of J and S; save outputs at r_vals. The initial configuration must be</span>
+<span class="sd">    compatible with r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the</span>
+<span class="sd">    first binary (1D array at all output separations) and J_vals[0][0] is the</span>
+<span class="sd">    first binary at the first output separation (this is a scalar).</span>
 
 <span class="sd">    Checkpointing is implemented: results are stored in `precession.storedir`.</span>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        Jf_vals,xif_vals,Sf_vals=precession.orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)</span>
+<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -5156,15 +5217,15 @@ the algorithms.</p>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    </span>
-<span class="sd">    - `Lhx_vals`: x component of the unit vector L/|L|.</span>
-<span class="sd">    - `Lhy_vals`: y component of the unit vector L/|L|.</span>
-<span class="sd">    - `Lhz_vals`: z component of the unit vector L/|L|.</span>
-<span class="sd">    - `S1hx_vals`: x component of the unit vector S1/|S1|.</span>
-<span class="sd">    - `S1hy_vals`: y component of the unit vector S1/|S1|.</span>
-<span class="sd">    - `S1hz_vals`: z component of the unit vector S1/|S1|.</span>
-<span class="sd">    - `S2hx_vals`: x component of the unit vector S2/|S2|.</span>
-<span class="sd">    - `S2hy_vals`: y component of the unit vector S2/|S2|.</span>
-<span class="sd">    - `S2hz_vals`: z component of the unit vector S2/|S2|.</span>
+<span class="sd">    - `Lx_fvals`: x component of the vector L.</span>
+<span class="sd">    - `Ly_fvals`: y component of the vector L.</span>
+<span class="sd">    - `Lz_fvals`: z component of the vector L.</span>
+<span class="sd">    - `S1x_fvals`: x component of the vector S1.</span>
+<span class="sd">    - `S1y_fvals`: y component of the vector S1.</span>
+<span class="sd">    - `S1z_fvals`: z component of the vector S1.</span>
+<span class="sd">    - `S2x_fvals`: x component of the vector S2.</span>
+<span class="sd">    - `S2y_fvals`: y component of the vector S2.</span>
+<span class="sd">    - `S2z_fvals`: z component of the vector S2.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="k">global</span> <span class="n">CPUs</span>
@@ -5257,7 +5318,7 @@ the algorithms.</p>
         <span class="n">r_vals_pa</span><span class="o">=</span><span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_vals</span> <span class="k">if</span> <span class="n">r</span><span class="o">&gt;</span><span class="n">r_t</span><span class="p">]</span>
         <span class="n">r_vals_oa</span><span class="o">=</span><span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_vals</span> <span class="k">if</span> <span class="n">r</span><span class="o">&lt;=</span><span class="n">r_t</span><span class="p">]</span> <span class="c"># Keep r_t (if present) in the orbit-average part</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_vals_oa</span> <span class="k">if</span> <span class="n">r</span><span class="o">==</span><span class="n">r_t</span><span class="p">]:</span> <span class="c"># If there&#39;s nothing but r_t in the orbit-averaged part</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_vals_oa</span> <span class="k">if</span> <span class="n">r</span><span class="o">!=</span><span class="n">r_t</span><span class="p">]:</span> <span class="c"># If there&#39;s nothing but r_t in the orbit-averaged part</span>
             <span class="k">assert</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&quot;[hybrid] No output required below r_t. You don&#39;t need a hybrid integration, use evolve_J_infinity instead&quot;</span>
 
         <span class="c"># Add the threshold at the end of the precession-average part and at the beginning of the orbit-average part</span>
@@ -5283,7 +5344,7 @@ the algorithms.</p>
         <span class="n">Lhx_vals_oa</span><span class="p">,</span><span class="n">Lhy_vals_oa</span><span class="p">,</span><span class="n">Lhz_vals_oa</span><span class="p">,</span><span class="n">S1hx_vals_oa</span><span class="p">,</span><span class="n">S1hy_vals_oa</span><span class="p">,</span><span class="n">S1hz_vals_oa</span><span class="p">,</span><span class="n">S2hx_vals_oa</span><span class="p">,</span><span class="n">S2hy_vals_oa</span><span class="p">,</span><span class="n">S2hz_vals_oa</span> <span class="o">=</span> <span class="n">orbav_integrator</span><span class="p">(</span><span class="n">J_vals_pa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">xi</span><span class="p">,</span><span class="n">S_t</span><span class="p">,</span><span class="n">r_vals_oa</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
 
         <span class="c"># Store the angles theta1, theta2 and deltaphi (S resampling not needed)</span>
-        <span class="c"># Don&#39;t use the first values in the arrays, because you added one value at on top earlier on</span>
+        <span class="c"># Don&#39;t use the first values in the arrays, because you added one value on top earlier on</span>
         <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">Lhx_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">Lhy_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">Lhz_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S1hx_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S1hy_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S1hz_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S2hx_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S2hy_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S2hz_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
             <span class="n">L_f</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r_f</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
             <span class="n">S_f</span><span class="o">=</span><span class="p">((</span><span class="n">S1</span><span class="o">*</span><span class="n">S1hx</span><span class="o">+</span><span class="n">S2</span><span class="o">*</span><span class="n">S2hx</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">S1</span><span class="o">*</span><span class="n">S1hy</span><span class="o">+</span><span class="n">S2</span><span class="o">*</span><span class="n">S2hy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">S1</span><span class="o">*</span><span class="n">S1hz</span><span class="o">+</span><span class="n">S2</span><span class="o">*</span><span class="n">S2hz</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
@@ -5361,9 +5422,9 @@ the algorithms.</p>
     <span class="k">global</span> <span class="n">CPUs</span>
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[hybrid] Warning q=1: required intial condition is S, not kappa_inf.&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
 
     <span class="n">single_flag</span><span class="o">=</span><span class="bp">False</span>
 
@@ -6104,9 +6165,9 @@ to be S (which is constant).</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span> 
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[Jofr_infinity] Warning q=1: required intial condition is S, not kappa_inf.&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
         <span class="n">S</span><span class="o">=</span><span class="n">kappa_inf</span>
         <span class="n">J_vals</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">S</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">L</span> <span class="ow">in</span> <span class="n">L_vals</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
@@ -6340,9 +6401,9 @@ momentum L about the total angular momentum J.</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[OmegazdtdS] Warning q=1: input here is cos(varphi), not S; now computing Omegaz * dt / d(cos(varphi))&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
         <span class="n">cosvarphi</span><span class="o">=</span><span class="n">S</span> <span class="c"># The input variable is actually cos(varphi)</span>
         <span class="n">L</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
         <span class="n">S</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">J</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -6420,6 +6481,114 @@ momentum L about the total angular momentum J.</p>
     <span class="k">if</span> <span class="n">t3</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c"># prevent occasional crash</span>
         <span class="n">t3</span><span class="o">=</span><span class="mf">1e-20</span>
     <span class="k">return</span> <span class="n">S</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="n">t3</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="precession.S_of_t">
+    <p>def <span class="ident">S_of_t</span>(</p><p>t, Sb_min, Sb_max, xi, J, q, S1, S2, r)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Integrate <code>precession.dSdt' to find S (time) as a function of t (magnitude
+of the total spin). In practice, this is done by inverting</code>precession.t_of_S'. Sb_min and Sb_max are
+passed to this function (and not computed within it) for computational
+efficiency. This function can only integrate over half precession period
+(i.e. from 0 to tau/2 at most). If you want S(t) over more precession
+periods you should stich different solutions together, consistently with the
+argument sign (in particular, flip sign every half period).</p>
+<p><strong>Call:</strong></p>
+<div class="codehilite"><pre>S=precession.S_of_t(t,Sb_min,Sb_max,xi,J,q,S1,S2,r,t_initial=0,sign=1.)
+</pre></div>
+
+
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>t</code>: time (in total mass units).</li>
+<li><code>S_final</code>: upper edge of the integration domain.</li>
+<li><code>Sb_min</code>: minimum value of S from geometrical constraints. This is S- in our papers.</li>
+<li><code>Sb_max</code>: maximum value of S from geometrical constraints. This is S+ in our papers.</li>
+<li><code>xi</code>: projection of the effective spin along the orbital angular momentum.</li>
+<li><code>J</code>: magnitude of the total angular momentum.</li>
+<li><code>q</code>: binary mass ratio. Must be q&lt;=1.</li>
+<li><code>S1</code>: spin magnitude of the primary BH.</li>
+<li><code>S2</code>: spin magnitude of the secondary BH.</li>
+<li><code>r</code>: binary separation.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>S</code>: magnitude of the total spin.</li>
+</ul></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.S_of_t', this);">Show source &equiv;</a></p>
+  <div id="source-precession.S_of_t" class="source">
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">S_of_t</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_max</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Integrate `precession.dSdt&#39; to find S (time) as a function of t (magnitude</span>
+<span class="sd">    of the total spin). In practice, this is done by inverting  `precession.t_of_S&#39;. Sb_min and Sb_max are</span>
+<span class="sd">    passed to this function (and not computed within it) for computational</span>
+<span class="sd">    efficiency. This function can only integrate over half precession period</span>
+<span class="sd">    (i.e. from 0 to tau/2 at most). If you want S(t) over more precession</span>
+<span class="sd">    periods you should stich different solutions together, consistently with the</span>
+<span class="sd">    argument sign (in particular, flip sign every half period).</span>
+
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        S=precession.S_of_t(t,Sb_min,Sb_max,xi,J,q,S1,S2,r,t_initial=0,sign=1.)</span>
+<span class="sd">    </span>
+<span class="sd">    **Parameters:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `t`: time (in total mass units).</span>
+<span class="sd">    - `S_final`: upper edge of the integration domain.</span>
+<span class="sd">    - `Sb_min`: minimum value of S from geometrical constraints. This is S- in our papers.</span>
+<span class="sd">    - `Sb_max`: maximum value of S from geometrical constraints. This is S+ in our papers.</span>
+<span class="sd">    - `xi`: projection of the effective spin along the orbital angular momentum.</span>
+<span class="sd">    - `J`: magnitude of the total angular momentum.</span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
+<span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+<span class="sd">    - `r`: binary separation.</span>
+
+<span class="sd">    **Returns:**</span>
+
+<span class="sd">    - `S`: magnitude of the total spin.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">tau</span><span class="o">=</span><span class="n">precession_period</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+
+    <span class="k">global</span> <span class="n">flags_q1</span>
+    <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;[S_of_t] Warning q=1: output here is cos(varphi) not S; now computing cos(varphi)(t) )&quot;</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            
+        <span class="n">L</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">J</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">S_min</span><span class="p">,</span><span class="n">S_max</span><span class="o">=</span><span class="n">St_limits</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="o">-</span><span class="n">S_min</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-8</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">S</span><span class="o">-</span><span class="n">S_max</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-8</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;[S_of_t] Warning: you are at resonance, varphi is ill defined here.&quot;</span>
+            <span class="k">return</span> <span class="mf">0.</span>
+        <span class="k">elif</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">tau</span><span class="o">/</span><span class="mf">2.</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&quot;[S_of_t] Error. You&#39;re trying to integrate over more than one (half)period&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">S</span><span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">brentq</span><span class="p">(</span><span class="k">lambda</span> <span class="n">S</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span> <span class="n">sp</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="n">dtdS</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">t</span> <span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span> <span class="n">Sb_max</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">S</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Sb_min</span><span class="o">-</span><span class="n">Sb_max</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-8</span><span class="p">:</span> <span class="c"># This happens when [Sb_limits] fails in bracketing of the solutions. In practice, this is a resonant binary.</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">Sb_min</span><span class="p">,</span><span class="n">Sb_min</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">tau</span><span class="o">/</span><span class="mf">2.</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&quot;[S_of_t] Error. You&#39;re trying to integrate over more than one (half)period&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">S</span><span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">brentq</span><span class="p">(</span><span class="k">lambda</span> <span class="n">S</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span> <span class="n">sp</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="n">dtdS</span><span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">t</span> <span class="p">,</span> <span class="n">Sb_min</span><span class="p">,</span> <span class="n">Sb_max</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">S</span>
 </pre></div>
 
   </div>
@@ -6652,9 +6821,9 @@ numerical issues may still be present.</p>
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">u</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
                 <span class="k">print</span> <span class="s">&quot;[Sb_limits_comp] Warning q=1,u=0: input for kappa means S&quot;</span>
-                <span class="n">flags_q1</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+                <span class="n">flags_q1</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
             <span class="n">Sb_both</span><span class="o">=</span><span class="n">kappa</span>
         <span class="k">else</span><span class="p">:</span>
            <span class="n">Sb_both</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">kappa</span><span class="o">/</span><span class="n">u</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">xi</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">u</span><span class="p">)</span>
@@ -7047,7 +7216,7 @@ primary BH aligned with L; spin of the secondary BH antialigned with L);
 down-up (spin of the primary BH aligned with L; spin of the secondary BH
 antialigned with L).</p>
 <p><strong>Call:</strong></p>
-<div class="codehilite"><pre>xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=aligned_configurations(q,S1,S2,r)
+<div class="codehilite"><pre>xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=precession.aligned_configurations(q,S1,S2,r)
 </pre></div>
 
 
@@ -7084,7 +7253,7 @@ antialigned with L).</p>
 
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=aligned_configurations(q,S1,S2,r)</span>
+<span class="sd">        xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup=precession.aligned_configurations(q,S1,S2,r)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -7207,9 +7376,9 @@ sign every half period).</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[alpha_of_S] Warning q=1: input here is cos(varphi), not S; now computing alpha(cosvarphi)&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
         
         <span class="n">L</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
         <span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">J</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -9163,9 +9332,9 @@ is a scalar).</p>
     <span class="k">global</span> <span class="n">CPUs</span>
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[hybrid] Warning q=1: required intial condition is S, not kappa_inf.&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
 
     <span class="n">single_flag</span><span class="o">=</span><span class="bp">False</span>
 
@@ -9290,7 +9459,7 @@ is a scalar).</p>
         <span class="n">r_vals_pa</span><span class="o">=</span><span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_vals</span> <span class="k">if</span> <span class="n">r</span><span class="o">&gt;</span><span class="n">r_t</span><span class="p">]</span>
         <span class="n">r_vals_oa</span><span class="o">=</span><span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_vals</span> <span class="k">if</span> <span class="n">r</span><span class="o">&lt;=</span><span class="n">r_t</span><span class="p">]</span> <span class="c"># Keep r_t (if present) in the orbit-average part</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_vals_oa</span> <span class="k">if</span> <span class="n">r</span><span class="o">==</span><span class="n">r_t</span><span class="p">]:</span> <span class="c"># If there&#39;s nothing but r_t in the orbit-averaged part</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r_vals_oa</span> <span class="k">if</span> <span class="n">r</span><span class="o">!=</span><span class="n">r_t</span><span class="p">]:</span> <span class="c"># If there&#39;s nothing but r_t in the orbit-averaged part</span>
             <span class="k">assert</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&quot;[hybrid] No output required below r_t. You don&#39;t need a hybrid integration, use evolve_J_infinity instead&quot;</span>
 
         <span class="c"># Add the threshold at the end of the precession-average part and at the beginning of the orbit-average part</span>
@@ -9316,7 +9485,7 @@ is a scalar).</p>
         <span class="n">Lhx_vals_oa</span><span class="p">,</span><span class="n">Lhy_vals_oa</span><span class="p">,</span><span class="n">Lhz_vals_oa</span><span class="p">,</span><span class="n">S1hx_vals_oa</span><span class="p">,</span><span class="n">S1hy_vals_oa</span><span class="p">,</span><span class="n">S1hz_vals_oa</span><span class="p">,</span><span class="n">S2hx_vals_oa</span><span class="p">,</span><span class="n">S2hy_vals_oa</span><span class="p">,</span><span class="n">S2hz_vals_oa</span> <span class="o">=</span> <span class="n">orbav_integrator</span><span class="p">(</span><span class="n">J_vals_pa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">xi</span><span class="p">,</span><span class="n">S_t</span><span class="p">,</span><span class="n">r_vals_oa</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
 
         <span class="c"># Store the angles theta1, theta2 and deltaphi (S resampling not needed)</span>
-        <span class="c"># Don&#39;t use the first values in the arrays, because you added one value at on top earlier on</span>
+        <span class="c"># Don&#39;t use the first values in the arrays, because you added one value on top earlier on</span>
         <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">Lhx_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">Lhy_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">Lhz_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S1hx_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S1hy_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S1hz_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S2hx_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S2hy_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">S2hz_vals_oa</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
             <span class="n">L_f</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r_f</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
             <span class="n">S_f</span><span class="o">=</span><span class="p">((</span><span class="n">S1</span><span class="o">*</span><span class="n">S1hx</span><span class="o">+</span><span class="n">S2</span><span class="o">*</span><span class="n">S2hx</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">S1</span><span class="o">*</span><span class="n">S1hy</span><span class="o">+</span><span class="n">S2</span><span class="o">*</span><span class="n">S2hy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">S1</span><span class="o">*</span><span class="n">S1hz</span><span class="o">+</span><span class="n">S2</span><span class="o">*</span><span class="n">S2hz</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
@@ -9436,9 +9605,9 @@ xi: the constant value of S is returned instead.</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[kappa_backwards] Warning q=1: sensible output is S, not kappa_inf.&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span> <span class="c"># Suppress future warnings</span>
         <span class="n">S</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">J</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">xi</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">S</span>
     
@@ -9987,9 +10156,9 @@ through cos(varphi), not S.</p>
     <span class="c"># Get initial condition in a cartesian frame. Use the frame aligned to J at the initial separation</span>
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[orbav_integrator] Warning q=1: input here is cos(varphi), not S.&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
     
     <span class="n">L_vals</span><span class="o">=</span><span class="p">[(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">comp</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span> <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">r_vals</span><span class="p">]</span>
     <span class="n">v_vals</span><span class="o">=</span><span class="p">[(</span><span class="n">M</span><span class="o">/</span><span class="n">comp</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span> <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">r_vals</span><span class="p">]</span>
@@ -10367,9 +10536,9 @@ first binary at the first output separation (this is a scalar).</p>
     
     <span class="k">global</span> <span class="n">flags_q1</span> 
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[orbit_averaged] Warning q=1: Input/output for S is actually cos(varphi)&quot;</span>       
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
 
     <span class="n">single_flag</span><span class="o">=</span><span class="bp">False</span>
     <span class="k">try</span><span class="p">:</span> <span class="c">#Convert float to array if you&#39;re evolving just one binary</span>
@@ -10403,8 +10572,8 @@ first binary at the first output separation (this is a scalar).</p>
         <span class="k">print</span> <span class="s">&quot;[orbit_averaged] Reading:&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="nb">file</span>
         <span class="n">dummy</span><span class="p">,</span><span class="n">J_f</span><span class="p">,</span><span class="n">xi_f</span><span class="p">,</span><span class="n">S_f</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">J_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">J_f</span><span class="p">)</span>
-        <span class="n">S_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_f</span><span class="p">)</span>
         <span class="n">xi_vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xi_f</span><span class="p">)</span>
+        <span class="n">S_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S_f</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">single_flag</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">J_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xi_vals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -10479,7 +10648,6 @@ first binary at the first output separation (this is a scalar).</p>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">savename</span><span class="p">):</span>
         <span class="k">print</span> <span class="s">&quot;[orbit_averaged] Transferring binary. Output:&quot;</span><span class="p">,</span> <span class="n">savename</span>
         <span class="n">outfilesave</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">savename</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-       
         <span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span> <span class="o">=</span> <span class="n">orbav_integrator</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span><span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">):</span>        
@@ -10524,16 +10692,16 @@ first binary at the first output separation (this is a scalar).</p>
 the python parmap module; the number of available cores can be specified
 using the integer global variable <code>CPUs</code> (all available cores will be used
 by default). Input are given in terms of J, xi and S; outputs are projected
-on a reference frame such that Jx=Jy=Ly=0 at the initial separation.
-Vectors, not unit vectros!, are returned. Evolve a sequence of binaries with
-the SAME q, S1,S2 but different xi and initial values of J and S; save
-outputs at r_vals. The initial configuration must be compatible with
-r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the first binary
-(1D array at all output separations) and J_vals[0][0] is the first binary at
-the first output separation (this is a scalar).</p>
+on a reference frame such that Jx=Jy=Ly=0 at the initial separation (cf.
+<code>Jframe_projection</code>). Vectors, not unit vectros!, are returned. Evolve a
+sequence of binaries with the SAME q, S1,S2 but different xi and initial
+values of J and S; save outputs at r_vals. The initial configuration must be
+compatible with r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the
+first binary (1D array at all output separations) and J_vals[0][0] is the
+first binary at the first output separation (this is a scalar).</p>
 <p>Checkpointing is implemented: results are stored in <a href="#precession.storedir"><code>storedir</code></a>.</p>
 <p><strong>Call:</strong></p>
-<div class="codehilite"><pre>Jf_vals,xif_vals,Sf_vals=precession.orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)
+<div class="codehilite"><pre>Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)
 </pre></div>
 
 
@@ -10549,15 +10717,15 @@ the first output separation (this is a scalar).</p>
 </ul>
 <p><strong>Returns:</strong></p>
 <ul>
-<li><code>Lhx_vals</code>: x component of the unit vector L/|L|.</li>
-<li><code>Lhy_vals</code>: y component of the unit vector L/|L|.</li>
-<li><code>Lhz_vals</code>: z component of the unit vector L/|L|.</li>
-<li><code>S1hx_vals</code>: x component of the unit vector S1/|S1|.</li>
-<li><code>S1hy_vals</code>: y component of the unit vector S1/|S1|.</li>
-<li><code>S1hz_vals</code>: z component of the unit vector S1/|S1|.</li>
-<li><code>S2hx_vals</code>: x component of the unit vector S2/|S2|.</li>
-<li><code>S2hy_vals</code>: y component of the unit vector S2/|S2|.</li>
-<li><code>S2hz_vals</code>: z component of the unit vector S2/|S2|.</li>
+<li><code>Lx_fvals</code>: x component of the vector L.</li>
+<li><code>Ly_fvals</code>: y component of the vector L.</li>
+<li><code>Lz_fvals</code>: z component of the vector L.</li>
+<li><code>S1x_fvals</code>: x component of the vector S1.</li>
+<li><code>S1y_fvals</code>: y component of the vector S1.</li>
+<li><code>S1z_fvals</code>: z component of the vector S1.</li>
+<li><code>S2x_fvals</code>: x component of the vector S2.</li>
+<li><code>S2y_fvals</code>: y component of the vector S2.</li>
+<li><code>S2z_fvals</code>: z component of the vector S2.</li>
 </ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.orbit_vectors', this);">Show source &equiv;</a></p>
@@ -10569,19 +10737,19 @@ the first output separation (this is a scalar).</p>
 <span class="sd">    the python parmap module; the number of available cores can be specified</span>
 <span class="sd">    using the integer global variable `CPUs` (all available cores will be used</span>
 <span class="sd">    by default). Input are given in terms of J, xi and S; outputs are projected</span>
-<span class="sd">    on a reference frame such that Jx=Jy=Ly=0 at the initial separation.</span>
-<span class="sd">    Vectors, not unit vectros!, are returned. Evolve a sequence of binaries with</span>
-<span class="sd">    the SAME q, S1,S2 but different xi and initial values of J and S; save</span>
-<span class="sd">    outputs at r_vals. The initial configuration must be compatible with</span>
-<span class="sd">    r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the first binary</span>
-<span class="sd">    (1D array at all output separations) and J_vals[0][0] is the first binary at</span>
-<span class="sd">    the first output separation (this is a scalar).</span>
+<span class="sd">    on a reference frame such that Jx=Jy=Ly=0 at the initial separation (cf.</span>
+<span class="sd">    `Jframe_projection`). Vectors, not unit vectros!, are returned. Evolve a</span>
+<span class="sd">    sequence of binaries with the SAME q, S1,S2 but different xi and initial</span>
+<span class="sd">    values of J and S; save outputs at r_vals. The initial configuration must be</span>
+<span class="sd">    compatible with r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the</span>
+<span class="sd">    first binary (1D array at all output separations) and J_vals[0][0] is the</span>
+<span class="sd">    first binary at the first output separation (this is a scalar).</span>
 
 <span class="sd">    Checkpointing is implemented: results are stored in `precession.storedir`.</span>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        Jf_vals,xif_vals,Sf_vals=precession.orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)</span>
+<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -10595,15 +10763,15 @@ the first output separation (this is a scalar).</p>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    </span>
-<span class="sd">    - `Lhx_vals`: x component of the unit vector L/|L|.</span>
-<span class="sd">    - `Lhy_vals`: y component of the unit vector L/|L|.</span>
-<span class="sd">    - `Lhz_vals`: z component of the unit vector L/|L|.</span>
-<span class="sd">    - `S1hx_vals`: x component of the unit vector S1/|S1|.</span>
-<span class="sd">    - `S1hy_vals`: y component of the unit vector S1/|S1|.</span>
-<span class="sd">    - `S1hz_vals`: z component of the unit vector S1/|S1|.</span>
-<span class="sd">    - `S2hx_vals`: x component of the unit vector S2/|S2|.</span>
-<span class="sd">    - `S2hy_vals`: y component of the unit vector S2/|S2|.</span>
-<span class="sd">    - `S2hz_vals`: z component of the unit vector S2/|S2|.</span>
+<span class="sd">    - `Lx_fvals`: x component of the vector L.</span>
+<span class="sd">    - `Ly_fvals`: y component of the vector L.</span>
+<span class="sd">    - `Lz_fvals`: z component of the vector L.</span>
+<span class="sd">    - `S1x_fvals`: x component of the vector S1.</span>
+<span class="sd">    - `S1y_fvals`: y component of the vector S1.</span>
+<span class="sd">    - `S1z_fvals`: z component of the vector S1.</span>
+<span class="sd">    - `S2x_fvals`: x component of the vector S2.</span>
+<span class="sd">    - `S2y_fvals`: y component of the vector S2.</span>
+<span class="sd">    - `S2z_fvals`: z component of the vector S2.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="k">global</span> <span class="n">CPUs</span>
@@ -11553,9 +11721,9 @@ Sb_max (and is troubling to apply a hit-or-miss approach).</p>
 
     <span class="k">global</span> <span class="n">flags_q1</span>
     <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flags_q1</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">==</span><span class="bp">False</span><span class="p">:</span>
             <span class="k">print</span> <span class="s">&quot;[samplingS] Warning q=1: sampling is cos(varphi), not S&quot;</span>
-            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
+            <span class="n">flags_q1</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">=</span><span class="bp">True</span>
             
         <span class="c"># If q=1, the limits must be specified in cos(varphi)</span>
         <span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span> <span class="c"># Don&#39;t go too close to the actual limits</span>
@@ -11591,15 +11759,15 @@ Sb_max (and is troubling to apply a hit-or-miss approach).</p>
 
     
   
-    <div class="desc"><p>Integrate `precession.dSdt' to find t (time) as a function of S (magnitude
+    <div class="desc"><p>Integrate <code>precession.dSdt' to find t (time) as a function of S (magnitude
 of the total spin). Since dS/dt depends on S and not on t, finding t(S) only
-requires a numnerical integration; finding S(t) would require a ODE solver
-(straightforward, but it has not been implemented). Sb_min and Sb_max are
-passed to this function (and not computed within it) for computational
-efficiency. This function can only integrate over half precession period
-(i.e. from Sb_min to Sb_max at most). If you want t(S) over more precession
-periods you should stich different solutions together, consistently with the
-argument sign (in particular, flip sign every half period).</p>
+requires a numnerical integration; S(t) is provided in</code>precession.t_of_S'.
+Sb_min and Sb_max are passed to this function (and not computed within it)
+for computational efficiency. This function can only integrate over half
+precession period (i.e. from Sb_min to Sb_max at most). If you want t(S)
+over more precession periods you should stich different solutions together,
+consistently with the argument sign (in particular, flip sign every half
+period).</p>
 <p><strong>Call:</strong></p>
 <div class="codehilite"><pre>t=precession.t_of_S(S_initial,S_final,Sb_min,Sb_max,xi,J,q,S1,S2,r,t_initial=0,sign=1.)
 </pre></div>
@@ -11632,13 +11800,13 @@ argument sign (in particular, flip sign every half period).</p>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Integrate `precession.dSdt&#39; to find t (time) as a function of S (magnitude</span>
 <span class="sd">    of the total spin). Since dS/dt depends on S and not on t, finding t(S) only</span>
-<span class="sd">    requires a numnerical integration; finding S(t) would require a ODE solver</span>
-<span class="sd">    (straightforward, but it has not been implemented). Sb_min and Sb_max are</span>
-<span class="sd">    passed to this function (and not computed within it) for computational</span>
-<span class="sd">    efficiency. This function can only integrate over half precession period</span>
-<span class="sd">    (i.e. from Sb_min to Sb_max at most). If you want t(S) over more precession</span>
-<span class="sd">    periods you should stich different solutions together, consistently with the</span>
-<span class="sd">    argument sign (in particular, flip sign every half period).</span>
+<span class="sd">    requires a numnerical integration; S(t) is provided in `precession.t_of_S&#39;.</span>
+<span class="sd">    Sb_min and Sb_max are passed to this function (and not computed within it)</span>
+<span class="sd">    for computational efficiency. This function can only integrate over half</span>
+<span class="sd">    precession period (i.e. from Sb_min to Sb_max at most). If you want t(S)</span>
+<span class="sd">    over more precession periods you should stich different solutions together,</span>
+<span class="sd">    consistently with the argument sign (in particular, flip sign every half</span>
+<span class="sd">    period).</span>
 
 <span class="sd">    **Call:**</span>
 
@@ -12623,12 +12791,9 @@ is simply checks -1&lt;cos(theta_i)&lt;1.</p>
 
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p class="name"><a href="test.m.html">precession.test</a></p>
+      <p class="name"><a href="test/index.html">precession.test</a></p>
       
   
-    <div class="desc"><h1>DYNAMICS OF PRECESSING BLACK-HOLE BINARIES</h1>
-<p>precession.test is a submodule containing various tests to illustate the features of precession.</p>
-<p>PUT MORE MORE</p></div>
 
       </div>
   </section>

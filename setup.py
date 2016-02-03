@@ -39,7 +39,7 @@ setup(
     author='Davide Gerosa',
     author_email='d.gerosa@damtp.cam.ac.uk',
     license='CC by-nc-sa 3.0',
-    packages=['precession'],
+    packages=['precession','precession.test'],
     install_requires=[
           'numpy',
           'scipy',

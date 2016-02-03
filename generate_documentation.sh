@@ -4,9 +4,7 @@
 
 python <<END
 import precession
-print "Generating documentation of precession, version", precession.__version__, "(from Pypi)."
+print "Generating documentation of precession, version", precession.__version__
 END
 
-pdoc --html --html-dir=temp precession
-mv temp/precession/* .
-rm -r temp
+pdoc --html --overwrite precession
