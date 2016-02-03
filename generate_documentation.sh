@@ -8,3 +8,4 @@ print "Generating documentation of precession, version", precession.__version__
 END
 
 pdoc --html --overwrite precession
+rm precession/*pyc precession/*/*pyc
