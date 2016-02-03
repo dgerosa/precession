@@ -10,7 +10,7 @@ rc('font', **font)
 rc('text',usetex=True)
 rc('figure',max_open_warning=1000)
 import pylab
-
+import matplotlib
 
 def parameter_selection():
     '''
@@ -325,88 +325,90 @@ def PNwrappers():
 
 def compare_evolutions():
     '''
-    WRITE ME PLEASE
-
-
+    Compare precession averaged and orbit averaged integrations. Plot the
+    evolution of xi, J, S and their relative differences between the two
+    approaches. Since precession-averaged estimates of S require a random
+    sampling, this plot will look different every time this routine is executed.
+    Output is saved in ./spin_angles.pdf.
+    
     **Run using**
 
         import precession.test
         precession.test.compare_evolutions()
     '''
 
-    fig=pylab.figure(figsize=(6,6))     # Create figure object and axes
-    
-    ax_S=fig.add_axes([0,0.1,0.8,0.3])   # bottom-main
+    fig=pylab.figure(figsize=(6,6)) # Create figure object and axes
 
-    ax_Jd=fig.add_axes([0,0.5,0.8,0.1]) # middle-small
-    ax_J=fig.add_axes([0,0.6,0.8,0.3]) # middle-main
-
-    ax_xid=fig.add_axes([0,1,0.8,0.1]) # top-small
-    ax_xi=fig.add_axes([0,1.1,0.8,0.3]) # top-main
-
-
+    L,Ws,Wm,G=0.85,0.15,0.3,0.03 # Sizes
+    ax_Sd=fig.add_axes([0,0,L,Ws])              # bottom-small    
+    ax_S=fig.add_axes([0,Ws,L,Wm])              # bottom-main
+    ax_Jd=fig.add_axes([0,Ws+Wm+G,L,Ws])        # middle-small
+    ax_J=fig.add_axes([0,Ws+Ws+Wm+G,L,Wm])      # middle-main
+    ax_xid=fig.add_axes([0,2*(Ws+Wm+G),L,Ws])   # top-small
+    ax_xi=fig.add_axes([0,Ws+2*(Ws+Wm+G),L,Wm]) # top-main
 
     q=0.8      # Mass ratio. Must be q<=1.
     chi1=0.6   # Primary spin. Must be chi1<=1
     chi2=1.    # Secondary spin. Must be chi2<=1
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
-    ri=100*M  # Initial separation.
+    ri=100.*M  # Initial separation.
     rf=10.*M   # Final separation.
-    #r_vals=numpy.logspace(numpy.log10(ri),numpy.log10(rf),1000) # Output requested
-    r_vals=numpy.linspace(ri,rf,1000) # Output requested
+    r_vals=numpy.linspace(ri,rf,1001) # Output requested
+    Ji=2.24    # Magnitude of J: Jmin<J<Jmax as given by J_lim
+    xi=-0.5    # Effective spin: xi_low<xi<xi_up as given by xi_allowed
 
-
-    #Jmin,Jmax=precession.J_lim(q,S1,S2,ri)
-    #Ji= Jmin+(Jmax-Jmin)*0.2
-    #xi_low,xi_up=precession.xi_allowed(Ji,q,S1,S2,ri)
-    #xi= xi_low+(xi_up-xi_low)*0.2
-    
-    #print Ji,xi
-    Ji=2.24   # Magnitude of J: Jmin<J<Jmax as given by J_lim
-    xi=-0.5  # Effective spin: xi_low<xi<xi_up as given by xi_allowed
-    
-    Jf_P=precession.evolve_J(xi,Ji,r_vals,q,S1,S2) # Integrate J, precession-averaged
-    Sf_P=[precession.samplingS(xi,J,q,S1,S2,r) for J,r in zip(Jf_P[::100],r_vals[::100])] # Resample S
-
+    Jf_P=precession.evolve_J(xi,Ji,r_vals,q,S1,S2) # Pr.av. integration
+    Sf_P=[precession.samplingS(xi,J,q,S1,S2,r) for J,r in zip(Jf_P[0::10],r_vals[0::10])] # Resample S (reduce output for clarity)
     Sb_min,Sb_max= zip(*[precession.Sb_limits(xi,J,q,S1,S2,r) for J,r in zip(Jf_P,r_vals)]) # Envelopes
-    
-    S=precession.samplingS(xi,Ji,q,S1,S2,ri)
-    Jf_O,xif_O,Sf_O=precession.orbit_averaged(Ji,xi,S,r_vals,q,S1,S2)
-    
-    Jf_dev=abs((Jf_P-Jf_O)/Jf_O)
-    ax_Jd.plot(r_vals,Jf_dev)
-    
-    xi_dev=abs((xi-xif_O)/xi)
-    ax_xid.plot(r_vals,xi_dev*1e12)
+    S=numpy.average([precession.Sb_limits(xi,Ji,q,S1,S2,ri)]) # Initialize S
+    Jf_O,xif_O,Sf_O=precession.orbit_averaged(Ji,xi,S,r_vals,q,S1,S2) # Orb.av. integration
 
-    ax_xi.axhline(xi)
-    ax_xi.plot(r_vals,xif_O)
+    Pcol,Ocol,Dcol='blue','red','green'
+    Pst,Ost='solid','dashed'
+    ax_xi.axhline(xi,c=Pcol,ls=Pst,lw=2)  # Plot xi, pr.av. (constant)
+    ax_xi.plot(r_vals,xif_O,c=Ocol,ls=Ost,lw=2) # Plot xi, orbit averaged
+    ax_xid.plot(r_vals,(xi-xif_O)/xi*1e11,c=Dcol,lw=2) # Plot xi deviations (rescaled)
+    ax_J.plot(r_vals,Jf_P,c=Pcol,ls=Pst,lw=2) # Plot J, pr.av.
+    ax_J.plot(r_vals,Jf_O,c=Ocol,ls=Ost,lw=2) # Plot J, orb.av
+    ax_Jd.plot(r_vals,(Jf_P-Jf_O)/Jf_O*1e3,c=Dcol,lw=2) # Plot J deviations (rescaled)
+    ax_S.scatter(r_vals[0::10],Sf_P,facecolor='none',edgecolor=Pcol) # Plot S, pr.av. (resampled)
+    ax_S.plot(r_vals,Sb_min,c=Pcol,ls=Pst,lw=2)  # Plot S, pr.av. (envelopes)
+    ax_S.plot(r_vals,Sb_max,c=Pcol,ls=Pst,lw=2)  # Plot S, pr.av. (envelopes)
+    ax_S.plot(r_vals,Sf_O,c=Ocol,ls=Ost,lw=2)    # Plot S, orb.av (evolved)
+    ax_Sd.plot(r_vals[0::10],(Sf_P-Sf_O[0::10])/Sf_O[0::10],c=Dcol,lw=2) # Plot S deviations
 
-    ax_J.plot(r_vals,Jf_P)
-    ax_J.plot(r_vals,Jf_O)
-    
-    ax_S.scatter(r_vals[::100],Sf_P)
-    ax_S.plot(r_vals,Sb_min)
-    ax_S.plot(r_vals,Sb_max)
-    ax_S.plot(r_vals,Sf_O)
-
-
-    ax_xi.set_xlim(ri,rf)
-    ax_J.set_xlim(ri,rf)
-    ax_S.set_xlim(ri,rf)
-    ax_xi.set_ylim(-0.55,-0.43)
-    ax_J.set_ylim(0.7,2.3)
-    ax_S.set_ylim(0.25,0.39)
-
-    ax_Jd.set_xlim(ri,rf)
-    ax_xid.set_xlim(ri,rf)
-
-    ax_J.set_xticklabels([])
-    ax_xi.set_xticklabels([])
-
-    #ax_xi.semilogx()
-    #ax_J.semilogx()
-    #ax_S.semilogx()
+    # Options for nice plotting
+    for ax in [ax_xi,ax_xid,ax_J,ax_Jd,ax_S,ax_Sd]:
+        ax.set_xlim(ri,rf)
+        ax.yaxis.set_label_coords(-0.16, 0.5)
+        ax.spines['left'].set_lw(1.5)
+        ax.spines['right'].set_lw(1.5)
+    for ax in [ax_xi,ax_J,ax_S]:
+        ax.spines['top'].set_lw(1.5)
+    for ax in [ax_xid,ax_Jd,ax_Sd]:
+        ax.axhline(0,c='black',ls='dotted')
+        ax.spines['bottom'].set_lw(1.5)
+    for ax in [ax_xid,ax_J,ax_Jd,ax_S]: ax.set_xticklabels([])
+    ax_xi.set_ylim(-0.55,-0.45)
+    ax_J.set_ylim(0.4,2.3)
+    ax_S.set_ylim(0.24,0.41)
+    ax_xid.set_ylim(-0.2,1.2)
+    ax_Jd.set_ylim(-3,5.5)
+    ax_Sd.set_ylim(-0.7,0.7)
+    ax_xid.yaxis.set_major_locator(matplotlib.ticker.MultipleLocator(0.5))
+    ax_Jd.yaxis.set_major_locator(matplotlib.ticker.MultipleLocator(2))
+    ax_S.yaxis.set_major_locator(matplotlib.ticker.MultipleLocator(0.05))
+    ax_Sd.yaxis.set_major_locator(matplotlib.ticker.MultipleLocator(0.5))
+    ax_xi.xaxis.set_ticks_position('top')
+    ax_xi.xaxis.set_label_position('top')
+    ax_Sd.set_xlabel("$r/M$")
+    ax_xi.set_xlabel("$r/M$")
+    ax_xi.set_ylabel("$\\xi$")
+    ax_J.set_ylabel("$J/M^2$")
+    ax_S.set_ylabel("$S/M^2$")
+    ax_xid.set_ylabel("$\\Delta\\xi/\\xi \;[10^{-11}]$")
+    ax_Jd.set_ylabel("$\\Delta J/J \;[10^{-3}]$")
+    ax_Sd.set_ylabel("$\\Delta S / S$")
 
     fig.savefig("compare_evolutions.pdf",bbox_inches='tight') # Save pdf file
 
@@ -415,7 +417,7 @@ def compare_evolutions():
 #spin_angles()
 #phase_resampling()
 #PNevolve()
-compare_evolutions()
+#compare_evolutions()
 
 
 #phase_resampling()
