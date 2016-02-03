@@ -130,9 +130,9 @@ def spin_angles():
     ax_dp=fig.add_axes([0,0,0.6,0.8]) #bottom-left
     ax_t12=fig.add_axes([0.8,0,0.6,0.8]) #bottom-right
 
-    q=0.7   # Mass ratio. Must be q<=1.
+    q=0.7    # Mass ratio. Must be q<=1.
     chi1=0.6 # Primary spin. Must be chi1<=1
-    chi2=1. # Secondary spin. Must be chi2<=1
+    chi2=1.  # Secondary spin. Must be chi2<=1
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
     r=20*M # Separation. Must be r>10M for PN to be valid
     J=0.94 # Magnitude of J: Jmin<J<Jmax as given by J_lim
@@ -203,16 +203,16 @@ def phase_resampling():
     ax_td=fig.add_axes([0.65,0,0.3,0.6]) #bottom-right
     ax_Sd=fig.add_axes([0,0.65,0.6,0.3]) #top-left
 
-    q=0.5   # Mass ratio. Must be q<=1.
+    q=0.5    # Mass ratio. Must be q<=1.
     chi1=0.3 # Primary spin. Must be chi1<=1
     chi2=0.9 # Secondary spin. Must be chi2<=1
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
     r=200.*M # Separation. Must be r>10M for PN to be valid
-    J=3.14 # Magnitude of J: Jmin<J<Jmax as given by J_lim
+    J=3.14   # Magnitude of J: Jmin<J<Jmax as given by J_lim
     xi=-0.01 # Effective spin: xi_low<xi<xi_up as given by xi_allowed
     Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r) # Limits in S
-    tau=precession.precession_period(xi,J,q,S1,S2,r) # Precessional period
-    d=2000 # Size of the statistical sample
+    tau=precession.precession_period(xi,J,q,S1,S2,r)   # Precessional period
+    d=2000   # Size of the statistical sample
 
     os.system("mkdir -p "+precession.storedir) # Create store directory, if necessary
     filename=precession.storedir+"/phase_resampling.dat" # Output file name
@@ -265,10 +265,22 @@ def phase_resampling():
 
 
 def PNwrappers():
-        
-    q=0.9  # Mass ratio. Must be q<=1.
-    chi1=0.5 # Primary spin. Must be chi1<=1
-    chi2=0.5 # Secondary spin. Must be chi2<=1
+    '''
+    Wrappers of the PN integrators. Here we show how to perform orbit-averaged,
+    precession-averaged and hybrid PN inspirals using the various wrappers
+    implemented in the code. We also show how to estimate the final mass, spin
+    and recoil of the BH remnant following a merger.
+
+
+    **Run using**
+
+        import precession.test
+        precession.test.PNwrappers()
+    '''
+
+    q=0.9      # Mass ratio. Must be q<=1.
+    chi1=0.5   # Primary spin. Must be chi1<=1
+    chi2=0.5   # Secondary spin. Must be chi2<=1
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
     ri=1000*M  # Initial separation.
     rf=10.*M   # Final separation.
@@ -311,13 +323,99 @@ def PNwrappers():
     print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
     
 
+def compare_evolutions():
+    '''
+    WRITE ME PLEASE
+
+
+    **Run using**
+
+        import precession.test
+        precession.test.compare_evolutions()
+    '''
+
+    fig=pylab.figure(figsize=(6,6))     # Create figure object and axes
+    
+    ax_S=fig.add_axes([0,0.1,0.8,0.3])   # bottom-main
+
+    ax_Jd=fig.add_axes([0,0.5,0.8,0.1]) # middle-small
+    ax_J=fig.add_axes([0,0.6,0.8,0.3]) # middle-main
+
+    ax_xid=fig.add_axes([0,1,0.8,0.1]) # top-small
+    ax_xi=fig.add_axes([0,1.1,0.8,0.3]) # top-main
+
+
+
+    q=0.8      # Mass ratio. Must be q<=1.
+    chi1=0.6   # Primary spin. Must be chi1<=1
+    chi2=1.    # Secondary spin. Must be chi2<=1
+    M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
+    ri=100*M  # Initial separation.
+    rf=10.*M   # Final separation.
+    #r_vals=numpy.logspace(numpy.log10(ri),numpy.log10(rf),1000) # Output requested
+    r_vals=numpy.linspace(ri,rf,1000) # Output requested
+
+
+    #Jmin,Jmax=precession.J_lim(q,S1,S2,ri)
+    #Ji= Jmin+(Jmax-Jmin)*0.2
+    #xi_low,xi_up=precession.xi_allowed(Ji,q,S1,S2,ri)
+    #xi= xi_low+(xi_up-xi_low)*0.2
+    
+    #print Ji,xi
+    Ji=2.24   # Magnitude of J: Jmin<J<Jmax as given by J_lim
+    xi=-0.5  # Effective spin: xi_low<xi<xi_up as given by xi_allowed
+    
+    Jf_P=precession.evolve_J(xi,Ji,r_vals,q,S1,S2) # Integrate J, precession-averaged
+    Sf_P=[precession.samplingS(xi,J,q,S1,S2,r) for J,r in zip(Jf_P[::100],r_vals[::100])] # Resample S
+
+    Sb_min,Sb_max= zip(*[precession.Sb_limits(xi,J,q,S1,S2,r) for J,r in zip(Jf_P,r_vals)]) # Envelopes
+    
+    S=precession.samplingS(xi,Ji,q,S1,S2,ri)
+    Jf_O,xif_O,Sf_O=precession.orbit_averaged(Ji,xi,S,r_vals,q,S1,S2)
+    
+    Jf_dev=abs((Jf_P-Jf_O)/Jf_O)
+    ax_Jd.plot(r_vals,Jf_dev)
+    
+    xi_dev=abs((xi-xif_O)/xi)
+    ax_xid.plot(r_vals,xi_dev*1e12)
+
+    ax_xi.axhline(xi)
+    ax_xi.plot(r_vals,xif_O)
+
+    ax_J.plot(r_vals,Jf_P)
+    ax_J.plot(r_vals,Jf_O)
+    
+    ax_S.scatter(r_vals[::100],Sf_P)
+    ax_S.plot(r_vals,Sb_min)
+    ax_S.plot(r_vals,Sb_max)
+    ax_S.plot(r_vals,Sf_O)
+
+
+    ax_xi.set_xlim(ri,rf)
+    ax_J.set_xlim(ri,rf)
+    ax_S.set_xlim(ri,rf)
+    ax_xi.set_ylim(-0.55,-0.43)
+    ax_J.set_ylim(0.7,2.3)
+    ax_S.set_ylim(0.25,0.39)
+
+    ax_Jd.set_xlim(ri,rf)
+    ax_xid.set_xlim(ri,rf)
+
+    ax_J.set_xticklabels([])
+    ax_xi.set_xticklabels([])
+
+    #ax_xi.semilogx()
+    #ax_J.semilogx()
+    #ax_S.semilogx()
+
+    fig.savefig("compare_evolutions.pdf",bbox_inches='tight') # Save pdf file
 
 
 #parameter_selection()
 #spin_angles()
 #phase_resampling()
 #PNevolve()
-
+compare_evolutions()
 
 
 #phase_resampling()
