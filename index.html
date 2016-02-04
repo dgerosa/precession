@@ -1085,6 +1085,9 @@ table {
     <li class="mono"><a href="#precession.evolve_J_infinity">evolve_J_infinity</a></li>
     <li class="mono"><a href="#precession.evolve_angles">evolve_angles</a></li>
     <li class="mono"><a href="#precession.evolve_angles_single">evolve_angles_single</a></li>
+    <li class="mono"><a href="#precession.finalkick">finalkick</a></li>
+    <li class="mono"><a href="#precession.finalmass">finalmass</a></li>
+    <li class="mono"><a href="#precession.finalspin">finalspin</a></li>
     <li class="mono"><a href="#precession.find_morphology">find_morphology</a></li>
     <li class="mono"><a href="#precession.from_the_angles">from_the_angles</a></li>
     <li class="mono"><a href="#precession.from_the_angles_inf">from_the_angles_inf</a></li>
@@ -1478,6 +1481,8 @@ the algorithms.</p>
 <span class="sd">Global flags to reduce warnings in the equal-mass limit q=1.</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
+
+
 <span class="c">#################################</span>
 <span class="c">############# LIMITS ############</span>
 <span class="c">#################################</span>
@@ -1680,7 +1685,7 @@ the algorithms.</p>
 <span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
 <span class="sd">    - `r`: binary separation.</span>
-<span class="sd">    - `more`: if `True` returns additional quantities,</span>
+<span class="sd">    - `more`: if `True` returns additional quantities.</span>
 
 <span class="sd">    **Returns:**</span>
 
@@ -2323,7 +2328,7 @@ the algorithms.</p>
 <span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
 <span class="sd">    - `r`: binary separation.</span>
-<span class="sd">    - `more`: if `True` returns additional quantities,</span>
+<span class="sd">    - `more`: if `True` returns additional quantities.</span>
 <span class="sd">    - `verbose`: if `True` print additional information.</span>
 
 <span class="sd">    **Returns:**</span>
@@ -2418,7 +2423,7 @@ the algorithms.</p>
 <span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
 <span class="sd">    - `r`: binary separation.</span>
-<span class="sd">    - `more`: if `True` returns additional quantities,</span>
+<span class="sd">    - `more`: if `True` returns additional quantities.</span>
 
 <span class="sd">    **Returns:**</span>
 
@@ -2581,7 +2586,6 @@ the algorithms.</p>
         <span class="n">kappa_inf</span><span class="o">=</span> <span class="p">(</span><span class="n">S1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1_inf</span><span class="p">)</span><span class="o">+</span><span class="n">S2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2_inf</span><span class="p">))</span><span class="o">*</span><span class="n">M</span><span class="o">**-</span><span class="mi">2</span>
         <span class="k">return</span> <span class="n">xi</span><span class="p">,</span><span class="n">kappa_inf</span>
 
-
     
 <span class="k">def</span> <span class="nf">aligned_configurations</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
 
@@ -2631,7 +2635,6 @@ the algorithms.</p>
     <span class="n">Jdownup</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">L</span><span class="o">-</span><span class="n">S1</span><span class="o">+</span><span class="n">S2</span><span class="p">)</span>
     
     <span class="k">return</span> <span class="n">xiupup</span><span class="p">,</span><span class="n">xidowndown</span><span class="p">,</span><span class="n">xiupdown</span><span class="p">,</span><span class="n">xidownup</span><span class="p">,</span><span class="n">Jupup</span><span class="p">,</span><span class="n">Jdowndown</span><span class="p">,</span><span class="n">Jupdown</span><span class="p">,</span><span class="n">Jdownup</span>
-
 
 
 <span class="k">def</span> <span class="nf">updown</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
@@ -3901,6 +3904,7 @@ the algorithms.</p>
 
     <span class="k">return</span> <span class="n">dJdL</span><span class="o">*</span><span class="n">dLdr</span>
 
+
 <span class="k">def</span> <span class="nf">dJdL</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
@@ -5139,7 +5143,6 @@ the algorithms.</p>
         <span class="k">return</span> <span class="n">theta1_fvals</span><span class="p">,</span> <span class="n">theta2_fvals</span><span class="p">,</span> <span class="n">deltaphi_fvals</span>
 
 
-
 <span class="k">def</span> <span class="nf">orbit_vectors_single</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
@@ -5375,6 +5378,7 @@ the algorithms.</p>
         
     <span class="k">return</span> <span class="n">savename</span>
 
+
 <span class="k">def</span> <span class="nf">hybrid</span><span class="p">(</span><span class="n">xi_vals</span><span class="p">,</span><span class="n">kappainf_vals</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r_t</span><span class="p">):</span>
  
     <span class="sd">&#39;&#39;&#39;</span>
@@ -5478,6 +5482,246 @@ the algorithms.</p>
 
 
 
+<span class="c">#################################</span>
+<span class="c">########## BH REMNANT ###########</span>
+<span class="c">#################################</span>
+
+
+<span class="k">def</span> <span class="nf">finalmass</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate the final mass of the BH renmant following a BH merger. We</span>
+<span class="sd">    implement the fitting formula to numerical relativity simulations by</span>
+<span class="sd">    Barausse Morozova Rezzolla 2012.  See also Gerosa and Sesana 2015. This</span>
+<span class="sd">    formula has to be applied *close to merger*, where numerical relativity</span>
+<span class="sd">    simulations are available. You should do a PN evolution to transfer binaries</span>
+<span class="sd">    at r~10M.</span>
+
+
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        Mfin=precession.finalmass(theta1,theta2,deltaPhi,q,S1,S2)</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    - `theta1`: angle between the spin of the primary and the orbital angular momentum.</span>
+<span class="sd">    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.</span>
+<span class="sd">    - `deltaphi`: angle between the projection of the two spins on the orbital plane.</span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
+<span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `Mfin`: mass of the BH remnant, in units of the (pre-merger) binary total mass</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">chi1</span><span class="o">=</span><span class="n">S1</span><span class="o">/</span><span class="p">(</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>   <span class="c"># Dimensionless spin</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="c"># Dimensionless spin</span>
+    <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span>     <span class="c"># Symmetric mass ratio</span>
+    
+    <span class="c"># Spins here are defined in a frame with L along z and S1 in xz</span>
+    <span class="n">hatL</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">hatS1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)])</span>
+    <span class="n">hatS2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)])</span>
+    <span class="c">#Useful spin combinations. </span>
+    <span class="n">Delta</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">-</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">Delta_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">Delta_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    <span class="n">chit</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">+</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">chit_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">chit_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    
+    <span class="c">#Final mass. Barausse Morozova Rezzolla 2012</span>
+    <span class="n">p0</span><span class="o">=</span><span class="mf">0.04827</span>
+    <span class="n">p1</span><span class="o">=</span><span class="mf">0.01707</span>
+    <span class="n">Z1</span><span class="o">=</span><span class="mf">1.</span><span class="o">+</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="nb">pow</span><span class="p">(</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">2.</span><span class="p">),</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">+</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">))</span>
+    <span class="n">Z2</span><span class="o">=</span><span class="nb">pow</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span><span class="o">+</span><span class="nb">pow</span><span class="p">(</span><span class="n">Z1</span><span class="p">,</span><span class="mf">2.</span><span class="p">),</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">risco</span><span class="o">=</span><span class="mf">3.</span><span class="o">+</span><span class="n">Z2</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span><span class="n">chit_par</span><span class="p">)</span><span class="o">*</span><span class="nb">pow</span><span class="p">((</span><span class="mf">3.</span><span class="o">-</span><span class="n">Z1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">3.</span><span class="o">+</span><span class="n">Z1</span><span class="o">+</span><span class="mf">2.</span><span class="o">*</span><span class="n">Z2</span><span class="p">),</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">Eisco</span><span class="o">=</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="mf">2.</span><span class="o">/</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="n">risco</span><span class="p">),</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c">#Radiated energy, in unit of the initial total mass of the binary</span>
+    <span class="n">Erad</span><span class="o">=</span> <span class="n">eta</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">Eisco</span><span class="p">)</span><span class="o">+</span><span class="mf">4.</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">eta</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">4.</span><span class="o">*</span><span class="n">p0</span><span class="o">+</span><span class="mf">16.</span><span class="o">*</span><span class="n">p1</span><span class="o">*</span><span class="n">chit_par</span><span class="o">*</span><span class="p">(</span><span class="n">chit_par</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span><span class="o">+</span><span class="n">Eisco</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
+    <span class="n">Mfin</span><span class="o">=</span><span class="n">M</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span> <span class="n">Erad</span><span class="p">)</span> <span class="c"># Final mass</span>
+        
+    <span class="k">return</span> <span class="n">Mfin</span>
+    
+
+<span class="k">def</span> <span class="nf">finalspin</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate the final mass of the BH renmant following a BH merger. We</span>
+<span class="sd">    implement the fitting formula to numerical relativity simulations by</span>
+<span class="sd">    Barausse Rezzolla 2009.  See also Gerosa and Sesana 2015. We return the</span>
+<span class="sd">    dimensionless spin, which is the spin in units of the (pre-merger) binary</span>
+<span class="sd">    total mass, not the spin in units of the actual BH remnant. This can be</span>
+<span class="sd">    obtained combing this function with `finalmass`. Maximally spinning BHs are</span>
+<span class="sd">    returned if/whenever the fitting formula returns dimensionless spins greater</span>
+<span class="sd">    than 1. This formula has to be applied *close to merger*, where numerical</span>
+<span class="sd">    relativity simulations are available. You should do a PN evolution to</span>
+<span class="sd">    transfer binaries at r~10M.</span>
+
+
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        Mfin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    - `theta1`: angle between the spin of the primary and the orbital angular momentum.</span>
+<span class="sd">    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.</span>
+<span class="sd">    - `deltaphi`: angle between the projection of the two spins on the orbital plane.</span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
+<span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `chifin`: dimensionless spin of the BH remnant</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">chi1</span><span class="o">=</span><span class="n">S1</span><span class="o">/</span><span class="p">(</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>   <span class="c"># Dimensionless spin</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="c"># Dimensionless spin</span>
+    <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span>     <span class="c"># Symmetric mass ratio</span>
+    
+    <span class="c"># Spins here are defined in a frame with L along z and S1 in xz</span>
+    <span class="n">hatL</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">hatS1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)])</span>
+    <span class="n">hatS2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)])</span>
+    <span class="c">#Useful spin combinations. </span>
+    <span class="n">Delta</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">-</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">Delta_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">Delta_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    <span class="n">chit</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">+</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">chit_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">chit_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    
+    <span class="c">#Final spin. Barausse Rezzolla 2009</span>
+    <span class="n">t0</span><span class="o">=-</span><span class="mf">2.8904</span>
+    <span class="n">t2</span><span class="o">=-</span><span class="mf">3.51712</span>
+    <span class="n">t3</span><span class="o">=</span><span class="mf">2.5763</span>
+    <span class="n">s4</span><span class="o">=-</span><span class="mf">0.1229</span>
+    <span class="n">s5</span><span class="o">=</span><span class="mf">0.4537</span>
+    <span class="n">smalll</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">3.</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="n">t2</span><span class="o">*</span><span class="n">eta</span><span class="o">+</span><span class="n">t3</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">eta</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="n">s4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">chit</span><span class="p">)</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">4.</span><span class="p">)</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">s5</span><span class="o">*</span><span class="n">eta</span><span class="o">+</span><span class="n">t0</span><span class="o">+</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="n">chit_par</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">chifin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span> <span class="n">chit</span><span class="o">+</span><span class="n">hatL</span><span class="o">*</span><span class="n">smalll</span><span class="o">*</span><span class="n">q</span><span class="o">/</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="n">chifin</span><span class="o">&gt;</span><span class="mf">1.</span><span class="p">:</span> <span class="c">#Check on the final spin, as suggested by Emanuele</span>
+        <span class="k">print</span> <span class="s">&quot;[finalspin] Warning: got chi&gt;1, force chi=1&quot;</span>
+        <span class="n">chifin</span><span class="o">==</span><span class="mf">1.</span>
+        
+    <span class="k">return</span> <span class="n">chifin</span>
+    
+    
+<span class="k">def</span> <span class="nf">finalkick</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">maxkick</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">kms</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate the final kick of the BH remnant following a BH merger. We</span>
+<span class="sd">    implement the fitting formula to numerical relativity simulations developed</span>
+<span class="sd">    by the Rochester group. The larger contribution comes from the component of</span>
+<span class="sd">    the kick parallel to L. Flags let you switch on and off the various</span>
+<span class="sd">    contributions (all on by default): superkicks (Gonzalez et al. 2007a;</span>
+<span class="sd">    Campanelli et al. 2007), hang-up kicks (Lousto &amp; Zlochower 2011),</span>
+<span class="sd">    cross-kicks (Lousto &amp; Zlochower 2013). The orbital-plane kick components are</span>
+<span class="sd">    implemented as described in Kesden et al. 2010a. See also Gerosa and Sesana</span>
+<span class="sd">    2015.</span>
+
+<span class="sd">    The final kick depends on the orbital phase at merger Theta. By default,</span>
+<span class="sd">    this is assumed to be randonly distributed in [0,2pi]. The maximum kick is</span>
+<span class="sd">    realized for Theta=0 and can be computed with the optional argument</span>
+<span class="sd">    maxkick=True. This formula has to be applied *close to merger*, where</span>
+<span class="sd">    numerical relativity simulations are available. You should do a PN evolution</span>
+<span class="sd">    to transfer binaries at r~10M.</span>
+<span class="sd">   </span>
+<span class="sd">    The final kick is returned in geometrical units (i.e. vkick/c) by default,</span>
+<span class="sd">    and converted to km/s if kms=True.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        Mfin=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    - `theta1`: angle between the spin of the primary and the orbital angular momentum.</span>
+<span class="sd">    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.</span>
+<span class="sd">    - `deltaphi`: angle between the projection of the two spins on the orbital plane.</span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
+<span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+<span class="sd">    - `maxkick`: if `True` maximizes over the orbital phase at merger.</span>
+<span class="sd">    - `kms`: if `True` convert result to km/s.</span>
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `finalkick`: dimensionless kick of the BH remnant</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    
+    <span class="n">chi1</span><span class="o">=</span><span class="n">S1</span><span class="o">/</span><span class="p">(</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>   <span class="c"># Dimensionless spin</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="c"># Dimensionless spin</span>
+    <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span>     <span class="c"># Symmetric mass ratio</span>
+    
+    <span class="c"># Spins here are defined in a frame with L along z and S1 in xz</span>
+    <span class="n">hatL</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">hatS1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)])</span>
+    <span class="n">hatS2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)])</span>
+    <span class="c">#Useful spin combinations. </span>
+    <span class="n">Delta</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">-</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">Delta_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">Delta_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    <span class="n">chit</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">+</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">chit_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">chit_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    
+    <span class="c">#Kick. Coefficients are quoted in km/s</span>
+    
+    <span class="c"># vm and vperp are like in Kesden at 2010a, vpar is modified from Lousto Zlochower 2013</span>
+    <span class="n">xi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mf">145.</span><span class="p">)</span>
+    <span class="n">A</span><span class="o">=</span><span class="mf">1.2e4</span>
+    <span class="n">B</span><span class="o">=-</span><span class="mf">0.93</span>
+    <span class="n">H</span><span class="o">=</span><span class="mf">6.9e3</span>
+
+    <span class="c"># Switch on/off the various (super)kick contribution. Default are all on    </span>
+    <span class="n">superkick</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">hangupkick</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">crosskick</span><span class="o">=</span><span class="bp">True</span>
+    
+    <span class="k">if</span> <span class="n">superkick</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+        <span class="n">V11</span><span class="o">=</span><span class="mf">3677.76</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">V11</span><span class="o">=</span><span class="mf">0.</span>
+    <span class="k">if</span> <span class="n">hangupkick</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>    
+        <span class="n">VA</span><span class="o">=</span><span class="mf">2481.21</span>
+        <span class="n">VB</span><span class="o">=</span><span class="mf">1792.45</span>
+        <span class="n">VC</span><span class="o">=</span><span class="mf">1506.52</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">VA</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="n">VB</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="n">VC</span><span class="o">=</span><span class="mf">0.</span>
+    <span class="k">if</span> <span class="n">crosskick</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+        <span class="n">C2</span><span class="o">=</span><span class="mf">1140.</span>
+        <span class="n">C3</span><span class="o">=</span><span class="mf">2481.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">C2</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="n">C3</span><span class="o">=</span><span class="mf">0.</span>
+        
+    <span class="k">if</span> <span class="n">maxkick</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+        <span class="n">bigTheta</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bigTheta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    
+    <span class="n">vm</span><span class="o">=</span><span class="n">A</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">B</span><span class="o">*</span><span class="n">eta</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">vperp</span><span class="o">=</span><span class="n">H</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="n">Delta_par</span>
+    <span class="n">vpar</span><span class="o">=</span><span class="mf">16.</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span> <span class="p">(</span><span class="n">Delta_perp</span><span class="o">*</span><span class="p">(</span><span class="n">V11</span><span class="o">+</span><span class="mf">2.</span><span class="o">*</span><span class="n">VA</span><span class="o">*</span><span class="n">chit_par</span><span class="o">+</span><span class="mf">4.</span><span class="o">*</span><span class="n">VB</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span><span class="o">+</span><span class="mf">8.</span><span class="o">*</span><span class="n">VC</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">3.</span><span class="p">))</span> <span class="o">+</span> <span class="n">chit_perp</span><span class="o">*</span><span class="n">Delta_par</span><span class="o">*</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">C2</span><span class="o">+</span><span class="mf">4.</span><span class="o">*</span><span class="n">C3</span><span class="o">*</span><span class="n">chit_par</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">bigTheta</span><span class="p">)</span>         
+    <span class="n">vkick</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">([</span><span class="n">vm</span><span class="o">+</span><span class="n">vperp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span><span class="n">vperp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span><span class="n">vpar</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">vkick</span><span class="o">&gt;</span><span class="mi">5000</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;[finalkick] Warning; I got v_kick&gt;5000km/s. This shouldn&#39;t be possibile&quot;</span>
+    
+    <span class="k">if</span> <span class="n">kms</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">vkick</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c"># speed of light in km/s</span>
+        <span class="k">return</span> <span class="n">vkick</span><span class="o">/</span><span class="mf">299792.458</span>
+
+
 
 <span class="c">#################################</span>
 <span class="c">########## UTILITIES ############</span>
@@ -5572,8 +5816,7 @@ the algorithms.</p>
         <span class="k">assert</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&quot;[cutoff] Please select &#39;space&#39; or &#39;ground&#39;. Otherwise run ftor with the chosen frequency&quot;</span>
     <span class="n">rcut</span><span class="o">=</span><span class="n">ftor</span><span class="p">(</span><span class="n">fcut</span><span class="p">,</span><span class="n">M_msun</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">rcut</span><span class="p">,</span> <span class="n">fcut</span>
-        
-        
+    
 </pre></div>
 
   </div>
@@ -8739,6 +8982,381 @@ first output separation (this is a scalar).</p>
   
       
   <div class="item">
+    <div class="name def" id="precession.finalkick">
+    <p>def <span class="ident">finalkick</span>(</p><p>theta1, theta2, deltaPhi, q, S1, S2, maxkick=False, kms=False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Estimate the final kick of the BH remnant following a BH merger. We
+implement the fitting formula to numerical relativity simulations developed
+by the Rochester group. The larger contribution comes from the component of
+the kick parallel to L. Flags let you switch on and off the various
+contributions (all on by default): superkicks (Gonzalez et al. 2007a;
+Campanelli et al. 2007), hang-up kicks (Lousto &amp; Zlochower 2011),
+cross-kicks (Lousto &amp; Zlochower 2013). The orbital-plane kick components are
+implemented as described in Kesden et al. 2010a. See also Gerosa and Sesana
+2015.</p>
+<p>The final kick depends on the orbital phase at merger Theta. By default,
+this is assumed to be randonly distributed in [0,2pi]. The maximum kick is
+realized for Theta=0 and can be computed with the optional argument
+maxkick=True. This formula has to be applied <em>close to merger</em>, where
+numerical relativity simulations are available. You should do a PN evolution
+to transfer binaries at r~10M.</p>
+<p>The final kick is returned in geometrical units (i.e. vkick/c) by default,
+and converted to km/s if kms=True.</p>
+<p><strong>Call:</strong></p>
+<div class="codehilite"><pre>Mfin=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)
+</pre></div>
+
+
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>theta1</code>: angle between the spin of the primary and the orbital angular momentum.</li>
+<li><code>theta2</code>: angle between the spin of the secondary and the orbital angular momentum.</li>
+<li><code>deltaphi</code>: angle between the projection of the two spins on the orbital plane.</li>
+<li><code>q</code>: binary mass ratio. Must be q&lt;=1.</li>
+<li><code>S1</code>: spin magnitude of the primary BH.</li>
+<li><code>S2</code>: spin magnitude of the secondary BH.</li>
+<li><code>maxkick</code>: if <code>True</code> maximizes over the orbital phase at merger.</li>
+<li><code>kms</code>: if <code>True</code> convert result to km/s.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>finalkick</code>: dimensionless kick of the BH remnant</li>
+</ul></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.finalkick', this);">Show source &equiv;</a></p>
+  <div id="source-precession.finalkick" class="source">
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">finalkick</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">maxkick</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">kms</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate the final kick of the BH remnant following a BH merger. We</span>
+<span class="sd">    implement the fitting formula to numerical relativity simulations developed</span>
+<span class="sd">    by the Rochester group. The larger contribution comes from the component of</span>
+<span class="sd">    the kick parallel to L. Flags let you switch on and off the various</span>
+<span class="sd">    contributions (all on by default): superkicks (Gonzalez et al. 2007a;</span>
+<span class="sd">    Campanelli et al. 2007), hang-up kicks (Lousto &amp; Zlochower 2011),</span>
+<span class="sd">    cross-kicks (Lousto &amp; Zlochower 2013). The orbital-plane kick components are</span>
+<span class="sd">    implemented as described in Kesden et al. 2010a. See also Gerosa and Sesana</span>
+<span class="sd">    2015.</span>
+
+<span class="sd">    The final kick depends on the orbital phase at merger Theta. By default,</span>
+<span class="sd">    this is assumed to be randonly distributed in [0,2pi]. The maximum kick is</span>
+<span class="sd">    realized for Theta=0 and can be computed with the optional argument</span>
+<span class="sd">    maxkick=True. This formula has to be applied *close to merger*, where</span>
+<span class="sd">    numerical relativity simulations are available. You should do a PN evolution</span>
+<span class="sd">    to transfer binaries at r~10M.</span>
+<span class="sd">   </span>
+<span class="sd">    The final kick is returned in geometrical units (i.e. vkick/c) by default,</span>
+<span class="sd">    and converted to km/s if kms=True.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        Mfin=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    - `theta1`: angle between the spin of the primary and the orbital angular momentum.</span>
+<span class="sd">    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.</span>
+<span class="sd">    - `deltaphi`: angle between the projection of the two spins on the orbital plane.</span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
+<span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+<span class="sd">    - `maxkick`: if `True` maximizes over the orbital phase at merger.</span>
+<span class="sd">    - `kms`: if `True` convert result to km/s.</span>
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `finalkick`: dimensionless kick of the BH remnant</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    
+    <span class="n">chi1</span><span class="o">=</span><span class="n">S1</span><span class="o">/</span><span class="p">(</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>   <span class="c"># Dimensionless spin</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="c"># Dimensionless spin</span>
+    <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span>     <span class="c"># Symmetric mass ratio</span>
+    
+    <span class="c"># Spins here are defined in a frame with L along z and S1 in xz</span>
+    <span class="n">hatL</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">hatS1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)])</span>
+    <span class="n">hatS2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)])</span>
+    <span class="c">#Useful spin combinations. </span>
+    <span class="n">Delta</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">-</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">Delta_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">Delta_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    <span class="n">chit</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">+</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">chit_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">chit_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    
+    <span class="c">#Kick. Coefficients are quoted in km/s</span>
+    
+    <span class="c"># vm and vperp are like in Kesden at 2010a, vpar is modified from Lousto Zlochower 2013</span>
+    <span class="n">xi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mf">145.</span><span class="p">)</span>
+    <span class="n">A</span><span class="o">=</span><span class="mf">1.2e4</span>
+    <span class="n">B</span><span class="o">=-</span><span class="mf">0.93</span>
+    <span class="n">H</span><span class="o">=</span><span class="mf">6.9e3</span>
+
+    <span class="c"># Switch on/off the various (super)kick contribution. Default are all on    </span>
+    <span class="n">superkick</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">hangupkick</span><span class="o">=</span><span class="bp">True</span>
+    <span class="n">crosskick</span><span class="o">=</span><span class="bp">True</span>
+    
+    <span class="k">if</span> <span class="n">superkick</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+        <span class="n">V11</span><span class="o">=</span><span class="mf">3677.76</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">V11</span><span class="o">=</span><span class="mf">0.</span>
+    <span class="k">if</span> <span class="n">hangupkick</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>    
+        <span class="n">VA</span><span class="o">=</span><span class="mf">2481.21</span>
+        <span class="n">VB</span><span class="o">=</span><span class="mf">1792.45</span>
+        <span class="n">VC</span><span class="o">=</span><span class="mf">1506.52</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">VA</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="n">VB</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="n">VC</span><span class="o">=</span><span class="mf">0.</span>
+    <span class="k">if</span> <span class="n">crosskick</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+        <span class="n">C2</span><span class="o">=</span><span class="mf">1140.</span>
+        <span class="n">C3</span><span class="o">=</span><span class="mf">2481.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">C2</span><span class="o">=</span><span class="mf">0.</span>
+        <span class="n">C3</span><span class="o">=</span><span class="mf">0.</span>
+        
+    <span class="k">if</span> <span class="n">maxkick</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
+        <span class="n">bigTheta</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bigTheta</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    
+    <span class="n">vm</span><span class="o">=</span><span class="n">A</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">B</span><span class="o">*</span><span class="n">eta</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">vperp</span><span class="o">=</span><span class="n">H</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="n">Delta_par</span>
+    <span class="n">vpar</span><span class="o">=</span><span class="mf">16.</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span><span class="n">eta</span><span class="o">*</span> <span class="p">(</span><span class="n">Delta_perp</span><span class="o">*</span><span class="p">(</span><span class="n">V11</span><span class="o">+</span><span class="mf">2.</span><span class="o">*</span><span class="n">VA</span><span class="o">*</span><span class="n">chit_par</span><span class="o">+</span><span class="mf">4.</span><span class="o">*</span><span class="n">VB</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span><span class="o">+</span><span class="mf">8.</span><span class="o">*</span><span class="n">VC</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">3.</span><span class="p">))</span> <span class="o">+</span> <span class="n">chit_perp</span><span class="o">*</span><span class="n">Delta_par</span><span class="o">*</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">C2</span><span class="o">+</span><span class="mf">4.</span><span class="o">*</span><span class="n">C3</span><span class="o">*</span><span class="n">chit_par</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">bigTheta</span><span class="p">)</span>         
+    <span class="n">vkick</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">([</span><span class="n">vm</span><span class="o">+</span><span class="n">vperp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span><span class="n">vperp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span><span class="n">vpar</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">vkick</span><span class="o">&gt;</span><span class="mi">5000</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;[finalkick] Warning; I got v_kick&gt;5000km/s. This shouldn&#39;t be possibile&quot;</span>
+    
+    <span class="k">if</span> <span class="n">kms</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">vkick</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c"># speed of light in km/s</span>
+        <span class="k">return</span> <span class="n">vkick</span><span class="o">/</span><span class="mf">299792.458</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="precession.finalmass">
+    <p>def <span class="ident">finalmass</span>(</p><p>theta1, theta2, deltaPhi, q, S1, S2)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Estimate the final mass of the BH renmant following a BH merger. We
+implement the fitting formula to numerical relativity simulations by
+Barausse Morozova Rezzolla 2012.  See also Gerosa and Sesana 2015. This
+formula has to be applied <em>close to merger</em>, where numerical relativity
+simulations are available. You should do a PN evolution to transfer binaries
+at r~10M.</p>
+<p><strong>Call:</strong></p>
+<div class="codehilite"><pre>Mfin=precession.finalmass(theta1,theta2,deltaPhi,q,S1,S2)
+</pre></div>
+
+
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>theta1</code>: angle between the spin of the primary and the orbital angular momentum.</li>
+<li><code>theta2</code>: angle between the spin of the secondary and the orbital angular momentum.</li>
+<li><code>deltaphi</code>: angle between the projection of the two spins on the orbital plane.</li>
+<li><code>q</code>: binary mass ratio. Must be q&lt;=1.</li>
+<li><code>S1</code>: spin magnitude of the primary BH.</li>
+<li><code>S2</code>: spin magnitude of the secondary BH.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>Mfin</code>: mass of the BH remnant, in units of the (pre-merger) binary total mass</li>
+</ul></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.finalmass', this);">Show source &equiv;</a></p>
+  <div id="source-precession.finalmass" class="source">
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">finalmass</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate the final mass of the BH renmant following a BH merger. We</span>
+<span class="sd">    implement the fitting formula to numerical relativity simulations by</span>
+<span class="sd">    Barausse Morozova Rezzolla 2012.  See also Gerosa and Sesana 2015. This</span>
+<span class="sd">    formula has to be applied *close to merger*, where numerical relativity</span>
+<span class="sd">    simulations are available. You should do a PN evolution to transfer binaries</span>
+<span class="sd">    at r~10M.</span>
+
+
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        Mfin=precession.finalmass(theta1,theta2,deltaPhi,q,S1,S2)</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    - `theta1`: angle between the spin of the primary and the orbital angular momentum.</span>
+<span class="sd">    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.</span>
+<span class="sd">    - `deltaphi`: angle between the projection of the two spins on the orbital plane.</span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
+<span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `Mfin`: mass of the BH remnant, in units of the (pre-merger) binary total mass</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">chi1</span><span class="o">=</span><span class="n">S1</span><span class="o">/</span><span class="p">(</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>   <span class="c"># Dimensionless spin</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="c"># Dimensionless spin</span>
+    <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span>     <span class="c"># Symmetric mass ratio</span>
+    
+    <span class="c"># Spins here are defined in a frame with L along z and S1 in xz</span>
+    <span class="n">hatL</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">hatS1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)])</span>
+    <span class="n">hatS2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)])</span>
+    <span class="c">#Useful spin combinations. </span>
+    <span class="n">Delta</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">-</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">Delta_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">Delta_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    <span class="n">chit</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">+</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">chit_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">chit_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    
+    <span class="c">#Final mass. Barausse Morozova Rezzolla 2012</span>
+    <span class="n">p0</span><span class="o">=</span><span class="mf">0.04827</span>
+    <span class="n">p1</span><span class="o">=</span><span class="mf">0.01707</span>
+    <span class="n">Z1</span><span class="o">=</span><span class="mf">1.</span><span class="o">+</span> <span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="nb">pow</span><span class="p">(</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">2.</span><span class="p">),</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span><span class="o">+</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">))</span>
+    <span class="n">Z2</span><span class="o">=</span><span class="nb">pow</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">chit_par</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span><span class="o">+</span><span class="nb">pow</span><span class="p">(</span><span class="n">Z1</span><span class="p">,</span><span class="mf">2.</span><span class="p">),</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">risco</span><span class="o">=</span><span class="mf">3.</span><span class="o">+</span><span class="n">Z2</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span><span class="n">chit_par</span><span class="p">)</span><span class="o">*</span><span class="nb">pow</span><span class="p">((</span><span class="mf">3.</span><span class="o">-</span><span class="n">Z1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">3.</span><span class="o">+</span><span class="n">Z1</span><span class="o">+</span><span class="mf">2.</span><span class="o">*</span><span class="n">Z2</span><span class="p">),</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">Eisco</span><span class="o">=</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="mf">2.</span><span class="o">/</span><span class="p">(</span><span class="mf">3.</span><span class="o">*</span><span class="n">risco</span><span class="p">),</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c">#Radiated energy, in unit of the initial total mass of the binary</span>
+    <span class="n">Erad</span><span class="o">=</span> <span class="n">eta</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">Eisco</span><span class="p">)</span><span class="o">+</span><span class="mf">4.</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">eta</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">4.</span><span class="o">*</span><span class="n">p0</span><span class="o">+</span><span class="mf">16.</span><span class="o">*</span><span class="n">p1</span><span class="o">*</span><span class="n">chit_par</span><span class="o">*</span><span class="p">(</span><span class="n">chit_par</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span><span class="o">+</span><span class="n">Eisco</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span>
+    <span class="n">Mfin</span><span class="o">=</span><span class="n">M</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span> <span class="n">Erad</span><span class="p">)</span> <span class="c"># Final mass</span>
+        
+    <span class="k">return</span> <span class="n">Mfin</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="precession.finalspin">
+    <p>def <span class="ident">finalspin</span>(</p><p>theta1, theta2, deltaPhi, q, S1, S2)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Estimate the final mass of the BH renmant following a BH merger. We
+implement the fitting formula to numerical relativity simulations by
+Barausse Rezzolla 2009.  See also Gerosa and Sesana 2015. We return the
+dimensionless spin, which is the spin in units of the (pre-merger) binary
+total mass, not the spin in units of the actual BH remnant. This can be
+obtained combing this function with <code>finalmass</code>. Maximally spinning BHs are
+returned if/whenever the fitting formula returns dimensionless spins greater
+than 1. This formula has to be applied <em>close to merger</em>, where numerical
+relativity simulations are available. You should do a PN evolution to
+transfer binaries at r~10M.</p>
+<p><strong>Call:</strong></p>
+<div class="codehilite"><pre>Mfin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)
+</pre></div>
+
+
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>theta1</code>: angle between the spin of the primary and the orbital angular momentum.</li>
+<li><code>theta2</code>: angle between the spin of the secondary and the orbital angular momentum.</li>
+<li><code>deltaphi</code>: angle between the projection of the two spins on the orbital plane.</li>
+<li><code>q</code>: binary mass ratio. Must be q&lt;=1.</li>
+<li><code>S1</code>: spin magnitude of the primary BH.</li>
+<li><code>S2</code>: spin magnitude of the secondary BH.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>chifin</code>: dimensionless spin of the BH remnant</li>
+</ul></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.finalspin', this);">Show source &equiv;</a></p>
+  <div id="source-precession.finalspin" class="source">
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">finalspin</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate the final mass of the BH renmant following a BH merger. We</span>
+<span class="sd">    implement the fitting formula to numerical relativity simulations by</span>
+<span class="sd">    Barausse Rezzolla 2009.  See also Gerosa and Sesana 2015. We return the</span>
+<span class="sd">    dimensionless spin, which is the spin in units of the (pre-merger) binary</span>
+<span class="sd">    total mass, not the spin in units of the actual BH remnant. This can be</span>
+<span class="sd">    obtained combing this function with `finalmass`. Maximally spinning BHs are</span>
+<span class="sd">    returned if/whenever the fitting formula returns dimensionless spins greater</span>
+<span class="sd">    than 1. This formula has to be applied *close to merger*, where numerical</span>
+<span class="sd">    relativity simulations are available. You should do a PN evolution to</span>
+<span class="sd">    transfer binaries at r~10M.</span>
+
+
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        Mfin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    - `theta1`: angle between the spin of the primary and the orbital angular momentum.</span>
+<span class="sd">    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.</span>
+<span class="sd">    - `deltaphi`: angle between the projection of the two spins on the orbital plane.</span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
+<span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `chifin`: dimensionless spin of the BH remnant</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">chi1</span><span class="o">=</span><span class="n">S1</span><span class="o">/</span><span class="p">(</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>   <span class="c"># Dimensionless spin</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">M</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="c"># Dimensionless spin</span>
+    <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span>     <span class="c"># Symmetric mass ratio</span>
+    
+    <span class="c"># Spins here are defined in a frame with L along z and S1 in xz</span>
+    <span class="n">hatL</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">hatS1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)])</span>
+    <span class="n">hatS2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">deltaPhi</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)])</span>
+    <span class="c">#Useful spin combinations. </span>
+    <span class="n">Delta</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">-</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">Delta_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">Delta_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Delta</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    <span class="n">chit</span><span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">hatS2</span><span class="o">+</span><span class="n">chi1</span><span class="o">*</span><span class="n">hatS1</span><span class="p">)</span><span class="o">/</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">chit_par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">)</span>
+    <span class="n">chit_perp</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">hatL</span><span class="p">))</span>
+    
+    <span class="c">#Final spin. Barausse Rezzolla 2009</span>
+    <span class="n">t0</span><span class="o">=-</span><span class="mf">2.8904</span>
+    <span class="n">t2</span><span class="o">=-</span><span class="mf">3.51712</span>
+    <span class="n">t3</span><span class="o">=</span><span class="mf">2.5763</span>
+    <span class="n">s4</span><span class="o">=-</span><span class="mf">0.1229</span>
+    <span class="n">s5</span><span class="o">=</span><span class="mf">0.4537</span>
+    <span class="n">smalll</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">3.</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="n">t2</span><span class="o">*</span><span class="n">eta</span><span class="o">+</span><span class="n">t3</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="n">eta</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="n">s4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">chit</span><span class="p">,</span><span class="n">chit</span><span class="p">)</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">4.</span><span class="p">)</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mf">2.</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">s5</span><span class="o">*</span><span class="n">eta</span><span class="o">+</span><span class="n">t0</span><span class="o">+</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="n">chit_par</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">chifin</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span> <span class="n">chit</span><span class="o">+</span><span class="n">hatL</span><span class="o">*</span><span class="n">smalll</span><span class="o">*</span><span class="n">q</span><span class="o">/</span><span class="nb">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">,</span><span class="mf">2.</span><span class="p">)</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="n">chifin</span><span class="o">&gt;</span><span class="mf">1.</span><span class="p">:</span> <span class="c">#Check on the final spin, as suggested by Emanuele</span>
+        <span class="k">print</span> <span class="s">&quot;[finalspin] Warning: got chi&gt;1, force chi=1&quot;</span>
+        <span class="n">chifin</span><span class="o">==</span><span class="mf">1.</span>
+        
+    <span class="k">return</span> <span class="n">chifin</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
     <div class="name def" id="precession.find_morphology">
     <p>def <span class="ident">find_morphology</span>(</p><p>xi, J, q, S1, S2, r)</p>
     </div>
@@ -11468,7 +12086,7 @@ J_dp0,S_dp0,theta1_dp0,theta2_dp0,J_dp180,S_dp180,theta1_dp180,theta2_dp180=prec
 <li><code>S1</code>: spin magnitude of the primary BH.</li>
 <li><code>S2</code>: spin magnitude of the secondary BH.</li>
 <li><code>r</code>: binary separation.</li>
-<li><code>more</code>: if <code>True</code> returns additional quantities,</li>
+<li><code>more</code>: if <code>True</code> returns additional quantities.</li>
 </ul>
 <p><strong>Returns:</strong></p>
 <ul>
@@ -11508,7 +12126,7 @@ J_dp0,S_dp0,theta1_dp0,theta2_dp0,J_dp180,S_dp180,theta1_dp180,theta2_dp180=prec
 <span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
 <span class="sd">    - `r`: binary separation.</span>
-<span class="sd">    - `more`: if `True` returns additional quantities,</span>
+<span class="sd">    - `more`: if `True` returns additional quantities.</span>
 
 <span class="sd">    **Returns:**</span>
 
@@ -12072,7 +12690,7 @@ xi_low,xi_up,S_xilow,S_xiup=precession.xi_allowed(J,q,S1,S2,r,more=True,verbose=
 <li><code>S1</code>: spin magnitude of the primary BH.</li>
 <li><code>S2</code>: spin magnitude of the secondary BH.</li>
 <li><code>r</code>: binary separation.</li>
-<li><code>more</code>: if <code>True</code> returns additional quantities,</li>
+<li><code>more</code>: if <code>True</code> returns additional quantities.</li>
 <li><code>verbose</code>: if <code>True</code> print additional information.</li>
 </ul>
 <p><strong>Returns:</strong></p>
@@ -12116,7 +12734,7 @@ xi_low,xi_up,S_xilow,S_xiup=precession.xi_allowed(J,q,S1,S2,r,more=True,verbose=
 <span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
 <span class="sd">    - `r`: binary separation.</span>
-<span class="sd">    - `more`: if `True` returns additional quantities,</span>
+<span class="sd">    - `more`: if `True` returns additional quantities.</span>
 <span class="sd">    - `verbose`: if `True` print additional information.</span>
 
 <span class="sd">    **Returns:**</span>
@@ -12213,7 +12831,7 @@ xi_low,xi_up,S_xilow,S_xiup=precession.xi_allowed(J,q,S1,S2,r,more=True,verbose=
 <li><code>S1</code>: spin magnitude of the primary BH.</li>
 <li><code>S2</code>: spin magnitude of the secondary BH.</li>
 <li><code>r</code>: binary separation.</li>
-<li><code>more</code>: if <code>True</code> returns additional quantities,</li>
+<li><code>more</code>: if <code>True</code> returns additional quantities.</li>
 </ul>
 <p><strong>Returns:</strong></p>
 <ul>
@@ -12240,7 +12858,7 @@ xi_low,xi_up,S_xilow,S_xiup=precession.xi_allowed(J,q,S1,S2,r,more=True,verbose=
 <span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
 <span class="sd">    - `r`: binary separation.</span>
-<span class="sd">    - `more`: if `True` returns additional quantities,</span>
+<span class="sd">    - `more`: if `True` returns additional quantities.</span>
 
 <span class="sd">    **Returns:**</span>
 
