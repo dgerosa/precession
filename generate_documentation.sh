@@ -18,7 +18,7 @@ git checkout master
 
 # Be sure your working branch is clean
 #if [[ $((git-status---porcelain)) -eq 0 ]]; then 
-if [[ $((git-status---porcelain)) -eq 0 ]]; then 
+if [ "$(git status --porcelain)" ]; then 
   echo "Please, clean your working directory first."
   exit 1
 else 
