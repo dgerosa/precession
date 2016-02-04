@@ -1871,7 +1871,7 @@ def dSdt(S,xi,J,q,S1,S2,r,sign=1.):
 def dtdS(S,xi,J,q,S1,S2,r,sign=1.):
 
     '''
-    Auxiliary function dt/dS=(dS/dt)^-1. `See precession.dSdt`.
+    Auxiliary function dt/dS=(dS/dt)^-1. See `precession.dSdt`.
 
     **Call:**
 
@@ -1899,9 +1899,9 @@ def dtdS(S,xi,J,q,S1,S2,r,sign=1.):
 def t_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, t_initial=0, sign=1. ):
 
     '''
-    Integrate `precession.dSdt' to find t (time) as a function of S (magnitude
+    Integrate `precession.dSdt` to find t (time) as a function of S (magnitude
     of the total spin). Since dS/dt depends on S and not on t, finding t(S) only
-    requires a numnerical integration; S(t) is provided in `precession.t_of_S'.
+    requires a numnerical integration; S(t) is provided in `precession.t_of_S`.
     Sb_min and Sb_max are passed to this function (and not computed within it)
     for computational efficiency. This function can only integrate over half
     precession period (i.e. from Sb_min to Sb_max at most). If you want t(S)
@@ -1963,13 +1963,14 @@ def t_of_S( S_initial,S_final ,Sb_min,Sb_max ,xi,J,q,S1,S2,r, t_initial=0, sign=
 def S_of_t(t, Sb_min,Sb_max,xi,J,q,S1,S2,r):
 
     '''
-    Integrate `precession.dSdt' to find S (time) as a function of t (magnitude
-    of the total spin). In practice, this is done by inverting  `precession.t_of_S'. Sb_min and Sb_max are
-    passed to this function (and not computed within it) for computational
-    efficiency. This function can only integrate over half precession period
-    (i.e. from 0 to tau/2 at most). If you want S(t) over more precession
-    periods you should stich different solutions together, consistently with the
-    argument sign (in particular, flip sign every half period).
+    Integrate `precession.dSdt` to find S (time) as a function of t (magnitude
+    of the total spin). In practice, this is done by inverting 
+    `precession.t_of_S`. Sb_min and Sb_max are passed to this function (and not
+    computed within it) for computational efficiency. This function can only
+    integrate over half precession period (i.e. from 0 to tau/2 at most). If you
+    want S(t) over more precession periods you should stich different solutions
+    together, consistently with the argument sign (in particular, flip sign
+    every half period).
 
     **Call:**
 
@@ -2767,8 +2768,8 @@ def evolve_J(xi_vals,J_vals,r_vals,q,S1,S2):
     '''
     Wrapper of `precession.Jofr` to enable parallelization through the python
     `parmap` module; the number of available cores can be specified using the
-    integer global variable `CPUs` (all available cores will be used by
-    default). Evolve a sequence of binaries with the SAME q, S1, S2 but
+    integer global variable `precession.CPUs` (all available cores will be used
+    by default). Evolve a sequence of binaries with the SAME q, S1, S2 but
     different xi and initial values of J and save outputs at r_vals. Output is a
     2D array, where e.g. J_vals[0] is the first binary (1D array at all output
     separations) and J_vals[0][0] is the first binary at the first output
@@ -2902,17 +2903,16 @@ def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
 
     Parallelization through the python `parmap` module is implemented; the
     number of available cores can be specified using the integer global variable
-    `CPUs` (all available cores will be used by default). Evolve a sequence of
-    binaries with the SAME q, S1,S2 but different theta1, theta2, deltaphi
-    (assumed to be specified at r_vals[0]) and save outputs at r_vals. Outputs
-    are 2D arrays, where e.g theta1_fvals[0] is the first binary (1D array at
-    all output separations) and theta1_fvals[0][0] is the first binary at the
-    first output separation (this is a scalar).
+    `precession.CPUs` (all available cores will be used by default). Evolve a
+    sequence of binaries with the SAME q, S1,S2 but different theta1, theta2,
+    deltaphi (assumed to be specified at r_vals[0]) and save outputs at r_vals.
+    Outputs are 2D arrays, where e.g theta1_fvals[0] is the first binary (1D
+    array at all output separations) and theta1_fvals[0][0] is the first binary
+    at the first output separation (this is a scalar).
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
 
     **Call:**
-
         theta1f_vals,theta2f_vals,deltaphif_vals=precession.evolve_angles(theta1i_vals,theta2i_vals,deltaphii_vals,r_vals,q,S1,S2)
          
     **Parameters:**
@@ -3098,15 +3098,15 @@ def evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q,S1,S2):
     '''
     Wrapper of `precession.Jofr_infinity` to enable parallelization through the
     python `parmap` module; the number of available cores can be specified using
-    the integer global variable `CPUs` (all available cores will be used by
-    default). Evolve a sequence of binaries with the SAME q, S1, S2 but
+    the integer global variable `precession.CPUs` (all available cores will be
+    used by default). Evolve a sequence of binaries with the SAME q, S1, S2 but
     different xi and initial values of J and save outputs at r_vals. Output is a
     2D array, where e.g. J_vals[0] is the first binary (1D array at all output
     separations) and J_vals[0][0] is the first binary at the first output
     separation (this is a scalar). We strongly reccommend using this function,
     even for a single binary.
 
-    Checkpointing is implemented: results are stored in `precession.g`.
+    Checkpointing is implemented: results are stored in `precession.storedir`.
  
     **Call:**
 
@@ -3265,9 +3265,9 @@ def evolve_J_backwards(xi_vals,J_vals,r,q,S1,S2):
     '''
     Wrapper of `precession.kappa_backwards` to enable parallelization through
     the python `parmap` module; the number of available cores can be specified
-    using the integer global variable `CPUs` (all available cores will be used
-    by default). Evolve a sequence of binaries with the SAME q, S1,S2, from the
-    SAME separation r, but different xi and initial kappa_inf.
+    using the integer global variable `precession.CPUs` (all available cores
+    will be used by default). Evolve a sequence of binaries with the SAME q,
+    S1,S2, from the SAME separation r, but different xi and initial kappa_inf.
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
@@ -3489,7 +3489,6 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     `precession.orbit_angles` provided.
  
     **Call:**
-
         Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2)
 
     **Parameters:**
@@ -3620,13 +3619,14 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     '''
     Wrapper of `precession.orbav_integrator` to enable parallelization through
     the python parmap module; the number of available cores can be specified
-    using the integer global variable `CPUs` (all available cores will be used
-    by default). Input/outputs are given in terms of J, xi and S. Evolve a
-    sequence of binaries with the SAME q, S1,S2 but different xi and initial
-    values of J and S; save outputs at r_vals. The initial configuration must be
-    compatible with r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the
-    first binary (1D array at all output separations) and J_vals[0][0] is the
-    first binary at the first output separation (this is a scalar).
+    using the integer global variable `precession.CPUs` (all available cores
+    will be used by default). Input/outputs are given in terms of J, xi and S.
+    Evolve a sequence of binaries with the SAME q, S1,S2 but different xi and
+    initial values of J and S; save outputs at r_vals. The initial configuration
+    must be compatible with r_vals[0]. Output is a 2D array, where e.g.
+    J_vals[0] is the first binary (1D array at all output separations) and
+    J_vals[0][0] is the first binary at the first output separation (this is a
+    scalar).
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
@@ -3703,7 +3703,7 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
 def orbit_angles_single(theta1_i,theta2_i,deltaphi_i,r_vals,q,S1,S2):
 
     '''
-    Auxiliary function, see `orbit_angles`.
+    Auxiliary function, see `precession.orbit_angles`.
  
     **Call:**
 
@@ -3781,13 +3781,13 @@ def orbit_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
     '''
     Wrapper of `precession.orbav_integrator` to enable parallelization through
     the python parmap module; the number of available cores can be specified
-    using the integer global variable `CPUs` (all available cores will be used
-    by default). Input/outputs are given in terms of the angles theta1, theta2
-    and deltaphi. Evolve a sequence of binaries with the SAME q, S1,S2 but
-    different initial values for the angles; save outputs at r_vals. Output is a
-    2D array, where e.g. theta1_vals[0] is the first binary (1D array at all
-    output separations) and theta1_vals[0][0] is the first binary at the first
-    output separation (this is a scalar).
+    using the integer global variable `precession.CPUs` (all available cores
+    will be used by default). Input/outputs are given in terms of the angles
+    theta1, theta2 and deltaphi. Evolve a sequence of binaries with the SAME q,
+    S1,S2 but different initial values for the angles; save outputs at r_vals.
+    Output is a 2D array, where e.g. theta1_vals[0] is the first binary (1D
+    array at all output separations) and theta1_vals[0][0] is the first binary
+    at the first output separation (this is a scalar).
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
@@ -3915,15 +3915,16 @@ def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     '''
     Wrapper of `precession.orbav_integrator` to enable parallelization through
     the python parmap module; the number of available cores can be specified
-    using the integer global variable `CPUs` (all available cores will be used
-    by default). Input are given in terms of J, xi and S; outputs are projected
-    on a reference frame such that Jx=Jy=Ly=0 at the initial separation (cf.
-    `Jframe_projection`). Vectors, not unit vectros!, are returned. Evolve a
-    sequence of binaries with the SAME q, S1,S2 but different xi and initial
-    values of J and S; save outputs at r_vals. The initial configuration must be
-    compatible with r_vals[0]. Output is a 2D array, where e.g. J_vals[0] is the
-    first binary (1D array at all output separations) and J_vals[0][0] is the
-    first binary at the first output separation (this is a scalar).
+    using the integer global variable `precession.CPUs` (all available cores
+    will be used by default). Input are given in terms of J, xi and S; outputs
+    are projected on a reference frame such that Jx=Jy=Ly=0 at the initial
+    separation (cf. `precession.Jframe_projection`). Vectors, not unit vectros!,
+    are returned. Evolve a sequence of binaries with the SAME q, S1,S2 but
+    different xi and initial values of J and S; save outputs at r_vals. The
+    initial configuration must be compatible with r_vals[0]. Output is a 2D
+    array, where e.g. J_vals[0] is the first binary (1D array at all output
+    separations) and J_vals[0][0] is the first binary at the first output
+    separation (this is a scalar).
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
@@ -4112,10 +4113,10 @@ def hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t):
     phase.
 
     Parallelization is implemented through the python parmap module; the number
-    of available cores can be specified using the integer global variable `CPUs`
-    (all available cores will be used by default). Evolve a sequence of binaries
-    with the SAME q, S1,S2 but different xi and kappa_inf; save outputs at
-    r_vals.
+    of available cores can be specified using the integer global variable
+    `precession.CPUs` (all available cores will be used by default). Evolve a
+    sequence of binaries with the SAME q, S1,S2 but different xi and kappa_inf;
+    save outputs at r_vals.
 
     The initial condition is NOT returned by this function. Outputs are given in
     terms of the angles theta1, theta2 and deltaphi as 2D arrays, where e.g
@@ -4277,11 +4278,11 @@ def finalspin(theta1,theta2,deltaPhi,q,S1,S2):
     Barausse Rezzolla 2009.  See also Gerosa and Sesana 2015. We return the
     dimensionless spin, which is the spin in units of the (pre-merger) binary
     total mass, not the spin in units of the actual BH remnant. This can be
-    obtained combing this function with `finalmass`. Maximally spinning BHs are
-    returned if/whenever the fitting formula returns dimensionless spins greater
-    than 1. This formula has to be applied *close to merger*, where numerical
-    relativity simulations are available. You should do a PN evolution to
-    transfer binaries at r~10M.
+    obtained combing this function with `precession.finalmass`. Maximally
+    spinning BHs are returned if/whenever the fitting formula returns
+    dimensionless spins greater than 1. This formula has to be applied *close to
+    merger*, where numerical relativity simulations are available. You should do
+    a PN evolution to transfer binaries at r~10M.
 
 
     **Call:**
