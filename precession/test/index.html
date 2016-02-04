@@ -1084,6 +1084,7 @@ table {
 <span class="n">mport</span> <span class="n">pylab</span>
 <span class="n">mport</span> <span class="n">matplotlib</span>
 <span class="n">ef</span> <span class="n">parameter_selection</span><span class="p">():</span>
+   
    <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">   Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.</span>
 <span class="sd">   All quantities are given in total-mass units c=G=M=1.</span>
@@ -1175,6 +1176,7 @@ table {
    <span class="n">xi</span><span class="p">,</span><span class="n">kappainf</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">from_the_angles_inf</span><span class="p">(</span><span class="n">t1_inf</span><span class="p">,</span><span class="n">t2_inf</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
    <span class="k">print</span> <span class="s">&quot;From the angles one can go back to (xi,kappa_inf)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">kappainf</span><span class="p">)</span>
 <span class="n">ef</span> <span class="n">spin_angles</span><span class="p">():</span>
+   
    <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">   Binary dynamics on the precessional timescale. The spin angles</span>
 <span class="sd">   theta1,theta2, DeltaPhi and theta12 are computed and plotted against the</span>
@@ -1234,6 +1236,7 @@ table {
        <span class="n">ax_dp</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper right&#39;</span><span class="p">)</span> <span class="c"># Fill the legend with the precessional morphology</span>
    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;spin_angles.pdf&quot;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s">&#39;tight&#39;</span><span class="p">)</span> <span class="c"># Save pdf file</span>
 <span class="n">ef</span> <span class="n">phase_resampling</span><span class="p">():</span>
+   
    <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">   Precessional phase resampling. The magnidute of the total spin S is sampled</span>
 <span class="sd">   according to |dS/dt|^-1, which correspond to a flat distribution in t(S).</span>
@@ -1300,6 +1303,7 @@ table {
    <span class="n">ax_Sd</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$P(S)$&quot;</span><span class="p">)</span>
    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;phase_resampling.pdf&quot;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s">&#39;tight&#39;</span><span class="p">)</span> <span class="c"># Save pdf file</span>
 <span class="n">ef</span> <span class="n">PNwrappers</span><span class="p">():</span>
+   
    <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">   Wrappers of the PN integrators. Here we show how to perform orbit-averaged,</span>
 <span class="sd">   precession-averaged and hybrid PN inspirals using the various wrappers</span>
@@ -1350,6 +1354,7 @@ table {
    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> (theta1,theta2,deltaphi)=(</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">,</span><span class="si">%.3f</span><span class="s">)&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t1f</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">t2f</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">dpf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
    
 <span class="n">ef</span> <span class="n">compare_evolutions</span><span class="p">():</span>
+   
    <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">   Compare precession averaged and orbit averaged integrations. Plot the</span>
 <span class="sd">   evolution of xi, J, S and their relative differences between the two</span>
@@ -1429,14 +1434,6 @@ table {
    <span class="n">ax_Jd</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">Delta J/J \;[10^{-3}]$&quot;</span><span class="p">)</span>
    <span class="n">ax_Sd</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">Delta S / S$&quot;</span><span class="p">)</span>
    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;compare_evolutions.pdf&quot;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s">&#39;tight&#39;</span><span class="p">)</span> <span class="c"># Save pdf file</span>
-<span class="n">parameter_selection</span><span class="p">()</span>
-<span class="n">spin_angles</span><span class="p">()</span>
-<span class="n">phase_resampling</span><span class="p">()</span>
-<span class="n">PNevolve</span><span class="p">()</span>
-<span class="n">compare_evolutions</span><span class="p">()</span>
-<span class="n">phase_resampling</span><span class="p">()</span>
-<span class="n">spin_angles</span><span class="p">()</span>
-<span class="n">parameter_selection</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1476,6 +1473,7 @@ and recoil of the BH remnant following a merger.</p>
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.PNwrappers', this);">Show source &equiv;</a></p>
   <div id="source-precession.test.PNwrappers" class="source">
     <div class="codehilite"><pre><span class="k">def</span> <span class="nf">PNwrappers</span><span class="p">():</span>
+    
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Wrappers of the PN integrators. Here we show how to perform orbit-averaged,</span>
 <span class="sd">    precession-averaged and hybrid PN inspirals using the various wrappers</span>
@@ -1561,6 +1559,7 @@ Output is saved in ./spin_angles.pdf.</p>
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.compare_evolutions', this);">Show source &equiv;</a></p>
   <div id="source-precession.test.compare_evolutions" class="source">
     <div class="codehilite"><pre><span class="k">def</span> <span class="nf">compare_evolutions</span><span class="p">():</span>
+    
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Compare precession averaged and orbit averaged integrations. Plot the</span>
 <span class="sd">    evolution of xi, J, S and their relative differences between the two</span>
@@ -1674,6 +1673,7 @@ All quantities are given in total-mass units c=G=M=1.</p>
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.parameter_selection', this);">Show source &equiv;</a></p>
   <div id="source-precession.test.parameter_selection" class="source">
     <div class="codehilite"><pre><span class="k">def</span> <span class="nf">parameter_selection</span><span class="p">():</span>
+    
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.</span>
 <span class="sd">    All quantities are given in total-mass units c=G=M=1.</span>
@@ -1797,6 +1797,7 @@ Output is saved in ./phase_resampling.pdf and data stored in
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.phase_resampling', this);">Show source &equiv;</a></p>
   <div id="source-precession.test.phase_resampling" class="source">
     <div class="codehilite"><pre><span class="k">def</span> <span class="nf">phase_resampling</span><span class="p">():</span>
+    
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Precessional phase resampling. The magnidute of the total spin S is sampled</span>
 <span class="sd">    according to |dS/dt|^-1, which correspond to a flat distribution in t(S).</span>
@@ -1903,6 +1904,7 @@ detected as indicated in the legend of the plot. Output is saved in
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.spin_angles', this);">Show source &equiv;</a></p>
   <div id="source-precession.test.spin_angles" class="source">
     <div class="codehilite"><pre><span class="k">def</span> <span class="nf">spin_angles</span><span class="p">():</span>
+    
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Binary dynamics on the precessional timescale. The spin angles</span>
 <span class="sd">    theta1,theta2, DeltaPhi and theta12 are computed and plotted against the</span>
