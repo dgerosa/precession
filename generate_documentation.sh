@@ -1,7 +1,7 @@
 # Generate automatic html documentation using pdoc.
 # pdoc is available here https://github.com/BurntSushi/pdoc
 # and can be installed from Pypi: pip install pdoc
-# Html documentation is pushed on a dedicated git branch called gh-pages.
+# Html documentation is pushed to a dedicated git branch called gh-pages
 # and is it available at http://dgerosa.github.io/precession/
 
 
