@@ -15,13 +15,14 @@
 
 git checkout master
 
-python <<END
-import precession
-print "Generating documentation of precession, version", precession.__version__
-END
+#python <<END
+#import precession
+#print "Generating documentation of precession, version", precession.__version__
+#END
+#rm precession/*pyc precession/*/*pyc
+
 
 pdoc --html --overwrite precession
-rm precession/*pyc precession/*/*pyc
 
 temp1=`mktemp`
 cp precession/index.html $temp1
