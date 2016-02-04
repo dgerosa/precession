@@ -4286,7 +4286,7 @@ def finalspin(theta1,theta2,deltaPhi,q,S1,S2):
 
     **Call:**
 
-        Mfin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)
+        chifin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)
 
     **Parameters:**
 
@@ -4359,7 +4359,7 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
     
     **Call:**
 
-        Mfin=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)
+        vkick=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)
 
     **Parameters:**
 
@@ -4374,7 +4374,7 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
 
     **Returns:**
     
-    - `finalkick`: dimensionless kick of the BH remnant
+    - `vkick`: dimensionless kick of the BH remnant
     '''
 
     
