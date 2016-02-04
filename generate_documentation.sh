@@ -17,49 +17,50 @@
 git checkout master
 
 # Be sure your working branch is clean
-if [ -n "$(git status --porcelain)" ]; then 
-  echo "Generating documentation"; 
-else 
+#if [[ $((git-status---porcelain)) -eq 0 ]]; then 
+if [[ $((git-status---porcelain)) -eq 0 ]]; then 
   echo "Please, clean your working directory first."
   exit 1
+else 
+  echo "Generating documentation"; 
 fi
-
-# Check version of the code seen by pdoc
-python <<END
-import precession
-print "Python module precession, version", precession.__version__
-END
-
-# Generate documentation using pdc
-pdoc --html --overwrite precession
-# Get rid of precompiled files
-rm precession/*pyc precession/*/*pyc
-
-# Move html files somewhere else
-temp1=`mktemp`
-cp precession/index.html $temp1
-temp2=`mktemp`
-cp precession/test/index.html $temp2
-
-# Commit new html to master branch
-git add *
-git commit -m "generate_documentation.sh"
-git push
-
-# Move html files to gh-pages branch (directories there should exist)
-git checkout gh-pages
-mv $temp1 index.html
-mv $temp2 test/index.html
-
-# Commit new html to gh-pages branch
-git add *
-git commit -m "generate_documentation.sh"
-git push
-
-# Get rid of temp files
-rm -f $temp1 $temp2
-
-git checkout master
-
-
+# 
+# # Check version of the code seen by pdoc
+# python <<END
+# import precession
+# print "Python module precession, version", precession.__version__
+# END
+# 
+# # Generate documentation using pdc
+# pdoc --html --overwrite precession
+# # Get rid of precompiled files
+# rm precession/*pyc precession/*/*pyc
+# 
+# # Move html files somewhere else
+# temp1=`mktemp`
+# cp precession/index.html $temp1
+# temp2=`mktemp`
+# cp precession/test/index.html $temp2
+# 
+# # Commit new html to master branch
+# git add *
+# git commit -m "generate_documentation.sh"
+# git push
+# 
+# # Move html files to gh-pages branch (directories there should exist)
+# git checkout gh-pages
+# mv $temp1 index.html
+# mv $temp2 test/index.html
+# 
+# # Commit new html to gh-pages branch
+# git add *
+# git commit -m "generate_documentation.sh"
+# git push
+# 
+# # Get rid of temp files
+# rm -f $temp1 $temp2
+# 
+# git checkout master
+# 
+# 
 
