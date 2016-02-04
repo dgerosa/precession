@@ -5563,7 +5563,7 @@ the algorithms.</p>
 
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        Mfin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)</span>
+<span class="sd">        chifin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -5636,7 +5636,7 @@ the algorithms.</p>
 <span class="sd">    </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        Mfin=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)</span>
+<span class="sd">        vkick=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -5651,7 +5651,7 @@ the algorithms.</p>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    </span>
-<span class="sd">    - `finalkick`: dimensionless kick of the BH remnant</span>
+<span class="sd">    - `vkick`: dimensionless kick of the BH remnant</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     
@@ -9007,7 +9007,7 @@ to transfer binaries at r~10M.</p>
 <p>The final kick is returned in geometrical units (i.e. vkick/c) by default,
 and converted to km/s if kms=True.</p>
 <p><strong>Call:</strong></p>
-<div class="codehilite"><pre>Mfin=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)
+<div class="codehilite"><pre>vkick=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)
 </pre></div>
 
 
@@ -9024,7 +9024,7 @@ and converted to km/s if kms=True.</p>
 </ul>
 <p><strong>Returns:</strong></p>
 <ul>
-<li><code>finalkick</code>: dimensionless kick of the BH remnant</li>
+<li><code>vkick</code>: dimensionless kick of the BH remnant</li>
 </ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.finalkick', this);">Show source &equiv;</a></p>
@@ -9055,7 +9055,7 @@ and converted to km/s if kms=True.</p>
 <span class="sd">    </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        Mfin=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)</span>
+<span class="sd">        vkick=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -9070,7 +9070,7 @@ and converted to km/s if kms=True.</p>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    </span>
-<span class="sd">    - `finalkick`: dimensionless kick of the BH remnant</span>
+<span class="sd">    - `vkick`: dimensionless kick of the BH remnant</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     
@@ -9266,7 +9266,7 @@ than 1. This formula has to be applied <em>close to merger</em>, where numerical
 relativity simulations are available. You should do a PN evolution to
 transfer binaries at r~10M.</p>
 <p><strong>Call:</strong></p>
-<div class="codehilite"><pre>Mfin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)
+<div class="codehilite"><pre>chifin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)
 </pre></div>
 
 
@@ -9303,7 +9303,7 @@ transfer binaries at r~10M.</p>
 
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        Mfin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)</span>
+<span class="sd">        chifin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)</span>
 
 <span class="sd">    **Parameters:**</span>
 
