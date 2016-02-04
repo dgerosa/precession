@@ -1,20 +1,12 @@
 # Generate automatic html documentation using pdoc.
 # pdoc is available here https://github.com/BurntSushi/pdoc
 # and can be installed from Pypi: pip install pdoc
-
-#python <<END
-#import precession
-#print "Generating documentation of precession, version", precession.__version__
-#END
-
-#pdoc --html --overwrite precession
-#rm precession/*pyc precession/*/*pyc
+# Html documentation is pushed on a dedicated git branch called gh-pages.
+# and is it available at http://dgerosa.github.io/precession/
 
 
-##################
-
-
-git checkout master -q
+# Start from master
+git checkout master
 
 # Be sure your working branch is clean
 if [ "$(git status --porcelain)" ]; then 
@@ -47,7 +39,7 @@ git commit -m "generate_documentation.sh"
 git push
 
 # Move html files to gh-pages branch (directories there should exist)
-git checkout gh-pages -q
+git checkout gh-pages
 mv $temp1 index.html
 mv $temp2 test/index.html
 
@@ -59,7 +51,5 @@ git push
 # Get rid of temp files
 rm -f $temp1 $temp2
 
-git checkout master -q
-
-
-
+# Back to master
+git checkout master
