@@ -2835,7 +2835,7 @@ def evolve_J(xi_vals,J_vals,r_vals,q,S1,S2):
 def evolve_angles_single(theta1_i,theta2_i,deltaphi_i,r_vals,q,S1,S2):
 
     '''
-    Auxiliary function, see `evolve_angles`.
+    Auxiliary function, see `precession.evolve_angles`.
 
     **Call:**
 
