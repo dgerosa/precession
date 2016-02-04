@@ -15,14 +15,14 @@
 
 git checkout master
 
-#python <<END
-#import precession
-#print "Generating documentation of precession, version", precession.__version__
-#END
-#rm precession/*pyc precession/*/*pyc
-
+python <<END
+import precession
+print "Generating documentation of precession, version", precession.__version__
+END
 
 pdoc --html --overwrite precession
+
+rm precession/*pyc precession/*/*pyc
 
 temp1=`mktemp`
 cp precession/index.html $temp1
@@ -35,13 +35,14 @@ git commit -m "generate_documentation.sh"
 git push
 
 git checkout gh-pages
-mv $temp index.html
+mv $temp1 index.html
 mv $temp2 test/index.html
 
 git add *
 git commit -m "generate_documentation.sh"
+git push
 
-rm $temp1 $temp2
+rm -f $temp1 $temp2
 
 git checkout master
 
