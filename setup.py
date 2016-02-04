@@ -1,10 +1,7 @@
 '''
-To publish on Pypi type
+To publish on Pypi:
     python setup.py sdist
     python setup.py sdist upload
-    
-To generate automatic documentation
-    pdoc --html --html-dir=documentation precession
 '''
 
 from setuptools import setup
