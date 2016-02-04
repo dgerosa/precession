@@ -204,6 +204,8 @@ flags_q1=list(np.zeros((20), dtype=bool))
 Global flags to reduce warnings in the equal-mass limit q=1.
 '''
 
+
+
 #################################
 ############# LIMITS ############
 #################################
@@ -406,7 +408,7 @@ def xi_at_Jlim(q,S1,S2,r,more=False):
     - `S1`: spin magnitude of the primary BH.
     - `S2`: spin magnitude of the secondary BH.
     - `r`: binary separation.
-    - `more`: if `True` returns additional quantities,
+    - `more`: if `True` returns additional quantities.
 
     **Returns:**
 
@@ -1049,7 +1051,7 @@ def xi_allowed(J,q,S1,S2,r, more=False,verbose=False):
     - `S1`: spin magnitude of the primary BH.
     - `S2`: spin magnitude of the secondary BH.
     - `r`: binary separation.
-    - `more`: if `True` returns additional quantities,
+    - `more`: if `True` returns additional quantities.
     - `verbose`: if `True` print additional information.
 
     **Returns:**
@@ -1144,7 +1146,7 @@ def resonant_finder(xi,q,S1,S2,r, more=False):
     - `S1`: spin magnitude of the primary BH.
     - `S2`: spin magnitude of the secondary BH.
     - `r`: binary separation.
-    - `more`: if `True` returns additional quantities,
+    - `more`: if `True` returns additional quantities.
 
     **Returns:**
 
@@ -1307,7 +1309,6 @@ def from_the_angles_inf(theta1_inf,theta2_inf,q,S1,S2):
         kappa_inf= (S1*np.cos(theta1_inf)+S2*np.cos(theta2_inf))*M**-2
         return xi,kappa_inf
 
-
     
 def aligned_configurations(q,S1,S2,r):
 
@@ -1357,7 +1358,6 @@ def aligned_configurations(q,S1,S2,r):
     Jdownup=np.abs(L-S1+S2)
     
     return xiupup,xidowndown,xiupdown,xidownup,Jupup,Jdowndown,Jupdown,Jdownup
-
 
 
 def updown(q,S1,S2):
@@ -2627,6 +2627,7 @@ def dJdr(J,r,xi,q,S1,S2):
 
     return dJdL*dLdr
 
+
 def dJdL(J,r,xi,q,S1,S2):
 
     '''
@@ -3865,7 +3866,6 @@ def orbit_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
         return theta1_fvals, theta2_fvals, deltaphi_fvals
 
 
-
 def orbit_vectors_single(J,xi,S,r_vals,q,S1,S2):
 
     '''
@@ -4101,6 +4101,7 @@ def hybrid_single(xi,kappa_inf,r_vals,q,S1,S2,r_t):
         
     return savename
 
+
 def hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t):
  
     '''
@@ -4204,6 +4205,246 @@ def hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t):
 
 
 
+#################################
+########## BH REMNANT ###########
+#################################
+
+
+def finalmass(theta1,theta2,deltaPhi,q,S1,S2):
+
+    '''
+    Estimate the final mass of the BH renmant following a BH merger. We
+    implement the fitting formula to numerical relativity simulations by
+    Barausse Morozova Rezzolla 2012.  See also Gerosa and Sesana 2015. This
+    formula has to be applied *close to merger*, where numerical relativity
+    simulations are available. You should do a PN evolution to transfer binaries
+    at r~10M.
+
+
+    **Call:**
+
+        Mfin=precession.finalmass(theta1,theta2,deltaPhi,q,S1,S2)
+
+    **Parameters:**
+
+    - `theta1`: angle between the spin of the primary and the orbital angular momentum.
+    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.
+    - `deltaphi`: angle between the projection of the two spins on the orbital plane.
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+
+    **Returns:**
+    
+    - `Mfin`: mass of the BH remnant, in units of the (pre-merger) binary total mass
+    '''
+
+    chi1=S1/(M/(1.+q))**2   # Dimensionless spin
+    chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
+    eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
+    
+    # Spins here are defined in a frame with L along z and S1 in xz
+    hatL=np.array([0,0,1])
+    hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
+    hatS2 = np.array([np.sin(theta2)*np.cos(deltaPhi),np.sin(theta2)*np.sin(deltaPhi),np.cos(theta2)])
+    #Useful spin combinations. 
+    Delta= (q*chi2*hatS2-chi1*hatS1)/(1.+q)
+    Delta_par=np.dot(Delta,hatL)
+    Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
+    chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
+    chit_par=np.dot(chit,hatL)
+    chit_perp=np.linalg.norm(np.cross(chit,hatL))
+    
+    #Final mass. Barausse Morozova Rezzolla 2012
+    p0=0.04827
+    p1=0.01707
+    Z1=1.+ pow(1.-pow(chit_par,2.),1./3.)* (pow(1.+chit_par,1./3.)+pow(1.-chit_par,1./3.))
+    Z2=pow(3.*pow(chit_par,2.)+pow(Z1,2.),1./2.)
+    risco=3.+Z2-math.copysign(1.,chit_par)*pow((3.-Z1)*(3.+Z1+2.*Z2),1./2.)
+    Eisco=pow(1.-2./(3.*risco),1./2)
+    #Radiated energy, in unit of the initial total mass of the binary
+    Erad= eta*(1.-Eisco)+4.*pow(eta,2.)*(4.*p0+16.*p1*chit_par*(chit_par+1.)+Eisco-1.)
+    Mfin=M*(1.- Erad) # Final mass
+        
+    return Mfin
+    
+
+def finalspin(theta1,theta2,deltaPhi,q,S1,S2):
+
+    '''
+    Estimate the final mass of the BH renmant following a BH merger. We
+    implement the fitting formula to numerical relativity simulations by
+    Barausse Rezzolla 2009.  See also Gerosa and Sesana 2015. We return the
+    dimensionless spin, which is the spin in units of the (pre-merger) binary
+    total mass, not the spin in units of the actual BH remnant. This can be
+    obtained combing this function with `finalmass`. Maximally spinning BHs are
+    returned if/whenever the fitting formula returns dimensionless spins greater
+    than 1. This formula has to be applied *close to merger*, where numerical
+    relativity simulations are available. You should do a PN evolution to
+    transfer binaries at r~10M.
+
+
+    **Call:**
+
+        Mfin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)
+
+    **Parameters:**
+
+    - `theta1`: angle between the spin of the primary and the orbital angular momentum.
+    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.
+    - `deltaphi`: angle between the projection of the two spins on the orbital plane.
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+
+    **Returns:**
+    
+    - `chifin`: dimensionless spin of the BH remnant
+    '''
+    
+    chi1=S1/(M/(1.+q))**2   # Dimensionless spin
+    chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
+    eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
+    
+    # Spins here are defined in a frame with L along z and S1 in xz
+    hatL=np.array([0,0,1])
+    hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
+    hatS2 = np.array([np.sin(theta2)*np.cos(deltaPhi),np.sin(theta2)*np.sin(deltaPhi),np.cos(theta2)])
+    #Useful spin combinations. 
+    Delta= (q*chi2*hatS2-chi1*hatS1)/(1.+q)
+    Delta_par=np.dot(Delta,hatL)
+    Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
+    chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
+    chit_par=np.dot(chit,hatL)
+    chit_perp=np.linalg.norm(np.cross(chit,hatL))
+    
+    #Final spin. Barausse Rezzolla 2009
+    t0=-2.8904
+    t2=-3.51712
+    t3=2.5763
+    s4=-0.1229
+    s5=0.4537
+    smalll = 2.*pow(3.,1./2.) + t2*eta+t3*pow(eta,2.) + s4*np.dot(chit,chit)*pow(1.+q,4.)*pow(1+q*q,-2.) + (s5*eta+t0+2.)*chit_par*pow(1.+q,2)*pow(1.+q*q,-1)
+    chifin=np.linalg.norm( chit+hatL*smalll*q/pow(1.+q,2.) )
+    if chifin>1.: #Check on the final spin, as suggested by Emanuele
+        print "[finalspin] Warning: got chi>1, force chi=1"
+        chifin==1.
+        
+    return chifin
+    
+    
+def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
+
+    '''
+    Estimate the final kick of the BH remnant following a BH merger. We
+    implement the fitting formula to numerical relativity simulations developed
+    by the Rochester group. The larger contribution comes from the component of
+    the kick parallel to L. Flags let you switch on and off the various
+    contributions (all on by default): superkicks (Gonzalez et al. 2007a;
+    Campanelli et al. 2007), hang-up kicks (Lousto & Zlochower 2011),
+    cross-kicks (Lousto & Zlochower 2013). The orbital-plane kick components are
+    implemented as described in Kesden et al. 2010a. See also Gerosa and Sesana
+    2015.
+
+    The final kick depends on the orbital phase at merger Theta. By default,
+    this is assumed to be randonly distributed in [0,2pi]. The maximum kick is
+    realized for Theta=0 and can be computed with the optional argument
+    maxkick=True. This formula has to be applied *close to merger*, where
+    numerical relativity simulations are available. You should do a PN evolution
+    to transfer binaries at r~10M.
+   
+    The final kick is returned in geometrical units (i.e. vkick/c) by default,
+    and converted to km/s if kms=True.
+    
+    
+    **Call:**
+
+        Mfin=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)
+
+    **Parameters:**
+
+    - `theta1`: angle between the spin of the primary and the orbital angular momentum.
+    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.
+    - `deltaphi`: angle between the projection of the two spins on the orbital plane.
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+    - `maxkick`: if `True` maximizes over the orbital phase at merger.
+    - `kms`: if `True` convert result to km/s.
+
+    **Returns:**
+    
+    - `finalkick`: dimensionless kick of the BH remnant
+    '''
+
+    
+    chi1=S1/(M/(1.+q))**2   # Dimensionless spin
+    chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
+    eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
+    
+    # Spins here are defined in a frame with L along z and S1 in xz
+    hatL=np.array([0,0,1])
+    hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
+    hatS2 = np.array([np.sin(theta2)*np.cos(deltaPhi),np.sin(theta2)*np.sin(deltaPhi),np.cos(theta2)])
+    #Useful spin combinations. 
+    Delta= (q*chi2*hatS2-chi1*hatS1)/(1.+q)
+    Delta_par=np.dot(Delta,hatL)
+    Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
+    chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
+    chit_par=np.dot(chit,hatL)
+    chit_perp=np.linalg.norm(np.cross(chit,hatL))
+    
+    #Kick. Coefficients are quoted in km/s
+    
+    # vm and vperp are like in Kesden at 2010a, vpar is modified from Lousto Zlochower 2013
+    xi=np.radians(145.)
+    A=1.2e4
+    B=-0.93
+    H=6.9e3
+
+    # Switch on/off the various (super)kick contribution. Default are all on    
+    superkick=True
+    hangupkick=True
+    crosskick=True
+    
+    if superkick==True:
+        V11=3677.76
+    else:
+        V11=0.
+    if hangupkick==True:    
+        VA=2481.21
+        VB=1792.45
+        VC=1506.52
+    else:
+        VA=0.
+        VB=0.
+        VC=0.
+    if crosskick==True:
+        C2=1140.
+        C3=2481.
+    else:
+        C2=0.
+        C3=0.
+        
+    if maxkick==True:
+        bigTheta=0
+    else:
+        bigTheta=np.random.uniform(0., 2.*np.pi)
+    
+    vm=A*eta*eta*(1.+B*eta)*(1.-q)/(1.+q)
+    vperp=H*eta*eta*Delta_par
+    vpar=16.*eta*eta* (Delta_perp*(V11+2.*VA*chit_par+4.*VB*pow(chit_par,2.)+8.*VC*pow(chit_par,3.)) + chit_perp*Delta_par*(2.*C2+4.*C3*chit_par)) * np.cos(bigTheta)         
+    vkick=np.linalg.norm([vm+vperp*np.cos(xi),vperp*np.sin(xi),vpar])
+
+    if vkick>5000:
+        print "[finalkick] Warning; I got v_kick>5000km/s. This shouldn't be possibile"
+    
+    if kms:
+        return vkick
+    else:  # speed of light in km/s
+        return vkick/299792.458
+
+
 
 #################################
 ########## UTILITIES ############
@@ -4298,7 +4539,5 @@ def cutoff(detector,M_msun):
         assert False, "[cutoff] Please select 'space' or 'ground'. Otherwise run ftor with the chosen frequency"
     rcut=ftor(fcut,M_msun)
     return rcut, fcut
-        
-        
-
+    
 

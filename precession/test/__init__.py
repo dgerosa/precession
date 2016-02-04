@@ -13,6 +13,7 @@ import pylab
 import matplotlib
 
 def parameter_selection():
+    
     '''
     Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.
     All quantities are given in total-mass units c=G=M=1.
@@ -111,6 +112,7 @@ def parameter_selection():
 
 
 def spin_angles():
+    
     '''
     Binary dynamics on the precessional timescale. The spin angles
     theta1,theta2, DeltaPhi and theta12 are computed and plotted against the
@@ -185,6 +187,7 @@ def spin_angles():
 
 
 def phase_resampling():
+    
     '''
     Precessional phase resampling. The magnidute of the total spin S is sampled
     according to |dS/dt|^-1, which correspond to a flat distribution in t(S).
@@ -265,6 +268,7 @@ def phase_resampling():
 
 
 def PNwrappers():
+    
     '''
     Wrappers of the PN integrators. Here we show how to perform orbit-averaged,
     precession-averaged and hybrid PN inspirals using the various wrappers
@@ -324,6 +328,7 @@ def PNwrappers():
     
 
 def compare_evolutions():
+    
     '''
     Compare precession averaged and orbit averaged integrations. Plot the
     evolution of xi, J, S and their relative differences between the two
@@ -411,15 +416,3 @@ def compare_evolutions():
     ax_Sd.set_ylabel("$\\Delta S / S$")
 
     fig.savefig("compare_evolutions.pdf",bbox_inches='tight') # Save pdf file
-
-
-#parameter_selection()
-#spin_angles()
-#phase_resampling()
-#PNevolve()
-#compare_evolutions()
-
-
-#phase_resampling()
-#spin_angles()
-#parameter_selection()
