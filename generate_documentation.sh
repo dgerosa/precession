@@ -60,7 +60,7 @@ END
     cp precession/test/index.html $temp2
 
     # Commit new html to master branch
-    git add *
+    git add precession/index.html precession/test/index.html
     git commit -m "generate_documentation.sh"
     git push
 
@@ -70,7 +70,7 @@ END
     mv $temp2 test/index.html
 
     # Commit new html to gh-pages branch
-    git add *
+    git add index.html test/index.html
     git commit -m "generate_documentation.sh"
     git push
 
