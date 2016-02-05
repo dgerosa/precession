@@ -1,3 +1,7 @@
+'''
+PLEASE WRITE ME
+'''
+
 
 import sys,os
 import precession 
@@ -326,6 +330,14 @@ def PNwrappers():
     t1f,t2f,dpf=precession.hybrid(xii,kappainf,r_vals,q,S1,S2,rt)
     print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
     
+    print "\n *Properties of the BH remnant*"  
+    Mfin=precession.finalmass(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)    
+    print "\t M_f=%.3f" %Mfin
+    chifin=precession.finalspin(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)
+    print "\t chi_f=%.3f, S_f=%.3f" %(chifin,chifin*Mfin**2)
+    vkick=precession.finalkick(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)
+    print "\t vkick=%.5f" %(vkick) # Geometrical units c=1
+
 
 def compare_evolutions():
     
