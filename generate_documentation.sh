@@ -13,8 +13,8 @@ while test $# -gt 0; do
                         echo "and published at http://dgerosa.github.io/precession/"
                         echo " "
                         echo "options:"
-                        echo "-h, --help       show brief help"
-                        echo "-web             push documentation to http://dgerosa.github.io/precession/"
+                        echo "   -h, --help       show brief help"
+                        echo "   -web             push documentation to http://dgerosa.github.io/precession/"
                         exit 0
                         ;;
                 -web)
