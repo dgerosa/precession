@@ -82,7 +82,16 @@ END
 
 else
     echo "Generating documentation, local only"; 
+    
+# Check version of the code seen by pdoc
+python <<END
+import precession
+print "Python module precession, version", precession.__version__
+END
+
+    # Generate documentation using pdc
     pdoc --html --overwrite precession
+    # Get rid of precompiled files
     rm precession/*pyc precession/*/*pyc
 
 fi
