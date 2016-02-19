@@ -3917,7 +3917,7 @@ def orbit_vectors_single(J,xi,S,r_vals,q,S1,S2):
     return savename
 
 
-def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
+def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q_vals,S1_vals,S2_vals):
 
     '''
     Wrapper of `precession.orbav_integrator` to enable parallelization through
@@ -3926,8 +3926,8 @@ def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     will be used by default). Input are given in terms of J, xi and S; outputs
     are projected on a reference frame such that Jx=Jy=Ly=0 at the initial
     separation (cf. `precession.Jframe_projection`). Vectors, not unit vectros!,
-    are returned. Evolve a sequence of binaries with the SAME q, S1,S2 but
-    different xi and initial values of J and S; save outputs at r_vals. The
+    are returned. Evolve a sequence of binaries with the different q, S1, S2, xi
+    and initial values of J and S; save outputs at SAME separations r_vals. The
     initial configuration must be compatible with r_vals[0]. Output is a 2D
     array, where e.g. J_vals[0] is the first binary (1D array at all output
     separations) and J_vals[0][0] is the first binary at the first output
@@ -3936,8 +3936,7 @@ def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
     **Call:**
-
-        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2)
+        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,S1_vals,S2_vals)
 
     **Parameters:**
 
@@ -3945,9 +3944,9 @@ def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     - `xii_vals`: initial condition for xi (array).
     - `Si_vals`: initial condition for S (array).
     - `r_vals`: binary separation (array).
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
+    - `q_vals`: binary mass ratio. Must be q<=1 (array).
+    - `S1_vals`: spin magnitude of the primary BH (array).
+    - `S2_vals`: spin magnitude of the secondary BH (array).
 
     **Returns:**
     
@@ -3966,13 +3965,14 @@ def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     
     single_flag=False
     try: #Convert float to array if you're evolving just one binary
-        len(J_vals)
-        len(xi_vals)
-        len(S_vals)
+        len(q_vals)
     except:
         J_vals=[J_vals]
         xi_vals=[xi_vals]
         S_vals=[S_vals]
+        q_vals=[q_vals]
+        S1_vals=[S1_vals]
+        S2_vals=[S2_vals]
         single_flag=True
     try: # Set default
         CPUs
@@ -3982,12 +3982,12 @@ def orbit_vectors(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     
     # Parallelization
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(orbit_vectors_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=True) 
+        filelist=parmap.starmap(orbit_vectors_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
     elif CPUs==1: # 1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(orbit_vectors_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=False) 
+        filelist=parmap.starmap(orbit_vectors_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
     else: # Run on a given number of CPUs        
         p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(orbit_vectors_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,pool=p) 
+        filelist=parmap.starmap(orbit_vectors_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p) 
 
     Lx_fvals=[]
     Ly_fvals=[]
@@ -4034,12 +4034,17 @@ def hybrid_single(xi,kappa_inf,r_vals,q,S1,S2,r_t):
     - `q`: binary mass ratio. Must be q<=1.
     - `S1`: spin magnitude of the primary BH.
     - `S2`: spin magnitude of the secondary BH.
-    - `r_transition`: transition radius between orbit- and precession-averaged approach.
+    - `r_t`: transition radius between orbit- and precession-averaged approach.
 
     **Returns:**
 
     - `savename`: checkpoint filename.
     '''
+    global flags_q1
+    if q==1:
+        if flags_q1[14]==False:
+            print "[hybrid] Warning q=1: required intial condition is S, not kappa_inf."
+            flags_q1[14]=True # Suppress future warnings
 
     os.system("mkdir -p "+storedir) 
     savename= storedir+"/hybrid_"+'_'.join([str(x) for x in (xi,kappa_inf,max(r_vals),min(r_vals),len(r_vals),q,S1,S2,r_t)])+".dat"
@@ -4110,20 +4115,20 @@ def hybrid_single(xi,kappa_inf,r_vals,q,S1,S2,r_t):
     return savename
 
 
-def hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t):
+def hybrid(xi_vals,kappainf_vals,r_vals,q_vals,S1_vals,S2_vals,r_t):
  
     '''
     Hybrid inspiral. Evolve a binary FROM INIFINITELY large separations (as
-    specified by kappa_inf and xi) till the threshold r_transition using the
-    precession-averaged approach, and then from r_transition to the end of the
-    inspiral using an orbit-averaged integration to track the precessional
-    phase.
+    specified by kappa_inf and xi) till the threshold r_t using the
+    precession-averaged approach, and then from r_t to the end of the inspiral
+    using an orbit-averaged integration to track the precessional phase.
 
     Parallelization is implemented through the python parmap module; the number
     of available cores can be specified using the integer global variable
     `precession.CPUs` (all available cores will be used by default). Evolve a
-    sequence of binaries with the SAME q, S1,S2 but different xi and kappa_inf;
-    save outputs at r_vals.
+    sequence of binaries with the different q, S1,S2, xi and kappa_inf. Save
+    outputs at SAME separations r_vals; r_t must also be the same for all
+    binaries
 
     The initial condition is NOT returned by this function. Outputs are given in
     terms of the angles theta1, theta2 and deltaphi as 2D arrays, where e.g
@@ -4132,18 +4137,17 @@ def hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t):
     is a scalar).
 
     **Call:**
-
-        theta1f_vals,theta2f_vals,deltaphif_vals=precession.hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t)
+        theta1f_vals,theta2f_vals,deltaphif_vals=precession.hybrid(xi_vals,kappainf_vals,r_vals,q_vals,S1_vals,S2_vals,r_t)
 
     **Parameters:**
     
     - `xi_vals`: projection of the effective spin along the orbital angular momentum (array).
     - `kappainf_vals`: asymtotic value of kappa at large separations (array).
     - `r_vals`: binary separation (array).
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
-    - `r_transition`: transition radius between orbit- and precession-averaged approach.
+    - `q_vals`: binary mass ratio. Must be q<=1 (array).
+    - `S1_vals`: spin magnitude of the primary BH (array).
+    - `S2_vals`: spin magnitude of the secondary BH (array).
+    - `r_t`: transition radius between orbit- and precession-averaged approach.
 
     **Returns:**
 
@@ -4152,25 +4156,19 @@ def hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t):
     - `deltaphif_vals`: solutions for deltaphi (2D array).
     '''
 
-
-
     global CPUs
-    global flags_q1
-    if q==1:
-        if flags_q1[14]==False:
-            print "[hybrid] Warning q=1: required intial condition is S, not kappa_inf."
-            flags_q1[14]=True # Suppress future warnings
 
     single_flag=False
 
     try: #Convert float to array if you're evolving just one binary 
-        len(xi_vals)
-        len(kappainf_vals)
+        len(q_vals)
     except:
         single_flag=True
         xi_vals=[xi_vals]
         kappainf_vals=[kappainf_vals]
-
+        q_vals=[q_vals]
+        S1_vals=[S1_vals]
+        S2_vals=[S2_vals]
     try: # Set defaults
         CPUs
     except:
@@ -4183,12 +4181,12 @@ def hybrid(xi_vals,kappainf_vals,r_vals,q,S1,S2,r_t):
 
         #Parallelization
         if CPUs==0: #Run on all cpus on the current machine! (default option) 
-            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals),r_vals,q,S1,S2,r_t,parallel=True)
+            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals,[r_t for i in range(len(q_vals))]),parallel=True)
         elif CPUs==1: #1 cpus done by explicitely removing parallelization 
-            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals),r_vals,q,S1,S2,r_t,parallel=False)
+            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals,[r_t for i in range(len(q_vals))]),parallel=False)
         else: # Run on a given number of CPUs
             p = multiprocessing.Pool(CPUs)
-            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals),r_vals,q,S1,S2,r_t,pool=p)
+            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals,[r_t for i in range(len(q_vals))]),pool=p)
 
         theta1_fvals=[]
         theta2_fvals=[]
@@ -4227,7 +4225,6 @@ def finalmass(theta1,theta2,deltaPhi,q,S1,S2):
     formula has to be applied *close to merger*, where numerical relativity
     simulations are available. You should do a PN evolution to transfer binaries
     at r~10M.
-
 
     **Call:**
 
@@ -4290,7 +4287,6 @@ def finalspin(theta1,theta2,deltaPhi,q,S1,S2):
     dimensionless spins greater than 1. This formula has to be applied *close to
     merger*, where numerical relativity simulations are available. You should do
     a PN evolution to transfer binaries at r~10M.
-
 
     **Call:**
 
@@ -4363,7 +4359,6 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
    
     The final kick is returned in geometrical units (i.e. vkick/c) by default,
     and converted to km/s if kms=True.
-    
     
     **Call:**
 
