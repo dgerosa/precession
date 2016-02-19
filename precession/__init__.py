@@ -3095,33 +3095,33 @@ def Jofr_infinity_checkpoint(xi,kappa_inf,r_vals,q,S1,S2):
     return savename
 
 
-def evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q,S1,S2):
+def evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q_vals,S1_vals,S2_vals):
 
     '''
     Wrapper of `precession.Jofr_infinity` to enable parallelization through the
     python `parmap` module; the number of available cores can be specified using
     the integer global variable `precession.CPUs` (all available cores will be
-    used by default). Evolve a sequence of binaries with the SAME q, S1, S2 but
-    different xi and initial values of J and save outputs at r_vals. Output is a
-    2D array, where e.g. J_vals[0] is the first binary (1D array at all output
-    separations) and J_vals[0][0] is the first binary at the first output
-    separation (this is a scalar). We strongly reccommend using this function,
-    even for a single binary.
+    used by default). Evolve a sequence of binaries with the different q, S1,
+    S2, xi and initial values of J and save outputs at the SAME separations
+    r_vals. Output is a 2D array, where e.g. J_vals[0] is the first binary (1D
+    array at all output separations) and J_vals[0][0] is the first binary at the
+    first output separation (this is a scalar). We strongly reccommend using
+    this function, even for a single binary.
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
     **Call:**
 
-        Jf_vals=precession.evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q,S1,S2)
+        Jf_vals=precession.evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q_vals,S1_vals,S2_vals)
 
     **Parameters:**
 
     - `xi_vals`: projection of the effective spin along the orbital angular momentum (array).
     - `kappainf_vals`: asymptotic value of kappa at large separations (array).
     - `r_vals`: binary separation (array).
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
+    - `q_vals`: binary mass ratio. Must be q<=1 (array).
+    - `S1_vals`: spin magnitude of the primary BH (array).
+    - `S2_vals`: spin magnitude of the secondary BH (array).
 
     **Returns:**
 
@@ -3132,11 +3132,13 @@ def evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q,S1,S2):
 
     single_flag=False
     try: #Convert float to array if you're evolving just one binary
-        len(xi_vals)
-        len(kappainf_vals)
+        len(q_vals)
     except:
         xi_vals=[xi_vals]
         kappainf_vals=[kappainf_vals]
+        q_vals=[q_vals]
+        S1_vals=[S1_vals]
+        S2_vals=[S2_vals]
         single_flag=True
     try: # Set default
         CPUs
@@ -3145,12 +3147,12 @@ def evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q,S1,S2):
         print "[evolve_J_infinity] Default parallel computation"
     # Parallelization
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals),r_vals,q,S1,S2,parallel=True) 
+        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
     elif CPUs==1: # 1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals),r_vals,q,S1,S2,parallel=False) 
+        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
     else: # Run on a given number of CPUs        
         p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals),r_vals,q,S1,S2,pool=p) 
+        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p) 
 
     J_fvals=[]
     for index, file in enumerate(filelist):
@@ -3262,46 +3264,46 @@ def kappa_backwards_checkpoint(xi,J,r,q,S1,S2):
     return savename
 
 
-def evolve_J_backwards(xi_vals,J_vals,r,q,S1,S2):
+def evolve_J_backwards(xi_vals,J_vals,r,q_vals,S1_vals,S2_vals):
 
     '''
     Wrapper of `precession.kappa_backwards` to enable parallelization through
     the python `parmap` module; the number of available cores can be specified
     using the integer global variable `precession.CPUs` (all available cores
-    will be used by default). Evolve a sequence of binaries with the SAME q,
-    S1,S2, from the SAME separation r, but different xi and initial kappa_inf.
+    will be used by default). Evolve a sequence of binaries with the different
+    q, S1,S2, xi and kappa_inf from the SAME separation r.
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
  
     **Call:**
 
-        kappainf_vals=precession.evolve_J_backwards(xi_vals,J_vals,r,q,S1,S2)
+        kappainf_vals=precession.evolve_J_backwards(xi_vals,J_vals,r,q_vals,S1_vals,S2_vals)
 
     **Parameters:**
 
     - `xi_vals`: projection of the effective spin along the orbital angular momentum (array).
     - `J`: magnitude of the total angular momentum (array).
     - `r`: binary separation.
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
+    - `q_vals`: binary mass ratio. Must be q<=1 (array).
+    - `S1_vals`: spin magnitude of the primary BH (array).
+    - `S2_vals`: spin magnitude of the secondary BH (array).
 
     **Returns:**
 
     - `kappainf_vals`: asymptotic value of kappa at large separations (array).
     '''
 
-
-
     global CPUs
 
     flag=False
     try: #Convert float to array, if you're evolving just one binary
-        len(xi_vals)
-        len(J_vals)
+        len(q_vals)
     except:
         xi_vals=[xi_vals]
         J_vals=[J_vals]
+        q_vals=[q_vals]
+        S1_vals=[S1_vals]
+        S2_vals=[S2_vals]
         flag=True
     try:
         CPUs
@@ -3310,12 +3312,12 @@ def evolve_J_backwards(xi_vals,J_vals,r,q,S1,S2):
         print "[evolve_J_backwards] Default parallel computation"
     #Parallelization... python is cool indeed
     if CPUs==0: #Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals),r,q,S1,S2,parallel=True) 
+        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals,[r for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
     elif CPUs==1: #1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals),r,q,S1,S2,parallel=False) 
+        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals,[r for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
     else: # Run on a given number of CPUs        
         p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals),r,q,S1,S2,pool=p) 
+        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals,[r for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p) 
 
     kappainf_vals=[]
     for index, file in enumerate(filelist):
@@ -3587,6 +3589,12 @@ def orbit_averaged_single(J,xi,S,r_vals,q,S1,S2):
     os.system("mkdir -p "+storedir) 
     savename= storedir+"/orbav_"+'_'.join([str(x) for x in (J,xi,S,max(r_vals),min(r_vals),len(r_vals),q,S1,S2)])+".dat"
 
+    global flags_q1 
+    if q==1:
+        if flags_q1[13]==False:
+            print "[orbit_averaged] Warning q=1: Input/output for S is actually cos(varphi)"       
+            flags_q1[13]=True
+
     if not os.path.isfile(savename):
         print "[orbit_averaged] Transferring binary. Output:", savename
         outfilesave = open(savename,"w",0)
@@ -3616,17 +3624,17 @@ def orbit_averaged_single(J,xi,S,r_vals,q,S1,S2):
     return savename
 
 
-def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
+def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q_vals,S1_vals,S2_vals):
 
     '''
     Wrapper of `precession.orbav_integrator` to enable parallelization through
     the python parmap module; the number of available cores can be specified
     using the integer global variable `precession.CPUs` (all available cores
     will be used by default). Input/outputs are given in terms of J, xi and S.
-    Evolve a sequence of binaries with the SAME q, S1,S2 but different xi and
-    initial values of J and S; save outputs at r_vals. The initial configuration
-    must be compatible with r_vals[0]. Output is a 2D array, where e.g.
-    J_vals[0] is the first binary (1D array at all output separations) and
+    Evolve a sequence of binaries with the different q, S1,S2, xi and initial
+    values of J and S; save outputs at the SAME separations r_vals. The initial
+    configuration must be compatible with r_vals[0]. Output is a 2D array, where
+    e.g. J_vals[0] is the first binary (1D array at all output separations) and
     J_vals[0][0] is the first binary at the first output separation (this is a
     scalar).
 
@@ -3642,9 +3650,9 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     - `xii_vals`: initial condition for xi (array).
     - `Si_vals`: initial condition for S (array).
     - `r_vals`: binary separation (array).
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
+    - `q_vals`: binary mass ratio. Must be q<=1 (array).
+    - `S1_vals`: spin magnitude of the primary BH (array).
+    - `S2_vals`: spin magnitude of the secondary BH (array).
 
     **Returns:**
 
@@ -3655,21 +3663,17 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     
     global CPUs
     
-    global flags_q1 
-    if q==1:
-        if flags_q1[13]==False:
-            print "[orbit_averaged] Warning q=1: Input/output for S is actually cos(varphi)"       
-            flags_q1[13]=True
 
     single_flag=False
     try: #Convert float to array if you're evolving just one binary
-        len(J_vals)
-        len(xi_vals)
-        len(S_vals)
+        len(q_vals)
     except:
         J_vals=[J_vals]
         xi_vals=[xi_vals]
         S_vals=[S_vals]
+        q_vals=[q_vals]
+        S1_vals=[S1_vals]
+        S2_vals=[S2_vals]
         single_flag=True
     try: # Set default
         CPUs
@@ -3679,12 +3683,12 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q,S1,S2):
     
     # Parallelization
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=True) 
+        filelist=parmap.starmap(evolve_angles_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
     elif CPUs==1: # 1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,parallel=False) 
+        filelist=parmap.starma(evolve_angles_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
     else: # Run on a given number of CPUs        
         p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals),r_vals,q,S1,S2,pool=p) 
+        filelist=parmap.starmap(evolve_angles_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p) 
 
     J_fvals=[]
     S_fvals=[]
