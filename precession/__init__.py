@@ -2780,7 +2780,7 @@ def evolve_J(xi_vals,J_vals,r_vals,q_vals,S1_vals,S2_vals):
  
     **Call:**
 
-        Jf_vals=precession.evolve_J(xi_vals,Ji_vals,r_vals,q,S1,S2)
+        Jf_vals=precession.evolve_J(xi_vals,Ji_vals,r_vals,q_vals,S1_vals,S2_vals)
      
     **Parameters:**
 
@@ -2797,10 +2797,10 @@ def evolve_J(xi_vals,J_vals,r_vals,q_vals,S1_vals,S2_vals):
     '''
 
     global CPUs
-
     single_flag=False
+    
     try: # Convert float to array if you're evolving just one binary
-        len(xi_vals)
+        len(q_vals)
     except:
         xi_vals=[xi_vals]
         J_vals=[J_vals]
@@ -2815,12 +2815,12 @@ def evolve_J(xi_vals,J_vals,r_vals,q_vals,S1_vals,S2_vals):
         print "[evolve_J] Default parallel computation"
     # Parallelization.
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(xi_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
+        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
     elif CPUs==1: # 1 cpus done by explicitely switching parallelization off
-        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(xi_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
+        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
     else: # Run on a given number of CPUs        
         p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(xi_vals))],q_vals,S1_vals,S2_vals),pool=p) 
+        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p) 
 
     J_fvals=[]
     for index, file in enumerate(filelist):
@@ -2890,7 +2890,7 @@ def evolve_angles_single(theta1_i,theta2_i,deltaphi_i,r_vals,q,S1,S2):
     return savename
 
 
-def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
+def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q_vals,S1_vals,S2_vals):
 
     '''
     Binary evolution from the angles theta1, theta2 and deltaphi as initial data
@@ -2906,16 +2906,16 @@ def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
     Parallelization through the python `parmap` module is implemented; the
     number of available cores can be specified using the integer global variable
     `precession.CPUs` (all available cores will be used by default). Evolve a
-    sequence of binaries with the SAME q, S1,S2 but different theta1, theta2,
-    deltaphi (assumed to be specified at r_vals[0]) and save outputs at r_vals.
-    Outputs are 2D arrays, where e.g theta1_fvals[0] is the first binary (1D
-    array at all output separations) and theta1_fvals[0][0] is the first binary
-    at the first output separation (this is a scalar).
+    sequence of binaries with different values of q, S1,S2, theta1, theta2,
+    deltaphi (assumed to be specified at r_vals[0]) and save outputs at SAME
+    separations r_vals. Outputs are 2D arrays, where e.g theta1_fvals[0] is the
+    first binary (1D array at all output separations) and theta1_fvals[0][0] is
+    the first binary at the first output separation (this is a scalar).
 
     Checkpointing is implemented: results are stored in `precession.storedir`.
 
     **Call:**
-        theta1f_vals,theta2f_vals,deltaphif_vals=precession.evolve_angles(theta1i_vals,theta2i_vals,deltaphii_vals,r_vals,q,S1,S2)
+        theta1f_vals,theta2f_vals,deltaphif_vals=precession.evolve_angles(theta1i_vals,theta2i_vals,deltaphii_vals,r_vals,q_vals,S1_vals,S2_vals)
          
     **Parameters:**
     
@@ -2923,9 +2923,9 @@ def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
     - `theta2i_vals`: initial condition for theta2 (array).
     - `deltaphii_vals`: initial condition for deltaphi (array).
     - `r_vals`: binary separation (array).
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
+    - `q_vals`: binary mass ratio. Must be q<=1 (array).
+    - `S1_vals`: spin magnitude of the primary BH (array).
+    - `S2_vals`: spin magnitude of the secondary BH (array).
 
     **Returns:**
 
@@ -2938,15 +2938,15 @@ def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
     single_flag=False
 
     try: # Convert float to array if you're evolving just one binary
-        len(theta1_vals)
-        len(theta1_vals)
-        len(deltaphi_vals)
+        len(q_vals)
     except:
         single_flag=True
         theta1_vals=[theta1_vals]
         theta2_vals=[theta2_vals]
         deltaphi_vals=[deltaphi_vals]
-
+        q_vals=[q_vals]
+        S1_vals=[S1_vals]
+        S2_vals=[S2_vals]
     try: # Set default
         CPUs
     except:
@@ -2958,13 +2958,13 @@ def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q,S1,S2):
         loopflag=False
 
         #Parallelization
-        if CPUs==0: #Run on all cpus on the current machine! (default option)
-            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals),r_vals,q,S1,S2,parallel=True) 
+        if CPUs==0: #Run on all cpus on the current machine! (default option)    
+            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
         elif CPUs==1: #1 cpus done by explicitely removing parallelization
-            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals),r_vals,q,S1,S2,parallel=False) 
+            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
         else: # Run on a given number of CPUs        
             p = multiprocessing.Pool(CPUs)
-            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals),r_vals,q,S1,S2,pool=p) 
+            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p) 
 
         theta1_fvals=[]
         theta2_fvals=[]
