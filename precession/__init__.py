@@ -2763,15 +2763,15 @@ def Jofr_checkpoint(xi,J_initial,r_vals,q,S1,S2):
     return savename
 
 
-def evolve_J(xi_vals,J_vals,r_vals,q,S1,S2):
+def evolve_J(xi_vals,J_vals,r_vals,q_vals,S1_vals,S2_vals):
 
     '''
     Wrapper of `precession.Jofr` to enable parallelization through the python
     `parmap` module; the number of available cores can be specified using the
     integer global variable `precession.CPUs` (all available cores will be used
-    by default). Evolve a sequence of binaries with the SAME q, S1, S2 but
-    different xi and initial values of J and save outputs at r_vals. Output is a
-    2D array, where e.g. J_vals[0] is the first binary (1D array at all output
+    by default). Evolve a sequence of binaries with the different q, S1, S2, xi
+    and initial values of J and save outputs at the SAME r_vals. Output is a 2D
+    array, where e.g. J_vals[0] is the first binary (1D array at all output
     separations) and J_vals[0][0] is the first binary at the first output
     separation (this is a scalar). We strongly reccommend using this function,
     even for a single binary.
@@ -2787,9 +2787,9 @@ def evolve_J(xi_vals,J_vals,r_vals,q,S1,S2):
     - `xi_vals`: projection of the effective spin along the orbital angular momentum (array).
     - `Ji_vals`: initial condition for numerical integration (array).
     - `r_vals`: binary separation (array).
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
+    - `q_vals`: binary mass ratio. Must be q<=1 (array).
+    - `S1_vals`: spin magnitude of the primary BH (array).
+    - `S2_vals`: spin magnitude of the secondary BH (array).
 
     **Returns:**
 
@@ -2801,10 +2801,12 @@ def evolve_J(xi_vals,J_vals,r_vals,q,S1,S2):
     single_flag=False
     try: # Convert float to array if you're evolving just one binary
         len(xi_vals)
-        len(J_vals)
     except:
         xi_vals=[xi_vals]
         J_vals=[J_vals]
+        q_vals=[q_vals]
+        S1_vals=[S1_vals]
+        S2_vals=[S2_vals]
         single_flag=True
     try: # Set default
         CPUs
@@ -2813,12 +2815,12 @@ def evolve_J(xi_vals,J_vals,r_vals,q,S1,S2):
         print "[evolve_J] Default parallel computation"
     # Parallelization.
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals),r_vals,q,S1,S2,parallel=True) 
+        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(xi_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
     elif CPUs==1: # 1 cpus done by explicitely switching parallelization off
-        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals),r_vals,q,S1,S2,parallel=False) 
+        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(xi_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
     else: # Run on a given number of CPUs        
         p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals),r_vals,q,S1,S2,pool=p) 
+        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(xi_vals))],q_vals,S1_vals,S2_vals),pool=p) 
 
     J_fvals=[]
     for index, file in enumerate(filelist):
