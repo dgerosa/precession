@@ -3586,14 +3586,14 @@ def orbit_averaged_single(J,xi,S,r_vals,q,S1,S2):
     - `savename`: checkpoint filename.
     '''
     
-    os.system("mkdir -p "+storedir) 
-    savename= storedir+"/orbav_"+'_'.join([str(x) for x in (J,xi,S,max(r_vals),min(r_vals),len(r_vals),q,S1,S2)])+".dat"
-
     global flags_q1 
     if q==1:
         if flags_q1[13]==False:
             print "[orbit_averaged] Warning q=1: Input/output for S is actually cos(varphi)"       
             flags_q1[13]=True
+    
+    os.system("mkdir -p "+storedir) 
+    savename= storedir+"/orbav_"+'_'.join([str(x) for x in (J,xi,S,max(r_vals),min(r_vals),len(r_vals),q,S1,S2)])+".dat"
 
     if not os.path.isfile(savename):
         print "[orbit_averaged] Transferring binary. Output:", savename
@@ -3663,7 +3663,6 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q_vals,S1_vals,S2_vals):
     
     global CPUs
     
-
     single_flag=False
     try: #Convert float to array if you're evolving just one binary
         len(q_vals)
@@ -3683,12 +3682,12 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q_vals,S1_vals,S2_vals):
     
     # Parallelization
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(evolve_angles_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
+        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True) 
     elif CPUs==1: # 1 cpus done by explicitely removing parallelization
-        filelist=parmap.starma(evolve_angles_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
+        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False) 
     else: # Run on a given number of CPUs        
         p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(evolve_angles_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p) 
+        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p) 
 
     J_fvals=[]
     S_fvals=[]
