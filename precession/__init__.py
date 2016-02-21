@@ -4400,7 +4400,7 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
     #Kick. Coefficients are quoted in km/s
     
     # vm and vperp are like in Kesden at 2010a, vpar is modified from Lousto Zlochower 2013
-    xi=np.radians(145.)
+    zeta=np.radians(145.)
     A=1.2e4
     B=-0.93
     H=6.9e3
@@ -4437,7 +4437,7 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
     vm=A*eta*eta*(1.+B*eta)*(1.-q)/(1.+q)
     vperp=H*eta*eta*Delta_par
     vpar=16.*eta*eta* (Delta_perp*(V11+2.*VA*chit_par+4.*VB*pow(chit_par,2.)+8.*VC*pow(chit_par,3.)) + chit_perp*Delta_par*(2.*C2+4.*C3*chit_par)) * np.cos(bigTheta)         
-    vkick=np.linalg.norm([vm+vperp*np.cos(xi),vperp*np.sin(xi),vpar])
+    vkick=np.linalg.norm([vm+vperp*np.cos(zeta),vperp*np.sin(zeta),vpar])
 
     if vkick>5000:
         print "[finalkick] Warning; I got v_kick>5000km/s. This shouldn't be possibile"
