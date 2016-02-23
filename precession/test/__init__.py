@@ -467,4 +467,3 @@ def timing():
     print "Precession-averaged: serial integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
     precession.empty_temp() # Remove previous checkpoints
     
-timing()
