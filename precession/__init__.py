@@ -23,8 +23,8 @@ installed through pip:
 
     pip install precession
 
-Prerequisites are `numpy`, `scipy` and `parmap`. All can be installed through
-pip.
+Prerequisites are `numpy`, `scipy` and `parmap`, which can be all installed
+through pip.
 
 
 ### THINGS TO KEEP IN MIND
@@ -102,17 +102,16 @@ Please, report bugs to
 
 I'm happy to help you out! 
 
-I'd like to thank E.
-Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D. Trifiro' and J. Vosmera for
-the help receiving in interpreting the physical results and implementing some of
-the algorithms.
+I'd like to thank E. Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D.
+Trifiro' and J. Vosmera for the help received in interpreting the physical
+results and implementing some of the algorithms.
 '''
 
 __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2015 Davide Gerosa"
 __license__ = "CC by-nc-sa 3.0"
-__version__ = "0.0.0.35"
+__version__ = "0.0.0.36"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\

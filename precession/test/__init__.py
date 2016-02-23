@@ -1,11 +1,19 @@
 '''
-PLEASE WRITE ME
+This submodule provides practical examples to illustrate the main features of `precession`. Examples are illustrated in 
+
+ADD REFERENCE TO CODE PAPER HERE!
+
+This submodule has to be loaded separately typing
+
+    import precession.test
+
 '''
 
 
 import sys,os
 import precession 
 import numpy
+import random
 from matplotlib import use #Useful when working on SSH
 use('Agg') 
 from matplotlib import rc #Set plot defaults
@@ -15,6 +23,8 @@ rc('text',usetex=True)
 rc('figure',max_open_warning=1000)
 import pylab
 import matplotlib
+import time
+import multiprocessing
 
 def parameter_selection():
     
@@ -112,15 +122,11 @@ def spin_angles():
         precession.test.spin_angles()
     '''
 
-    fig=pylab.figure(figsize=(6,6))        # Create figure object and axes
-    #ax_t1=fig.add_axes([0,0.85,0.47,0.7])   # top-left
-    #ax_t2=fig.add_axes([0.65,0.85,0.47,0.7]) # top-right
-    #ax_dp=fig.add_axes([0,0,0.47,0.7])      # bottom-left
-    #ax_t12=fig.add_axes([0.65,0,0.47,0.7])   # bottom-right
-    ax_t1=fig.add_axes([0,0.8,0.9,0.6])   # top-left
-    ax_t2=fig.add_axes([1.1,0.8,0.9,0.6]) # top-right
-    ax_dp=fig.add_axes([0,0,0.9,0.6])      # bottom-left
-    ax_t12=fig.add_axes([1.1,0,0.9,0.6])   # bottom-right
+    fig=pylab.figure(figsize=(6,6))      # Create figure object and axes
+    ax_t1=fig.add_axes([0,1.95,0.9,0.5]) # first (top)
+    ax_t2=fig.add_axes([0,1.3,0.9,0.5])  # second
+    ax_dp=fig.add_axes([0,0.65,0.9,0.5]) # third
+    ax_t12=fig.add_axes([0,0,0.9,0.5])   # fourth (bottom)
 
     q=0.7    # Mass ratio. Must be q<=1.
     chi1=0.6 # Primary spin. Must be chi1<=1
@@ -167,7 +173,7 @@ def spin_angles():
         ax_t2.set_ylabel("$\\theta_2$")
         ax_t12.set_ylabel("$\\theta_{12}$")
         ax_dp.set_ylabel("$\\Delta\\Phi$")
-        ax_dp.legend(loc='upper right') # Fill the legend with the precessional morphology
+        ax_t1.legend(loc='lower right',fontsize=18) # Fill the legend with the precessional morphology
 
     fig.savefig("spin_angles.pdf",bbox_inches='tight') # Save pdf file
 
@@ -187,8 +193,8 @@ def phase_resampling():
         precession.test.phase_resampling()
     '''
 
-    fig=pylab.figure(figsize=(6,6)) #Create figure object and axes
-    ax_tS=fig.add_axes([0,0,0.6,0.6]) #bottom-left
+    fig=pylab.figure(figsize=(6,6))      #Create figure object and axes
+    ax_tS=fig.add_axes([0,0,0.6,0.6])    #bottom-left
     ax_td=fig.add_axes([0.65,0,0.3,0.6]) #bottom-right
     ax_Sd=fig.add_axes([0,0.65,0.6,0.3]) #top-left
 
@@ -203,7 +209,7 @@ def phase_resampling():
     tau=precession.precession_period(xi,J,q,S1,S2,r)   # Precessional period
     d=2000   # Size of the statistical sample
 
-    os.system("mkdir -p "+precession.storedir) # Create store directory, if necessary
+    precession.make_temp() # Create store directory, if necessary
     filename=precession.storedir+"/phase_resampling.dat" # Output file name
     if not os.path.isfile(filename): # Compute and store data if not present
         out=open(filename,"w")
@@ -252,7 +258,6 @@ def phase_resampling():
 
     fig.savefig("phase_resampling.pdf",bbox_inches='tight') # Save pdf file
 
-
 def PNwrappers():
     
     '''
@@ -271,44 +276,40 @@ def PNwrappers():
     q=0.9      # Mass ratio. Must be q<=1.
     chi1=0.5   # Primary spin. Must be chi1<=1
     chi2=0.5   # Secondary spin. Must be chi2<=1
+    print "We study a binary with\n\tq=%.3f\n\tchi1=%.3f\n\tchi2=%.3f" %(q,chi1,chi2)
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
     ri=1000*M  # Initial separation.
     rf=10.*M   # Final separation.
     rt=100.*M  # Intermediate separation for hybrid evolution.
     r_vals=numpy.logspace(numpy.log10(ri),numpy.log10(rf),1000) # Output requested
-
     t1i=numpy.pi/4.; t2i=numpy.pi/4.; dpi=numpy.pi/4. # Initial configuration
     xii,Ji,Si=precession.from_the_angles(t1i,t2i,dpi,q,S1,S2,ri)
-    print "Configuration at r=ri"
-    print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xii,Ji,Si)
-    print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1i,t2i,dpi)
+    print "Configuration at ri=%.0f\n\t(xi,J,S)=(%.3f,%.3f,%.3f)\n\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(ri,xii,Ji,Si,t1i,t2i,dpi)
 
     print "\n *Orbit-averaged evolution*"
-    print "Evolution ri --> rf"
+    print "Evolution ri=%.0f --> rf=%.0f" %(ri,rf)
     Jf,xif,Sf=precession.orbit_averaged(Ji,xii,Si,r_vals,q,S1,S2)
     print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xif[-1],Jf[-1],Sf[-1])
     t1f,t2f,dpf=precession.orbit_angles(t1i,t2i,dpi,r_vals,q,S1,S2)
     print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
     Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z=precession.orbit_vectors(Ji,xii,Si,r_vals,q,S1,S2)
-    print "\t (Lx,Ly,Lz)=(%.3f,%.3f,%.3f)" %(Lx[-1],Ly[-1],Lz[-1])
-    print "\t (S1x,S1y,S1z)=(%.3f,%.3f,%.3f)" %(S1x[-1],S1y[-1],S1z[-1])
-    print "\t (S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(S2x[-1],S2y[-1],S2z[-1])
+    print "\t (Lx,Ly,Lz)=(%.3f,%.3f,%.3f)\n\t(S1x,S1y,S1z)=(%.3f,%.3f,%.3f)\n\t(S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(Lx[-1],Ly[-1],Lz[-1],S1x[-1],S1y[-1],S1z[-1],S2x[-1],S2y[-1],S2z[-1])
 
     print "\n *Precession-averaged evolution*"  
-    print "Evolution ri --> rf"
+    print "Evolution ri=%.0f --> rf=%.0f" %(ri,rf)
     Jf=precession.evolve_J(xii,Ji,r_vals,q,S1,S2)
     print "\t (xi,J,S)=(%.3f,%.3f,-)" %(xii,Jf[-1])
     t1f,t2f,dpf=precession.evolve_angles(t1i,t2i,dpi,r_vals,q,S1,S2)
     print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
-    print "Evolution ri --> infinity"
+    print "Evolution ri=%.0f --> infinity" %ri
     kappainf=precession.evolve_J_backwards(xii,Jf[-1],rf,q,S1,S2)
     print "\t kappainf=%.3f" %kappainf    
     Jf=precession.evolve_J_infinity(xii,kappainf,r_vals,q,S1,S2)
-    print "Evolution infinity --> rf"
+    print "Evolution infinity --> rf=%.0f" %rf 
     print "\t J=%.3f" %Jf[-1] 
 
     print "\n *Hybrid evolution*"  
-    print "Prec.Av. infinity --> rt & Orb.Av. rt --> rf"
+    print "Prec.Av. infinity --> rt=%.0f & Orb.Av. rt=%.0f --> rf=%.0f" %(rt,rt,rf)
     t1f,t2f,dpf=precession.hybrid(xii,kappainf,r_vals,q,S1,S2,rt)
     print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
     
@@ -364,11 +365,11 @@ def compare_evolutions():
 
     Pcol,Ocol,Dcol='blue','red','green'
     Pst,Ost='solid','dashed'
-    ax_xi.axhline(xi,c=Pcol,ls=Pst,lw=2)  # Plot xi, pr.av. (constant)
-    ax_xi.plot(r_vals,xif_O,c=Ocol,ls=Ost,lw=2) # Plot xi, orbit averaged
+    ax_xi.axhline(xi,c=Pcol,ls=Pst,lw=2)         # Plot xi, pr.av. (constant)
+    ax_xi.plot(r_vals,xif_O,c=Ocol,ls=Ost,lw=2)  # Plot xi, orbit averaged
     ax_xid.plot(r_vals,(xi-xif_O)/xi*1e11,c=Dcol,lw=2) # Plot xi deviations (rescaled)
-    ax_J.plot(r_vals,Jf_P,c=Pcol,ls=Pst,lw=2) # Plot J, pr.av.
-    ax_J.plot(r_vals,Jf_O,c=Ocol,ls=Ost,lw=2) # Plot J, orb.av
+    ax_J.plot(r_vals,Jf_P,c=Pcol,ls=Pst,lw=2)    # Plot J, pr.av.
+    ax_J.plot(r_vals,Jf_O,c=Ocol,ls=Ost,lw=2)    # Plot J, orb.av
     ax_Jd.plot(r_vals,(Jf_P-Jf_O)/Jf_O*1e3,c=Dcol,lw=2) # Plot J deviations (rescaled)
     ax_S.scatter(r_vals[0::10],Sf_P,facecolor='none',edgecolor=Pcol) # Plot S, pr.av. (resampled)
     ax_S.plot(r_vals,Sb_min,c=Pcol,ls=Pst,lw=2)  # Plot S, pr.av. (envelopes)
@@ -410,3 +411,65 @@ def compare_evolutions():
     ax_Sd.set_ylabel("$\\Delta S / S$")
 
     fig.savefig("compare_evolutions.pdf",bbox_inches='tight') # Save pdf file
+
+
+def timing():
+    
+    '''
+    This examples compare the numerical performance of `precession.orbit_angles`
+    and `precession.evolve_angles`. Computation is performed twice, first using
+    all the available CPUs and then explicitely disabling the code
+    parallelization.
+    
+    **Run using**
+
+        import precession.test
+        precession.test.timing()
+    '''
+
+    BHsample=[] #  Construct a sample of BH binaries
+    N=1000
+    for i in range(N):
+        q=random.uniform(0,1)
+        chi1=random.uniform(0,1)
+        chi2=random.uniform(0,1)
+        M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2)
+        t1=random.uniform(0,numpy.pi)
+        t2=random.uniform(0,numpy.pi)
+        dp=random.uniform(0,2.*numpy.pi)
+        BHsample.append([q,S1,S2,t1,t2,dp])
+    q_vals,S1_vals,S2_vals,t1i_vals,t2i_vals,dpi_vals=zip(*BHsample) # Traspose python list
+
+    ri=1000*M      # Initial separation
+    rf=10*M        # Final separation
+    r_vals=[ri,rf] # Intermediate output separations not needed here
+
+    print "Integrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPUs" %(N,ri,rf,multiprocessing.cpu_count()) # Parallel computation used by default
+    t0=time.time() 
+    precession.orbit_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)  
+    t=time.time()-t0
+    print "Orbit-averaged: parallel integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
+    t0=time.time()
+    precession.evolve_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)    
+    t=time.time()-t0
+    print "Precession-averaged: parallel integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
+
+    precession.empty_temp() # Remove previous checkpoints
+    precession.CPUs=1       # Force serial computations
+    print "\nIntegrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPU" %(len(BHsample),ri,rf,precession.CPUs)
+    t0=time.time()
+    precession.orbit_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)  
+    t=time.time()-t0
+    print "Orbit-averaged: serial integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
+    t0=time.time()
+    precession.evolve_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)    
+    t=time.time()-t0
+    print "Precession-averaged: serial integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
+    precession.empty_temp() # Remove previous checkpoints
+
+
+
+
+timing()
+    
+    
