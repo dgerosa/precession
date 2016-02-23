@@ -428,7 +428,7 @@ def timing():
     '''
 
     BHsample=[] #  Construct a sample of BH binaries
-    N=1000
+    N=100
     for i in range(N):
         q=random.uniform(0,1)
         chi1=random.uniform(0,1)
@@ -466,7 +466,5 @@ def timing():
     t=time.time()-t0
     print "Precession-averaged: serial integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
     precession.empty_temp() # Remove previous checkpoints
-
-
-timing()
     
+timing()
