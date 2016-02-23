@@ -289,37 +289,37 @@ def PNwrappers():
     print "\n *Orbit-averaged evolution*"
     print "Evolution ri=%.0f --> rf=%.0f" %(ri,rf)
     Jf,xif,Sf=precession.orbit_averaged(Ji,xii,Si,r_vals,q,S1,S2)
-    print "\t (xi,J,S)=(%.3f,%.3f,%.3f)" %(xif[-1],Jf[-1],Sf[-1])
+    print "\t(xi,J,S)=(%.3f,%.3f,%.3f)" %(xif[-1],Jf[-1],Sf[-1])
     t1f,t2f,dpf=precession.orbit_angles(t1i,t2i,dpi,r_vals,q,S1,S2)
-    print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
+    print "\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
     Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z=precession.orbit_vectors(Ji,xii,Si,r_vals,q,S1,S2)
-    print "\t (Lx,Ly,Lz)=(%.3f,%.3f,%.3f)\n\t(S1x,S1y,S1z)=(%.3f,%.3f,%.3f)\n\t(S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(Lx[-1],Ly[-1],Lz[-1],S1x[-1],S1y[-1],S1z[-1],S2x[-1],S2y[-1],S2z[-1])
+    print "\t(Lx,Ly,Lz)=(%.3f,%.3f,%.3f)\n\t(S1x,S1y,S1z)=(%.3f,%.3f,%.3f)\n\t(S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(Lx[-1],Ly[-1],Lz[-1],S1x[-1],S1y[-1],S1z[-1],S2x[-1],S2y[-1],S2z[-1])
 
     print "\n *Precession-averaged evolution*"  
     print "Evolution ri=%.0f --> rf=%.0f" %(ri,rf)
     Jf=precession.evolve_J(xii,Ji,r_vals,q,S1,S2)
-    print "\t (xi,J,S)=(%.3f,%.3f,-)" %(xii,Jf[-1])
+    print "\t(xi,J,S)=(%.3f,%.3f,-)" %(xii,Jf[-1])
     t1f,t2f,dpf=precession.evolve_angles(t1i,t2i,dpi,r_vals,q,S1,S2)
-    print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
+    print "\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
     print "Evolution ri=%.0f --> infinity" %ri
     kappainf=precession.evolve_J_backwards(xii,Jf[-1],rf,q,S1,S2)
-    print "\t kappainf=%.3f" %kappainf    
+    print "\tkappainf=%.3f" %kappainf    
     Jf=precession.evolve_J_infinity(xii,kappainf,r_vals,q,S1,S2)
     print "Evolution infinity --> rf=%.0f" %rf 
-    print "\t J=%.3f" %Jf[-1] 
+    print "\tJ=%.3f" %Jf[-1] 
 
     print "\n *Hybrid evolution*"  
     print "Prec.Av. infinity --> rt=%.0f & Orb.Av. rt=%.0f --> rf=%.0f" %(rt,rt,rf)
     t1f,t2f,dpf=precession.hybrid(xii,kappainf,r_vals,q,S1,S2,rt)
-    print "\t (theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
+    print "\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
     
     print "\n *Properties of the BH remnant*"  
     Mfin=precession.finalmass(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)    
-    print "\t M_f=%.3f" %Mfin
+    print "\tM_f=%.3f" %Mfin
     chifin=precession.finalspin(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)
-    print "\t chi_f=%.3f, S_f=%.3f" %(chifin,chifin*Mfin**2)
+    print "\tchi_f=%.3f, S_f=%.3f" %(chifin,chifin*Mfin**2)
     vkick=precession.finalkick(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)
-    print "\t vkick=%.5f" %(vkick) # Geometrical units c=1
+    print "\tvkick=%.5f" %(vkick) # Geometrical units c=1
 
 
 def compare_evolutions():
@@ -440,7 +440,7 @@ def timing():
         BHsample.append([q,S1,S2,t1,t2,dp])
     q_vals,S1_vals,S2_vals,t1i_vals,t2i_vals,dpi_vals=zip(*BHsample) # Traspose python list
 
-    ri=1000*M      # Initial separation
+    ri=1e4*M      # Initial separation
     rf=10*M        # Final separation
     r_vals=[ri,rf] # Intermediate output separations not needed here
 
@@ -468,8 +468,5 @@ def timing():
     precession.empty_temp() # Remove previous checkpoints
 
 
-
-
 timing()
-    
     
