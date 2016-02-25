@@ -59,11 +59,6 @@ END
     temp2=`mktemp`
     cp precession/test/index.html $temp2
 
-    # Commit new html to master branch
-    #git add precession/index.html precession/test/index.html
-    #git commit -m "generate_documentation.sh"
-    #git push
-
     # Move html files to gh-pages branch (directories there should exist)
     git checkout gh-pages
     mv $temp1 index.html
@@ -112,3 +107,10 @@ outfilesave = open("README.md","w",0)   # Write to file
 outfilesave.write(joined)
 outfilesave.close()
 END
+
+
+# Commit new html to master branch
+git add precession/index.html precession/test/index.html README.md
+git commit -m "Automatic commit from generate_documentation.sh"
+git push
+

@@ -1,9 +1,11 @@
 '''
-This submodule provides practical examples to illustrate the main features of `precession`. Examples are illustrated in 
+This submodule provides practical examples to illustrate the main features of
+`precession`. Examples are illustrated in 
 
-ADD REFERENCE TO CODE PAPER HERE!
+- *Precession. Dynamics of spinning black-hole binaries with Python.* 
+Davide Gerosa. Submitted to... arXiv:...
 
-This submodule has to be loaded separately typing
+This submodule has to be loaded separately:
 
     import precession.test
 
