@@ -95,3 +95,17 @@ END
     rm precession/*pyc precession/*/*pyc
 
 fi
+
+
+# Generate readme
+
+python <<END
+import precession
+docs=precession.__doc__
+splits=docs.split('###')
+removed = splits[:2] + splits[3 :]
+joined= "###".join(removed)
+outfilesave = open("README.md","w",0)
+outfilesave.write(joined)
+outfilesave.close()
+END
