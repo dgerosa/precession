@@ -20,11 +20,6 @@ precessional dynamics, integrators to perform orbit-averaged and
 precession-averaged post-Newtonian inspirals, and implementation of the fitting
 formulae to predict the properties of the black-hole remnant.
 
-Detailed documentation and results from the code are available at:
-
-- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) 
-- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)
-
 This code is released to the community under the [Creative Commons Attribution
 International license](http://creativecommons.org/licenses/by/4.0).
 Essentially, you may use `precession` as you like but must make reference to
@@ -34,7 +29,6 @@ describing its implementation:
 - *Precession. Dynamics of spinning black-hole binaries with Python.* 
 Davide Gerosa. Submitted to... arXiv:...
 
-
 `precession` is an open-source code distributed under git version-control system on
 
 [github.com/dgerosa/precession](github.com/dgerosa/precessions)
@@ -42,6 +36,12 @@ Davide Gerosa. Submitted to... arXiv:...
 API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository
 
 [dgerosa.github.io/precession](dgerosa.github.io/precession)
+
+Further information and scientific results on the results are available at:
+
+- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) 
+- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)
+
 
 
 ### INSTALLATION
