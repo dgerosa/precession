@@ -6,15 +6,22 @@ Detailed documentation and results from the code are available at:
 - [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) 
 - [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)
 
-This code is released to the community under the [Creative Commons
-attribution-noncommercial-sharealike
-license](http://creativecommons.org/licenses/by-nc-sa/3.0). Essentially, you may
-use `precession`, but must make reference to our work, and you must not use it
-for commercial purposes. Any code where precession is used, must be released
-under the same licence.  When using precession in any published work, you must
-cite the papers describing its implementation:
+This code is released to the community under the [Creative Commons Attribution
+4.0 International license](http://creativecommons.org/licenses/by/4.0).
+Essentially, you may use `precession` as you like but must make reference to
+our work. When using precession in any published work, please cite the paper
+describing its implementation:
 
 ADD REFERENCE TO CODE PAPER HERE!
+
+`precession` is an open-source code distributed under git version-control system on
+
+[github.com/dgerosa/precession](github.com/dgerosa/precessions)
+
+API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository
+
+[dgerosa.github.io/precession](dgerosa.github.io/precession)
+
 
 ### INSTALLATION
  

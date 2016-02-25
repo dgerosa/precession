@@ -338,7 +338,6 @@ def compare_evolutions():
     '''
 
     fig=pylab.figure(figsize=(6,6)) # Create figure object and axes
-
     L,Ws,Wm,G=0.85,0.15,0.3,0.03 # Sizes
     ax_Sd=fig.add_axes([0,0,L,Ws])              # bottom-small    
     ax_S=fig.add_axes([0,Ws,L,Wm])              # bottom-main
