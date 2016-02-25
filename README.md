@@ -57,6 +57,8 @@ built-in help system
     import precession
     help(precession.function)
 
+Several tests and tutorial are available in the submodule `precession.test`.
+
 
 ### THANKS
 The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). 
