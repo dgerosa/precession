@@ -31,17 +31,16 @@ Davide Gerosa. Submitted to... arXiv:...
 
 `precession` is an open-source code distributed under git version-control system on
 
-[github.com/dgerosa/precession](github.com/dgerosa/precessions)
+- [github.com/dgerosa/precession](github.com/dgerosa/precessions)
 
 API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository
 
-[dgerosa.github.io/precession](dgerosa.github.io/precession)
+- [dgerosa.github.io/precession](dgerosa.github.io/precession)
 
 Further information and scientific results on the results are available at:
 
 - [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) 
 - [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)
-
 
 
 ### INSTALLATION
@@ -53,6 +52,10 @@ installed through pip:
 
 Prerequisites are `numpy`, `scipy` and `parmap`, which can be all installed
 through pip.
+
+Information on all code functions are available through Pyhton's built-in help system
+
+    help(precession.function)
 
 
 ### THANKS
