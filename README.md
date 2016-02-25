@@ -5,7 +5,7 @@ precession
 
 **email** d.gerosa@damtp.cam.ac.uk
 
-**Copyright** Copyright (C) 2015 Davide Gerosa
+**Copyright** Copyright (C) 2016 Davide Gerosa
 
 **Licence** CC BY 4.0
 
