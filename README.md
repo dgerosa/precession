@@ -46,7 +46,7 @@ Further information and scientific results on the results are available at:
 ### INSTALLATION
  
 `precession` works in python 2.x and has been tested on 2.7.10. It can be
-installed through pip:
+installed through [pip](https://pypi.python.org/pypi/precession):
 
     pip install precession
 
