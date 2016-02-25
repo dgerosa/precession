@@ -101,11 +101,11 @@ fi
 echo "Generating readme"
 python <<END
 import precession
-docs=precession.__doc__
-splits=docs.split('###')
-removed = splits[:2] + splits[3 :]
-joined= "###".join(removed)
-outfilesave = open("README.md","w",0)
+docs=precession.__doc__                 # Get code docstrings
+splits=docs.split('###')                # Separate parts
+removed = splits[:2] + splits[3 :]      # Get rid of some details
+joined= "###".join(removed)             # Put parts back together
+outfilesave = open("README.md","w",0)   # Write to file
 outfilesave.write(joined)
 outfilesave.close()
 END
