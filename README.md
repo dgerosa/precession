@@ -51,9 +51,8 @@ installed through pip:
     pip install precession
 
 Prerequisites are `numpy`, `scipy` and `parmap`, which can be all installed
-through pip.
-
-Information on all code functions are available through Pyhton's built-in help system
+through pip. Information on all code functions are available through Pyhton's
+built-in help system
 
     help(precession.function)
 
