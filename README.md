@@ -7,12 +7,18 @@ precession
 
 **Copyright** Copyright (C) 2015 Davide Gerosa
 
-**Licence** CC by-nc-sa 3.0
+**Licence** CC BY 4.0
 
 **Version** 0.0.0.36
 
 
-# DYNAMICS OF PRECESSING BLACK-HOLE BINARIES
+# DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON
+
+`precession` is a Python module to study the dynamics of precessing black-hole
+binaries in the post-Newtonian regime. The code includes tools to study the
+precessional dynamics, integrators to perform orbit-averaged and
+precession-averaged post-Newtonian inspirals, and implementation of the fitting
+formulae to predict the properties of the black-hole remnant.
 
 Detailed documentation and results from the code are available at:
 
@@ -20,12 +26,15 @@ Detailed documentation and results from the code are available at:
 - [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)
 
 This code is released to the community under the [Creative Commons Attribution
-4.0 International license](http://creativecommons.org/licenses/by/4.0).
+International license](http://creativecommons.org/licenses/by/4.0).
 Essentially, you may use `precession` as you like but must make reference to
 our work. When using precession in any published work, please cite the paper
 describing its implementation:
 
-ADD REFERENCE TO CODE PAPER HERE!
+#Precession. Dynamics of spinning black-hole binaries with Python.#
+
+Davide Gerosa. Submitted to... arXiv:...
+
 
 `precession` is an open-source code distributed under git version-control system on
 
