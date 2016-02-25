@@ -1157,21 +1157,23 @@ table {
 <p><strong>email</strong> d.gerosa@damtp.cam.ac.uk</p>
 <p><strong>Copyright</strong> Copyright (C) 2015 Davide Gerosa</p>
 <p><strong>Licence</strong> CC by-nc-sa 3.0</p>
-<p><strong>Version</strong> 0.0.0.35</p>
+<p><strong>Version</strong> 0.0.0.36</p>
 <h1>DYNAMICS OF PRECESSING BLACK-HOLE BINARIES</h1>
 <p>Detailed documentation and results from the code are available at:</p>
 <ul>
 <li><a href="www.damtp.cam.ac.uk/user/dg438/spinprecession">www.damtp.cam.ac.uk/user/dg438/spinprecession</a> </li>
 <li><a href="www.davidegerosa.com/spinprecession">www.davidegerosa.com/spinprecession</a></li>
 </ul>
-<p>This code is released to the community under the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0">Creative Commons
-attribution-noncommercial-sharealike
-license</a>. Essentially, you may
-use <code>precession</code>, but must make reference to our work, and you must not use it
-for commercial purposes. Any code where precession is used, must be released
-under the same licence.  When using precession in any published work, you must
-cite the papers describing its implementation:</p>
+<p>This code is released to the community under the <a href="http://creativecommons.org/licenses/by/4.0">Creative Commons Attribution
+4.0 International license</a>.
+Essentially, you may use <code>precession</code> as you like but must make reference to
+our work. When using precession in any published work, please cite the paper
+describing its implementation:</p>
 <p>ADD REFERENCE TO CODE PAPER HERE!</p>
+<p><code>precession</code> is an open-source code distributed under git version-control system on</p>
+<p><a href="github.com/dgerosa/precessions">github.com/dgerosa/precession</a></p>
+<p>API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository</p>
+<p><a href="dgerosa.github.io/precession">dgerosa.github.io/precession</a></p>
 <h3>INSTALLATION</h3>
 <p><code>precession</code> works in python 2.x and has been tested on 2.7.10. It can be
 installed through pip:</p>
@@ -1179,8 +1181,8 @@ installed through pip:</p>
 </pre></div>
 
 
-<p>Prerequisites are <code>numpy</code>, <code>scipy</code> and <code>parmap</code>. All can be installed through
-pip.</p>
+<p>Prerequisites are <code>numpy</code>, <code>scipy</code> and <code>parmap</code>, which can be all installed
+through pip.</p>
 <h3>THINGS TO KEEP IN MIND</h3>
 <ol>
 <li>
@@ -1268,10 +1270,9 @@ Please, report bugs to</p>
 
 
 <p>I'm happy to help you out! </p>
-<p>I'd like to thank E.
-Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D. Trifiro' and J. Vosmera for
-the help receiving in interpreting the physical results and implementing some of
-the algorithms.</p>
+<p>I'd like to thank E. Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D.
+Trifiro' and J. Vosmera for the help received in interpreting the physical
+results and implementing some of the algorithms.</p>
   
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession', this);">Show source &equiv;</a></p>
   <div id="source-precession" class="source">
@@ -1283,15 +1284,22 @@ the algorithms.</p>
 <span class="sd">- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) </span>
 <span class="sd">- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)</span>
 
-<span class="sd">This code is released to the community under the [Creative Commons</span>
-<span class="sd">attribution-noncommercial-sharealike</span>
-<span class="sd">license](http://creativecommons.org/licenses/by-nc-sa/3.0). Essentially, you may</span>
-<span class="sd">use `precession`, but must make reference to our work, and you must not use it</span>
-<span class="sd">for commercial purposes. Any code where precession is used, must be released</span>
-<span class="sd">under the same licence.  When using precession in any published work, you must</span>
-<span class="sd">cite the papers describing its implementation:</span>
+<span class="sd">This code is released to the community under the [Creative Commons Attribution</span>
+<span class="sd">4.0 International license](http://creativecommons.org/licenses/by/4.0).</span>
+<span class="sd">Essentially, you may use `precession` as you like but must make reference to</span>
+<span class="sd">our work. When using precession in any published work, please cite the paper</span>
+<span class="sd">describing its implementation:</span>
 
 <span class="sd">ADD REFERENCE TO CODE PAPER HERE!</span>
+
+<span class="sd">`precession` is an open-source code distributed under git version-control system on</span>
+
+<span class="sd">[github.com/dgerosa/precession](github.com/dgerosa/precessions)</span>
+
+<span class="sd">API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository</span>
+
+<span class="sd">[dgerosa.github.io/precession](dgerosa.github.io/precession)</span>
+
 
 <span class="sd">### INSTALLATION</span>
 <span class="sd"> </span>
@@ -1300,8 +1308,8 @@ the algorithms.</p>
 
 <span class="sd">    pip install precession</span>
 
-<span class="sd">Prerequisites are `numpy`, `scipy` and `parmap`. All can be installed through</span>
-<span class="sd">pip.</span>
+<span class="sd">Prerequisites are `numpy`, `scipy` and `parmap`, which can be all installed</span>
+<span class="sd">through pip.</span>
 
 
 <span class="sd">### THINGS TO KEEP IN MIND</span>
@@ -1371,7 +1379,7 @@ the algorithms.</p>
 <span class="sd">should play with the h0 optional paramenter in scipy&#39;s odeint function.</span>
 
 
-<span class="sd">###THANKS</span>
+<span class="sd">### THANKS</span>
 <span class="sd">The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). </span>
 <span class="sd">Please, report bugs to</span>
 
@@ -1379,17 +1387,16 @@ the algorithms.</p>
 
 <span class="sd">I&#39;m happy to help you out! </span>
 
-<span class="sd">I&#39;d like to thank E.</span>
-<span class="sd">Berti, M. Kesden, U. Sperhake, R. O&#39;Shaughnessy, D. Trifiro&#39; and J. Vosmera for</span>
-<span class="sd">the help receiving in interpreting the physical results and implementing some of</span>
-<span class="sd">the algorithms.</span>
+<span class="sd">I&#39;d like to thank E. Berti, M. Kesden, U. Sperhake, R. O&#39;Shaughnessy, D.</span>
+<span class="sd">Trifiro&#39; and J. Vosmera for the help received in interpreting the physical</span>
+<span class="sd">results and implementing some of the algorithms.</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Davide Gerosa&quot;</span>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s">&quot;d.gerosa@damtp.cam.ac.uk&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;Copyright (C) 2015 Davide Gerosa&quot;</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;CC by-nc-sa 3.0&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.35&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.36&quot;</span>
 
 
 <span class="n">__doc__</span><span class="o">=</span><span class="s">&quot;**Author** &quot;</span><span class="o">+</span><span class="n">__author__</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="o">+</span>\
@@ -13409,7 +13416,11 @@ is simply checks -1&lt;cos(theta_i)&lt;1.</p>
       <p class="name"><a href="test/index.html">precession.test</a></p>
       
   
-    <div class="desc"><p>PLEASE WRITE ME</p></div>
+    <div class="desc"><p>This submodule provides practical examples to illustrate the main features of <code>precession</code>. Examples are illustrated in </p>
+<p>ADD REFERENCE TO CODE PAPER HERE!</p>
+<p>This submodule has to be loaded separately typing</p>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">precession.test</span>
+</pre></div></div>
 
       </div>
   </section>
