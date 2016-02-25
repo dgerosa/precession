@@ -71,7 +71,7 @@ END
 
     # Commit new html to gh-pages branch
     git add index.html test/index.html
-    git commit -m "generate_documentation.sh"
+    git commit -m "Automatic commit from generate_documentation.sh"
     git push
 
     # Get rid of temp files
@@ -102,7 +102,10 @@ echo "Generating readme"
 python <<END
 import precession
 docs=precession.__doc__                 # Get code docstrings
-splits=docs.split('###')                # Separate parts
+title="precession\n"+\
+      "==========\n\n"+\
+      docs                              # Prepend title
+splits=title.split('###')               # Separate parts
 removed = splits[:2] + splits[3 :]      # Get rid of some details
 joined= "###".join(removed)             # Put parts back together
 outfilesave = open("README.md","w",0)   # Write to file
