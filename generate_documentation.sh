@@ -60,9 +60,9 @@ END
     cp precession/test/index.html $temp2
 
     # Commit new html to master branch
-    git add precession/index.html precession/test/index.html
-    git commit -m "generate_documentation.sh"
-    git push
+    #git add precession/index.html precession/test/index.html
+    #git commit -m "generate_documentation.sh"
+    #git push
 
     # Move html files to gh-pages branch (directories there should exist)
     git checkout gh-pages
@@ -98,7 +98,7 @@ fi
 
 
 # Generate readme
-
+echo "Generating readme"
 python <<END
 import precession
 docs=precession.__doc__
