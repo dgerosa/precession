@@ -8,7 +8,7 @@
 
 **email** d.gerosa@damtp.cam.ac.uk
 
-**Copyright** Copyright (C) 2015 David..." />
+**Copyright** Copyright (C) 2016 David..." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
   
@@ -1155,34 +1155,53 @@ table {
   <h1 class="title"><span class="name">precession</span> module</h1>
   <p><strong>Author</strong> Davide Gerosa</p>
 <p><strong>email</strong> d.gerosa@damtp.cam.ac.uk</p>
-<p><strong>Copyright</strong> Copyright (C) 2015 Davide Gerosa</p>
-<p><strong>Licence</strong> CC by-nc-sa 3.0</p>
+<p><strong>Copyright</strong> Copyright (C) 2016 Davide Gerosa</p>
+<p><strong>Licence</strong> CC BY 4.0</p>
 <p><strong>Version</strong> 0.0.0.36</p>
-<h1>DYNAMICS OF PRECESSING BLACK-HOLE BINARIES</h1>
-<p>Detailed documentation and results from the code are available at:</p>
+<h1>DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON</h1>
+<p><code>precession</code> is a Python module to study the dynamics of precessing black-hole
+binaries in the post-Newtonian regime. The code includes tools to study the
+precessional dynamics, integrators to perform orbit-averaged and
+precession-averaged post-Newtonian inspirals, and implementation of the fitting
+formulae to predict the properties of the black-hole remnant.</p>
+<p>This code is released to the community under the <a href="http://creativecommons.org/licenses/by/4.0">Creative Commons Attribution
+International license</a>.
+Essentially, you may use <code>precession</code> as you like but must make reference to
+our work. When using precession in any published work, please cite the paper
+describing its implementation:</p>
+<ul>
+<li><em>Precession. Dynamics of spinning black-hole binaries with Python.</em> 
+Davide Gerosa. Submitted to... arXiv:...</li>
+</ul>
+<p><code>precession</code> is an open-source code distributed under git version-control system on</p>
+<ul>
+<li><a href="github.com/dgerosa/precessions">github.com/dgerosa/precession</a></li>
+</ul>
+<p>API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository</p>
+<ul>
+<li><a href="dgerosa.github.io/precession">dgerosa.github.io/precession</a></li>
+</ul>
+<p>Further information and scientific results on the results are available at:</p>
 <ul>
 <li><a href="www.damtp.cam.ac.uk/user/dg438/spinprecession">www.damtp.cam.ac.uk/user/dg438/spinprecession</a> </li>
 <li><a href="www.davidegerosa.com/spinprecession">www.davidegerosa.com/spinprecession</a></li>
 </ul>
-<p>This code is released to the community under the <a href="http://creativecommons.org/licenses/by/4.0">Creative Commons Attribution
-4.0 International license</a>.
-Essentially, you may use <code>precession</code> as you like but must make reference to
-our work. When using precession in any published work, please cite the paper
-describing its implementation:</p>
-<p>ADD REFERENCE TO CODE PAPER HERE!</p>
-<p><code>precession</code> is an open-source code distributed under git version-control system on</p>
-<p><a href="github.com/dgerosa/precessions">github.com/dgerosa/precession</a></p>
-<p>API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository</p>
-<p><a href="dgerosa.github.io/precession">dgerosa.github.io/precession</a></p>
 <h3>INSTALLATION</h3>
 <p><code>precession</code> works in python 2.x and has been tested on 2.7.10. It can be
-installed through pip:</p>
+installed through <a href="https://pypi.python.org/pypi/precession">pip</a>:</p>
 <div class="codehilite"><pre>pip install precession
 </pre></div>
 
 
 <p>Prerequisites are <code>numpy</code>, <code>scipy</code> and <code>parmap</code>, which can be all installed
-through pip.</p>
+through pip. Information on all code functions are available through Pyhton's
+built-in help system</p>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">precession</span>
+<span class="n">help</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">function</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Several tests and tutorial are available in the submodule <a href="test/index.html"><code>precession.test</code></a>.</p>
 <h3>THINGS TO KEEP IN MIND</h3>
 <ol>
 <li>
@@ -1277,39 +1296,52 @@ results and implementing some of the algorithms.</p>
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession', this);">Show source &equiv;</a></p>
   <div id="source-precession" class="source">
     <div class="codehilite"><pre><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd"># DYNAMICS OF PRECESSING BLACK-HOLE BINARIES</span>
+<span class="sd"># DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON</span>
 
-<span class="sd">Detailed documentation and results from the code are available at:</span>
-
-<span class="sd">- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) </span>
-<span class="sd">- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)</span>
+<span class="sd">`precession` is a Python module to study the dynamics of precessing black-hole</span>
+<span class="sd">binaries in the post-Newtonian regime. The code includes tools to study the</span>
+<span class="sd">precessional dynamics, integrators to perform orbit-averaged and</span>
+<span class="sd">precession-averaged post-Newtonian inspirals, and implementation of the fitting</span>
+<span class="sd">formulae to predict the properties of the black-hole remnant.</span>
 
 <span class="sd">This code is released to the community under the [Creative Commons Attribution</span>
-<span class="sd">4.0 International license](http://creativecommons.org/licenses/by/4.0).</span>
+<span class="sd">International license](http://creativecommons.org/licenses/by/4.0).</span>
 <span class="sd">Essentially, you may use `precession` as you like but must make reference to</span>
 <span class="sd">our work. When using precession in any published work, please cite the paper</span>
 <span class="sd">describing its implementation:</span>
 
-<span class="sd">ADD REFERENCE TO CODE PAPER HERE!</span>
+<span class="sd">- *Precession. Dynamics of spinning black-hole binaries with Python.* </span>
+<span class="sd">Davide Gerosa. Submitted to... arXiv:...</span>
 
 <span class="sd">`precession` is an open-source code distributed under git version-control system on</span>
 
-<span class="sd">[github.com/dgerosa/precession](github.com/dgerosa/precessions)</span>
+<span class="sd">- [github.com/dgerosa/precession](github.com/dgerosa/precessions)</span>
 
 <span class="sd">API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository</span>
 
-<span class="sd">[dgerosa.github.io/precession](dgerosa.github.io/precession)</span>
+<span class="sd">- [dgerosa.github.io/precession](dgerosa.github.io/precession)</span>
+
+<span class="sd">Further information and scientific results on the results are available at:</span>
+
+<span class="sd">- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) </span>
+<span class="sd">- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)</span>
 
 
 <span class="sd">### INSTALLATION</span>
 <span class="sd"> </span>
 <span class="sd">`precession` works in python 2.x and has been tested on 2.7.10. It can be</span>
-<span class="sd">installed through pip:</span>
+<span class="sd">installed through [pip](https://pypi.python.org/pypi/precession):</span>
 
 <span class="sd">    pip install precession</span>
 
 <span class="sd">Prerequisites are `numpy`, `scipy` and `parmap`, which can be all installed</span>
-<span class="sd">through pip.</span>
+<span class="sd">through pip. Information on all code functions are available through Pyhton&#39;s</span>
+<span class="sd">built-in help system</span>
+
+<span class="sd">    import precession</span>
+<span class="sd">    help(precession.function)</span>
+
+<span class="sd">Several tests and tutorial are available in the submodule `precession.test`.</span>
 
 
 <span class="sd">### THINGS TO KEEP IN MIND</span>
@@ -1394,8 +1426,8 @@ results and implementing some of the algorithms.</p>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Davide Gerosa&quot;</span>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s">&quot;d.gerosa@damtp.cam.ac.uk&quot;</span>
-<span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;Copyright (C) 2015 Davide Gerosa&quot;</span>
-<span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;CC by-nc-sa 3.0&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;Copyright (C) 2016 Davide Gerosa&quot;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;CC BY 4.0&quot;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.36&quot;</span>
 
 
@@ -13416,10 +13448,14 @@ is simply checks -1&lt;cos(theta_i)&lt;1.</p>
       <p class="name"><a href="test/index.html">precession.test</a></p>
       
   
-    <div class="desc"><p>This submodule provides practical examples to illustrate the main features of <code>precession</code>. Examples are illustrated in </p>
-<p>ADD REFERENCE TO CODE PAPER HERE!</p>
-<p>This submodule has to be loaded separately typing</p>
-<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">precession.test</span>
+    <div class="desc"><p>This submodule provides practical examples to illustrate the main features of
+<code>precession</code>. Examples are illustrated in </p>
+<ul>
+<li><em>Precession. Dynamics of spinning black-hole binaries with Python.</em> 
+Davide Gerosa. Submitted to... arXiv:...</li>
+</ul>
+<p>This submodule has to be loaded separately:</p>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">precessio...</span>
 </pre></div></div>
 
       </div>
