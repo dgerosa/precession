@@ -189,7 +189,7 @@ def make_temp():
 
     **Call:**
 
-        precession.empty_temp()
+        precession.make_temp()
     '''
     
     global storedir
