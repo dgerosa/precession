@@ -1048,6 +1048,7 @@ table {
   <ul>
     <li class="mono"><a href="#precession.test.PNwrappers">PNwrappers</a></li>
     <li class="mono"><a href="#precession.test.compare_evolutions">compare_evolutions</a></li>
+    <li class="mono"><a href="#precession.test.minimal">minimal</a></li>
     <li class="mono"><a href="#precession.test.parameter_selection">parameter_selection</a></li>
     <li class="mono"><a href="#precession.test.phase_resampling">phase_resampling</a></li>
     <li class="mono"><a href="#precession.test.spin_angles">spin_angles</a></li>
@@ -1111,6 +1112,34 @@ Davide Gerosa. Submitted to... arXiv:...</li>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 
+
+<span class="k">def</span> <span class="nf">minimal</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A minimal working example to perform a BH binary inspiral</span>
+
+<span class="sd">    **Run using**</span>
+
+<span class="sd">        import precession.test</span>
+<span class="sd">        precession.test.minimal()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">t0</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> 
+    <span class="n">q</span><span class="o">=</span><span class="mf">0.75</span>    <span class="c"># Mass ratio</span>
+    <span class="n">chi1</span><span class="o">=</span><span class="mf">0.5</span>  <span class="c"># Primary&#39;s spin magnitude</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="mf">0.95</span> <span class="c"># Secondary&#39;s spin magnitude</span>
+    <span class="k">print</span> <span class="s">&quot;Take a BH binary with</span><span class="se">\n\t</span><span class="s">q=</span><span class="si">%.2f</span><span class="se">\n\t</span><span class="s">chi1=</span><span class="si">%.2f</span><span class="se">\n\t</span><span class="s">chi2=</span><span class="si">%.2f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span>
+    <span class="n">sep</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="c"># Output separations</span>
+    <span class="n">t1</span><span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.</span>  <span class="c"># Spin orientations at r_vals[0]</span>
+    <span class="n">t2</span><span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.</span>
+    <span class="n">dp</span><span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.</span>
+    <span class="n">M</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">get_fixed</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span>
+    <span class="n">t1_v</span><span class="p">,</span><span class="n">t2_v</span><span class="p">,</span><span class="n">dp_v</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">evolve_angles</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">,</span><span class="n">sep</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>    
+    <span class="k">print</span> <span class="s">&quot;Perform BH binary inspiral&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;log10(r/M) </span><span class="se">\t</span><span class="s"> theta1 </span><span class="se">\t</span><span class="s"> theta2 </span><span class="se">\t</span><span class="s"> deltaphi&quot;</span>
+    <span class="k">for</span> <span class="n">r</span><span class="p">,</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">sep</span><span class="p">),</span><span class="n">t1_v</span><span class="p">,</span><span class="n">t2_v</span><span class="p">,</span><span class="n">dp_v</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%.0f</span><span class="s"> </span><span class="se">\t\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> </span><span class="se">\t\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> </span><span class="se">\t\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>
+    <span class="k">print</span> <span class="s">&quot;Executed in </span><span class="si">%.3f</span><span class="s">s&quot;</span> <span class="o">%</span><span class="n">t</span>
 
 
 <span class="k">def</span> <span class="nf">parameter_selection</span><span class="p">():</span>
@@ -1769,6 +1798,57 @@ Output is saved in ./spin_angles.pdf.</p>
     <span class="n">ax_Sd</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;$</span><span class="se">\\</span><span class="s">Delta S / S$&quot;</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;compare_evolutions.pdf&quot;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s">&#39;tight&#39;</span><span class="p">)</span> <span class="c"># Save pdf file</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="precession.test.minimal">
+    <p>def <span class="ident">minimal</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>A minimal working example to perform a BH binary inspiral</p>
+<p><strong>Run using</strong></p>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">precession.test</span>
+<span class="n">precession</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">minimal</span><span class="p">()</span>
+</pre></div></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.minimal', this);">Show source &equiv;</a></p>
+  <div id="source-precession.test.minimal" class="source">
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">minimal</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A minimal working example to perform a BH binary inspiral</span>
+
+<span class="sd">    **Run using**</span>
+
+<span class="sd">        import precession.test</span>
+<span class="sd">        precession.test.minimal()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">t0</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> 
+    <span class="n">q</span><span class="o">=</span><span class="mf">0.75</span>    <span class="c"># Mass ratio</span>
+    <span class="n">chi1</span><span class="o">=</span><span class="mf">0.5</span>  <span class="c"># Primary&#39;s spin magnitude</span>
+    <span class="n">chi2</span><span class="o">=</span><span class="mf">0.95</span> <span class="c"># Secondary&#39;s spin magnitude</span>
+    <span class="k">print</span> <span class="s">&quot;Take a BH binary with</span><span class="se">\n\t</span><span class="s">q=</span><span class="si">%.2f</span><span class="se">\n\t</span><span class="s">chi1=</span><span class="si">%.2f</span><span class="se">\n\t</span><span class="s">chi2=</span><span class="si">%.2f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span>
+    <span class="n">sep</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="c"># Output separations</span>
+    <span class="n">t1</span><span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.</span>  <span class="c"># Spin orientations at r_vals[0]</span>
+    <span class="n">t2</span><span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.</span>
+    <span class="n">dp</span><span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.</span>
+    <span class="n">M</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">get_fixed</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">)</span>
+    <span class="n">t1_v</span><span class="p">,</span><span class="n">t2_v</span><span class="p">,</span><span class="n">dp_v</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">evolve_angles</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">,</span><span class="n">sep</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>    
+    <span class="k">print</span> <span class="s">&quot;Perform BH binary inspiral&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;log10(r/M) </span><span class="se">\t</span><span class="s"> theta1 </span><span class="se">\t</span><span class="s"> theta2 </span><span class="se">\t</span><span class="s"> deltaphi&quot;</span>
+    <span class="k">for</span> <span class="n">r</span><span class="p">,</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">sep</span><span class="p">),</span><span class="n">t1_v</span><span class="p">,</span><span class="n">t2_v</span><span class="p">,</span><span class="n">dp_v</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%.0f</span><span class="s"> </span><span class="se">\t\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> </span><span class="se">\t\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s"> </span><span class="se">\t\t</span><span class="s"> </span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,</span><span class="n">dp</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>
+    <span class="k">print</span> <span class="s">&quot;Executed in </span><span class="si">%.3f</span><span class="s">s&quot;</span> <span class="o">%</span><span class="n">t</span>
 </pre></div>
 
   </div>
