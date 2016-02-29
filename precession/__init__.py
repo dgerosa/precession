@@ -18,16 +18,16 @@ Davide Gerosa. Submitted to... arXiv:...
 
 `precession` is an open-source code distributed under git version-control system on
 
-- [github.com/dgerosa/precession](github.com/dgerosa/precessions)
+- [github.com/dgerosa/precession](https://github.com/dgerosa/precessions)
 
 API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository
 
-- [dgerosa.github.io/precession](dgerosa.github.io/precession)
+- [dgerosa.github.io/precession](https://dgerosa.github.io/precession)
 
 Further information and scientific results on the results are available at:
 
-- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) 
-- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)
+- [www.damtp.cam.ac.uk/user/dg438/spinprecession](http://www.damtp.cam.ac.uk/user/dg438/spinprecession) 
+- [www.davidegerosa.com/spinprecession](http://www.davidegerosa.com/spinprecession)
 
 
 ### INSTALLATION
@@ -131,7 +131,7 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2016 Davide Gerosa"
 __license__ = "CC BY 4.0"
-__version__ = "0.0.0.43"
+__version__ = "0.0.0.44"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
