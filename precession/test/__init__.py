@@ -29,6 +29,35 @@ import time
 import multiprocessing
 
 
+def minimal():
+    '''
+    A minimal working example to perform a BH binary inspiral
+
+    **Run using**
+
+        import precession.test
+        precession.test.minimal()
+    '''
+
+    t0=time.time() 
+    q=0.75   # Mass ratio
+    chi1=0.5 # Primary's spin magnitude
+    chi2=0.95 # Secondary's spin magnitude
+    print "Take a BH binary with\n\tq=%.2f\n\tchi1=%.2f\n\tchi2=%.2f" %(q,chi1,chi2)
+    sep=numpy.logspace(10,1,10) # Output separations
+    t1= numpy.pi/3.  # Spin orientations at r_vals[0]
+    t2= 2.*numpy.pi/3.
+    dp= numpy.pi/4.
+    M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2)
+    t1_v,t2_v,dp_v=precession.evolve_angles(t1,t2,dp,sep,q,S1,S2)    
+    print "Perform BH binary inspiral"
+    print "log10(r/M) \t theta1 \t theta2 \t deltaphi"
+    for r,t1,t2,dp in zip(numpy.log10(sep),t1_v,t2_v,dp_v):
+        print "%.0f \t\t %.3f \t\t %.3f \t\t %.3f" %(r,t1,t2,dp)
+    t=time.time()-t0
+    print "Executed in %.3fs" %t
+
+minimal()
 
 def parameter_selection():
     
