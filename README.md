@@ -9,7 +9,7 @@ precession
 
 **Licence** CC BY 4.0
 
-**Version** 0.0.0.43
+**Version** 0.0.0.44
 
 
 # DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON
@@ -31,16 +31,16 @@ Davide Gerosa. Submitted to... arXiv:...
 
 `precession` is an open-source code distributed under git version-control system on
 
-- [github.com/dgerosa/precession](github.com/dgerosa/precessions)
+- [github.com/dgerosa/precession](https://github.com/dgerosa/precessions)
 
 API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository
 
-- [dgerosa.github.io/precession](dgerosa.github.io/precession)
+- [dgerosa.github.io/precession](https://dgerosa.github.io/precession)
 
 Further information and scientific results on the results are available at:
 
-- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) 
-- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)
+- [www.damtp.cam.ac.uk/user/dg438/spinprecession](http://www.damtp.cam.ac.uk/user/dg438/spinprecession) 
+- [www.davidegerosa.com/spinprecession](http://www.davidegerosa.com/spinprecession)
 
 
 ### INSTALLATION
