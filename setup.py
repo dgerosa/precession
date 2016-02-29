@@ -5,10 +5,12 @@ To publish on Pypi:
 '''
 
 from setuptools import setup
-from pypandoc import convert
-    
-read_md = lambda f: convert(f, 'rst') # Convert markdown to rst for pypi
 
+# Fill "long_description" using the README file
+def readme():
+    with open('README.rst') as f:
+        return f.read()
+        
 # Extract code version from __init__.py 
 def get_version():
     with open('precession/__init__.py') as f:
@@ -20,7 +22,7 @@ setup(
     name='precession',
     version=get_version(),
     description='Dynamics of precessing black-hole binaries',
-    long_description=read_md('README.md'),
+    long_description=readme(),
     classifiers=[
         'Topic :: Scientific/Engineering :: Astronomy',
         'Topic :: Scientific/Engineering :: Physics',

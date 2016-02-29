@@ -92,7 +92,7 @@ END
 fi
 
 
-# Generate readme
+# Generate readme (markdown)
 echo "Generating readme"
 python <<END
 import precession
@@ -107,6 +107,9 @@ outfilesave = open("README.md","w",0)   # Write to file
 outfilesave.write(joined)
 outfilesave.close()
 END
+
+# Convert readme to rst (not committed)
+pandoc README.md --from markdown --to rst -s -o README.rst
 
 
 # Commit new html to master branch
