@@ -40,8 +40,8 @@ def minimal():
     '''
 
     t0=time.time() 
-    q=0.75   # Mass ratio
-    chi1=0.5 # Primary's spin magnitude
+    q=0.75    # Mass ratio
+    chi1=0.5  # Primary's spin magnitude
     chi2=0.95 # Secondary's spin magnitude
     print "Take a BH binary with\n\tq=%.2f\n\tchi1=%.2f\n\tchi2=%.2f" %(q,chi1,chi2)
     sep=numpy.logspace(10,1,10) # Output separations
@@ -57,7 +57,6 @@ def minimal():
     t=time.time()-t0
     print "Executed in %.3fs" %t
 
-minimal()
 
 def parameter_selection():
     
