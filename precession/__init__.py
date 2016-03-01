@@ -20,14 +20,16 @@ Davide Gerosa. Submitted to... arXiv:...
 
 - [github.com/dgerosa/precession](https://github.com/dgerosa/precessions)
 
-API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository
+API documentation can be generated automatically in html format from the code
+docstrings using `pdoc`, and is is uplodad in a dedicated branch of the git
+repository      
 
 - [dgerosa.github.io/precession](https://dgerosa.github.io/precession)
 
 Further information and scientific results on the results are available at:
 
-- [www.damtp.cam.ac.uk/user/dg438/spinprecession](http://www.damtp.cam.ac.uk/user/dg438/spinprecession) 
-- [www.davidegerosa.com/spinprecession](http://www.davidegerosa.com/spinprecession)
+- [www.damtp.cam.ac.uk/user/dg438/precession](http://www.damtp.cam.ac.uk/user/dg438/precession) 
+- [www.davidegerosa.com/precession](http://www.davidegerosa.com/precession)
 
 
 ### INSTALLATION
@@ -122,9 +124,8 @@ Please, report bugs to
 
 I'm happy to help you out! 
 
-I'd like to thank E. Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D.
-Trifiro' and J. Vosmera for the help received in interpreting the physical
-results and implementing some of the algorithms.
+**Thanks**: E. Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D.
+Trifiro', A. Klein, J. Vosmera and X. Zhao.
 '''
 
 __author__ = "Davide Gerosa"
