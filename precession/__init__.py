@@ -76,7 +76,6 @@ computation of the angle alpha is somewhat unstable close to xi_min and xi_max
 as returned by xi_allowed. Richard O'Shaughnessy found that a tolerance of 2e-3
 on xi works well.
 
-
 4. **Checkpointing**. Checkpointing is implemented in some functions for
 computational efficiency. Temporary data are stored in a local directory and
 will be read in if available. To delete all previous data run
@@ -102,11 +101,11 @@ the current machine will be used.
 If q=1 the total-spin magnitude S cannot be used to parametrize the precession
 cycle and the angle varphi needs to be tracked explicitly. The q=1 case is
 implemented in the code: inputs and outputs of some of the functions are
-actually specified in cos(varphi), even if for simplicity we still call them
+actually specified in cos(varphi), even though for simplicity we still call them
 **S**. In case of precession-averaged integrations to/from infinity, kappa_inf
 becomes degenerate with xi and a required initial value of S is required.
 Please, refer to the documentation below for details. The generic unequal-mass
-part of the code works fine up to q<0.9999. To run higher values of q we
+part of the code works fine up to q<0.995. To run higher values of q we
 recommend setting q=1.
 
 7. **Stalling**. When performing precession-averaged evolutions, some binaires

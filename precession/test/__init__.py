@@ -254,7 +254,7 @@ def phase_resampling():
         # Sample values of S from |dt/dS|. Distribution should be flat in t.
         S_sample=numpy.array([precession.samplingS(xi,J,q,S1,S2,r) for i in range(d)])
         t_sample=numpy.array([abs(precession.t_of_S(Sb_min,S,Sb_min,Sb_max,xi,J,q,S1,S2,r)) for S in S_sample])
-        # Continous distributions (normalized)
+        # Continuous distributions (normalized)
         S_distr=numpy.array([2.*abs(precession.dtdS(S,xi,J,q,S1,S2,r)/tau) for S in S_vals])
         t_distr=numpy.array([2./tau for t in t_vals])
 
