@@ -4356,7 +4356,7 @@ def finalspin(theta1,theta2,deltaPhi,q,S1,S2):
     return chifin
     
     
-def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
+def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False,more=False):
 
     '''
     Estimate the final kick of the BH remnant following a BH merger. We
@@ -4381,7 +4381,7 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
     
     **Call:**
 
-        vkick=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)
+        vkick=precession.finalkick(theta1,theta2,deltaphi,q,S1,S2,maxkick=False,kms=False,more=False)
 
     **Parameters:**
 
@@ -4393,10 +4393,17 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
     - `S2`: spin magnitude of the secondary BH.
     - `maxkick`: if `True` maximizes over the orbital phase at merger.
     - `kms`: if `True` convert result to km/s.
+    - `more`: if `True` returns additional quantities.
 
     **Returns:**
     
-    - `vkick`: dimensionless kick of the BH remnant
+    - `vkick`: kick of the BH remnant
+    - `vm`: (optional) mass-asymmetry term
+    - `vperp`: (optional) spin-asymmetry term perpendicular to L
+    - `v_e1`: (optional) component of the orbital-plane kick
+    - `v_e2`: (optional) component of the orbital-plane kick
+    - `vpar`: (optional) spin-asymmetry term along L
+    
     '''
 
     
@@ -4461,12 +4468,20 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False):
     if vkick>5000:
         print "[finalkick] Warning; I got v_kick>5000km/s. This shouldn't be possibile"
     
-    if kms:
+    if not kms: # divide by the speed of light in km/s
+        c_kms=299792.458
+        vkick=vkick/299792.458
+        vm=vm/299792.458
+        vperp=vperp/299792.458
+        vpar=vpar/299792.458
+
+    if more:
+        return vkick, vm, vperp, vm+vperp*np.cos(zeta), vperp*np.sin(zeta), vpar
+    else:
         return vkick
-    else:  # speed of light in km/s
-        return vkick/299792.458
-
-
+        
+        
+        
 
 #################################
 ########## UTILITIES ############
