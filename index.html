@@ -1157,7 +1157,7 @@ table {
 <p><strong>email</strong> d.gerosa@damtp.cam.ac.uk</p>
 <p><strong>Copyright</strong> Copyright (C) 2016 Davide Gerosa</p>
 <p><strong>Licence</strong> CC BY 4.0</p>
-<p><strong>Version</strong> 0.0.0.40</p>
+<p><strong>Version</strong> 0.0.0.44</p>
 <h1>DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON</h1>
 <p><code>precession</code> is a Python module to study the dynamics of precessing black-hole
 binaries in the post-Newtonian regime. The code includes tools to study the
@@ -1175,16 +1175,18 @@ Davide Gerosa. Submitted to... arXiv:...</li>
 </ul>
 <p><code>precession</code> is an open-source code distributed under git version-control system on</p>
 <ul>
-<li><a href="github.com/dgerosa/precessions">github.com/dgerosa/precession</a></li>
+<li><a href="https://github.com/dgerosa/precessions">github.com/dgerosa/precession</a></li>
 </ul>
-<p>API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository</p>
+<p>API documentation can be generated automatically in html format from the code
+docstrings using <code>pdoc</code>, and is is uplodad in a dedicated branch of the git
+repository      </p>
 <ul>
-<li><a href="dgerosa.github.io/precession">dgerosa.github.io/precession</a></li>
+<li><a href="https://dgerosa.github.io/precession">dgerosa.github.io/precession</a></li>
 </ul>
 <p>Further information and scientific results on the results are available at:</p>
 <ul>
-<li><a href="www.damtp.cam.ac.uk/user/dg438/spinprecession">www.damtp.cam.ac.uk/user/dg438/spinprecession</a> </li>
-<li><a href="www.davidegerosa.com/spinprecession">www.davidegerosa.com/spinprecession</a></li>
+<li><a href="http://www.damtp.cam.ac.uk/user/dg438/precession">www.damtp.cam.ac.uk/user/dg438/precession</a> </li>
+<li><a href="http://www.davidegerosa.com/precession">www.davidegerosa.com/precession</a></li>
 </ul>
 <h3>INSTALLATION</h3>
 <p><code>precession</code> works in python 2.x and has been tested on 2.7.10. It can be
@@ -1266,11 +1268,11 @@ the current machine will be used.</p>
 If q=1 the total-spin magnitude S cannot be used to parametrize the precession
 cycle and the angle varphi needs to be tracked explicitly. The q=1 case is
 implemented in the code: inputs and outputs of some of the functions are
-actually specified in cos(varphi), even if for simplicity we still call them
+actually specified in cos(varphi), even though for simplicity we still call them
 <strong>S</strong>. In case of precession-averaged integrations to/from infinity, kappa_inf
 becomes degenerate with xi and a required initial value of S is required.
 Please, refer to the documentation below for details. The generic unequal-mass
-part of the code works fine up to q&lt;0.9999. To run higher values of q we
+part of the code works fine up to q&lt;0.995. To run higher values of q we
 recommend setting q=1.</p>
 </li>
 <li>
@@ -1289,9 +1291,8 @@ Please, report bugs to</p>
 
 
 <p>I'm happy to help you out! </p>
-<p>I'd like to thank E. Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D.
-Trifiro' and J. Vosmera for the help received in interpreting the physical
-results and implementing some of the algorithms.</p>
+<p><strong>Thanks</strong>: E. Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D.
+Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
   
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession', this);">Show source &equiv;</a></p>
   <div id="source-precession" class="source">
@@ -1315,16 +1316,18 @@ results and implementing some of the algorithms.</p>
 
 <span class="sd">`precession` is an open-source code distributed under git version-control system on</span>
 
-<span class="sd">- [github.com/dgerosa/precession](github.com/dgerosa/precessions)</span>
+<span class="sd">- [github.com/dgerosa/precession](https://github.com/dgerosa/precessions)</span>
 
-<span class="sd">API documentation can be generated automatically in html format from the code docstrings using pdoc, and is is uplodad in a dedicated branch of the git repository</span>
+<span class="sd">API documentation can be generated automatically in html format from the code</span>
+<span class="sd">docstrings using `pdoc`, and is is uplodad in a dedicated branch of the git</span>
+<span class="sd">repository      </span>
 
-<span class="sd">- [dgerosa.github.io/precession](dgerosa.github.io/precession)</span>
+<span class="sd">- [dgerosa.github.io/precession](https://dgerosa.github.io/precession)</span>
 
 <span class="sd">Further information and scientific results on the results are available at:</span>
 
-<span class="sd">- [www.damtp.cam.ac.uk/user/dg438/spinprecession](www.damtp.cam.ac.uk/user/dg438/spinprecession) </span>
-<span class="sd">- [www.davidegerosa.com/spinprecession](www.davidegerosa.com/spinprecession)</span>
+<span class="sd">- [www.damtp.cam.ac.uk/user/dg438/precession](http://www.damtp.cam.ac.uk/user/dg438/precession) </span>
+<span class="sd">- [www.davidegerosa.com/precession](http://www.davidegerosa.com/precession)</span>
 
 
 <span class="sd">### INSTALLATION</span>
@@ -1371,7 +1374,6 @@ results and implementing some of the algorithms.</p>
 <span class="sd">as returned by xi_allowed. Richard O&#39;Shaughnessy found that a tolerance of 2e-3</span>
 <span class="sd">on xi works well.</span>
 
-
 <span class="sd">4. **Checkpointing**. Checkpointing is implemented in some functions for</span>
 <span class="sd">computational efficiency. Temporary data are stored in a local directory and</span>
 <span class="sd">will be read in if available. To delete all previous data run</span>
@@ -1397,11 +1399,11 @@ results and implementing some of the algorithms.</p>
 <span class="sd">If q=1 the total-spin magnitude S cannot be used to parametrize the precession</span>
 <span class="sd">cycle and the angle varphi needs to be tracked explicitly. The q=1 case is</span>
 <span class="sd">implemented in the code: inputs and outputs of some of the functions are</span>
-<span class="sd">actually specified in cos(varphi), even if for simplicity we still call them</span>
+<span class="sd">actually specified in cos(varphi), even though for simplicity we still call them</span>
 <span class="sd">**S**. In case of precession-averaged integrations to/from infinity, kappa_inf</span>
 <span class="sd">becomes degenerate with xi and a required initial value of S is required.</span>
 <span class="sd">Please, refer to the documentation below for details. The generic unequal-mass</span>
-<span class="sd">part of the code works fine up to q&lt;0.9999. To run higher values of q we</span>
+<span class="sd">part of the code works fine up to q&lt;0.995. To run higher values of q we</span>
 <span class="sd">recommend setting q=1.</span>
 
 <span class="sd">7. **Stalling**. When performing precession-averaged evolutions, some binaires</span>
@@ -1419,16 +1421,15 @@ results and implementing some of the algorithms.</p>
 
 <span class="sd">I&#39;m happy to help you out! </span>
 
-<span class="sd">I&#39;d like to thank E. Berti, M. Kesden, U. Sperhake, R. O&#39;Shaughnessy, D.</span>
-<span class="sd">Trifiro&#39; and J. Vosmera for the help received in interpreting the physical</span>
-<span class="sd">results and implementing some of the algorithms.</span>
+<span class="sd">**Thanks**: E. Berti, M. Kesden, U. Sperhake, R. O&#39;Shaughnessy, D.</span>
+<span class="sd">Trifiro&#39;, A. Klein, J. Vosmera and X. Zhao.</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Davide Gerosa&quot;</span>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s">&quot;d.gerosa@damtp.cam.ac.uk&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;Copyright (C) 2016 Davide Gerosa&quot;</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;CC BY 4.0&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.40&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.44&quot;</span>
 
 
 <span class="n">__doc__</span><span class="o">=</span><span class="s">&quot;**Author** &quot;</span><span class="o">+</span><span class="n">__author__</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="o">+</span>\
@@ -5653,7 +5654,7 @@ results and implementing some of the algorithms.</p>
     <span class="k">return</span> <span class="n">chifin</span>
     
     
-<span class="k">def</span> <span class="nf">finalkick</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">maxkick</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">kms</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">finalkick</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">maxkick</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">kms</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">more</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Estimate the final kick of the BH remnant following a BH merger. We</span>
@@ -5678,7 +5679,7 @@ results and implementing some of the algorithms.</p>
 <span class="sd">    </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        vkick=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)</span>
+<span class="sd">        vkick=precession.finalkick(theta1,theta2,deltaphi,q,S1,S2,maxkick=False,kms=False,more=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -5690,10 +5691,17 @@ results and implementing some of the algorithms.</p>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
 <span class="sd">    - `maxkick`: if `True` maximizes over the orbital phase at merger.</span>
 <span class="sd">    - `kms`: if `True` convert result to km/s.</span>
+<span class="sd">    - `more`: if `True` returns additional quantities.</span>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    </span>
-<span class="sd">    - `vkick`: dimensionless kick of the BH remnant</span>
+<span class="sd">    - `vkick`: kick of the BH remnant</span>
+<span class="sd">    - `vm`: (optional) mass-asymmetry term</span>
+<span class="sd">    - `vperp`: (optional) spin-asymmetry term perpendicular to L</span>
+<span class="sd">    - `v_e1`: (optional) component of the orbital-plane kick</span>
+<span class="sd">    - `v_e2`: (optional) component of the orbital-plane kick</span>
+<span class="sd">    - `vpar`: (optional) spin-asymmetry term along L</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     
@@ -5758,12 +5766,20 @@ results and implementing some of the algorithms.</p>
     <span class="k">if</span> <span class="n">vkick</span><span class="o">&gt;</span><span class="mi">5000</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&quot;[finalkick] Warning; I got v_kick&gt;5000km/s. This shouldn&#39;t be possibile&quot;</span>
     
-    <span class="k">if</span> <span class="n">kms</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">kms</span><span class="p">:</span> <span class="c"># divide by the speed of light in km/s</span>
+        <span class="n">c_kms</span><span class="o">=</span><span class="mf">299792.458</span>
+        <span class="n">vkick</span><span class="o">=</span><span class="n">vkick</span><span class="o">/</span><span class="mf">299792.458</span>
+        <span class="n">vm</span><span class="o">=</span><span class="n">vm</span><span class="o">/</span><span class="mf">299792.458</span>
+        <span class="n">vperp</span><span class="o">=</span><span class="n">vperp</span><span class="o">/</span><span class="mf">299792.458</span>
+        <span class="n">vpar</span><span class="o">=</span><span class="n">vpar</span><span class="o">/</span><span class="mf">299792.458</span>
+
+    <span class="k">if</span> <span class="n">more</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">vkick</span><span class="p">,</span> <span class="n">vm</span><span class="p">,</span> <span class="n">vperp</span><span class="p">,</span> <span class="n">vm</span><span class="o">+</span><span class="n">vperp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">zeta</span><span class="p">),</span> <span class="n">vperp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">zeta</span><span class="p">),</span> <span class="n">vpar</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">vkick</span>
-    <span class="k">else</span><span class="p">:</span>  <span class="c"># speed of light in km/s</span>
-        <span class="k">return</span> <span class="n">vkick</span><span class="o">/</span><span class="mf">299792.458</span>
-
-
+        
+        
+        
 
 <span class="c">#################################</span>
 <span class="c">########## UTILITIES ############</span>
@@ -9027,7 +9043,7 @@ the first binary at the first output separation (this is a scalar).</p>
       
   <div class="item">
     <div class="name def" id="precession.finalkick">
-    <p>def <span class="ident">finalkick</span>(</p><p>theta1, theta2, deltaPhi, q, S1, S2, maxkick=False, kms=False)</p>
+    <p>def <span class="ident">finalkick</span>(</p><p>theta1, theta2, deltaPhi, q, S1, S2, maxkick=False, kms=False, more=False)</p>
     </div>
     
 
@@ -9051,7 +9067,7 @@ to transfer binaries at r~10M.</p>
 <p>The final kick is returned in geometrical units (i.e. vkick/c) by default,
 and converted to km/s if kms=True.</p>
 <p><strong>Call:</strong></p>
-<div class="codehilite"><pre>vkick=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)
+<div class="codehilite"><pre>vkick=precession.finalkick(theta1,theta2,deltaphi,q,S1,S2,maxkick=False,kms=False,more=False)
 </pre></div>
 
 
@@ -9065,15 +9081,21 @@ and converted to km/s if kms=True.</p>
 <li><code>S2</code>: spin magnitude of the secondary BH.</li>
 <li><code>maxkick</code>: if <code>True</code> maximizes over the orbital phase at merger.</li>
 <li><code>kms</code>: if <code>True</code> convert result to km/s.</li>
+<li><code>more</code>: if <code>True</code> returns additional quantities.</li>
 </ul>
 <p><strong>Returns:</strong></p>
 <ul>
-<li><code>vkick</code>: dimensionless kick of the BH remnant</li>
+<li><code>vkick</code>: kick of the BH remnant</li>
+<li><code>vm</code>: (optional) mass-asymmetry term</li>
+<li><code>vperp</code>: (optional) spin-asymmetry term perpendicular to L</li>
+<li><code>v_e1</code>: (optional) component of the orbital-plane kick</li>
+<li><code>v_e2</code>: (optional) component of the orbital-plane kick</li>
+<li><code>vpar</code>: (optional) spin-asymmetry term along L</li>
 </ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.finalkick', this);">Show source &equiv;</a></p>
   <div id="source-precession.finalkick" class="source">
-    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">finalkick</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">maxkick</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">kms</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">finalkick</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaPhi</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">maxkick</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">kms</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">more</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Estimate the final kick of the BH remnant following a BH merger. We</span>
@@ -9098,7 +9120,7 @@ and converted to km/s if kms=True.</p>
 <span class="sd">    </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        vkick=precession.finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False)</span>
+<span class="sd">        vkick=precession.finalkick(theta1,theta2,deltaphi,q,S1,S2,maxkick=False,kms=False,more=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -9110,10 +9132,17 @@ and converted to km/s if kms=True.</p>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
 <span class="sd">    - `maxkick`: if `True` maximizes over the orbital phase at merger.</span>
 <span class="sd">    - `kms`: if `True` convert result to km/s.</span>
+<span class="sd">    - `more`: if `True` returns additional quantities.</span>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    </span>
-<span class="sd">    - `vkick`: dimensionless kick of the BH remnant</span>
+<span class="sd">    - `vkick`: kick of the BH remnant</span>
+<span class="sd">    - `vm`: (optional) mass-asymmetry term</span>
+<span class="sd">    - `vperp`: (optional) spin-asymmetry term perpendicular to L</span>
+<span class="sd">    - `v_e1`: (optional) component of the orbital-plane kick</span>
+<span class="sd">    - `v_e2`: (optional) component of the orbital-plane kick</span>
+<span class="sd">    - `vpar`: (optional) spin-asymmetry term along L</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     
@@ -9178,10 +9207,17 @@ and converted to km/s if kms=True.</p>
     <span class="k">if</span> <span class="n">vkick</span><span class="o">&gt;</span><span class="mi">5000</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&quot;[finalkick] Warning; I got v_kick&gt;5000km/s. This shouldn&#39;t be possibile&quot;</span>
     
-    <span class="k">if</span> <span class="n">kms</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">kms</span><span class="p">:</span> <span class="c"># divide by the speed of light in km/s</span>
+        <span class="n">c_kms</span><span class="o">=</span><span class="mf">299792.458</span>
+        <span class="n">vkick</span><span class="o">=</span><span class="n">vkick</span><span class="o">/</span><span class="mf">299792.458</span>
+        <span class="n">vm</span><span class="o">=</span><span class="n">vm</span><span class="o">/</span><span class="mf">299792.458</span>
+        <span class="n">vperp</span><span class="o">=</span><span class="n">vperp</span><span class="o">/</span><span class="mf">299792.458</span>
+        <span class="n">vpar</span><span class="o">=</span><span class="n">vpar</span><span class="o">/</span><span class="mf">299792.458</span>
+
+    <span class="k">if</span> <span class="n">more</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">vkick</span><span class="p">,</span> <span class="n">vm</span><span class="p">,</span> <span class="n">vperp</span><span class="p">,</span> <span class="n">vm</span><span class="o">+</span><span class="n">vperp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">zeta</span><span class="p">),</span> <span class="n">vperp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">zeta</span><span class="p">),</span> <span class="n">vpar</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">vkick</span>
-    <span class="k">else</span><span class="p">:</span>  <span class="c"># speed of light in km/s</span>
-        <span class="k">return</span> <span class="n">vkick</span><span class="o">/</span><span class="mf">299792.458</span>
 </pre></div>
 
   </div>
