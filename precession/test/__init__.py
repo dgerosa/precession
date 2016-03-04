@@ -43,7 +43,7 @@ def minimal():
     q=0.75    # Mass ratio
     chi1=0.5  # Primary's spin magnitude
     chi2=0.95 # Secondary's spin magnitude
-    print "Take a BH binary with\n\tq=%.2f\n\tchi1=%.2f\n\tchi2=%.2f" %(q,chi1,chi2)
+    print "Take a BH binary with q=%.2f, chi1=%.2f and chi2=%.2f" %(q,chi1,chi2)
     sep=numpy.logspace(10,1,10) # Output separations
     t1= numpy.pi/3.  # Spin orientations at r_vals[0]
     t2= 2.*numpy.pi/3.
@@ -308,7 +308,7 @@ def PNwrappers():
     q=0.9      # Mass ratio. Must be q<=1.
     chi1=0.5   # Primary spin. Must be chi1<=1
     chi2=0.5   # Secondary spin. Must be chi2<=1
-    print "We study a binary with\n\tq=%.3f\n\tchi1=%.3f\n\tchi2=%.3f" %(q,chi1,chi2)
+    print "We study a binary with\n\tq=%.3f, chi1=%.3f, chi2=%.3f" %(q,chi1,chi2)
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
     ri=1000*M  # Initial separation.
     rf=10.*M   # Final separation.
@@ -318,7 +318,7 @@ def PNwrappers():
     xii,Ji,Si=precession.from_the_angles(t1i,t2i,dpi,q,S1,S2,ri)
     print "Configuration at ri=%.0f\n\t(xi,J,S)=(%.3f,%.3f,%.3f)\n\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(ri,xii,Ji,Si,t1i,t2i,dpi)
 
-    print "\n *Orbit-averaged evolution*"
+    print " *Orbit-averaged evolution*"
     print "Evolution ri=%.0f --> rf=%.0f" %(ri,rf)
     Jf,xif,Sf=precession.orbit_averaged(Ji,xii,Si,r_vals,q,S1,S2)
     print "\t(xi,J,S)=(%.3f,%.3f,%.3f)" %(xif[-1],Jf[-1],Sf[-1])
@@ -327,7 +327,7 @@ def PNwrappers():
     Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z=precession.orbit_vectors(Ji,xii,Si,r_vals,q,S1,S2)
     print "\t(Lx,Ly,Lz)=(%.3f,%.3f,%.3f)\n\t(S1x,S1y,S1z)=(%.3f,%.3f,%.3f)\n\t(S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(Lx[-1],Ly[-1],Lz[-1],S1x[-1],S1y[-1],S1z[-1],S2x[-1],S2y[-1],S2z[-1])
 
-    print "\n *Precession-averaged evolution*"  
+    print " *Precession-averaged evolution*"  
     print "Evolution ri=%.0f --> rf=%.0f" %(ri,rf)
     Jf=precession.evolve_J(xii,Ji,r_vals,q,S1,S2)
     print "\t(xi,J,S)=(%.3f,%.3f,-)" %(xii,Jf[-1])
@@ -340,12 +340,12 @@ def PNwrappers():
     print "Evolution infinity --> rf=%.0f" %rf 
     print "\tJ=%.3f" %Jf[-1] 
 
-    print "\n *Hybrid evolution*"  
+    print " *Hybrid evolution*"  
     print "Prec.Av. infinity --> rt=%.0f & Orb.Av. rt=%.0f --> rf=%.0f" %(rt,rt,rf)
     t1f,t2f,dpf=precession.hybrid(xii,kappainf,r_vals,q,S1,S2,rt)
     print "\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
     
-    print "\n *Properties of the BH remnant*"  
+    print " *Properties of the BH remnant*"  
     Mfin=precession.finalmass(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)    
     print "\tM_f=%.3f" %Mfin
     chifin=precession.finalspin(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)
@@ -475,7 +475,7 @@ def timing():
     rf=10*M        # Final separation
     r_vals=[ri,rf] # Intermediate output separations not needed here
 
-    print "Integrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPUs" %(N,ri,rf,multiprocessing.cpu_count()) # Parallel computation used by default
+    print " *Integrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPUs*" %(N,ri,rf,multiprocessing.cpu_count()) # Parallel computation used by default
     t0=time.time() 
     precession.orbit_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)  
     t=time.time()-t0
@@ -487,7 +487,7 @@ def timing():
 
     precession.empty_temp() # Remove previous checkpoints
     precession.CPUs=1       # Force serial computations
-    print "\nIntegrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPU" %(len(BHsample),ri,rf,precession.CPUs)
+    print " *Integrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPU*" %(len(BHsample),ri,rf,precession.CPUs)
     t0=time.time()
     precession.orbit_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)  
     t=time.time()-t0
