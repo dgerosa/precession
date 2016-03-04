@@ -313,7 +313,7 @@ def PNwrappers():
     ri=1000*M  # Initial separation.
     rf=10.*M   # Final separation.
     rt=100.*M  # Intermediate separation for hybrid evolution.
-    r_vals=numpy.logspace(numpy.log10(ri),numpy.log10(rf),1000) # Output requested
+    r_vals=numpy.logspace(numpy.log10(ri),numpy.log10(rf),10) # Output requested
     t1i=numpy.pi/4.; t2i=numpy.pi/4.; dpi=numpy.pi/4. # Initial configuration
     xii,Ji,Si=precession.from_the_angles(t1i,t2i,dpi,q,S1,S2,ri)
     print "Configuration at ri=%.0f\n\t(xi,J,S)=(%.3f,%.3f,%.3f)\n\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(ri,xii,Ji,Si,t1i,t2i,dpi)
@@ -324,9 +324,11 @@ def PNwrappers():
     print "\t(xi,J,S)=(%.3f,%.3f,%.3f)" %(xif[-1],Jf[-1],Sf[-1])
     t1f,t2f,dpf=precession.orbit_angles(t1i,t2i,dpi,r_vals,q,S1,S2)
     print "\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
-    Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z=precession.orbit_vectors(Ji,xii,Si,r_vals,q,S1,S2)
+    Jvec,Lvec,S1vec,S2vec,Svec=precession.Jframe_projection(xii,Si,Ji,q,S1,S2,ri)
+    Lxi,Lyi,Lzi=Lvec; S1xi,S1yi,S1zi=S1vec; S2xi,S2yi,S2zi=S2vec  
+    Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z=precession.orbit_vectors(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q)
     print "\t(Lx,Ly,Lz)=(%.3f,%.3f,%.3f)\n\t(S1x,S1y,S1z)=(%.3f,%.3f,%.3f)\n\t(S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(Lx[-1],Ly[-1],Lz[-1],S1x[-1],S1y[-1],S1z[-1],S2x[-1],S2y[-1],S2z[-1])
-
+    
     print " *Precession-averaged evolution*"  
     print "Evolution ri=%.0f --> rf=%.0f" %(ri,rf)
     Jf=precession.evolve_J(xii,Ji,r_vals,q,S1,S2)
