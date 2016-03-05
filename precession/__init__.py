@@ -265,7 +265,22 @@ def get_fixed(q,chi1,chi2):
 def get_L(r,q):
 
     '''
-    Return Newtonian expression for the orbital angular momentum. This function is not called explicitely within the precession module to increase efficiency.
+    Return Newtonian expression for the orbital angular momentum. This function is not called explicitely within the `precession` module to increase efficiency.
+    
+    **Call:**
+
+        L=precession.get_L(r,q)
+    
+    **Parameters:**
+ 
+    - `q`: binary mass ratio. Must be q<=1.
+    - `r`: binary separation.
+
+    **Returns:**
+    
+    - `L`: Magnitude of the orbital angular momentum
+
+    
     '''
     
     L=(q/(1.+q)**2)*(r*M**3)**.5    
@@ -4001,7 +4016,7 @@ def orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_
  
     **Call:**
         
-        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,S1_vals,S2_vals)
+        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals)
 
     **Parameters:**
 
