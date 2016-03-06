@@ -4,29 +4,47 @@ web=0
 while test $# -gt 0; do
         case "$1" in
                 -h|--help)
-                        echo "Usage: bash generate_documentation.sh [options]"
+                        echo "Usage: bash generate_documentation.sh -doc -web -readme"
                         echo " "
                         echo "Generate automatic html documentation using pdoc"
                         echo "pdoc is available here https://github.com/BurntSushi/pdoc"
                         echo "and can be installed from Pypi: pip install pdoc."
+                        echo "If -doc, documentation is only produced but not published online"
                         echo "If -web, documentation is pushed to a dedicated git branch (gh-pages)"
                         echo "and published at http://dgerosa.github.io/precession/"
+                        echo "If -readme, create a md readme from docstrings and convert it to rst"
                         echo " "
                         echo "options:"
                         echo "   -h, --help       show brief help"
-                        echo "   -web             push documentation to http://dgerosa.github.io/precession/"
+                        echo "   -doc             produce documentation
+                        echo "   -web             produce and publish  documentation
+                        echo "   -readme          produce readme
+
                         exit 0
+                        ;;
+                -doc)
+                        shift
+                        doc=1
+                        shift
                         ;;
                 -web)
                         shift
                         web=1
                         shift
                         ;;
+                -readme)
+                        shift
+                        readme=1
+                        shift
+                        ;;
+
                 *)
                         break
                         ;;
         esac
 done
+
+I HAVE TO FIX THIS
 
 
 if [ $web -eq 1 ]; then
