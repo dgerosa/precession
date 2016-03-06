@@ -1061,7 +1061,7 @@ def build_angles(Lvec,S1vec,S2vec):
 
     **Call:**
 
-        xi,J,S=precession.build_angles(Lvec,S1vec,S2vec)
+        theta1,theta2,deltaphi,theta12=precession.build_angles(Lvec,S1vec,S2vec)
 
     **Parameters:**
 
