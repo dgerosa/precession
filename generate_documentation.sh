@@ -53,6 +53,30 @@ END
     # Get rid of precompiled files
     rm precession/*pyc precession/*/*pyc
 
+    # Generate readme (markdown)
+    echo "Generating readme"
+python <<END
+import precession
+docs=precession.__doc__                 # Get code docstrings
+title="precession\n"+\
+      "==========\n\n"+\
+      docs                              # Prepend title
+splits=title.split('###')               # Separate parts
+removed = splits[:2] + splits[3 :]      # Get rid of some details
+joined= "###".join(removed)             # Put parts back together
+outfilesave = open("README.md","w",0)   # Write to file
+outfilesave.write(joined)
+outfilesave.close()
+END
+
+    # Convert readme to rst (not committed)
+    pandoc README.md --from markdown --to rst -s -o README.rst
+
+    # Commit new html to master branch
+    git add precession/index.html precession/test/index.html README.md
+    git commit -m "Automatic commit from generate_documentation.sh"
+    git push
+
     # Move html files somewhere else
     temp1=`mktemp`
     cp precession/index.html $temp1
@@ -89,11 +113,8 @@ END
     # Get rid of precompiled files
     rm precession/*pyc precession/*/*pyc
 
-fi
-
-
-# Generate readme (markdown)
-echo "Generating readme"
+    # Generate readme (markdown)
+    echo "Generating readme"
 python <<END
 import precession
 docs=precession.__doc__                 # Get code docstrings
@@ -108,12 +129,9 @@ outfilesave.write(joined)
 outfilesave.close()
 END
 
-# Convert readme to rst (not committed)
-pandoc README.md --from markdown --to rst -s -o README.rst
+    # Convert readme to rst (not committed)
+    pandoc README.md --from markdown --to rst -s -o README.rst
 
 
-# Commit new html to master branch
-git add precession/index.html precession/test/index.html README.md
-git commit -m "Automatic commit from generate_documentation.sh"
-git push
+fi
 
