@@ -9,7 +9,7 @@ precession
 
 **Licence** CC BY 4.0
 
-**Version** 0.0.0.47
+**Version** 0.0.0.48
 
 
 # DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON

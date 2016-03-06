@@ -1071,6 +1071,7 @@ table {
     <li class="mono"><a href="#precession.aligned_configurations">aligned_configurations</a></li>
     <li class="mono"><a href="#precession.alpha_of_S">alpha_of_S</a></li>
     <li class="mono"><a href="#precession.alphaz">alphaz</a></li>
+    <li class="mono"><a href="#precession.build_angles">build_angles</a></li>
     <li class="mono"><a href="#precession.cutoff">cutoff</a></li>
     <li class="mono"><a href="#precession.dJdL">dJdL</a></li>
     <li class="mono"><a href="#precession.dJdr">dJdr</a></li>
@@ -1157,7 +1158,7 @@ table {
 <p><strong>email</strong> d.gerosa@damtp.cam.ac.uk</p>
 <p><strong>Copyright</strong> Copyright (C) 2016 Davide Gerosa</p>
 <p><strong>Licence</strong> CC BY 4.0</p>
-<p><strong>Version</strong> 0.0.0.47</p>
+<p><strong>Version</strong> 0.0.0.48</p>
 <h1>DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON</h1>
 <p><code>precession</code> is a Python module to study the dynamics of precessing black-hole
 binaries in the post-Newtonian regime. The code includes tools to study the
@@ -1429,7 +1430,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s">&quot;d.gerosa@damtp.cam.ac.uk&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;Copyright (C) 2016 Davide Gerosa&quot;</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;CC BY 4.0&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.47&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.48&quot;</span>
 
 
 <span class="n">__doc__</span><span class="o">=</span><span class="s">&quot;**Author** &quot;</span><span class="o">+</span><span class="n">__author__</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="o">+</span>\
@@ -1563,7 +1564,22 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="k">def</span> <span class="nf">get_L</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Return Newtonian expression for the orbital angular momentum. This function is not called explicitely within the precession module to increase efficiency.</span>
+<span class="sd">    Return Newtonian expression for the orbital angular momentum. This function is not called explicitely within the `precession` module to increase efficiency.</span>
+<span class="sd">    </span>
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        L=precession.get_L(r,q)</span>
+<span class="sd">    </span>
+<span class="sd">    **Parameters:**</span>
+<span class="sd"> </span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `r`: binary separation.</span>
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `L`: Magnitude of the orbital angular momentum</span>
+
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="n">L</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>    
@@ -2335,6 +2351,45 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
         <span class="n">S</span><span class="o">=</span> <span class="p">(</span><span class="n">S1</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">S2</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mf">2.</span><span class="o">*</span><span class="n">S1</span><span class="o">*</span><span class="n">S2</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)))</span><span class="o">**.</span><span class="mi">5</span>
         <span class="n">J</span><span class="o">=</span> <span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">S</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mf">2.</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="p">(</span><span class="n">S1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">+</span><span class="n">S2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)))</span><span class="o">**.</span><span class="mi">5</span>
         <span class="k">return</span> <span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">S</span>
+
+<span class="k">def</span> <span class="nf">build_angles</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S1vec</span><span class="p">,</span><span class="n">S2vec</span><span class="p">):</span>
+  
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Compute the angles theta1, theta2, deltaphi and theta12 from the xyz</span>
+<span class="sd">    components of L, S1 and S2.</span>
+
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        xi,J,S=precession.build_angles(Lvec,S1vec,S2vec)</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    - `Lvec`: components of L in a reference frame (3 values for x,y,z).</span>
+<span class="sd">    - `S1vec`: components of S1 in a reference frame (3 values for x,y,z).</span>
+<span class="sd">    - `S2vec`: components of S2 in a reference frame (3 values for x,y,z).</span>
+
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `theta1`: angle between the spin of the primary and the orbital angular momentum.</span>
+<span class="sd">    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.</span>
+<span class="sd">    - `deltaphi`: angle between the projection of the two spins on the orbital plane.</span>
+<span class="sd">    - `theta12`: angle between the two spins.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">L</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Lvec</span><span class="p">)</span>
+    <span class="n">S1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">S1vec</span><span class="p">)</span>
+    <span class="n">S2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">S2vec</span><span class="p">)</span>
+    
+    <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S1vec</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">S1</span><span class="p">))</span>
+    <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S2vec</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">S2</span><span class="p">))</span>
+    <span class="n">theta12</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">S1vec</span><span class="p">,</span><span class="n">S2vec</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">S1</span><span class="o">*</span><span class="n">S2</span><span class="p">))</span>
+    <span class="n">deltaphi</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta12</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span>   <span class="p">)</span> 
+    
+    <span class="n">deltaphi</span><span class="o">*=</span><span class="n">math</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S1vec</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S2vec</span><span class="p">))))</span>
+    <span class="k">return</span> <span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span><span class="p">,</span><span class="n">theta12</span>
+
+
 
 
 <span class="k">def</span> <span class="nf">xi_allowed</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">,</span> <span class="n">more</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -5299,7 +5354,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 <span class="sd">        </span>
-<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,S1_vals,S2_vals)</span>
+<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -7843,6 +7898,81 @@ sign every half period).</p>
   
       
   <div class="item">
+    <div class="name def" id="precession.build_angles">
+    <p>def <span class="ident">build_angles</span>(</p><p>Lvec, S1vec, S2vec)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Compute the angles theta1, theta2, deltaphi and theta12 from the xyz
+components of L, S1 and S2.</p>
+<p><strong>Call:</strong></p>
+<div class="codehilite"><pre>xi,J,S=precession.build_angles(Lvec,S1vec,S2vec)
+</pre></div>
+
+
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>Lvec</code>: components of L in a reference frame (3 values for x,y,z).</li>
+<li><code>S1vec</code>: components of S1 in a reference frame (3 values for x,y,z).</li>
+<li><code>S2vec</code>: components of S2 in a reference frame (3 values for x,y,z).</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>theta1</code>: angle between the spin of the primary and the orbital angular momentum.</li>
+<li><code>theta2</code>: angle between the spin of the secondary and the orbital angular momentum.</li>
+<li><code>deltaphi</code>: angle between the projection of the two spins on the orbital plane.</li>
+<li><code>theta12</code>: angle between the two spins.</li>
+</ul></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.build_angles', this);">Show source &equiv;</a></p>
+  <div id="source-precession.build_angles" class="source">
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">build_angles</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S1vec</span><span class="p">,</span><span class="n">S2vec</span><span class="p">):</span>
+  
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Compute the angles theta1, theta2, deltaphi and theta12 from the xyz</span>
+<span class="sd">    components of L, S1 and S2.</span>
+
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        xi,J,S=precession.build_angles(Lvec,S1vec,S2vec)</span>
+
+<span class="sd">    **Parameters:**</span>
+
+<span class="sd">    - `Lvec`: components of L in a reference frame (3 values for x,y,z).</span>
+<span class="sd">    - `S1vec`: components of S1 in a reference frame (3 values for x,y,z).</span>
+<span class="sd">    - `S2vec`: components of S2 in a reference frame (3 values for x,y,z).</span>
+
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `theta1`: angle between the spin of the primary and the orbital angular momentum.</span>
+<span class="sd">    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.</span>
+<span class="sd">    - `deltaphi`: angle between the projection of the two spins on the orbital plane.</span>
+<span class="sd">    - `theta12`: angle between the two spins.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">L</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Lvec</span><span class="p">)</span>
+    <span class="n">S1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">S1vec</span><span class="p">)</span>
+    <span class="n">S2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">S2vec</span><span class="p">)</span>
+    
+    <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S1vec</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">S1</span><span class="p">))</span>
+    <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S2vec</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">S2</span><span class="p">))</span>
+    <span class="n">theta12</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">S1vec</span><span class="p">,</span><span class="n">S2vec</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">S1</span><span class="o">*</span><span class="n">S2</span><span class="p">))</span>
+    <span class="n">deltaphi</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta12</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span>   <span class="p">)</span> 
+    
+    <span class="n">deltaphi</span><span class="o">*=</span><span class="n">math</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S1vec</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span><span class="n">S2vec</span><span class="p">))))</span>
+    <span class="k">return</span> <span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span><span class="p">,</span><span class="n">theta12</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
     <div class="name def" id="precession.cutoff">
     <p>def <span class="ident">cutoff</span>(</p><p>detector, M_msun)</p>
     </div>
@@ -9810,14 +9940,43 @@ r^3) in cgs units. Mass units: r--&gt; GMr/c^2</p>
 
     
   
-    <div class="desc"><p>Return Newtonian expression for the orbital angular momentum. This function is not called explicitely within the precession module to increase efficiency.</p></div>
+    <div class="desc"><p>Return Newtonian expression for the orbital angular momentum. This function is not called explicitely within the <code>precession</code> module to increase efficiency.</p>
+<p><strong>Call:</strong></p>
+<div class="codehilite"><pre>L=precession.get_L(r,q)
+</pre></div>
+
+
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>q</code>: binary mass ratio. Must be q&lt;=1.</li>
+<li><code>r</code>: binary separation.</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><code>L</code>: Magnitude of the orbital angular momentum</li>
+</ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.get_L', this);">Show source &equiv;</a></p>
   <div id="source-precession.get_L" class="source">
     <div class="codehilite"><pre><span class="k">def</span> <span class="nf">get_L</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Return Newtonian expression for the orbital angular momentum. This function is not called explicitely within the precession module to increase efficiency.</span>
+<span class="sd">    Return Newtonian expression for the orbital angular momentum. This function is not called explicitely within the `precession` module to increase efficiency.</span>
+<span class="sd">    </span>
+<span class="sd">    **Call:**</span>
+
+<span class="sd">        L=precession.get_L(r,q)</span>
+<span class="sd">    </span>
+<span class="sd">    **Parameters:**</span>
+<span class="sd"> </span>
+<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `r`: binary separation.</span>
+
+<span class="sd">    **Returns:**</span>
+<span class="sd">    </span>
+<span class="sd">    - `L`: Magnitude of the orbital angular momentum</span>
+
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="n">L</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>    
@@ -11446,7 +11605,7 @@ the first binary (1D array at all output separations) and Lx_fvals[0][0] is
 the first binary at the first output separation (this is a scalar).</p>
 <p>Checkpointing is implemented: results are stored in <a href="#precession.storedir"><code>storedir</code></a>.</p>
 <p><strong>Call:</strong></p>
-<div class="codehilite"><pre>Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,S1_vals,S2_vals)
+<div class="codehilite"><pre>Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals)
 </pre></div>
 
 
@@ -11498,7 +11657,7 @@ the first binary at the first output separation (this is a scalar).</p>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 <span class="sd">        </span>
-<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(J_vals,xi_vals,S_vals,r_vals,S1_vals,S2_vals)</span>
+<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals)</span>
 
 <span class="sd">    **Parameters:**</span>
 
