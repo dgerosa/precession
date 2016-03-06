@@ -131,7 +131,7 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2016 Davide Gerosa"
 __license__ = "CC BY 4.0"
-__version__ = "0.0.0.47"
+__version__ = "0.0.0.48"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
@@ -1052,6 +1052,45 @@ def from_the_angles(theta1,theta2,deltaphi,q,S1,S2,r):
         S= (S1**2+S2**2+2.*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**.5
         J= (L**2+S**2+2.*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**.5
         return xi,J,S
+
+def build_angles(Lvec,S1vec,S2vec):
+  
+    '''
+    Compute the angles theta1, theta2, deltaphi and theta12 from the xyz
+    components of L, S1 and S2.
+
+    **Call:**
+
+        xi,J,S=precession.build_angles(Lvec,S1vec,S2vec)
+
+    **Parameters:**
+
+    - `Lvec`: components of L in a reference frame (3 values for x,y,z).
+    - `S1vec`: components of S1 in a reference frame (3 values for x,y,z).
+    - `S2vec`: components of S2 in a reference frame (3 values for x,y,z).
+
+
+    **Returns:**
+    
+    - `theta1`: angle between the spin of the primary and the orbital angular momentum.
+    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.
+    - `deltaphi`: angle between the projection of the two spins on the orbital plane.
+    - `theta12`: angle between the two spins.
+    '''
+
+    L=np.linalg.norm(Lvec)
+    S1=np.linalg.norm(S1vec)
+    S2=np.linalg.norm(S2vec)
+    
+    theta1 = np.arccos(np.dot(Lvec,S1vec)/(L*S1))
+    theta2 = np.arccos(np.dot(Lvec,S2vec)/(L*S2))
+    theta12= np.arccos(np.dot(S1vec,S2vec)/(S1*S2))
+    deltaphi= np.arccos((np.cos(theta12) - np.cos(theta1)*np.cos(theta2))/(np.sin(theta1)*np.sin(theta2))   ) 
+    
+    deltaphi*=math.copysign(1., np.dot(Lvec,np.cross(np.cross(Lvec,S1vec),np.cross(Lvec,S2vec))))
+    return theta1,theta2,deltaphi,theta12
+
+
 
 
 def xi_allowed(J,q,S1,S2,r, more=False,verbose=False):
