@@ -58,7 +58,7 @@ fi
 if [ "$(git status --porcelain)" ]; then 
     echo "Please, clean your working directory first."
     exit 1
-
+fi
 
 
 ###################################
