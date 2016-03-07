@@ -21,6 +21,7 @@ while test $# -gt 0; do
                         echo "   -doc             produce documentation"
                         echo "   -web             produce and publish  documentation"
                         echo "   -readme          produce readme"
+                        echo "   -all             do all the previous"
 
                         exit 0
                         ;;
