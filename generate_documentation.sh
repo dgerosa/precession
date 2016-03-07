@@ -53,6 +53,14 @@ if [ $web -eq 0 ] && [ $doc -eq 0 ] && [ $readme -eq 0 ]; then
     exit 0
 fi
 
+
+# Be sure your working branch is clean
+if [ "$(git status --porcelain)" ]; then 
+    echo "Please, clean your working directory first."
+    exit 1
+
+
+
 ###################################
 
 if [ $web -eq 1 ]; then
