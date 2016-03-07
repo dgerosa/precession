@@ -136,7 +136,7 @@ END
     # rm pyc files
     rm precession/__init__.pyc precession/test/__init__.pyc
   
-    # Commit new html to gh-pages branch
+    # Commit new html to master branch
     git add precession/index.html precession/test/index.html
     git commit -m "Automatic commit from generate_documentation.sh"
     git push    
@@ -168,7 +168,7 @@ END
     # Convert readme to rst (this is ignored by git, but needed to upload on pypi)
     pandoc README.md --from markdown --to rst -s -o README.rst
 
-    # Commit new html to gh-pages branch
+    # Commit readme to master branch
     git add README.md
     git commit -m "Automatic commit from generate_documentation.sh"
     git push    
