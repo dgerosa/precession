@@ -70,7 +70,7 @@ def parameter_selection():
         precession.test.parameter_selection()
     '''
 
-    print "\n *Parameter selection at finite separation*"
+    print "\n *Parameter selection at finite separations*"
     q=0.8   # Must be q<=1. Check documentation for q=1.
     chi1=1. # Must be chi1<=1
     chi2=1. # Must be chi2<=1
@@ -119,18 +119,18 @@ def parameter_selection():
     if phase==-1: labelp="a single DeltaPhi~pi phase"
     elif phase==2: labelp="two DeltaPhi~pi phases, a Circulating phase"    
     elif phase==3: labelp="a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase"
-    print "The coexisintg phases are: "+labelp
+    print "The coexisting phases are: "+labelp
     
-    print "\n *Parameter selection at infinitely separation*"
+    print "\n *Parameter selection at infinitely large separations*"
     print "We study a binary with\n\tq=%.3f\n\tchi1=%.3f\n\tchi2=%.3f\n\tS1=%.3f\n\tS2=%.3f" %(q,chi1,chi2,S1,S2)
-    print "at infinitely large separation r=%.3f" %r
+    print "at infinitely large separations"
     kappainf_min,kappainf_max=precession.kappainf_lim(S1,S2)
     print "The geometrical limits on xi and kappa_inf are\n\t%.3f<=xi<=%.3f\n\t %.3f<=kappa_inf<=%.3f" %(xi_min,xi_max,kappainf_min,kappainf_max)
     print "We select a value of xi within the limits\n\txi=%.3f" %xi
     kappainf_low,kappainf_up=precession.kappainf_allowed(xi,q,S1,S2)
     print "This constraints the range of kappa_inf to\n\t%.3f<=kappa_inf<=%.3f" %(kappainf_low,kappainf_up)
     kappainf=(kappainf_low+kappainf_up)/2.
-    print "We select a value of tkappa_inf  within the limits\n\tkappa_inf=%.3f" %kappainf
+    print "We select a value of kappa_inf  within the limits\n\tkappa_inf=%.3f" %kappainf
     test=(xi>=min(precession.xiinf_allowed(kappainf,q,S1,S2)) and xi<=max(precession.xiinf_allowed(kappainf,q,S1,S2)))
     print "Is our couple (xi,kappa_inf) consistent?", test 
     t1_inf,t2_inf=precession.thetas_inf(xi,kappainf,q,S1,S2)
@@ -372,7 +372,7 @@ def compare_evolutions():
     '''
 
     fig=pylab.figure(figsize=(6,6)) # Create figure object and axes
-    L,Ws,Wm,G=0.85,0.15,0.3,0.03 # Sizes
+    L,Ws,Wm,G=0.85,0.15,0.3,0.03    # Sizes
     ax_Sd=fig.add_axes([0,0,L,Ws])              # bottom-small    
     ax_S=fig.add_axes([0,Ws,L,Wm])              # bottom-main
     ax_Jd=fig.add_axes([0,Ws+Wm+G,L,Ws])        # middle-small
@@ -488,7 +488,7 @@ def timing():
     print "Precession-averaged: parallel integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
 
     precession.empty_temp() # Remove previous checkpoints
-    precession.CPUs=1       # Force serial computations
+    precession.CPUs=1       # Force serial computation
     print " *Integrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPU*" %(len(BHsample),ri,rf,precession.CPUs)
     t0=time.time()
     precession.orbit_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)  
