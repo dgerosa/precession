@@ -1,6 +1,8 @@
-#Usage: bash generate_documentation.sh [-h|--help] [-web]
+# Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme] [-all]
 
 web=0
+doc=0
+readme=0
 while test $# -gt 0; do
         case "$1" in
                 -h|--help)
@@ -16,51 +18,65 @@ while test $# -gt 0; do
                         echo " "
                         echo "options:"
                         echo "   -h, --help       show brief help"
-                        echo "   -doc             produce documentation
-                        echo "   -web             produce and publish  documentation
-                        echo "   -readme          produce readme
+                        echo "   -doc             produce documentation"
+                        echo "   -web             produce and publish  documentation"
+                        echo "   -readme          produce readme"
 
                         exit 0
                         ;;
                 -doc)
                         shift
                         doc=1
-                        shift
                         ;;
                 -web)
                         shift
                         web=1
-                        shift
                         ;;
                 -readme)
                         shift
                         readme=1
-                        shift
                         ;;
-
-                *)
-                        break
+                -all)
+                        shift
+                        doc=1
+                        web=1
+                        readme=1
                         ;;
         esac
 done
 
-I HAVE TO FIX THIS
 
+###################################
+
+if [ $web -eq 0 ] && [ $doc -eq 0 ] && [ $readme -eq 0 ]; then
+    echo "Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme] [-all]"
+    exit 0
+fi
+
+###################################
 
 if [ $web -eq 1 ]; then
+    
+    echo "Generating documentation, updating website"
+    
+     # Where you start from
+    start=$(pwd)
 
     # Start from master
     git checkout master
 
-    # Be sure your working branch is clean
-    if [ "$(git status --porcelain)" ]; then 
-      echo "Please, clean your working directory first."
-      exit 1
-    else 
-      echo "Generating documentation, updating website"; 
-    fi
+    # Build temporary directory
+    mkdir ${HOME}/temp_precession
+    mkdir ${HOME}/temp_precession/precession
+    mkdir ${HOME}/temp_precession/precession/test
+    # Copy code in temp directory
+    cp precession/__init__.py ${HOME}/temp_precession/precession
+    cp precession/test/__init__.py ${HOME}/temp_precession/precession/test
 
-# Check version of the code seen by pdoc
+    # Go there
+    cd ${HOME}/temp_precession
+
+    # Check version of the code seen by pdoc
 python <<END
 import precession
 print "Python module precession, version", precession.__version__
@@ -68,59 +84,38 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
-    # Get rid of precompiled files
-    rm precession/*pyc precession/*/*pyc
 
-    # Generate readme (markdown)
-    echo "Generating readme"
-python <<END
-import precession
-docs=precession.__doc__                 # Get code docstrings
-title="precession\n"+\
-      "==========\n\n"+\
-      docs                              # Prepend title
-splits=title.split('###')               # Separate parts
-removed = splits[:2] + splits[3 :]      # Get rid of some details
-joined= "###".join(removed)             # Put parts back together
-outfilesave = open("README.md","w",0)   # Write to file
-outfilesave.write(joined)
-outfilesave.close()
-END
-
-    # Convert readme to rst (not committed)
-    pandoc README.md --from markdown --to rst -s -o README.rst
-
-    # Commit new html to master branch
-    git add precession/index.html precession/test/index.html README.md
-    git commit -m "Automatic commit from generate_documentation.sh"
-    git push
-
-    # Move html files somewhere else
-    temp1=`mktemp`
-    cp precession/index.html $temp1
-    temp2=`mktemp`
-    cp precession/test/index.html $temp2
+    # Go back
+    cd ${start}
 
     # Move html files to gh-pages branch (directories there should exist)
     git checkout gh-pages
-    mv $temp1 index.html
-    mv $temp2 test/index.html
+    mv ${HOME}/temp_precession/precession/index.html index.html
+    mv ${HOME}/temp_precession/precession/test/index.html test/index.html
 
     # Commit new html to gh-pages branch
     git add index.html test/index.html
     git commit -m "Automatic commit from generate_documentation.sh"
     git push
 
-    # Get rid of temp files
-    rm -f $temp1 $temp2
-
     # Back to master
     git checkout master
-
-else
-    echo "Generating documentation, local only"; 
     
-# Check version of the code seen by pdoc
+    # Get rid of temp files
+    rm -rf ${HOME}/temp_precession
+   
+fi
+
+###################################
+
+if [ $doc -eq 1 ]; then
+    
+    echo "Generating documentation, local version"
+    
+    # Be sure you're in master
+    git checkout master
+
+    # Check version of the code seen by pdoc
 python <<END
 import precession
 print "Python module precession, version", precession.__version__
@@ -128,11 +123,25 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
-    # Get rid of precompiled files
-    rm precession/*pyc precession/*/*pyc
+   
+    # rm pyc files
+    rm precession/__init__.pyc precession/test/__init__.pyc
+  
+    # Commit new html to gh-pages branch
+    git add precession/index.html precession/test/index.html
+    git commit -m "Automatic commit from generate_documentation.sh"
+    git push    
+  
+fi
 
-    # Generate readme (markdown)
+###################################
+
+
+if [ $readme -eq 1 ]; then
+
     echo "Generating readme"
+
+    # Generate readme in markdown using python's docstrings
 python <<END
 import precession
 docs=precession.__doc__                 # Get code docstrings
@@ -147,9 +156,12 @@ outfilesave.write(joined)
 outfilesave.close()
 END
 
-    # Convert readme to rst (not committed)
+    # Convert readme to rst (this is ignored by git, but needed to upload on pypi)
     pandoc README.md --from markdown --to rst -s -o README.rst
 
+    # Commit new html to gh-pages branch
+    git add README.md
+    git commit -m "Automatic commit from generate_documentation.sh"
+    git push    
 
 fi
-
