@@ -115,7 +115,7 @@ roughly one binary in a million or so. If you really want to fix this, you
 should play with the h0 optional paramenter in scipy's odeint function.
 
 
-### THANKS
+### CREDITS
 The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). 
 Please, report bugs to
 
