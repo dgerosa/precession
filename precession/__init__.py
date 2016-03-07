@@ -1,5 +1,5 @@
 '''
-# DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON
+# DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON 
 
 `precession` is a Python module to study the dynamics of precessing black-hole
 binaries in the post-Newtonian regime. The code includes tools to study the
