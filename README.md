@@ -62,7 +62,7 @@ built-in help system
 Several tests and tutorial are available in the submodule `precession.test`.
 
 
-### THANKS
+### CREDITS
 The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). 
 Please, report bugs to
 
