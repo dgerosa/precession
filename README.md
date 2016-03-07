@@ -14,11 +14,24 @@ precession
 
 # DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON
 
-`precession` is a Python module to study the dynamics of precessing black-hole
-binaries in the post-Newtonian regime. The code includes tools to study the
-precessional dynamics, integrators to perform orbit-averaged and
-precession-averaged post-Newtonian inspirals, and implementation of the fitting
-formulae to predict the properties of the black-hole remnant.
+`precession` is a new open-source Python module to study the post-Newtonian
+dynamics of precessing black-hole binaries. The code provides a self-consistent
+framework to (i) study the evolution of the black-hole spins along their
+precession cycles, (ii) perform gravitational-wave driven binary inspirals using
+both standard integrations and innovative multi-timescale methods, and (iii)
+predict the properties of the black-hole remnant using fitting formulae to
+numerical relativity simulations. Flexibility, ease-of-use and numerical
+efficiency make `precession` the ideal tool to insert black-hole spin dynamics in
+larger-scale numerical studies such as gravitational-wave parameter-estimation
+codes, populations synthesis models to predict gravitational-wave event rates,
+galaxy merger trees and cosmological simulations of structure formation.
+`precession` provides fast and reliable integration methods to propagate
+statistical samples of black-hole binaries from/to large separations where they
+form to/from small separations where they become detectable, thus linking
+gravitational-wave observations of spinning black-hole binaries to their
+astrophysical formation history. The code is also a promising tool to compute
+post-Newtonian injections to numerical relativity simulations targeting the spin
+precession dynamics.
 
 This code is released to the community under the [Creative Commons Attribution
 International license](http://creativecommons.org/licenses/by/4.0).
