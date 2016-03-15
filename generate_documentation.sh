@@ -43,6 +43,8 @@ while test $# -gt 0; do
                         web=1
                         readme=1
                         ;;
+                *)
+                shift
         esac
 done
 
