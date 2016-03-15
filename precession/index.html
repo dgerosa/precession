@@ -1158,7 +1158,7 @@ table {
 <p><strong>email</strong> d.gerosa@damtp.cam.ac.uk</p>
 <p><strong>Copyright</strong> Copyright (C) 2016 Davide Gerosa</p>
 <p><strong>Licence</strong> CC BY 4.0</p>
-<p><strong>Version</strong> 0.0.0.48</p>
+<p><strong>Version</strong> 0.0.0.49</p>
 <h1>DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON</h1>
 <p><code>precession</code> is an open-source Python module to study the post-Newtonian
 dynamics of precessing black-hole binaries. The code provides a self-consistent
@@ -1456,7 +1456,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="n">__email__</span> <span class="o">=</span> <span class="s">&quot;d.gerosa@damtp.cam.ac.uk&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&quot;Copyright (C) 2016 Davide Gerosa&quot;</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s">&quot;CC BY 4.0&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.48&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.0.0.49&quot;</span>
 
 
 <span class="n">__doc__</span><span class="o">=</span><span class="s">&quot;**Author** &quot;</span><span class="o">+</span><span class="n">__author__</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="o">+</span>\
@@ -4736,7 +4736,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="c">#################################</span>
 
 
-<span class="k">def</span> <span class="nf">orbav_eqs</span><span class="p">(</span><span class="n">allvars</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">orbav_eqs</span><span class="p">(</span><span class="n">allvars</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where</span>
@@ -4761,7 +4761,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2)</span>
+<span class="sd">        allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 <span class="sd">    - `allvars`: array of lenght 9 cointaining the initial condition for numerical integration for the components of the unit vectors L, S1 and S2.</span>
@@ -4774,7 +4774,8 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">    - `m2`: mass of the secondary BH.</span>
 <span class="sd">    - `chi1`: dimensionless spin magnitude of the primary BH. Must be 0&lt;=chi1&lt;=1</span>
 <span class="sd">    - `chi2`: dimensionless spin magnitude of the secondary BH. Must be 0&lt;=chi2&lt;=1</span>
-<span class="sd">    </span>
+<span class="sd">    - `time`: if `True` also integrate t(r).</span>
+
 <span class="sd">    **Returns:**</span>
 
 <span class="sd">    - `allders`: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.</span>
@@ -4790,7 +4791,8 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
     <span class="n">S2hx</span><span class="o">=</span><span class="n">allvars</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
     <span class="n">S2hy</span><span class="o">=</span><span class="n">allvars</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
     <span class="n">S2hz</span><span class="o">=</span><span class="n">allvars</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
-    <span class="c">#t=allvars[9] # Uncomment if v(t) is needed</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="n">t</span><span class="o">=</span><span class="n">allvars</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> 
 
     <span class="c"># Useful variables</span>
     <span class="n">ct1</span><span class="o">=</span><span class="p">(</span><span class="n">Lhx</span><span class="o">*</span><span class="n">S1hx</span><span class="o">+</span><span class="n">Lhy</span><span class="o">*</span><span class="n">S1hy</span><span class="o">+</span><span class="n">Lhz</span><span class="o">*</span><span class="n">S1hz</span><span class="p">)</span>
@@ -4861,13 +4863,13 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
     <span class="n">dS2hydv</span><span class="o">=</span><span class="n">dS2hydt</span><span class="o">*</span><span class="n">dtdv</span>
     <span class="n">dS2hzdv</span><span class="o">=</span><span class="n">dS2hzdt</span><span class="o">*</span><span class="n">dtdv</span>
     
-    <span class="c"># Uncomment if v(t) is needed</span>
-    <span class="c">#return dLhxdv, dLhydv, dLhzdv, dS1hxdv, dS1hydv, dS1hzdv, dS2hxdv, dS2hydv, dS2hzdv , dtdv</span>
-    
-    <span class="k">return</span> <span class="n">dLhxdv</span><span class="p">,</span> <span class="n">dLhydv</span><span class="p">,</span> <span class="n">dLhzdv</span><span class="p">,</span> <span class="n">dS1hxdv</span><span class="p">,</span> <span class="n">dS1hydv</span><span class="p">,</span> <span class="n">dS1hzdv</span><span class="p">,</span> <span class="n">dS2hxdv</span><span class="p">,</span> <span class="n">dS2hydv</span><span class="p">,</span> <span class="n">dS2hzdv</span> 
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dLhxdv</span><span class="p">,</span> <span class="n">dLhydv</span><span class="p">,</span> <span class="n">dLhzdv</span><span class="p">,</span> <span class="n">dS1hxdv</span><span class="p">,</span> <span class="n">dS1hydv</span><span class="p">,</span> <span class="n">dS1hzdv</span><span class="p">,</span> <span class="n">dS2hxdv</span><span class="p">,</span> <span class="n">dS2hydv</span><span class="p">,</span> <span class="n">dS2hzdv</span> <span class="p">,</span> <span class="n">dtdv</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dLhxdv</span><span class="p">,</span> <span class="n">dLhydv</span><span class="p">,</span> <span class="n">dLhzdv</span><span class="p">,</span> <span class="n">dS1hxdv</span><span class="p">,</span> <span class="n">dS1hydv</span><span class="p">,</span> <span class="n">dS1hzdv</span><span class="p">,</span> <span class="n">dS2hxdv</span><span class="p">,</span> <span class="n">dS2hydv</span><span class="p">,</span> <span class="n">dS2hzdv</span> 
 
 
-<span class="k">def</span> <span class="nf">orbav_integrator</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">orbav_integrator</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Single orbit-averaged integration. Integrate the system of ODEs specified in</span>
@@ -4891,7 +4893,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">    `precession.orbit_angles` provided.</span>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
-<span class="sd">        Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2)</span>
+<span class="sd">        Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2,time=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 <span class="sd">    </span>
@@ -4902,6 +4904,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
 <span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+<span class="sd">    - `time`: if `True` also integrate t(r).</span>
 
 <span class="sd">    **Returns:**</span>
 
@@ -4914,6 +4917,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">    - `S2hx_vals`: x component of the unit vector S2/|S2|.</span>
 <span class="sd">    - `S2hy_vals`: y component of the unit vector S2/|S2|.</span>
 <span class="sd">    - `S2hz_vals`: z component of the unit vector S2/|S2|.</span>
+<span class="sd">    - `t_fvals`: (optional) time as a function of the separation.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="c"># Get initial condition in a cartesian frame. Use the frame aligned to J at the initial separation</span>
@@ -4931,8 +4935,11 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
     <span class="n">S1h_initial</span><span class="o">=</span><span class="p">[</span><span class="n">comp</span><span class="o">/</span><span class="n">S1</span> <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">S1vec</span><span class="p">]</span>
     <span class="n">S2h_initial</span><span class="o">=</span><span class="p">[</span><span class="n">comp</span><span class="o">/</span><span class="n">S2</span> <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">S2vec</span><span class="p">]</span>
     
-    <span class="c">#t_initial=0 # Uncomment if v(t) is needed</span>
-    <span class="n">allvars_initial</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">Lh_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S1h_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S2h_initial</span><span class="p">)</span> <span class="c">#+list([t_initial])</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="n">t_initial</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">allvars_initial</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">Lh_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S1h_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S2h_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">([</span><span class="n">t_initial</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">allvars_initial</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">Lh_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S1h_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S2h_initial</span><span class="p">)</span>
 
     <span class="c">#Compute these numbers only once</span>
     <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
@@ -4942,7 +4949,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
     <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="n">m2</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="c"># Actual integration</span>
-    <span class="n">res</span> <span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">orbav_eqs</span><span class="p">,</span> <span class="n">allvars_initial</span><span class="p">,</span> <span class="n">v_vals</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">),</span> <span class="n">mxstep</span><span class="o">=</span><span class="mi">5000000</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">printmessg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="c">#,tcrit=sing)</span>
+    <span class="n">res</span> <span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">orbav_eqs</span><span class="p">,</span> <span class="n">allvars_initial</span><span class="p">,</span> <span class="n">v_vals</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">,</span><span class="n">time</span><span class="p">),</span> <span class="n">mxstep</span><span class="o">=</span><span class="mi">5000000</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">printmessg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="c">#,tcrit=sing)</span>
 
     <span class="c"># Unzip output</span>
     <span class="n">traxres</span><span class="o">=</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">)</span>
@@ -4955,9 +4962,14 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
     <span class="n">S2hx_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
     <span class="n">S2hy_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
     <span class="n">S2hz_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
-    <span class="c">#t_fvals=traxres[9] # Uncomment if v(t) is needed</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="n">t_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
     
-    <span class="k">return</span> <span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">,</span><span class="n">t_fvals</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span>
 
 
 <span class="k">def</span> <span class="nf">orbit_averaged_single</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
@@ -5271,14 +5283,14 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
         <span class="k">return</span> <span class="n">theta1_fvals</span><span class="p">,</span> <span class="n">theta2_fvals</span><span class="p">,</span> <span class="n">deltaphi_fvals</span>
 
 
-<span class="k">def</span> <span class="nf">orbit_vectors_single</span><span class="p">(</span><span class="n">Lxi</span><span class="p">,</span><span class="n">Lyi</span><span class="p">,</span><span class="n">Lzi</span><span class="p">,</span><span class="n">S1xi</span><span class="p">,</span><span class="n">S1yi</span><span class="p">,</span><span class="n">S1zi</span><span class="p">,</span><span class="n">S2xi</span><span class="p">,</span><span class="n">S2yi</span><span class="p">,</span><span class="n">S2zi</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">orbit_vectors_single</span><span class="p">(</span><span class="n">Lxi</span><span class="p">,</span><span class="n">Lyi</span><span class="p">,</span><span class="n">Lzi</span><span class="p">,</span><span class="n">S1xi</span><span class="p">,</span><span class="n">S1yi</span><span class="p">,</span><span class="n">S1zi</span><span class="p">,</span><span class="n">S2xi</span><span class="p">,</span><span class="n">S2yi</span><span class="p">,</span><span class="n">S2zi</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Auxiliary function, see `precession.orbit_vector`.</span>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        savename=precession.orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q)</span>
+<span class="sd">        savename=precession.orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q,time=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -5293,6 +5305,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">    - `S2zi`: z component of the vector S2, initial.</span>
 <span class="sd">    - `r_vals`: binary separation (array).</span>
 <span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `time`: if `True` also integrate t(r).</span>
 
 <span class="sd">    **Returns:**</span>
 
@@ -5324,8 +5337,11 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
         <span class="n">S2hyi</span><span class="o">=</span><span class="n">S2yi</span><span class="o">/</span><span class="n">S2</span> 
         <span class="n">S2hzi</span><span class="o">=</span><span class="n">S2zi</span><span class="o">/</span><span class="n">S2</span> 
     
-        <span class="c">#t_initial=0 # Uncomment if v(t) is needed</span>
-        <span class="n">allvars_initial</span><span class="o">=</span><span class="p">[</span><span class="n">Lhxi</span><span class="p">,</span><span class="n">Lhyi</span><span class="p">,</span><span class="n">Lhzi</span><span class="p">,</span><span class="n">S1hxi</span><span class="p">,</span><span class="n">S1hyi</span><span class="p">,</span><span class="n">S1hzi</span><span class="p">,</span><span class="n">S2hxi</span><span class="p">,</span><span class="n">S2hyi</span><span class="p">,</span><span class="n">S2hzi</span><span class="p">]</span> <span class="c">#+list([t_initial])</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">t_initial</span><span class="o">=</span><span class="mi">0</span>
+            <span class="n">allvars_initial</span><span class="o">=</span><span class="p">[</span><span class="n">Lhxi</span><span class="p">,</span><span class="n">Lhyi</span><span class="p">,</span><span class="n">Lhzi</span><span class="p">,</span><span class="n">S1hxi</span><span class="p">,</span><span class="n">S1hyi</span><span class="p">,</span><span class="n">S1hzi</span><span class="p">,</span><span class="n">S2hxi</span><span class="p">,</span><span class="n">S2hyi</span><span class="p">,</span><span class="n">S2hzi</span><span class="p">,</span><span class="n">t_initial</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">allvars_initial</span><span class="o">=</span><span class="p">[</span><span class="n">Lhxi</span><span class="p">,</span><span class="n">Lhyi</span><span class="p">,</span><span class="n">Lhzi</span><span class="p">,</span><span class="n">S1hxi</span><span class="p">,</span><span class="n">S1hyi</span><span class="p">,</span><span class="n">S1hzi</span><span class="p">,</span><span class="n">S2hxi</span><span class="p">,</span><span class="n">S2hyi</span><span class="p">,</span><span class="n">S2hzi</span><span class="p">]</span>
 
         <span class="c">#Compute these numbers only once</span>
         <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
@@ -5335,7 +5351,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
         <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="n">m2</span><span class="o">**</span><span class="mi">2</span>
 
         <span class="c"># Actual integration</span>
-        <span class="n">res</span> <span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">orbav_eqs</span><span class="p">,</span> <span class="n">allvars_initial</span><span class="p">,</span> <span class="n">v_vals</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">),</span> <span class="n">mxstep</span><span class="o">=</span><span class="mi">5000000</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">printmessg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="c">#,tcrit=sing)</span>
+        <span class="n">res</span> <span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">orbav_eqs</span><span class="p">,</span> <span class="n">allvars_initial</span><span class="p">,</span> <span class="n">v_vals</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">,</span><span class="n">time</span><span class="p">),</span> <span class="n">mxstep</span><span class="o">=</span><span class="mi">5000000</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">printmessg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="c">#,tcrit=sing)</span>
 
         <span class="c"># Unzip output</span>
         <span class="n">traxres</span><span class="o">=</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">)</span>
@@ -5348,11 +5364,17 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
         <span class="n">S2hx_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
         <span class="n">S2hy_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
         <span class="n">S2hz_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
-        <span class="c">#t_fvals=traxres[9] # Uncomment if v(t) is needed</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">t_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
        
-        <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span><span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">):</span>                   
-            <span class="n">L_f</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r_f</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
-            <span class="n">outfilesave</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhx</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhy</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhz</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hx</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hy</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hz</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hx</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hy</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hz</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span><span class="p">,</span><span class="n">t_f</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span><span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">,</span><span class="n">t_fvals</span><span class="p">):</span>                   
+                <span class="n">L_f</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r_f</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
+                <span class="n">outfilesave</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhx</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhy</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhz</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hx</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hy</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hz</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hx</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hy</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hz</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">t_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span><span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">):</span>                   
+                <span class="n">L_f</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r_f</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
+                <span class="n">outfilesave</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhx</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhy</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhz</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hx</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hy</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hz</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hx</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hy</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hz</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="n">outfilesave</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="c">#else:</span>
@@ -5361,7 +5383,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
     <span class="k">return</span> <span class="n">savename</span>
 
 
-<span class="k">def</span> <span class="nf">orbit_vectors</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q_vals</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">orbit_vectors</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q_vals</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Wrapper of the orbit-averaged PN integrator to enable parallelization</span>
@@ -5380,7 +5402,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 <span class="sd">        </span>
-<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals)</span>
+<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals,time=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -5394,7 +5416,8 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">    - `S2yi_vals`: y component of the vector S2, initial (array).</span>
 <span class="sd">    - `S2zi_vals`: z component of the vector S2, initial (array).</span>
 <span class="sd">    - `r_vals`: binary separation (array).</span>
-<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `q_vals`: binary mass ratio. Must be q&lt;=1 (array).</span>
+<span class="sd">    - `time`: if `True` also integrate t(r).</span>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    </span>
@@ -5434,12 +5457,12 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
     
     <span class="c"># Parallelization</span>
     <span class="k">if</span> <span class="n">CPUs</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c"># Run on all cpus on the current machine! (default option)</span>
-        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">parallel</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> 
+        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">time</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> 
     <span class="k">elif</span> <span class="n">CPUs</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c"># 1 cpus done by explicitely removing parallelization</span>
-        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">parallel</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> 
+        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">time</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> 
     <span class="k">else</span><span class="p">:</span> <span class="c"># Run on a given number of CPUs        </span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">CPUs</span><span class="p">)</span>
-        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">pool</span><span class="o">=</span><span class="n">p</span><span class="p">)</span> 
+        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">time</span><span class="p">,</span><span class="n">pool</span><span class="o">=</span><span class="n">p</span><span class="p">)</span> 
 
     <span class="n">Lx_fvals</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">Ly_fvals</span><span class="o">=</span><span class="p">[]</span>
@@ -5450,9 +5473,14 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
     <span class="n">S2x_fvals</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">S2y_fvals</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">S2z_fvals</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="n">t_fvals</span><span class="o">=</span><span class="p">[]</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="nb">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
         <span class="k">print</span> <span class="s">&quot;[orbit_vectors] Reading:&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="nb">file</span>
-        <span class="n">dummy</span><span class="p">,</span><span class="n">Lx</span><span class="p">,</span><span class="n">Ly</span><span class="p">,</span><span class="n">Lz</span><span class="p">,</span><span class="n">S1x</span><span class="p">,</span><span class="n">S1y</span><span class="p">,</span><span class="n">S1z</span><span class="p">,</span><span class="n">S2x</span><span class="p">,</span><span class="n">S2y</span><span class="p">,</span><span class="n">S2z</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">dummy</span><span class="p">,</span><span class="n">Lx</span><span class="p">,</span><span class="n">Ly</span><span class="p">,</span><span class="n">Lz</span><span class="p">,</span><span class="n">S1x</span><span class="p">,</span><span class="n">S1y</span><span class="p">,</span><span class="n">S1z</span><span class="p">,</span><span class="n">S2x</span><span class="p">,</span><span class="n">S2y</span><span class="p">,</span><span class="n">S2z</span><span class="p">,</span><span class="n">tf</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dummy</span><span class="p">,</span><span class="n">Lx</span><span class="p">,</span><span class="n">Ly</span><span class="p">,</span><span class="n">Lz</span><span class="p">,</span><span class="n">S1x</span><span class="p">,</span><span class="n">S1y</span><span class="p">,</span><span class="n">S1z</span><span class="p">,</span><span class="n">S2x</span><span class="p">,</span><span class="n">S2y</span><span class="p">,</span><span class="n">S2z</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">Lx_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lx</span><span class="p">)</span>
         <span class="n">Ly_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Ly</span><span class="p">)</span>
         <span class="n">Lz_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lz</span><span class="p">)</span>
@@ -5462,11 +5490,19 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
         <span class="n">S2x_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S2x</span><span class="p">)</span>
         <span class="n">S2y_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S2y</span><span class="p">)</span>
         <span class="n">S2z_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S2z</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">t_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tf</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">single_flag</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ly_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Lz_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>        
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ly_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Lz_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">t_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>     
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ly_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Lz_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">,</span> <span class="n">Ly_fvals</span><span class="p">,</span> <span class="n">Lz_fvals</span><span class="p">,</span> <span class="n">S1x_fvals</span><span class="p">,</span> <span class="n">S1y_fvals</span><span class="p">,</span> <span class="n">S1z_fvals</span><span class="p">,</span> <span class="n">S2x_fvals</span><span class="p">,</span> <span class="n">S2y_fvals</span><span class="p">,</span> <span class="n">S2z_fvals</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">,</span> <span class="n">Ly_fvals</span><span class="p">,</span> <span class="n">Lz_fvals</span><span class="p">,</span> <span class="n">S1x_fvals</span><span class="p">,</span> <span class="n">S1y_fvals</span><span class="p">,</span> <span class="n">S1z_fvals</span><span class="p">,</span> <span class="n">S2x_fvals</span><span class="p">,</span> <span class="n">S2y_fvals</span><span class="p">,</span> <span class="n">S2z_fvals</span><span class="p">,</span> <span class="n">t_fvals</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">,</span> <span class="n">Ly_fvals</span><span class="p">,</span> <span class="n">Lz_fvals</span><span class="p">,</span> <span class="n">S1x_fvals</span><span class="p">,</span> <span class="n">S1y_fvals</span><span class="p">,</span> <span class="n">S1z_fvals</span><span class="p">,</span> <span class="n">S2x_fvals</span><span class="p">,</span> <span class="n">S2y_fvals</span><span class="p">,</span> <span class="n">S2z_fvals</span>
 
 
 <span class="k">def</span> <span class="nf">hybrid_single</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span><span class="n">kappa_inf</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r_t</span><span class="p">):</span>
@@ -10796,7 +10832,7 @@ needed.</p>
       
   <div class="item">
     <div class="name def" id="precession.orbav_eqs">
-    <p>def <span class="ident">orbav_eqs</span>(</p><p>allvars, v, q, S1, S2, eta, m1, m2, chi1, chi2)</p>
+    <p>def <span class="ident">orbav_eqs</span>(</p><p>allvars, v, q, S1, S2, eta, m1, m2, chi1, chi2, time=False)</p>
     </div>
     
 
@@ -10819,7 +10855,7 @@ radiation reaction.</p>
 separation), not in time. If an expression for v(t) is needed, the code can
 be easiliy modified to return time as well.</p>
 <p><strong>Call:</strong></p>
-<div class="codehilite"><pre>allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2)
+<div class="codehilite"><pre>allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False)
 </pre></div>
 
 
@@ -10833,7 +10869,8 @@ be easiliy modified to return time as well.</p>
 - <code>m1</code>: mass of the primary BH.
 - <code>m2</code>: mass of the secondary BH.
 - <code>chi1</code>: dimensionless spin magnitude of the primary BH. Must be 0&lt;=chi1&lt;=1
-- <code>chi2</code>: dimensionless spin magnitude of the secondary BH. Must be 0&lt;=chi2&lt;=1</p>
+- <code>chi2</code>: dimensionless spin magnitude of the secondary BH. Must be 0&lt;=chi2&lt;=1
+- <code>time</code>: if <code>True</code> also integrate t(r).</p>
 <p><strong>Returns:</strong></p>
 <ul>
 <li><code>allders</code>: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.</li>
@@ -10841,7 +10878,7 @@ be easiliy modified to return time as well.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.orbav_eqs', this);">Show source &equiv;</a></p>
   <div id="source-precession.orbav_eqs" class="source">
-    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">orbav_eqs</span><span class="p">(</span><span class="n">allvars</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">):</span>
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">orbav_eqs</span><span class="p">(</span><span class="n">allvars</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where</span>
@@ -10866,7 +10903,7 @@ be easiliy modified to return time as well.</p>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2)</span>
+<span class="sd">        allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 <span class="sd">    - `allvars`: array of lenght 9 cointaining the initial condition for numerical integration for the components of the unit vectors L, S1 and S2.</span>
@@ -10879,7 +10916,8 @@ be easiliy modified to return time as well.</p>
 <span class="sd">    - `m2`: mass of the secondary BH.</span>
 <span class="sd">    - `chi1`: dimensionless spin magnitude of the primary BH. Must be 0&lt;=chi1&lt;=1</span>
 <span class="sd">    - `chi2`: dimensionless spin magnitude of the secondary BH. Must be 0&lt;=chi2&lt;=1</span>
-<span class="sd">    </span>
+<span class="sd">    - `time`: if `True` also integrate t(r).</span>
+
 <span class="sd">    **Returns:**</span>
 
 <span class="sd">    - `allders`: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.</span>
@@ -10895,7 +10933,8 @@ be easiliy modified to return time as well.</p>
     <span class="n">S2hx</span><span class="o">=</span><span class="n">allvars</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
     <span class="n">S2hy</span><span class="o">=</span><span class="n">allvars</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
     <span class="n">S2hz</span><span class="o">=</span><span class="n">allvars</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
-    <span class="c">#t=allvars[9] # Uncomment if v(t) is needed</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="n">t</span><span class="o">=</span><span class="n">allvars</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> 
 
     <span class="c"># Useful variables</span>
     <span class="n">ct1</span><span class="o">=</span><span class="p">(</span><span class="n">Lhx</span><span class="o">*</span><span class="n">S1hx</span><span class="o">+</span><span class="n">Lhy</span><span class="o">*</span><span class="n">S1hy</span><span class="o">+</span><span class="n">Lhz</span><span class="o">*</span><span class="n">S1hz</span><span class="p">)</span>
@@ -10966,10 +11005,10 @@ be easiliy modified to return time as well.</p>
     <span class="n">dS2hydv</span><span class="o">=</span><span class="n">dS2hydt</span><span class="o">*</span><span class="n">dtdv</span>
     <span class="n">dS2hzdv</span><span class="o">=</span><span class="n">dS2hzdt</span><span class="o">*</span><span class="n">dtdv</span>
     
-    <span class="c"># Uncomment if v(t) is needed</span>
-    <span class="c">#return dLhxdv, dLhydv, dLhzdv, dS1hxdv, dS1hydv, dS1hzdv, dS2hxdv, dS2hydv, dS2hzdv , dtdv</span>
-    
-    <span class="k">return</span> <span class="n">dLhxdv</span><span class="p">,</span> <span class="n">dLhydv</span><span class="p">,</span> <span class="n">dLhzdv</span><span class="p">,</span> <span class="n">dS1hxdv</span><span class="p">,</span> <span class="n">dS1hydv</span><span class="p">,</span> <span class="n">dS1hzdv</span><span class="p">,</span> <span class="n">dS2hxdv</span><span class="p">,</span> <span class="n">dS2hydv</span><span class="p">,</span> <span class="n">dS2hzdv</span> 
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dLhxdv</span><span class="p">,</span> <span class="n">dLhydv</span><span class="p">,</span> <span class="n">dLhzdv</span><span class="p">,</span> <span class="n">dS1hxdv</span><span class="p">,</span> <span class="n">dS1hydv</span><span class="p">,</span> <span class="n">dS1hzdv</span><span class="p">,</span> <span class="n">dS2hxdv</span><span class="p">,</span> <span class="n">dS2hydv</span><span class="p">,</span> <span class="n">dS2hzdv</span> <span class="p">,</span> <span class="n">dtdv</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dLhxdv</span><span class="p">,</span> <span class="n">dLhydv</span><span class="p">,</span> <span class="n">dLhzdv</span><span class="p">,</span> <span class="n">dS1hxdv</span><span class="p">,</span> <span class="n">dS1hydv</span><span class="p">,</span> <span class="n">dS1hzdv</span><span class="p">,</span> <span class="n">dS2hxdv</span><span class="p">,</span> <span class="n">dS2hydv</span><span class="p">,</span> <span class="n">dS2hzdv</span> 
 </pre></div>
 
   </div>
@@ -10980,7 +11019,7 @@ be easiliy modified to return time as well.</p>
       
   <div class="item">
     <div class="name def" id="precession.orbav_integrator">
-    <p>def <span class="ident">orbav_integrator</span>(</p><p>J, xi, S, r_vals, q, S1, S2)</p>
+    <p>def <span class="ident">orbav_integrator</span>(</p><p>J, xi, S, r_vals, q, S1, S2, time=False)</p>
     </div>
     
 
@@ -11003,7 +11042,7 @@ through cos(varphi), not S.</p>
 <p>We recommend to use one of the wrappers <a href="#precession.orbit_averaged"><code>orbit_averaged</code></a> and
 <a href="#precession.orbit_angles"><code>orbit_angles</code></a> provided.</p>
 <p><strong>Call:</strong>
-    Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2)</p>
+    Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2,time=False)</p>
 <p><strong>Parameters:</strong></p>
 <ul>
 <li><code>J</code>: magnitude of the total angular momentum.</li>
@@ -11013,6 +11052,7 @@ through cos(varphi), not S.</p>
 <li><code>q</code>: binary mass ratio. Must be q&lt;=1.</li>
 <li><code>S1</code>: spin magnitude of the primary BH.</li>
 <li><code>S2</code>: spin magnitude of the secondary BH.</li>
+<li><code>time</code>: if <code>True</code> also integrate t(r).</li>
 </ul>
 <p><strong>Returns:</strong></p>
 <ul>
@@ -11025,11 +11065,12 @@ through cos(varphi), not S.</p>
 <li><code>S2hx_vals</code>: x component of the unit vector S2/|S2|.</li>
 <li><code>S2hy_vals</code>: y component of the unit vector S2/|S2|.</li>
 <li><code>S2hz_vals</code>: z component of the unit vector S2/|S2|.</li>
+<li><code>t_fvals</code>: (optional) time as a function of the separation.</li>
 </ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.orbav_integrator', this);">Show source &equiv;</a></p>
   <div id="source-precession.orbav_integrator" class="source">
-    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">orbav_integrator</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">):</span>
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">orbav_integrator</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Single orbit-averaged integration. Integrate the system of ODEs specified in</span>
@@ -11053,7 +11094,7 @@ through cos(varphi), not S.</p>
 <span class="sd">    `precession.orbit_angles` provided.</span>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
-<span class="sd">        Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2)</span>
+<span class="sd">        Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2,time=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 <span class="sd">    </span>
@@ -11064,6 +11105,7 @@ through cos(varphi), not S.</p>
 <span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
 <span class="sd">    - `S1`: spin magnitude of the primary BH.</span>
 <span class="sd">    - `S2`: spin magnitude of the secondary BH.</span>
+<span class="sd">    - `time`: if `True` also integrate t(r).</span>
 
 <span class="sd">    **Returns:**</span>
 
@@ -11076,6 +11118,7 @@ through cos(varphi), not S.</p>
 <span class="sd">    - `S2hx_vals`: x component of the unit vector S2/|S2|.</span>
 <span class="sd">    - `S2hy_vals`: y component of the unit vector S2/|S2|.</span>
 <span class="sd">    - `S2hz_vals`: z component of the unit vector S2/|S2|.</span>
+<span class="sd">    - `t_fvals`: (optional) time as a function of the separation.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="c"># Get initial condition in a cartesian frame. Use the frame aligned to J at the initial separation</span>
@@ -11093,8 +11136,11 @@ through cos(varphi), not S.</p>
     <span class="n">S1h_initial</span><span class="o">=</span><span class="p">[</span><span class="n">comp</span><span class="o">/</span><span class="n">S1</span> <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">S1vec</span><span class="p">]</span>
     <span class="n">S2h_initial</span><span class="o">=</span><span class="p">[</span><span class="n">comp</span><span class="o">/</span><span class="n">S2</span> <span class="k">for</span> <span class="n">comp</span> <span class="ow">in</span> <span class="n">S2vec</span><span class="p">]</span>
     
-    <span class="c">#t_initial=0 # Uncomment if v(t) is needed</span>
-    <span class="n">allvars_initial</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">Lh_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S1h_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S2h_initial</span><span class="p">)</span> <span class="c">#+list([t_initial])</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="n">t_initial</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">allvars_initial</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">Lh_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S1h_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S2h_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">([</span><span class="n">t_initial</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">allvars_initial</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">Lh_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S1h_initial</span><span class="p">)</span><span class="o">+</span><span class="nb">list</span><span class="p">(</span><span class="n">S2h_initial</span><span class="p">)</span>
 
     <span class="c">#Compute these numbers only once</span>
     <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
@@ -11104,7 +11150,7 @@ through cos(varphi), not S.</p>
     <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="n">m2</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="c"># Actual integration</span>
-    <span class="n">res</span> <span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">orbav_eqs</span><span class="p">,</span> <span class="n">allvars_initial</span><span class="p">,</span> <span class="n">v_vals</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">),</span> <span class="n">mxstep</span><span class="o">=</span><span class="mi">5000000</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">printmessg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="c">#,tcrit=sing)</span>
+    <span class="n">res</span> <span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">orbav_eqs</span><span class="p">,</span> <span class="n">allvars_initial</span><span class="p">,</span> <span class="n">v_vals</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">,</span><span class="n">time</span><span class="p">),</span> <span class="n">mxstep</span><span class="o">=</span><span class="mi">5000000</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">printmessg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="c">#,tcrit=sing)</span>
 
     <span class="c"># Unzip output</span>
     <span class="n">traxres</span><span class="o">=</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">)</span>
@@ -11117,9 +11163,14 @@ through cos(varphi), not S.</p>
     <span class="n">S2hx_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
     <span class="n">S2hy_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
     <span class="n">S2hz_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
-    <span class="c">#t_fvals=traxres[9] # Uncomment if v(t) is needed</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="n">t_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
     
-    <span class="k">return</span> <span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">,</span><span class="n">t_fvals</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span>
 </pre></div>
 
   </div>
@@ -11612,7 +11663,7 @@ scalar).</p>
       
   <div class="item">
     <div class="name def" id="precession.orbit_vectors">
-    <p>def <span class="ident">orbit_vectors</span>(</p><p>Lxi_vals, Lyi_vals, Lzi_vals, S1xi_vals, S1yi_vals, S1zi_vals, S2xi_vals, S2yi_vals, S2zi_vals, r_vals, q_vals)</p>
+    <p>def <span class="ident">orbit_vectors</span>(</p><p>Lxi_vals, Lyi_vals, Lzi_vals, S1xi_vals, S1yi_vals, S1zi_vals, S2xi_vals, S2yi_vals, S2zi_vals, r_vals, q_vals, time=False)</p>
     </div>
     
 
@@ -11631,7 +11682,7 @@ the first binary (1D array at all output separations) and Lx_fvals[0][0] is
 the first binary at the first output separation (this is a scalar).</p>
 <p>Checkpointing is implemented: results are stored in <a href="#precession.storedir"><code>storedir</code></a>.</p>
 <p><strong>Call:</strong></p>
-<div class="codehilite"><pre>Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals)
+<div class="codehilite"><pre>Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals,time=False)
 </pre></div>
 
 
@@ -11647,7 +11698,8 @@ the first binary at the first output separation (this is a scalar).</p>
 <li><code>S2yi_vals</code>: y component of the vector S2, initial (array).</li>
 <li><code>S2zi_vals</code>: z component of the vector S2, initial (array).</li>
 <li><code>r_vals</code>: binary separation (array).</li>
-<li><code>q</code>: binary mass ratio. Must be q&lt;=1.</li>
+<li><code>q_vals</code>: binary mass ratio. Must be q&lt;=1 (array).</li>
+<li><code>time</code>: if <code>True</code> also integrate t(r).</li>
 </ul>
 <p><strong>Returns:</strong></p>
 <ul>
@@ -11664,7 +11716,7 @@ the first binary at the first output separation (this is a scalar).</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.orbit_vectors', this);">Show source &equiv;</a></p>
   <div id="source-precession.orbit_vectors" class="source">
-    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">orbit_vectors</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q_vals</span><span class="p">):</span>
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">orbit_vectors</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q_vals</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Wrapper of the orbit-averaged PN integrator to enable parallelization</span>
@@ -11683,7 +11735,7 @@ the first binary at the first output separation (this is a scalar).</p>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 <span class="sd">        </span>
-<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals)</span>
+<span class="sd">        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals,time=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -11697,7 +11749,8 @@ the first binary at the first output separation (this is a scalar).</p>
 <span class="sd">    - `S2yi_vals`: y component of the vector S2, initial (array).</span>
 <span class="sd">    - `S2zi_vals`: z component of the vector S2, initial (array).</span>
 <span class="sd">    - `r_vals`: binary separation (array).</span>
-<span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `q_vals`: binary mass ratio. Must be q&lt;=1 (array).</span>
+<span class="sd">    - `time`: if `True` also integrate t(r).</span>
 
 <span class="sd">    **Returns:**</span>
 <span class="sd">    </span>
@@ -11737,12 +11790,12 @@ the first binary at the first output separation (this is a scalar).</p>
     
     <span class="c"># Parallelization</span>
     <span class="k">if</span> <span class="n">CPUs</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c"># Run on all cpus on the current machine! (default option)</span>
-        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">parallel</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> 
+        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">time</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> 
     <span class="k">elif</span> <span class="n">CPUs</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c"># 1 cpus done by explicitely removing parallelization</span>
-        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">parallel</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> 
+        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">time</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> 
     <span class="k">else</span><span class="p">:</span> <span class="c"># Run on a given number of CPUs        </span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">CPUs</span><span class="p">)</span>
-        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">pool</span><span class="o">=</span><span class="n">p</span><span class="p">)</span> 
+        <span class="n">filelist</span><span class="o">=</span><span class="n">parmap</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">orbit_vectors_single</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Lxi_vals</span><span class="p">,</span><span class="n">Lyi_vals</span><span class="p">,</span><span class="n">Lzi_vals</span><span class="p">,</span><span class="n">S1xi_vals</span><span class="p">,</span><span class="n">S1yi_vals</span><span class="p">,</span><span class="n">S1zi_vals</span><span class="p">,</span><span class="n">S2xi_vals</span><span class="p">,</span><span class="n">S2yi_vals</span><span class="p">,</span><span class="n">S2zi_vals</span><span class="p">,[</span><span class="n">r_vals</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_vals</span><span class="p">))],</span><span class="n">q_vals</span><span class="p">),</span><span class="n">time</span><span class="p">,</span><span class="n">pool</span><span class="o">=</span><span class="n">p</span><span class="p">)</span> 
 
     <span class="n">Lx_fvals</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">Ly_fvals</span><span class="o">=</span><span class="p">[]</span>
@@ -11753,9 +11806,14 @@ the first binary at the first output separation (this is a scalar).</p>
     <span class="n">S2x_fvals</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">S2y_fvals</span><span class="o">=</span><span class="p">[]</span>
     <span class="n">S2z_fvals</span><span class="o">=</span><span class="p">[]</span>
+    <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+        <span class="n">t_fvals</span><span class="o">=</span><span class="p">[]</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="nb">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
         <span class="k">print</span> <span class="s">&quot;[orbit_vectors] Reading:&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="nb">file</span>
-        <span class="n">dummy</span><span class="p">,</span><span class="n">Lx</span><span class="p">,</span><span class="n">Ly</span><span class="p">,</span><span class="n">Lz</span><span class="p">,</span><span class="n">S1x</span><span class="p">,</span><span class="n">S1y</span><span class="p">,</span><span class="n">S1z</span><span class="p">,</span><span class="n">S2x</span><span class="p">,</span><span class="n">S2y</span><span class="p">,</span><span class="n">S2z</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">dummy</span><span class="p">,</span><span class="n">Lx</span><span class="p">,</span><span class="n">Ly</span><span class="p">,</span><span class="n">Lz</span><span class="p">,</span><span class="n">S1x</span><span class="p">,</span><span class="n">S1y</span><span class="p">,</span><span class="n">S1z</span><span class="p">,</span><span class="n">S2x</span><span class="p">,</span><span class="n">S2y</span><span class="p">,</span><span class="n">S2z</span><span class="p">,</span><span class="n">tf</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dummy</span><span class="p">,</span><span class="n">Lx</span><span class="p">,</span><span class="n">Ly</span><span class="p">,</span><span class="n">Lz</span><span class="p">,</span><span class="n">S1x</span><span class="p">,</span><span class="n">S1y</span><span class="p">,</span><span class="n">S1z</span><span class="p">,</span><span class="n">S2x</span><span class="p">,</span><span class="n">S2y</span><span class="p">,</span><span class="n">S2z</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">Lx_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lx</span><span class="p">)</span>
         <span class="n">Ly_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Ly</span><span class="p">)</span>
         <span class="n">Lz_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Lz</span><span class="p">)</span>
@@ -11765,11 +11823,19 @@ the first binary at the first output separation (this is a scalar).</p>
         <span class="n">S2x_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S2x</span><span class="p">)</span>
         <span class="n">S2y_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S2y</span><span class="p">)</span>
         <span class="n">S2z_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">S2z</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">t_fvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tf</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">single_flag</span><span class="o">==</span><span class="bp">True</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ly_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Lz_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>        
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ly_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Lz_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">t_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>     
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ly_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Lz_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S1z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2x_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2y_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S2z_fvals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">,</span> <span class="n">Ly_fvals</span><span class="p">,</span> <span class="n">Lz_fvals</span><span class="p">,</span> <span class="n">S1x_fvals</span><span class="p">,</span> <span class="n">S1y_fvals</span><span class="p">,</span> <span class="n">S1z_fvals</span><span class="p">,</span> <span class="n">S2x_fvals</span><span class="p">,</span> <span class="n">S2y_fvals</span><span class="p">,</span> <span class="n">S2z_fvals</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">,</span> <span class="n">Ly_fvals</span><span class="p">,</span> <span class="n">Lz_fvals</span><span class="p">,</span> <span class="n">S1x_fvals</span><span class="p">,</span> <span class="n">S1y_fvals</span><span class="p">,</span> <span class="n">S1z_fvals</span><span class="p">,</span> <span class="n">S2x_fvals</span><span class="p">,</span> <span class="n">S2y_fvals</span><span class="p">,</span> <span class="n">S2z_fvals</span><span class="p">,</span> <span class="n">t_fvals</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Lx_fvals</span><span class="p">,</span> <span class="n">Ly_fvals</span><span class="p">,</span> <span class="n">Lz_fvals</span><span class="p">,</span> <span class="n">S1x_fvals</span><span class="p">,</span> <span class="n">S1y_fvals</span><span class="p">,</span> <span class="n">S1z_fvals</span><span class="p">,</span> <span class="n">S2x_fvals</span><span class="p">,</span> <span class="n">S2y_fvals</span><span class="p">,</span> <span class="n">S2z_fvals</span>
 </pre></div>
 
   </div>
@@ -11780,7 +11846,7 @@ the first binary at the first output separation (this is a scalar).</p>
       
   <div class="item">
     <div class="name def" id="precession.orbit_vectors_single">
-    <p>def <span class="ident">orbit_vectors_single</span>(</p><p>Lxi, Lyi, Lzi, S1xi, S1yi, S1zi, S2xi, S2yi, S2zi, r_vals, q)</p>
+    <p>def <span class="ident">orbit_vectors_single</span>(</p><p>Lxi, Lyi, Lzi, S1xi, S1yi, S1zi, S2xi, S2yi, S2zi, r_vals, q, time=False)</p>
     </div>
     
 
@@ -11788,7 +11854,7 @@ the first binary at the first output separation (this is a scalar).</p>
   
     <div class="desc"><p>Auxiliary function, see <code>precession.orbit_vector</code>.</p>
 <p><strong>Call:</strong></p>
-<div class="codehilite"><pre>savename=precession.orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q)
+<div class="codehilite"><pre>savename=precession.orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q,time=False)
 </pre></div>
 
 
@@ -11805,6 +11871,7 @@ the first binary at the first output separation (this is a scalar).</p>
 <li><code>S2zi</code>: z component of the vector S2, initial.</li>
 <li><code>r_vals</code>: binary separation (array).</li>
 <li><code>q</code>: binary mass ratio. Must be q&lt;=1.</li>
+<li><code>time</code>: if <code>True</code> also integrate t(r).</li>
 </ul>
 <p><strong>Returns:</strong></p>
 <ul>
@@ -11813,14 +11880,14 @@ the first binary at the first output separation (this is a scalar).</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.orbit_vectors_single', this);">Show source &equiv;</a></p>
   <div id="source-precession.orbit_vectors_single" class="source">
-    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">orbit_vectors_single</span><span class="p">(</span><span class="n">Lxi</span><span class="p">,</span><span class="n">Lyi</span><span class="p">,</span><span class="n">Lzi</span><span class="p">,</span><span class="n">S1xi</span><span class="p">,</span><span class="n">S1yi</span><span class="p">,</span><span class="n">S1zi</span><span class="p">,</span><span class="n">S2xi</span><span class="p">,</span><span class="n">S2yi</span><span class="p">,</span><span class="n">S2zi</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">):</span>
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">orbit_vectors_single</span><span class="p">(</span><span class="n">Lxi</span><span class="p">,</span><span class="n">Lyi</span><span class="p">,</span><span class="n">Lzi</span><span class="p">,</span><span class="n">S1xi</span><span class="p">,</span><span class="n">S1yi</span><span class="p">,</span><span class="n">S1zi</span><span class="p">,</span><span class="n">S2xi</span><span class="p">,</span><span class="n">S2yi</span><span class="p">,</span><span class="n">S2zi</span><span class="p">,</span><span class="n">r_vals</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Auxiliary function, see `precession.orbit_vector`.</span>
 <span class="sd"> </span>
 <span class="sd">    **Call:**</span>
 
-<span class="sd">        savename=precession.orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q)</span>
+<span class="sd">        savename=precession.orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q,time=False)</span>
 
 <span class="sd">    **Parameters:**</span>
 
@@ -11835,6 +11902,7 @@ the first binary at the first output separation (this is a scalar).</p>
 <span class="sd">    - `S2zi`: z component of the vector S2, initial.</span>
 <span class="sd">    - `r_vals`: binary separation (array).</span>
 <span class="sd">    - `q`: binary mass ratio. Must be q&lt;=1.</span>
+<span class="sd">    - `time`: if `True` also integrate t(r).</span>
 
 <span class="sd">    **Returns:**</span>
 
@@ -11866,8 +11934,11 @@ the first binary at the first output separation (this is a scalar).</p>
         <span class="n">S2hyi</span><span class="o">=</span><span class="n">S2yi</span><span class="o">/</span><span class="n">S2</span> 
         <span class="n">S2hzi</span><span class="o">=</span><span class="n">S2zi</span><span class="o">/</span><span class="n">S2</span> 
     
-        <span class="c">#t_initial=0 # Uncomment if v(t) is needed</span>
-        <span class="n">allvars_initial</span><span class="o">=</span><span class="p">[</span><span class="n">Lhxi</span><span class="p">,</span><span class="n">Lhyi</span><span class="p">,</span><span class="n">Lhzi</span><span class="p">,</span><span class="n">S1hxi</span><span class="p">,</span><span class="n">S1hyi</span><span class="p">,</span><span class="n">S1hzi</span><span class="p">,</span><span class="n">S2hxi</span><span class="p">,</span><span class="n">S2hyi</span><span class="p">,</span><span class="n">S2hzi</span><span class="p">]</span> <span class="c">#+list([t_initial])</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">t_initial</span><span class="o">=</span><span class="mi">0</span>
+            <span class="n">allvars_initial</span><span class="o">=</span><span class="p">[</span><span class="n">Lhxi</span><span class="p">,</span><span class="n">Lhyi</span><span class="p">,</span><span class="n">Lhzi</span><span class="p">,</span><span class="n">S1hxi</span><span class="p">,</span><span class="n">S1hyi</span><span class="p">,</span><span class="n">S1hzi</span><span class="p">,</span><span class="n">S2hxi</span><span class="p">,</span><span class="n">S2hyi</span><span class="p">,</span><span class="n">S2hzi</span><span class="p">,</span><span class="n">t_initial</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">allvars_initial</span><span class="o">=</span><span class="p">[</span><span class="n">Lhxi</span><span class="p">,</span><span class="n">Lhyi</span><span class="p">,</span><span class="n">Lhzi</span><span class="p">,</span><span class="n">S1hxi</span><span class="p">,</span><span class="n">S1hyi</span><span class="p">,</span><span class="n">S1hzi</span><span class="p">,</span><span class="n">S2hxi</span><span class="p">,</span><span class="n">S2hyi</span><span class="p">,</span><span class="n">S2hzi</span><span class="p">]</span>
 
         <span class="c">#Compute these numbers only once</span>
         <span class="n">eta</span><span class="o">=</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
@@ -11877,7 +11948,7 @@ the first binary at the first output separation (this is a scalar).</p>
         <span class="n">chi2</span><span class="o">=</span><span class="n">S2</span><span class="o">/</span><span class="n">m2</span><span class="o">**</span><span class="mi">2</span>
 
         <span class="c"># Actual integration</span>
-        <span class="n">res</span> <span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">orbav_eqs</span><span class="p">,</span> <span class="n">allvars_initial</span><span class="p">,</span> <span class="n">v_vals</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">),</span> <span class="n">mxstep</span><span class="o">=</span><span class="mi">5000000</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">printmessg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="c">#,tcrit=sing)</span>
+        <span class="n">res</span> <span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">orbav_eqs</span><span class="p">,</span> <span class="n">allvars_initial</span><span class="p">,</span> <span class="n">v_vals</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">eta</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="p">,</span><span class="n">time</span><span class="p">),</span> <span class="n">mxstep</span><span class="o">=</span><span class="mi">5000000</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">printmessg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span><span class="c">#,tcrit=sing)</span>
 
         <span class="c"># Unzip output</span>
         <span class="n">traxres</span><span class="o">=</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">res</span><span class="p">)</span>
@@ -11890,11 +11961,17 @@ the first binary at the first output separation (this is a scalar).</p>
         <span class="n">S2hx_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
         <span class="n">S2hy_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
         <span class="n">S2hz_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
-        <span class="c">#t_fvals=traxres[9] # Uncomment if v(t) is needed</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">t_fvals</span><span class="o">=</span><span class="n">traxres</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
        
-        <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span><span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">):</span>                   
-            <span class="n">L_f</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r_f</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
-            <span class="n">outfilesave</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhx</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhy</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhz</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hx</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hy</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hz</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hx</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hy</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hz</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span><span class="p">,</span><span class="n">t_f</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span><span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">,</span><span class="n">t_fvals</span><span class="p">):</span>                   
+                <span class="n">L_f</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r_f</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
+                <span class="n">outfilesave</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhx</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhy</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhz</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hx</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hy</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hz</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hx</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hy</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hz</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">t_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">r_f</span><span class="p">,</span><span class="n">Lhx</span><span class="p">,</span><span class="n">Lhy</span><span class="p">,</span><span class="n">Lhz</span><span class="p">,</span><span class="n">S1hx</span><span class="p">,</span><span class="n">S1hy</span><span class="p">,</span><span class="n">S1hz</span><span class="p">,</span><span class="n">S2hx</span><span class="p">,</span><span class="n">S2hy</span><span class="p">,</span><span class="n">S2hz</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_vals</span><span class="p">,</span><span class="n">Lhx_fvals</span><span class="p">,</span><span class="n">Lhy_fvals</span><span class="p">,</span><span class="n">Lhz_fvals</span><span class="p">,</span><span class="n">S1hx_fvals</span><span class="p">,</span><span class="n">S1hy_fvals</span><span class="p">,</span><span class="n">S1hz_fvals</span><span class="p">,</span><span class="n">S2hx_fvals</span><span class="p">,</span><span class="n">S2hy_fvals</span><span class="p">,</span><span class="n">S2hz_fvals</span><span class="p">):</span>                   
+                <span class="n">L_f</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">r_f</span><span class="o">*</span><span class="n">M</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
+                <span class="n">outfilesave</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhx</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhy</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Lhz</span><span class="o">*</span><span class="n">L_f</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hx</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hy</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S1hz</span><span class="o">*</span><span class="n">S1</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hx</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hy</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">S2hz</span><span class="o">*</span><span class="n">S2</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
         <span class="n">outfilesave</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="c">#else:</span>

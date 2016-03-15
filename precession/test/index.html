@@ -1047,6 +1047,7 @@ table {
       
   <ul>
     <li class="mono"><a href="#precession.test.PNwrappers">PNwrappers</a></li>
+    <li class="mono"><a href="#precession.test.all">all</a></li>
     <li class="mono"><a href="#precession.test.compare_evolutions">compare_evolutions</a></li>
     <li class="mono"><a href="#precession.test.minimal">minimal</a></li>
     <li class="mono"><a href="#precession.test.parameter_selection">parameter_selection</a></li>
@@ -1374,6 +1375,7 @@ Davide Gerosa. Submitted to... arXiv:...</li>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;phase_resampling.pdf&quot;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s">&#39;tight&#39;</span><span class="p">)</span> <span class="c"># Save pdf file</span>
 
+
 <span class="k">def</span> <span class="nf">PNwrappers</span><span class="p">():</span>
     
     <span class="sd">&#39;&#39;&#39;</span>
@@ -1584,6 +1586,31 @@ Davide Gerosa. Submitted to... arXiv:...</li>
     <span class="k">print</span> <span class="s">&quot;Precession-averaged: serial integrations</span><span class="se">\n\t</span><span class="s"> total time t=</span><span class="si">%.3f</span><span class="s">s</span><span class="se">\n\t</span><span class="s"> time per binary t/N=</span><span class="si">%.3f</span><span class="s">s&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">t</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
     <span class="n">precession</span><span class="o">.</span><span class="n">empty_temp</span><span class="p">()</span> <span class="c"># Remove previous checkpoints</span>
     
+    
+<span class="k">def</span> <span class="nf">all</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Run all tests in this submodule</span>
+<span class="sd">    </span>
+<span class="sd">    **Run using**</span>
+
+<span class="sd">        import precession.test</span>
+<span class="sd">        precession.test.all()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.minimal</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">minimal</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.parameter_selection</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">parameter_selection</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.spin_angles</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">spin_angles</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.phase_resampling</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">phase_resampling</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.PNwrappers</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">PNwrappers</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.compare_evolutions</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">compare_evolutions</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.timing</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">timing</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1686,6 +1713,54 @@ and recoil of the BH remnant following a merger.</p>
     <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">chi_f=</span><span class="si">%.3f</span><span class="s">, S_f=</span><span class="si">%.3f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">chifin</span><span class="p">,</span><span class="n">chifin</span><span class="o">*</span><span class="n">Mfin</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">vkick</span><span class="o">=</span><span class="n">precession</span><span class="o">.</span><span class="n">finalkick</span><span class="p">(</span><span class="n">t1f</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">t2f</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">dpf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">)</span>
     <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">vkick=</span><span class="si">%.5f</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">vkick</span><span class="p">)</span> <span class="c"># Geometrical units c=1</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="precession.test.all">
+    <p>def <span class="ident">all</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Run all tests in this submodule</p>
+<p><strong>Run using</strong></p>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">precession.test</span>
+<span class="n">precession</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-precession.test.all', this);">Show source &equiv;</a></p>
+  <div id="source-precession.test.all" class="source">
+    <div class="codehilite"><pre><span class="k">def</span> <span class="nf">all</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Run all tests in this submodule</span>
+<span class="sd">    </span>
+<span class="sd">    **Run using**</span>
+
+<span class="sd">        import precession.test</span>
+<span class="sd">        precession.test.all()</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.minimal</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">minimal</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.parameter_selection</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">parameter_selection</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.spin_angles</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">spin_angles</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.phase_resampling</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">phase_resampling</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.PNwrappers</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">PNwrappers</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.compare_evolutions</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">compare_evolutions</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">**** Execution precession.test.timing</span><span class="se">\n</span><span class="s">&quot;</span>
+    <span class="n">timing</span><span class="p">()</span>
 </pre></div>
 
   </div>
