@@ -290,6 +290,7 @@ def phase_resampling():
 
     fig.savefig("phase_resampling.pdf",bbox_inches='tight') # Save pdf file
 
+
 def PNwrappers():
     
     '''
@@ -500,3 +501,40 @@ def timing():
     print "Precession-averaged: serial integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
     precession.empty_temp() # Remove previous checkpoints
     
+    
+def all():
+    '''
+    Run all tests in this submodule
+    
+    **Run using**
+
+        import precession.test
+        precession.test.all()
+    '''
+    
+    print "\n**** Execution precession.test.minimal\n"
+    minimal()
+    print "\n**** Execution precession.test.parameter_selection\n"
+    parameter_selection()
+    print "\n**** Execution precession.test.spin_angles\n"
+    spin_angles()
+    print "\n**** Execution precession.test.phase_resampling\n"
+    phase_resampling()
+    print "\n**** Execution precession.test.PNwrappers\n"
+    PNwrappers()
+    print "\n**** Execution precession.test.compare_evolutions\n"
+    compare_evolutions()
+    print "\n**** Execution precession.test.timing\n"
+    timing()
+
+
+
+
+
+
+
+
+
+
+
+
