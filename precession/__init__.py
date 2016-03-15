@@ -3424,7 +3424,7 @@ def evolve_J_backwards(xi_vals,J_vals,r,q_vals,S1_vals,S2_vals):
 #################################
 
 
-def orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2):
+def orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False):
 
     '''
     Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where
@@ -3449,7 +3449,7 @@ def orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2):
  
     **Call:**
 
-        allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2)
+        allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False)
 
     **Parameters:**
     - `allvars`: array of lenght 9 cointaining the initial condition for numerical integration for the components of the unit vectors L, S1 and S2.
@@ -3462,7 +3462,8 @@ def orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2):
     - `m2`: mass of the secondary BH.
     - `chi1`: dimensionless spin magnitude of the primary BH. Must be 0<=chi1<=1
     - `chi2`: dimensionless spin magnitude of the secondary BH. Must be 0<=chi2<=1
-    
+    - `time`: if `True` also integrate t(r).
+
     **Returns:**
 
     - `allders`: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.
@@ -3478,7 +3479,8 @@ def orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2):
     S2hx=allvars[6]
     S2hy=allvars[7]
     S2hz=allvars[8]
-    #t=allvars[9] # Uncomment if v(t) is needed
+    if time:
+        t=allvars[9] 
 
     # Useful variables
     ct1=(Lhx*S1hx+Lhy*S1hy+Lhz*S1hz)
@@ -3549,13 +3551,13 @@ def orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2):
     dS2hydv=dS2hydt*dtdv
     dS2hzdv=dS2hzdt*dtdv
     
-    # Uncomment if v(t) is needed
-    #return dLhxdv, dLhydv, dLhzdv, dS1hxdv, dS1hydv, dS1hzdv, dS2hxdv, dS2hydv, dS2hzdv , dtdv
-    
-    return dLhxdv, dLhydv, dLhzdv, dS1hxdv, dS1hydv, dS1hzdv, dS2hxdv, dS2hydv, dS2hzdv 
+    if time:
+        return dLhxdv, dLhydv, dLhzdv, dS1hxdv, dS1hydv, dS1hzdv, dS2hxdv, dS2hydv, dS2hzdv , dtdv
+    else:
+        return dLhxdv, dLhydv, dLhzdv, dS1hxdv, dS1hydv, dS1hzdv, dS2hxdv, dS2hydv, dS2hzdv 
 
 
-def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
+def orbav_integrator(J,xi,S,r_vals,q,S1,S2,time=False):
     
     '''
     Single orbit-averaged integration. Integrate the system of ODEs specified in
@@ -3579,7 +3581,7 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     `precession.orbit_angles` provided.
  
     **Call:**
-        Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2)
+        Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2,time=False)
 
     **Parameters:**
     
@@ -3590,6 +3592,7 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     - `q`: binary mass ratio. Must be q<=1.
     - `S1`: spin magnitude of the primary BH.
     - `S2`: spin magnitude of the secondary BH.
+    - `time`: if `True` also integrate t(r).
 
     **Returns:**
 
@@ -3602,6 +3605,7 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     - `S2hx_vals`: x component of the unit vector S2/|S2|.
     - `S2hy_vals`: y component of the unit vector S2/|S2|.
     - `S2hz_vals`: z component of the unit vector S2/|S2|.
+    - `t_fvals`: (optional) time as a function of the separation.
     '''
 
     # Get initial condition in a cartesian frame. Use the frame aligned to J at the initial separation
@@ -3619,8 +3623,11 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     S1h_initial=[comp/S1 for comp in S1vec]
     S2h_initial=[comp/S2 for comp in S2vec]
     
-    #t_initial=0 # Uncomment if v(t) is needed
-    allvars_initial=list(Lh_initial)+list(S1h_initial)+list(S2h_initial) #+list([t_initial])
+    if time:
+        t_initial=0
+        allvars_initial=list(Lh_initial)+list(S1h_initial)+list(S2h_initial)+list([t_initial])
+    else:
+        allvars_initial=list(Lh_initial)+list(S1h_initial)+list(S2h_initial)
 
     #Compute these numbers only once
     eta=q/(1.+q)**2 
@@ -3630,7 +3637,7 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     chi2=S2/m2**2
 
     # Actual integration
-    res =integrate.odeint(orbav_eqs, allvars_initial, v_vals, args=(q,S1,S2,eta,m1,m2,chi1,chi2), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)#,tcrit=sing)
+    res =integrate.odeint(orbav_eqs, allvars_initial, v_vals, args=(q,S1,S2,eta,m1,m2,chi1,chi2,time), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)#,tcrit=sing)
 
     # Unzip output
     traxres=zip(*res)
@@ -3643,9 +3650,14 @@ def orbav_integrator(J,xi,S,r_vals,q,S1,S2):
     S2hx_fvals=traxres[6]
     S2hy_fvals=traxres[7]
     S2hz_fvals=traxres[8]
-    #t_fvals=traxres[9] # Uncomment if v(t) is needed
+    if time:
+        t_fvals=traxres[9]
     
-    return Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals
+    if time:
+        return Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals,t_fvals
+
+    else:
+        return Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals
 
 
 def orbit_averaged_single(J,xi,S,r_vals,q,S1,S2):
@@ -3959,14 +3971,14 @@ def orbit_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q_vals,S1_vals,S2_
         return theta1_fvals, theta2_fvals, deltaphi_fvals
 
 
-def orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q):
+def orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q,time=False):
 
     '''
     Auxiliary function, see `precession.orbit_vector`.
  
     **Call:**
 
-        savename=precession.orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q)
+        savename=precession.orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q,time=False)
 
     **Parameters:**
 
@@ -3981,6 +3993,7 @@ def orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q):
     - `S2zi`: z component of the vector S2, initial.
     - `r_vals`: binary separation (array).
     - `q`: binary mass ratio. Must be q<=1.
+    - `time`: if `True` also integrate t(r).
 
     **Returns:**
 
@@ -4012,8 +4025,11 @@ def orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q):
         S2hyi=S2yi/S2 
         S2hzi=S2zi/S2 
     
-        #t_initial=0 # Uncomment if v(t) is needed
-        allvars_initial=[Lhxi,Lhyi,Lhzi,S1hxi,S1hyi,S1hzi,S2hxi,S2hyi,S2hzi] #+list([t_initial])
+        if time:
+            t_initial=0
+            allvars_initial=[Lhxi,Lhyi,Lhzi,S1hxi,S1hyi,S1hzi,S2hxi,S2hyi,S2hzi,t_initial]
+        else:
+            allvars_initial=[Lhxi,Lhyi,Lhzi,S1hxi,S1hyi,S1hzi,S2hxi,S2hyi,S2hzi]
 
         #Compute these numbers only once
         eta=q/(1.+q)**2 
@@ -4023,7 +4039,7 @@ def orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q):
         chi2=S2/m2**2
 
         # Actual integration
-        res =integrate.odeint(orbav_eqs, allvars_initial, v_vals, args=(q,S1,S2,eta,m1,m2,chi1,chi2), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)#,tcrit=sing)
+        res =integrate.odeint(orbav_eqs, allvars_initial, v_vals, args=(q,S1,S2,eta,m1,m2,chi1,chi2,time), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)#,tcrit=sing)
 
         # Unzip output
         traxres=zip(*res)
@@ -4036,11 +4052,17 @@ def orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q):
         S2hx_fvals=traxres[6]
         S2hy_fvals=traxres[7]
         S2hz_fvals=traxres[8]
-        #t_fvals=traxres[9] # Uncomment if v(t) is needed
+        if time:
+            t_fvals=traxres[9]
        
-        for r_f,Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz in zip(r_vals,Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals):                   
-            L_f=(q/(1.+q)**2)*(r_f*M**3)**.5
-            outfilesave.write(str(r_f)+" "+str(Lhx*L_f)+" "+str(Lhy*L_f)+" "+str(Lhz*L_f)+" "+str(S1hx*S1)+" "+str(S1hy*S1)+" "+str(S1hz*S1)+" "+str(S2hx*S2)+" "+str(S2hy*S2)+" "+str(S2hz*S2)+"\n")
+        if time:
+            for r_f,Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t_f in zip(r_vals,Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals,t_fvals):                   
+                L_f=(q/(1.+q)**2)*(r_f*M**3)**.5
+                outfilesave.write(str(r_f)+" "+str(Lhx*L_f)+" "+str(Lhy*L_f)+" "+str(Lhz*L_f)+" "+str(S1hx*S1)+" "+str(S1hy*S1)+" "+str(S1hz*S1)+" "+str(S2hx*S2)+" "+str(S2hy*S2)+" "+str(S2hz*S2)+" "+str(t_f)+"\n")
+        else:
+            for r_f,Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz in zip(r_vals,Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals):                   
+                L_f=(q/(1.+q)**2)*(r_f*M**3)**.5
+                outfilesave.write(str(r_f)+" "+str(Lhx*L_f)+" "+str(Lhy*L_f)+" "+str(Lhz*L_f)+" "+str(S1hx*S1)+" "+str(S1hy*S1)+" "+str(S1hz*S1)+" "+str(S2hx*S2)+" "+str(S2hy*S2)+" "+str(S2hz*S2)+"\n")
         outfilesave.close()
 
     #else:
@@ -4049,7 +4071,7 @@ def orbit_vectors_single(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q):
     return savename
 
 
-def orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals):
+def orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals,time=False):
 
     '''
     Wrapper of the orbit-averaged PN integrator to enable parallelization
@@ -4068,7 +4090,7 @@ def orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_
  
     **Call:**
         
-        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals)
+        Lx_fvals,Ly_fvals,Lz_fvals,S1x_fvals,S1y_fvals,S1z_fvals,S2x_fvals,S2y_fvals,S2z_fvals=precession.orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,r_vals,q_vals,time=False)
 
     **Parameters:**
 
@@ -4082,7 +4104,8 @@ def orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_
     - `S2yi_vals`: y component of the vector S2, initial (array).
     - `S2zi_vals`: z component of the vector S2, initial (array).
     - `r_vals`: binary separation (array).
-    - `q`: binary mass ratio. Must be q<=1.
+    - `q_vals`: binary mass ratio. Must be q<=1 (array).
+    - `time`: if `True` also integrate t(r).
 
     **Returns:**
     
@@ -4122,12 +4145,12 @@ def orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_
     
     # Parallelization
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),parallel=True) 
+        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),time,parallel=True) 
     elif CPUs==1: # 1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),parallel=False) 
+        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),time,parallel=False) 
     else: # Run on a given number of CPUs        
         p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),pool=p) 
+        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),time,pool=p) 
 
     Lx_fvals=[]
     Ly_fvals=[]
@@ -4138,9 +4161,14 @@ def orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_
     S2x_fvals=[]
     S2y_fvals=[]
     S2z_fvals=[]
+    if time:
+        t_fvals=[]
     for index, file in enumerate(filelist):
         print "[orbit_vectors] Reading:", index, file
-        dummy,Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z= np.loadtxt(file,unpack=True)
+        if time:
+            dummy,Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z,tf= np.loadtxt(file,unpack=True)
+        else:
+            dummy,Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z= np.loadtxt(file,unpack=True)
         Lx_fvals.append(Lx)
         Ly_fvals.append(Ly)
         Lz_fvals.append(Lz)
@@ -4150,11 +4178,19 @@ def orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_
         S2x_fvals.append(S2x)
         S2y_fvals.append(S2y)
         S2z_fvals.append(S2z)
+        if time:
+            t_fvals.append(tf)
 
     if single_flag==True:
-        return Lx_fvals[0], Ly_fvals[0], Lz_fvals[0], S1x_fvals[0], S1y_fvals[0], S1z_fvals[0], S2x_fvals[0], S2y_fvals[0], S2z_fvals[0]        
+        if time:
+            return Lx_fvals[0], Ly_fvals[0], Lz_fvals[0], S1x_fvals[0], S1y_fvals[0], S1z_fvals[0], S2x_fvals[0], S2y_fvals[0], S2z_fvals[0],t_fvals[0]     
+        else:
+            return Lx_fvals[0], Ly_fvals[0], Lz_fvals[0], S1x_fvals[0], S1y_fvals[0], S1z_fvals[0], S2x_fvals[0], S2y_fvals[0], S2z_fvals[0] 
     else:
-        return Lx_fvals, Ly_fvals, Lz_fvals, S1x_fvals, S1y_fvals, S1z_fvals, S2x_fvals, S2y_fvals, S2z_fvals
+        if time:
+            return Lx_fvals, Ly_fvals, Lz_fvals, S1x_fvals, S1y_fvals, S1z_fvals, S2x_fvals, S2y_fvals, S2z_fvals, t_fvals
+        else:
+            return Lx_fvals, Ly_fvals, Lz_fvals, S1x_fvals, S1y_fvals, S1z_fvals, S2x_fvals, S2y_fvals, S2z_fvals
 
 
 def hybrid_single(xi,kappa_inf,r_vals,q,S1,S2,r_t):
