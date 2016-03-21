@@ -61,7 +61,7 @@ def minimal():
 def parameter_selection():
     
     '''
-    Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separations. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.
+    Selection of consistent parameters to describe the BH spin orientations, both at finite and infinitely large separation. Compute some quantities which characterize the spin-precession dynamics, such as morphology, precessional period and resonant angles.
     All quantities are given in total-mass units c=G=M=1.
 
     **Run using**
@@ -75,7 +75,7 @@ def parameter_selection():
     chi1=1. # Must be chi1<=1
     chi2=1. # Must be chi2<=1
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
-    print "We study a binary with\n\tq=%.3f\n\tchi1=%.3f\n\tchi2=%.3f\n\tS1=%.3f\n\tS2=%.3f" %(q,chi1,chi2,S1,S2)
+    print "We study a binary with\n\tq=%.3f     m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2)
     r=100*M # Must be r>10M for PN to be valid
     print "at separation\n\tr=%.3f" %r
     xi_min,xi_max=precession.xi_lim(q,S1,S2)
@@ -83,13 +83,13 @@ def parameter_selection():
     Sso_min,Sso_max=precession.Sso_limits(S1,S2)
     print "The geometrical limits on xi,J and S are\n\t%.3f<=xi<=%.3f\n\t%.3f<=J<=%.3f\n\t%.3f<=S<=%.3f" %(xi_min,xi_max,Jmin,Jmax,Sso_min,Sso_max)
     J= (Jmin+Jmax)/2.
-    print "We select a value of J within the limits\n\tJ=%.3f " %J
+    print "We select a value of J\n\tJ=%.3f " %J
     St_min,St_max=precession.St_limits(J,q,S1,S2,r)
     print "This constraints the range of S to\n\t%.3f<=S<=%.3f" %(St_min,St_max)
     xi_low,xi_up=precession.xi_allowed(J,q,S1,S2,r)
     print "The allowed range of xi is\n\t%.3f<=xi<=%.3f" %(xi_low,xi_up)
     xi=(xi_low+xi_up)/2.
-    print "We select a value of xi within the limits\n\txi=%.3f" %xi
+    print "We select a value of xi\n\txi=%.3f" %xi
     test=(J>=min(precession.J_allowed(xi,q,S1,S2,r)) and J<=max(precession.J_allowed(xi,q,S1,S2,r)))
     print "Is our couple (xi,J) consistent?", test
     Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r)
@@ -99,7 +99,7 @@ def parameter_selection():
     t1,t2,dp,t12=precession.parametric_angles(S,J,xi,q,S1,S2,r)
     print "The angles describing the spin orientations are\n\t(theta1,theta2,DeltaPhi)=(%.3f,%.3f,%.3f)" %(t1,t2,dp)
     xi,J,S = precession.from_the_angles(t1,t2,dp,q,S1,S2,r)
-    print "From the angles one can go back to\n\t(xi,J,S)=(%.3f,%.3f,%.3f)" %(xi,J,S)
+    print "From the angles one can recovery\n\t(xi,J,S)=(%.3f,%.3f,%.3f)" %(xi,J,S)
     
     print "\n *Features of spin precession*"
     t1_dp0,t2_dp0,t1_dp180,t2_dp180=precession.resonant_finder(xi,q,S1,S2,r)
@@ -121,22 +121,22 @@ def parameter_selection():
     elif phase==3: labelp="a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase"
     print "The coexisting phases are: "+labelp
     
-    print "\n *Parameter selection at infinitely large separations*"
-    print "We study a binary with\n\tq=%.3f\n\tchi1=%.3f\n\tchi2=%.3f\n\tS1=%.3f\n\tS2=%.3f" %(q,chi1,chi2,S1,S2)
-    print "at infinitely large separations"
+    print "\n *Parameter selection at infinitely large separation*"
+    print "We study a binary with\n\tq=%.3f     m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2)
+    print "at infinitely large separation"
     kappainf_min,kappainf_max=precession.kappainf_lim(S1,S2)
     print "The geometrical limits on xi and kappa_inf are\n\t%.3f<=xi<=%.3f\n\t %.3f<=kappa_inf<=%.3f" %(xi_min,xi_max,kappainf_min,kappainf_max)
-    print "We select a value of xi within the limits\n\txi=%.3f" %xi
+    print "We select a value of xi\n\txi=%.3f" %xi
     kappainf_low,kappainf_up=precession.kappainf_allowed(xi,q,S1,S2)
-    print "This constraints the range of kappa_inf to\n\t%.3f<=kappa_inf<=%.3f" %(kappainf_low,kappainf_up)
+    print "This constrains the range of kappa_inf to\n\t%.3f<=kappa_inf<=%.3f" %(kappainf_low,kappainf_up)
     kappainf=(kappainf_low+kappainf_up)/2.
-    print "We select a value of kappa_inf  within the limits\n\tkappa_inf=%.3f" %kappainf
+    print "We select a value of kappa_inf\n\tkappa_inf=%.3f" %kappainf
     test=(xi>=min(precession.xiinf_allowed(kappainf,q,S1,S2)) and xi<=max(precession.xiinf_allowed(kappainf,q,S1,S2)))
     print "Is our couple (xi,kappa_inf) consistent?", test 
     t1_inf,t2_inf=precession.thetas_inf(xi,kappainf,q,S1,S2)
     print "The asymptotic (constant) values of theta1 and theta2 are\n\t(theta1_inf,theta2_inf)=(%.3f,%.3f)" %(t1_inf,t2_inf)
     xi,kappainf = precession.from_the_angles_inf(t1_inf,t2_inf,q,S1,S2)
-    print "From the angles one can go back to\n\t(xi,kappa_inf)=(%.3f,%.3f)" %(xi,kappainf)
+    print "From the angles one can recovery\n\t(xi,kappa_inf)=(%.3f,%.3f)" %(xi,kappainf)
     
 
 def spin_angles():
@@ -526,12 +526,6 @@ def all():
     compare_evolutions()
     print "\n**** Execution precession.test.timing\n"
     timing()
-
-
-
-
-
-
 
 
 

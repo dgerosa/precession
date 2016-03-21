@@ -2147,7 +2147,7 @@ def precession_period(xi,J,q,S1,S2,r):
 def OmegazdtdS(S,xi,J,q,S1,S2,r,sign=1.):
     
     '''
-    Auxiliary function Omega_z * dt/dS. See `precession.Omegaz` and `precession.dSdt`.
+    Auxiliary function Omega_z * |dt/dS|. See `precession.Omegaz` and `precession.dSdt`.
 
     **Call:**
 
