@@ -23,7 +23,7 @@ precession dynamics.
 This code is released to the community under the [Creative Commons Attribution
 International license](http://creativecommons.org/licenses/by/4.0).
 Essentially, you may use `precession` as you like but must make reference to
-our work. When using precession in any published work, please cite the paper
+our work. When using `precession` in any published work, please cite the paper
 describing its implementation:
 
 - *Precession. Dynamics of spinning black-hole binaries with Python.* 
@@ -34,7 +34,7 @@ Davide Gerosa. Submitted to... arXiv:...
 - [github.com/dgerosa/precession](https://github.com/dgerosa/precessions)
 
 API documentation can be generated automatically in html format from the code
-docstrings using `pdoc`, and is is uplodad in a dedicated branch of the git
+docstrings using `pdoc`, and is is uplodad to a dedicated branch of the git
 repository      
 
 - [dgerosa.github.io/precession](https://dgerosa.github.io/precession)
@@ -79,15 +79,14 @@ the limits Jmin and Jmax of the total angular momentum J, and/or by
 sin(theta_i)=0. I strongly recommend to always set a tolerance, for instance,
 
         Jmin,Jmax=precession.J_lim(q,S1,S2,r) for J in
-        numpy.linspace(Jmin+1e-4,Jmax-1e-4,100): 
+        numpy.linspace(Jmin+1e-6,Jmax-1e-6,100): 
             do things...
 
 3. **Don't go too close to the limits (ii)**. For the same reason, some
 quantities cannot be computed efficiently for binaries which are very close to a
-spin-orbit resonance (which indeed does not precess at all!). For instance,  the
-computation of the angle alpha is somewhat unstable close to xi_min and xi_max
-as returned by xi_allowed. Richard O'Shaughnessy found that a tolerance of 2e-3
-on xi works well.
+spin-orbit resonance. For instance, the computation of the angle alpha may be
+inaccurate for binaries very close to xi_min and xi_max as returned by
+xi_allowed.
 
 4. **Checkpointing**. Checkpointing is implemented in some functions for
 computational efficiency. Temporary data are stored in a local directory and
@@ -95,16 +94,17 @@ will be read in if available. To delete all previous data run
 
         precession.empty_temp()
 
-    By default, data are stored in a local directory called `checkpoints`, which
-    is created when needed. You can change it setting
+    By default, data are stored in a local directory called
+    `precession_checkpoints`, which is created when needed. You can change it
+    setting
 
         precession.storedir=[path]
 
 5. **Parallelization**. Some parts of the code are parallelized using the
 `parmap` module. Instructions on code parallelization are set by the global
-variable CPUs - `CPUs=1`: no parallelization will be used; - `CPUs=integer`: to
-specify the actual number of cores to be used; - `CPUs=0` (default): all CPUs in
-the current machine will be used.
+variable CPUs: (i) `CPUs=1` enforces a serial computation; (ii) `CPUs=integer`
+specifies the number of parallel processes; (iii) `CPUs=0` (default) autodetects
+the number of core in the current machine.
 
     You can set this variable using
 
@@ -114,18 +114,18 @@ the current machine will be used.
 If q=1 the total-spin magnitude S cannot be used to parametrize the precession
 cycle and the angle varphi needs to be tracked explicitly. The q=1 case is
 implemented in the code: inputs and outputs of some of the functions are
-actually specified in cos(varphi), even though for simplicity we still call them
+actually specified as cos(varphi), even though for simplicity we still call them
 **S**. In case of precession-averaged integrations to/from infinity, kappa_inf
-becomes degenerate with xi and a required initial value of S is required.
+becomes degenerate with xi and an initial value of S is required.
 Please, refer to the documentation below for details. The generic unequal-mass
 part of the code works fine up to q<0.995. To run higher values of q we
-recommend setting q=1.
+recommend setting q=1 and learn the relevant parts of the code.
 
-7. **Stalling**. When performing precession-averaged evolutions, some binaires
+7. **Stalling**. When performing precession-averaged evolutions, some binaries
 may occasionally stall and take longer to run. This is due to the first step
 attempted by the ODE integrator. This is a minor issue and  only happens to
 roughly one binary in a million or so. If you really want to fix this, you
-should play with the h0 optional paramenter in scipy's odeint function.
+should play with the `h0` optional paramenter in scipy's odeint function.
 
 
 ### CREDITS
