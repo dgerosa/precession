@@ -1181,7 +1181,7 @@ precession dynamics.</p>
 <p>This code is released to the community under the <a href="http://creativecommons.org/licenses/by/4.0">Creative Commons Attribution
 International license</a>.
 Essentially, you may use <code>precession</code> as you like but must make reference to
-our work. When using precession in any published work, please cite the paper
+our work. When using <code>precession</code> in any published work, please cite the paper
 describing its implementation:</p>
 <ul>
 <li><em>Precession. Dynamics of spinning black-hole binaries with Python.</em> 
@@ -1192,7 +1192,7 @@ Davide Gerosa. Submitted to... arXiv:...</li>
 <li><a href="https://github.com/dgerosa/precessions">github.com/dgerosa/precession</a></li>
 </ul>
 <p>API documentation can be generated automatically in html format from the code
-docstrings using <code>pdoc</code>, and is is uplodad in a dedicated branch of the git
+docstrings using <code>pdoc</code>, and is is uplodad to a dedicated branch of the git
 repository      </p>
 <ul>
 <li><a href="https://dgerosa.github.io/precession">dgerosa.github.io/precession</a></li>
@@ -1236,7 +1236,7 @@ aligned, hence non-precessing, configurations. These configurations are given by
 the limits Jmin and Jmax of the total angular momentum J, and/or by
 sin(theta_i)=0. I strongly recommend to always set a tolerance, for instance,</p>
 <div class="codehilite"><pre>Jmin,Jmax=precession.J_lim(q,S1,S2,r) for J in
-numpy.linspace(Jmin+1e-4,Jmax-1e-4,100): 
+numpy.linspace(Jmin+1e-6,Jmax-1e-6,100): 
     do things...
 </pre></div>
 
@@ -1245,10 +1245,9 @@ numpy.linspace(Jmin+1e-4,Jmax-1e-4,100):
 <li>
 <p><strong>Don't go too close to the limits (ii)</strong>. For the same reason, some
 quantities cannot be computed efficiently for binaries which are very close to a
-spin-orbit resonance (which indeed does not precess at all!). For instance,  the
-computation of the angle alpha is somewhat unstable close to xi_min and xi_max
-as returned by xi_allowed. Richard O'Shaughnessy found that a tolerance of 2e-3
-on xi works well.</p>
+spin-orbit resonance. For instance, the computation of the angle alpha may be
+inaccurate for binaries very close to xi_min and xi_max as returned by
+xi_allowed.</p>
 </li>
 <li>
 <p><strong>Checkpointing</strong>. Checkpointing is implemented in some functions for
@@ -1258,8 +1257,9 @@ will be read in if available. To delete all previous data run</p>
 </pre></div>
 
 
-<p>By default, data are stored in a local directory called <code>checkpoints</code>, which
-is created when needed. You can change it setting</p>
+<p>By default, data are stored in a local directory called
+<code>precession_checkpoints</code>, which is created when needed. You can change it
+setting</p>
 <div class="codehilite"><pre>precession.storedir=[path]
 </pre></div>
 
@@ -1268,9 +1268,9 @@ is created when needed. You can change it setting</p>
 <li>
 <p><strong>Parallelization</strong>. Some parts of the code are parallelized using the
 <code>parmap</code> module. Instructions on code parallelization are set by the global
-variable CPUs - <code>CPUs=1</code>: no parallelization will be used; - <code>CPUs=integer</code>: to
-specify the actual number of cores to be used; - <code>CPUs=0</code> (default): all CPUs in
-the current machine will be used.</p>
+variable CPUs: (i) <code>CPUs=1</code> enforces a serial computation; (ii) <code>CPUs=integer</code>
+specifies the number of parallel processes; (iii) <code>CPUs=0</code> (default) autodetects
+the number of core in the current machine.</p>
 <p>You can set this variable using</p>
 <div class="codehilite"><pre>precession.CPUs = [integer]
 </pre></div>
@@ -1282,19 +1282,19 @@ the current machine will be used.</p>
 If q=1 the total-spin magnitude S cannot be used to parametrize the precession
 cycle and the angle varphi needs to be tracked explicitly. The q=1 case is
 implemented in the code: inputs and outputs of some of the functions are
-actually specified in cos(varphi), even though for simplicity we still call them
+actually specified as cos(varphi), even though for simplicity we still call them
 <strong>S</strong>. In case of precession-averaged integrations to/from infinity, kappa_inf
-becomes degenerate with xi and a required initial value of S is required.
+becomes degenerate with xi and an initial value of S is required.
 Please, refer to the documentation below for details. The generic unequal-mass
 part of the code works fine up to q&lt;0.995. To run higher values of q we
-recommend setting q=1.</p>
+recommend setting q=1 and learn the relevant parts of the code.</p>
 </li>
 <li>
-<p><strong>Stalling</strong>. When performing precession-averaged evolutions, some binaires
+<p><strong>Stalling</strong>. When performing precession-averaged evolutions, some binaries
 may occasionally stall and take longer to run. This is due to the first step
 attempted by the ODE integrator. This is a minor issue and  only happens to
 roughly one binary in a million or so. If you really want to fix this, you
-should play with the h0 optional paramenter in scipy's odeint function.</p>
+should play with the <code>h0</code> optional paramenter in scipy's odeint function.</p>
 </li>
 </ol>
 <h3>CREDITS</h3>
@@ -1335,7 +1335,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">This code is released to the community under the [Creative Commons Attribution</span>
 <span class="sd">International license](http://creativecommons.org/licenses/by/4.0).</span>
 <span class="sd">Essentially, you may use `precession` as you like but must make reference to</span>
-<span class="sd">our work. When using precession in any published work, please cite the paper</span>
+<span class="sd">our work. When using `precession` in any published work, please cite the paper</span>
 <span class="sd">describing its implementation:</span>
 
 <span class="sd">- *Precession. Dynamics of spinning black-hole binaries with Python.* </span>
@@ -1346,7 +1346,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">- [github.com/dgerosa/precession](https://github.com/dgerosa/precessions)</span>
 
 <span class="sd">API documentation can be generated automatically in html format from the code</span>
-<span class="sd">docstrings using `pdoc`, and is is uplodad in a dedicated branch of the git</span>
+<span class="sd">docstrings using `pdoc`, and is is uplodad to a dedicated branch of the git</span>
 <span class="sd">repository      </span>
 
 <span class="sd">- [dgerosa.github.io/precession](https://dgerosa.github.io/precession)</span>
@@ -1391,15 +1391,14 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">sin(theta_i)=0. I strongly recommend to always set a tolerance, for instance,</span>
 
 <span class="sd">        Jmin,Jmax=precession.J_lim(q,S1,S2,r) for J in</span>
-<span class="sd">        numpy.linspace(Jmin+1e-4,Jmax-1e-4,100): </span>
+<span class="sd">        numpy.linspace(Jmin+1e-6,Jmax-1e-6,100): </span>
 <span class="sd">            do things...</span>
 
 <span class="sd">3. **Don&#39;t go too close to the limits (ii)**. For the same reason, some</span>
 <span class="sd">quantities cannot be computed efficiently for binaries which are very close to a</span>
-<span class="sd">spin-orbit resonance (which indeed does not precess at all!). For instance,  the</span>
-<span class="sd">computation of the angle alpha is somewhat unstable close to xi_min and xi_max</span>
-<span class="sd">as returned by xi_allowed. Richard O&#39;Shaughnessy found that a tolerance of 2e-3</span>
-<span class="sd">on xi works well.</span>
+<span class="sd">spin-orbit resonance. For instance, the computation of the angle alpha may be</span>
+<span class="sd">inaccurate for binaries very close to xi_min and xi_max as returned by</span>
+<span class="sd">xi_allowed.</span>
 
 <span class="sd">4. **Checkpointing**. Checkpointing is implemented in some functions for</span>
 <span class="sd">computational efficiency. Temporary data are stored in a local directory and</span>
@@ -1407,16 +1406,17 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 
 <span class="sd">        precession.empty_temp()</span>
 
-<span class="sd">    By default, data are stored in a local directory called `checkpoints`, which</span>
-<span class="sd">    is created when needed. You can change it setting</span>
+<span class="sd">    By default, data are stored in a local directory called</span>
+<span class="sd">    `precession_checkpoints`, which is created when needed. You can change it</span>
+<span class="sd">    setting</span>
 
 <span class="sd">        precession.storedir=[path]</span>
 
 <span class="sd">5. **Parallelization**. Some parts of the code are parallelized using the</span>
 <span class="sd">`parmap` module. Instructions on code parallelization are set by the global</span>
-<span class="sd">variable CPUs - `CPUs=1`: no parallelization will be used; - `CPUs=integer`: to</span>
-<span class="sd">specify the actual number of cores to be used; - `CPUs=0` (default): all CPUs in</span>
-<span class="sd">the current machine will be used.</span>
+<span class="sd">variable CPUs: (i) `CPUs=1` enforces a serial computation; (ii) `CPUs=integer`</span>
+<span class="sd">specifies the number of parallel processes; (iii) `CPUs=0` (default) autodetects</span>
+<span class="sd">the number of core in the current machine.</span>
 
 <span class="sd">    You can set this variable using</span>
 
@@ -1426,18 +1426,18 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="sd">If q=1 the total-spin magnitude S cannot be used to parametrize the precession</span>
 <span class="sd">cycle and the angle varphi needs to be tracked explicitly. The q=1 case is</span>
 <span class="sd">implemented in the code: inputs and outputs of some of the functions are</span>
-<span class="sd">actually specified in cos(varphi), even though for simplicity we still call them</span>
+<span class="sd">actually specified as cos(varphi), even though for simplicity we still call them</span>
 <span class="sd">**S**. In case of precession-averaged integrations to/from infinity, kappa_inf</span>
-<span class="sd">becomes degenerate with xi and a required initial value of S is required.</span>
+<span class="sd">becomes degenerate with xi and an initial value of S is required.</span>
 <span class="sd">Please, refer to the documentation below for details. The generic unequal-mass</span>
 <span class="sd">part of the code works fine up to q&lt;0.995. To run higher values of q we</span>
-<span class="sd">recommend setting q=1.</span>
+<span class="sd">recommend setting q=1 and learn the relevant parts of the code.</span>
 
-<span class="sd">7. **Stalling**. When performing precession-averaged evolutions, some binaires</span>
+<span class="sd">7. **Stalling**. When performing precession-averaged evolutions, some binaries</span>
 <span class="sd">may occasionally stall and take longer to run. This is due to the first step</span>
 <span class="sd">attempted by the ODE integrator. This is a minor issue and  only happens to</span>
 <span class="sd">roughly one binary in a million or so. If you really want to fix this, you</span>
-<span class="sd">should play with the h0 optional paramenter in scipy&#39;s odeint function.</span>
+<span class="sd">should play with the `h0` optional paramenter in scipy&#39;s odeint function.</span>
 
 
 <span class="sd">### CREDITS</span>
@@ -3459,7 +3459,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.</p>
 <span class="k">def</span> <span class="nf">OmegazdtdS</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
     
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Auxiliary function Omega_z * dt/dS. See `precession.Omegaz` and `precession.dSdt`.</span>
+<span class="sd">    Auxiliary function Omega_z * |dt/dS|. See `precession.Omegaz` and `precession.dSdt`.</span>
 
 <span class="sd">    **Call:**</span>
 
@@ -6822,7 +6822,7 @@ momentum L about the total angular momentum J.</p>
 
     
   
-    <div class="desc"><p>Auxiliary function Omega_z * dt/dS. See <a href="#precession.Omegaz"><code>Omegaz</code></a> and <a href="#precession.dSdt"><code>dSdt</code></a>.</p>
+    <div class="desc"><p>Auxiliary function Omega_z * |dt/dS|. See <a href="#precession.Omegaz"><code>Omegaz</code></a> and <a href="#precession.dSdt"><code>dSdt</code></a>.</p>
 <p><strong>Call:</strong></p>
 <div class="codehilite"><pre>OmegadtdS=precession.OmegazdtdS(S,xi,J,q,S1,S2,r,sign=1.):
 </pre></div>
@@ -6849,7 +6849,7 @@ momentum L about the total angular momentum J.</p>
     <div class="codehilite"><pre><span class="k">def</span> <span class="nf">OmegazdtdS</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">xi</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">S1</span><span class="p">,</span><span class="n">S2</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">sign</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
     
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Auxiliary function Omega_z * dt/dS. See `precession.Omegaz` and `precession.dSdt`.</span>
+<span class="sd">    Auxiliary function Omega_z * |dt/dS|. See `precession.Omegaz` and `precession.dSdt`.</span>
 
 <span class="sd">    **Call:**</span>
 
