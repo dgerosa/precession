@@ -31,7 +31,7 @@ Davide Gerosa. Submitted to... arXiv:...
 
 `precession` is an open-source code distributed under git version-control system on
 
-- [github.com/dgerosa/precession](https://github.com/dgerosa/precessions)
+- [github.com/dgerosa/precession](https://github.com/dgerosa/precession)
 
 API documentation can be generated automatically in html format from the code
 docstrings using `pdoc`, and is is uplodad to a dedicated branch of the git
