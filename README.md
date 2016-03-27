@@ -36,7 +36,7 @@ precession dynamics.
 This code is released to the community under the [Creative Commons Attribution
 International license](http://creativecommons.org/licenses/by/4.0).
 Essentially, you may use `precession` as you like but must make reference to
-our work. When using precession in any published work, please cite the paper
+our work. When using `precession` in any published work, please cite the paper
 describing its implementation:
 
 - *Precession. Dynamics of spinning black-hole binaries with Python.* 
@@ -44,10 +44,10 @@ Davide Gerosa. Submitted to... arXiv:...
 
 `precession` is an open-source code distributed under git version-control system on
 
-- [github.com/dgerosa/precession](https://github.com/dgerosa/precessions)
+- [github.com/dgerosa/precession](https://github.com/dgerosa/precession)
 
 API documentation can be generated automatically in html format from the code
-docstrings using `pdoc`, and is is uplodad in a dedicated branch of the git
+docstrings using `pdoc`, and is is uplodad to a dedicated branch of the git
 repository      
 
 - [dgerosa.github.io/precession](https://dgerosa.github.io/precession)
