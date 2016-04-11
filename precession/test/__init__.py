@@ -85,7 +85,7 @@ def parameter_selection():
     J= (Jmin+Jmax)/2.
     print "We select a value of J\n\tJ=%.3f " %J
     St_min,St_max=precession.St_limits(J,q,S1,S2,r)
-    print "This constraints the range of S to\n\t%.3f<=S<=%.3f" %(St_min,St_max)
+    print "This constrains the range of S to\n\t%.3f<=S<=%.3f" %(St_min,St_max)
     xi_low,xi_up=precession.xi_allowed(J,q,S1,S2,r)
     print "The allowed range of xi is\n\t%.3f<=xi<=%.3f" %(xi_low,xi_up)
     xi=(xi_low+xi_up)/2.
