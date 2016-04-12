@@ -49,10 +49,10 @@ def minimal():
     t2= 2.*numpy.pi/3.
     dp= numpy.pi/4.
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2)
-    t1_v,t2_v,dp_v=precession.evolve_angles(t1,t2,dp,sep,q,S1,S2)    
+    t1v,t2v,dpv=precession.evolve_angles(t1,t2,dp,sep,q,S1,S2)    
     print "Perform BH binary inspiral"
     print "log10(r/M) \t theta1 \t theta2 \t deltaphi"
-    for r,t1,t2,dp in zip(numpy.log10(sep),t1_v,t2_v,dp_v):
+    for r,t1,t2,dp in zip(numpy.log10(sep),t1v,t2v,dpv):
         print "%.0f \t\t %.3f \t\t %.3f \t\t %.3f" %(r,t1,t2,dp)
     t=time.time()-t0
     print "Executed in %.3fs" %t
@@ -103,7 +103,7 @@ def parameter_selection():
     
     print "\n *Features of spin precession*"
     t1_dp0,t2_dp0,t1_dp180,t2_dp180=precession.resonant_finder(xi,q,S1,S2,r)
-    print "The spin-orbit resonances are\n\t(theta1,theta2)=(%.3f,%.3f) for DeltaPhi=0\n\t(theta1,theta2)=(%.3f,%.3f) for DeltaPhi=pi" %(t1_dp0,t2_dp0,t1_dp180,t2_dp180)
+    print "The spin-orbit resonances for these values of J and xi are\n\t(theta1,theta2)=(%.3f,%.3f) for DeltaPhi=0\n\t(theta1,theta2)=(%.3f,%.3f) for DeltaPhi=pi" %(t1_dp0,t2_dp0,t1_dp180,t2_dp180)
     tau = precession.precession_period(xi,J,q,S1,S2,r)
     print "We integrate dt/dS to calculate the precessional period\n\ttau=%.3f" %tau
     alpha = precession.alphaz(xi,J,q,S1,S2,r)
@@ -178,12 +178,12 @@ def spin_angles():
         Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r) # Limits in S
         S_vals = numpy.linspace(Sb_min,Sb_max,1000) # Create array, from S- to S+
         S_go=S_vals # First half of the precession cycle: from S- to S+
-        t_go=map(lambda x: precession.t_of_S(S_go[0],x, Sb_min,Sb_max,xi,J,q,S1,S2,r,0,sign=-1),S_go) # Compute time values. Assume t=0 at S-      
-        t1_go,t2_go,dp_go,t12_go=zip(*[precession.parametric_angles(S,J,xi,q,S1,S2,r) for S in S_go]) # Compute the angles. Assume DeltaPhi>=0 in the first half of the cycle
+        t_go=map(lambda x: precession.t_of_S(S_go[0],x, Sb_min,Sb_max,xi,J,q,S1,S2,r,0,sign=-1.),S_go) # Compute time values. Assume t=0 at S-      
+        t1_go,t2_go,dp_go,t12_go=zip(*[precession.parametric_angles(S,J,xi,q,S1,S2,r) for S in S_go]) # Compute the angles.
+        dp_go=[-dp for dp in dp_go] # DeltaPhi<=0 in the first half of the cycle 
         S_back=S_vals[::-1] # Second half of the precession cycle: from S+ to S-
         t_back=map(lambda x: precession.t_of_S(S_back[0],x, Sb_min,Sb_max, xi,J,q,S1,S2,r,t_go[-1],sign=1.),S_back) # Compute time, start from the last point of the first half t_go[-1]
-        t1_back,t2_back,dp_back,t12_back=zip(*[precession.parametric_angles(S,J,xi,q,S1,S2,r) for S in S_back]) # Compute the angles.
-        dp_back=[-dp for dp in dp_back] # Assume DeltaPhi<=0 in the second half of the cycle
+        t1_back,t2_back,dp_back,t12_back=zip(*[precession.parametric_angles(S,J,xi,q,S1,S2,r) for S in S_back]) # Compute the angles. DeltaPhi>=0 in the second half of the cycle
 
         for ax,vec_go,vec_back in zip([ax_t1,ax_t2,ax_dp,ax_t12], [t1_go,t2_go,dp_go,t12_go], [t1_back,t2_back,dp_back,t12_back]): # Plot all curves
             ax.plot([t/tau for t in t_go],vec_go,c=color,lw=2,label=labelm)
