@@ -75,7 +75,7 @@ def parameter_selection():
     chi1=1. # Must be chi1<=1
     chi2=1. # Must be chi2<=1
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
-    print "We study a binary with\n\tq=%.3f     m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2)
+    print "We study a binary with\n\tq=%.3f  m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2)
     r=100*M # Must be r>10M for PN to be valid
     print "at separation\n\tr=%.3f" %r
     xi_min,xi_max=precession.xi_lim(q,S1,S2)
@@ -122,7 +122,7 @@ def parameter_selection():
     print "The coexisting phases are: "+labelp
     
     print "\n *Parameter selection at infinitely large separation*"
-    print "We study a binary with\n\tq=%.3f     m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2)
+    print "We study a binary with\n\tq=%.3f  m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2)
     print "at infinitely large separation"
     kappainf_min,kappainf_max=precession.kappainf_lim(S1,S2)
     print "The geometrical limits on xi and kappa_inf are\n\t%.3f<=xi<=%.3f\n\t %.3f<=kappa_inf<=%.3f" %(xi_min,xi_max,kappainf_min,kappainf_max)
