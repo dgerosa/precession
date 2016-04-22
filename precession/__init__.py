@@ -59,8 +59,9 @@ built-in help system
     help(precession.function)
 
 Several tests and tutorial are available in the submodule `precession.test`. A
-detailed descriptions of the functionalies of the code is provided in the
-scientific paper [arXiv:1604.xxxxx](https://arxiv.org/abs/1604.xxxxx) where examples are also presented. 
+detailed description of the functionalies of the code is provided in the
+scientific paper [arXiv:1604.xxxxx](https://arxiv.org/abs/1604.xxxxx), where
+examples are also presented. 
 
 
 ### THINGS TO KEEP IN MIND
