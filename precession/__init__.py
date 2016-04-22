@@ -1,24 +1,23 @@
 '''
 # DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON
 
-`precession` is an open-source Python module to study the post-Newtonian
-dynamics of precessing black-hole binaries. The code provides a self-consistent
-framework to (i) study the evolution of the black-hole spins along their
-precession cycles, (ii) perform gravitational-wave driven binary inspirals using
-both standard integrations and innovative multi-timescale methods, and (iii)
-predict the properties of the black-hole remnant using fitting formulae to
-numerical relativity simulations. Flexibility, ease-of-use and numerical
-efficiency make `precession` the ideal tool to insert black-hole spin dynamics in
-larger-scale numerical studies such as gravitational-wave parameter-estimation
-codes, populations synthesis models to predict gravitational-wave event rates,
-galaxy merger trees and cosmological simulations of structure formation.
-`precession` provides fast and reliable integration methods to propagate
-statistical samples of black-hole binaries from/to large separations where they
-form to/from small separations where they become detectable, thus linking
-gravitational-wave observations of spinning black-hole binaries to their
-astrophysical formation history. The code is also a promising tool to compute
-post-Newtonian injections to numerical relativity simulations targeting the spin
-precession dynamics.
+`precession` is an open-source Python module to study the dynamics of precessing
+black-hole binaries in the post-Newtonian regime.  The code provides a
+comprehensive toolbox to (i) study the evolution of the black-hole spins  along
+their precession cycles, (ii) perform gravitational-wave driven binary inspirals
+using both orbit-averaged and precession-averaged integrations, and (iii)
+predict the properties of the merger remnant through fitting formulae obtained
+from numerical relativity simulations. `precession` is a ready-to-use tool to 
+add  the black-hole spin dynamics to larger-scale numerical studies such as 
+gravitational-wave parameter estimation codes, population synthesis models to
+predict gravitational-wave event rates, galaxy merger trees and  cosmological
+simulations of structure formation. `precession` provides fast and reliable
+integration methods to propagate statistical samples of black-hole binaries
+from/to large separations where they form to/from small separations where they 
+become detectable, thus linking gravitational-wave observations of spinning
+black-hole binaries to their astrophysical formation history. The code is also a
+useful tool to compute initial parameters for numerical relativity simulations
+targeting specific precessing systems.
 
 This code is released to the community under the [Creative Commons Attribution
 International license](http://creativecommons.org/licenses/by/4.0).
@@ -27,14 +26,14 @@ our work. When using `precession` in any published work, please cite the paper
 describing its implementation:
 
 - *Precession. Dynamics of spinning black-hole binaries with Python.* 
-Davide Gerosa. Submitted to... arXiv:...
+Davide Gerosa, Michael Kesden. arXiv:...
 
 `precession` is an open-source code distributed under git version-control system on
 
 - [github.com/dgerosa/precession](https://github.com/dgerosa/precession)
 
 API documentation can be generated automatically in html format from the code
-docstrings using `pdoc`, and is is uplodad to a dedicated branch of the git
+docstrings using `pdoc`, and is uplodad to a dedicated branch of the git
 repository      
 
 - [dgerosa.github.io/precession](https://dgerosa.github.io/precession)
@@ -59,7 +58,9 @@ built-in help system
     import precession
     help(precession.function)
 
-Several tests and tutorial are available in the submodule `precession.test`.
+Several tests and tutorial are available in the submodule `precession.test`. A
+detailed descriptions of the functionalies of the code is provided in the
+scientific paper [arXiv:num](arXiv:num) where examples are also presented. 
 
 
 ### THINGS TO KEEP IN MIND
@@ -144,7 +145,7 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2016 Davide Gerosa"
 __license__ = "CC BY 4.0"
-__version__ = "0.0.0.50"
+__version__ = "0.9"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
