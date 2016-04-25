@@ -73,7 +73,7 @@ examples are also presented.
 - Gerosa et al. MNRAS 451 (2015) [3941-3954](http://mnras.oxfordjournals.org/content/451/4/3941). [arXiv:1503.06807](https://arxiv.org/abs/1503.06807)
 - Gerosa et al. PRD 92 (2015) [064016](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.92.064016). [arXiv:1506.03492](https://arxiv.org/abs/1506.03492)
 - Gerosa et al. PRL 115 (2015) [141102](http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.115.141102). [arXiv:1506.09116](https://arxiv.org/abs/1506.09116)
-- Trifirò et al. PRD 93 (2016) [044071](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.93.044071). [arXiv:1507.05587](https://arxiv.org/abs/1507.05587)
+- Trifiro' et al. PRD 93 (2016) [044071](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.93.044071). [arXiv:1507.05587](https://arxiv.org/abs/1507.05587)
 
 
 ### THINGS TO KEEP IN MIND
