@@ -64,6 +64,18 @@ scientific paper [arXiv:1604.xxxxx](https://arxiv.org/abs/1604.xxxxx), where
 examples are also presented. 
 
 
+### RESULTS
+
+`precession` has been used in the following published papers:
+
+- Gerosa and Sesana. MNRAS 446 (2015) [38-55](http://mnras.oxfordjournals.org/content/446/1/38). [arXiv:1405.2072](https://arxiv.org/abs/1405.2072)
+- Kesden et al. PRL 114 (2015) [081103](http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.114.081103). [arXiv:1411.0674](https://arxiv.org/abs/1411.0674)
+- Gerosa et al. MNRAS 451 (2015) [3941-3954](http://mnras.oxfordjournals.org/content/451/4/3941). [arXiv:1503.06807](https://arxiv.org/abs/1503.06807)
+- Gerosa et al. PRD 92 (2015) [064016](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.92.064016). [arXiv:1506.03492](https://arxiv.org/abs/1506.03492)
+- Gerosa et al. PRL 115 (2015) [141102](http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.115.141102). [arXiv:1506.09116](https://arxiv.org/abs/1506.09116)
+- Trifirò et al. PRD 93 (2016) [044071](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.93.044071). [arXiv:1507.05587](https://arxiv.org/abs/1507.05587)
+
+
 ### THINGS TO KEEP IN MIND
 
 1. **Units**. All quantities in the code are specified in units where c=G=1.
