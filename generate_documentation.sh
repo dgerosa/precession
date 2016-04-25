@@ -1,4 +1,5 @@
 # Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme] [-all]
+# Generate API documentation from he python's docstrings present in the code using pdoc. Generate readme for github and pypi. 
 
 web=0
 doc=0
@@ -160,7 +161,7 @@ title="precession\n"+\
       "==========\n\n"+\
       docs                              # Prepend title
 splits=title.split('###')               # Separate parts
-removed = splits[:2] + splits[3 :]      # Get rid of some details
+removed = splits[:3] + splits[4 :]      # Get rid of some details
 joined= "###".join(removed)             # Put parts back together
 outfilesave = open("README.md","w",0)   # Write to file
 outfilesave.write(joined)
