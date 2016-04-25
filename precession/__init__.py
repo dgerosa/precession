@@ -150,7 +150,7 @@ Please, report bugs to
 
 I'm happy to help you out! 
 
-**Thanks**: E. Berti, M. Kesden, U. Sperhake, R. O'Shaughnessy, D.
+**Thanks**: M. Kesden, U. Sperhake, E. Berti, R. O'Shaughnessy, A. Sesana, D.
 Trifiro', A. Klein, J. Vosmera and X. Zhao.
 '''
 
@@ -158,7 +158,7 @@ __author__ = "Davide Gerosa"
 __email__ = "d.gerosa@damtp.cam.ac.uk"
 __copyright__ = "Copyright (C) 2016 Davide Gerosa"
 __license__ = "CC BY 4.0"
-__version__ = "0.9.0"
+__version__ = "0.9.1"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
