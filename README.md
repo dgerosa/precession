@@ -89,6 +89,11 @@ examples are also presented.
 - Trifiro' et al. PRD 93 (2016) 044071. [arXiv:1507.05587](https://arxiv.org/abs/1507.05587)
 
 
+### RELEASES
+
+v1.0.0 (stable)  [![DOI](https://zenodo.org/badge/21015/dgerosa/precession.svg)](https://zenodo.org/badge/latestdoi/21015/dgerosa/precession)
+
+
 ### CREDITS
 The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). 
 Please, report bugs to
