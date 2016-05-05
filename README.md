@@ -9,7 +9,7 @@ precession
 
 **Licence** CC BY 4.0
 
-**Version** 0.9.1
+**Version** 1.0.0
 
 
 # DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON
@@ -39,7 +39,7 @@ our work. When using `precession` in any published work, please cite the paper
 describing its implementation:
 
 - *Precession. Dynamics of spinning black-hole binaries with Python.* 
-D. Gerosa, M. Kesden. [arXiv:1604.xxxxx](https://arxiv.org/abs/1604.xxxxx)
+D. Gerosa, M. Kesden. [arXiv:1605.01067](https://arxiv.org/abs/1605.01067)
 
 `precession` is an open-source code distributed under git version-control system on
 
@@ -73,7 +73,7 @@ built-in help system
 
 Several tests and tutorial are available in the submodule `precession.test`. A
 detailed description of the functionalies of the code is provided in the
-scientific paper [arXiv:1604.xxxxx](https://arxiv.org/abs/1604.xxxxx), where
+scientific paper [arXiv:1605.01067](https://arxiv.org/abs/1605.01067), where
 examples are also presented. 
 
 
