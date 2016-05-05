@@ -91,7 +91,7 @@ examples are also presented.
 
 ### RELEASES
 
-v1.0.0 (stable)  [![DOI](https://zenodo.org/badge/21015/dgerosa/precession.svg)](https://zenodo.org/badge/latestdoi/21015/dgerosa/precession)
+[![DOI](https://zenodo.org/badge/21015/dgerosa/precession.svg)](https://zenodo.org/badge/latestdoi/21015/dgerosa/precession)   v1.0.0 (stable)  
 
 
 ### CREDITS
