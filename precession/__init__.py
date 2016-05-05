@@ -142,6 +142,10 @@ roughly one binary in a million or so. If you really want to fix this, you
 should play with the `h0` optional paramenter in scipy's odeint function.
 
 
+### RELEASES
+
+[![DOI](https://zenodo.org/badge/21015/dgerosa/precession.svg)](https://zenodo.org/badge/latestdoi/21015/dgerosa/precession)   v1.0.0 (stable)  
+
 ### CREDITS
 The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). 
 Please, report bugs to

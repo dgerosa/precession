@@ -39,7 +39,7 @@ setup(
     url='https://github.com/dgerosa/precession/',
     author='Davide Gerosa',
     author_email='d.gerosa@damtp.cam.ac.uk',
-    license='CC by-nc-sa 3.0',
+    license='CC by 4.0',
     packages=['precession','precession.test'],
     install_requires=[
           'numpy',
