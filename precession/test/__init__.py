@@ -3,7 +3,7 @@ This submodule provides practical examples to illustrate the main features of
 `precession`. Examples are illustrated in 
 
 - *Precession. Dynamics of spinning black-hole binaries with Python.* 
-Davide Gerosa. Submitted to... arXiv:...
+D. Gerosa, M. Kesden. [arXiv:1605.01067](https://arxiv.org/abs/1605.01067)
 
 This submodule has to be loaded separately:
 
