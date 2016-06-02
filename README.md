@@ -51,7 +51,7 @@ repository
 
 - [dgerosa.github.io/precession](https://dgerosa.github.io/precession)
 
-Further information and scientific results on the results are available at:
+Further information and scientific results are available at:
 
 - [www.damtp.cam.ac.uk/user/dg438/precession](http://www.damtp.cam.ac.uk/user/dg438/precession) 
 - [www.davidegerosa.com/precession](http://www.davidegerosa.com/precession)
@@ -92,7 +92,6 @@ examples are also presented.
 ### RELEASES
 
 [![DOI](https://zenodo.org/badge/21015/dgerosa/precession.svg)](https://zenodo.org/badge/latestdoi/21015/dgerosa/precession)   v1.0.0 (stable)  
-
 
 ### CREDITS
 The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). 
