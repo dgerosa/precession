@@ -38,7 +38,7 @@ repository
 
 - [dgerosa.github.io/precession](https://dgerosa.github.io/precession)
 
-Further information and scientific results on the results are available at:
+Further information and scientific results are available at:
 
 - [www.damtp.cam.ac.uk/user/dg438/precession](http://www.damtp.cam.ac.uk/user/dg438/precession) 
 - [www.davidegerosa.com/precession](http://www.davidegerosa.com/precession)
