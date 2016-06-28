@@ -26,7 +26,9 @@ our work. When using `precession` in any published work, please cite the paper
 describing its implementation:
 
 - *PRECESSION: Dynamics of spinning black-hole binaries with Python.* 
-D. Gerosa, M. Kesden. [arXiv:1605.01067](https://arxiv.org/abs/1605.01067)
+D. Gerosa, M. Kesden. PRD 93 (2016) 
+[124066](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.93.124066). 
+[arXiv:1605.01067](https://arxiv.org/abs/1605.01067)
 
 `precession` is an open-source code distributed under git version-control system on
 
@@ -74,7 +76,7 @@ examples are also presented.
 - Gerosa et al. PRD 92 (2015) 064016. [arXiv:1506.03492](https://arxiv.org/abs/1506.03492)
 - Gerosa et al. PRL 115 (2015) 141102. [arXiv:1506.09116](https://arxiv.org/abs/1506.09116)
 - Trifiro' et al. PRD 93 (2016) 044071. [arXiv:1507.05587](https://arxiv.org/abs/1507.05587)
-- Gerosa et Kesden. PRD in press. [arXiv:1605.01067](https://arxiv.org/abs/1605.01067)
+- Gerosa et Kesden. PRD 93 (2016) 124066. [arXiv:1605.01067](https://arxiv.org/abs/1605.01067)
 - Gerosa et Moore. PRL in press. [arXiv:1606.04226](https://arxiv.org/abs/1606.04226)
 
 
