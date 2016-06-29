@@ -25,7 +25,7 @@ Essentially, you may use `precession` as you like but must make reference to
 our work. When using `precession` in any published work, please cite the paper
 describing its implementation:
 
-- *PRECESSION: Dynamics of spinning black-hole binaries with Python.*
+- *PRECESSION: Dynamics of spinning black-hole binaries with python.*
 D. Gerosa, M. Kesden. PRD 93 (2016)
 [124066](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.93.124066).
 [arXiv:1605.01067](https://arxiv.org/abs/1605.01067)
