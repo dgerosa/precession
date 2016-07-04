@@ -1,5 +1,6 @@
 # Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme] [-all]
-# Generate API documentation from he python's docstrings present in the code using pdoc. Generate readme for github and pypi. 
+# Generate API documentation from he python's docstrings present in the code using pdoc. Generate readme for github and pypi.
+# Remember: if you have a pip version of precession installed, pdoc will generate the documentation from there. If you want to generate the documentation from the local version, you need to uninstall the pip version first, run this script, and reinstall from pip if you like.
 
 web=0
 doc=0
@@ -59,7 +60,7 @@ fi
 
 
 # Be sure your working branch is clean
-if [ "$(git status --porcelain)" ]; then 
+if [ "$(git status --porcelain)" ]; then
     echo "Please, clean your working directory first."
     exit 1
 fi
@@ -68,9 +69,9 @@ fi
 ###################################
 
 if [ $web -eq 1 ]; then
-    
+
     echo "Generating documentation, updating website"
-    
+
      # Where you start from
     start=$(pwd)
 
@@ -112,18 +113,18 @@ END
 
     # Back to master
     git checkout master
-    
+
     # Get rid of temp files
     rm -rf ${HOME}/temp_precession
-   
+
 fi
 
 ###################################
 
 if [ $doc -eq 1 ]; then
-    
+
     echo "Generating documentation, local version"
-    
+
     # Be sure you're in master
     git checkout master
 
@@ -135,15 +136,15 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
-   
+
     # rm pyc files
     rm precession/__init__.pyc precession/test/__init__.pyc
-  
+
     # Commit new html to master branch
     git add precession/index.html precession/test/index.html
     git commit -m "Automatic commit from generate_documentation.sh"
-    git push    
-  
+    git push
+
 fi
 
 ###################################
@@ -174,6 +175,6 @@ END
     # Commit readme to master branch
     git add README.md
     git commit -m "Automatic commit from generate_documentation.sh"
-    git push    
+    git push
 
 fi
