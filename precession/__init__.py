@@ -156,10 +156,11 @@ Please, report bugs to
 
     d.gerosa@damtp.cam.ac.uk
 
-I'm happy to help you out!
+I am happy to help you out!
 
 **Thanks**: M. Kesden, U. Sperhake, E. Berti, R. O'Shaughnessy, A. Sesana, D.
 Trifiro', A. Klein, J. Vosmera and X. Zhao.
+
 '''
 
 __author__ = "Davide Gerosa"
