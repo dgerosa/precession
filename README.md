@@ -3,7 +3,7 @@ precession
 
 **Author** Davide Gerosa
 
-**email** d.gerosa@damtp.cam.ac.uk
+**email** dgerosa@caltech.edu
 
 **Copyright** Copyright (C) 2016 Davide Gerosa
 
@@ -55,7 +55,7 @@ repository
 
 Further information and scientific results are available at:
 
-- [www.damtp.cam.ac.uk/user/dg438/precession](http://www.damtp.cam.ac.uk/user/dg438/precession)
+- [www.tapir.caltech.edu/~dgerosa/precession](http://www.tapir.caltech.edu/~dgerosa/precession)
 - [www.davidegerosa.com/precession](http://www.davidegerosa.com/precession)
 
 
@@ -102,7 +102,7 @@ examples are also presented.
 The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com).
 Please, report bugs to
 
-    d.gerosa@damtp.cam.ac.uk
+    dgerosa@caltech.edu
 
 I am happy to help you out!
 
