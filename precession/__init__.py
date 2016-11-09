@@ -42,7 +42,7 @@ repository
 
 Further information and scientific results are available at:
 
-- [www.damtp.cam.ac.uk/user/dg438/precession](http://www.damtp.cam.ac.uk/user/dg438/precession)
+- [www.tapir.caltech.edu/~dgerosa/precession](http://www.tapir.caltech.edu/~dgerosa/precession)
 - [www.davidegerosa.com/precession](http://www.davidegerosa.com/precession)
 
 
@@ -155,7 +155,7 @@ should play with the `h0` optional paramenter in scipy's odeint function.
 The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com).
 Please, report bugs to
 
-    d.gerosa@damtp.cam.ac.uk
+    dgerosa@caltech.edu
 
 I am happy to help you out!
 
@@ -165,7 +165,7 @@ Trifiro', A. Klein, J. Vosmera and X. Zhao.
 '''
 
 __author__ = "Davide Gerosa"
-__email__ = "d.gerosa@damtp.cam.ac.uk"
+__email__ = "dgerosa@caltech.edu"
 __copyright__ = "Copyright (C) 2016 Davide Gerosa"
 __license__ = "CC BY 4.0"
 __version__ = "1.0.0"
