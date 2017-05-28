@@ -92,7 +92,9 @@ examples are also presented.
 - Gerosa and Kesden. PRD 93 (2016) 124066. [arXiv:1605.01067](https://arxiv.org/abs/1605.01067)
 - Gerosa and Moore. PRL 117 (2016) 011101. [arXiv:1606.04226](https://arxiv.org/abs/1606.04226)
 - Rodriguez et al. APJL 832 (2016) L2 [arXiv:1609.05916](https://arxiv.org/abs/1609.05916)
-- Gerosa et al. Submitted to CQG [arXiv:1612.05263](https://arxiv.org/abs/1612.05263)
+- Gerosa et al. CQG 34 (2017) 6, 064004 [arXiv:1612.05263](https://arxiv.org/abs/1612.05263)
+- Gerosa and Berti.  PRD in press. [arXiv:1703.06223](https://arxiv.org/abs/1703.06223)
+- Zhao et al.  Submitted to PRD. [arXiv:1705.02369](https://arxiv.org/abs/1705.02369)
 
 
 ### RELEASES
