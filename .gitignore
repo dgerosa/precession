@@ -1,5 +1,6 @@
 # MAC OSX files
 /.DS_Store/
+.DS_Store
 
 # Compiled python modules.
 *.pyc
