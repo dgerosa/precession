@@ -93,7 +93,7 @@ examples are also presented.
 - Gerosa and Moore. PRL 117 (2016) 011101. [arXiv:1606.04226](https://arxiv.org/abs/1606.04226)
 - Rodriguez et al. APJL 832 (2016) L2 [arXiv:1609.05916](https://arxiv.org/abs/1609.05916)
 - Gerosa et al. CQG 34 (2017) 6, 064004 [arXiv:1612.05263](https://arxiv.org/abs/1612.05263)
-- Gerosa and Berti.  PRD 95 (2016) 124046. [arXiv:1703.06223](https://arxiv.org/abs/1703.06223)
+- Gerosa and Berti.  PRD 95 (2017) 124046. [arXiv:1703.06223](https://arxiv.org/abs/1703.06223)
 - Zhao et al. PRD 96 (2017) 024007. [arXiv:1705.02369](https://arxiv.org/abs/1705.02369)
 
 
