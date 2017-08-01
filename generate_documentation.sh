@@ -73,6 +73,7 @@ pip uninstall -y precession
 
 if [ $web -eq 1 ]; then
 
+    echo " "
     echo "Generating documentation, updating website"
 
      # Where you start from
@@ -130,6 +131,7 @@ fi
 
 if [ $doc -eq 1 ]; then
 
+    echo " "
     echo "Generating documentation, local version"
 
     # Where you start from
@@ -188,6 +190,7 @@ fi
 
 if [ $readme -eq 1 ]; then
 
+    echo " "
     echo "Generating readme"
 
     # Where you start from
@@ -241,8 +244,6 @@ END
 
     # Get rid of temp files
     rm -rf ${HOME}/temp_precession
-
-
 
 fi
 
