@@ -189,6 +189,7 @@ fi
 if [ $readme -eq 1 ]; then
 
     echo "Generating readme"
+    pip install .
 
     # Generate readme in markdown using python's docstrings
 python <<END
@@ -213,6 +214,7 @@ END
     git commit -m "Automatic commit from generate_documentation.sh"
     git push
 
+    pip uninstall -y precession
 fi
 
 pip install precession
