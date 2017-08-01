@@ -67,7 +67,7 @@ if [ "$(git status --porcelain)" ]; then
 #    exit 1
 fi
 
-pip uninstall precession
+pip uninstall -y precession
 
 ###################################
 
@@ -101,7 +101,7 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
-    pip uninstall precession
+    pip uninstall -y precession
 
     # Go back
     cd ${start}
@@ -158,7 +158,7 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
-    pip uninstall precession
+    pip uninstall -y precession
 
     # Go back
     cd ${start}
