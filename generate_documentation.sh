@@ -64,7 +64,7 @@ fi
 # Be sure your working branch is clean
 if [ "$(git status --porcelain)" ]; then
     echo "Please, clean your working directory first."
-    exit 1
+    #exit 1
 fi
 
 pip uninstall -y precession
@@ -189,6 +189,22 @@ fi
 if [ $readme -eq 1 ]; then
 
     echo "Generating readme"
+
+    # Where you start from
+    start=$(pwd)
+
+    # Build temporary directory
+    mkdir ${HOME}/temp_precession
+    mkdir ${HOME}/temp_precession/precession
+    mkdir ${HOME}/temp_precession/precession/test
+    # Copy code in temp directory
+    cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
+    cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
+    cp setup.py ${HOME}/temp_precession/setup.py
+    cp README.rst ${HOME}/temp_precession/README.rst
+
+    # Go there
+    cd ${HOME}/temp_precession
     pip install .
 
     # Generate readme in markdown using python's docstrings
@@ -205,16 +221,29 @@ outfilesave = open("README.md","w",0)   # Write to file
 outfilesave.write(joined)
 outfilesave.close()
 END
+    pip uninstall -y precession
+
+    # Go back
+    cd ${start}
+
+    mv ${HOME}/temp_precession/README.md README.md
 
     # Convert readme to rst (this is ignored by git, but needed to upload on pypi)
     pandoc README.md --from markdown --to rst -s -o README.rst
 
     # Commit readme to master branch
-    git add README.md
+    git add README.md README.rst
     git commit -m "Automatic commit from generate_documentation.sh"
     git push
 
-    pip uninstall -y precession
+    # rm pyc files
+    rm -rf precession/__init__.pyc precession/test/__init__.pyc
+
+    # Get rid of temp files
+    rm -rf ${HOME}/temp_precession
+
+
+
 fi
 
 pip install precession
