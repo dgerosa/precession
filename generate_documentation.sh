@@ -59,12 +59,15 @@ if [ $web -eq 0 ] && [ $doc -eq 0 ] && [ $readme -eq 0 ]; then
     exit 0
 fi
 
+
+
 # Be sure your working branch is clean
 if [ "$(git status --porcelain)" ]; then
     echo "Please, clean your working directory first."
 #    exit 1
 fi
 
+pip uninstall precession
 
 ###################################
 
@@ -88,6 +91,7 @@ if [ $web -eq 1 ]; then
 
     # Go there
     cd ${HOME}/temp_precession
+    pip install .
 
     # Check version of the code seen by pdoc
 python <<END
@@ -97,6 +101,7 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
+    pip uninstall precession
 
     # Go back
     cd ${start}
@@ -138,9 +143,12 @@ if [ $doc -eq 1 ]; then
     # Copy code in temp directory
     cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
     cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
+    cp setup.py ${HOME}/temp_precession/setup.py
+    cp README.rst ${HOME}/temp_precession/README.rst
 
     # Go there
     cd ${HOME}/temp_precession
+    pip install .
 
     # Check version of the code seen by pdoc
     python <<END
@@ -150,6 +158,7 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
+    pip uninstall precession
 
     # Go back
     cd ${start}
@@ -168,6 +177,7 @@ END
 
     # Get rid of temp files
     rm -rf ${HOME}/temp_precession
+
 
 fi
 
@@ -202,3 +212,5 @@ END
     git push
 
 fi
+
+pip install precession
