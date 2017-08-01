@@ -62,7 +62,7 @@ fi
 # Be sure your working branch is clean
 if [ "$(git status --porcelain)" ]; then
     echo "Please, clean your working directory first."
-    exit 1
+#    exit 1
 fi
 
 
@@ -125,11 +125,25 @@ if [ $doc -eq 1 ]; then
 
     echo "Generating documentation, local version"
 
-    # Be sure you're in master
-    git checkout master
+    # Where you start from
+    start=$(pwd)
 
-    # Check version of the code seen by pdoc
-python <<END
+    # Start from master
+    #git checkout master
+
+    # Build temporary directory
+    mkdir ${HOME}/temp_precession
+    mkdir ${HOME}/temp_precession/precession
+    mkdir ${HOME}/temp_precession/precession/test
+    # Copy code in temp directory
+    cp precession/__init__.py ${HOME}/temp_precession/precession
+    cp precession/test/__init__.py ${HOME}/temp_precession/precession/test
+
+    # Go there
+    cd ${HOME}/temp_precession
+
+     # Check version of the code seen by pdoc
+    python <<END
 import precession
 print "Python module precession, version", precession.__version__
 END
@@ -137,13 +151,23 @@ END
     # Generate documentation using pdc
     pdoc --html --overwrite precession
 
-    # rm pyc files
-    rm precession/__init__.pyc precession/test/__init__.pyc
+    # Go back
+    cd ${start}
+
+    mv ${HOME}/temp_precession/precession/index.html precession/index.html
+    mv ${HOME}/temp_precession/precession/test/index.html precession/test/index.html
+
 
     # Commit new html to master branch
-    git add precession/index.html precession/test/index.html
-    git commit -m "Automatic commit from generate_documentation.sh"
-    git push
+    #git add precession/index.html precession/test/index.html
+    #git commit -m "Automatic commit from generate_documentation.sh"
+    #git push
+
+    # rm pyc files
+    rm -rf precession/__init__.pyc precession/test/__init__.pyc
+
+    # Get rid of temp files
+    rm -rf ${HOME}/temp_precession
 
 fi
 
