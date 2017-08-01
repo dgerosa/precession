@@ -159,9 +159,9 @@ END
 
 
     # Commit new html to master branch
-    #git add precession/index.html precession/test/index.html
-    #git commit -m "Automatic commit from generate_documentation.sh"
-    #git push
+    git add precession/index.html precession/test/index.html
+    git commit -m "Automatic commit from generate_documentation.sh"
+    git push
 
     # rm pyc files
     rm -rf precession/__init__.pyc precession/test/__init__.pyc
