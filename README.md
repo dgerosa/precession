@@ -81,7 +81,7 @@ examples are also presented.
 
 ### RESULTS
 
-`precession` has been used in the following published papers::
+`precession` has been used in the following published papers:
 
 - Gerosa and Sesana. MNRAS 446 (2015) 38-55. [arXiv:1405.2072](https://arxiv.org/abs/1405.2072)
 - Kesden et al. PRL 114 (2015) 081103. [arXiv:1411.0674](https://arxiv.org/abs/1411.0674)

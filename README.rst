@@ -90,7 +90,7 @@ are also presented.
 RESULTS
 -------
 
-``precession`` has been used in the following published papers::
+``precession`` has been used in the following published papers:
 
 -  Gerosa and Sesana. MNRAS 446 (2015) 38-55.
    `arXiv:1405.2072 <https://arxiv.org/abs/1405.2072>`__
