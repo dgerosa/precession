@@ -64,7 +64,7 @@ fi
 # Be sure your working branch is clean
 if [ "$(git status --porcelain)" ]; then
     echo "Please, clean your working directory first."
-#    exit 1
+    exit 1
 fi
 
 pip uninstall -y precession
