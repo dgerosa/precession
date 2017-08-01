@@ -12,9 +12,6 @@
 /*.egg-info
 /*.egg
 
-# rst README (run pandoc README.md --from markdown --to rst -s -o README.rst)
-README.rst
-
 # Code checkpoints
 precession_checkpoints/
 
