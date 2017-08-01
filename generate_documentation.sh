@@ -83,8 +83,8 @@ if [ $web -eq 1 ]; then
     mkdir ${HOME}/temp_precession/precession
     mkdir ${HOME}/temp_precession/precession/test
     # Copy code in temp directory
-    cp precession/__init__.py ${HOME}/temp_precession/precession
-    cp precession/test/__init__.py ${HOME}/temp_precession/precession/test
+    cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
+    cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
 
     # Go there
     cd ${HOME}/temp_precession
@@ -136,13 +136,13 @@ if [ $doc -eq 1 ]; then
     mkdir ${HOME}/temp_precession/precession
     mkdir ${HOME}/temp_precession/precession/test
     # Copy code in temp directory
-    cp precession/__init__.py ${HOME}/temp_precession/precession
-    cp precession/test/__init__.py ${HOME}/temp_precession/precession/test
+    cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
+    cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
 
     # Go there
     cd ${HOME}/temp_precession
 
-     # Check version of the code seen by pdoc
+    # Check version of the code seen by pdoc
     python <<END
 import precession
 print "Python module precession, version", precession.__version__
