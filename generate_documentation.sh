@@ -1,6 +1,6 @@
 # Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme] [-all]
 # Generate API documentation from he python's docstrings present in the code using pdoc. Generate readme for github and pypi.
-# Remember: if you have a pip version of precession installed, pdoc will generate the documentation from there. If you want to generate the documentation from the local version, you need to uninstall the pip version first, run this script, and reinstall from pip if you like.
+# Remember: if you have a pip version of precession installed, pdoc will generate the documentation from there. That's why I have all these pip install and pip uninstall in here. I couldn't find a better way to handle this.
 
 
 web=0
