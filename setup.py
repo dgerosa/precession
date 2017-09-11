@@ -1,6 +1,6 @@
 '''
 Standard setup.py to upload the code on pypi.
-First, remember to do 
+First, remember to do
     bash generate_documentation.sh -all
 to be sure docstrings and readme are up-to-date. Then
     python setup.py sdist
@@ -14,10 +14,10 @@ from setuptools import setup
 def readme():
     with open('README.rst') as f:
         return f.read()
-        
-# Extract code version from __init__.py 
+
+# Extract code version from __init__.py
 def get_version():
-    with open('precession/__init__.py') as f:
+    with open('precession/precession.py') as f:
         for line in f.readlines():
             if "__version__" in line:
                 return line.split('"')[1]
