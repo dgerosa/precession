@@ -45,7 +45,7 @@ setup(
           'numpy',
           'scipy',
           'matplotlib',
-          'parmap',
+          'parmap>=1.5.1',
       ],
     include_package_data=True,
     zip_safe=False,
