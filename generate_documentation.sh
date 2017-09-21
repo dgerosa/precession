@@ -89,8 +89,7 @@ if [ $web -eq 1 ]; then
     # Copy code in temp directory
     cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
     cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
-    cp setup.py ${HOME}/temp_precession/setup.py
-    #cp README.rst ${HOME}/temp_precession/README.rst
+    cp README.rst ${HOME}/temp_precession/README.rst
 
     # Go there
     cd ${HOME}/temp_precession
@@ -138,57 +137,63 @@ fi
 
 if [ $doc -eq 1 ]; then
 
-    echo " "
-    echo "Generating documentation, local version"
+  pip uninstall -y precession
 
-    # Where you start from
-    start=$(pwd)
+  echo " "
+  echo "Generating documentation, local version"
 
-    # Start from master
-    #git checkout master
+   # Where you start from
+  start=$(pwd)
 
-    # Build temporary directory
-    mkdir ${HOME}/temp_precession
-    mkdir ${HOME}/temp_precession/precession
-    mkdir ${HOME}/temp_precession/precession/test
-    # Copy code in temp directory
-    cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
-    cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
-    cp setup.py ${HOME}/temp_precession/setup.py
-    cp README.rst ${HOME}/temp_precession/README.rst
+  # Start from master
+  git checkout master
 
-    # Go there
-    cd ${HOME}/temp_precession
-    #python setup.py install
+  # Build temporary directory
+  mkdir ${HOME}/temp_precession
+  mkdir ${HOME}/temp_precession/precession
+  mkdir ${HOME}/temp_precession/precession/test
+  # Copy code in temp directory
+  cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
+  cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
+  cp README.rst ${HOME}/temp_precession/README.rst
 
-    # Check version of the code seen by pdoc
-    python <<END
+  # Go there
+  cd ${HOME}/temp_precession
+
+  echo "from setuptools import setup" >setup.py
+  echo "setup(name='precession',packages=['precession','precession.test'])" >>setup.py
+
+  python setup.py install
+
+  # Check version of the code seen by pdoc
+python <<END
 import precession
 print "Python module precession, version", precession.__version__
 END
 
-    # Generate documentation using pdc
-    pdoc --html --overwrite precession
-    #pip uninstall -y precession
+  # Generate documentation using pdc
+  pdoc --html --overwrite precession
 
-    # Go back
-    cd ${start}
+  # # Go back
+  cd ${start}
 
-    mv ${HOME}/temp_precession/precession/index.html precession/index.html
-    mv ${HOME}/temp_precession/precession/test/index.html precession/test/index.html
+  mv ${HOME}/temp_precession/precession/index.html precession/index.html
+  mv ${HOME}/temp_precession/precession/test/index.html precession/test/index.html
 
+  # Commit new html to master branch
+  git add precession/index.html precession/test/index.html
+  git commit -m "Automatic commit from generate_documentation.sh"
+  git push
 
-    # Commit new html to master branch
-    git add precession/index.html precession/test/index.html
-    git commit -m "Automatic commit from generate_documentation.sh"
-    git push
+  # rm pyc files
+  rm -rf precession/__init__.pyc precession/test/__init__.pyc
 
-    # rm pyc files
-    rm -rf precession/__init__.pyc precession/test/__init__.pyc
+  # Get rid of temp files
+  rm -rf ${HOME}/temp_precession
 
-    # Get rid of temp files
-    rm -rf ${HOME}/temp_precession
-
+  pip uninstall -y precession
+  cd ${HOME}
+  pip install precession
 
 fi
 
@@ -197,25 +202,39 @@ fi
 
 if [ $readme -eq 1 ]; then
 
-    echo " "
-    echo "Generating readme"
+  echo " "
+  echo "Generating readme"
 
-    # Where you start from
-    start=$(pwd)
+  pip uninstall -y precession
 
-    # Build temporary directory
-    mkdir ${HOME}/temp_precession
-    mkdir ${HOME}/temp_precession/precession
-    mkdir ${HOME}/temp_precession/precession/test
-    # Copy code in temp directory
-    cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
-    cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
-    cp setup.py ${HOME}/temp_precession/setup.py
-    cp README.rst ${HOME}/temp_precession/README.rst
+  # Where you start from
+  start=$(pwd)
 
-    # Go there
-    cd ${HOME}/temp_precession
-    #python setup.py install
+  # Start from master
+  git checkout master
+
+  # Build temporary directory
+  mkdir ${HOME}/temp_precession
+  mkdir ${HOME}/temp_precession/precession
+  mkdir ${HOME}/temp_precession/precession/test
+  # Copy code in temp directory
+  cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
+  cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
+  cp README.rst ${HOME}/temp_precession/README.rst
+
+  # Go there
+  cd ${HOME}/temp_precession
+
+  echo "from setuptools import setup" >setup.py
+  echo "setup(name='precession',packages=['precession','precession.test'])" >>setup.py
+
+  python setup.py install
+
+  # Check version of the code seen by pdoc
+python <<END
+import precession
+print "Python module precession, version", precession.__version__
+END
 
     # Generate readme in markdown using python's docstrings
 python <<END
@@ -251,6 +270,12 @@ END
 
     # Get rid of temp files
     rm -rf ${HOME}/temp_precession
+
+    pip uninstall -y precession
+    cd ${HOME}
+    pip install precession
+
+
 
 fi
 
