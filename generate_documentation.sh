@@ -87,8 +87,8 @@ if [ $web -eq 1 ]; then
     # Copy code in temp directory
     cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
     cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
-    cp setup.py ${HOME}/temp_precession/setup.py
-    cp README.rst ${HOME}/temp_precession/README.rst
+    #cp setup.py ${HOME}/temp_precession/setup.py
+    #cp README.rst ${HOME}/temp_precession/README.rst
 
     # Go there
     cd ${HOME}/temp_precession
@@ -103,7 +103,7 @@ END
     # Generate documentation using pdc
     pdoc --html --overwrite precession
     #pip uninstall -y precession
-
+    #
     # Go back
     cd ${start}
 
