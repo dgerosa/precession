@@ -171,7 +171,7 @@ __author__ = "Davide Gerosa"
 __email__ = "dgerosa@caltech.edu"
 __copyright__ = "Copyright (C) 2016 Davide Gerosa"
 __license__ = "CC BY 4.0"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
