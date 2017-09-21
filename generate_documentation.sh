@@ -11,7 +11,7 @@ while test $# -gt 0; do
                         echo " "
                         echo "Generate automatic html documentation using pdoc"
                         echo "pdoc is available here https://github.com/BurntSushi/pdoc"
-                        echo "and can be installed from Pypi: pip install pdoc."
+                        echo "and can be installed from Pypi: #pip install pdoc."
                         echo "If -doc, documentation is only produced but not published online"
                         echo "If -web, documentation is pushed to a dedicated git branch (gh-pages)"
                         echo "and published at http://dgerosa.github.io/precession/"
@@ -65,7 +65,7 @@ if [ "$(git status --porcelain)" ]; then
     #exit 1
 fi
 
-pip uninstall -y precession
+#pip uninstall -y precession
 
 ###################################
 
@@ -92,7 +92,7 @@ if [ $web -eq 1 ]; then
 
     # Go there
     cd ${HOME}/temp_precession
-    python setup.py install
+    #python setup.py install
 
     # Check version of the code seen by pdoc
 python <<END
@@ -102,7 +102,7 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
-    pip uninstall -y precession
+    #pip uninstall -y precession
 
     # Go back
     cd ${start}
@@ -150,7 +150,7 @@ if [ $doc -eq 1 ]; then
 
     # Go there
     cd ${HOME}/temp_precession
-    python setup.py install
+    #python setup.py install
 
     # Check version of the code seen by pdoc
     python <<END
@@ -160,7 +160,7 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
-    pip uninstall -y precession
+    #pip uninstall -y precession
 
     # Go back
     cd ${start}
@@ -206,7 +206,7 @@ if [ $readme -eq 1 ]; then
 
     # Go there
     cd ${HOME}/temp_precession
-    python setup.py install
+    #python setup.py install
 
     # Generate readme in markdown using python's docstrings
 python <<END
@@ -222,7 +222,7 @@ outfilesave = open("README.md","w",0)   # Write to file
 outfilesave.write(joined)
 outfilesave.close()
 END
-    pip uninstall -y precession
+    #pip uninstall -y precession
 
     # Go back
     cd ${start}
@@ -245,4 +245,4 @@ END
 
 fi
 
-pip install precession
+#pip install precession
