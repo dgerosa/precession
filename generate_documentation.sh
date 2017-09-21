@@ -1,7 +1,5 @@
 # Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme] [-all]
 # Generate API documentation from he python's docstrings present in the code using pdoc. Generate readme for github and pypi.
-# Remember: if you have a pip version of precession installed, pdoc will generate the documentation from there. That's why I have all these pip install and pip uninstall in here. I couldn't find a better way to handle this.
-
 
 web=0
 doc=0
@@ -94,7 +92,7 @@ if [ $web -eq 1 ]; then
 
     # Go there
     cd ${HOME}/temp_precession
-    pip install .
+    python setup.py install
 
     # Check version of the code seen by pdoc
 python <<END
@@ -152,7 +150,7 @@ if [ $doc -eq 1 ]; then
 
     # Go there
     cd ${HOME}/temp_precession
-    pip install .
+    python setup.py install
 
     # Check version of the code seen by pdoc
     python <<END
@@ -208,7 +206,7 @@ if [ $readme -eq 1 ]; then
 
     # Go there
     cd ${HOME}/temp_precession
-    pip install .
+    python setup.py install
 
     # Generate readme in markdown using python's docstrings
 python <<END
