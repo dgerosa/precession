@@ -71,6 +71,8 @@ fi
 
 if [ $web -eq 1 ]; then
 
+    pip uninstall -y precession
+
     echo " "
     echo "Generating documentation, updating website"
 
@@ -87,12 +89,16 @@ if [ $web -eq 1 ]; then
     # Copy code in temp directory
     cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
     cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
-    #cp setup.py ${HOME}/temp_precession/setup.py
+    cp setup.py ${HOME}/temp_precession/setup.py
     #cp README.rst ${HOME}/temp_precession/README.rst
 
     # Go there
     cd ${HOME}/temp_precession
-    #python setup.py install
+
+    echo "from setuptools import setup" >setup.py
+    echo "setup(name='precession',packages=['precession','precession.test'])" >>setup.py
+
+    python setup.py install
 
     # Check version of the code seen by pdoc
 python <<END
@@ -103,8 +109,8 @@ END
     # Generate documentation using pdc
     pdoc --html --overwrite precession
     #pip uninstall -y precession
-    #
-    # Go back
+
+    # # Go back
     cd ${start}
 
     # Move html files to gh-pages branch (directories there should exist)
