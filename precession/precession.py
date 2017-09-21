@@ -198,7 +198,7 @@ from scipy import optimize
 from scipy import integrate
 import random
 import math
-import multiprocessing,parmap # if you don't have parmap, try "pip install parmap".
+import parmap # if you don't have parmap, try "pip install parmap".
 import __main__
 
 ##Unbuffereb stdout. Less efficient but interesting for debugging.
@@ -2928,12 +2928,11 @@ def evolve_J(xi_vals,J_vals,r_vals,q_vals,S1_vals,S2_vals):
         print "[evolve_J] Default parallel computation"
     # Parallelization.
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True)
+        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals), pm_parallel=True)
     elif CPUs==1: # 1 cpus done by explicitely switching parallelization off
-        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False)
+        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=False)
     else: # Run on a given number of CPUs
-        p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p)
+        filelist=parmap.starmap(Jofr_checkpoint, zip(xi_vals,J_vals, [r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_processes=CPUs)
 
     J_fvals=[]
     for index, file in enumerate(filelist):
@@ -3073,12 +3072,11 @@ def evolve_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q_vals,S1_vals,S2
 
         #Parallelization
         if CPUs==0: #Run on all cpus on the current machine! (default option)
-            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True)
+            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=True)
         elif CPUs==1: #1 cpus done by explicitely removing parallelization
-            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False)
+            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=False)
         else: # Run on a given number of CPUs
-            p = multiprocessing.Pool(CPUs)
-            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p)
+            filelist=parmap.starmap(evolve_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_processes=CPUs)
 
         theta1_fvals=[]
         theta2_fvals=[]
@@ -3261,12 +3259,11 @@ def evolve_J_infinity(xi_vals,kappainf_vals,r_vals,q_vals,S1_vals,S2_vals):
         print "[evolve_J_infinity] Default parallel computation"
     # Parallelization
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True)
+        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=True)
     elif CPUs==1: # 1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False)
+        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=False)
     else: # Run on a given number of CPUs
-        p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p)
+        filelist=parmap.starmap(Jofr_infinity_checkpoint, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_processes=CPUs)
 
     J_fvals=[]
     for index, file in enumerate(filelist):
@@ -3426,12 +3423,11 @@ def evolve_J_backwards(xi_vals,J_vals,r,q_vals,S1_vals,S2_vals):
         print "[evolve_J_backwards] Default parallel computation"
     #Parallelization... python is cool indeed
     if CPUs==0: #Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals,[r for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True)
+        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals,[r for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=True)
     elif CPUs==1: #1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals,[r for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False)
+        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals,[r for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=False)
     else: # Run on a given number of CPUs
-        p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals,[r for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p)
+        filelist=parmap.starmap(kappa_backwards_checkpoint, zip(xi_vals,J_vals,[r for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_processes=CPUs)
 
     kappainf_vals=[]
     for index, file in enumerate(filelist):
@@ -3808,12 +3804,11 @@ def orbit_averaged(J_vals,xi_vals,S_vals,r_vals,q_vals,S1_vals,S2_vals):
 
     # Parallelization
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True)
+        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=True)
     elif CPUs==1: # 1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False)
+        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=False)
     else: # Run on a given number of CPUs
-        p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p)
+        filelist=parmap.starmap(orbit_averaged_single, zip(J_vals,xi_vals,S_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_processes=CPUs)
 
     J_fvals=[]
     S_fvals=[]
@@ -3970,12 +3965,11 @@ def orbit_angles(theta1_vals,theta2_vals,deltaphi_vals,r_vals,q_vals,S1_vals,S2_
 
         #Parallelization... python is cool indeed
         if CPUs==0: #Run on all cpus on the current machine! (default option)
-            filelist=parmap.starmap(orbit_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=True)
+            filelist=parmap.starmap(orbit_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=True)
         elif CPUs==1: #1 cpus done by explicitely removing parallelization
-            filelist=parmap.starmap(orbit_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),parallel=False)
+            filelist=parmap.starmap(orbit_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_parallel=False)
         else: # Run on a given number of CPUs
-            p = multiprocessing.Pool(CPUs)
-            filelist=parmap.starmap(orbit_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pool=p)
+            filelist=parmap.starmap(orbit_angles_single, zip(theta1_vals,theta2_vals,deltaphi_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals),pm_processes=CPUs)
 
         theta1_fvals=[]
         theta2_fvals=[]
@@ -4173,12 +4167,11 @@ def orbit_vectors(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_
 
     # Parallelization
     if CPUs==0: # Run on all cpus on the current machine! (default option)
-        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),time,parallel=True)
+        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),time,pm_parallel=True)
     elif CPUs==1: # 1 cpus done by explicitely removing parallelization
-        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),time,parallel=False)
+        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),time,pm_parallel=False)
     else: # Run on a given number of CPUs
-        p = multiprocessing.Pool(CPUs)
-        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),time,pool=p)
+        filelist=parmap.starmap(orbit_vectors_single, zip(Lxi_vals,Lyi_vals,Lzi_vals,S1xi_vals,S1yi_vals,S1zi_vals,S2xi_vals,S2yi_vals,S2zi_vals,[r_vals for i in range(len(q_vals))],q_vals),time,pm_processes=CPUs)
 
     Lx_fvals=[]
     Ly_fvals=[]
@@ -4385,12 +4378,11 @@ def hybrid(xi_vals,kappainf_vals,r_vals,q_vals,S1_vals,S2_vals,r_t):
 
         #Parallelization
         if CPUs==0: #Run on all cpus on the current machine! (default option)
-            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals,[r_t for i in range(len(q_vals))]),parallel=True)
+            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals,[r_t for i in range(len(q_vals))]),pm_parallel=True)
         elif CPUs==1: #1 cpus done by explicitely removing parallelization
-            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals,[r_t for i in range(len(q_vals))]),parallel=False)
+            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals,[r_t for i in range(len(q_vals))]),pm_parallel=False)
         else: # Run on a given number of CPUs
-            p = multiprocessing.Pool(CPUs)
-            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals,[r_t for i in range(len(q_vals))]),pool=p)
+            filelist=parmap.starmap(hybrid_single, zip(xi_vals,kappainf_vals,[r_vals for i in range(len(q_vals))],q_vals,S1_vals,S2_vals,[r_t for i in range(len(q_vals))]),pm_processes=CPUs)
 
         theta1_fvals=[]
         theta2_fvals=[]
