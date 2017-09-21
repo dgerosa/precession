@@ -108,7 +108,6 @@ END
 
     # Generate documentation using pdc
     pdoc --html --overwrite precession
-    #pip uninstall -y precession
 
     # # Go back
     cd ${start}
@@ -128,6 +127,10 @@ END
 
     # Get rid of temp files
     rm -rf ${HOME}/temp_precession
+
+    pip uninstall -y precession
+    cd ${HOME}
+    pip install precession
 
 fi
 
