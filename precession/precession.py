@@ -149,6 +149,15 @@ attempted by the ODE integrator. This is a minor issue and  only happens to
 roughly one binary in a million or so. If you really want to fix this, you
 should play with the `h0` optional paramenter in scipy's odeint function.
 
+8. **Typos** There are two typos in [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
+(i) The (1+4eta) factor in Eq.(37) should really be (1-4eta), such that p0
+correspond to the radiated energy for equal-mass non-spinning BHs. The origin of
+this typo is a trivial mistake when rewriting the analogous equation from
+Gerosa and Sesana 2015. (ii) A minus sign is missing in the Delta vector is of
+Eq.(36). This error, which is present in various papers since at lest 2010
+originates from the conversion between a notation where m1 (m2) is the heavier
+(lighter) BH like the one used here, to the opposite one used by other groups.
+This has been corrected since v1.0.2.
 
 ### RELEASES
 
@@ -171,7 +180,7 @@ __author__ = "Davide Gerosa"
 __email__ = "dgerosa@caltech.edu"
 __copyright__ = "Copyright (C) 2016 Davide Gerosa"
 __license__ = "CC BY 4.0"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 
 __doc__="**Author** "+__author__+"\n\n"+\
@@ -4583,7 +4592,6 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False,more=False)
 
     '''
 
-
     chi1=S1/(M/(1.+q))**2   # Dimensionless spin
     chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
     eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
@@ -4593,7 +4601,7 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False,more=False)
     hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
     hatS2 = np.array([np.sin(theta2)*np.cos(deltaPhi),np.sin(theta2)*np.sin(deltaPhi),np.cos(theta2)])
     #Useful spin combinations.
-    Delta= (q*chi2*hatS2-chi1*hatS1)/(1.+q)
+    Delta= -(q*chi2*hatS2-chi1*hatS1)/(1.+q) # Minus sign added in v1.0.2. Typo in the paper.
     Delta_par=np.dot(Delta,hatL)
     Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
     chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
