@@ -154,8 +154,8 @@ should play with the `h0` optional paramenter in scipy's odeint function.
 (i) The (1+4eta) factor in Eq.(37) should really be (1-4eta), such that p0
 correspond to the radiated energy for equal-mass non-spinning BHs. The origin of
 this typo is a trivial mistake when rewriting the analogous equation from
-Gerosa and Sesana 2015. (ii) A minus sign is missing in the Delta vector is of
-Eq.(36). This error, which is present in various papers since at lest 2010
+Gerosa and Sesana 2015. (ii) A minus sign is missing in the Delta vector of
+Eq.(36). This error, which is present in various papers since at least 2010,
 originates from the conversion between a notation where m1 (m2) is the heavier
 (lighter) BH like the one used here, to the opposite one used by other groups.
 This has been corrected since v1.0.2.
