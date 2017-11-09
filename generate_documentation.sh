@@ -1,4 +1,4 @@
-# Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme] [-all]
+# Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme]
 # Generate API documentation from he python's docstrings present in the code using pdoc. Generate readme for github and pypi.
 
 web=0
@@ -22,7 +22,6 @@ while test $# -gt 0; do
                         echo "   -doc             produce documentation"
                         echo "   -web             produce and publish  documentation"
                         echo "   -readme          produce readme"
-                        echo "   -all             do all the previous"
 
                         exit 0
                         ;;
@@ -38,12 +37,12 @@ while test $# -gt 0; do
                         shift
                         readme=1
                         ;;
-                -all)
-                        shift
-                        doc=1
-                        web=1
-                        readme=1
-                        ;;
+                # -all)
+                #         shift
+                #         doc=1
+                #         web=1
+                #         readme=1
+                #         ;;
                 *)
                 shift
         esac
@@ -53,7 +52,7 @@ done
 ###################################
 
 if [ $web -eq 0 ] && [ $doc -eq 0 ] && [ $readme -eq 0 ]; then
-    echo "Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme] [-all]"
+    echo "Usage: bash generate_documentation.sh [-h||--help] [-doc] [-web] [-readme]"
     exit 0
 fi
 
