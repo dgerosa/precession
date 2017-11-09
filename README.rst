@@ -116,6 +116,8 @@ RESULTS
    `arXiv:1703.06223 <https://arxiv.org/abs/1703.06223>`__
 -  Zhao et al. PRD 96 (2017) 024007.
    `arXiv:1705.02369 <https://arxiv.org/abs/1705.02369>`__
+-  Wysocki et al. PRD 96 (2017) 024007.
+   `arXiv:1709.01943 <https://arxiv.org/abs/1709.01943>`__
 
 RELEASES
 --------

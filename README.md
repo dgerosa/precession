@@ -95,6 +95,7 @@ examples are also presented.
 - Gerosa et al. CQG 34 (2017) 6, 064004 [arXiv:1612.05263](https://arxiv.org/abs/1612.05263)
 - Gerosa and Berti.  PRD 95 (2017) 124046. [arXiv:1703.06223](https://arxiv.org/abs/1703.06223)
 - Zhao et al. PRD 96 (2017) 024007. [arXiv:1705.02369](https://arxiv.org/abs/1705.02369)
+- Wysocki et al. PRD 96 (2017) 024007. [arXiv:1709.01943](https://arxiv.org/abs/1709.01943)
 
 
 ### RELEASES
