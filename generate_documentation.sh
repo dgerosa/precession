@@ -70,72 +70,74 @@ fi
 ###################################
 
 if [ $web -eq 1 ]; then
+  rm precession/*pyc
 
-    pip uninstall -y precession
+  pip uninstall -y precession
 
-    echo " "
-    echo "Generating documentation, updating website"
+  echo " "
+  echo "Generating documentation, updating website"
 
-     # Where you start from
-    start=$(pwd)
+   # Where you start from
+  start=$(pwd)
 
-    # Start from master
-    git checkout master
+  # Start from master
+  git checkout master
 
-    # Build temporary directory
-    mkdir ${HOME}/temp_precession
-    mkdir ${HOME}/temp_precession/precession
-    mkdir ${HOME}/temp_precession/precession/test
-    # Copy code in temp directory
-    cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
-    cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
-    cp README.rst ${HOME}/temp_precession/README.rst
+  # Build temporary directory
+  mkdir ${HOME}/temp_precession
+  mkdir ${HOME}/temp_precession/precession
+  mkdir ${HOME}/temp_precession/precession/test
+  # Copy code in temp directory
+  cp precession/precession.py ${HOME}/temp_precession/precession/__init__.py
+  cp precession/test/test.py ${HOME}/temp_precession/precession/test/__init__.py
+  cp README.rst ${HOME}/temp_precession/README.rst
 
-    # Go there
-    cd ${HOME}/temp_precession
+  # Go there
+  cd ${HOME}/temp_precession
 
-    echo "from setuptools import setup" >setup.py
-    echo "setup(name='precession',packages=['precession','precession.test'])" >>setup.py
+  echo "from setuptools import setup" >setup.py
+  echo "setup(name='precession',packages=['precession','precession.test'])" >>setup.py
 
-    python setup.py install
+  python setup.py install
 
-    # Check version of the code seen by pdoc
+  # Check version of the code seen by pdoc
 python <<END
 import precession
 print "Python module precession, version", precession.__version__
 END
 
-    # Generate documentation using pdc
-    pdoc --html --overwrite precession
+  # Generate documentation using pdc
+  pdoc --html --overwrite precession
 
-    # # Go back
-    cd ${start}
+  # # Go back
+  cd ${start}
 
-    # Move html files to gh-pages branch (directories there should exist)
-    git checkout gh-pages
-    mv ${HOME}/temp_precession/precession/index.html index.html
-    mv ${HOME}/temp_precession/precession/test/index.html test/index.html
+  # Move html files to gh-pages branch (directories there should exist)
+  git checkout gh-pages
+  mv ${HOME}/temp_precession/precession/index.html index.html
+  mv ${HOME}/temp_precession/precession/test/index.html test/index.html
 
-    # Commit new html to gh-pages branch
-    git add index.html test/index.html
-    git commit -m "Automatic commit from generate_documentation.sh"
-    git push
+  # Commit new html to gh-pages branch
+  git add index.html test/index.html
+  git commit -m "Automatic commit from generate_documentation.sh"
+  git push
 
-    # Back to master
-    git checkout master
+  # Back to master
+  git checkout master
 
-    # Get rid of temp files
-    rm -rf ${HOME}/temp_precession
+  # Get rid of temp files
+  rm -rf ${HOME}/temp_precession
 
-    pip uninstall -y precession
-    cd ${HOME}
-    pip install precession
+  pip uninstall -y precession
+  cd ${HOME}
+  pip install precession
 
 fi
 
 ###################################
 
 if [ $doc -eq 1 ]; then
+  rm precession/*pyc
 
   pip uninstall -y precession
 
@@ -201,6 +203,7 @@ fi
 
 
 if [ $readme -eq 1 ]; then
+  rm precession/*pyc
 
   echo " "
   echo "Generating readme"
