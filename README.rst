@@ -126,7 +126,8 @@ RELEASES
 submission of `arXiv:1605.01067 <https://arxiv.org/abs/1605.01067>`__.
 
 |DOI| v1.0.2. Clarifications on typos in Eq. (36) and (37) of
-arXiv:1605.01067. See help(precession) for more information.
+`arXiv:1605.01067 <https://arxiv.org/abs/1605.01067>`__. See
+help(precession) for more information.
 
 CREDITS
 -------

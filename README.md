@@ -100,9 +100,9 @@ examples are also presented.
 
 ### RELEASES
 
-[![DOI](https://zenodo.org/badge/21015/dgerosa/precession.svg)](https://zenodo.org/badge/latestdoi/21015/dgerosa/precession)   v1.0.0. Stable version released together with the first arxiv submission of [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
+[![DOI](https://zenodo.org/badge/21015/dgerosa/precession.svg)](https://zenodo.org/badge/latestdoi/21015/dgerosa/precession) v1.0.0. Stable version released together with the first arxiv submission of [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
 
-[![DOI](https://zenodo.org/badge/46057982.svg)](https://zenodo.org/badge/latestdoi/46057982) v1.0.2. Clarifications on typos in Eq. (36) and (37) of arXiv:1605.01067. See help(precession) for more information.
+[![DOI](https://zenodo.org/badge/46057982.svg)](https://zenodo.org/badge/latestdoi/46057982) v1.0.2. Clarifications on typos in Eq. (36) and (37) of [arXiv:1605.01067](https://arxiv.org/abs/1605.01067). See help(precession) for more information.
 
 
 ### CREDITS
