@@ -122,7 +122,11 @@ RESULTS
 RELEASES
 --------
 
-|DOI| v1.0.0 (stable)
+|DOI| v1.0.0. Stable version released together with the first arxiv
+submission of `arXiv:1605.01067 <https://arxiv.org/abs/1605.01067>`__.
+
+|DOI| v1.0.2. Clarifications on typos in Eq. (36) and (37) of
+arXiv:1605.01067. See help(precession) for more information.
 
 CREDITS
 -------
@@ -141,3 +145,5 @@ Sesana, D. Trifiro', A. Klein, J. Vosmera and X. Zhao.
 
 .. |DOI| image:: https://zenodo.org/badge/21015/dgerosa/precession.svg
    :target: https://zenodo.org/badge/latestdoi/21015/dgerosa/precession
+.. |DOI| image:: https://zenodo.org/badge/46057982.svg
+   :target: https://zenodo.org/badge/latestdoi/46057982
