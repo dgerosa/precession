@@ -116,8 +116,14 @@ RESULTS
    `arXiv:1703.06223 <https://arxiv.org/abs/1703.06223>`__
 -  Zhao et al. PRD 96 (2017) 024007.
    `arXiv:1705.02369 <https://arxiv.org/abs/1705.02369>`__
--  Wysocki et al.
+-  Wysocki et al. PRD 97 (2018) 043014
    `arXiv:1709.01943 <https://arxiv.org/abs/1709.01943>`__
+-  Gerosa J.Phys.Conf.Ser. 957 (2018) 012014
+   `arXiv:1711.1003 <https://arxiv.org/abs/1711.1003>`__
+-  Rodriguez et al. PRL 120 (2018) 151101
+   `arXiv:1712.0493 <https://arxiv.org/abs/1712.0493>`__
+-  Gerosa et al. PRD 97 (2018) 104049
+   `arXiv:1802.04276 <https://arxiv.org/abs/1802.04276>`__
 
 RELEASES
 --------
