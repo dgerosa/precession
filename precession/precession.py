@@ -4486,23 +4486,27 @@ def finalmass(theta1,theta2,deltaPhi,q,S1,S2):
     return Mfin
 
 
-def finalspin(theta1,theta2,deltaPhi,q,S1,S2):
+
+def finalspin(theta1,theta2,deltaPhi,q,S1,S2,which='HBZ16_34corr'):
 
     '''
     Estimate the final mass of the BH renmant following a BH merger. We
     implement the fitting formula to numerical relativity simulations by
-    Barausse Rezzolla 2009.  See also Gerosa and Sesana 2015. We return the
+    Barausse and Rezzolla 2009 and Hofmann, Barausse and Rezzolla 2016.
+    See also Gerosa and Sesana 2015. By default returns the Hofmann+ expression
+    with nM=3, nJ=4 and corrections for the effective angles. We return the
     dimensionless spin, which is the spin in units of the (pre-merger) binary
     total mass, not the spin in units of the actual BH remnant. This can be
     obtained combing this function with `precession.finalmass`. Maximally
     spinning BHs are returned if/whenever the fitting formula returns
-    dimensionless spins greater than 1. This formula has to be applied *close to
-    merger*, where numerical relativity simulations are available. You should do
-    a PN evolution to transfer binaries at r~10M.
+    dimensionless spins greater than 1. This formula has to be applied
+    *close to merger*, where numerical relativity simulations are available.
+    You should do a PN evolution to transfer binaries at r~10M.
+
 
     **Call:**
 
-        chifin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2)
+        chifin=precession.finalspin(theta1,theta2,deltaPhi,q,S1,S2, which="HBZ16_34corr")
 
     **Parameters:**
 
@@ -4512,6 +4516,8 @@ def finalspin(theta1,theta2,deltaPhi,q,S1,S2):
     - `q`: binary mass ratio. Must be q<=1.
     - `S1`: spin magnitude of the primary BH.
     - `S2`: spin magnitude of the secondary BH.
+    - `which`: select fitting formula, should be: BR09, HBZ16_12, HBZ16_12corr, HBZ16_33, HBZ16_33corr, HBZ16_34, HBZ16_34corr.
+
 
     **Returns:**
 
@@ -4522,31 +4528,157 @@ def finalspin(theta1,theta2,deltaPhi,q,S1,S2):
     chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
     eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
 
-    # Spins here are defined in a frame with L along z and S1 in xz
-    hatL=np.array([0,0,1])
-    hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
-    hatS2 = np.array([np.sin(theta2)*np.cos(deltaPhi),np.sin(theta2)*np.sin(deltaPhi),np.cos(theta2)])
-    #Useful spin combinations.
-    Delta= (q*chi2*hatS2-chi1*hatS1)/(1.+q)
-    Delta_par=np.dot(Delta,hatL)
-    Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
-    chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
-    chit_par=np.dot(chit,hatL)
-    chit_perp=np.linalg.norm(np.cross(chit,hatL))
+    if which == 'BR09': # This was the default in precession v1
 
-    #Final spin. Barausse Rezzolla 2009
-    t0=-2.8904
-    t2=-3.51712
-    t3=2.5763
-    s4=-0.1229
-    s5=0.4537
-    smalll = 2.*pow(3.,1./2.) + t2*eta+t3*pow(eta,2.) + s4*np.dot(chit,chit)*pow(1.+q,4.)*pow(1+q*q,-2.) + (s5*eta+t0+2.)*chit_par*pow(1.+q,2)*pow(1.+q*q,-1)
-    chifin=np.linalg.norm( chit+hatL*smalll*q/pow(1.+q,2.) )
-    if chifin>1.: #Check on the final spin, as suggested by Emanuele
-        print "[finalspin] Warning: got chi>1, force chi=1"
-        chifin==1.
+        # Spins here are defined in a frame with L along z and S1 in xz
+        hatL=np.array([0,0,1])
+        hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
+        hatS2 = np.array([np.sin(theta2)*np.cos(deltaPhi),np.sin(theta2)*np.sin(deltaPhi),np.cos(theta2)])
+        #Useful spin combinations.
+        Delta= (q*chi2*hatS2-chi1*hatS1)/(1.+q)
+        Delta_par=np.dot(Delta,hatL)
+        Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
+        chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
+        chit_par=np.dot(chit,hatL)
+        chit_perp=np.linalg.norm(np.cross(chit,hatL))
+
+        #Final spin. Barausse Rezzolla 2009
+        t0=-2.8904
+        t2=-3.51712
+        t3=2.5763
+        s4=-0.1229
+        s5=0.4537
+        smalll = 2.*pow(3.,1./2.) + t2*eta+t3*pow(eta,2.) + s4*np.dot(chit,chit)*pow(1.+q,4.)*pow(1+q*q,-2.) + (s5*eta+t0+2.)*chit_par*pow(1.+q,2)*pow(1.+q*q,-1)
+        chifin=np.linalg.norm( chit+hatL*smalll*q/pow(1.+q,2.) )
+        if chifin>1.: #Check on the final spin, as suggested by Emanuele
+            print "[finalspin] Warning: got chi>1, force chi=1"
+            chifin==1.
+
+    elif which in ['HBZ16_12', 'HBZ16_12corr', 'HBZ16_33', 'HBZ16_33corr', 'HBZ16_34', 'HBZ16_34corr']:
+
+        ## Table 1 of their paper:
+            #
+            # \begin{table}
+            # \begin{center}
+            # \begin{tabular*}{\columnwidth}{cccccc}
+            # \hline
+            # \hline
+            # \!\!\!$k_{01}$   & \!\!\!$k_{02}$   & \!\!\!$k_{10}$   & \!\!\!$k_{11}$  & \!\!\!$k_{12}$ &\!\!\! $\xi$ \\
+            # \!\!\!$-1.2019$ & \!\!\!$-1.20764$ & \!\!\!$3.79245$ & \!\!\!$1.18385$ & \!\!\!$4.90494$& \!\!\!$0.41616$ \\
+            # \hline
+            # \hline
+            # & & & & & \\
+            # \hline
+            # \hline
+            # \!\!\!$k_{01}$ & \!\!\!$k_{02}$ & \!\!\!$k_{03}$ & \!\!\!$k_{10}$ & \!\!\!$k_{11}$ & \!\!\!$k_{12}$ \\
+            # \!\!\!$2.87025$ & \!\!\!$ -1.53315$ & \!\!\!$ -3.78893$ & \!\!\!$ 32.9127$ & \!\!\!$ -62.9901$ & \!\!\!$ 10.0068$ \\
+            # \hline
+            # \!\!\!$k_{13}$ & \!\!\!$k_{20}$ & \!\!\!$k_{21}$ & \!\!\!$k_{22}$ & \!\!\!$k_{23}$ & \!\!\!$k_{30}$ \\
+            # \!\!\!$ 56.1926$ & \!\!\!$-136.832$ & \!\!\!$ 329.32$ & \!\!\!$ -13.2034$ & \!\!\!$ -252.27$ & \!\!\!$ 210.075$ \\
+            # \hline
+            # \!\!\!$k_{31}$ & \!\!\!$k_{32}$ & \!\!\!$k_{33}$& \!\!\!$\xi$ \\
+            # \!\!\!$ -545.35$ & \!\!\!$ -3.97509$ & \!\!\!$368.405$ & \!\!\!$ 0.463926$ \\
+            # \hline
+            # \hline
+            # & & & & & \\
+            # \hline
+            # \hline
+            # \!\!\!$k_{01} $ & \!\!\!$k_{02} $ &\!\!\! $k_{03} $ & \!\!\!$k_{04} $ & \!\!\!$k_{10} $ & \!\!\!$k_{11} $ \\
+            # \!\!\!$3.39221$ &\!\!\!$4.48865$ &\!\!\!$-5.77101$ &\!\!\!$-13.0459$ &\!\!\!$35.1278$ &\!\!\! $-72.9336$ \\
+            # \hline
+            # \!\!\!$k_{12} $ & \!\!\!$k_{13} $ &\!\!\! $k_{14} $ &\!\!\! $k_{20} $ & \!\!\!$k_{21} $ &\!\!\! $k_{22} $ \\
+            # \!\!\!$-86.0036$ &\!\!\!$93.7371$ &\!\!\!$200.975$ &\!\!\!$-146.822$ &\!\!\!$387.184$ &\!\!\!$447.009$ \\
+            # \hline
+            #  \!\!\!$k_{23} $ & \!\!\!$k_{24} $ &\!\!\!$k_{30} $ & \!\!\!$k_{31} $ & \!\!\!$k_{32} $ & \!\!\!$k_{33} $ \\
+            #  \!\!\!$-467.383$ &\!\!\!$-884.339$ &\!\!\!$223.911$ &\!\!\!$-648.502$ &\!\!\!$-697.177$ &\!\!\!$753.738$ \\
+            # \hline
+            # \!\!\!$k_{34}$ &\!\!\!$\xi$ \\
+            # \!\!\!$1166.89$ &\!\!\!$0.474046$ \\
+            # \hline
+            # \hline
+            # \end{tabular*}
+            # \caption{The coefficients of our formula, for $n_{_M}=1,~n_{_J}=2$ (top
+            #   block), $n_{_M}=3,~n_{_J}=3$ (middle block) and $n_{_M}=3,~n_{_J}=4$
+            #   (bottom block).}
+            # \label{table_coeffs}
+
+        kfit = {}
+
+        if 'HBZ16_12' in which:
+            nM=1
+            nJ=2
+            kfit[(0,0)] = -3.82 # TODO: fix the calculation of k00 using Eq. 11
+            kfit[(0,1)] = -1.2019
+            kfit[(0,2)] = -1.20764
+            kfit[(1,0)] = 3.79245
+            kfit[(1,1)] = 1.18385
+            kfit[(1,2)] = 4.90494
+            xifit = 0.41616
+
+        if 'HBZ16_33' in which:
+            nM=3
+            nJ=3
+            kfit[(0,0)] = -5.9 # TODO: fix the calculation of k00 using Eq. 11
+            kfit[(0,1)] = 2.87025
+            kfit[(0,2)] = -1.53315
+            kfit[(0,3)] = -3.78893
+            kfit[(1,0)] = 32.9127
+            kfit[(1,1)] = -62.9901
+            kfit[(1,2)] = 10.0068
+            kfit[(1,3)] = 56.1926
+            kfit[(2,0)] = -136.832
+            kfit[(2,1)] = 329.32
+            kfit[(2,2)] = -13.2034
+            kfit[(2,3)] = -252.27
+            kfit[(3,0)] = 210.075
+            kfit[(3,1)] = -545.35
+            kfit[(3,2)] = -3.97509
+            kfit[(3,3)] = 368.405
+            xifit = 0.463926
+
+        if 'HBZ16_34' in which:
+            nM=3
+            nJ=3
+            kfit[(0,0)] = -5.9 # TODO: fix the calculation of k00 using Eq. 11
+            kfit[(0,1)] = 3.39221
+            kfit[(0,2)] = 4.48865
+            kfit[(0,3)] = -5.77101
+            kfit[(0,4)] = -13.0459
+            kfit[(1,0)] = 35.1278
+            kfit[(1,1)] = -72.9336
+            kfit[(1,2)] = -86.0036
+            kfit[(1,3)] = 93.7371
+            kfit[(1,4)] = 200.975
+            kfit[(2,0)] = -146.822
+            kfit[(2,1)] = 387.184
+            kfit[(2,2)] = 447.009
+            kfit[(2,3)] = -467.383
+            kfit[(2,4)] = -884.339
+            kfit[(3,0)] = 223.911
+            kfit[(3,1)] = -648.502
+            kfit[(3,2)] = -697.177
+            kfit[(3,3)] = 753.738
+            kfit[(3,4)] = 1166.89
+            xifit = 0.474046
+
+
+        # Eq. 14 - 15
+        atot = ( chi1*np.cos(theta1) + chi2*np.cos(theta2)*q**2 ) / (1.+q)**2
+        aeff = atot + xifit*eta* ( chi1*np.cos(theta1) + chi2*np.cos(theta2) )
+
+        # Eq 2 - 6 evaluated at aeff, as specified in Eq 11
+        Z1= 1. + (1.-(aeff**2.))**(1./3.) * ( (1.+aeff)**(1./3.) + (1.-aeff)**(1./3.) )
+        Z2= ( (3.*aeff**2.) + (Z1**2.) )**(1./2.)
+        risco= 3. + Z2 - math.copysign(1.,aeff) * ( (3.-Z1)*(3.+Z1+2.*Z2) )**(1./2.)
+        Eisco=(1.-2./(3.*risco))**(1./2.)
+        Lisco = (2./(3.*(3**(1./2.)))) * ( 1. + 2.*(3.*risco - 2. )**(1./2.) )
+
+    else:
+        raise ValueError, "[finalspin] Wrong which option"
+
 
     return chifin
+
 
 
 def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False,more=False):
