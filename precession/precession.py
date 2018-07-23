@@ -4614,7 +4614,6 @@ def finalspin(theta1,theta2,deltaphi,q,S1,S2,which='HBR16_34corr'):
 
         # Calculate K00 from Eq 11
         kfit[(0,0)] = (4.**2.) * ( 0.68646 - reduce(lambda x,y: x+y, [kfit[(i,0)]/(4.**(2.+i))  for i in range(1,nM+1)]) - (3**0.5)/2. )
-        print kfit[(0,0)]
         theta12 = np.arccos(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2))
 
         # Eq 18
