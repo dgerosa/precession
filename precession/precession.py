@@ -4589,7 +4589,7 @@ def finalspin(theta1,theta2,deltaphi,q,S1,S2,which='HBR16_34corr'):
         if 'HBR16_34' in which:
             nM=3
             nJ=4
-            #kfit[(0,0)] = -5.9
+            #kfit[(0,0)] = -5.97723
             kfit[(0,1)] = 3.39221
             kfit[(0,2)] = 4.48865
             kfit[(0,3)] = -5.77101
@@ -4614,6 +4614,7 @@ def finalspin(theta1,theta2,deltaphi,q,S1,S2,which='HBR16_34corr'):
 
         # Calculate K00 from Eq 11
         kfit[(0,0)] = (4.**2.) * ( 0.68646 - reduce(lambda x,y: x+y, [kfit[(i,0)]/(4.**(2.+i))  for i in range(1,nM+1)]) - (3**0.5)/2. )
+
         theta12 = np.arccos(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2))
 
         # Eq 18
@@ -4626,7 +4627,7 @@ def finalspin(theta1,theta2,deltaphi,q,S1,S2,which='HBR16_34corr'):
             theta12 = theta12 + eps12 * np.sin(theta12)
 
         costheta1 = np.cos(theta1)
-        costheta2 = np.cos(theta1)
+        costheta2 = np.cos(theta2)
         costheta12 = np.cos(theta12)
 
         # Eq. 14 - 15
@@ -4656,6 +4657,7 @@ def finalspin(theta1,theta2,deltaphi,q,S1,S2,which='HBR16_34corr'):
         chifin=1.
 
     return chifin
+
 
 
 def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False,more=False):
