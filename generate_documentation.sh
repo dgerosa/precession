@@ -168,8 +168,9 @@ if [ $doc -eq 1 ]; then
 
   # Check version of the code seen by pdoc
 python <<END
+from __future__ import print_function
 import precession
-print "Python module precession, version", precession.__version__
+print("Python module precession, version", precession.__version__)
 END
 
   # Generate documentation using pdc

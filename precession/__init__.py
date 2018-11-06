@@ -1,7 +1,8 @@
-from precession import *
-__author__ = precession.__author__
-__email__ = precession.__email__
-__copyright__ = precession.__copyright__
-__license__ = precession.__license__
-__version__ = precession.__version__
-__doc__ = precession.__doc__
+from .precession import __author__
+from .precession import __email__
+from .precession import __copyright__
+from .precession import __license__
+from .precession import __version__
+from .precession import __doc__
+
+from .precession import *

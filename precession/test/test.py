@@ -12,11 +12,15 @@ This submodule has to be loaded separately:
 '''
 
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys,os
 import precession 
 import numpy
 import random
 from matplotlib import use #Useful when working on SSH
+from six.moves import range
+from six.moves import zip
 use('Agg') 
 from matplotlib import rc #Set plot defaults
 font = {'family':'serif','serif':['cmr10'],'weight' : 'medium','size' : 20}
@@ -43,19 +47,19 @@ def minimal():
     q=0.75    # Mass ratio
     chi1=0.5  # Primary's spin magnitude
     chi2=0.95 # Secondary's spin magnitude
-    print "Take a BH binary with q=%.2f, chi1=%.2f and chi2=%.2f" %(q,chi1,chi2)
+    print("Take a BH binary with q=%.2f, chi1=%.2f and chi2=%.2f" %(q,chi1,chi2))
     sep=numpy.logspace(10,1,10) # Output separations
     t1= numpy.pi/3.  # Spin orientations at r_vals[0]
     t2= 2.*numpy.pi/3.
     dp= numpy.pi/4.
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2)
     t1v,t2v,dpv=precession.evolve_angles(t1,t2,dp,sep,q,S1,S2)    
-    print "Perform BH binary inspiral"
-    print "log10(r/M) \t theta1 \t theta2 \t deltaphi"
+    print("Perform BH binary inspiral")
+    print("log10(r/M) \t theta1 \t theta2 \t deltaphi")
     for r,t1,t2,dp in zip(numpy.log10(sep),t1v,t2v,dpv):
-        print "%.0f \t\t %.3f \t\t %.3f \t\t %.3f" %(r,t1,t2,dp)
+        print("%.0f \t\t %.3f \t\t %.3f \t\t %.3f" %(r,t1,t2,dp))
     t=time.time()-t0
-    print "Executed in %.3fs" %t
+    print("Executed in %.3fs" %t)
 
 
 def parameter_selection():
@@ -70,73 +74,73 @@ def parameter_selection():
         precession.test.parameter_selection()
     '''
 
-    print "\n *Parameter selection at finite separations*"
+    print("\n *Parameter selection at finite separations*")
     q=0.8   # Must be q<=1. Check documentation for q=1.
     chi1=1. # Must be chi1<=1
     chi2=1. # Must be chi2<=1
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
-    print "We study a binary with\n\tq=%.3f  m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2)
+    print("We study a binary with\n\tq=%.3f  m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2))
     r=100*M # Must be r>10M for PN to be valid
-    print "at separation\n\tr=%.3f" %r
+    print("at separation\n\tr=%.3f" %r)
     xi_min,xi_max=precession.xi_lim(q,S1,S2)
     Jmin,Jmax=precession.J_lim(q,S1,S2,r)
     Sso_min,Sso_max=precession.Sso_limits(S1,S2)
-    print "The geometrical limits on xi,J and S are\n\t%.3f<=xi<=%.3f\n\t%.3f<=J<=%.3f\n\t%.3f<=S<=%.3f" %(xi_min,xi_max,Jmin,Jmax,Sso_min,Sso_max)
+    print("The geometrical limits on xi,J and S are\n\t%.3f<=xi<=%.3f\n\t%.3f<=J<=%.3f\n\t%.3f<=S<=%.3f" %(xi_min,xi_max,Jmin,Jmax,Sso_min,Sso_max))
     J= (Jmin+Jmax)/2.
-    print "We select a value of J\n\tJ=%.3f " %J
+    print("We select a value of J\n\tJ=%.3f " %J)
     St_min,St_max=precession.St_limits(J,q,S1,S2,r)
-    print "This constrains the range of S to\n\t%.3f<=S<=%.3f" %(St_min,St_max)
+    print("This constrains the range of S to\n\t%.3f<=S<=%.3f" %(St_min,St_max))
     xi_low,xi_up=precession.xi_allowed(J,q,S1,S2,r)
-    print "The allowed range of xi is\n\t%.3f<=xi<=%.3f" %(xi_low,xi_up)
+    print("The allowed range of xi is\n\t%.3f<=xi<=%.3f" %(xi_low,xi_up))
     xi=(xi_low+xi_up)/2.
-    print "We select a value of xi\n\txi=%.3f" %xi
+    print("We select a value of xi\n\txi=%.3f" %xi)
     test=(J>=min(precession.J_allowed(xi,q,S1,S2,r)) and J<=max(precession.J_allowed(xi,q,S1,S2,r)))
-    print "Is our couple (xi,J) consistent?", test
+    print("Is our couple (xi,J) consistent?", test)
     Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r)
-    print "S oscillates between\n\tS-=%.3f\n\tS+=%.3f" %(Sb_min,Sb_max)
+    print("S oscillates between\n\tS-=%.3f\n\tS+=%.3f" %(Sb_min,Sb_max))
     S=(Sb_min+Sb_max)/2.
-    print "We select a value of S between S- and S+\n\tS=%.3f" %S
+    print("We select a value of S between S- and S+\n\tS=%.3f" %S)
     t1,t2,dp,t12=precession.parametric_angles(S,J,xi,q,S1,S2,r)
-    print "The angles describing the spin orientations are\n\t(theta1,theta2,DeltaPhi)=(%.3f,%.3f,%.3f)" %(t1,t2,dp)
+    print("The angles describing the spin orientations are\n\t(theta1,theta2,DeltaPhi)=(%.3f,%.3f,%.3f)" %(t1,t2,dp))
     xi,J,S = precession.from_the_angles(t1,t2,dp,q,S1,S2,r)
-    print "From the angles one can recovery\n\t(xi,J,S)=(%.3f,%.3f,%.3f)" %(xi,J,S)
+    print("From the angles one can recovery\n\t(xi,J,S)=(%.3f,%.3f,%.3f)" %(xi,J,S))
     
-    print "\n *Features of spin precession*"
+    print("\n *Features of spin precession*")
     t1_dp0,t2_dp0,t1_dp180,t2_dp180=precession.resonant_finder(xi,q,S1,S2,r)
-    print "The spin-orbit resonances for these values of J and xi are\n\t(theta1,theta2)=(%.3f,%.3f) for DeltaPhi=0\n\t(theta1,theta2)=(%.3f,%.3f) for DeltaPhi=pi" %(t1_dp0,t2_dp0,t1_dp180,t2_dp180)
+    print("The spin-orbit resonances for these values of J and xi are\n\t(theta1,theta2)=(%.3f,%.3f) for DeltaPhi=0\n\t(theta1,theta2)=(%.3f,%.3f) for DeltaPhi=pi" %(t1_dp0,t2_dp0,t1_dp180,t2_dp180))
     tau = precession.precession_period(xi,J,q,S1,S2,r)
-    print "We integrate dt/dS to calculate the precessional period\n\ttau=%.3f" %tau
+    print("We integrate dt/dS to calculate the precessional period\n\ttau=%.3f" %tau)
     alpha = precession.alphaz(xi,J,q,S1,S2,r)
-    print "We integrate Omega*dt/dS to find\n\talpha=%.3f" %alpha
+    print("We integrate Omega*dt/dS to find\n\talpha=%.3f" %alpha)
     morphology = precession.find_morphology(xi,J,q,S1,S2,r)
     if morphology==-1: labelm="Librating about DeltaPhi=0"
     elif morphology==1: labelm="Librating about DeltaPhi=pi"    
     elif morphology==0: labelm="Circulating"
-    print "The precessional morphology is: "+labelm
+    print("The precessional morphology is: "+labelm)
     sys.stdout = os.devnull # Ignore warnings
     phase,xi_transit_low,xi_transit_up=precession.phase_xi(J,q,S1,S2,r)
     sys.stdout = sys.__stdout__ # Restore warnings
     if phase==-1: labelp="a single DeltaPhi~pi phase"
     elif phase==2: labelp="two DeltaPhi~pi phases, a Circulating phase"    
     elif phase==3: labelp="a DeltaPhi~0, a Circulating, a DeltaPhi~pi phase"
-    print "The coexisting phases are: "+labelp
+    print("The coexisting phases are: "+labelp)
     
-    print "\n *Parameter selection at infinitely large separation*"
-    print "We study a binary with\n\tq=%.3f  m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2)
-    print "at infinitely large separation"
+    print("\n *Parameter selection at infinitely large separation*")
+    print("We study a binary with\n\tq=%.3f  m1=%.3f  m2=%.3f\n\tchi1=%.3f  S1=%.3f\n\tchi2=%.3f  S2=%.3f" %(q,m1,m2,chi1,S1,chi2,S2))
+    print("at infinitely large separation")
     kappainf_min,kappainf_max=precession.kappainf_lim(S1,S2)
-    print "The geometrical limits on xi and kappa_inf are\n\t%.3f<=xi<=%.3f\n\t %.3f<=kappa_inf<=%.3f" %(xi_min,xi_max,kappainf_min,kappainf_max)
-    print "We select a value of xi\n\txi=%.3f" %xi
+    print("The geometrical limits on xi and kappa_inf are\n\t%.3f<=xi<=%.3f\n\t %.3f<=kappa_inf<=%.3f" %(xi_min,xi_max,kappainf_min,kappainf_max))
+    print("We select a value of xi\n\txi=%.3f" %xi)
     kappainf_low,kappainf_up=precession.kappainf_allowed(xi,q,S1,S2)
-    print "This constrains the range of kappa_inf to\n\t%.3f<=kappa_inf<=%.3f" %(kappainf_low,kappainf_up)
+    print("This constrains the range of kappa_inf to\n\t%.3f<=kappa_inf<=%.3f" %(kappainf_low,kappainf_up))
     kappainf=(kappainf_low+kappainf_up)/2.
-    print "We select a value of kappa_inf\n\tkappa_inf=%.3f" %kappainf
+    print("We select a value of kappa_inf\n\tkappa_inf=%.3f" %kappainf)
     test=(xi>=min(precession.xiinf_allowed(kappainf,q,S1,S2)) and xi<=max(precession.xiinf_allowed(kappainf,q,S1,S2)))
-    print "Is our couple (xi,kappa_inf) consistent?", test 
+    print("Is our couple (xi,kappa_inf) consistent?", test) 
     t1_inf,t2_inf=precession.thetas_inf(xi,kappainf,q,S1,S2)
-    print "The asymptotic (constant) values of theta1 and theta2 are\n\t(theta1_inf,theta2_inf)=(%.3f,%.3f)" %(t1_inf,t2_inf)
+    print("The asymptotic (constant) values of theta1 and theta2 are\n\t(theta1_inf,theta2_inf)=(%.3f,%.3f)" %(t1_inf,t2_inf))
     xi,kappainf = precession.from_the_angles_inf(t1_inf,t2_inf,q,S1,S2)
-    print "From the angles one can recovery\n\t(xi,kappa_inf)=(%.3f,%.3f)" %(xi,kappainf)
+    print("From the angles one can recovery\n\t(xi,kappa_inf)=(%.3f,%.3f)" %(xi,kappainf))
     
 
 def spin_angles():
@@ -178,12 +182,12 @@ def spin_angles():
         Sb_min,Sb_max=precession.Sb_limits(xi,J,q,S1,S2,r) # Limits in S
         S_vals = numpy.linspace(Sb_min,Sb_max,1000) # Create array, from S- to S+
         S_go=S_vals # First half of the precession cycle: from S- to S+
-        t_go=map(lambda x: precession.t_of_S(S_go[0],x, Sb_min,Sb_max,xi,J,q,S1,S2,r,0,sign=-1.),S_go) # Compute time values. Assume t=0 at S-      
-        t1_go,t2_go,dp_go,t12_go=zip(*[precession.parametric_angles(S,J,xi,q,S1,S2,r) for S in S_go]) # Compute the angles.
+        t_go=[precession.t_of_S(S_go[0],x, Sb_min,Sb_max,xi,J,q,S1,S2,r,0,sign=-1.) for x in S_go] # Compute time values. Assume t=0 at S-      
+        t1_go,t2_go,dp_go,t12_go=list(zip(*[precession.parametric_angles(S,J,xi,q,S1,S2,r) for S in S_go])) # Compute the angles.
         dp_go=[-dp for dp in dp_go] # DeltaPhi<=0 in the first half of the cycle 
         S_back=S_vals[::-1] # Second half of the precession cycle: from S+ to S-
-        t_back=map(lambda x: precession.t_of_S(S_back[0],x, Sb_min,Sb_max, xi,J,q,S1,S2,r,t_go[-1],sign=1.),S_back) # Compute time, start from the last point of the first half t_go[-1]
-        t1_back,t2_back,dp_back,t12_back=zip(*[precession.parametric_angles(S,J,xi,q,S1,S2,r) for S in S_back]) # Compute the angles. DeltaPhi>=0 in the second half of the cycle
+        t_back=[precession.t_of_S(S_back[0],x, Sb_min,Sb_max, xi,J,q,S1,S2,r,t_go[-1],sign=1.) for x in S_back] # Compute time, start from the last point of the first half t_go[-1]
+        t1_back,t2_back,dp_back,t12_back=list(zip(*[precession.parametric_angles(S,J,xi,q,S1,S2,r) for S in S_back])) # Compute the angles. DeltaPhi>=0 in the second half of the cycle
 
         for ax,vec_go,vec_back in zip([ax_t1,ax_t2,ax_dp,ax_t12], [t1_go,t2_go,dp_go,t12_go], [t1_back,t2_back,dp_back,t12_back]): # Plot all curves
             ax.plot([t/tau for t in t_go],vec_go,c=color,lw=2,label=labelm)
@@ -309,7 +313,7 @@ def PNwrappers():
     q=0.9      # Mass ratio. Must be q<=1.
     chi1=0.5   # Primary spin. Must be chi1<=1
     chi2=0.5   # Secondary spin. Must be chi2<=1
-    print "We study a binary with\n\tq=%.3f, chi1=%.3f, chi2=%.3f" %(q,chi1,chi2)
+    print("We study a binary with\n\tq=%.3f, chi1=%.3f, chi2=%.3f" %(q,chi1,chi2))
     M,m1,m2,S1,S2=precession.get_fixed(q,chi1,chi2) # Total-mass units M=1
     ri=1000*M  # Initial separation.
     rf=10.*M   # Final separation.
@@ -317,44 +321,44 @@ def PNwrappers():
     r_vals=numpy.logspace(numpy.log10(ri),numpy.log10(rf),10) # Output requested
     t1i=numpy.pi/4.; t2i=numpy.pi/4.; dpi=numpy.pi/4. # Initial configuration
     xii,Ji,Si=precession.from_the_angles(t1i,t2i,dpi,q,S1,S2,ri)
-    print "Configuration at ri=%.0f\n\t(xi,J,S)=(%.3f,%.3f,%.3f)\n\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(ri,xii,Ji,Si,t1i,t2i,dpi)
+    print("Configuration at ri=%.0f\n\t(xi,J,S)=(%.3f,%.3f,%.3f)\n\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(ri,xii,Ji,Si,t1i,t2i,dpi))
 
-    print " *Orbit-averaged evolution*"
-    print "Evolution ri=%.0f --> rf=%.0f" %(ri,rf)
+    print(" *Orbit-averaged evolution*")
+    print("Evolution ri=%.0f --> rf=%.0f" %(ri,rf))
     Jf,xif,Sf=precession.orbit_averaged(Ji,xii,Si,r_vals,q,S1,S2)
-    print "\t(xi,J,S)=(%.3f,%.3f,%.3f)" %(xif[-1],Jf[-1],Sf[-1])
+    print("\t(xi,J,S)=(%.3f,%.3f,%.3f)" %(xif[-1],Jf[-1],Sf[-1]))
     t1f,t2f,dpf=precession.orbit_angles(t1i,t2i,dpi,r_vals,q,S1,S2)
-    print "\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
+    print("\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1]))
     Jvec,Lvec,S1vec,S2vec,Svec=precession.Jframe_projection(xii,Si,Ji,q,S1,S2,ri)
     Lxi,Lyi,Lzi=Lvec; S1xi,S1yi,S1zi=S1vec; S2xi,S2yi,S2zi=S2vec  
     Lx,Ly,Lz,S1x,S1y,S1z,S2x,S2y,S2z=precession.orbit_vectors(Lxi,Lyi,Lzi,S1xi,S1yi,S1zi,S2xi,S2yi,S2zi,r_vals,q)
-    print "\t(Lx,Ly,Lz)=(%.3f,%.3f,%.3f)\n\t(S1x,S1y,S1z)=(%.3f,%.3f,%.3f)\n\t(S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(Lx[-1],Ly[-1],Lz[-1],S1x[-1],S1y[-1],S1z[-1],S2x[-1],S2y[-1],S2z[-1])
+    print("\t(Lx,Ly,Lz)=(%.3f,%.3f,%.3f)\n\t(S1x,S1y,S1z)=(%.3f,%.3f,%.3f)\n\t(S2x,S2y,S2z)=(%.3f,%.3f,%.3f)" %(Lx[-1],Ly[-1],Lz[-1],S1x[-1],S1y[-1],S1z[-1],S2x[-1],S2y[-1],S2z[-1]))
     
-    print " *Precession-averaged evolution*"  
-    print "Evolution ri=%.0f --> rf=%.0f" %(ri,rf)
+    print(" *Precession-averaged evolution*")  
+    print("Evolution ri=%.0f --> rf=%.0f" %(ri,rf))
     Jf=precession.evolve_J(xii,Ji,r_vals,q,S1,S2)
-    print "\t(xi,J,S)=(%.3f,%.3f,-)" %(xii,Jf[-1])
+    print("\t(xi,J,S)=(%.3f,%.3f,-)" %(xii,Jf[-1]))
     t1f,t2f,dpf=precession.evolve_angles(t1i,t2i,dpi,r_vals,q,S1,S2)
-    print "\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
-    print "Evolution ri=%.0f --> infinity" %ri
+    print("\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1]))
+    print("Evolution ri=%.0f --> infinity" %ri)
     kappainf=precession.evolve_J_backwards(xii,Jf[-1],rf,q,S1,S2)
-    print "\tkappainf=%.3f" %kappainf    
+    print("\tkappainf=%.3f" %kappainf)    
     Jf=precession.evolve_J_infinity(xii,kappainf,r_vals,q,S1,S2)
-    print "Evolution infinity --> rf=%.0f" %rf 
-    print "\tJ=%.3f" %Jf[-1] 
+    print("Evolution infinity --> rf=%.0f" %rf) 
+    print("\tJ=%.3f" %Jf[-1]) 
 
-    print " *Hybrid evolution*"  
-    print "Prec.Av. infinity --> rt=%.0f & Orb.Av. rt=%.0f --> rf=%.0f" %(rt,rt,rf)
+    print(" *Hybrid evolution*")  
+    print("Prec.Av. infinity --> rt=%.0f & Orb.Av. rt=%.0f --> rf=%.0f" %(rt,rt,rf))
     t1f,t2f,dpf=precession.hybrid(xii,kappainf,r_vals,q,S1,S2,rt)
-    print "\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1])
+    print("\t(theta1,theta2,deltaphi)=(%.3f,%.3f,%.3f)" %(t1f[-1],t2f[-1],dpf[-1]))
     
-    print " *Properties of the BH remnant*"  
+    print(" *Properties of the BH remnant*")  
     Mfin=precession.finalmass(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)    
-    print "\tM_f=%.3f" %Mfin
+    print("\tM_f=%.3f" %Mfin)
     chifin=precession.finalspin(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)
-    print "\tchi_f=%.3f, S_f=%.3f" %(chifin,chifin*Mfin**2)
+    print("\tchi_f=%.3f, S_f=%.3f" %(chifin,chifin*Mfin**2))
     vkick=precession.finalkick(t1f[-1],t2f[-1],dpf[-1],q,S1,S2)
-    print "\tvkick=%.5f" %(vkick) # Geometrical units c=1
+    print("\tvkick=%.5f" %(vkick)) # Geometrical units c=1
 
 
 def compare_evolutions():
@@ -393,7 +397,7 @@ def compare_evolutions():
 
     Jf_P=precession.evolve_J(xi,Ji,r_vals,q,S1,S2) # Pr.av. integration
     Sf_P=[precession.samplingS(xi,J,q,S1,S2,r) for J,r in zip(Jf_P[0::10],r_vals[0::10])] # Resample S (reduce output for clarity)
-    Sb_min,Sb_max= zip(*[precession.Sb_limits(xi,J,q,S1,S2,r) for J,r in zip(Jf_P,r_vals)]) # Envelopes
+    Sb_min,Sb_max= list(zip(*[precession.Sb_limits(xi,J,q,S1,S2,r) for J,r in zip(Jf_P,r_vals)])) # Envelopes
     S=numpy.average([precession.Sb_limits(xi,Ji,q,S1,S2,ri)]) # Initialize S
     Jf_O,xif_O,Sf_O=precession.orbit_averaged(Ji,xi,S,r_vals,q,S1,S2) # Orb.av. integration
 
@@ -472,33 +476,33 @@ def timing():
         t2=random.uniform(0,numpy.pi)
         dp=random.uniform(0,2.*numpy.pi)
         BHsample.append([q,S1,S2,t1,t2,dp])
-    q_vals,S1_vals,S2_vals,t1i_vals,t2i_vals,dpi_vals=zip(*BHsample) # Traspose python list
+    q_vals,S1_vals,S2_vals,t1i_vals,t2i_vals,dpi_vals=list(zip(*BHsample)) # Traspose python list
 
     ri=1e4*M      # Initial separation
     rf=10*M        # Final separation
     r_vals=[ri,rf] # Intermediate output separations not needed here
 
-    print " *Integrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPUs*" %(N,ri,rf,multiprocessing.cpu_count()) # Parallel computation used by default
+    print(" *Integrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPUs*" %(N,ri,rf,multiprocessing.cpu_count())) # Parallel computation used by default
     t0=time.time() 
     precession.orbit_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)  
     t=time.time()-t0
-    print "Orbit-averaged: parallel integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
+    print("Orbit-averaged: parallel integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N))
     t0=time.time()
     precession.evolve_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)    
     t=time.time()-t0
-    print "Precession-averaged: parallel integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
+    print("Precession-averaged: parallel integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N))
 
     precession.empty_temp() # Remove previous checkpoints
     precession.CPUs=1       # Force serial computation
-    print " *Integrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPU*" %(len(BHsample),ri,rf,precession.CPUs)
+    print(" *Integrating a sample of N=%.0f BH binaries from ri=%.0f to rf=%.0f using %.0f CPU*" %(len(BHsample),ri,rf,precession.CPUs))
     t0=time.time()
     precession.orbit_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)  
     t=time.time()-t0
-    print "Orbit-averaged: serial integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
+    print("Orbit-averaged: serial integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N))
     t0=time.time()
     precession.evolve_angles(t1i_vals,t2i_vals,dpi_vals,r_vals,q_vals,S1_vals,S2_vals)    
     t=time.time()-t0
-    print "Precession-averaged: serial integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N)
+    print("Precession-averaged: serial integrations\n\t total time t=%.3fs\n\t time per binary t/N=%.3fs" %(t,t/N))
     precession.empty_temp() # Remove previous checkpoints
     
     
@@ -512,19 +516,19 @@ def all():
         precession.test.all()
     '''
     
-    print "\n**** Execution precession.test.minimal\n"
+    print("\n**** Execution precession.test.minimal\n")
     minimal()
-    print "\n**** Execution precession.test.parameter_selection\n"
+    print("\n**** Execution precession.test.parameter_selection\n")
     parameter_selection()
-    print "\n**** Execution precession.test.spin_angles\n"
+    print("\n**** Execution precession.test.spin_angles\n")
     spin_angles()
-    print "\n**** Execution precession.test.phase_resampling\n"
+    print("\n**** Execution precession.test.phase_resampling\n")
     phase_resampling()
-    print "\n**** Execution precession.test.PNwrappers\n"
+    print("\n**** Execution precession.test.PNwrappers\n")
     PNwrappers()
-    print "\n**** Execution precession.test.compare_evolutions\n"
+    print("\n**** Execution precession.test.compare_evolutions\n")
     compare_evolutions()
-    print "\n**** Execution precession.test.timing\n"
+    print("\n**** Execution precession.test.timing\n")
     timing()
 
 
