@@ -167,11 +167,13 @@ This has been corrected since v1.0.2.
 
 ### RELEASES
 
-[![DOI](https://zenodo.org/badge/21015/dgerosa/precession.svg)](https://zenodo.org/badge/latestdoi/21015/dgerosa/precession) v1.0.0. Stable version released together with the first arxiv submission of [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
+[![DOI](https://zenodo.org/badge/46057982.svg)](https://zenodo.org/badge/latestdoi/46057982)
 
-[![DOI](https://zenodo.org/badge/46057982.svg)](https://zenodo.org/badge/latestdoi/46057982) v1.0.2. Clarifications on typos in Eq. (36) and (37) of [arXiv:1605.01067](https://arxiv.org/abs/1605.01067). See help(precession) for more information.
+*v1.0.0* Stable version released together with the first arxiv submission of [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
 
-v1.0.3. Python 3 now supported (hurray!). By default, `finalspin ` now returns more updated result by Hofmann, Barausse and Rezzolla 2016.
+*v1.0.2* Clarifications on typos in Eq. (36) and (37) of [arXiv:1605.01067](https://arxiv.org/abs/1605.01067). See help(precession) for more information.
+
+*v1.0.3* Python 3 now supported (hurray!). By default, `finalspin ` now returns more updated result by Hofmann, Barausse and Rezzolla 2016.
 
 
 
