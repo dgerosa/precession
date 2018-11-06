@@ -9,7 +9,7 @@ precession
 
 **Licence** CC BY 4.0
 
-**Version** 1.0.2
+**Version** 1.0.3
 
 
 # DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON
@@ -96,16 +96,21 @@ examples are also presented.
 - Gerosa and Berti.  PRD 95 (2017) 124046. [arXiv:1703.06223](https://arxiv.org/abs/1703.06223)
 - Zhao et al. PRD 96 (2017) 024007. [arXiv:1705.02369](https://arxiv.org/abs/1705.02369)
 - Wysocki et al. PRD 97 (2018) 043014 [arXiv:1709.01943](https://arxiv.org/abs/1709.01943)
-- Gerosa J.Phys.Conf.Ser. 957 (2018) 012014 [arXiv:1711.1003](https://arxiv.org/abs/1711.1003)
-- Rodriguez et al. PRL 120 (2018) 151101 [arXiv:1712.0493](https://arxiv.org/abs/1712.0493)
-- Gerosa et al.  PRD 97 (2018) 104049  [arXiv:1802.04276](https://arxiv.org/abs/1802.04276)
-
+- Gerosa J.Phys.Conf.Ser. 957 (2018) 012014. [arXiv:1711.1003](https://arxiv.org/abs/1711.1003)
+- Rodriguez et al. PRL 120 (2018) 151101. [arXiv:1712.0493](https://arxiv.org/abs/1712.0493)
+- Gerosa et al.  PRD 97 (2018) 104049. [arXiv:1802.04276](https://arxiv.org/abs/1802.04276)
+- Gerosa et al.  PRD 98 (2018) 084036. [arXiv:1808.02491](https://arxiv.org/abs/1808.02491)
+- Varma et al. [arXiv:1809.09125](https://arxiv.org/abs/1809.09125)
+- Tso et al. [arXiv:1807.00075](https://arxiv.org/abs/1807.00075)
 
 ### RELEASES
 
 [![DOI](https://zenodo.org/badge/21015/dgerosa/precession.svg)](https://zenodo.org/badge/latestdoi/21015/dgerosa/precession) v1.0.0. Stable version released together with the first arxiv submission of [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
 
 [![DOI](https://zenodo.org/badge/46057982.svg)](https://zenodo.org/badge/latestdoi/46057982) v1.0.2. Clarifications on typos in Eq. (36) and (37) of [arXiv:1605.01067](https://arxiv.org/abs/1605.01067). See help(precession) for more information.
+
+v1.0.3. Python 3 now supported (hurray!). By default, `finalspin ` now returns more updated result by Hofmann, Barausse and Rezzolla 2016.
+
 
 
 ### CREDITS
