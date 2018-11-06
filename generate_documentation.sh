@@ -251,7 +251,7 @@ title="precession\n"+\
 splits=title.split('###')               # Separate parts
 removed = splits[:3] + splits[4 :]      # Get rid of some details
 joined= "###".join(removed)             # Put parts back together
-outfilesave = open("README.md","w",0)   # Write to file
+outfilesave = open("README.md","w")   # Write to file
 outfilesave.write(joined)
 outfilesave.close()
 END
