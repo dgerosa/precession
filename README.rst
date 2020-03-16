@@ -70,16 +70,16 @@ be installed through `pip <https://pypi.python.org/pypi/precession>`__:
 
 ::
 
-    pip install precession
+   pip install precession
 
 Prerequisites are ``numpy``, ``scipy`` and ``parmap``, which can be all
 installed through pip. Information on all code functions are available
-through Pyhton's built-in help system
+through Pyhton’s built-in help system
 
 ::
 
-    import precession
-    help(precession.function)
+   import precession
+   help(precession.function)
 
 Several tests and tutorial are available in the submodule
 ``precession.test``. A detailed description of the functionalies of the
@@ -94,40 +94,58 @@ RESULTS
 
 -  Gerosa and Sesana. MNRAS 446 (2015) 38-55.
    `arXiv:1405.2072 <https://arxiv.org/abs/1405.2072>`__
--  Kesden et al. PRL 114 (2015) 081103.
+-  Kesden et al. PRL 114 (2015) 081103.
    `arXiv:1411.0674 <https://arxiv.org/abs/1411.0674>`__
--  Gerosa et al. MNRAS 451 (2015) 3941-3954.
+-  Gerosa et al. MNRAS 451 (2015) 3941-3954.
    `arXiv:1503.06807 <https://arxiv.org/abs/1503.06807>`__
--  Gerosa et al. PRD 92 (2015) 064016.
+-  Gerosa et al. PRD 92 (2015) 064016.
    `arXiv:1506.03492 <https://arxiv.org/abs/1506.03492>`__
--  Gerosa et al. PRL 115 (2015) 141102.
+-  Gerosa et al. PRL 115 (2015) 141102.
    `arXiv:1506.09116 <https://arxiv.org/abs/1506.09116>`__
--  Trifiro' et al. PRD 93 (2016) 044071.
+-  Trifiro’ et al. PRD 93 (2016) 044071.
    `arXiv:1507.05587 <https://arxiv.org/abs/1507.05587>`__
 -  Gerosa and Kesden. PRD 93 (2016) 124066.
    `arXiv:1605.01067 <https://arxiv.org/abs/1605.01067>`__
 -  Gerosa and Moore. PRL 117 (2016) 011101.
    `arXiv:1606.04226 <https://arxiv.org/abs/1606.04226>`__
--  Rodriguez et al. APJL 832 (2016) L2
+-  Rodriguez et al. APJL 832 (2016) L2
    `arXiv:1609.05916 <https://arxiv.org/abs/1609.05916>`__
--  Gerosa et al. CQG 34 (2017) 6, 064004
+-  Gerosa et al. CQG 34 (2017) 6, 064004
    `arXiv:1612.05263 <https://arxiv.org/abs/1612.05263>`__
 -  Gerosa and Berti. PRD 95 (2017) 124046.
    `arXiv:1703.06223 <https://arxiv.org/abs/1703.06223>`__
--  Zhao et al. PRD 96 (2017) 024007.
+-  Zhao et al. PRD 96 (2017) 024007.
    `arXiv:1705.02369 <https://arxiv.org/abs/1705.02369>`__
--  Wysocki et al. PRD 97 (2018) 043014
+-  Wysocki et al. PRD 97 (2018) 043014
    `arXiv:1709.01943 <https://arxiv.org/abs/1709.01943>`__
 -  Gerosa J.Phys.Conf.Ser. 957 (2018) 012014.
    `arXiv:1711.1003 <https://arxiv.org/abs/1711.1003>`__
--  Rodriguez et al. PRL 120 (2018) 151101.
+-  Rodriguez et al. PRL 120 (2018) 151101.
    `arXiv:1712.0493 <https://arxiv.org/abs/1712.0493>`__
--  Gerosa et al. PRD 97 (2018) 104049.
+-  Gerosa et al. PRD 97 (2018) 104049.
    `arXiv:1802.04276 <https://arxiv.org/abs/1802.04276>`__
--  Gerosa et al. PRD 98 (2018) 084036.
+-  Gerosa et al. PRD 98 (2018) 084036.
    `arXiv:1808.02491 <https://arxiv.org/abs/1808.02491>`__
--  Varma et al. `arXiv:1809.09125 <https://arxiv.org/abs/1809.09125>`__
--  Tso et al. `arXiv:1807.00075 <https://arxiv.org/abs/1807.00075>`__
+-  Varma et al. PRL 122 (2019) 011101.
+   `arXiv:1809.09125 <https://arxiv.org/abs/1809.09125>`__
+-  Gerosa et al. PRD 99 (2019) 103004.
+   `arXiv:1902.00021 <https://arxiv.org/abs/1902.00021>`__
+-  Gerosa et al. CQG 36 (2019) 105003.
+   `arXiv:1811.05979 <https://arxiv.org/abs/1811.05979>`__
+-  Tso et al. PRD 99 (2019) 124043
+   `arXiv:1807.00075 <https://arxiv.org/abs/1807.00075>`__
+-  Gerosa and Berti. PRD 100 (2019) 041301.
+   `arXiv:1906.05295 <https://arxiv.org/abs/1906.05295>`__
+-  Varma et al. PRR 1 (2019) 033015.
+   `arXiv:1905.09300 <https://arxiv.org/abs/1905.09300>`__
+-  Wong and Gerosa. PRD 100 (2019) 083015.
+   `arXiv:1909.06373 <https://arxiv.org/abs/1909.06373>`__
+-  Phukon et al. PRD 100 (2019) 124008.
+   `arXiv:1904.03985 <https://arxiv.org/abs/1904.03985>`__
+-  Varma et
+   al. \ `arXiv:2002.00296 <https://arxiv.org/abs/2002.00296>`__
+-  Mould and Gerosa
+   `arXiv:2003.02281 <https://arxiv.org/abs/2003.02281>`__
 
 RELEASES
 --------
@@ -152,12 +170,12 @@ Gerosa <www.davidegerosa.com>`__. Please, report bugs to
 
 ::
 
-    dgerosa@caltech.edu
+   dgerosa@caltech.edu
 
 I am happy to help you out!
 
-**Thanks**: M. Kesden, U. Sperhake, E. Berti, R. O'Shaughnessy, A.
-Sesana, D. Trifiro', A. Klein, J. Vosmera and X. Zhao.
+**Thanks**: M. Kesden, U. Sperhake, E. Berti, R. O’Shaughnessy, A.
+Sesana, D. Trifiro’, A. Klein, J. Vosmera and X. Zhao.
 
 .. |DOI| image:: https://zenodo.org/badge/46057982.svg
    :target: https://zenodo.org/badge/latestdoi/46057982
