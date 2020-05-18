@@ -1,0 +1,4 @@
+numpy
+scipy
+matplotlib
+parmap>=1.5.1
