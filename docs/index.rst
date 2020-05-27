@@ -1,4 +1,4 @@
-packagetemplate's documentation: index
+precession's documentation: index
 ======================================
 
 .. toctree::

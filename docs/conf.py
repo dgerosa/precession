@@ -18,17 +18,15 @@ import sphinx
 from recommonmark.parser import CommonMarkParser
 
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('../packagetemplate'))
-from __version__ import __version__
+sys.path.insert(0, os.path.abspath('../precession'))
+from __version__ import __title__, __version__, __author__
 
 
 # -- Project information -----------------------------------------------------
 
-#import _version as packagetemplate_version
-
-project = 'packagetemplate'
-copyright = 'Copyright (c) 2020 Matthew Mould'
-author = 'Matthew Mould'
+project = __title__
+author = __author__
+copyright = 'Copyright (c) 2020 '+author
 
 # The short X.Y version
 version = __version__
@@ -139,7 +137,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'packagetemplate'
+htmlhelp_basename = project
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -166,8 +164,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'packagetemplate.tex', 'packagetemplate Documentation',
-     'Matthew Mould', 'manual'),
+    (master_doc, project+'.tex', project+' Documentation',
+     author, 'manual'),
 ]
 
 
@@ -176,7 +174,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'packagetemplate', 'packagetemplate Documentation',
+    (master_doc, project, project+' Documentation',
      [author], 1)
 ]
 
@@ -187,8 +185,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'packagetemplate', 'packagetemplate Documentation',
-     author, 'packagetemplate', 'One line description of project.',
+    (master_doc, project, project+' Documentation',
+     author, project, 'One line description of project.',
      'Miscellaneous'),
 ]
 
