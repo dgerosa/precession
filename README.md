@@ -1,18 +1,17 @@
 precession
 ==========
 
-**Author** Davide Gerosa
+- - -
+- - -
 
-**email** dgerosa@caltech.edu
+> **WARNING**: We are currently developing a new, awesome version of `precession`. You can check out our progess on the `master` and `dev` branches. `precession_v1`, as described in [arXiv:1605.01067](https://arxiv.org/abs/1605.01067) is still fully functional, and we reccommend you to use it for now. You can install it via pip (`pip install precession`, see below). The source code is available in a [dedicated branch](https://github.com/dgerosa/precession/tree/precession_v1) of this repository called `precession_v1`. The documentation can be browsed at [this link](https://htmlpreview.github.io/?https://github.com/dgerosa/precession/blob/precession_v1/docs/index.html). Sorry for the inconvenience, we hope v2 will be out soon! Stay tuned. 
 
-**Copyright** Copyright (C) 2016 Davide Gerosa
-
-**Licence** CC BY 4.0
-
-**Version** 1.0.3
-
+- - -
+- - -
 
 # DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON
+
+
 
 `precession` is an open-source Python module to study the dynamics of precessing
 black-hole binaries in the post-Newtonian regime.  The code provides a
