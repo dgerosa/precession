@@ -13,7 +13,8 @@ __all__ = [] # Why is this necessary?
 
 @np.vectorize
 def mass1(q):
-    """Mass of the heavier black hole in units of the total mass.
+    """
+    Mass of the heavier black hole in units of the total mass.
 
     Parameters
     ----------
@@ -24,7 +25,6 @@ def mass1(q):
     -------
     m1: float
         Mass of the primary black hole.
-
     """
 
     return 1/(1+q)
@@ -32,16 +32,17 @@ def mass1(q):
 
 @np.vectorize
 def mass2(q):
-    """Mass of the lighter black hole in units of the total mass.
+    """
+    Mass of the lighter black hole in units of the total mass.
 
     Parameters
     ----------
-    q: float or numpy array
+    q: float
         Mass ratio: 0 <= q <= 1.
 
     Returns
     -------
-    m2: float or numpy array
+    m2: float
         Mass of the secondary black hole.
 
     """
@@ -51,18 +52,19 @@ def mass2(q):
 
 @np.vectorize
 def spin1(q,chi1):
-    """Spin of the heavier black hole in units of the total mass.
+    """
+    Spin angular momentum of the heavier black hole.
 
     Parameters
     ----------
-    q: float or numpy array
+    q: float
         Mass ratio: 0 <= q <= 1.
     chi1: float or numpy array
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
 
     Returns
     -------
-    S2: float or numpy array
+    S1: float
         Spin of the primary black hole.
     """
 
@@ -71,31 +73,174 @@ def spin1(q,chi1):
 
 @np.vectorize
 def spin2(q,chi2):
-    """Spin of the heavier black hole in units of the total mass.
+    """
+    Spin angular momentum of the lighter black hole.
 
     Parameters
     ----------
-    q: float or numpy array
+    q: float
         Mass ratio: 0 <= q <= 1.
     chi2: float or numpy array
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
 
     Returns
     -------
-    S1: float or numpy array
-        Spin of the primary black hole.
+    S2: float
+        Spin of the secondary black hole.
     """
 
     return chi2*(mass2(q))**2
 
 
 def spinmags(q,chi1,chi2):
-    """Spins of the black holes in units of the total mass.
+    """
+    Spins of the black holes in units of the total mass.
 
     Parameters
     ----------
-    q: float or numpy array
+    q: float
         Mass ratio: 0 <= q <= 1.
+    chi1: float or numpy array
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    S1: float
+        Spin of the primary black hole.
+    S2: float
+        Spin of the secondary black hole.
+    """
+
+    return np.array([spin1(q,chi1),spin2(q,chi2)])
+
+
+@np.vectorize
+def angularmomentum(r,q):
+    """
+    Newtonian angular momentum of the binary.
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    Returns
+    -------
+    Smin: float
+        Binary angular momentum
+    """
+
+    return mass1(q)*mass2(q)*r**(3/2)
+
+
+def Jlimits(r,q,chi1,chi2):
+    """
+    Limits on the magnitude of the total angular momentum due to the vector relation J=L+S1+S2
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+
+    Returns
+    -------
+    Jmin:
+        Minimum value of the total angular momentum.
+    Jmax:
+        Maximum value of the total angular momentum.
+    """
+
+
+    S1,S2 = spinmags(q,chi1,chi2)
+    L = angularmomentum(r,q)
+    Jmin = np.maximum(0, L-S1-S2, np.abs(S1-S2)-L)
+    Jmax = L+S1+S1
+
+    return np.array([Jmin,Jmax]).T
+
+
+def Slimits_S1S2(q,chi1,chi2):
+    """
+    Limits on the total spin magnitude due to the vector relation S=S1+S2
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    Smin:
+        Minimum value of the total spin.
+    Smax:
+        Maximum value of the total spin.
+    """
+
+    S1,S2= spinmags(q,chi1,chi2)
+
+    return np.array([np.abs(S1-S2), S1+S2]).T
+
+
+def Slimits_LJ(r,J,q):
+    """
+    Limits on the total spin magnitude due to the vector relation S=J-L
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    J: float
+        Magnitude of the total angular momentum.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    Returns
+    -------
+    Smin:
+        Minimum value of the total spin.
+    Smax:
+        Maximum value of the total spin.
+    """
+
+    L= angularmomentum(r,q)
+
+    return np.array([np.abs(J-L), J+L]).T
+
+
+def _limits_check(testvalue,interval):
+    """Check if a value is within a given interval"""
+    # Is there a way to exclude functions from the documentation?
+    interval= interval.T
+    return np.logical_and(testvalue>interval[0],testvalue<interval[1])
+
+
+def limits_check(function=None, S=None,r=None,J=None,q=None,chi1=None,chi2=None):
+    """
+    Check if a given variable satisfies the relevant geometrical constraints. The behaviour is set by `function`. For instance, to check if some values of J are compatible with the provides values of r, q, chi1, and chi2 use function=`Jlimits`. Not all the parameters are necessary. For instance, to check the limits in J one does not need to provide values of S.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    r: float
+        Binary separation.
+    J: float
+        Magnitude of the total angular momentum.
     chi1: float or numpy array
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float or numpy array
@@ -103,12 +248,20 @@ def spinmags(q,chi1,chi2):
 
     Returns
     -------
-    S2: float or numpy array
-        Spin of the primary black hole.
+    Boolean flag.
     """
 
-    return np.array([spin1(q,chi1),spin2(q,chi2)])
+    if function=='Jlimits':
+        return _limits_check(J,Jlimits(r,q,chi1,chi2))
 
+    elif function=='Slimits_S1S2':
+        return _limits_check(S,Slimits_S1S2(q,chi1,chi2))
+
+    elif function=='Slimits_JL':
+        return _limits_check(S,Slimits_LJ(r,J,q))
+
+    else:
+        raise ValueError
 
 
 
@@ -191,12 +344,23 @@ class Binary:
 
 if __name__ == '__main__':
 
-    q=[0.3,0.6]
-    chi1=[0.4,0.6]
-    chi2=[0.4,0.6]
-    S1,S2=spinmags(q,chi1,chi2)
-    print(S1)
+    #q=[0.3,0.6]
+    #chi1=[0.4,0.6]
+    #chi2=[0.4,0.6]
 
+    q=[0.5,1,0.3]
+    chi1=[0.5,0.5,0.67]
+    chi2=[0.5,0.5,0.8]
+    r=[10,10,10]
+    #print(Slimits_S1S2(q,chi1,chi2))
+
+    #print(limits_check([0.24,4,6],Slimits_S1S2(q,chi1,chi2)))
+    print(Jlimits(r,q,chi1,chi2))
+
+    v= limits_check(function="Jlimits",r=r,J=[7,4,5],q=q,chi1=chi1,chi2=chi2)
+    print(v)
+
+    #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
     #
     # # Example
     # #--------
