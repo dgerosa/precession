@@ -6,12 +6,11 @@ import numpy as np
 import scipy as sp
 # Using precession_v1 functions for now
 import precession as pre
-
+import sys, os
 
 __all__ = [] # Why is this necessary?
 
 
-@np.vectorize
 def mass1(q):
     """
     Mass of the heavier black hole in units of the total mass.
@@ -27,10 +26,12 @@ def mass1(q):
         Mass of the primary black hole.
     """
 
-    return 1/(1+q)
+    q = np.array(q)
+    m1 = 1/(1+q)
+
+    return m1
 
 
-@np.vectorize
 def mass2(q):
     """
     Mass of the lighter black hole in units of the total mass.
@@ -47,10 +48,12 @@ def mass2(q):
 
     """
 
-    return q/(1+q)
+    q = np.array(q)
+    m2 = q/(1+q)
+
+    return m2
 
 
-@np.vectorize
 def spin1(q,chi1):
     """
     Spin angular momentum of the heavier black hole.
@@ -68,10 +71,12 @@ def spin1(q,chi1):
         Spin of the primary black hole.
     """
 
-    return chi1*(mass1(q))**2
+    chi1 = np.array(chi1)
+    S1 = chi1*(mass1(q))**2
+
+    return S1
 
 
-@np.vectorize
 def spin2(q,chi2):
     """
     Spin angular momentum of the lighter black hole.
@@ -89,7 +94,10 @@ def spin2(q,chi2):
         Spin of the secondary black hole.
     """
 
-    return chi2*(mass2(q))**2
+    chi2 = np.array(chi2)
+    S2 = chi2*(mass2(q))**2
+
+    return S2
 
 
 def spinmags(q,chi1,chi2):
@@ -113,10 +121,12 @@ def spinmags(q,chi1,chi2):
         Spin of the secondary black hole.
     """
 
-    return np.array([spin1(q,chi1),spin2(q,chi2)])
+    S1 = spin1(q,chi1)
+    S2 = spin2(q,chi2)
+
+    return np.array([S1,S2])
 
 
-@np.vectorize
 def angularmomentum(r,q):
     """
     Newtonian angular momentum of the binary.
@@ -134,7 +144,38 @@ def angularmomentum(r,q):
         Binary angular momentum
     """
 
-    return mass1(q)*mass2(q)*r**(3/2)
+    r = np.array(r)
+    L = mass1(q)*mass2(q)*r**(3/2)
+
+    return L
+
+
+def xilimits(q,chi1,chi2):
+    """
+    Limits on the effective spin xi.
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    ximin:
+        Minimum value of the effective spin.
+    ximax:
+        Maximum value of the effective spin.
+    """
+
+    q=np.array(q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    xilim = (1+q)*S1 + (1+1/q)*S2
+
+    return np.array([-xilim,xilim]).T
 
 
 def Jlimits(r,q,chi1,chi2):
@@ -152,7 +193,6 @@ def Jlimits(r,q,chi1,chi2):
     chi2: float
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
 
-
     Returns
     -------
     Jmin:
@@ -167,7 +207,7 @@ def Jlimits(r,q,chi1,chi2):
     Jmin = np.maximum(0, L-S1-S2, np.abs(S1-S2)-L)
     Jmax = L+S1+S1
 
-    return np.array([Jmin,Jmax]).T
+    return np.array([Jmin,Jmax])
 
 
 def Slimits_S1S2(q,chi1,chi2):
@@ -192,8 +232,10 @@ def Slimits_S1S2(q,chi1,chi2):
     """
 
     S1,S2= spinmags(q,chi1,chi2)
+    Smin = np.abs(S1-S2)
+    Smax = S1+S2
 
-    return np.array([np.abs(S1-S2), S1+S2]).T
+    return np.array([Smin,Smax])
 
 
 def Slimits_LJ(r,J,q):
@@ -218,14 +260,15 @@ def Slimits_LJ(r,J,q):
     """
 
     L= angularmomentum(r,q)
+    Smin = np.abs(J-L)
+    Smax = J+L
 
-    return np.array([np.abs(J-L), J+L]).T
+    return np.array([Smin,Smax])
 
 
 def _limits_check(testvalue,interval):
     """Check if a value is within a given interval"""
     # Is there a way to exclude functions from the documentation?
-    interval= interval.T
     return np.logical_and(testvalue>interval[0],testvalue<interval[1])
 
 
@@ -344,21 +387,26 @@ class Binary:
 
 if __name__ == '__main__':
 
-    #q=[0.3,0.6]
-    #chi1=[0.4,0.6]
-    #chi2=[0.4,0.6]
+    q=[0.3,0.6]
+    chi1=[0.4,0.6]
+    chi2=[0.4,0.6]
 
+    #print(spinmags(q,chi1,chi2))
+
+    #sys.exit()
     q=[0.5,1,0.3]
     chi1=[0.5,0.5,0.67]
     chi2=[0.5,0.5,0.8]
     r=[10,10,10]
     #print(Slimits_S1S2(q,chi1,chi2))
+    print(_limits_check([0.24,4,6],Slimits_S1S2(q,chi1,chi2)))
 
-    #print(limits_check([0.24,4,6],Slimits_S1S2(q,chi1,chi2)))
-    print(Jlimits(r,q,chi1,chi2))
+    #print(xilimits(q[0],chi1[0],chi2[0]))
 
-    v= limits_check(function="Jlimits",r=r,J=[7,4,5],q=q,chi1=chi1,chi2=chi2)
-    print(v)
+    #print(xilimits(q,chi1,chi2))
+
+    #v= limits_check(function="Jlimits",r=r,J=[7,4,5],q=q,chi1=chi1,chi2=chi2)
+    #print(v)
 
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
     #
