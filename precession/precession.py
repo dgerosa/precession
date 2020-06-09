@@ -9,16 +9,40 @@ import precession as pre
 
 
 # How should we represent a single binary?
+
 # The fixed parameters without initialization are
 # M, q, chi1, chi2 (or m1, m2, S1, S2)
+
 # To initialize a binary we also require
 # r (or L) and xi, J, S (or theta1, theta2 and DeltaPhi)
+
 # Different parameters are required for different evolutions:
 # finite/infinite precession-averaged or orbit-averaged
 # For the precession-averaged we can include finite and infinite in one
 # and allow for r = np.inf with a flag to check for this
-# Should we ignore the total mass M?
-# Or include it everywhere as an optional parameter?
+
+# Class for binary population as a parent/child of binary single class?
+
+
+def newlen(var):
+    """Redefine len function
+    """
+
+    try:
+        n = len(var)
+    except:
+        n = 1
+    return n
+
+
+def isarray(var):
+    """Check if a variable is an array
+    """
+
+    if isinstance(var, (list, tuple, np.ndarray)):
+        return True
+    else:
+        return False
 
 
 class Binary:
@@ -78,6 +102,38 @@ class Binary:
         self.S = S
 
         return xi, J, S
+
+
+class UpUp:
+    pass
+
+
+class DownDown:
+    pass
+
+
+class DownUp:
+    pass
+
+
+class UpDown:
+    pass
+
+
+def alignedBinaries():
+    return UpUp(), DownDown(), DownUp(), UpDown()
+
+
+class BinaryPopulation:
+    pass
+
+
+class FieldPopulation:
+    pass
+
+
+class ClusterPopulation:
+    pass
 
 
 # Example
