@@ -6,7 +6,7 @@ import numpy as np
 import scipy as sp
 # Using precession_v1 functions for now
 import precession as pre
-import sys, os
+import sys, os, time
 
 __all__ = [] # Why is this necessary?
 
@@ -145,7 +145,7 @@ def angularmomentum(r,q):
     """
 
     r = np.array(r)
-    L = mass1(q)*mass2(q)*r**(3/2)
+    L = mass1(q)*mass2(q)*r**0.5
 
     return L
 
@@ -211,12 +211,42 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
 
 
 def deltacoeffs(r,xi,q,chi1,chi2):
-    """Not finished
-    Polynomial coefficients of the discriminant as a function of J"""
+    """
+    Coefficients of the quintic equation in J that defines the spin-orbit resonances.
 
-    L=angularmomentum(r,q)
-    xi=np.array(xi)
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    delta10:
+        Coefficient of J^10.
+    delta8:
+        Coefficient of J^8.
+    delta6:
+        Coefficient of J^6.
+    delta4:
+        Coefficient of J^4.
+    delta2:
+        Coefficient of J^2.
+    delta0:
+        Coefficient of J^0.
+    """
+
+
     q=np.array(q)
+    xi=np.array(xi)
+    L=angularmomentum(r,q)
     S1,S2= spinmags(q,chi1,chi2)
 
     delta0 = \
@@ -437,22 +467,78 @@ def deltacoeffs(r,xi,q,chi1,chi2):
     -4 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( q )**( 3 ) * ( ( 1 + q \
     ) )**( 8 )
 
-    return delta10, delta8, delta6, delta4, delta2, delta0
+    return np.array([delta10, delta8, delta6, delta4, delta2, delta0])
 
 def deltaroots(r,xi,q,chi1,chi2):
+    """
+    All the roots (physical and unphysical) of the quintic equation in J^2 that determines the spin-orbit resonances.
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    J2: Array of complex numbers
+        Roots of the quintic polynomial
+    """
+
     coeffs= deltacoeffs(r,xi,q,chi1,chi2)
-    J2 = np.sort_complex(np.roots(coeffs)) # Complex numbers, sort according to real part
+
+    if len(coeffs.shape)==1:
+        J2 = np.sort_complex(np.roots(coeffs))
+    else:
+        J2 = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
 
     return J2
 
 def Jresonances(r,xi,q,chi1,chi2):
-    # The good solutions are the last two. That's because the discriminant quintic asymptotes to -infinity and the physical region is when it's positive
+    """
+    Total angular momentum of the two spin-orbit resonances.
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    Jmin: float
+        Spin-orbit resonance that minimizes J (DeltaPhi=pi)
+    Jmax: float
+        Spin-orbit resonance that minimizes J (DeltaPhi=pi)
+    """
 
     J2roots= deltaroots(r,xi,q,chi1,chi2)
-    Jresonances = np.real(J2roots[np.isreal(J2roots)][-2:]**0.5)
+    # The good solutions are the last two. That's because the discriminant quintic asymptotes to -infinity and the physical region is when it's positive
+    if len(J2roots.shape)==1:
+        Jmin,Jmax = np.real(J2roots[np.isreal(J2roots)][-2:]**0.5)
+    else:
+        Jmin,Jmax = np.array([np.real(x[np.isreal(x)][-2:]**0.5) for x in J2roots]).T
 
-    return Jresonances
+    return np.array([Jmin,Jmax])
 
+
+def xiresonances(J,r,q,chi1,chi2):
+    #TODO. Find xi resonance for each value of J: max and min of the effective potentials. Can we do it without a root finder?
+    raise NotImplementedError
 
 def Slimits_S1S2(q,chi1,chi2):
     """
@@ -510,9 +596,9 @@ def Slimits_LJ(J,r,q):
     return np.array([Smin,Smax])
 
 
-def Slimits_LJS1S2(J,r,q):
+def Slimits_LJS1S2(J,r,q,chi1,chi2):
     """
-    Limits on the total spin magnitude due to the vector relation S=J-L
+    Limits on the total spin magnitude due to the vector relations S=S1+S2 and S=J-L.
 
     Parameters
     ----------
@@ -540,7 +626,35 @@ def Slimits_LJS1S2(J,r,q):
 
 
 def sigmacoeffs(J,r,xi,q,chi1,chi2):
-    """Not finished"""
+    """
+    Coefficients of the cubic equation in S^2 that identifies the effective potentials.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    sigma6:
+        Coefficient of S^6.
+    sigma4:
+        Coefficient of S^4.
+    sigma2:
+        Coefficient of S^2.
+    sigma0:
+        Coefficient of S^0.
+    """
 
     J=np.array(J)
     L=angularmomentum(r,q)
@@ -576,15 +690,46 @@ def sigmacoeffs(J,r,xi,q,chi1,chi2):
     return sigma6, sigma4, sigma2, sigma0
 
 def S2roots(J,r,xi,q,chi1,chi2):
-    """Not finished"""
+    """
+    Coefficients of the cubic equation in S^2 that identifies the effective potentials.
 
-    a,b,c,d= sigmacoeffs(J,r,xi,q,chi1,chi2)
-    pt = (b**2/(3*a**2) - c/a)/3
-    qt = ((2*b**3)/(27*a**3) - (b*c)/(3*a**2) + d/a) /2
-    asint = np.arcsin(qt*pt**(-3/2))/3
-    S32,Sminus2,Splus2 =  2*pt**(1/2) * np.sin(asint+ (2*np.pi/3)*np.array([2,0,1])) - b/(3*a)
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
 
-    return S32,Sminus2,Splus2
+    Returns
+    -------
+    S32: float
+        Spurious root.
+    Sminus2:
+        Lowest physical root (or unphysical).
+    Splus2:
+        Lowest physical root (or unphysical).
+
+    """
+
+    #TODO: Vectorize it. Make it valid for both cases with 1 and 3 roots.
+
+    sigma6,sigma4,sigma2,sigma0= sigmacoeffs(J,r,xi,q,chi1,chi2)
+
+    sigmap = (sigma4**2/(3*sigma6**2) - sigma2/sigma6)/3
+    sigmaq = ((2*sigma4**3)/(27*sigma6**3) - (sigma4*sigma2)/(3*sigma6**2) + sigma0/sigma6) /2
+    Sminus2,Splus2,S32 =  2*sigmap**(1/2) * np.sin(np.arcsin(sigmaq*sigmap**(-3/2))/3 + (2*np.pi/3)*np.array([0,1,2])) - sigma4/(3*sigma6)
+
+    #print(np.roots([sigma6,sigma4,sigma2,sigma0])) # You can test this against numpy.roots
+
+    return Sminus2,Splus2,S32
 
 
 
@@ -727,14 +872,28 @@ class Binary:
 
 if __name__ == '__main__':
 
-    r=10
-    xi=0
-    q=0.5
-    chi1=0.5
-    chi2=0.5
-    J=6.9
+    r=[10,10]
+    xi=[0,-0.6]
+    q=[0.8,0.2]
+    chi1=[1,1]
+    chi2=[1,1]
 
+    print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
     print(Jresonances(r,xi,q,chi1,chi2))
+
+
+    J=[0.8,0.4]
+
+    print(S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+
+
+    #M,m1,m2,S1,S2=pre.get_fixed(q[0],chi1[0],chi2[0])
+    #print(pre.J_allowed(xi[0],q[0],S1[0],S2[0],r[0]))
+
+    #print(Jresonances(r,xi,q,chi1,chi2))
+
+    #S2roots(J,r,xi,q,chi1,chi2)
 
     #print(Jlimits(r,q,chi1,chi2))
     #print(S2roots(J,r,xi,q,chi1,chi2))
@@ -744,4 +903,3 @@ if __name__ == '__main__':
 
 
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
-
