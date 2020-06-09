@@ -633,6 +633,25 @@ def limits_check(function=None, S=None,J=None,r=None,q=None,chi1=None,chi2=None)
         raise ValueError
 
 
+def newlen(var):
+    """Redefine len function
+    """
+
+    try:
+        n = len(var)
+    except:
+        n = 1
+    return n
+
+
+def isarray(var):
+    """Check if a variable is an array
+    """
+
+    if isinstance(var, (list, tuple, np.ndarray)):
+        return True
+    else:
+        return False
 
 
 class Binary:
@@ -706,10 +725,6 @@ class Binary:
         return xi, J, S
 
 
-
-
-
-
 if __name__ == '__main__':
 
     r=10
@@ -729,22 +744,4 @@ if __name__ == '__main__':
 
 
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
-    #
-    # # Example
-    # #--------
-    # q = .7
-    # chi1 = .8
-    # chi2 = .9
-    # b = Binary(q, chi1, chi2)
-    #
-    # ri = 1000.
-    # t1i = np.pi/2.
-    # t2i = np.pi/3.
-    # dpi = np.pi/4.
-    # xii, Ji, Si = b.config_angles(ri, t1i, t2i, dpi)
-    #
-    # rf = 10.
-    # nr = 1000
-    # r = np.linspace(ri, rf, nr)
-    # xi, J, S = b.orb_evolve(r)
-    # #--------
+
