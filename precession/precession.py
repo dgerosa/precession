@@ -175,7 +175,7 @@ def xilimits(q,chi1,chi2):
     S1,S2 = spinmags(q,chi1,chi2)
     xilim = (1+q)*S1 + (1+1/q)*S2
 
-    return np.array([-xilim,xilim]).T
+    return np.array([-xilim,xilim])
 
 
 def Jlimits(r,q,chi1,chi2):
