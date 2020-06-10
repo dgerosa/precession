@@ -7,9 +7,18 @@ import scipy as sp
 # Using precession_v1 functions for now
 import precession as pre
 import sys, os, time
+import warnings
+import itertools
 
 __all__ = [] # Why is this necessary?
 
+
+#getnone=itertools.repeat(None)
+def flen(x):
+    if hasattr(x, "__len__"):
+        return len(x)
+    else:
+        return 1
 
 def mass1(q):
     """
@@ -150,34 +159,6 @@ def angularmomentum(r,q):
     return L
 
 
-def xilimits(q,chi1,chi2):
-    """
-    Limits on the effective spin xi.
-
-    Parameters
-    ----------
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    -------
-    ximin:
-        Minimum value of the effective spin.
-    ximax:
-        Maximum value of the effective spin.
-    """
-
-    q=np.array(q)
-    S1,S2 = spinmags(q,chi1,chi2)
-    xilim = (1+q)*S1 + (1+1/q)*S2
-
-    return np.array([-xilim,xilim])
-
-
 def Jlimits_LS1S2(r,q,chi1,chi2):
     """
     Limits on the magnitude of the total angular momentum due to the vector relation J=L+S1+S2
@@ -204,13 +185,13 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
 
     S1,S2 = spinmags(q,chi1,chi2)
     L = angularmomentum(r,q)
-    Jmin = np.maximum.reduce([0, L-S1-S2, np.abs(S1-S2)-L])
+    Jmin = np.maximum.reduce([np.zeros(flen(L)), L-S1-S2, np.abs(S1-S2)-L])
     Jmax = L+S1+S1
 
     return np.array([Jmin,Jmax])
 
 
-def deltacoeffs(r,xi,q,chi1,chi2):
+def Jdiscriminant_coefficients(r,xi,q,chi1,chi2):
     """
     Coefficients of the quintic equation in J that defines the spin-orbit resonances.
 
@@ -229,17 +210,17 @@ def deltacoeffs(r,xi,q,chi1,chi2):
 
     Returns
     -------
-    delta10:
+    sigma10:
         Coefficient of J^10.
-    delta8:
+    sigma8:
         Coefficient of J^8.
-    delta6:
+    sigma6:
         Coefficient of J^6.
-    delta4:
+    sigma4:
         Coefficient of J^4.
-    delta2:
+    sigma2:
         Coefficient of J^2.
-    delta0:
+    sigma0:
         Coefficient of J^0.
     """
 
@@ -249,7 +230,7 @@ def deltacoeffs(r,xi,q,chi1,chi2):
     L=angularmomentum(r,q)
     S1,S2= spinmags(q,chi1,chi2)
 
-    delta0 = \
+    sigma0 = \
     ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( ( ( \
     L )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 + ( q )**( 2 ) ) * ( S1 + \
     -1 * S2 ) * ( S1 + S2 ) + 2 * L * q * xi ) ) )**( 2 ) * ( ( L )**( 6 \
@@ -275,7 +256,7 @@ def deltacoeffs(r,xi,q,chi1,chi2):
     2 ) + ( 1 + -4 * q ) * ( S2 )**( 2 ) ) * ( xi )**( 2 ) + 16 * ( q \
     )**( 4 ) * ( xi )**( 4 ) ) ) ) ) ) ) ) ) )
 
-    delta2 = \
+    sigma2 = \
     -4 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( \
     ( L )**( 8 ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( 1 + q * ( 3 + \
     q ) ) + ( ( L )**( 7 ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( 3 + \
@@ -390,7 +371,7 @@ def deltacoeffs(r,xi,q,chi1,chi2):
     S2 )**( 4 ) + 8 * ( S2 )**( 2 ) * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) \
     ) ) ) ) ) ) ) ) )
 
-    delta4 = \
+    sigma4 = \
     2 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( \
     ( L )**( 6 ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( 3 + q * ( 14 + \
     3 * q ) ) + ( -2 * ( -1 + q ) * ( ( 1 + q ) )**( 4 ) * ( q * ( S1 \
@@ -440,7 +421,7 @@ def deltacoeffs(r,xi,q,chi1,chi2):
     ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) \
     )
 
-    delta6 = \
+    sigma6 = \
     -4 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * q * ( ( 1 + q ) )**( 6 ) \
     * ( ( L )**( 4 ) * q * ( ( 1 + q ) )**( 2 ) * ( 1 + q * ( 8 + q ) ) + \
     ( ( ( 1 + q ) )**( 2 ) * ( ( q )**( 2 ) * ( 10 + 3 * ( -4 + q ) * q ) \
@@ -456,50 +437,49 @@ def deltacoeffs(r,xi,q,chi1,chi2):
     ( -1 + q * ( 13 + q ) ) ) * ( S2 )**( 2 ) ) + 4 * ( q )**( 2 ) * ( 2 \
     + q * ( 7 + 2 * q ) ) * ( xi )**( 2 ) ) ) ) ) ) ) )
 
-    delta8 = \
+    sigma8 = \
     ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( q )**( 2 ) * ( ( 1 + q ) \
     )**( 6 ) * ( ( ( 1 + q ) )**( 2 ) * ( ( L )**( 2 ) * ( 1 + q * ( 18 + \
     q ) ) + ( 4 * ( 5 + -3 * q ) * q * ( S1 )**( 2 ) + 4 * ( -3 + 5 * q ) \
     * ( S2 )**( 2 ) ) ) + ( 20 * L * q * ( ( 1 + q ) )**( 2 ) * xi + 4 * \
     ( q )**( 2 ) * ( xi )**( 2 ) ) )
 
-    delta10 = \
+    sigma10 = \
     -4 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( q )**( 3 ) * ( ( 1 + q \
     ) )**( 8 )
 
-    return np.array([delta10, delta8, delta6, delta4, delta2, delta0])
+    return np.array([sigma10, sigma8, sigma6, sigma4, sigma2, sigma0])
 
-def deltaroots(r,xi,q,chi1,chi2):
+
+def wraproots(coefficientfunction, *args,**kwargs):
     """
-    All the roots (physical and unphysical) of the quintic equation in J^2 that determines the spin-orbit resonances.
+    Find roots of a polynomial given coefficients. Wrapper of numpy.roots.
 
     Parameters
     ----------
-    r: float
-        Binary separation.
-    xi: float
-        Effective spin
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    coefficientfunction: callable
+        Function returnin the polynomial coefficients ordered from highest to lowest degree.
+    *args, **kwargs:
+        Parameters of `coefficientfunction`.
 
     Returns
     -------
-    J2: Array of complex numbers
-        Roots of the quintic polynomial
+    sols: array
+        Roots of the polynomial, ordered according to their real part. Complex roots are masked with nans.
     """
 
-    coeffs= deltacoeffs(r,xi,q,chi1,chi2)
+    coeffs= coefficientfunction(*args,**kwargs)
 
-    if len(coeffs.shape)==1:
-        J2 = np.sort_complex(np.roots(coeffs))
+    #TODO: Can we avoid this for loop and do it with numpy arrays?
+    if np.ndim(coeffs)==1:
+        sols = np.sort_complex(np.roots(coeffs))
     else:
-        J2 = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
+        sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
 
-    return J2
+    sols = np.real(np.where(np.isreal(sols),sols,np.nan))
+
+    return sols
+
 
 def Jresonances(r,xi,q,chi1,chi2):
     """
@@ -526,19 +506,350 @@ def Jresonances(r,xi,q,chi1,chi2):
         Spin-orbit resonance that minimizes J (DeltaPhi=pi)
     """
 
-    J2roots= deltaroots(r,xi,q,chi1,chi2)
     # The good solutions are the last two. That's because the discriminant quintic asymptotes to -infinity and the physical region is when it's positive
-    if len(J2roots.shape)==1:
-        Jmin,Jmax = np.real(J2roots[np.isreal(J2roots)][-2:]**0.5)
+
+
+    J2roots= wraproots(Jdiscriminant_coefficients,r,xi,q,chi1,chi2)
+
+    if np.ndim(J2roots)==1:
+        Jmin,Jmax = J2roots[~np.isnan(J2roots)][-2:]**0.5
     else:
-        Jmin,Jmax = np.array([np.real(x[np.isreal(x)][-2:]**0.5) for x in J2roots]).T
+        Jmin,Jmax = np.array([x[~np.isnan(x)][-2:]**0.5 for x in J2roots]).T
 
     return np.array([Jmin,Jmax])
 
 
+def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
+    """
+    Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
+        - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
+        - If r, xi, q, chi1, and chi2 are provides, the limits are given by the two spin-orbit resonances.
+
+    Parameters
+    ----------
+    J: float, optional
+        Magnitude of the total angular momentum.
+    r: float, optional
+        Binary separation.
+    xi: float, optional
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float, optional
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float, optional
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    conincident: boolean, optional
+        If True, assume that the input is a spin-orbit resonance and return repeated roots
+
+    Returns
+    -------
+    Sminus:
+        Minimum value of the total spin.
+    Splus:
+        Maximum value of the total spin.
+    """
+
+    if r is None or q is None or chi1 is None or chi2 is None:
+        raise TypeError
+    elif xi is None:
+        Jmin,Jmax = Jlimits_LS1S2(r,q,chi1,chi2)
+    else:
+        #TODO: Assert that the xi values are compatible with q,chi1,chi2 (either explicitely or with a generic 'limits_check' function)
+        Jmin,Jmax = Jresonances(r,xi,q,chi1,chi2)
+
+    return np.array([Jmin,Jmax])
+
+
+def xilimits_definition(q,chi1,chi2):
+    """
+    Limits on the effective spin based only on the definition xi = (1+q)S1.L + (1+1/q)S2.L
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    ximin:
+        Minimum value of the effective spin.
+    ximax:
+        Maximum value of the effective spin.
+    """
+
+    q=np.array(q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    xilim = (1+q)*S1 + (1+1/q)*S2
+
+    return np.array([-xilim,xilim])
+
+
+def xidiscriminant_coefficients(J,r,q,chi1,chi2):
+    """
+    Coefficients of the 6-degree equation in xi that defines the spin-orbit resonances.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    sigma6:
+        Coefficient of xi^6.
+    sigma5:
+        Coefficient of xi^5.
+    sigma4:
+        Coefficient of xi^4.
+    sigma3:
+        Coefficient of xi^3.
+    sigma2:
+        Coefficient of xi^2.
+    sigma1:
+        Coefficient of xi^1.
+    sigma0:
+        Coefficient of xi^0.
+    """
+
+
+    q=np.array(q)
+    J=np.array(J)
+    L=angularmomentum(r,q)
+    S1,S2= spinmags(q,chi1,chi2)
+
+    sigma0 = \
+    -1 * ( L )**( 2 ) * ( ( 1 + q ) )**( 6 ) * ( ( -1 + ( q )**( 2 ) ) \
+    )**( 2 ) * ( 4 * ( J )**( 10 ) * ( q )**( 3 ) + ( -1 * ( J )**( 8 ) * \
+    ( q )**( 2 ) * ( ( L )**( 2 ) * ( 1 + q * ( 18 + q ) ) + ( 4 * ( 5 + \
+    -3 * q ) * q * ( S1 )**( 2 ) + 4 * ( -3 + 5 * q ) * ( S2 )**( 2 ) ) ) \
+    + ( 4 * ( J )**( 6 ) * q * ( q * ( ( L )**( 4 ) * ( 1 + q * ( 8 + q ) \
+    ) + ( -1 * ( L )**( 2 ) * ( -1 + q * ( -13 + ( q + 5 * ( q )**( 2 ) ) \
+    ) ) * ( S1 )**( 2 ) + q * ( 10 + 3 * ( -4 + q ) * q ) * ( S1 )**( 4 ) \
+    ) ) + ( ( ( L )**( 2 ) * ( -5 + q * ( -1 + q * ( 13 + q ) ) ) + -2 * \
+    q * ( 6 + q * ( -11 + 6 * q ) ) * ( S1 )**( 2 ) ) * ( S2 )**( 2 ) + ( \
+    3 + 2 * q * ( -6 + 5 * q ) ) * ( S2 )**( 4 ) ) ) + ( -1 * ( ( q )**( \
+    2 ) * ( ( ( L )**( 2 ) + ( S1 )**( 2 ) ) )**( 2 ) * ( ( L )**( 2 ) + \
+    -4 * ( -1 + q ) * q * ( S1 )**( 2 ) ) + ( 2 * ( ( L )**( 4 ) * ( -2 + \
+    q * ( 2 + q ) ) + ( ( L )**( 2 ) * q * ( -10 + ( 19 + -10 * q ) * q ) \
+    * ( S1 )**( 2 ) + 6 * ( -1 + q ) * ( q )**( 2 ) * ( S1 )**( 4 ) ) ) * \
+    ( S2 )**( 2 ) + ( ( ( L )**( 2 ) * ( -8 + q * ( 8 + q ) ) + -12 * ( \
+    -1 + q ) * q * ( S1 )**( 2 ) ) * ( S2 )**( 4 ) + 4 * ( -1 + q ) * ( \
+    S2 )**( 6 ) ) ) ) * ( ( ( L )**( 2 ) * ( 1 + q ) + ( -1 + q ) * ( S1 \
+    + -1 * S2 ) * ( S1 + S2 ) ) )**( 2 ) + ( 2 * ( J )**( 4 ) * ( -1 * ( \
+    L )**( 6 ) * ( q )**( 2 ) * ( 3 + q * ( 14 + 3 * q ) ) + ( 2 * ( L \
+    )**( 4 ) * ( ( q )**( 2 ) * ( -2 + q * ( -13 + q * ( -9 + q * ( 11 + \
+    q ) ) ) ) * ( S1 )**( 2 ) + ( 1 + -1 * q * ( 11 + 2 * q ) * ( -1 + ( \
+    q + ( q )**( 2 ) ) ) ) * ( S2 )**( 2 ) ) + ( ( L )**( 2 ) * ( ( q \
+    )**( 2 ) * ( -3 + q * ( -24 + q * ( 13 + 4 * q * ( 1 + q ) ) ) ) * ( \
+    S1 )**( 4 ) + ( 2 * q * ( 15 + q * ( -23 + q * ( 22 + q * ( -23 + 15 \
+    * q ) ) ) ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 4 + q * ( 4 + q * ( \
+    13 + -3 * q * ( 8 + q ) ) ) ) * ( S2 )**( 4 ) ) ) + 2 * ( -1 + q ) * \
+    ( ( q )**( 3 ) * ( 10 + ( -8 + q ) * q ) * ( S1 )**( 6 ) + ( -9 * ( q \
+    )**( 2 ) * ( 2 + ( -2 + q ) * q ) * ( S1 )**( 4 ) * ( S2 )**( 2 ) + ( \
+    9 * q * ( 1 + 2 * ( -1 + q ) * q ) * ( S1 )**( 2 ) * ( S2 )**( 4 ) + \
+    ( -1 + 2 * ( 4 + -5 * q ) * q ) * ( S2 )**( 6 ) ) ) ) ) ) ) + 4 * ( J \
+    )**( 2 ) * ( ( L )**( 8 ) * ( q )**( 2 ) * ( 1 + q * ( 3 + q ) ) + ( \
+    ( L )**( 6 ) * ( ( q )**( 2 ) * ( 1 + q * ( 7 + -1 * ( -1 + q ) * q * \
+    ( 9 + 2 * q ) ) ) * ( S1 )**( 2 ) + ( -2 + q * ( -7 + q * ( 9 + q * ( \
+    7 + q ) ) ) ) * ( S2 )**( 2 ) ) + ( -1 * ( ( -1 + q ) )**( 2 ) * ( ( \
+    -1 * q * ( S1 )**( 2 ) + ( S2 )**( 2 ) ) )**( 2 ) * ( q * ( -5 + 2 * \
+    q ) * ( S1 )**( 4 ) + ( 2 * ( 1 + ( q + ( q )**( 2 ) ) ) * ( S1 )**( \
+    2 ) * ( S2 )**( 2 ) + ( 2 + -5 * q ) * ( S2 )**( 4 ) ) ) + ( ( L )**( \
+    4 ) * ( ( q )**( 2 ) * ( 1 + q * ( 2 + -1 * ( -1 + q ) * q * ( 11 + 6 \
+    * q ) ) ) * ( S1 )**( 4 ) + ( 2 * ( -1 + ( q + ( -14 * ( q )**( 2 ) + \
+    ( 25 * ( q )**( 3 ) + ( -14 * ( q )**( 4 ) + ( ( q )**( 5 ) + -1 * ( \
+    q )**( 6 ) ) ) ) ) ) ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -6 + q * ( \
+    -5 + q * ( 11 + q * ( 2 + q ) ) ) ) * ( S2 )**( 4 ) ) ) + ( L )**( 2 \
+    ) * ( -1 + q ) * ( -1 * ( q )**( 2 ) * ( 1 + q * ( 4 + q * ( -5 + 6 * \
+    q ) ) ) * ( S1 )**( 6 ) + ( q * ( 15 + q * ( -34 + q * ( 37 + -4 * ( \
+    -1 + q ) * q ) ) ) * ( S1 )**( 4 ) * ( S2 )**( 2 ) + ( ( 4 + -1 * q * \
+    ( 4 + q * ( 37 + q * ( -34 + 15 * q ) ) ) ) * ( S1 )**( 2 ) * ( S2 \
+    )**( 4 ) + ( 6 + ( -1 + q ) * q * ( 5 + q ) ) * ( S2 )**( 6 ) ) ) ) ) \
+    ) ) ) ) ) ) ) )
+
+    sigma1 = \
+    -4 * ( L )**( 3 ) * ( ( -1 + q ) )**( 2 ) * q * ( ( 1 + q ) )**( 7 ) \
+    * ( -5 * ( J )**( 8 ) * ( q )**( 2 ) * ( 1 + q ) + ( ( J )**( 6 ) * q \
+    * ( ( L )**( 2 ) * ( 1 + q ) * ( 1 + q * ( 18 + q ) ) + ( -1 * q * ( \
+    -20 + q * ( 3 + q ) ) * ( S1 )**( 2 ) + ( -1 + q * ( -3 + 20 * q ) ) \
+    * ( S2 )**( 2 ) ) ) + ( ( J )**( 4 ) * ( q * ( -3 * ( L )**( 4 ) * ( \
+    1 + q ) * ( 1 + q * ( 8 + q ) ) + ( ( L )**( 2 ) * ( -3 + q * ( -31 + \
+    2 * q * ( 6 + q ) * ( -3 + 2 * q ) ) ) * ( S1 )**( 2 ) + q * ( -30 + \
+    q * ( 39 + q * ( -19 + 4 * q ) ) ) * ( S1 )**( 4 ) ) ) + ( ( ( L )**( \
+    2 ) * ( 4 + -1 * q * ( -18 + q * ( 9 + q ) * ( 4 + 3 * q ) ) ) + 3 * \
+    q * ( 1 + q ) * ( 1 + ( q )**( 2 ) ) * ( S1 )**( 2 ) ) * ( S2 )**( 2 \
+    ) + ( 4 + q * ( -19 + ( 39 * q + -30 * ( q )**( 2 ) ) ) ) * ( S2 )**( \
+    4 ) ) ) + ( -1 * ( ( L )**( 2 ) * ( 1 + q ) + ( -1 + q ) * ( S1 + -1 \
+    * S2 ) * ( S1 + S2 ) ) * ( ( L )**( 6 ) * q * ( 1 + q * ( 3 + q ) ) + \
+    ( ( L )**( 4 ) * ( ( q )**( 2 ) * ( 9 + ( 7 + -8 * q ) * q ) * ( S1 \
+    )**( 2 ) + ( -8 + q * ( 7 + 9 * q ) ) * ( S2 )**( 2 ) ) + ( -1 * ( -1 \
+    + q ) * ( q * ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( q * ( -5 + 8 * \
+    q ) * ( S1 )**( 4 ) + ( 2 * ( -2 + ( q + -2 * ( q )**( 2 ) ) ) * ( S1 \
+    )**( 2 ) * ( S2 )**( 2 ) + ( 8 + -5 * q ) * ( S2 )**( 4 ) ) ) + ( L \
+    )**( 2 ) * ( q * ( -1 + ( q + ( 19 * ( q )**( 2 ) + -16 * ( q )**( 3 \
+    ) ) ) ) * ( S1 )**( 4 ) + ( 2 * ( 2 + q * ( -15 + q * ( 23 + q * ( \
+    -15 + 2 * q ) ) ) ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -16 + q * ( \
+    19 + ( q + -1 * ( q )**( 2 ) ) ) ) * ( S2 )**( 4 ) ) ) ) ) ) + ( J \
+    )**( 2 ) * ( ( L )**( 6 ) * q * ( 1 + q ) * ( 3 + q * ( 14 + 3 * q ) \
+    ) + ( ( L )**( 4 ) * ( q * ( 2 + q * ( 18 + -1 * q * ( 3 + q ) * ( \
+    -19 + 12 * q ) ) ) * ( S1 )**( 2 ) + ( -12 + q * ( -17 + q * ( 57 + 2 \
+    * q * ( 9 + q ) ) ) ) * ( S2 )**( 2 ) ) + ( ( L )**( 2 ) * ( q * ( 3 \
+    + q * ( 5 + q * ( 7 + 3 * ( 7 + -8 * q ) * q ) ) ) * ( S1 )**( 4 ) + \
+    ( -4 * ( 1 + q ) * ( 2 + q * ( -6 + q * ( 11 + 2 * ( -3 + q ) * q ) ) \
+    ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -24 + q * ( 21 + q * ( 7 + q * \
+    ( 5 + 3 * q ) ) ) ) * ( S2 )**( 4 ) ) ) + -1 * ( -1 + q ) * ( ( q \
+    )**( 2 ) * ( 20 + q * ( -29 + 12 * q ) ) * ( S1 )**( 6 ) + ( q * ( -3 \
+    + 2 * ( q )**( 2 ) * ( -7 + 4 * q ) ) * ( S1 )**( 4 ) * ( S2 )**( 2 ) \
+    + ( ( -8 + ( 14 * q + 3 * ( q )**( 3 ) ) ) * ( S1 )**( 2 ) * ( S2 \
+    )**( 4 ) + ( -12 + ( 29 + -20 * q ) * q ) * ( S2 )**( 6 ) ) ) ) ) ) ) \
+    ) ) ) )
+
+    sigma2 = \
+    -4 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( q )**( 2 ) * ( ( 1 + q \
+    ) )**( 6 ) * ( -1 * ( J )**( 8 ) * ( q )**( 2 ) + ( -1 * ( L )**( 8 ) \
+    * ( 1 + q * ( 1 + q ) * ( 10 + q * ( 9 + q ) ) ) + ( -1 * ( ( -1 + q \
+    ) )**( 2 ) * ( ( S1 + -1 * S2 ) )**( 2 ) * ( ( S1 + S2 ) )**( 2 ) * ( \
+    ( -1 * q * ( S1 )**( 2 ) + ( S2 )**( 2 ) ) )**( 2 ) + ( 2 * ( J )**( \
+    6 ) * q * ( 2 * ( L )**( 2 ) * ( 2 + q * ( 7 + 2 * q ) ) + ( -1 * ( \
+    -2 + q ) * q * ( S1 )**( 2 ) + ( -1 + 2 * q ) * ( S2 )**( 2 ) ) ) + ( \
+    2 * ( L )**( 6 ) * ( ( 1 + 2 * ( q )**( 2 ) * ( -11 + q * ( -7 + 5 * \
+    q ) ) ) * ( S1 )**( 2 ) + ( 10 + q * ( -14 + ( -22 * q + ( q )**( 3 ) \
+    ) ) ) * ( S2 )**( 2 ) ) + ( ( L )**( 4 ) * ( ( -1 + 6 * q * ( 3 + ( q \
+    )**( 2 ) * ( -12 + 7 * q ) ) ) * ( S1 )**( 4 ) + ( -2 * ( 9 + q * ( \
+    -33 + q * ( 35 + ( -33 * q + 9 * ( q )**( 2 ) ) ) ) ) * ( S1 )**( 2 ) \
+    * ( S2 )**( 2 ) + -1 * ( -42 + ( 72 * q + ( -18 * ( q )**( 3 ) + ( q \
+    )**( 4 ) ) ) ) * ( S2 )**( 4 ) ) ) + ( 2 * ( L )**( 2 ) * ( -1 + q ) \
+    * ( 2 * q * ( 2 + q * ( -8 + 5 * q ) ) * ( S1 )**( 6 ) + ( ( -1 + ( q \
+    + ( 15 * ( q )**( 2 ) + -9 * ( q )**( 3 ) ) ) ) * ( S1 )**( 4 ) * ( \
+    S2 )**( 2 ) + ( ( 9 + q * ( -15 + ( -1 + q ) * q ) ) * ( S1 )**( 2 ) \
+    * ( S2 )**( 4 ) + -2 * ( 5 + 2 * ( -4 + q ) * q ) * ( S2 )**( 6 ) ) ) \
+    ) + ( ( J )**( 4 ) * ( -1 * ( L )**( 4 ) * ( 1 + q * ( 26 + q * ( 72 \
+    + q * ( 26 + q ) ) ) ) + ( -1 * ( q )**( 2 ) * ( 6 + ( -6 + q ) * q ) \
+    * ( S1 )**( 4 ) + ( 2 * q * ( 3 + q * ( -5 + 3 * q ) ) * ( S1 )**( 2 \
+    ) * ( S2 )**( 2 ) + ( ( -1 + -6 * ( -1 + q ) * q ) * ( S2 )**( 4 ) + \
+    2 * ( L )**( 2 ) * ( q * ( -12 + q * ( -8 + ( -8 + q ) * q ) ) * ( S1 \
+    )**( 2 ) + ( 1 + -4 * q * ( 2 + q * ( 2 + 3 * q ) ) ) * ( S2 )**( 2 ) \
+    ) ) ) ) ) + 2 * ( J )**( 2 ) * ( ( L )**( 6 ) * ( 1 + q * ( 14 + q * \
+    ( 32 + q * ( 14 + q ) ) ) ) + ( ( L )**( 4 ) * ( ( 1 + q * ( 4 + q * \
+    ( 40 + 3 * ( 5 + -3 * q ) * q ) ) ) * ( S1 )**( 2 ) + ( -9 + q * ( 15 \
+    + q * ( 40 + q * ( 4 + q ) ) ) ) * ( S2 )**( 2 ) ) + ( ( -1 + q ) * ( \
+    q * ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( ( -2 + q ) * q * ( S1 \
+    )**( 4 ) + ( ( 1 + ( q )**( 2 ) ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( \
+    1 + -2 * q ) * ( S2 )**( 4 ) ) ) + ( L )**( 2 ) * ( q * ( 12 + q * ( \
+    -26 + ( 30 * q + -9 * ( q )**( 2 ) ) ) ) * ( S1 )**( 4 ) + ( -2 * ( 1 \
+    + q * ( -5 + q * ( 15 + ( -5 + q ) * q ) ) ) * ( S1 )**( 2 ) * ( S2 \
+    )**( 2 ) + ( -9 + 2 * q * ( 15 + q * ( -13 + 6 * q ) ) ) * ( S2 )**( \
+    4 ) ) ) ) ) ) ) ) ) ) ) ) ) )
+
+    sigma3 = \
+    -16 * ( L )**( 3 ) * ( ( -1 + q ) )**( 2 ) * ( q )**( 3 ) * ( ( 1 + q \
+    ) )**( 5 ) * ( ( J )**( 6 ) * q * ( 1 + q ) + ( -1 * ( L )**( 6 ) * ( \
+    1 + q ) * ( 2 + q * ( 7 + 2 * q ) ) + ( -1 * ( J )**( 4 ) * ( ( L \
+    )**( 2 ) * ( 1 + q ) * ( 1 + q * ( 11 + q ) ) + ( q * ( 3 + ( -1 + q \
+    ) * q ) * ( S1 )**( 2 ) + ( 1 + q * ( -1 + 3 * q ) ) * ( S2 )**( 2 ) \
+    ) ) + ( ( L )**( 4 ) * ( ( 3 + q * ( -5 + q * ( -19 + 2 * q ) ) ) * ( \
+    S1 )**( 2 ) + ( 2 + q * ( -19 + q * ( -5 + 3 * q ) ) ) * ( S2 )**( 2 \
+    ) ) + ( -1 * ( -1 + q ) * ( S1 + -1 * S2 ) * ( S1 + S2 ) * ( q * ( -1 \
+    + 2 * q ) * ( S1 )**( 4 ) + ( -1 * ( 1 + ( q )**( 2 ) ) * ( S1 )**( 2 \
+    ) * ( S2 )**( 2 ) + -1 * ( -2 + q ) * ( S2 )**( 4 ) ) ) + ( ( L )**( \
+    2 ) * ( ( -1 + q * ( 11 + q * ( -15 + 2 * q ) ) ) * ( S1 )**( 4 ) + ( \
+    ( 2 + ( q + ( ( q )**( 2 ) + 2 * ( q )**( 3 ) ) ) ) * ( S1 )**( 2 ) * \
+    ( S2 )**( 2 ) + -1 * ( -2 + q * ( 15 + ( -11 + q ) * q ) ) * ( S2 \
+    )**( 4 ) ) ) + ( J )**( 2 ) * ( ( L )**( 4 ) * ( 1 + q ) * ( 3 + q * \
+    ( 17 + 3 * q ) ) + ( q * ( 3 + q * ( -5 + 3 * q ) ) * ( S1 )**( 4 ) + \
+    ( ( -2 + q ) * ( 1 + q ) * ( -1 + 2 * q ) * ( S1 )**( 2 ) * ( S2 )**( \
+    2 ) + ( ( 3 + q * ( -5 + 3 * q ) ) * ( S2 )**( 4 ) + ( L )**( 2 ) * ( \
+    ( 2 + ( q + ( 17 * ( q )**( 2 ) + 2 * ( q )**( 3 ) ) ) ) * ( S1 )**( \
+    2 ) + ( 2 + q * ( 17 + ( q + 2 * ( q )**( 2 ) ) ) ) * ( S2 )**( 2 ) ) \
+    ) ) ) ) ) ) ) ) ) )
+
+    sigma4 = \
+    16 * ( L )**( 4 ) * ( ( -1 + q ) )**( 2 ) * ( q )**( 4 ) * ( ( 1 + q \
+    ) )**( 4 ) * ( ( J )**( 4 ) * ( 1 + q * ( 4 + q ) ) + ( 2 * ( L )**( \
+    4 ) * ( 3 + q * ( 7 + 3 * q ) ) + ( ( 1 + 6 * ( -1 + q ) * q ) * ( S1 \
+    )**( 4 ) + ( -2 * ( 3 + q * ( -5 + 3 * q ) ) * ( S1 )**( 2 ) * ( S2 \
+    )**( 2 ) + ( ( 6 + ( -6 + q ) * q ) * ( S2 )**( 4 ) + ( 2 * ( L )**( \
+    2 ) * ( ( -3 + ( 6 * q + 4 * ( q )**( 2 ) ) ) * ( S1 )**( 2 ) + ( 4 + \
+    -3 * ( -2 + q ) * q ) * ( S2 )**( 2 ) ) + -2 * ( J )**( 2 ) * ( ( L \
+    )**( 2 ) * ( 3 + q ) * ( 1 + 3 * q ) + ( ( 1 + q * ( -1 + 3 * q ) ) * \
+    ( S1 )**( 2 ) + ( 3 + ( -1 + q ) * q ) * ( S2 )**( 2 ) ) ) ) ) ) ) ) )
+
+    sigma5 = \
+    -64 * ( L )**( 5 ) * ( ( -1 + q ) )**( 2 ) * ( q )**( 5 ) * ( ( 1 + \
+    q ) )**( 3 ) * ( ( J )**( 2 ) * ( 1 + q ) + ( -2 * ( L )**( 2 ) * ( 1 \
+    + q ) + ( ( 1 + -2 * q ) * ( S1 )**( 2 ) + ( -2 + q ) * ( S2 )**( 2 ) \
+    ) ) )
+
+    sigma6 = \
+    64 * ( L )**( 6 ) * ( q )**( 6 ) * ( ( -1 + ( q )**( 2 ) ) )**( 2 )
+
+    return np.array([sigma6, sigma5, sigma4, sigma3, sigma2, sigma1, sigma0])
+
+
 def xiresonances(J,r,q,chi1,chi2):
-    #TODO. Find xi resonance for each value of J: max and min of the effective potentials. Can we do it without a root finder?
+    """
+    Total angular momentum of the two spin-orbit resonances.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    ximin: float
+        Spin-orbit resonance that minimizes xi (either DeltaPhi=0 or DeltaPhi=pi)
+    Jmax: float
+        Spin-orbit resonance that minimizes xi (always DeltaPhi=pi)
+    """
+
+    #Altough there are 6 solutions in general, we know that only two can lie between Smin and Smax.
+
+    #TODO: Can we avoid this for loop and do it with numpy arrays?
+
+    Smin,Smax = Slimits_LJS1S2(J,r,q,chi1,chi2)
+    xiroots= wraproots(xidiscriminant_coefficients,J,r,q,chi1,chi2)
+
+    def _compute(Smin,Smax,J,r,xiroots,q,chi1,chi2):
+        Sroots = np.array([Slimits_plusminus(J,r,x,q,chi1,chi2,coincident=True)[0] for x in xiroots])
+        with np.errstate(invalid='ignore'):
+            xires = xiroots[np.logical_and(Sroots>Smin, Sroots<Smax)]
+        return xires
+
+    if np.ndim(xiroots)==1:
+        ximin,ximax =_compute(Smin,Smax,J,r,xiroots,q,chi1,chi2)
+    else:
+        ximin,ximax =np.array(list(map(_compute, Smin,Smax,J,r,xiroots,q,chi1,chi2))).T
+
+    return np.array([ximin,ximax])
+
+
+
+def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
+    #TODO. Similar to J limits but for xi
     raise NotImplementedError
+
 
 def Slimits_S1S2(q,chi1,chi2):
     """
@@ -619,13 +930,13 @@ def Slimits_LJS1S2(J,r,q,chi1,chi2):
 
     SminS1S2,SmaxS1S2 = Slimits_S1S2(q,chi1,chi2)
     SminLJ, SmaxLJ = Slimits_LJ(J,r,q)
-    Smin = np.maximum(SminS1S1,SminLJ)
-    Smax = np.minimum(SmaxS1S1,SmaxLJ)
+    Smin = np.maximum(SminS1S2,SminLJ)
+    Smax = np.minimum(SmaxS1S2,SmaxLJ)
 
     return np.array([Smin,Smax])
 
 
-def sigmacoeffs(J,r,xi,q,chi1,chi2):
+def Scubic_coefficients(J,r,xi,q,chi1,chi2):
     """
     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
 
@@ -687,9 +998,10 @@ def sigmacoeffs(J,r,xi,q,chi1,chi2):
     L * ( 1 + q ) * ( -1 * q * ( S1 )**( 2 ) + ( S2 )**( 2 ) ) + q * ( -1 \
     * ( S1 )**( 2 ) + ( S2 )**( 2 ) ) * xi ) ) )
 
-    return sigma6, sigma4, sigma2, sigma0
+    return np.array([sigma6, sigma4, sigma2, sigma0])
 
-def S2roots(J,r,xi,q,chi1,chi2):
+
+def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
     """
     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
 
@@ -707,6 +1019,8 @@ def S2roots(J,r,xi,q,chi1,chi2):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    coincident: boolean, optional
+        If True, assume that the input is a spin-orbit resonance and return repeated roots
 
     Returns
     -------
@@ -719,18 +1033,107 @@ def S2roots(J,r,xi,q,chi1,chi2):
 
     """
 
-    #TODO: Vectorize it. Make it valid for both cases with 1 and 3 roots.
-
-    sigma6,sigma4,sigma2,sigma0= sigmacoeffs(J,r,xi,q,chi1,chi2)
+    #TODO. Rewrite it with masked arrays to avoid warkings
+    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(J,r,xi,q,chi1,chi2)
 
     sigmap = (sigma4**2/(3*sigma6**2) - sigma2/sigma6)/3
     sigmaq = ((2*sigma4**3)/(27*sigma6**3) - (sigma4*sigma2)/(3*sigma6**2) + sigma0/sigma6) /2
-    Sminus2,Splus2,S32 =  2*sigmap**(1/2) * np.sin(np.arcsin(sigmaq*sigmap**(-3/2))/3 + (2*np.pi/3)*np.array([0,1,2])) - sigma4/(3*sigma6)
+    #delta = sigmaq**2+sigmap**3
+
+    if not coincident:
+        # Mask values if there is only one solution and not three
+        with np.errstate(invalid='ignore'):
+            Sminus2,Splus2,S32= 2*sigmap**(1/2) * np.sin(np.arcsin(sigmaq*sigmap**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(sigmap)))) - sigma4/(3*sigma6)
+    elif coincident:
+        S32 = -2*sigmaq**(1/3) - sigma4/(3*sigma6)
+        Sminus2=Splus2  = sigmaq**(1/3) - sigma4/(3*sigma6)
 
     #print(np.roots([sigma6,sigma4,sigma2,sigma0])) # You can test this against numpy.roots
+    return np.array([Sminus2,Splus2,S32])
 
-    return Sminus2,Splus2,S32
 
+def Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=False):
+    """
+    Limits on the total spin magnitude compatible with both J and xi.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    conincident: boolean, optional
+        If True, assume that the input is a spin-orbit resonance and return repeated roots
+
+    Returns
+    -------
+    Sminus:
+        Minimum value of the total spin.
+    Splus:
+        Maximum value of the total spin.
+    """
+
+    Sminus2,Splus2,_= S2roots(J,r,xi,q,chi1,chi2,coincident=coincident)
+    with np.errstate(invalid='ignore'):
+        Sminus=Sminus2**0.5
+        Splus=Splus2**0.5
+
+    return np.array([Sminus,Splus])
+
+
+def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
+    """
+    Limits on the total spin magnitude. The contraints considered depend on the inputs provided.
+        - If q, chi1, and chi2 are provided, enforce S=S1+S2.
+        - If J, r, and q are provided, enforce S=J-L.
+        - If J, r, q, chi1, and chi2 are provided, enforce S=S1+S2 and S=J-L.
+        - If J, r, xi, q, chi1, and chi2 are provides, compute solve the cubic equation of the effective potentials (Sminus and Splus).
+
+    Parameters
+    ----------
+    J: float, optional
+        Magnitude of the total angular momentum.
+    r: float, optional
+        Binary separation.
+    xi: float, optional
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float, optional
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float, optional
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    conincident: boolean, optional
+        If True, assume that the input is a spin-orbit resonance and return repeated roots
+
+    Returns
+    -------
+    Sminus:
+        Minimum value of the total spin.
+    Splus:
+        Maximum value of the total spin.
+    """
+
+
+    if J is None and r is None and xi is None:
+        Smin,Smax = Slimits_S1S2(q,chi1,chi2)
+    elif xi is None and chi1 is None and chi1 is None:
+        Smin,Smax = Slimits_LJ(J,r,q)
+    elif xi is None:
+        Smin,Smax = Slimits_LJS1S2(J,r,q,chi1,chi2)
+    else:
+        #TODO: Assert that Slimits_LJS1S2 is also respected (either explicitely or with a generic 'limits_check' function)
+        Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=coincident)
+
+    return np.array([Smin,Smax])
 
 
 
@@ -776,6 +1179,17 @@ def limits_check(function=None, S=None,J=None,r=None,q=None,chi1=None,chi2=None)
 
     else:
         raise ValueError
+
+
+
+def effectivepotentials_Sphi(S,varphi,J,r,q,chi1,chi2):
+    return NotImplementedError
+def effectivepotentials(S,J,r,q,chi1,chi2,which):
+    # Call effectivepotentials_Sphi and which should select betwee uppper and lower effective potentials with the suitable value of phi
+    return NotImplementedError
+
+
+
 
 
 def newlen(var):
@@ -873,19 +1287,31 @@ class Binary:
 if __name__ == '__main__':
 
     r=[10,10]
-    xi=[0,-0.6]
+    xi=[0.35,-0.6]
     q=[0.8,0.2]
     chi1=[1,1]
     chi2=[1,1]
+    J=[1,0.23]
 
-    print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
-    print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
-    print(Jresonances(r,xi,q,chi1,chi2))
+    #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
+    #print(Jresonances(r,xi,q,chi1,chi2))
+    #print(Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2))
+    #print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
 
-    J=[0.8,0.4]
+    #print(xiresonances(J[0],r[0],q[0],chi1[0],chi2[0]))
+    #print(xiresonances(J[1],r[1],q[1],chi1[1],chi2[1]))
+    #print(xiresonances(J,r,q,chi1,chi2))
 
-    print(S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #print(S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
+
+    print(Slimits(J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+
+
+
+    #print(Slimits_cycle(J,r,xi,q,chi1,chi2))
 
 
     #M,m1,m2,S1,S2=pre.get_fixed(q[0],chi1[0],chi2[0])
