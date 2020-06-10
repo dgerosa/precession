@@ -470,7 +470,6 @@ def wraproots(coefficientfunction, *args,**kwargs):
 
     coeffs= coefficientfunction(*args,**kwargs)
 
-    #TODO: Can we avoid this for loop and do it with numpy arrays?
     if np.ndim(coeffs)==1:
         sols = np.sort_complex(np.roots(coeffs))
     else:
@@ -827,8 +826,6 @@ def xiresonances(J,r,q,chi1,chi2):
 
     #Altough there are 6 solutions in general, we know that only two can lie between Smin and Smax.
 
-    #TODO: Can we avoid this for loop and do it with numpy arrays?
-
     Smin,Smax = Slimits_LJS1S2(J,r,q,chi1,chi2)
     xiroots= wraproots(xidiscriminant_coefficients,J,r,q,chi1,chi2)
 
@@ -844,7 +841,6 @@ def xiresonances(J,r,q,chi1,chi2):
         ximin,ximax =np.array(list(map(_compute, Smin,Smax,J,r,xiroots,q,chi1,chi2))).T
 
     return np.array([ximin,ximax])
-
 
 
 def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
@@ -888,6 +884,7 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
         raise TypeError
 
     return np.array([ximin,ximax])
+
 
 def Slimits_S1S2(q,chi1,chi2):
     """
@@ -1071,7 +1068,6 @@ def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
 
     """
 
-    #TODO. Rewrite it with masked arrays to avoid warkings
     sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(J,r,xi,q,chi1,chi2)
 
     sigmap = (sigma4**2/(3*sigma6**2) - sigma2/sigma6)/3
@@ -1179,25 +1175,12 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
     return np.array([Smin,Smax])
 
 
-
-def limits_check(function=None, S=None,J=None,r=None,q=None,chi1=None,chi2=None):
+def limits_check(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     """
-    THIS FUNCTION DOESN'T WORK (YET)
-
-    Check if a given variable satisfies the relevant geometrical constraints. The behaviour is set by `function`. For instance, to check if some values of J are compatible with the provides values of r, q, chi1, and chi2 use function=`Jlimits`. Not all the parameters are necessary. For instance, to check the limits in J one does not need to provide values of S.
+    Check if a the inputs are consistent with the geometrical constraints.
 
     Parameters
     ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chi1: float or numpy array
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float or numpy array
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
 
     Returns
     -------
@@ -1208,25 +1191,12 @@ def limits_check(function=None, S=None,J=None,r=None,q=None,chi1=None,chi2=None)
         """Check if a value is within a given interval"""
         return np.logical_and(testvalue>interval[0],testvalue<interval[1])
 
-    if function=='Jlimits':
-        return _limits_check(J,Jlimits(r,q,chi1,chi2))
-
-    elif function=='Slimits_S1S2':
-        return _limits_check(S,Slimits_S1S2(q,chi1,chi2))
-
-    elif function=='Slimits_JL':
-        return _limits_check(S,Slimits_LJ(J,r,q))
-
-    elif function=='Slimits_JL':
-        return _limits_check(S,Slimits_LJ(J,r,q))
-
-    else:
-        raise ValueError
-
+    raise NotImplementedError
 
 
 def effectivepotentials_Sphi(S,varphi,J,r,q,chi1,chi2):
     return NotImplementedError
+
 def effectivepotentials(S,J,r,q,chi1,chi2,which):
     # Call effectivepotentials_Sphi and which should select betwee uppper and lower effective potentials with the suitable value of phi
     return NotImplementedError
