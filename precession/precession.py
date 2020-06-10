@@ -523,12 +523,10 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
         - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
-        - If r, xi, q, chi1, and chi2 are provides, the limits are given by the two spin-orbit resonances.
+        - If r, xi, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
 
     Parameters
     ----------
-    J: float, optional
-        Magnitude of the total angular momentum.
     r: float, optional
         Binary separation.
     xi: float, optional
@@ -544,19 +542,22 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
 
     Returns
     -------
-    Sminus:
-        Minimum value of the total spin.
-    Splus:
-        Maximum value of the total spin.
+    Jmin:
+        Minimum value of the total angular momentum.
+    Jmax:
+        Maximum value of the total angular momentum.
     """
 
-    if r is None or q is None or chi1 is None or chi2 is None:
-        raise TypeError
-    elif xi is None:
+    if r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
         Jmin,Jmax = Jlimits_LS1S2(r,q,chi1,chi2)
-    else:
+
+
+    elif r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
         #TODO: Assert that the xi values are compatible with q,chi1,chi2 (either explicitely or with a generic 'limits_check' function)
         Jmin,Jmax = Jresonances(r,xi,q,chi1,chi2)
+
+    else:
+        raise TypeError
 
     return np.array([Jmin,Jmax])
 
@@ -820,7 +821,7 @@ def xiresonances(J,r,q,chi1,chi2):
     -------
     ximin: float
         Spin-orbit resonance that minimizes xi (either DeltaPhi=0 or DeltaPhi=pi)
-    Jmax: float
+    ximax: float
         Spin-orbit resonance that minimizes xi (always DeltaPhi=pi)
     """
 
@@ -847,9 +848,46 @@ def xiresonances(J,r,q,chi1,chi2):
 
 
 def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
-    #TODO. Similar to J limits but for xi
-    raise NotImplementedError
+    """
+    Limits on the projected effective spin. The contraints considered depend on the inputs provided.
+        - If q, chi1, and chi2 are provided, enforce xi = (1+q)S1.L + (1+1/q)S2.L.
+        - If J, r, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
 
+    Parameters
+    ----------
+    J: float, optional
+        Magnitude of the total angular momentum.
+    r: float, optional
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float, optional
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float, optional
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    conincident: boolean, optional
+        If True, assume that the input is a spin-orbit resonance and return repeated roots
+
+    Returns
+    -------
+    ximin:
+        Minimum value of the effective spin.
+    ximax:
+        Maximum value of the effective spin.
+    """
+
+    if J is None and r is None and q is not None and chi1 is not None and chi2 is not None:
+        ximin,ximax = xilimits_definition(q,chi1,chi2)
+
+
+    elif J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
+        #TODO: Assert that the xi values are compatible with q,chi1,chi2 (either explicitely or with a generic 'limits_check' function)
+        ximin,ximax = xiresonances(J,r,q,chi1,chi2)
+
+    else:
+        raise TypeError
+
+    return np.array([ximin,ximax])
 
 def Slimits_S1S2(q,chi1,chi2):
     """
@@ -1095,7 +1133,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
         - If q, chi1, and chi2 are provided, enforce S=S1+S2.
         - If J, r, and q are provided, enforce S=J-L.
         - If J, r, q, chi1, and chi2 are provided, enforce S=S1+S2 and S=J-L.
-        - If J, r, xi, q, chi1, and chi2 are provides, compute solve the cubic equation of the effective potentials (Sminus and Splus).
+        - If J, r, xi, q, chi1, and chi2 are provided, compute solve the cubic equation of the effective potentials (Sminus and Splus).
 
     Parameters
     ----------
@@ -1122,16 +1160,21 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
         Maximum value of the total spin.
     """
 
-
-    if J is None and r is None and xi is None:
+    if J is None and r is None and xi is None and q is not None and chi1 is not None and chi2 is not None:
         Smin,Smax = Slimits_S1S2(q,chi1,chi2)
-    elif xi is None and chi1 is None and chi1 is None:
+
+    elif J is not None and r is not None and xi is None and q is not None and chi1 is None and chi2 is None:
         Smin,Smax = Slimits_LJ(J,r,q)
-    elif xi is None:
+
+    elif J is not None and r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
         Smin,Smax = Slimits_LJS1S2(J,r,q,chi1,chi2)
-    else:
+
+    elif J is not None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
         #TODO: Assert that Slimits_LJS1S2 is also respected (either explicitely or with a generic 'limits_check' function)
         Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=coincident)
+
+    else:
+        raise TypeError
 
     return np.array([Smin,Smax])
 
@@ -1307,7 +1350,9 @@ if __name__ == '__main__':
     #print(S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
 
-    print(Slimits(J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+    print(xilimits(q=q,chi1=chi1,chi2=chi2))
+
+    print(xilimits(J=J,r=r,q=q,chi1=chi1,chi2=chi2))
 
 
 
