@@ -1175,7 +1175,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
     return np.array([Smin,Smax])
 
 
-def limits_check(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
+def limits_check(S=none, J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     """
     Check if a the inputs are consistent with the geometrical constraints.
 
