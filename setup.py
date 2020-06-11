@@ -29,5 +29,13 @@ setuptools.setup(
     include_package_data=True,
     python_requires='>=3.5.*',
     install_requires=requires,
-    license=about['__license__']
+    license=about['__license__'],
+    zip_safe=False
 )
+
+# for long polynomials
+#from Cython.build import cythonize
+#setuptools.setup(
+#    ext_modules=cythonize('modulename.pyx')
+#)
+    
