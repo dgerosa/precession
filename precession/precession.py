@@ -1232,7 +1232,7 @@ def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
     -1 * ( ( L + -1 * S ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( J )**( 2 ) + \
     ( ( L + S ) )**( 2 ) ) )**( 1/2 ) * ( ( ( S )**( 2 ) + -1 * ( ( S1 + \
     -1 * S2 ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( S )**( 2 ) + ( ( S1 + S2 \
-    ) )**( 2 ) ) )**( 1/2 ) * numpy.cos( varphi ) )
+    ) )**( 2 ) ) )**( 1/2 ) * np.cos( varphi ) )
 
     return xi
 
