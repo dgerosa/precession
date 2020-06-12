@@ -1175,7 +1175,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
     return np.array([Smin,Smax])
 
 
-def limits_check(S=none, J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
+def limits_check(S=None, J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     """
     Check if a the inputs are consistent with the geometrical constraints.
 
@@ -1194,15 +1194,115 @@ def limits_check(S=none, J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     raise NotImplementedError
 
 
-def effectivepotentials_Sphi(S,varphi,J,r,q,chi1,chi2):
-    return NotImplementedError
+def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
+    """
+    Effective spin as a function of total spin magnitude S, nutation angle varphi and total angularm momentum J.
 
-def effectivepotentials(S,J,r,q,chi1,chi2,which):
-    # Call effectivepotentials_Sphi and which should select betwee uppper and lower effective potentials with the suitable value of phi
-    return NotImplementedError
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    varphi: float
+        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
+    J: float, optional
+        Magnitude of the total angular momentum.
+    r: float, optional
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    conincident: boolean, optional
+        If True, assume that the input is a spin-orbit resonance and return repeated roots
 
+    Returns
+    -------
+    xi: float
+        Effective spin
+    """
 
+    S=np.array(S)
+    varphi=np.array(varphi)
+    J=np.array(J)
+    q=np.array(q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    L = angularmomentum(r,q)
 
+    xi = \
+    1/4 * ( L )**( -1 ) * ( q )**( -1 ) * ( S )**( -2 ) * ( ( ( J )**( 2 \
+    ) + ( -1 * ( L )**( 2 ) + -1 * ( S )**( 2 ) ) ) * ( ( ( 1 + q ) )**( \
+    2 ) * ( S )**( 2 ) + ( -1 + ( q )**( 2 ) ) * ( ( S1 )**( 2 ) + -1 * ( \
+    S2 )**( 2 ) ) ) + -1 * ( 1 + -1 * ( q )**( 2 ) ) * ( ( ( J )**( 2 ) + \
+    -1 * ( ( L + -1 * S ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( J )**( 2 ) + \
+    ( ( L + S ) )**( 2 ) ) )**( 1/2 ) * ( ( ( S )**( 2 ) + -1 * ( ( S1 + \
+    -1 * S2 ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( S )**( 2 ) + ( ( S1 + S2 \
+    ) )**( 2 ) ) )**( 1/2 ) * numpy.cos( varphi ) )
+
+    return xi
+
+def effectivepotential_plus(S,J,r,q,chi1,chi2):
+    """
+    Upper effective potential.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float, optional
+        Magnitude of the total angular momentum.
+    r: float, optional
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    conincident: boolean, optional
+        If True, assume that the input is a spin-orbit resonance and return repeated roots
+
+    Returns
+    -------
+    xi: float
+        Effective spin
+    """
+
+    varphi = np.pi*np.ones(flen(S))
+    xi = effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2)
+    return xi
+
+def effectivepotential_minus(S,J,r,q,chi1,chi2):
+    """
+    Lower effective potential.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float, optional
+        Magnitude of the total angular momentum.
+    r: float, optional
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    conincident: boolean, optional
+        If True, assume that the input is a spin-orbit resonance and return repeated roots
+
+    Returns
+    -------
+    xi: float
+        Effective spin
+    """
+
+    varphi = np.zeros(flen(S))
+    xi = effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2)
+    return xi
 
 
 def newlen(var):
@@ -1320,11 +1420,13 @@ if __name__ == '__main__':
     #print(S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
 
-    print(xilimits(q=q,chi1=chi1,chi2=chi2))
+    #print(xilimits(q=q,chi1=chi1,chi2=chi2))
 
-    print(xilimits(J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+    #print(xilimits(J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+    S=[0.4,0.6668]
 
-
+    print(effectivepotential_plus(S,J,r,q,chi1,chi2))
+    print(effectivepotential_minus(S,J,r,q,chi1,chi2))
 
     #print(Slimits_cycle(J,r,xi,q,chi1,chi2))
 
