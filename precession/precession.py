@@ -20,6 +20,9 @@ def flen(x):
     else:
         return 1
 
+def toarray(*args):
+    return np.squeeze(np.array([*args]))
+
 def mass1(q):
     """
     Mass of the heavier black hole in units of the total mass.
@@ -35,7 +38,7 @@ def mass1(q):
         Mass of the primary black hole.
     """
 
-    q = np.array(q)
+    q = toarray(q)
     m1 = 1/(1+q)
 
     return m1
@@ -57,7 +60,7 @@ def mass2(q):
 
     """
 
-    q = np.array(q)
+    q = toarray(q)
     m2 = q/(1+q)
 
     return m2
@@ -80,7 +83,7 @@ def spin1(q,chi1):
         Spin of the primary black hole.
     """
 
-    chi1 = np.array(chi1)
+    chi1 = (chi1)
     S1 = chi1*(mass1(q))**2
 
     return S1
@@ -103,7 +106,7 @@ def spin2(q,chi2):
         Spin of the secondary black hole.
     """
 
-    chi2 = np.array(chi2)
+    chi2 = toarray(chi2)
     S2 = chi2*(mass2(q))**2
 
     return S2
@@ -153,7 +156,7 @@ def angularmomentum(r,q):
         Binary angular momentum
     """
 
-    r = np.array(r)
+    r = toarray(r)
     L = mass1(q)*mass2(q)*r**0.5
 
     return L
@@ -225,8 +228,7 @@ def Jdiscriminant_coefficients(r,xi,q,chi1,chi2):
     """
 
 
-    q=np.array(q)
-    xi=np.array(xi)
+    q,xi=toarray(q)
     L=angularmomentum(r,q)
     S1,S2= spinmags(q,chi1,chi2)
 
@@ -582,7 +584,7 @@ def xilimits_definition(q,chi1,chi2):
         Maximum value of the effective spin.
     """
 
-    q=np.array(q)
+    q=toarray(q)
     S1,S2 = spinmags(q,chi1,chi2)
     xilim = (1+q)*S1 + (1+1/q)*S2
 
@@ -625,8 +627,7 @@ def xidiscriminant_coefficients(J,r,q,chi1,chi2):
     """
 
 
-    q=np.array(q)
-    J=np.array(J)
+    J,q=toarray(J,q)
     L=angularmomentum(r,q)
     S1,S2= spinmags(q,chi1,chi2)
 
@@ -1002,10 +1003,8 @@ def Scubic_coefficients(J,r,xi,q,chi1,chi2):
         Coefficient of S^0.
     """
 
-    J=np.array(J)
+    J,xi,q=toarray(J,xi,q)
     L=angularmomentum(r,q)
-    xi=np.array(xi)
-    q=np.array(q)
     S1,S2= spinmags(q,chi1,chi2)
 
     sigma6 = q * ( ( 1 + q ) )**( 2 )
@@ -1054,7 +1053,7 @@ def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    coincident: boolean, optional
+    coincident: boolean, optional (default: False)
         If True, assume that the input is a spin-orbit resonance and return repeated roots
 
     Returns
@@ -1104,7 +1103,7 @@ def Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=False):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    conincident: boolean, optional
+    conincident: boolean, optional (default: False)
         If True, assume that the input is a spin-orbit resonance and return repeated roots
 
     Returns
@@ -1145,7 +1144,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float, optional
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    conincident: boolean, optional
+    conincident: boolean, optional (default: False)
         If True, assume that the input is a spin-orbit resonance and return repeated roots
 
     Returns
@@ -1204,9 +1203,9 @@ def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
         Magnitude of the total spin.
     varphi: float
         Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
-    J: float, optional
+    J: float
         Magnitude of the total angular momentum.
-    r: float, optional
+    r: float
         Binary separation.
     q: float
         Mass ratio: 0 <= q <= 1.
@@ -1214,8 +1213,6 @@ def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    conincident: boolean, optional
-        If True, assume that the input is a spin-orbit resonance and return repeated roots
 
     Returns
     -------
@@ -1223,10 +1220,7 @@ def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
         Effective spin
     """
 
-    S=np.array(S)
-    varphi=np.array(varphi)
-    J=np.array(J)
-    q=np.array(q)
+    S,varphi,J,q=toarray(S,varphi,J,q)
     S1,S2 = spinmags(q,chi1,chi2)
     L = angularmomentum(r,q)
 
@@ -1238,9 +1232,10 @@ def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
     -1 * ( ( L + -1 * S ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( J )**( 2 ) + \
     ( ( L + S ) )**( 2 ) ) )**( 1/2 ) * ( ( ( S )**( 2 ) + -1 * ( ( S1 + \
     -1 * S2 ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( S )**( 2 ) + ( ( S1 + S2 \
-    ) )**( 2 ) ) )**( 1/2 ) * numpy.cos( varphi ) )
+    ) )**( 2 ) ) )**( 1/2 ) * np.cos( varphi ) )
 
     return xi
+
 
 def effectivepotential_plus(S,J,r,q,chi1,chi2):
     """
@@ -1250,9 +1245,9 @@ def effectivepotential_plus(S,J,r,q,chi1,chi2):
     ----------
     S: float
         Magnitude of the total spin.
-    J: float, optional
+    J: float
         Magnitude of the total angular momentum.
-    r: float, optional
+    r: float
         Binary separation.
     q: float
         Mass ratio: 0 <= q <= 1.
@@ -1260,8 +1255,6 @@ def effectivepotential_plus(S,J,r,q,chi1,chi2):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    conincident: boolean, optional
-        If True, assume that the input is a spin-orbit resonance and return repeated roots
 
     Returns
     -------
@@ -1271,7 +1264,9 @@ def effectivepotential_plus(S,J,r,q,chi1,chi2):
 
     varphi = np.pi*np.ones(flen(S))
     xi = effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2)
+
     return xi
+
 
 def effectivepotential_minus(S,J,r,q,chi1,chi2):
     """
@@ -1281,9 +1276,9 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
     ----------
     S: float
         Magnitude of the total spin.
-    J: float, optional
+    J: float
         Magnitude of the total angular momentum.
-    r: float, optional
+    r: float
         Binary separation.
     q: float
         Mass ratio: 0 <= q <= 1.
@@ -1291,8 +1286,6 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    conincident: boolean, optional
-        If True, assume that the input is a spin-orbit resonance and return repeated roots
 
     Returns
     -------
@@ -1302,7 +1295,275 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
 
     varphi = np.zeros(flen(S))
     xi = effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2)
+
     return xi
+
+
+def spinangle_costheta1(S,J,r,xi,q,chi1,chi2):
+    """
+    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    costheta1: float
+        Cosine of the angle between orbital angular momentum and primary spin.
+    """
+
+    S,J,q=toarray(S,J,q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    L = angularmomentum(r,q)
+
+    costheta1= ( ((J**2-L**2-S**2)/L) - (2.*q*xi)/(1.+q) )/(2.*(1.-q)*S1)
+
+    return costheta1
+
+def spinangle_theta1(S,J,r,xi,q,chi1,chi2):
+    """
+    Angle theta1 between the orbital angular momentum and the spin of the primary black hole.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    """
+
+    costheta1=spinangle_costheta1(S,J,r,xi,q,chi1,chi2)
+    theta1 = np.arccos(costheta1)
+
+    return theta1
+
+
+def spinangle_costheta2(S,J,r,xi,q,chi1,chi2):
+    """
+    Cosine of the angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    costheta2: float
+        Cosine of the angle between orbital angular momentum and secondary spin.
+    """
+
+    S,J,q=toarray(S,J,q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    L = angularmomentum(r,q)
+
+    costheta2= ( ((J**2-L**2-S**2)*(-q/L)) + (2*q*xi)/(1+q) )/(2*(1-q)*S2)
+
+    return costheta2
+
+def spinangle_theta2(S,J,r,xi,q,chi1,chi2):
+    """
+    Angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    """
+
+    costheta2=spinangle_costheta2(S,J,r,xi,q,chi1,chi2)
+    theta2 = np.arccos(costheta2)
+
+    return theta2
+
+
+def spinangle_costheta12(S,q,chi1,chi2):
+    """
+    Cosine of the angle theta12 between the two spins.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    costheta12: float
+        Cosine of the angle between the two spins.
+    """
+
+    S=toarray(S)
+    S1,S2 = spinmags(q,chi1,chi2)
+    costheta12=(S**2-S1**2-S2**2)/(2*S1*S2)
+
+    return costheta12
+
+
+def spinangle_theta12(S,q,chi1,chi2):
+    """
+    Angle theta12 between the two spins.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    theta12: float
+        Angle between the two spins.
+    """
+
+    costheta12=spinangle_costheta12(S,q,chi1,chi2)
+    theta12 = np.arccos(costheta12)
+
+    return theta2
+
+
+def spinangle_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
+    """
+    Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    cosdeltaphi: float
+        Cosine of the angle between the projections of the two spins onto the orbital plane.
+    """
+
+    q=toarray(q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    costheta1=spinangle_costheta1(S,J,r,xi,q,chi1,chi2)
+    costheta2=spinangle_costheta2(S,J,r,xi,q,chi1,chi2)
+    costheta12=spinangle_costheta12(S,q,chi1,chi2)
+    cosdeltaphi= (costheta12 - costheta1*costheta2)/((1-costheta1**2)*(1-costheta2**2))**0.5
+
+    return cosdeltaphi
+
+
+def spinangle_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
+    """
+    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    xi: float
+        Effective spin.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    sign: optional (default: +1)
+        If positive returns values in [0,pi], if negative returns values in [-pi,0].
+
+    Returns
+    -------
+    deltaphi: float
+        Cosine of the angle between the projections of the two spins onto the orbital plane.
+    """
+
+    cosdeltaphi=spinangle_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
+    deltaphi = np.sign(sign)*np.arccos(cosdeltaphi)
+
+    return deltaphi
+
+
+
+
 
 
 def newlen(var):
@@ -1399,12 +1660,12 @@ class Binary:
 
 if __name__ == '__main__':
 
-    r=[10,10]
-    xi=[0.35,-0.6]
-    q=[0.8,0.2]
-    chi1=[1,1]
-    chi2=[1,1]
-    J=[1,0.23]
+    #r=[10,10]
+    #xi=[0.35,-0.6]
+    #q=[0.8,0.2]
+    #chi1=[1,1]
+    #chi2=[1,1]
+    #J=[1,0.23]
 
     #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
     #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
@@ -1423,10 +1684,10 @@ if __name__ == '__main__':
     #print(xilimits(q=q,chi1=chi1,chi2=chi2))
 
     #print(xilimits(J=J,r=r,q=q,chi1=chi1,chi2=chi2))
-    S=[0.4,0.6668]
+    #S=[0.4,0.6668]
 
-    print(effectivepotential_plus(S,J,r,q,chi1,chi2))
-    print(effectivepotential_minus(S,J,r,q,chi1,chi2))
+    #print(effectivepotential_plus(S,J,r,q,chi1,chi2))
+    #print(effectivepotential_minus(S,J,r,q,chi1,chi2))
 
     #print(Slimits_cycle(J,r,xi,q,chi1,chi2))
 
@@ -1442,7 +1703,13 @@ if __name__ == '__main__':
     #print(S2roots(J,r,xi,q,chi1,chi2))
 
 
-
-
-
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
+
+    S=[0.2,0.35]
+    q=[0.8,0.8]
+    chi1=[1,1]
+    chi2=[0.8,0.8]
+    r=[20,20]
+    J=[1.29,1.29]
+    xi=[0.3,0.3]
+    print(spinangle_deltaphi(S,J,r,xi,q,chi1,chi2)/np.pi)
