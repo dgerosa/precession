@@ -1487,7 +1487,7 @@ def spinangle_theta12(S,q,chi1,chi2):
     costheta12=spinangle_costheta12(S,q,chi1,chi2)
     theta12 = np.arccos(costheta12)
 
-    return theta2
+    return theta12
 
 
 def spinangle_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
