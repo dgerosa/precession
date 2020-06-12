@@ -10,8 +10,6 @@ import sys, os, time
 import warnings
 import itertools
 
-__all__ = [] # Why is this necessary?
-
 
 #getnone=itertools.repeat(None)
 def flen(x):
