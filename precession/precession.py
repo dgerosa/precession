@@ -1551,7 +1551,7 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     Returns
     -------
     deltaphi: float
-        Cosine of the angle between the projections of the two spins onto the orbital plane.
+        Angle between the projections of the two spins onto the orbital plane.
     """
 
     cosdeltaphi=eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
@@ -1559,6 +1559,180 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
 
     return deltaphi
 
+def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
+    """
+    Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi). Setting sign=+1 (default) returns deltaphi in [0, pi], setting sign=-1 returns deltaphi in [-pi,0].
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    xi: float
+        Effective spin.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    sign: optional (default: +1)
+        If positive returns values in [0,pi], if negative returns values in [-pi,0].
+
+    Returns
+    -------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    """
+
+    theta1=eval_theta1(S,J,r,xi,q,chi1,chi2)
+    theta2=eval_theta2(S,J,r,xi,q,chi1,chi2)
+    deltaphi=eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=sign)
+
+    return np.array([theta1,theta2,deltaphi])
+
+
+def eval_xi(theta1,theta2,q,chi1,chi2):
+    """
+    Effective spin from the spin angles.
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    xi: float
+        Effective spin.
+    """
+
+    theta1,theta2,q=toarray(theta1,theta2,q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    xi=(1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
+
+    return xi
+
+
+def eval_J(theta1,theta2,deltaphi,r,q,chi1,chi2):
+    """
+    Magnitude of the total angular momentum from the spin angles.
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    J: float
+        Magnitude of the total angular momentum.
+    """
+
+    theta1,theta2,deltaphi,q=toarray(theta1,theta2,deltaphi,q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    L = angularmomentum(r,q)
+    S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
+    J=(L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
+
+    return J
+
+
+def eval_S(theta1,theta2,deltaphi,q,chi1,chi2):
+    """
+    Magnitude of the total spin from the spin angles.
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    S: float
+        Magnitude of the total spin.
+    """
+
+    theta1,theta2,deltaphi=toarray(theta1,theta2,deltaphi)
+    S1,S2 = spinmags(q,chi1,chi2)
+
+    S=(S1**2+S2**2+2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
+
+    return S
+
+def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
+    """
+    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    xi: float
+        Effective spin.
+    """
+
+    S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
+    J=eval_J(theta1,theta2,deltaphi,r,q,chi1,chi2)
+    xi=eval_xi(theta1,theta2,q,chi1,chi2)
+
+    return np.array([S,J,xi])
 
 def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     """
@@ -1602,7 +1776,7 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     for k, v in dictlabel.items():
         morphs=np.where((status == k).all(axis=1),v,morphs)
 
-    return morphs
+    return np.squeeze(morphs)
 
 
 
@@ -1752,5 +1926,15 @@ if __name__ == '__main__':
     chi2=[0.8,0.8]
     r=[20,20]
     J=[1.29,1.29]
-    xi=[0.35,0.25]
-    print(morphology(J,r,xi,q,chi1,chi2))
+    xi=[0.35,0.3]
+    #print(morphology(J,r,xi,q,chi1,chi2))
+    #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+
+    theta1=[0.567,1]
+    theta2=[1,1]
+    deltaphi=[1,2]
+    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
+    print(S,J,xi)
+    theta1,theta2,deltaphi=conserved_to_angles(S,J,r,xi,q,chi1,chi2)
+    print(theta1,theta2,deltaphi)
+    #print(eval_costheta1(0.4,J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
