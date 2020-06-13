@@ -1332,6 +1332,7 @@ def eval_costheta1(S,J,r,xi,q,chi1,chi2):
 
     return costheta1
 
+
 def eval_theta1(S,J,r,xi,q,chi1,chi2):
     """
     Angle theta1 between the orbital angular momentum and the spin of the primary black hole.
@@ -1399,6 +1400,7 @@ def eval_costheta2(S,J,r,xi,q,chi1,chi2):
     costheta2= ( ((J**2-L**2-S**2)*(-q/L)) + (2*q*xi)/(1+q) )/(2*(1-q)*S2)
 
     return costheta2
+
 
 def eval_theta2(S,J,r,xi,q,chi1,chi2):
     """
@@ -1560,7 +1562,6 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     return deltaphi
 
 
-
 def eval_costhetaL(S,J,r,q,chi1,chi2):
     """
     Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
@@ -1594,7 +1595,6 @@ def eval_costhetaL(S,J,r,q,chi1,chi2):
     return costhetaL
 
 
-
 def eval_thetaL(S,J,r,q,chi1,chi2):
     """
     Angle thetaL betwen orbital angular momentum and total angular momentum.
@@ -1624,9 +1624,6 @@ def eval_thetaL(S,J,r,q,chi1,chi2):
     thetaL=np.arccos(costhetaL)
 
     return thetaL
-
-
-
 
 
 def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
@@ -1662,7 +1659,6 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     deltaphi = np.sign(sign)*np.arccos(cosdeltaphi)
 
     return deltaphi
-
 
 
 def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
@@ -1703,9 +1699,6 @@ def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
     deltaphi=eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=sign)
 
     return np.array([theta1,theta2,deltaphi])
-
-
-
 
 
 def eval_xi(theta1,theta2,q,chi1,chi2):
@@ -1806,6 +1799,7 @@ def eval_S(theta1,theta2,deltaphi,q,chi1,chi2):
 
     return S
 
+
 def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     """
     Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
@@ -1842,6 +1836,7 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     xi=eval_xi(theta1,theta2,q,chi1,chi2)
 
     return np.array([S,J,xi])
+
 
 def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     """
