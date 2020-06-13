@@ -1559,6 +1559,112 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
 
     return deltaphi
 
+
+
+def eval_costhetaL(S,J,r,q,chi1,chi2):
+    """
+    Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    costhetaL: float
+        Cosine of the angle betwen orbital angular momentum and total angular momentum.
+    """
+
+    S,J=toarray(S,J)
+    S1,S2 = spinmags(q,chi1,chi2)
+    L = angularmomentum(r,q)
+    costhetaL=(J**2+L**2-S**2)/(2*J*L)
+
+    return costhetaL
+
+
+
+def eval_thetaL(S,J,r,q,chi1,chi2):
+    """
+    Angle thetaL betwen orbital angular momentum and total angular momentum.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    thetaL: float
+        Angle betwen orbital angular momentum and total angular momentum.
+    """
+
+    costhetaL=eval_costhetaL(S,J,r,q,chi1,chi2)
+    thetaL=np.arccos(costhetaL)
+
+    return thetaL
+
+
+
+
+
+def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
+    """
+    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    xi: float
+        Effective spin.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    sign: optional (default: +1)
+        If positive returns values in [0,pi], if negative returns values in [-pi,0].
+
+    Returns
+    -------
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    """
+
+    cosdeltaphi=eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
+    deltaphi = np.sign(sign)*np.arccos(cosdeltaphi)
+
+    return deltaphi
+
+
+
 def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
     """
     Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi). Setting sign=+1 (default) returns deltaphi in [0, pi], setting sign=-1 returns deltaphi in [-pi,0].
@@ -1597,6 +1703,9 @@ def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
     deltaphi=eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=sign)
 
     return np.array([theta1,theta2,deltaphi])
+
+
+
 
 
 def eval_xi(theta1,theta2,q,chi1,chi2):
@@ -1781,6 +1890,8 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
 
 
 
+## TODO: A function to precession-average a generic quantity
+
 
 def newlen(var):
     """Redefine len function
@@ -1938,3 +2049,5 @@ if __name__ == '__main__':
     theta1,theta2,deltaphi=conserved_to_angles(S,J,r,xi,q,chi1,chi2)
     print(theta1,theta2,deltaphi)
     #print(eval_costheta1(0.4,J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+
+    print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
