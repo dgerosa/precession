@@ -1299,7 +1299,7 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
     return xi
 
 
-def spinangle_costheta1(S,J,r,xi,q,chi1,chi2):
+def eval_costheta1(S,J,r,xi,q,chi1,chi2):
     """
     Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
@@ -1334,7 +1334,7 @@ def spinangle_costheta1(S,J,r,xi,q,chi1,chi2):
 
     return costheta1
 
-def spinangle_theta1(S,J,r,xi,q,chi1,chi2):
+def eval_theta1(S,J,r,xi,q,chi1,chi2):
     """
     Angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
@@ -1361,13 +1361,13 @@ def spinangle_theta1(S,J,r,xi,q,chi1,chi2):
         Angle between orbital angular momentum and primary spin.
     """
 
-    costheta1=spinangle_costheta1(S,J,r,xi,q,chi1,chi2)
+    costheta1=eval_costheta1(S,J,r,xi,q,chi1,chi2)
     theta1 = np.arccos(costheta1)
 
     return theta1
 
 
-def spinangle_costheta2(S,J,r,xi,q,chi1,chi2):
+def eval_costheta2(S,J,r,xi,q,chi1,chi2):
     """
     Cosine of the angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
 
@@ -1402,7 +1402,7 @@ def spinangle_costheta2(S,J,r,xi,q,chi1,chi2):
 
     return costheta2
 
-def spinangle_theta2(S,J,r,xi,q,chi1,chi2):
+def eval_theta2(S,J,r,xi,q,chi1,chi2):
     """
     Angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
 
@@ -1429,13 +1429,13 @@ def spinangle_theta2(S,J,r,xi,q,chi1,chi2):
         Angle between orbital angular momentum and secondary spin.
     """
 
-    costheta2=spinangle_costheta2(S,J,r,xi,q,chi1,chi2)
+    costheta2=eval_costheta2(S,J,r,xi,q,chi1,chi2)
     theta2 = np.arccos(costheta2)
 
     return theta2
 
 
-def spinangle_costheta12(S,q,chi1,chi2):
+def eval_costheta12(S,q,chi1,chi2):
     """
     Cosine of the angle theta12 between the two spins.
 
@@ -1463,7 +1463,7 @@ def spinangle_costheta12(S,q,chi1,chi2):
     return costheta12
 
 
-def spinangle_theta12(S,q,chi1,chi2):
+def eval_theta12(S,q,chi1,chi2):
     """
     Angle theta12 between the two spins.
 
@@ -1484,13 +1484,13 @@ def spinangle_theta12(S,q,chi1,chi2):
         Angle between the two spins.
     """
 
-    costheta12=spinangle_costheta12(S,q,chi1,chi2)
+    costheta12=eval_costheta12(S,q,chi1,chi2)
     theta12 = np.arccos(costheta12)
 
     return theta12
 
 
-def spinangle_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
+def eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
     """
     Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
 
@@ -1519,15 +1519,15 @@ def spinangle_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
 
     q=toarray(q)
     S1,S2 = spinmags(q,chi1,chi2)
-    costheta1=spinangle_costheta1(S,J,r,xi,q,chi1,chi2)
-    costheta2=spinangle_costheta2(S,J,r,xi,q,chi1,chi2)
-    costheta12=spinangle_costheta12(S,q,chi1,chi2)
+    costheta1=eval_costheta1(S,J,r,xi,q,chi1,chi2)
+    costheta2=eval_costheta2(S,J,r,xi,q,chi1,chi2)
+    costheta12=eval_costheta12(S,q,chi1,chi2)
     cosdeltaphi= (costheta12 - costheta1*costheta2)/((1-costheta1**2)*(1-costheta2**2))**0.5
 
     return cosdeltaphi
 
 
-def spinangle_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
+def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     """
     Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].
 
@@ -1556,11 +1556,55 @@ def spinangle_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
         Cosine of the angle between the projections of the two spins onto the orbital plane.
     """
 
-    cosdeltaphi=spinangle_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
+    cosdeltaphi=eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
     deltaphi = np.sign(sign)*np.arccos(cosdeltaphi)
 
     return deltaphi
 
+
+def morphology(J,r,xi,q,chi1,chi2,simpler=False):
+    """
+    Evaluate the spin morphology and return "L0" for librating about DeltaPhi=0, "Lpi" for librating about DeltaPhi=pi, "C-" for circulating from DeltaPhi=pi to DeltaPhi=0, and "C+" for circulating from DeltaPhi=0 to DeltaPhi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return "C" for both.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    xi: float
+        Effective spin.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    simpler: optional (default: False)
+        If True does not distinguish between positive and negative circulation.
+
+    Returns
+    -------
+    morph: string
+        Spin morphology
+    """
+
+    Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
+    # Pairs of booleans based on the values of deltaphi at S- and S+
+    status = np.array([eval_cosdeltaphi(Smin,J,r,xi,q,chi1,chi2) >0.5 ,eval_cosdeltaphi(Smax,J,r,xi,q,chi1,chi2) >0.5]).T
+
+    # Map to labels
+    if simpler:
+        dictlabel = {(False,False):"Lpi", (True,True):"L0", (False, True):"C", (True, False):"C"}
+    else:
+        dictlabel = {(False,False):"Lpi", (True,True):"L0", (False, True):"C-", (True, False):"C+"}
+
+    # Subsitute pairs with labels
+    morphs = np.zeros(flen(J))
+    for k, v in dictlabel.items():
+        morphs=np.where((status == k).all(axis=1),v,morphs)
+
+    return morphs
 
 
 
@@ -1705,11 +1749,10 @@ if __name__ == '__main__':
 
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
 
-    S=[0.2,0.35]
     q=[0.8,0.8]
     chi1=[1,1]
     chi2=[0.8,0.8]
     r=[20,20]
     J=[1.29,1.29]
-    xi=[0.3,0.3]
-    print(spinangle_deltaphi(S,J,r,xi,q,chi1,chi2)/np.pi)
+    xi=[0.35,0.25]
+    print(morphology(J,r,xi,q,chi1,chi2))
