@@ -64,6 +64,29 @@ def mass2(q):
     return m2
 
 
+def symmetricmassratio(q):
+    """
+    Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    Returns
+    -------
+    eta: float
+        Symmetric mass ratio.
+
+    """
+
+    q = toarray(q)
+    eta = q/(1+q)**2
+
+    return eta
+
+
+
 def spin1(q,chi1):
     """
     Spin angular momentum of the heavier black hole.
@@ -1848,10 +1871,10 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
     xi: float
         Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
     chi1: float
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float
@@ -1862,7 +1885,7 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     Returns
     -------
     morph: string
-        Spin morphology
+        Spin morphology.
     """
 
     Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
@@ -1881,6 +1904,34 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
         morphs=np.where((status == k).all(axis=1),v,morphs)
 
     return np.squeeze(morphs)
+
+
+def period_prefactor(r,xi,q):
+    """
+    Numerical prefactor to the precession period.
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    Returns
+    -------
+    mathcalA: string
+        Numerical prefactor to the precession period.
+    """
+
+    r,xi=toarray(r,xi)
+    eta=symmetricmassratio(q)
+    mathcalA = (3/2)*(1/(r*eta**0.5))*(1-(xi/r**0.5))**0.5
+
+    return mathcalA
+
+
 
 
 
@@ -2040,9 +2091,11 @@ if __name__ == '__main__':
     theta2=[1,1]
     deltaphi=[1,2]
     S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
-    print(S,J,xi)
-    theta1,theta2,deltaphi=conserved_to_angles(S,J,r,xi,q,chi1,chi2)
-    print(theta1,theta2,deltaphi)
+    #print(S,J,xi)
+    #theta1,theta2,deltaphi=conserved_to_angles(S,J,r,xi,q,chi1,chi2)
+    #print(theta1,theta2,deltaphi)
     #print(eval_costheta1(0.4,J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
 
-    print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
+    #print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
+
+    print(period_prefactor(r,xi,q))
