@@ -3,7 +3,7 @@ precession
 """
 
 import numpy as np
-import scipy as sp
+import scipy, scipy.special
 # Using precession_v1 functions for now
 import precession as pre
 import sys, os, time
@@ -1906,7 +1906,7 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     return np.squeeze(morphs)
 
 
-def period_prefactor(r,xi,q):
+def Speriod_prefactor(r,xi,q):
     """
     Numerical prefactor to the precession period.
 
@@ -1927,13 +1927,80 @@ def period_prefactor(r,xi,q):
 
     r,xi=toarray(r,xi)
     eta=symmetricmassratio(q)
-    mathcalA = (3/2)*(1/(r*eta**0.5))*(1-(xi/r**0.5))**0.5
 
+    print("r",r)
+    mathcalA = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
+    print("pre", mathcalA)
     return mathcalA
 
 
+def elliptic_parameter(Sminus2,Splus2,S32):
+    """
+    Parameter m entering elliptic functiosn for the evolution of S.
+
+    Parameters
+    ----------
+    Sminus2, Splus2, S32: floats
+        Roots of d(S^2)/dt=0 with S32<=Sminus2<=Splus2.
+
+    Returns
+    -------
+    m: string
+        Parameter of the ellptic functions.
+    """
+
+    m = (Splus2-Sminus2)/(Splus2-S32)
+
+    return m
 
 
+
+def Speriod(J,r,xi,q,chi1,chi2):
+    """
+    Period of S as it oscillates from S- to S+ and back to S-.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    simpler: optional (default: False)
+        If True does not distinguish between positive and negative circulation.
+
+    Returns
+    -------
+    tau: string
+        Nutation period.
+    """
+
+    mathcalA=Speriod_prefactor(r,xi,q)
+    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+    m = elliptic_parameter(Sminus2,Splus2,S32)
+    tau = 4*scipy.special.ellipk(m) / (mathcalA* (Splus2-S32)**0.5)
+
+    return tau
+
+def Soft(t,J,r,xi,q,chi1,chi2):
+    """
+    Not finished
+    """
+
+    mathcalA=Speriod_prefactor(r,xi,q)
+    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+    print("s-", Sminus2**0.5)
+    m = elliptic_parameter(Sminus2,Splus2,S32)
+    S2 = Sminus2 + (Splus2-Sminus2)*(scipy.special.ellipj(t*mathcalA*(Splus2-S32)**0.5/2,m)[0])**2
+    S=S2**0.5
+    return S
 
 
 ## TODO: A function to precession-average a generic quantity
@@ -2078,19 +2145,19 @@ if __name__ == '__main__':
 
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
 
-    q=[0.8,0.8]
-    chi1=[1,1]
-    chi2=[0.8,0.8]
-    r=[20,20]
-    J=[1.29,1.29]
-    xi=[0.35,0.3]
+    q=[0.7,0.7]
+    chi1=[0.7,0.7]
+    chi2=[0.9,0.9]
+    r=[30,30]
+    J=[1.48,1.48]
+    xi=[0.25,0.17]
     #print(morphology(J,r,xi,q,chi1,chi2))
     #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
 
-    theta1=[0.567,1]
-    theta2=[1,1]
-    deltaphi=[1,2]
-    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
+    # theta1=[0.567,1]
+    # theta2=[1,1]
+    # deltaphi=[1,2]
+    #S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
     #print(S,J,xi)
     #theta1,theta2,deltaphi=conserved_to_angles(S,J,r,xi,q,chi1,chi2)
     #print(theta1,theta2,deltaphi)
@@ -2098,4 +2165,16 @@ if __name__ == '__main__':
 
     #print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
 
-    print(period_prefactor(r,xi,q))
+    tau = Speriod(J,r,xi,q,chi1,chi2)
+    print(tau)
+    Smin,Smax = Slimits_plusminus(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    t= np.linspace(0,50000,1000)
+    S= Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+
+    print(S)
+
+    import pylab as plt
+    plt.plot(t/1e5,S)
+    plt.axhline(Smin)
+    plt.axhline(Smax)
+    plt.show()
