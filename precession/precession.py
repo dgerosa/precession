@@ -119,7 +119,7 @@ def spin1(q,chi1):
         Spin of the primary black hole.
     """
 
-    chi1 = (chi1)
+    chi1 = toarray(chi1)
     S1 = chi1*(mass1(q))**2
 
     return S1

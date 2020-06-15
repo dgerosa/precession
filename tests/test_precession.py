@@ -11,73 +11,96 @@ def test_silly():
     assert True
 
 
-def isfloat(var):
+def assert_scalar(val, func, *args):
     """
-    Check a variable is a scalar float.
+    Assert that the output of an array is a scalar with correct check value.
 
     Parameters
     ----------
-    var, any:
-        Variable to check the type of.
+    val, float:
+        The check value for the function being tested.
 
-    Returns
-    -------
-    bool:
-        Truth of variable being a scalar float.
+    func, function:
+        The function to be tested.
+
+    *args:
+        The parameters passed to func.
     """
 
-    if isinstance(var, float):
-        return 1
-    else:
-        return 0
+    output = func(*args)
+    # Test scalar input returns scalar output
+    check_scalar = isinstance(output, float)
+    assert check_scalar, 'Scalar input does not return scalar output'
+    # Test function returns correct scalar value
+    if check_scalar:
+        check_val = val == output
+        assert check_val, 'Incorrect scalar value returned'
 
 
-def isarray(var):
+def assert_vector(vals, func, *args):
     """
-    Check if a variable is a numpy array.
+    Assert that the output of an array is a vector with correct check values.
 
     Parameters
     ----------
-    var, any:
-        Variable to check the type of.
+    vals, array:
+        The check values for the function being tested.
 
-    Returns
-    -------
-    bool:
-        Truth of variable being a numpy array.
+    func, function:
+        The function to be tested.
+
+    *args:
+        The parameters passed to func.
     """
 
-    if isinstance(var, np.ndarray):
-        return 1
-    elif isinstance(var, (list, tuple)):
-        return 0 #2
-    else:
-        return 0
+    output = func(*args)
+    # Test vector input returns vector output
+    check_vector = isinstance(output, np.ndarray)
+    assert check_vector, 'Vector input does not return vector output'
+    # Test function returns correct vector values
+    if check_vector:
+        check_vals = (vals == output).all()
+        assert check_vals, 'Incorrect vector values returned'
 
 
 def test_mass1():
     """
-    Test computation of primary mass.
+    Test computation of primary mass
     """
 
-    # Test scalar input returns scalar output.
+    # Test scalar input
     q = 1.0
-    m1 = pre.mass1(q)
-    check_scalar = isfloat(q)
-    assert check_scalar
-
-    # Test function returns correct scalar value.
-    if check_scalar:
-        check_val = m1 == 0.5
-        assert check_val
-
-    # Test vector input returns vector output.
+    m1 = 0.5
+    assert_scalar(m1, pre.mass1, q)
+    # Test vector input
     q = [1.0, 0.0]
-    m1 = pre.mass1(q)
-    check_vector = isarray(m1)
-    assert check_vector
+    m1 = [0.5, 1.0]
+    assert_vector(m1, pre.mass1, q)
 
-    # Test function returns correct vector values.
-    if check_vector:
-        check_vals = m1 == np.array([0.5, 1.0])
-        assert check_vals.all()
+
+#def test_mass1():
+#    """
+#    Test computation of primary mass.
+#    """
+#
+#    # Test scalar input returns scalar output
+#    q = 1.0
+#    m1 = pre.mass1(q)
+#    check_scalar = isfloat(m1)
+#    assert check_scalar, 'Scalar input does not return scalar output'
+#
+#    # Test function returns correct scalar value
+#    if check_scalar:
+#        check_val = m1 == 0.5
+#        assert check_val, 'Incorrect scalar value returned'
+#
+#    # Test vector input returns vector output
+#    q = [1.0, 0.0]
+#    m1 = pre.mass1(q)
+#    check_vector = isarray(m1)
+#    assert check_vector, 'Vector input does not return vector output'
+#
+#    # Test function returns correct vector values
+#    if check_vector:
+#        check_vals = (m1 == [0.5, 1.0]).all()
+#        assert check_vals, 'Incorrect vector values returned'
