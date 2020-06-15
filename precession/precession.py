@@ -18,8 +18,23 @@ def flen(x):
     else:
         return 1
 
+
 def toarray(*args):
     return np.squeeze(np.array([*args]))
+
+
+#def isarray(var):
+#    """
+#    Check if a variable is an array
+#    """
+#
+#    if isinstance(var, np.ndarray):
+#        return 1
+#    elif isinstance(var, (list, tuple)):
+#        return 0 #2
+#    else:
+#        return 0
+
 
 def mass1(q):
     """
@@ -2170,25 +2185,15 @@ def ho_freq(q, chi1, chi2, r):
 
 
 
-def newlen(var):
-    """Redefine len function
-    """
-
-    try:
-        n = len(var)
-    except:
-        n = 1
-    return n
-
-
-def isarray(var):
-    """Check if a variable is an array
-    """
-
-    if isinstance(var, (list, tuple, np.ndarray)):
-        return True
-    else:
-        return False
+#def newlen(var):
+#    """Redefine len function
+#    """
+#
+#    try:
+#        n = len(var)
+#    except:
+#        n = 1
+#    return n
 
 
 class Binary:
