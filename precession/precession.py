@@ -1079,13 +1079,12 @@ def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
 
     Returns
     -------
-    S32: float
-        Spurious root.
     Sminus2:
         Lowest physical root (or unphysical).
     Splus2:
-        Lowest physical root (or unphysical).
-
+        Highest physical root (or unphysical).
+    S32: float
+        Spurious root.
     """
 
     sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(J,r,xi,q,chi1,chi2)
@@ -1195,9 +1194,9 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
     return np.array([Smin,Smax])
 
 
-def limits_check(S=None, J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
+def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     """
-    Check if a the inputs are consistent with the geometrical constraints.
+    Check if the inputs are consistent with the geometrical constraints.
 
     Parameters
     ----------
@@ -1209,9 +1208,17 @@ def limits_check(S=None, J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
 
     def _limits_check(testvalue,interval):
         """Check if a value is within a given interval"""
-        return np.logical_and(testvalue>interval[0],testvalue<interval[1])
+        return np.logical_and(testvalue>=interval[0], testvalue<=interval[1])
 
-    raise NotImplementedError
+    Jlim = Jlimits(r, xi, q, chi1, chi2)
+    Jbool = _limits_check(J, Jlim)
+    xilim = xilimits(J, r, q, chi1, chi2)
+    xibool = _limits_check(xi, xilim)
+    Slim = Slimits(J, r, xi, q, chi1, chi2)
+    Sbool = _limits_check(S, Slim)
+    check = Jbool and xibool and Sbool
+
+    return check
 
 
 def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
