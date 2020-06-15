@@ -65,7 +65,7 @@ def assert_vector(vals, func, *args):
 
 def test_mass1():
     """
-    Test computation of primary mass
+    Test computation of primary mass.
     """
 
     # Test scalar input
@@ -78,29 +78,74 @@ def test_mass1():
     assert_vector(m1, pre.mass1, q)
 
 
-#def test_mass1():
-#    """
-#    Test computation of primary mass.
-#    """
-#
-#    # Test scalar input returns scalar output
-#    q = 1.0
-#    m1 = pre.mass1(q)
-#    check_scalar = isfloat(m1)
-#    assert check_scalar, 'Scalar input does not return scalar output'
-#
-#    # Test function returns correct scalar value
-#    if check_scalar:
-#        check_val = m1 == 0.5
-#        assert check_val, 'Incorrect scalar value returned'
-#
-#    # Test vector input returns vector output
-#    q = [1.0, 0.0]
-#    m1 = pre.mass1(q)
-#    check_vector = isarray(m1)
-#    assert check_vector, 'Vector input does not return vector output'
-#
-#    # Test function returns correct vector values
-#    if check_vector:
-#        check_vals = (m1 == [0.5, 1.0]).all()
-#        assert check_vals, 'Incorrect vector values returned'
+def test_mass2():
+    """
+    Test computation of secondary mass.
+    """
+
+    # Test scalar input
+    q = 1.0
+    m2 = 0.5
+    assert_scalar(m2, pre.mass2, q)
+    # Test vector input
+    q = [1.0, 0.0]
+    m2 = [0.5, 0.0]
+    assert_vector(m2, pre.mass2, q)
+
+
+def test_symmetricmassratio():
+    """
+    Test computation of symmetric mass ratio.
+    """
+
+    # Test scalar input
+    q = 1.0
+    eta = 0.25
+    assert_scalar(eta, pre.symmetricmassratio, q)
+    # Test vector input
+    q = [1.0, 0.0]
+    eta = [0.25, 0.0]
+    assert_vector(eta, pre.symmetricmassratio, q)
+
+
+def test_spin1():
+    """
+    Test computation of primary dimensionless spin.
+    """
+
+    # Test scalar input
+    q = 1.0
+    chi1 = 1.0
+    S1 = 0.25
+    assert_scalar(S1, pre.spin1, q, chi1)
+    # Test vector input
+    q = [1.0, 1.0, 0.0, 0.0]
+    chi1 = [1.0, 0.0, 1.0, 0.0]
+    S1 = [0.25, 0.0, 1.0, 0.0]
+    assert_vector(S1, pre.spin1, q, chi1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
