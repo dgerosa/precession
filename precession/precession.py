@@ -1656,41 +1656,6 @@ def eval_thetaL(S,J,r,q,chi1,chi2):
     return thetaL
 
 
-def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
-    """
-    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    xi: float
-        Effective spin.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    sign: optional (default: +1)
-        If positive returns values in [0,pi], if negative returns values in [-pi,0].
-
-    Returns
-    -------
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    """
-
-    cosdeltaphi=eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
-    deltaphi = np.sign(sign)*np.arccos(cosdeltaphi)
-
-    return deltaphi
-
-
 def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
     """
     Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi). Setting sign=+1 (default) returns deltaphi in [0, pi], setting sign=-1 returns deltaphi in [-pi,0].
