@@ -1983,8 +1983,6 @@ def Speriod(J,r,xi,q,chi1,chi2):
     m = elliptic_parameter(Sminus2,Splus2,S32)
     tau = 4*scipy.special.ellipk(m) / (mathcalA* (Splus2-S32)**0.5)
 
-    print("checl",mathcalA,Sminus2,Splus2,S32,m,tau)
-
     return tau
 
 def Soft(t,J,r,xi,q,chi1,chi2):
@@ -2017,11 +2015,11 @@ def Soft(t,J,r,xi,q,chi1,chi2):
     t=toarray(t)
     mathcalA=Speriod_prefactor(r,xi,q)
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
-    print("s-", Sminus2**0.5)
     m = elliptic_parameter(Sminus2,Splus2,S32)
     sn,cn,dn,pn = scipy.special.ellipj(t.T*mathcalA*(Splus2-S32)**0.5/2,m)
     S2 = Sminus2 + (Splus2-Sminus2)*((Sminus2-S32)/(Splus2-S32)) *(sn/dn)**2
     S=S2.T**0.5
+
     return S
 
 
@@ -2172,8 +2170,8 @@ if __name__ == '__main__':
     chi2=[0.9,0.9]
     r=[30,30]
     J=[1.48,1.48]
-    xi=[0.25,0.17]
-    print("stillworks",S2roots(J,r,xi,q,chi1,chi2))
+    xi=[0.25,0.18]
+    #print("stillworks",S2roots(J,r,xi,q,chi1,chi2))
 
 
     #print(morphology(J,r,xi,q,chi1,chi2))
@@ -2191,21 +2189,20 @@ if __name__ == '__main__':
     #print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
 
     tau = Speriod(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
-    print(tau)
     Smin,Smax = Slimits_plusminus(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
     t= np.linspace(0,tau,200)
     S= Soft([t,t],J,r,xi,q,chi1,chi2)
 
     #print(t)
-    print(S[0][1:5])
+    print(np.shape([t,t]))
+    print(np.shape(S))
+    #S= Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
 
-    S= Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    #print(S[1:5])
 
-    print(S[1:5])
+    #S= Soft(t[4],J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
 
-    S= Soft(t[4],J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
-
-    print(S)
+    #print(S)
 
     #import pylab as plt
     #plt.plot(t/1e5,S)
