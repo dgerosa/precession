@@ -5,14 +5,46 @@ import precession as pre
 
 def test_silly():
     """
-    Ensure test procude works.
+    Test the test procedure.
     """
 
     assert True
 
 
+def isfloat(var):
+    """
+    Check a variable is a scalar float.
+
+    Parameters
+    ----------
+    var, any:
+        Variable to check the type of.
+
+    Returns
+    -------
+    bool:
+        Truth of variable being a scalar float.
+    """
+
+    if isinstance(var, float):
+        return 1
+    else:
+        return 0
+
+
 def isarray(var):
-    """Check if a variable is an array
+    """
+    Check if a variable is a numpy array.
+
+    Parameters
+    ----------
+    var, any:
+        Variable to check the type of.
+
+    Returns
+    -------
+    bool:
+        Truth of variable being a numpy array.
     """
 
     if isinstance(var, np.ndarray):
@@ -25,23 +57,27 @@ def isarray(var):
 
 def test_mass1():
     """
-    Test primary mass from mass ratio.
+    Test computation of primary mass.
     """
 
-    q = 1.
+    # Test scalar input returns scalar output.
+    q = 1.0
     m1 = pre.mass1(q)
+    check_scalar = isfloat(q)
+    assert check_scalar
 
-    assert isarray(m1)
-    assert m1 == .5
+    # Test function returns correct scalar value.
+    if check_scalar:
+        check_val = m1 == 0.5
+        assert check_val
 
+    # Test vector input returns vector output.
+    q = [1.0, 0.0]
+    m1 = pre.mass1(q)
+    check_vector = isarray(q)
+    assert check_vector
 
-def test_mass2():
-    """
-    Test secondary mass from mass ratio.
-    """
-
-    q = 1.
-    m2 = pre.mass2(q)
-
-    assert isarray(m2)
-    assert m2 == .5
+    # Test function returns correct vector values.
+    if check_vector:
+        check_vals = m1 == np.array([0.5, 1.0])
+        assert check_vals
