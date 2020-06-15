@@ -74,7 +74,7 @@ def test_mass1():
     # Test vector input returns vector output.
     q = [1.0, 0.0]
     m1 = pre.mass1(q)
-    check_vector = isarray(q)
+    check_vector = isarray(m1)
     assert check_vector
 
     # Test function returns correct vector values.
