@@ -1103,7 +1103,7 @@ def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
         Sminus2=Splus2  = sigmaq**(1/3) - sigma4/(3*sigma6)
 
     #print(np.roots([sigma6,sigma4,sigma2,sigma0])) # You can test this against numpy.roots
-    return np.array([Sminus2,Splus2,S32])
+    return toarray([Sminus2,Splus2,S32])
 
 
 def Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=False):
@@ -1927,10 +1927,8 @@ def Speriod_prefactor(r,xi,q):
 
     r,xi=toarray(r,xi)
     eta=symmetricmassratio(q)
-
-    print("r",r)
     mathcalA = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
-    print("pre", mathcalA)
+
     return mathcalA
 
 
@@ -1973,8 +1971,6 @@ def Speriod(J,r,xi,q,chi1,chi2):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    simpler: optional (default: False)
-        If True does not distinguish between positive and negative circulation.
 
     Returns
     -------
@@ -1987,19 +1983,45 @@ def Speriod(J,r,xi,q,chi1,chi2):
     m = elliptic_parameter(Sminus2,Splus2,S32)
     tau = 4*scipy.special.ellipk(m) / (mathcalA* (Splus2-S32)**0.5)
 
+    print("checl",mathcalA,Sminus2,Splus2,S32,m,tau)
+
     return tau
 
 def Soft(t,J,r,xi,q,chi1,chi2):
     """
-    Not finished
+    Evolution of S on the precessional timescale (without radiation reaction).
+
+    Parameters
+    ----------
+    t: float, array
+        Time
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    S: float
+        Magnitude of the total spin.
     """
 
+    t=toarray(t)
     mathcalA=Speriod_prefactor(r,xi,q)
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
     print("s-", Sminus2**0.5)
     m = elliptic_parameter(Sminus2,Splus2,S32)
-    S2 = Sminus2 + (Splus2-Sminus2)*(scipy.special.ellipj(t*mathcalA*(Splus2-S32)**0.5/2,m)[0])**2
-    S=S2**0.5
+    sn,cn,dn,pn = scipy.special.ellipj(t.T*mathcalA*(Splus2-S32)**0.5/2,m)
+    S2 = Sminus2 + (Splus2-Sminus2)*((Sminus2-S32)/(Splus2-S32)) *(sn/dn)**2
+    S=S2.T**0.5
     return S
 
 
@@ -2137,10 +2159,10 @@ if __name__ == '__main__':
 
     #print(Jresonances(r,xi,q,chi1,chi2))
 
-    #S2roots(J,r,xi,q,chi1,chi2)
 
     #print(Jlimits(r,q,chi1,chi2))
     #print(S2roots(J,r,xi,q,chi1,chi2))
+
 
 
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
@@ -2151,6 +2173,9 @@ if __name__ == '__main__':
     r=[30,30]
     J=[1.48,1.48]
     xi=[0.25,0.17]
+    print("stillworks",S2roots(J,r,xi,q,chi1,chi2))
+
+
     #print(morphology(J,r,xi,q,chi1,chi2))
     #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
 
@@ -2165,16 +2190,25 @@ if __name__ == '__main__':
 
     #print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
 
-    tau = Speriod(J,r,xi,q,chi1,chi2)
+    tau = Speriod(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
     print(tau)
     Smin,Smax = Slimits_plusminus(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
-    t= np.linspace(0,50000,1000)
+    t= np.linspace(0,tau,200)
+    S= Soft([t,t],J,r,xi,q,chi1,chi2)
+
+    #print(t)
+    print(S[0][1:5])
+
     S= Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+
+    print(S[1:5])
+
+    S= Soft(t[4],J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
 
     print(S)
 
-    import pylab as plt
-    plt.plot(t/1e5,S)
-    plt.axhline(Smin)
-    plt.axhline(Smax)
-    plt.show()
+    #import pylab as plt
+    #plt.plot(t/1e5,S)
+    #plt.axhline(Smin)
+    #plt.axhline(Smax)
+    #plt.show()
