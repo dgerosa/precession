@@ -80,4 +80,4 @@ def test_mass1():
     # Test function returns correct vector values.
     if check_vector:
         check_vals = m1 == np.array([0.5, 1.0])
-        assert check_vals
+        assert check_vals.all()
