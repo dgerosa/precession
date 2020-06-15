@@ -28,7 +28,7 @@ def test_mass1():
     Test primary mass from mass ratio.
     """
 
-    q = .5
+    q = 1.
     m1 = pre.mass1(q)
 
     assert isarray(m1)
@@ -40,7 +40,7 @@ def test_mass2():
     Test secondary mass from mass ratio.
     """
 
-    q = .5
+    q = 1.
     m2 = pre.mass2(q)
 
     assert isarray(m2)
