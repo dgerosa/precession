@@ -2026,6 +2026,178 @@ def Soft(t,J,r,xi,q,chi1,chi2):
 ## TODO: A function to precession-average a generic quantity
 
 
+
+def rud(q, chi1, chi2):
+    """
+    The critical separations r_ud+/- marking the region of the up-down
+    precessional instability.
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio m2/m1, 0 <= q <= 1.
+
+    chi1:
+        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
+
+    chi2:
+        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
+
+    Returns
+    -------
+    r_udp: float
+        Outer critical separation marking the instability onset.
+
+    r_udm: float
+        Inner critical separation marking the end of the unstable region.
+    """
+
+    q, chi1, chi2 = toarray(q, chi1, chi2)
+    r_udp = (chi1**.5+(q*chi2)**.5)**4./(1.-q)**2.
+    r_udm = (chi1**.5-(q*chi2)**.5)**4./(1.-q)**2.
+
+    return np.array([r_udp, r_udm])
+
+
+def w_uu2(q, chi1, chi2, r):
+    """
+    The squared oscillation frequency of a perturbed up-up binary.
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio m2/m1, 0 <= q <= 1.
+
+    chi1:
+        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
+
+    chi2:
+        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
+
+    r: float
+        Orbital separation.
+
+    Returns
+    -------
+    w_uu2: float
+        Squared oscillation frequency of a perturbed up-up binary.
+    """
+
+    q, chi1, chi2, r = toarray(q, chi1, chi2)
+    w_uu2 = 9*(-(1+q)*r**.5+chi1+q*chi2)**2*((-1+q)**2*r+2*(-1+q)*r**.5*(chi1-q*chi2)+(chi1+q*chi2)**2)/(4*(1+q)**4*r**7)
+    #w_uu = w2**.5
+
+    return w_uu2
+
+
+def w_dd2(q, chi1, chi2, r):
+    """
+    The squared oscillation frequency of a perturbed down-down binary.
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio m2/m1, 0 <= q <= 1.
+
+    chi1:
+        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
+
+    chi2:
+        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
+
+    r: float
+        Orbital separation.
+
+    Returns
+    -------
+    w_uu2: float
+        Squared oscillation frequency of a perturbed down-down binary.
+    """
+
+    q, chi1, chi2, r  = toarray(q, chi1, chi2)
+    w_dd2 = 9*((1+q)*r**.5+chi1+q*chi2)**2*((-1+q)**2*r+2*(-1+q)*r**.5*(-chi1+q*chi2)+(chi1+q*chi2)**2)/(4*(1+q)**4*r**7)
+    #w_dd = w_dd2**.5
+
+    return w_dd2
+
+
+def w_du2(q, chi1, chi2, r):
+    """
+    The squared oscillation frequency of a perturbed down-up binary.
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio m2/m1, 0 <= q <= 1.
+
+    chi1:
+        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
+
+    chi2:
+        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
+
+    r: float
+        Orbital separation.
+
+    Returns
+    -------
+    w_uu2: float
+        Squared oscillation frequency of a perturbed down-up binary.
+    """
+
+    q, chi1, chi2, r  = toarray(q, chi1, chi2)
+    w_dd2 = 9*((1+q)*r**.5+chi1-q*chi2)**2*((-1+q)**2*r-2*(-1+q)*r**.5*(chi1+q*chi2)+(chi1-q*chi2)**2)/(4*(1+q)**4*r**7)
+    #w_dd = w_dd**.5
+
+    return w_dd2
+
+
+#def w_ud2_ofr(q, chi1, chi2, r):
+def w_ud2(q, chi1, chi2, r):
+    """
+    The squared oscillation frequency of a perturbed up-down binary.
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio m2/m1, 0 <= q <= 1.
+
+    chi1:
+        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
+
+    chi2:
+        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
+
+    r: float
+        Orbital separation.
+
+    Returns
+    -------
+    w_uu2: float
+        Squared oscillation frequency of a perturbed up-down binary.
+    """
+
+    q, chi1, chi2, r  = toarray(q, chi1, chi2)
+    w_ud2 = 9*((1+q)*r**.5-chi1+q*chi2)**2*((-1+q)**2*r+2*(-1+q)*r**.5*(chi1+q*chi2)+(chi1-q*chi2)**2)/(4*(1+q)**4*r**7)
+    #w_ud = w_ud**.5 # can be complex
+
+    return w_ud2
+
+
+def ho_freq(q, chi1, chi2, r):
+    """
+    """
+
+    uu = w_uu2(q, chi1, chi2, r)
+    dd = w_dd2(q, chi1, chi2, r)
+    du = w_du2(q, chi1, chi2, r)
+    ud = w_ud2(q, chi1, chi2, r)
+
+    return np.array([uu, dd, du, ud])
+
+
+
+
 def newlen(var):
     """Redefine len function
     """
