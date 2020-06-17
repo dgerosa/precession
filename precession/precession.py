@@ -2299,8 +2299,8 @@ if __name__ == '__main__':
           return (1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x
 
     # Should be equivalent to
-    def ell(x)
-        return np.where(x==0, 1/2, 1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x)
+    def ell(x):
+        return np.where(x==0, 1/2, (1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x)
 
     t0=time.time()
     [ell(0.5) for i in range(100)]
