@@ -2269,12 +2269,12 @@ class Binary:
 
 if __name__ == '__main__':
 
-    #r=[10,10]
-    #xi=[0.35,-0.6]
-    #q=[0.8,0.2]
-    #chi1=[1,1]
-    #chi2=[1,1]
-    #J=[1,0.23]
+    r=[10,10]
+    xi=[0.35,-0.6]
+    q=[0.8,0.2]
+    chi1=[1,1]
+    chi2=[1,1]
+    J=[1,0.23]
 
     #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
     #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
@@ -2286,9 +2286,25 @@ if __name__ == '__main__':
     #print(xiresonances(J[0],r[0],q[0],chi1[0],chi2[0]))
     #print(xiresonances(J[1],r[1],q[1],chi1[1],chi2[1]))
     #print(xiresonances(J,r,q,chi1,chi2))
-
-    #print(S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    t0=time.time()
+    [S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]) for i in range(100)]
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
+    print(time.time()-t0)
+
+    @np.vectorize
+    def ell(x):
+      if x==0:
+        return 1/2
+      else:
+          return (1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x
+
+    # Should be equivalent to
+    def ell(x)
+        return np.where(x==0, 1/2, 1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x)
+
+    t0=time.time()
+    [ell(0.5) for i in range(100)]
+    print(time.time()-t0)
 
     #print(xilimits(q=q,chi1=chi1,chi2=chi2))
 
@@ -2314,12 +2330,12 @@ if __name__ == '__main__':
 
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
 
-    q=[0.7,0.7]
-    chi1=[0.7,0.7]
-    chi2=[0.9,0.9]
-    r=[30,30]
-    J=[1.48,1.48]
-    xi=[0.25,0.18]
+    # q=[0.7,0.7]
+    # chi1=[0.7,0.7]
+    # chi2=[0.9,0.9]
+    # r=[30,30]
+    # J=[1.48,1.48]
+    # xi=[0.25,0.18]
     #print("stillworks",S2roots(J,r,xi,q,chi1,chi2))
 
 
@@ -2337,15 +2353,15 @@ if __name__ == '__main__':
 
     #print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
 
-    tau = Speriod(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
-    Smin,Smax = Slimits_plusminus(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
-    t= np.linspace(0,tau,200)
-    S= Soft([t,t],J,r,xi,q,chi1,chi2)
-
-    #print(t)
-    print(np.shape([t,t]))
-    print(np.shape(S))
-    #S= Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    # tau = Speriod(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    # Smin,Smax = Slimits_plusminus(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    # t= np.linspace(0,tau,200)
+    # S= Soft([t,t],J,r,xi,q,chi1,chi2)
+    #
+    # #print(t)
+    # print(np.shape([t,t]))
+    # print(np.shape(S))
+    # #S= Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
 
     #print(S[1:5])
 
