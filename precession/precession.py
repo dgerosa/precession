@@ -1209,6 +1209,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
     return np.array([Smin,Smax])
 
 
+## TODO
 def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     """
     Check if the inputs are consistent with the geometrical constraints.
@@ -2008,6 +2009,42 @@ def Soft(t,J,r,xi,q,chi1,chi2):
     S=S2.T**0.5
 
     return S
+    
+    
+def S2av_factor(m):
+    """
+    """
+    
+    K = scipy.special.ellipk(m)
+    E = scipy.special.ellipe(m)
+    f = (1.0 - E/K) / m
+    
+    return f
+    
+    
+def S2av_factor_expand(m, order=3):
+    """
+    """
+     
+    terms = [0.5, m/16.0, m**2.0/32.0, 41.0*m**3.0/2048.0]
+    f = sum(terms[:order+1])
+     
+    return f
+    
+    
+    
+def S2av(J, r, xi, q, chi1, chi2):
+    """
+    """
+    
+    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
+    m = elliptic_parameter(Sminus2, Splus2, S32)
+    K = scipy.special.ellipk(m)
+    E = scipy.special.ellipe(m)
+    f = (1.0 - E/K) / m
+    S2 = Splus2 - (Splus2-Sminus2)*f
+    
+    return S2
 
 
 ## TODO: A function to precession-average a generic quantity
