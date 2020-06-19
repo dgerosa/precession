@@ -144,4 +144,4 @@ def test_spin2():
     q = [1.0, 1.0, 0.0, 0.0]
     chi2 = [1.0, 0.0, 1.0, 0.0]
     S2 = [0.25, 0.0, 0.0, 0.0]
-    assert_vector(S2, pre.spin2, chi2)
+    assert_vector(S2, pre.spin2, q, chi2)
