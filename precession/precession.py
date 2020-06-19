@@ -3,7 +3,7 @@ precession
 """
 
 import numpy as np
-import scipy, scipy.special
+import scipy, scipy.special, scipy.integrate
 # Using precession_v1 functions for now
 import precession as pre
 import sys, os, time
@@ -1210,6 +1210,8 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
 
 
 ## TODO
+# Have to check inter-compatibility of Slimits, Jlimits, xilimits
+# Tags for each limit check that fails?
 def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     """
     Check if the inputs are consistent with the geometrical constraints.
@@ -1219,20 +1221,40 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 
     Returns
     -------
-    Boolean flag.
+    check: bool
+        True if the given parameters are compatible with each other, false if not.
     """
 
-    def _limits_check(testvalue,interval):
+    def _limits_check(testvalue, interval):
         """Check if a value is within a given interval"""
         return np.logical_and(testvalue>=interval[0], testvalue<=interval[1])
 
-    Jlim = Jlimits(r, xi, q, chi1, chi2)
-    Jbool = _limits_check(J, Jlim)
-    xilim = xilimits(J, r, q, chi1, chi2)
-    xibool = _limits_check(xi, xilim)
     Slim = Slimits(J, r, xi, q, chi1, chi2)
     Sbool = _limits_check(S, Slim)
-    check = Jbool and xibool and Sbool
+
+    Jlim = Jlimits(r, xi, q, chi1, chi2)
+    Jbool = _limits_check(J, Jlim)
+
+    xilim = xilimits(J, r, q, chi1, chi2)
+    xibool = _limits_check(xi, xilim)
+
+    check = all((Sbool, Jbool, xibool))
+
+    if r is not None:
+        rbool = _limits_check(r, [10.0, np.inf])
+        check = all((check, rbool))
+
+    if q is not None:
+        qbool = _limits_check(q, [0.0, 1.0])
+        check = all((check, qbool))
+
+    if chi1 is not None:
+        chi1bool = _limits_check(chi1, [0.0, 1.0])
+        check = all((check, chi1bool))
+
+    if chi2 is not None:
+        chi2bool = _limits_check(chi2, [0.0, 1.0])
+        check = all((check, chi2bool))
 
     return check
 
@@ -2009,50 +2031,108 @@ def Soft(t,J,r,xi,q,chi1,chi2):
     S=S2.T**0.5
 
     return S
-    
-    
+
+
 def S2av_factor(m):
     """
     """
-    
+
     K = scipy.special.ellipk(m)
     E = scipy.special.ellipe(m)
     f = (1.0 - E/K) / m
-    
+
     return f
-    
-    
+
+
 def S2av_factor_expand(m, order=3):
     """
     """
-     
+
     terms = [0.5, m/16.0, m**2.0/32.0, 41.0*m**3.0/2048.0]
     f = sum(terms[:order+1])
-     
+
     return f
-    
-    
-    
+
+
+
 def S2av(J, r, xi, q, chi1, chi2):
     """
     """
-    
+
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
     m = elliptic_parameter(Sminus2, Splus2, S32)
     K = scipy.special.ellipk(m)
     E = scipy.special.ellipe(m)
     f = (1.0 - E/K) / m
     S2 = Splus2 - (Splus2-Sminus2)*f
-    
+
     return S2
 
 
+def dSdtprefactor(r, xi, q):
+    """
+    """
+
+    L = angularmomentum(r, q)
+    eta = symmetricmassratio(q)
+    a = - (3/(2*eta**0.5)) * (eta/L)**6 * (1-(eta*xi/L))
+
+    return a
+
+
+def dS2dtsquared(S2, Sminus2, Splus2, S32, a):
+    """
+    """
+
+    return - a**2 * (S2-Splus2) * (S2-Sminus2) * (S2-S32)
+
+
+def dS2dt(S2, Sminus2, Splus2, S32, a):
+    """
+    """
+
+    return dS2dtsquared(S2, Sminus2, Splus2, S32, a)**0.5
+
+
+def dSdt(S2, Sminus2, Splus2, S32, a):
+    """
+    """
+
+    return (0.5 / S2**0.5) * dS2dt(S2, Sminus2, Splus2, S32, a)
+
+
 ## TODO: A function to precession-average a generic quantity
-def precession_average():
+# J, r, xi, q, chi1, chi2 or Sminus2, Splu2, S32?
+# Output evaluation on args or function of args?
+# Finish docstring once format is decided
+def precession_average(J, r, xi, q, chi1, chi2, func, args=()):
     """
+    Average a function over a precession cycle.
+
+    Parameters
+    ----------
+    func: function
+        Function to precession-average, with call func(S^2, args).
+
+    args: tuple
+        Extra arguments to pass to func.
+
+    Returns
+    -------
+
     """
-    
-    return None
+
+    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
+    a = dSdtprefactor(r, xi ,q)
+
+    def _integrand(S2):
+        return func(S2, *args) / np.abs(dS2dt(S2, Sminus2, Splus2, S32, a))
+
+    def _integral(args):
+        tau = Speriod(J, r, xi, q, chi1, chi2)
+        return (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2, args=args)[0]
+
+    return _integral
 
 
 def r_updown(q, chi1, chi2):
@@ -2077,7 +2157,7 @@ def r_updown(q, chi1, chi2):
 
     r_udm: float
         Inner critical separation marking the end of the unstable region.
-        
+
     """
 
     q, chi1, chi2 = toarray(q, chi1, chi2)
@@ -2085,17 +2165,17 @@ def r_updown(q, chi1, chi2):
     r_minus = (chi1**.5-(q*chi2)**.5)**4./(1.-q)**2.
 
     return np.array([r_plus, r_minus])
-    
-    
+
+
 def omega2_aligned(r, q, chi1, chi2, alpha1, alpha2):
     """
     Squared oscillation frequency of a given perturbed aligned-spin binary.
-    
+
     Parameters
     ----------
     r: float
         Orbital separation.
-        
+
     q: float
         Mass ratio m2/m1, 0 <= q <= 1.
 
@@ -2104,19 +2184,19 @@ def omega2_aligned(r, q, chi1, chi2, alpha1, alpha2):
 
     chi2: float
         Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-        
+
     alpha1: int
         Alignment of the primary black hole, +1 for up or -1 for down.
-        
+
     alpha2: int
         Alignment of the secondary black hole, +1 for up or -1 for down.
-        
+
     Returns
     -------
     omega2: float
         Squared oscillation frequency of the given aligned binary.
     """
-    
+
     L = angularmomentum(r, q)
     S1 = spin1(q, chi1)
     S2 = spin2(q, chi2)
@@ -2125,19 +2205,19 @@ def omega2_aligned(r, q, chi1, chi2, alpha1, alpha2):
     b = L**2*(1-q)**2 - 2*L*(q*alpha1*S1-alpha2*S2)*(1-q) + (q*alpha1*S1+alpha2*S2)**2
     c = (L - (q*alpha1*S1+alpha2*S2)/(1+q))**2
     omega2 = a*b*c
-    
+
     return omega2
-    
-    
+
+
 def omega2_upup(r, q, chi1, chi2):
     """
     Squared oscillation frequency of a perturbed up-up binary.
-    
+
     Parameters
     ----------
     r: float
         Orbital separation.
-        
+
     q: float
         Mass ratio m2/m1, 0 <= q <= 1.
 
@@ -2146,27 +2226,27 @@ def omega2_upup(r, q, chi1, chi2):
 
     chi2: float
         Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-        
+
     Returns
     -------
     omega2: float
         Squared oscillation frequency of the up-up binary, omega2 > 0 (for r > M).
     """
-    
+
     omega2 = omega2_aligned(r, q, chi1, chi2, 1, 1)
-    
+
     return omega2
-    
-    
+
+
 def omega2_downdown(r, q, chi1, chi2):
     """
     Squared oscillation frequency of a perturbed down-down binary.
-    
+
     Parameters
     ----------
     r: float
         Orbital separation.
-        
+
     q: float
         Mass ratio m2/m1, 0 <= q <= 1.
 
@@ -2175,27 +2255,27 @@ def omega2_downdown(r, q, chi1, chi2):
 
     chi2: float
         Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-        
+
     Returns
     -------
     omega2: float
         Squared oscillation frequency of the down-down binary, omega2 > 0 (for r > M).
     """
-    
+
     omega2 = omega2_aligned(r, q, chi1, chi2, -1, -1)
-    
+
     return omega2
-    
-    
+
+
 def omega2_downup(r, q, chi1, chi2):
     """
     Squared oscillation frequency of a perturbed down-up binary.
-    
+
     Parameters
     ----------
     r: float
         Orbital separation.
-        
+
     q: float
         Mass ratio m2/m1, 0 <= q <= 1.
 
@@ -2204,27 +2284,27 @@ def omega2_downup(r, q, chi1, chi2):
 
     chi2: float
         Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-        
+
     Returns
     -------
     omega2: float
         Squared oscillation frequency of the down-up binary, omega2 > 0 (for r > M).
     """
-    
+
     omega2 = omega2_aligned(r, q, chi1, chi2, -1, 1)
-    
+
     return omega2
-    
-    
+
+
 def omega2_updown(r, q, chi1, chi2):
     """
     Squared oscillation frequency of a perturbed up-down binary.
-    
+
     Parameters
     ----------
     r: float
         Orbital separation.
-        
+
     q: float
         Mass ratio m2/m1, 0 <= q <= 1.
 
@@ -2233,15 +2313,15 @@ def omega2_updown(r, q, chi1, chi2):
 
     chi2: float
         Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-        
+
     Returns
     -------
     omega2: float
         Squared oscillation frequency of the up-down binary, omega2 < 0 when r_ud+ > r > r_ud-.
     """
-    
+
     omega2 = omega2_aligned(r, q, chi1, chi2, 1, -1)
-    
+
     return omega2
 
 
