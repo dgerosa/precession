@@ -2080,6 +2080,7 @@ def dSdtprefactor(r, xi, q):
     return a
 
 
+# J, r, xi, q, chi1, chi2 or Sminus2, Splus2, S32, a?
 def dS2dtsquared(S2, Sminus2, Splus2, S32, a):
     """
     """
