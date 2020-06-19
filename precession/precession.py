@@ -2106,7 +2106,7 @@ def dSdt(S2, Sminus2, Splus2, S32, a):
 # J, r, xi, q, chi1, chi2 or Sminus2, Splu2, S32?
 # Output evaluation on args or function of args?
 # Finish docstring once format is decided
-def precession_average(J, r, xi, q, chi1, chi2, func, args=()):
+def precession_average(J, r, xi, q, chi1, chi2, func, *args):
     """
     Average a function over a precession cycle.
 
@@ -2126,14 +2126,14 @@ def precession_average(J, r, xi, q, chi1, chi2, func, args=()):
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
     a = dSdtprefactor(r, xi ,q)
 
-    def _integrand(S2):
+    def _integrand(S2, *args):
         return func(S2, *args) / np.abs(dS2dt(S2, Sminus2, Splus2, S32, a))
 
-    def _integral(args):
+    def _integral(*args):
         tau = Speriod(J, r, xi, q, chi1, chi2)
         return (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2, args=args)[0]
 
-    return _integral
+    return _integral(*args)
 
 
 def r_updown(q, chi1, chi2):
