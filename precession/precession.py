@@ -2048,13 +2048,16 @@ def S2av(J, r, xi, q, chi1, chi2):
 
 
 ## TODO: A function to precession-average a generic quantity
-
-
-
-def rud(q, chi1, chi2):
+def precession_average():
     """
-    The critical separations r_ud+/- marking the region of the up-down
-    precessional instability.
+    """
+    
+    return None
+
+
+def r_updown(q, chi1, chi2):
+    """
+    The critical separations r_ud+/- marking the region of the up-down precessional instability.
 
     Parameters
     ----------
@@ -2074,150 +2077,172 @@ def rud(q, chi1, chi2):
 
     r_udm: float
         Inner critical separation marking the end of the unstable region.
+        
     """
 
     q, chi1, chi2 = toarray(q, chi1, chi2)
-    r_udp = (chi1**.5+(q*chi2)**.5)**4./(1.-q)**2.
-    r_udm = (chi1**.5-(q*chi2)**.5)**4./(1.-q)**2.
+    r_plus = (chi1**.5+(q*chi2)**.5)**4./(1.-q)**2.
+    r_minus = (chi1**.5-(q*chi2)**.5)**4./(1.-q)**2.
 
-    return np.array([r_udp, r_udm])
-
-
-def w_uu2(q, chi1, chi2, r):
+    return np.array([r_plus, r_minus])
+    
+    
+def omega2_aligned(r, q, chi1, chi2, alpha1, alpha2):
     """
-    The squared oscillation frequency of a perturbed up-up binary.
-
+    Squared oscillation frequency of a given perturbed aligned-spin binary.
+    
     Parameters
     ----------
+    r: float
+        Orbital separation.
+        
     q: float
         Mass ratio m2/m1, 0 <= q <= 1.
 
-    chi1:
+    chi1: float
         Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
 
-    chi2:
+    chi2: float
         Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-
-    r: float
-        Orbital separation.
-
+        
+    alpha1: int
+        Alignment of the primary black hole, +1 for up or -1 for down.
+        
+    alpha2: int
+        Alignment of the secondary black hole, +1 for up or -1 for down.
+        
     Returns
     -------
-    w_uu2: float
-        Squared oscillation frequency of a perturbed up-up binary.
+    omega2: float
+        Squared oscillation frequency of the given aligned binary.
     """
-
-    q, chi1, chi2, r = toarray(q, chi1, chi2)
-    w_uu2 = 9*(-(1+q)*r**.5+chi1+q*chi2)**2*((-1+q)**2*r+2*(-1+q)*r**.5*(chi1-q*chi2)+(chi1+q*chi2)**2)/(4*(1+q)**4*r**7)
-    #w_uu = w2**.5
-
-    return w_uu2
-
-
-def w_dd2(q, chi1, chi2, r):
+    
+    L = angularmomentum(r, q)
+    S1 = spin1(q, chi1)
+    S2 = spin2(q, chi2)
+    # Slightly rewritten from Eq. 18 in arXiv:2003.02281 to regularized for q=1
+    a = (3*q**5/(2*(1+q)**11*L**7))**2
+    b = L**2*(1-q)**2 - 2*L*(q*alpha1*S1-alpha2*S2)*(1-q) + (q*alpha1*S1+alpha2*S2)**2
+    c = (L - (q*alpha1*S1+alpha2*S2)/(1+q))**2
+    omega2 = a*b*c
+    
+    return omega2
+    
+    
+def omega2_upup(r, q, chi1, chi2):
     """
-    The squared oscillation frequency of a perturbed down-down binary.
-
+    Squared oscillation frequency of a perturbed up-up binary.
+    
     Parameters
     ----------
+    r: float
+        Orbital separation.
+        
     q: float
         Mass ratio m2/m1, 0 <= q <= 1.
 
-    chi1:
+    chi1: float
         Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
 
-    chi2:
+    chi2: float
         Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-
-    r: float
-        Orbital separation.
-
+        
     Returns
     -------
-    w_uu2: float
-        Squared oscillation frequency of a perturbed down-down binary.
+    omega2: float
+        Squared oscillation frequency of the up-up binary, omega2 > 0 (for r > M).
     """
-
-    q, chi1, chi2, r  = toarray(q, chi1, chi2)
-    w_dd2 = 9*((1+q)*r**.5+chi1+q*chi2)**2*((-1+q)**2*r+2*(-1+q)*r**.5*(-chi1+q*chi2)+(chi1+q*chi2)**2)/(4*(1+q)**4*r**7)
-    #w_dd = w_dd2**.5
-
-    return w_dd2
-
-
-def w_du2(q, chi1, chi2, r):
+    
+    omega2 = omega2_aligned(r, q, chi1, chi2, 1, 1)
+    
+    return omega2
+    
+    
+def omega2_downdown(r, q, chi1, chi2):
     """
-    The squared oscillation frequency of a perturbed down-up binary.
-
+    Squared oscillation frequency of a perturbed down-down binary.
+    
     Parameters
     ----------
+    r: float
+        Orbital separation.
+        
     q: float
         Mass ratio m2/m1, 0 <= q <= 1.
 
-    chi1:
+    chi1: float
         Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
 
-    chi2:
+    chi2: float
         Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-
-    r: float
-        Orbital separation.
-
+        
     Returns
     -------
-    w_uu2: float
-        Squared oscillation frequency of a perturbed down-up binary.
+    omega2: float
+        Squared oscillation frequency of the down-down binary, omega2 > 0 (for r > M).
     """
-
-    q, chi1, chi2, r  = toarray(q, chi1, chi2)
-    w_dd2 = 9*((1+q)*r**.5+chi1-q*chi2)**2*((-1+q)**2*r-2*(-1+q)*r**.5*(chi1+q*chi2)+(chi1-q*chi2)**2)/(4*(1+q)**4*r**7)
-    #w_dd = w_dd**.5
-
-    return w_dd2
-
-
-#def w_ud2_ofr(q, chi1, chi2, r):
-def w_ud2(q, chi1, chi2, r):
+    
+    omega2 = omega2_aligned(r, q, chi1, chi2, -1, -1)
+    
+    return omega2
+    
+    
+def omega2_downup(r, q, chi1, chi2):
     """
-    The squared oscillation frequency of a perturbed up-down binary.
-
+    Squared oscillation frequency of a perturbed down-up binary.
+    
     Parameters
     ----------
+    r: float
+        Orbital separation.
+        
     q: float
         Mass ratio m2/m1, 0 <= q <= 1.
 
-    chi1:
+    chi1: float
         Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
 
-    chi2:
+    chi2: float
         Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-
-    r: float
-        Orbital separation.
-
+        
     Returns
     -------
-    w_uu2: float
-        Squared oscillation frequency of a perturbed up-down binary.
+    omega2: float
+        Squared oscillation frequency of the down-up binary, omega2 > 0 (for r > M).
     """
-
-    q, chi1, chi2, r  = toarray(q, chi1, chi2)
-    w_ud2 = 9*((1+q)*r**.5-chi1+q*chi2)**2*((-1+q)**2*r+2*(-1+q)*r**.5*(chi1+q*chi2)+(chi1-q*chi2)**2)/(4*(1+q)**4*r**7)
-    #w_ud = w_ud**.5 # can be complex
-
-    return w_ud2
-
-
-def ho_freq(q, chi1, chi2, r):
+    
+    omega2 = omega2_aligned(r, q, chi1, chi2, -1, 1)
+    
+    return omega2
+    
+    
+def omega2_updown(r, q, chi1, chi2):
     """
+    Squared oscillation frequency of a perturbed up-down binary.
+    
+    Parameters
+    ----------
+    r: float
+        Orbital separation.
+        
+    q: float
+        Mass ratio m2/m1, 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
+        
+    Returns
+    -------
+    omega2: float
+        Squared oscillation frequency of the up-down binary, omega2 < 0 when r_ud+ > r > r_ud-.
     """
-
-    uu = w_uu2(q, chi1, chi2, r)
-    dd = w_dd2(q, chi1, chi2, r)
-    du = w_du2(q, chi1, chi2, r)
-    ud = w_ud2(q, chi1, chi2, r)
-
-    return np.array([uu, dd, du, ud])
+    
+    omega2 = omega2_aligned(r, q, chi1, chi2, 1, -1)
+    
+    return omega2
 
 
 
