@@ -2033,19 +2033,24 @@ def Soft(t,J,r,xi,q,chi1,chi2):
     return S
 
 
-def S2av_factor(m):
+def S2av_mfactor(m):
     """
+    Write me.
     """
 
-    K = scipy.special.ellipk(m)
-    E = scipy.special.ellipe(m)
-    f = (1.0 - E/K) / m
+    m=toarray(m)
 
-    return f
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+        mfactor = (1- scipy.special.ellipe(m)/scipy.special.ellipk(m))/m
+
+    return np.where(m==0, 1/2, mfactor)
+
 
 
 def S2av_factor_expand(m, order=3):
     """
+    Remove?
     """
 
     terms = [0.5, m/16.0, m**2.0/32.0, 41.0*m**3.0/2048.0]
@@ -2419,6 +2424,8 @@ if __name__ == '__main__':
     chi2=[1,1]
     J=[1,0.23]
 
+    print(S2av_mfactor([0,0.5]))
+
     #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
     #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
     #print(Jresonances(r,xi,q,chi1,chi2))
@@ -2429,25 +2436,27 @@ if __name__ == '__main__':
     #print(xiresonances(J[0],r[0],q[0],chi1[0],chi2[0]))
     #print(xiresonances(J[1],r[1],q[1],chi1[1],chi2[1]))
     #print(xiresonances(J,r,q,chi1,chi2))
-    t0=time.time()
-    [S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]) for i in range(100)]
-    #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
-    print(time.time()-t0)
 
-    @np.vectorize
-    def ell(x):
-      if x==0:
-        return 1/2
-      else:
-          return (1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x
-
-    # Should be equivalent to
-    def ell(x):
-        return np.where(x==0, 1/2, (1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x)
-
-    t0=time.time()
-    [ell(0.5) for i in range(100)]
-    print(time.time()-t0)
+    #
+    # t0=time.time()
+    # [S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]) for i in range(100)]
+    # #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
+    # print(time.time()-t0)
+    #
+    # @np.vectorize
+    # def ell(x):
+    #   if x==0:
+    #     return 1/2
+    #   else:
+    #       return (1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x
+    #
+    # # Should be equivalent to
+    # def ell(x):
+    #     return np.where(x==0, 1/2, (1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x)
+    #
+    # t0=time.time()
+    # [ell(0.5) for i in range(100)]
+    # print(time.time()-t0)
 
     #print(xilimits(q=q,chi1=chi1,chi2=chi2))
 
