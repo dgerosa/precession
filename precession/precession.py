@@ -1120,6 +1120,119 @@ def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
     return toarray([Sminus2,Splus2,S32])
 
 
+
+
+
+def Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2):
+    """
+    Coefficients of the cubic equation in S^2 that identifies the effective potentials.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    sigma6:
+        Coefficient of S^6.
+    sigma4:
+        Coefficient of S^4.
+    sigma2:
+        Coefficient of S^2.
+    sigma0:
+        Coefficient of S^0.
+    """
+
+    kappa,u,xi,q=toarray(kappa,u,xi,q)
+    S1,S2= spinmags(q,chi1,chi2)
+
+    sigma6 = q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )
+
+    sigma4 = \
+    1/4 * ( ( 1 + q ) )**( 2 ) * ( 1 + ( 4 * ( S2 )**( 2 ) * ( u )**( 2 \
+    ) + ( ( q )**( 2 ) * ( 1 + 4 * ( S1 )**( 2 ) * ( u )**( 2 ) ) + -2 * \
+    q * ( 1 + 2 * u * ( ( ( S1 )**( 2 ) + ( S2 )**( 2 ) ) * u + ( -1 * xi \
+    + 2 * kappa ) ) ) ) ) )
+
+    sigma2 = \
+    ( -1 * q * ( -1 * xi + ( kappa + q * kappa ) ) * ( q * xi + -1 * ( 1 \
+    + q ) * kappa ) + ( -1/2 * ( -1 + ( q )**( 2 ) ) * ( S2 )**( 2 ) * ( \
+    -1 + ( ( q )**( 2 ) + ( 2 * q * u * xi + -4 * ( 1 + q ) * u * kappa ) \
+    ) ) + -1/2 * ( -1 + ( q )**( 2 ) ) * ( S1 )**( 2 ) * ( -1 + q * ( q + \
+    ( -2 * u * xi + 4 * ( 1 + q ) * u * kappa ) ) ) ) )
+
+    sigma0 = \
+    ( 1/4 * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) * ( ( ( S1 )**( 2 ) + -1 * ( \
+    S2 )**( 2 ) ) )**( 2 ) + ( -1 * q * ( -1 + ( q )**( 2 ) ) * ( S1 + -1 \
+    * S2 ) * ( S1 + S2 ) * xi * kappa + ( -1 + q ) * ( ( 1 + q ) )**( 2 ) \
+    * ( q * ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( kappa )**( 2 ) ) )
+
+    return np.array([sigma6, sigma4, sigma2, sigma0])
+
+
+def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
+    """
+    Coefficients of the cubic equation in S^2 that identifies the effective potentials.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    coincident: boolean, optional (default: False)
+        If True, assume that the input is a spin-orbit resonance and return repeated roots
+
+    Returns
+    -------
+    Sminus2:
+        Lowest physical root (or unphysical).
+    Splus2:
+        Highest physical root (or unphysical).
+    S32: float
+        Spurious root.
+    """
+
+    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2)
+
+    sigmap = (sigma4**2/(3*sigma6**2) - sigma2/sigma6)/3
+    sigmaq = ((2*sigma4**3)/(27*sigma6**3) - (sigma4*sigma2)/(3*sigma6**2) + sigma0/sigma6) /2
+    #delta = sigmaq**2+sigmap**3
+
+    if not coincident:
+        # Mask values if there is only one solution and not three
+        with np.errstate(invalid='ignore'):
+            Sminus2,Splus2,S32= 2*sigmap**(1/2) * np.sin(np.arcsin(sigmaq*sigmap**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(sigmap)))) - sigma4/(3*sigma6)
+    elif coincident:
+        S32 = -2*sigmaq**(1/3) - sigma4/(3*sigma6)
+        Sminus2=Splus2  = sigmaq**(1/3) - sigma4/(3*sigma6)
+
+    #print(np.roots([sigma6,sigma4,sigma2,sigma0])) # You can test this against numpy.roots
+    return toarray([Sminus2,Splus2,S32])
+
+
+
+
+
 def Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=False):
     """
     Limits on the total spin magnitude compatible with both J and xi.
@@ -1942,6 +2055,37 @@ def Speriod_prefactor(r,xi,q):
     return mathcalA
 
 
+
+# J, r, xi, q, chi1, chi2 or Sminus2, Splus2, S32, a?
+def dS2dtsquared(S,J,r,q,chi1,chi2):
+    """
+    Write me
+    """
+
+    mathcalA = Speriod_prefactor(r,xi,q)
+    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+
+    return - mathcalA**2 * (S**2-Splus2) * (S**2-Sminus2) * (S**2-S32)
+
+
+def dS2dt(S,J,r,q,chi1,chi2):
+    """
+    Write me
+    """
+
+    return dS2dtsquared(S,J,r,q,chi1,chi2)**0.5
+
+
+def dSdt(S,J,r,q,chi1,chi2):
+    """
+    Write me
+    """
+
+    return dS2dt(S,J,r,q,chi1,chi2) / (2*S)
+
+
+
+
 def elliptic_parameter(Sminus2,Splus2,S32):
     """
     Parameter m entering elliptic functiosn for the evolution of S.
@@ -1995,6 +2139,7 @@ def Speriod(J,r,xi,q,chi1,chi2):
 
     return tau
 
+
 def Soft(t,J,r,xi,q,chi1,chi2):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
@@ -2040,71 +2185,71 @@ def S2av_mfactor(m):
 
     m=toarray(m)
 
-    with warnings.catch_warnings():
+    with warnings.catch_warnings(): #Filter out warning for m=0
         warnings.filterwarnings("ignore", category=RuntimeWarning)
         mfactor = (1- scipy.special.ellipe(m)/scipy.special.ellipk(m))/m
 
+    # If m=0 return the limit 1/2
     return np.where(m==0, 1/2, mfactor)
 
 
-
-def S2av_factor_expand(m, order=3):
-    """
-    Remove?
-    """
-
-    terms = [0.5, m/16.0, m**2.0/32.0, 41.0*m**3.0/2048.0]
-    f = sum(terms[:order+1])
-
-    return f
-
+#
+# def S2av_factor_expand(m, order=3):
+#     """
+#     Do we need this?
+#     """
+#
+#     terms = [0.5, m/16.0, m**2.0/32.0, 41.0*m**3.0/2048.0]
+#     f = sum(terms[:order+1])
+#
+#     return f
 
 
 def S2av(J, r, xi, q, chi1, chi2):
     """
+    Write me
     """
 
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
     m = elliptic_parameter(Sminus2, Splus2, S32)
-    K = scipy.special.ellipk(m)
-    E = scipy.special.ellipe(m)
-    f = (1.0 - E/K) / m
-    S2 = Splus2 - (Splus2-Sminus2)*f
+    S2 = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
 
     return S2
 
 
-def dSdtprefactor(r, xi, q):
-    """
-    """
+
+def eval_kappa(J,r,q):
+
+    J=toarray(J)
+    L = angularmomentum(r, q)
+    kappa = ( J**2 - L**2) / (2* L)
+
+    return kappa
+
+
+def eval_u(r,q):
 
     L = angularmomentum(r, q)
-    eta = symmetricmassratio(q)
-    a = - (3/(2*eta**0.5)) * (eta/L)**6 * (1-(eta*xi/L))
+    u= 1/(2*L)
 
-    return a
-
-
-# J, r, xi, q, chi1, chi2 or Sminus2, Splus2, S32, a?
-def dS2dtsquared(S2, Sminus2, Splus2, S32, a):
-    """
-    """
-
-    return - a**2 * (S2-Splus2) * (S2-Sminus2) * (S2-S32)
+    return u
 
 
-def dS2dt(S2, Sminus2, Splus2, S32, a):
-    """
-    """
+def eval_kappainf(theta1inf,theta2inf,q,chi1,chi2):
 
-    return dS2dtsquared(S2, Sminus2, Splus2, S32, a)**0.5
+    S1,S2 = spinmags(q,chi1,chi2)
+    kappainf= S1*np.cos(theta1inf) + S2*np.cos(theta2inf)
+
+    return kappainf
 
 
-def dSdt(S2, Sminus2, Splus2, S32, a):
-    """
-    """
+# TODO: write the integrator. First understand how the S2 roots behave at r->infinity. Write another function for solving the quadratic instead of the cubic? 
+#def kappaofu():
+#    scipy.integrate.odeint(S2av, kappa_initial, u_outputs, args=(xi,q,chi1,chi2))
 
-    return (0.5 / S2**0.5) * dS2dt(S2, Sminus2, Splus2, S32, a)
+
+
+
 
 
 ## TODO: A function to precession-average a generic quantity
@@ -2127,6 +2272,8 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args):
     -------
 
     """
+
+    #TODO: add kwargs, not only args
 
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
     a = dSdtprefactor(r, xi ,q)
@@ -2333,6 +2480,9 @@ def omega2_updown(r, q, chi1, chi2):
 
 
 
+
+
+
 #def newlen(var):
 #    """Redefine len function
 #    """
@@ -2418,13 +2568,18 @@ class Binary:
 if __name__ == '__main__':
 
     r=[10,10]
-    xi=[0.35,-0.6]
+    xi=[0.35,-0.675]
     q=[0.8,0.2]
     chi1=[1,1]
     chi2=[1,1]
     J=[1,0.23]
 
-    print(S2av_mfactor([0,0.5]))
+    print(S2roots(J,r,xi,q,chi1,chi2))
+    #print( dSdtprefactor(r,xi,q) )
+    kappa=eval_kappa(J,r,q)
+    u=eval_u(r,q)
+    print(S2roots_NEW(kappa,u,xi,q,chi1,chi2))
+
 
     #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
     #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
