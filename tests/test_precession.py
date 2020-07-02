@@ -11,13 +11,13 @@ def test_silly():
     assert True
 
 
-def assert_scalar(val, func, *args):
+def assert_scalar(testval, func, *args):
     """
     Assert that the output of an array is a scalar with correct check value.
 
     Parameters
     ----------
-    val, float:
+    testval, float:
         The check value for the function being tested.
 
     func, function:
@@ -32,18 +32,17 @@ def assert_scalar(val, func, *args):
     check_scalar = isinstance(output, float)
     assert check_scalar, 'Scalar input does not return scalar output'
     # Test function returns correct scalar value
-    if check_scalar:
-        check_val = val == output
-        assert check_val, 'Incorrect scalar value returned'
+    check_val = testval == output
+    assert check_val, 'Scalar input returns incorret output value'
 
 
-def assert_vector(vals, func, *args):
+def assert_vector(testvals, func, shape=None, *args):
     """
     Assert that the output of an array is a vector with correct check values.
 
     Parameters
     ----------
-    vals, array:
+    testvals, array:
         The check values for the function being tested.
 
     func, function:
@@ -57,10 +56,12 @@ def assert_vector(vals, func, *args):
     # Test vector input returns vector output
     check_vector = isinstance(output, np.ndarray)
     assert check_vector, 'Vector input does not return vector output'
+    if shape is not None:
+        check_shape = output.shape == shape
+        assert check_shape, 'Vector input returns incorrect output shape'
     # Test function returns correct vector values
-    if check_vector:
-        check_vals = (vals == output).all()
-        assert check_vals, 'Incorrect vector values returned'
+    check_vals = (testvals == output).all()
+    assert check_vals, 'Vector input returns incorrect output values'
 
 
 def test_mass1():
@@ -145,3 +146,15 @@ def test_spin2():
     chi2 = [1.0, 0.0, 1.0, 0.0]
     S2 = [0.25, 0.0, 0.0, 0.0]
     assert_vector(S2, pre.spin2, q, chi2)
+
+
+def test_spinmags():
+    """
+    Test computation of dimensionless spins.
+    """
+
+    # Test scalar input
+    q = 1.0
+    chi1 = 1.0
+    chi2 = 1.0
+

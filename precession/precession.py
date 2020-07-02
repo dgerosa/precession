@@ -1073,7 +1073,7 @@ def Scubic_coefficients(J,r,xi,q,chi1,chi2):
 
 def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
     """
-    Coefficients of the cubic equation in S^2 that identifies the effective potentials.
+    Roots of the cubic equation in S^2 that identifies the effective potentials.
 
     Parameters
     ----------
@@ -1183,7 +1183,7 @@ def Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2):
 
 def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
     """
-    Coefficients of the cubic equation in S^2 that identifies the effective potentials.
+    Roots of the cubic equation in S^2 that identifies the effective potentials.
 
     Parameters
     ----------
@@ -2059,7 +2059,32 @@ def Speriod_prefactor(r,xi,q):
 # J, r, xi, q, chi1, chi2 or Sminus2, Splus2, S32, a?
 def dS2dtsquared(S,J,r,q,chi1,chi2):
     """
-    Write me
+    Squared time derivative of the squared total spin, on the precession timescale.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+
+    J: float
+        Magnitude of the total angular momentum.
+
+    r: float
+        Orbital separation.
+
+    q: float
+        Mass ratio.
+
+    chi1: float
+        Dimensionless spin of the primary.
+
+    chi2: float
+        Dimensionless spin of the secondary.
+
+    Returns
+    -------
+    float
+        Squared time derivative of the squared total spin.
     """
 
     mathcalA = Speriod_prefactor(r,xi,q)
@@ -2070,7 +2095,32 @@ def dS2dtsquared(S,J,r,q,chi1,chi2):
 
 def dS2dt(S,J,r,q,chi1,chi2):
     """
-    Write me
+    Time derivative of the squared total spin, on the precession timescale.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+
+    J: float
+        Magnitude of the total angular momentum.
+
+    r: float
+        Orbital separation.
+
+    q: float
+        Mass ratio.
+
+    chi1: float
+        Dimensionless spin of the primary.
+
+    chi2: float
+        Dimensionless spin of the secondary.
+
+    Returns
+    -------
+    float
+        Time derivative of the squared total spin.
     """
 
     return dS2dtsquared(S,J,r,q,chi1,chi2)**0.5
@@ -2078,12 +2128,35 @@ def dS2dt(S,J,r,q,chi1,chi2):
 
 def dSdt(S,J,r,q,chi1,chi2):
     """
-    Write me
+    Ttime derivative of the total spin, on the precession timescale.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+
+    J: float
+        Magnitude of the total angular momentum.
+
+    r: float
+        Orbital separation.
+
+    q: float
+        Mass ratio.
+
+    chi1: float
+        Dimensionless spin of the primary.
+
+    chi2: float
+        Dimensionless spin of the secondary.
+
+    Returns
+    -------
+    float
+        Time derivative of the total spin.
     """
 
     return dS2dt(S,J,r,q,chi1,chi2) / (2*S)
-
-
 
 
 def elliptic_parameter(Sminus2,Splus2,S32):
@@ -2180,7 +2253,18 @@ def Soft(t,J,r,xi,q,chi1,chi2):
 
 def S2av_mfactor(m):
     """
-    Write me.
+    Factor depending on the elliptic parameter in the precession averaged squared total spin.
+
+    Parameters
+    ----------
+    m: float
+        Elliptic parameter.
+
+    Returns
+    -------
+    mfactor: float
+        Value of the factor for the given m, (1 - E(m)/K(m)) / m.
+        For m=0 the factor is 1/2.
     """
 
     m=toarray(m)
@@ -2193,21 +2277,27 @@ def S2av_mfactor(m):
     return np.where(m==0, 1/2, mfactor)
 
 
-#
-# def S2av_factor_expand(m, order=3):
-#     """
-#     Do we need this?
-#     """
-#
-#     terms = [0.5, m/16.0, m**2.0/32.0, 41.0*m**3.0/2048.0]
-#     f = sum(terms[:order+1])
-#
-#     return f
-
-
 def S2av(J, r, xi, q, chi1, chi2):
     """
-    Write me
+    Analytic precession averaged expression for the squared total spin.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
     """
 
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
@@ -2217,8 +2307,27 @@ def S2av(J, r, xi, q, chi1, chi2):
     return S2
 
 
-
 def eval_kappa(J,r,q):
+    """
+    Change of dependant variable to regularize the infinite orbital separation
+    limit of the precession-averaged evolution equation.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+
+    r: float
+        Binary separation.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    Returns
+    -------
+    kappa: float
+        New dependant variable, (J^2-L^2)/(2L).
+    """
 
     J=toarray(J)
     L = angularmomentum(r, q)
@@ -2228,6 +2337,23 @@ def eval_kappa(J,r,q):
 
 
 def eval_u(r,q):
+    """
+    Change of independant variable to regularize the infinite orbital separation
+    limit of the precession-averaged evolution equation.
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    Returns
+    -------
+    u: float
+        New independant variable, 1/(2L).
+    """
 
     L = angularmomentum(r, q)
     u= 1/(2*L)
@@ -2236,6 +2362,31 @@ def eval_u(r,q):
 
 
 def eval_kappainf(theta1inf,theta2inf,q,chi1,chi2):
+    """
+    Infinite orbital separation limit of the parameter kappa.
+
+    Parameters
+    ----------
+    theta1inf: float
+        Asymptotic value of the angle theta1 between S1 and L.
+
+    theta2inf: float
+        Asymptotic value of the angle theta2 between S2 and L.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    kappainf: float
+        Asymptotic value of kappa.
+    """
 
     S1,S2 = spinmags(q,chi1,chi2)
     kappainf= S1*np.cos(theta1inf) + S2*np.cos(theta2inf)
@@ -2243,49 +2394,287 @@ def eval_kappainf(theta1inf,theta2inf,q,chi1,chi2):
     return kappainf
 
 
-# TODO: write the integrator. First understand how the S2 roots behave at r->infinity. Write another function for solving the quadratic instead of the cubic? 
+def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
+    """
+    Infinite orbital separation limit of the cosine of the angle between the
+    orbital angular momentum and the primary spin.
+
+    Parameters
+    ----------
+    kappainf: float
+        Asymptotic value of kappa.
+
+    xi: float
+        Effective spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    costheta1inf: float
+        Asymptotic value of the cosine of the angle between the orbital angular
+        momentum and the primary spin.
+    """
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    costheta1inf = (-xi + kappainf*(1+1/q)) / (S1*(1/q-q))
+
+    return costheta1inf
+
+
+def eval_theta1inf(kappainf, xi, q, chi1, chi2):
+    """
+    Infinite orbital separation limit of the angle between the orbital angular
+    momentum and the primary spin.
+
+    Parameters
+    ----------
+    kappainf: float
+        Asymptotic value of kappa.
+
+    xi: float
+        Effective spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    theta1inf: float
+        Asymptotic value of the angle between the orbital angular momentum and
+        the primary spin.
+    """
+
+    costheta1inf = eval_costheta1inf(kappainf, xi, q, chi1, chi2)
+    theta1inf = np.arccos(costheta1inf)
+
+    return theta1inf
+
+
+def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
+    """
+    Infinite orbital separation limit of the cosine of the angle between the
+    orbital angular momentum and the secondary spin.
+
+    Parameters
+    ----------
+    kappainf: float
+        Asymptotic value of kappa.
+
+    xi: float
+        Effective spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    costheta2inf: float
+        Asymptotic value of the cosine of the angle between the orbital angular
+        momentum and the secondary spin.
+    """
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    costheta2inf = (xi - kappainf*(1+q)) / (S2*(1/q-q))
+
+    return costheta2inf
+
+
+def eval_theta2inf(kappainf, xi, q, chi1, chi2):
+    """
+    Infinite orbital separation limit of the angle between the orbital angular
+    momentum and the secondary spin.
+
+    Parameters
+    ----------
+    kappainf: float
+        Asymptotic value of kappa.
+
+    xi: float
+        Effective spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    theta2inf: float
+        Asymptotic value of the angle between the orbital angular momentum and
+        the secondary spin.
+    """
+
+    costheta2inf = eval_costheta2inf(kappainf, xi, q, chi1, chi2)
+    theta2inf = np.arccos(costheta2inf)
+
+    return theta2inf
+
+
+def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
+    """
+    Infinite orbital separation limit of the roots of the cubic equation in S^2.
+
+    Parameters
+    ----------
+    theta1inf: float
+        Asymptotic value of the angle between the orbital angular momentum and
+        the primary spin.
+
+    theta2inf: float
+        Asymptotic value of the angle between the orbital angular momentum and
+        the secondary spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    Sminus2inf: float
+        Asymptotic value of the root Sminus2.
+
+    Splus2inf: float
+        Asymptotic value of the root Splus2.
+
+    S32inf: float
+        Asymptotic value of the root S32, -inf.
+    """
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    costheta1inf = np.cos(theta1inf)
+    costheta2inf = np.cos(theta2inf)
+    sintheta1inf = np.sin(theta1inf)
+    sintheta2inf = np.sin(theta2inf)
+    Sminus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf-sintheta1inf*sintheta2inf)
+    Splus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf+sintheta1inf*sintheta2inf)
+    S32inf = -np.inf
+
+    return Sminus2inf, Splus2inf, S32inf
+
+
+def eval_S2avinf(theta1inf, theta2inf, q, chi1, chi2):
+    """
+    Infinite orbital separation limit of the precession averaged values of S^2.
+
+    Parameters
+    ----------
+    theta1inf: float
+        Asymptotic value of the angle between the orbital angular momentum and
+        the primary spin.
+
+    theta2inf: float
+        Asymptotic value of the angle between the orbital angular momentum and
+        the secondary spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    S2avinf: flaot
+        Asymptotic value of S2av.
+    """
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    costheta1inf = np.cos(theta1inf)
+    costheta2inf = np.cos(theta2inf)
+    S2avinf = S1**2 + S2**2 + 2*S1*S2*costheta1inf*costheta2inf
+
+    return S2avinf
+
+
+# TODO: write the integrator. First understand how the S2 roots behave at r->infinity. Write another function for solving the quadratic instead of the cubic?
 #def kappaofu():
 #    scipy.integrate.odeint(S2av, kappa_initial, u_outputs, args=(xi,q,chi1,chi2))
 
 
-
-
-
-
 ## TODO: A function to precession-average a generic quantity
-# J, r, xi, q, chi1, chi2 or Sminus2, Splu2, S32?
-# Output evaluation on args or function of args?
-# Finish docstring once format is decided
-def precession_average(J, r, xi, q, chi1, chi2, func, *args):
+def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     """
     Average a function over a precession cycle.
 
     Parameters
     ----------
-    func: function
-        Function to precession-average, with call func(S^2, args).
+    J: float
+        Magnitude of the total angular momentum.
 
-    args: tuple
+    r: float
+        Binary separation.
+
+    xi: float
+        Effective spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    func: function
+        Function to precession-average, with call func(S**2, *args, **kwargs).
+
+    *args: tuple
         Extra arguments to pass to func.
+
+    **kwargs: tuple
+        Extra keyword arguments to pass to func.
 
     Returns
     -------
-
+    func_pre: float
+        Precession averaged value of func.
     """
 
     #TODO: add kwargs, not only args
 
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
-    a = dSdtprefactor(r, xi ,q)
+    a = Speriod_prefactor(r, xi ,q)
 
-    def _integrand(S2, *args):
-        return func(S2, *args) / np.abs(dS2dt(S2, Sminus2, Splus2, S32, a))
+    def _integrand(S2):
+        return func(S2, *args, **kwargs) / np.abs(dS2dt(S2, Sminus2, Splus2, S32, a))
 
-    def _integral(*args):
-        tau = Speriod(J, r, xi, q, chi1, chi2)
-        return (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2, args=args)[0]
+    tau = Speriod(J, r, xi, q, chi1, chi2)
+    func_pre = (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2)[0]
 
-    return _integral(*args)
+    return func_pre
 
 
 def r_updown(q, chi1, chi2):
