@@ -36,7 +36,7 @@ def assert_scalar(testval, func, *args):
     assert check_val, 'Scalar input returns incorret output value'
 
 
-def assert_vector(testvals, func, shape=None, *args):
+def assert_vector(testvals, func, *args, shape=None):
     """
     Assert that the output of an array is a vector with correct check values.
 

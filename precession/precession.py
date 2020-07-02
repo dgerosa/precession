@@ -2250,7 +2250,7 @@ def Soft(t,J,r,xi,q,chi1,chi2):
 
     return S
 
-
+## TODO: use Eq.15 instead of Eq.22 for m=0?
 def S2av_mfactor(m):
     """
     Factor depending on the elliptic parameter in the precession averaged squared total spin.
