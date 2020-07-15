@@ -135,7 +135,6 @@ def symmetricmassratio(q):
     return eta
 
 
-
 def spin1(q,chi1):
     """
     Spin angular momentum of the heavier black hole.
@@ -307,7 +306,6 @@ def Jdiscriminant_coefficients(r,xi,q,chi1,chi2):
     sigma0:
         Coefficient of J^0.
     """
-
 
     q,xi=toarray(q,xi)
     L=angularmomentum(r,q)
@@ -633,7 +631,6 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
     if r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
         Jmin,Jmax = Jlimits_LS1S2(r,q,chi1,chi2)
 
-
     elif r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
         #TODO: Assert that the xi values are compatible with q,chi1,chi2 (either explicitely or with a generic 'limits_check' function)
         Jmin,Jmax = Jresonances(r,xi,q,chi1,chi2)
@@ -706,7 +703,6 @@ def xidiscriminant_coefficients(J,r,q,chi1,chi2):
     sigma0:
         Coefficient of xi^0.
     """
-
 
     J,q=toarray(J,q)
     L=angularmomentum(r,q)
@@ -1223,6 +1219,7 @@ def Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2):
     return np.array([sigma6, sigma4, sigma2, sigma0])
 
 
+## TODO: generalize sigma6=0 to vector sigma6
 def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
@@ -1255,6 +1252,8 @@ def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
     """
 
     sigma6,sigma4,sigma2,sigma0= Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2)
+
+    #sigma6bool = sigma6 == 0.0
 
     if sigma6 == 0.0:
         Sminus2 = (-sigma2 - (sigma2**2 - 4*sigma4*sigma0)**0.5) / (2*sigma4)
@@ -2579,6 +2578,36 @@ def S2av(J, r, xi, q, chi1, chi2):
     return S2
 
 
+def S2av_NEW(kappa, u, xi, q, chi1, chi2):
+    """
+    Analytic precession averaged expression for the squared total spin.
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    """
+
+    Sminus2, Splus2, S32 = S2roots_NEW(kappa, u, xi, q, chi1, chi2)
+    m = elliptic_parameter(Sminus2, Splus2, S32)
+    S2 = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
+
+    return S2
+
+
 def eval_kappa(J, r, q):
     """
     Change of dependant variable to regularize the infinite orbital separation
@@ -2854,6 +2883,16 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     return toarray([Sminus2inf, Splus2inf, S32inf])
 
 
+def S2rootsinf_NEW(kappainf, xi, q, chi1, chi2):
+    """
+    """
+
+    uinf = 0.0
+    Sminus2inf, Splus2inf, S32inf = S2roots_NEW(kappainf, uinf, xi, q, chi1, chi2)
+
+    return toarray([Sminus2inf, Splus2inf, S32inf])
+
+
 def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the precession averaged values of S^2.
@@ -2884,21 +2923,36 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     """
 
     S1, S2 = spinmags(q, chi1, chi2)
-    costheta1inf = np.cos(theta1inf)
-    costheta2inf = np.cos(theta2inf)
-    S2avinf = S1**2 + S2**2 + 2*S1*S2*costheta1inf*costheta2inf
+    S2inf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
 
-    return S2avinf
+    return S2inf
+
+
+def S2avinf_NEW(kappainf, xi, q, chi1, chi2):
+    """
+    """
+
+    #S1, S2 = spinmags(q, chi1, chi2)
+    #eta = symmetricmassratio(q)
+    #S2inf = S1**2 + S2**2 + (2.0*q/(1.0-q)**2)*(kappainf*(xi-kappainf)-xi**2*eta)
+
+    uinf = 0.0
+    Sminus2, Splus2, S32 = S2roots_NEW(kappainf, uinf, xi, q, chi1, chi2)
+    S2inf = (Sminus2+Splus2) / 2.0
+
+    return S2inf
 
 
 # TODO: write the integrator. First understand how the S2 roots behave at r->infinity. Write another function for solving the quadratic instead of the cubic?
 #def kappaofu():
 #    scipy.integrate.odeint(S2av, kappa_initial, u_outputs, args=(xi,q,chi1,chi2))
-def kappaofu():
+def kappaofu(kappa0, u, xi, q, chi1, chi2):
     """
     """
 
-    return None
+    kappa = scipy.integrate.odeint(S2av_NEW, kappa0, u, args=(xi,q,chi1,chi2))
+
+    return toarray(kappa)
 
 
 ## TODO: A function to precession-average a generic quantity
