@@ -1256,17 +1256,23 @@ def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
 
     sigma6,sigma4,sigma2,sigma0= Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2)
 
-    sigmap = (sigma4**2/(3*sigma6**2) - sigma2/sigma6)/3
-    sigmaq = ((2*sigma4**3)/(27*sigma6**3) - (sigma4*sigma2)/(3*sigma6**2) + sigma0/sigma6) /2
-    #delta = sigmaq**2+sigmap**3
+    if sigma6 == 0.0:
+        Sminus2 = (-sigma2 - (sigma2**2 - 4*sigma4*sigma0)**0.5) / (2*sigma4)
+        Splus2 = (-sigma2 + (sigma2**2 - 4*sigma4*sigma0)**0.5) / (2*sigma4)
+        S32 = -np.inf
 
-    if not coincident:
-        # Mask values if there is only one solution and not three
-        with np.errstate(invalid='ignore'):
-            Sminus2,Splus2,S32= 2*sigmap**(1/2) * np.sin(np.arcsin(sigmaq*sigmap**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(sigmap)))) - sigma4/(3*sigma6)
-    elif coincident:
-        S32 = -2*sigmaq**(1/3) - sigma4/(3*sigma6)
-        Sminus2=Splus2  = sigmaq**(1/3) - sigma4/(3*sigma6)
+    else:
+        sigmap = (sigma4**2/(3*sigma6**2) - sigma2/sigma6)/3
+        sigmaq = ((2*sigma4**3)/(27*sigma6**3) - (sigma4*sigma2)/(3*sigma6**2) + sigma0/sigma6) /2
+        #delta = sigmaq**2+sigmap**3
+
+        if not coincident:
+            # Mask values if there is only one solution and not three
+            with np.errstate(invalid='ignore'):
+                Sminus2,Splus2,S32= 2*sigmap**(1/2) * np.sin(np.arcsin(sigmaq*sigmap**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(sigmap)))) - sigma4/(3*sigma6)
+        elif coincident:
+            S32 = -2*sigmaq**(1/3) - sigma4/(3*sigma6)
+            Sminus2=Splus2  = sigmaq**(1/3) - sigma4/(3*sigma6)
 
     #print(np.roots([sigma6,sigma4,sigma2,sigma0])) # You can test this against numpy.roots
     return toarray([Sminus2,Splus2,S32])
@@ -2800,6 +2806,7 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
     return theta2inf
 
 
+## TODO: not needed with S2roots_NEW modification for sigma6=0
 def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the roots of the cubic equation in S^2.
@@ -2844,7 +2851,7 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     Splus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf + sintheta1inf*sintheta2inf)
     S32inf = -np.inf
 
-    return Sminus2inf, Splus2inf, S32inf
+    return toarray([Sminus2inf, Splus2inf, S32inf])
 
 
 def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
@@ -2887,6 +2894,11 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
 # TODO: write the integrator. First understand how the S2 roots behave at r->infinity. Write another function for solving the quadratic instead of the cubic?
 #def kappaofu():
 #    scipy.integrate.odeint(S2av, kappa_initial, u_outputs, args=(xi,q,chi1,chi2))
+def kappaofu():
+    """
+    """
+
+    return None
 
 
 ## TODO: A function to precession-average a generic quantity
