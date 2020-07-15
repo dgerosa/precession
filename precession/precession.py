@@ -77,6 +77,42 @@ def mass2(q):
     return m2
 
 
+def masses(q):
+    """
+    """
+
+    m1 = mass1(q)
+    m2 = mass2(q)
+
+    return np.array([m1, m2])
+
+
+def massratio(m1, m2):
+    """
+    Mass ratio, 0 < q = m2/m1 < 1.
+
+    Parameters
+    ----------
+    m1: float
+        Mass of the primary black hole.
+
+    m2: float
+        Mass of the secondary black hole.
+
+    Returns
+    -------
+    q: float
+        Mass ratio, 0 < q < 1.
+
+    """
+
+    m1 = toarray(m1)
+    m2 = toarray(m2)
+    q = m2 / m1
+
+    return q
+
+
 def symmetricmassratio(q):
     """
     Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2
@@ -196,6 +232,17 @@ def angularmomentum(r,q):
     return L
 
 
+def orbitalseparation(L, q):
+    """
+    """
+
+    L = toarray(L)
+    m1, m2 = masses(q)
+    r = (L / (m1 * m2))**2
+
+    return r
+
+
 def Jlimits_LS1S2(r,q,chi1,chi2):
     """
     Limits on the magnitude of the total angular momentum due to the vector relation J=L+S1+S2
@@ -262,7 +309,7 @@ def Jdiscriminant_coefficients(r,xi,q,chi1,chi2):
     """
 
 
-    q,xi=toarray(q)
+    q,xi=toarray(q,xi)
     L=angularmomentum(r,q)
     S1,S2= spinmags(q,chi1,chi2)
 
@@ -1118,9 +1165,6 @@ def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
     return toarray([Sminus2,Splus2,S32])
 
 
-
-
-
 def Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2):
     """
     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
@@ -1228,9 +1272,6 @@ def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
     return toarray([Sminus2,Splus2,S32])
 
 
-
-
-
 def Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=False):
     """
     Limits on the total spin magnitude compatible with both J and xi.
@@ -1320,8 +1361,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
     return np.array([Smin,Smax])
 
 
-## TODO
-# Have to check inter-compatibility of Slimits, Jlimits, xilimits
+# TODO: Check inter-compatibility of Slimits, Jlimits, xilimits
 # Tags for each limit check that fails?
 def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     """
@@ -1329,12 +1369,42 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 
     Parameters
     ----------
+    S: float
+        Magnitude of the total spin.
+    J: float, optional
+        Magnitude of the total angular momentum.
+    r: float, optional
+        Binary separation.
+    xi: float, optional
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float, optional
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float, optional
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
 
     Returns
     -------
     check: bool
         True if the given parameters are compatible with each other, false if not.
     """
+    # q, ch1, chi2
+    # 0, 1
+
+    # J: r, xi, q, chi1, chi2
+    # r, q, chi1, chi2 -> Jlimits_LS1S2
+    # r, xi, q, chi1, chi2 -> Jresonances
+
+    # xi: J, r, q, chi1, chi2
+    # q, chi1, chi2 -> xilimits_definition
+    # J, r, q, chi1, chi2 -> xiresonances
+
+    # S: J, r, xi, q, chi1, chi2
+    # q, chi1, chi2 -> Slimits_S1S2
+    # J, r, q -> Slimits_LJ
+    # J, r, q, chi1, chi2 -> Slimits_LJS1S2
+    # J, r, xi, q, chi1, chi2 -> Slimits_plusminus
 
     def _limits_check(testvalue, interval):
         """Check if a value is within a given interval"""
@@ -1805,46 +1875,6 @@ def eval_thetaL(S,J,r,q,chi1,chi2):
     return thetaL
 
 
-def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
-    """
-    Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi). Setting sign=+1 (default) returns deltaphi in [0, pi], setting sign=-1 returns deltaphi in [-pi,0].
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    xi: float
-        Effective spin.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    sign: optional (default: +1)
-        If positive returns values in [0,pi], if negative returns values in [-pi,0].
-
-    Returns
-    -------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    """
-
-    theta1=eval_theta1(S,J,r,xi,q,chi1,chi2)
-    theta2=eval_theta2(S,J,r,xi,q,chi1,chi2)
-    deltaphi=eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=sign)
-
-    return np.array([theta1,theta2,deltaphi])
-
-
 def eval_xi(theta1,theta2,q,chi1,chi2):
     """
     Effective spin from the spin angles.
@@ -1944,6 +1974,47 @@ def eval_S(theta1,theta2,deltaphi,q,chi1,chi2):
     return S
 
 
+def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
+    """
+    Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi).
+    Setting sign=+1 (default) returns deltaphi in [0, pi], setting sign=-1 returns deltaphi in [-pi,0].
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    xi: float
+        Effective spin.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    sign: optional (default: +1)
+        If positive returns values in [0,pi], if negative returns values in [-pi,0].
+
+    Returns
+    -------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    """
+
+    theta1=eval_theta1(S,J,r,xi,q,chi1,chi2)
+    theta2=eval_theta2(S,J,r,xi,q,chi1,chi2)
+    deltaphi=eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=sign)
+
+    return np.array([theta1,theta2,deltaphi])
+
+
 def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     """
     Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
@@ -1980,6 +2051,203 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     xi=eval_xi(theta1,theta2,q,chi1,chi2)
 
     return np.array([S,J,xi])
+
+
+## TODO:
+def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
+    """
+    """
+
+    L = angularmomentum(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+
+    t1 = (1+q) / (4*q * S**2 * L)
+    t2 = J**2 - L**2 - S**2
+    t3 = S**2 * (1+q) - (S1**2 - S2**2) * (1-q)
+    t4 = (1-q) * ((L+S)**2 - J**2)**0.5
+    t5 = (J**2 - (L-S)**2)**0.5
+    t6 = ((S1+S2)**2 - S**2)**0.5
+    t7 = (S**2 - (S1-S2)**2)**0.5
+
+    cosvarphi= ((t2*t3) - (xi/t1)) / (t4*t5*t6*t7)
+    varphi = np.arccos(cosvarphi) * sign
+
+    return varphi
+
+
+## TODO:
+def vectors_to_conserved(S1vec, S2vec, Lvec, q):
+    """
+    """
+
+    S1vec, S2vec, Lvec, q = toarray(S1vec, S2vec, Lvec, q)
+    vecs = [S1vec, S2vec, Lvec]
+    for i in range(len(vecs)):
+        if len(vecs[i].shape) == 1:
+            vecs[i] = np.array([vecs[i]])
+    S1vec, S2vec, Lvec = vecs
+    S = np.linalg.norm(S1vec+S2vec, axis=-1)
+    J = np.linalg.norm(S1vec+S2vec+Lvec, axis=-1)
+    L = np.linalg.norm(Lvec, axis=-1)
+    m1, m2 = masses(q)
+    #xi = np.einsum('ij, ij->i', S1vec/m1 + S2vec/m2, Lvec/L)
+    xi = np.array([np.dot(s0, l) for s0, l in zip(S1vec/m1+S2vec/m2, Lvec/L)])
+
+    return toarray(S, J, xi)
+
+
+## TODO:
+def vectors_to_angles(S1vec, S2vec, Lvec):
+    """
+    """
+
+    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
+    vecs = [S1vec, S2vec, Lvec]
+    for i in range(len(vecs)):
+        if len(vecs[i].shape) == 1:
+            vecs[i] = np.array([vecs[i]])
+    S1vec, S2vec, Lvec = vecs
+    S1vec = S1vec / np.linalg.norm(S1vec, axis=-1)
+    S2vec = S2vec / np.linalg.norm(S2vec, axis=-1)
+    Lvec = Lvec / np.linalg.norm(Lvec, axis=-1)
+    #theta1 = np.arccos(np.einsum('ij, ij->i', S1vec, Lvec))
+    #theta2 = np.arccos(np.einsum('ij, ij->i', S2vec, Lvec))
+    theta1 = np.arccos(np.array([np.dot(s1, l) for s1, l in zip(S1vec, Lvec)]))
+    theta2 = np.arccos(np.array([np.dot(s2, l) for s2, l in zip(S2vec, Lvec)]))
+    S1cL = np.cross(S1vec, Lvec)
+    S1cL = S1cL / np.linalg.norm(S1cL, axis=-1)
+    S2cL = np.cross(S2vec, Lvec)
+    S2cL = S2cL / np.linalg.norm(S2cL, axis=-1)
+    #deltaphi = np.arccos(np.einsum('ij, ij->i', S1cL, S2cL))
+    deltaphi = np.arccos(np.array([np.dot(s1cl, s2cl) for s1cl, s2cl in zip(S1cL, S2cL)]))
+
+    return toarray(theta1, theta2, deltaphi)
+
+
+## TODO:
+def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
+    """
+    Convert the conserved quantities to angular momentum vectors in the frame
+    aligned with the total angular momentum.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+
+    J: float
+        Magnitude of the total angular momentum.
+
+    r: float
+        Binary separation.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    xi: float
+        Effective spin.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+
+    """
+
+    S, J = toarray(S, J)
+    L = angularmomentum(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+    #if q == 1:
+    #else:
+    varphi = eval_varphi(S, J, r, xi, q, chi1, chi2)
+    thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
+
+    Jx = 0.0
+    Jy = 0.0
+    Jz = J
+    Jvec = np.array([Jx, Jy, Jz])
+
+    Lx = L * np.sin(thetaL)
+    Ly = 0.0
+    Lz = L * np.cos(thetaL)
+    Lvec = np.array([Lx, Ly, Lz])
+
+    Svec = Jvec - Lvec
+
+    A1 = (J**2 - (L-S)**2)**0.5
+    A2 = ((L+S)**2 - J**2)**0.5
+    A3 = (S**2 - (S1-S2)**2)**0.5
+    A4 = ((S1+S2)**2 - S**2)**0.5
+
+    #Lx_new = A1 * A2 / (2*J)
+    #Ly_new = 0.0
+    #Lz_new = (J**2 + L**2 - S**2) / (2*J)
+    #Lvec_new = np.array([Lx_new, Ly_new, Lz_new])
+
+    S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S1y = A3 * A4 * np.sin(varphi) / (2*S)
+    S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S1vec = np.array([S1x, S1y, S1z])
+
+    S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S2y = -A3*A4*np.sin(varphi) / (2*S)
+    S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S2vec = np.array([S2x, S2y, S2z])
+
+    return np.array([Svec, S1vec, S2vec, Jvec, Lvec])
+
+
+## TODO:
+def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    """
+
+    S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
+
+    return conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
+
+
+## TODO:
+def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    """
+
+    L = angularmomentum(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+
+    Lx = 0.0
+    Ly = 0.0
+    Lz = L
+    Lvec = np.array([Lx, Ly, Lz])
+
+    S1x = np.sin(theta1)
+    S1y = 0.0
+    S1z = np.cos(theta1)
+    S1vec = np.array([S1x, S1y, S1z]) * S1
+
+    S2x = np.sin(theta2) * np.cos(deltaphi)
+    S2y = np.sin(theta2) * np.sin(deltaphi)
+    S2z = np.cos(theta2)
+    S2vec = np.array([S2x, S2y, S2z]) * S2
+
+    Svec = S1vec + S2vec
+    Jvec = Lvec + Svec
+
+    return toarray(Svec, S1vec, S2vec, Jvec, Lvec)
+
+
+## TODO:
+def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
+    """
+    """
+
+    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
+
+    return angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
 
 
 def morphology(J,r,xi,q,chi1,chi2,simpler=False):
@@ -2248,7 +2516,7 @@ def Soft(t,J,r,xi,q,chi1,chi2):
 
     return S
 
-## TODO: use Eq.15 instead of Eq.22 for m=0?
+
 def S2av_mfactor(m):
     """
     Factor depending on the elliptic parameter in the precession averaged squared total spin.
@@ -2305,7 +2573,7 @@ def S2av(J, r, xi, q, chi1, chi2):
     return S2
 
 
-def eval_kappa(J,r,q):
+def eval_kappa(J, r, q):
     """
     Change of dependant variable to regularize the infinite orbital separation
     limit of the precession-averaged evolution equation.
@@ -2327,14 +2595,14 @@ def eval_kappa(J,r,q):
         New dependant variable, (J^2-L^2)/(2L).
     """
 
-    J=toarray(J)
+    J = toarray(J)
     L = angularmomentum(r, q)
-    kappa = ( J**2 - L**2) / (2* L)
+    kappa = (J**2 - L**2) / (2*L)
 
     return kappa
 
 
-def eval_u(r,q):
+def eval_u(r, q):
     """
     Change of independant variable to regularize the infinite orbital separation
     limit of the precession-averaged evolution equation.
@@ -2354,12 +2622,12 @@ def eval_u(r,q):
     """
 
     L = angularmomentum(r, q)
-    u= 1/(2*L)
+    u = 1 / (2*L)
 
     return u
 
 
-def eval_kappainf(theta1inf,theta2inf,q,chi1,chi2):
+def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the parameter kappa.
 
@@ -2386,8 +2654,8 @@ def eval_kappainf(theta1inf,theta2inf,q,chi1,chi2):
         Asymptotic value of kappa.
     """
 
-    S1,S2 = spinmags(q,chi1,chi2)
-    kappainf= S1*np.cos(theta1inf) + S2*np.cos(theta2inf)
+    S1, S2 = spinmags(q, chi1, chi2)
+    kappainf = S1*np.cos(theta1inf) + S2*np.cos(theta2inf)
 
     return kappainf
 
@@ -2572,14 +2840,14 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     costheta2inf = np.cos(theta2inf)
     sintheta1inf = np.sin(theta1inf)
     sintheta2inf = np.sin(theta2inf)
-    Sminus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf-sintheta1inf*sintheta2inf)
-    Splus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf+sintheta1inf*sintheta2inf)
+    Sminus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf - sintheta1inf*sintheta2inf)
+    Splus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf + sintheta1inf*sintheta2inf)
     S32inf = -np.inf
 
     return Sminus2inf, Splus2inf, S32inf
 
 
-def eval_S2avinf(theta1inf, theta2inf, q, chi1, chi2):
+def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the precession averaged values of S^2.
 
@@ -2657,7 +2925,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
 
     Returns
     -------
-    func_pre: float
+    func_av: float
         Precession averaged value of func.
     """
 
@@ -2670,9 +2938,9 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
         return func(S2, *args, **kwargs) / np.abs(dS2dt(S2, Sminus2, Splus2, S32, a))
 
     tau = Speriod(J, r, xi, q, chi1, chi2)
-    func_pre = (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2)[0]
+    func_av = (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2)[0]
 
-    return func_pre
+    return func_av
 
 
 def r_updown(q, chi1, chi2):
@@ -2738,8 +3006,7 @@ def omega2_aligned(r, q, chi1, chi2, alpha1, alpha2):
     """
 
     L = angularmomentum(r, q)
-    S1 = spin1(q, chi1)
-    S2 = spin2(q, chi2)
+    S1, S2 = spinmags(q, chi1, chi2)
     # Slightly rewritten from Eq. 18 in arXiv:2003.02281 to regularized for q=1
     a = (3*q**5/(2*(1+q)**11*L**7))**2
     b = L**2*(1-q)**2 - 2*L*(q*alpha1*S1-alpha2*S2)*(1-q) + (q*alpha1*S1+alpha2*S2)**2
@@ -2864,6 +3131,37 @@ def omega2_updown(r, q, chi1, chi2):
 
     return omega2
 
+
+# TODO: nutation
+def r_wide(q, chi1, chi2):
+    """
+    The critical separation r_wide below which the binary component with
+    smaller dimensionless spin may undergo wide nutations.
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio m2/m1, 0 <= q <= 1.
+
+    chi1:
+        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
+
+    chi2:
+        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
+
+    Returns
+    -------
+    r_wide: float
+        Critical orbital separation for wide nutation.
+        If chi1 < chi2 (chi1 > chi2) the primary (secondary) spin may undergo
+        wide nutations.
+
+    """
+
+    q, chi1, chi2 = toarray(q, chi1, chi2)
+    r_wide = ((q*chi2 - chi1) / (1-q))**2
+
+    return r_wide
 
 
 
