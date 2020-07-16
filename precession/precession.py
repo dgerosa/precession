@@ -2104,83 +2104,6 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     return np.array([S,J,xi])
 
 
-#TODO clean docstrings
-def angles_to_asymtpotic(theta1inf,theta2inf,q,chi1,chi2):
-    """
-    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
-
-    Parameters
-    ----------
-    theta1inf: float
-        Angle between orbital angular momentum and primary spin.
-    theta1inf: float
-        Angle between orbital angular momentum and primary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    ----------
-    kappainf: float
-        Asymptotic momentum (J^2-L^2)/(2L).
-    xi: float
-        Effective spin.
-    """
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    kappainf = S1*np.cos(theta1inf)+S2*np.cos(theta2inf)
-    xi = eval_xi(theta1inf,theta2inf,q,chi1,chi2)
-
-    return toarray(kappainf,xi)
-
-
-
-#TODO clean docstrings
-def asymtpotic_to_angles(kappainf,xi,q,chi1,chi2):
-    """
-    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
-
-    Parameters
-    ----------
-    theta1inf: float
-        Angle between orbital angular momentum and primary spin.
-    theta1inf: float
-        Angle between orbital angular momentum and primary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    ----------
-    kappainf: float
-        Asymptotic momentum (J^2-L^2)/(2L).
-    xi: float
-        Effective spin.
-    """
-
-    kappainf,xi = toarray(kappainf,xi)
-    S1, S2 = spinmags(q, chi1, chi2)
-
-    theta1inf = np.arccos( (-xi + kappainf*(1+1/q))/(S1*(1/q-q)) )
-    theta2inf = np.arccos( (xi - kappainf*(1+q))/(S2*(1/q-q)) )
-
-    return toarray(theta1inf,theta2inf)
-
-
 def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     """
     Evaluate the spin morphology and return "L0" for librating about DeltaPhi=0, "Lpi" for librating about DeltaPhi=pi, "C-" for circulating from DeltaPhi=pi to DeltaPhi=0, and "C+" for circulating from DeltaPhi=0 to DeltaPhi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return "C" for both.
@@ -2623,6 +2546,7 @@ def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
         Asymptotic value of kappa.
     """
 
+    theta1inf, theta2inf = toarray(theta1inf, theta2inf)
     S1, S2 = spinmags(q, chi1, chi2)
     kappainf = S1*np.cos(theta1inf) + S2*np.cos(theta2inf)
 
@@ -2658,6 +2582,7 @@ def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
         momentum and the primary spin.
     """
 
+    kappainf, xi, q = toarray(kappainf, xi, q)
     S1, S2 = spinmags(q, chi1, chi2)
     costheta1inf = (-xi + kappainf*(1+1/q)) / (S1*(1/q-q))
 
@@ -2728,6 +2653,7 @@ def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
         momentum and the secondary spin.
     """
 
+    kappainf, xi, q = toarray(kappainf, xi, q)
     S1, S2 = spinmags(q, chi1, chi2)
     costheta2inf = (xi - kappainf*(1+q)) / (S2*(1/q-q))
 
@@ -2767,6 +2693,79 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
     theta2inf = np.arccos(costheta2inf)
 
     return theta2inf
+
+
+def angles_to_asymtpotic(theta1inf, theta2inf, q, chi1, chi2):
+    """
+    Convert asymptotic angles theta1 theta2 into effective spin and asymptotic kappa.
+
+    Parameters
+    ----------
+    theta1inf: float
+        Asymptotic angle between orbital angular momentum and primary spin.
+
+    theta2inf: float
+        Asymptotic angle between orbital angular momentum and primary spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    ----------
+    kappainf: float
+        Asymptotic momentum (J^2-L^2)/(2L).
+
+    xi: float
+        Effective spin.
+    """
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    kappainf = eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
+    xi = eval_xi(theta1inf, theta2inf, q, chi1, chi2)
+
+    return np.array([kappainf, xi])
+
+
+def asymtpotic_to_angles(kappainf, xi, q, chi1, chi2):
+    """
+    Convert asymptotic kappa and xi into asymptotic angles theta1, theta2.
+
+    Parameters
+    ----------
+    theta1inf: float
+        Asymptotic angle between orbital angular momentum and primary spin.
+
+    theta1inf: float
+        Asymptotic angle between orbital angular momentum and primary spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    ----------
+    theta1inf: float
+        Asymptotic angle between the orbital angular momentum and primary spin.
+
+    theta2inf: float
+        Asymptotic angle between the orbital angular momentum and secondary spin.
+    """
+
+    theta1inf = eval_theta1inf(kappainf, xi, q, chi1, chi2)
+    theta2inf = eval_theta2inf(kappainf, xi, q, chi1, chi2)
+
+    return np.array([theta1inf, theta2inf])
 
 
 ## TODO: probably this is not needed anymore
