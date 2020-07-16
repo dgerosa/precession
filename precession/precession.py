@@ -2463,7 +2463,7 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
         m = elliptic_parameter(Sminus2, Splus2, S32)
         S2av = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
 
-    return S2av, S32, Sminus2, Splus2
+    return S2av
 
 
 def eval_kappa(J, r, q):
