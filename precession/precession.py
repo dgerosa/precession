@@ -1184,6 +1184,7 @@ def cubicsolver_distinct(coeff3, coeff2, coeff1, coeff0):
 
     return toarray(root1,root2,root3)
 
+
 def cubicsolver_coincident(coeff3, coeff2, coeff1, coeff0):
     #TODO: write docstrings
     # root1 != root2=root3
@@ -1572,6 +1573,28 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
     xi = effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2)
 
     return xi
+
+
+## TODO: fix docstrings
+def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
+    """
+    """
+
+    L = angularmomentum(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+
+    t1 = (1+q) / (4*q * S**2 * L)
+    t2 = J**2 - L**2 - S**2
+    t3 = S**2 * (1+q) - (S1**2 - S2**2) * (1-q)
+    t4 = (1-q) * ((L+S)**2 - J**2)**0.5
+    t5 = (J**2 - (L-S)**2)**0.5
+    t6 = ((S1+S2)**2 - S**2)**0.5
+    t7 = (S**2 - (S1-S2)**2)**0.5
+
+    cosvarphi= ((t2*t3) - (xi/t1)) / (t4*t5*t6*t7)
+    varphi = np.arccos(cosvarphi) * sign
+
+    return varphi
 
 
 def eval_costheta1(S,J,r,xi,q,chi1,chi2):
@@ -2081,283 +2104,6 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     return np.array([S,J,xi])
 
 
-#TODO clean docstrings
-def angles_to_asymtpotic(theta1inf,theta2inf,q,chi1,chi2):
-    """
-    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
-
-    Parameters
-    ----------
-    theta1inf: float
-        Angle between orbital angular momentum and primary spin.
-    theta1inf: float
-        Angle between orbital angular momentum and primary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    ----------
-    kappainf: float
-        Asymptotic momentum (J^2-L^2)/(2L).
-    xi: float
-        Effective spin.
-    """
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    kappainf = S1*np.cos(theta1inf)+S2*np.cos(theta2inf)
-    xi = eval_xi(theta1inf,theta2inf,q,chi1,chi2)
-
-    return toarray(kappainf,xi)
-
-
-
-#TODO clean docstrings
-def asymtpotic_to_angles(kappainf,xi,q,chi1,chi2):
-    """
-    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
-
-    Parameters
-    ----------
-    theta1inf: float
-        Angle between orbital angular momentum and primary spin.
-    theta1inf: float
-        Angle between orbital angular momentum and primary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    ----------
-    kappainf: float
-        Asymptotic momentum (J^2-L^2)/(2L).
-    xi: float
-        Effective spin.
-    """
-
-    kappainf,xi = toarray(kappainf,xi)
-    S1, S2 = spinmags(q, chi1, chi2)
-
-    theta1inf = np.arccos( (-xi + kappainf*(1+1/q))/(S1*(1/q-q)) )
-    theta2inf = np.arccos( (xi - kappainf*(1+q))/(S2*(1/q-q)) )
-
-    return toarray(theta1inf,theta2inf)
-
-
-
-
-
-## TODO: fix docstrings
-def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
-    """
-    """
-
-    L = angularmomentum(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
-
-    t1 = (1+q) / (4*q * S**2 * L)
-    t2 = J**2 - L**2 - S**2
-    t3 = S**2 * (1+q) - (S1**2 - S2**2) * (1-q)
-    t4 = (1-q) * ((L+S)**2 - J**2)**0.5
-    t5 = (J**2 - (L-S)**2)**0.5
-    t6 = ((S1+S2)**2 - S**2)**0.5
-    t7 = (S**2 - (S1-S2)**2)**0.5
-
-    cosvarphi= ((t2*t3) - (xi/t1)) / (t4*t5*t6*t7)
-    varphi = np.arccos(cosvarphi) * sign
-
-    return varphi
-
-
-## TODO:
-def vectors_to_conserved(S1vec, S2vec, Lvec, q):
-    """
-    """
-
-    S1vec, S2vec, Lvec, q = toarray(S1vec, S2vec, Lvec, q)
-    vecs = [S1vec, S2vec, Lvec]
-    for i in range(len(vecs)):
-        if len(vecs[i].shape) == 1:
-            vecs[i] = np.array([vecs[i]])
-    S1vec, S2vec, Lvec = vecs
-    S = np.linalg.norm(S1vec+S2vec, axis=-1)
-    J = np.linalg.norm(S1vec+S2vec+Lvec, axis=-1)
-    L = np.linalg.norm(Lvec, axis=-1)
-    m1, m2 = masses(q)
-    #xi = np.einsum('ij, ij->i', S1vec/m1 + S2vec/m2, Lvec/L)
-    xi = np.array([np.dot(s0, l) for s0, l in zip(S1vec/m1+S2vec/m2, Lvec/L)])
-
-    return toarray(S, J, xi)
-
-
-## TODO:
-def vectors_to_angles(S1vec, S2vec, Lvec):
-    """
-    """
-
-    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
-    vecs = [S1vec, S2vec, Lvec]
-    for i in range(len(vecs)):
-        if len(vecs[i].shape) == 1:
-            vecs[i] = np.array([vecs[i]])
-    S1vec, S2vec, Lvec = vecs
-    S1vec = S1vec / np.linalg.norm(S1vec, axis=-1)
-    S2vec = S2vec / np.linalg.norm(S2vec, axis=-1)
-    Lvec = Lvec / np.linalg.norm(Lvec, axis=-1)
-    #theta1 = np.arccos(np.einsum('ij, ij->i', S1vec, Lvec))
-    #theta2 = np.arccos(np.einsum('ij, ij->i', S2vec, Lvec))
-    theta1 = np.arccos(np.array([np.dot(s1, l) for s1, l in zip(S1vec, Lvec)]))
-    theta2 = np.arccos(np.array([np.dot(s2, l) for s2, l in zip(S2vec, Lvec)]))
-    S1cL = np.cross(S1vec, Lvec)
-    S1cL = S1cL / np.linalg.norm(S1cL, axis=-1)
-    S2cL = np.cross(S2vec, Lvec)
-    S2cL = S2cL / np.linalg.norm(S2cL, axis=-1)
-    #deltaphi = np.arccos(np.einsum('ij, ij->i', S1cL, S2cL))
-    deltaphi = np.arccos(np.array([np.dot(s1cl, s2cl) for s1cl, s2cl in zip(S1cL, S2cL)]))
-
-    return toarray(theta1, theta2, deltaphi)
-
-
-## TODO:
-def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
-    """
-    Convert the conserved quantities to angular momentum vectors in the frame
-    aligned with the total angular momentum.
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-
-    J: float
-        Magnitude of the total angular momentum.
-
-    r: float
-        Binary separation.
-
-    q: float
-        Mass ratio: 0 <= q <= 1.
-
-    xi: float
-        Effective spin.
-
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    -------
-
-    """
-
-    S, J = toarray(S, J)
-    L = angularmomentum(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
-    #if q == 1:
-    #else:
-    varphi = eval_varphi(S, J, r, xi, q, chi1, chi2)
-    thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
-
-    Jx = 0.0
-    Jy = 0.0
-    Jz = J
-    Jvec = np.array([Jx, Jy, Jz])
-
-    Lx = L * np.sin(thetaL)
-    Ly = 0.0
-    Lz = L * np.cos(thetaL)
-    Lvec = np.array([Lx, Ly, Lz])
-
-    Svec = Jvec - Lvec
-
-    A1 = (J**2 - (L-S)**2)**0.5
-    A2 = ((L+S)**2 - J**2)**0.5
-    A3 = (S**2 - (S1-S2)**2)**0.5
-    A4 = ((S1+S2)**2 - S**2)**0.5
-
-    #Lx_new = A1 * A2 / (2*J)
-    #Ly_new = 0.0
-    #Lz_new = (J**2 + L**2 - S**2) / (2*J)
-    #Lvec_new = np.array([Lx_new, Ly_new, Lz_new])
-
-    S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S1y = A3 * A4 * np.sin(varphi) / (2*S)
-    S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S1vec = np.array([S1x, S1y, S1z])
-
-    S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S2y = -A3*A4*np.sin(varphi) / (2*S)
-    S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S2vec = np.array([S2x, S2y, S2z])
-
-    return np.array([Svec, S1vec, S2vec, Jvec, Lvec])
-
-
-## TODO:
-def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
-    """
-    """
-
-    S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
-
-    return conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
-
-
-## TODO:
-def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
-    """
-    """
-
-    L = angularmomentum(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
-
-    Lx = 0.0
-    Ly = 0.0
-    Lz = L
-    Lvec = np.array([Lx, Ly, Lz])
-
-    S1x = np.sin(theta1)
-    S1y = 0.0
-    S1z = np.cos(theta1)
-    S1vec = np.array([S1x, S1y, S1z]) * S1
-
-    S2x = np.sin(theta2) * np.cos(deltaphi)
-    S2y = np.sin(theta2) * np.sin(deltaphi)
-    S2z = np.cos(theta2)
-    S2vec = np.array([S2x, S2y, S2z]) * S2
-
-    Svec = S1vec + S2vec
-    Jvec = Lvec + Svec
-
-    return toarray(Svec, S1vec, S2vec, Jvec, Lvec)
-
-
-## TODO:
-def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
-    """
-    """
-
-    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
-
-    return angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
-
-
 def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     """
     Evaluate the spin morphology and return "L0" for librating about DeltaPhi=0, "Lpi" for librating about DeltaPhi=pi, "C-" for circulating from DeltaPhi=pi to DeltaPhi=0, and "C+" for circulating from DeltaPhi=0 to DeltaPhi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return "C" for both.
@@ -2836,6 +2582,7 @@ def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
         Asymptotic value of kappa.
     """
 
+    theta1inf, theta2inf = toarray(theta1inf, theta2inf)
     S1, S2 = spinmags(q, chi1, chi2)
     kappainf = S1*np.cos(theta1inf) + S2*np.cos(theta2inf)
 
@@ -2871,6 +2618,7 @@ def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
         momentum and the primary spin.
     """
 
+    kappainf, xi, q = toarray(kappainf, xi, q)
     S1, S2 = spinmags(q, chi1, chi2)
     costheta1inf = (-xi + kappainf*(1+1/q)) / (S1*(1/q-q))
 
@@ -2941,6 +2689,7 @@ def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
         momentum and the secondary spin.
     """
 
+    kappainf, xi, q = toarray(kappainf, xi, q)
     S1, S2 = spinmags(q, chi1, chi2)
     costheta2inf = (xi - kappainf*(1+q)) / (S2*(1/q-q))
 
@@ -2980,6 +2729,79 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
     theta2inf = np.arccos(costheta2inf)
 
     return theta2inf
+
+
+def angles_to_asymtpotic(theta1inf, theta2inf, q, chi1, chi2):
+    """
+    Convert asymptotic angles theta1 theta2 into effective spin and asymptotic kappa.
+
+    Parameters
+    ----------
+    theta1inf: float
+        Asymptotic angle between orbital angular momentum and primary spin.
+
+    theta2inf: float
+        Asymptotic angle between orbital angular momentum and primary spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    ----------
+    kappainf: float
+        Asymptotic momentum (J^2-L^2)/(2L).
+
+    xi: float
+        Effective spin.
+    """
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    kappainf = eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
+    xi = eval_xi(theta1inf, theta2inf, q, chi1, chi2)
+
+    return np.array([kappainf, xi])
+
+
+def asymtpotic_to_angles(kappainf, xi, q, chi1, chi2):
+    """
+    Convert asymptotic kappa and xi into asymptotic angles theta1, theta2.
+
+    Parameters
+    ----------
+    theta1inf: float
+        Asymptotic angle between orbital angular momentum and primary spin.
+
+    theta1inf: float
+        Asymptotic angle between orbital angular momentum and primary spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    ----------
+    theta1inf: float
+        Asymptotic angle between the orbital angular momentum and primary spin.
+
+    theta2inf: float
+        Asymptotic angle between the orbital angular momentum and secondary spin.
+    """
+
+    theta1inf = eval_theta1inf(kappainf, xi, q, chi1, chi2)
+    theta2inf = eval_theta2inf(kappainf, xi, q, chi1, chi2)
+
+    return np.array([theta1inf, theta2inf])
 
 
 ## TODO: probably this is not needed anymore
@@ -3082,8 +2904,6 @@ def Jofr(ic, r, xi, q, chi1, chi2):
     return toarray(J)
 
 
-
-
 ## TODO: A function to precession-average a generic quantity
 def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     """
@@ -3136,6 +2956,181 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     func_av = (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2)[0]
 
     return func_av
+
+
+## TODO:
+def vectors_to_conserved(S1vec, S2vec, Lvec, q):
+    """
+    """
+
+    S1vec, S2vec, Lvec, q = toarray(S1vec, S2vec, Lvec, q)
+    vecs = [S1vec, S2vec, Lvec]
+    for i in range(len(vecs)):
+        if len(vecs[i].shape) == 1:
+            vecs[i] = np.array([vecs[i]])
+    S1vec, S2vec, Lvec = vecs
+    S = np.linalg.norm(S1vec+S2vec, axis=-1)
+    J = np.linalg.norm(S1vec+S2vec+Lvec, axis=-1)
+    L = np.linalg.norm(Lvec, axis=-1)
+    m1, m2 = masses(q)
+    #xi = np.einsum('ij, ij->i', S1vec/m1 + S2vec/m2, Lvec/L)
+    xi = np.array([np.dot(s0, l) for s0, l in zip(S1vec/m1+S2vec/m2, Lvec/L)])
+
+    return toarray(S, J, xi)
+
+
+## TODO:
+def vectors_to_angles(S1vec, S2vec, Lvec):
+    """
+    """
+
+    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
+    vecs = [S1vec, S2vec, Lvec]
+    for i in range(len(vecs)):
+        if len(vecs[i].shape) == 1:
+            vecs[i] = np.array([vecs[i]])
+    S1vec, S2vec, Lvec = vecs
+    S1vec = S1vec / np.linalg.norm(S1vec, axis=-1)
+    S2vec = S2vec / np.linalg.norm(S2vec, axis=-1)
+    Lvec = Lvec / np.linalg.norm(Lvec, axis=-1)
+    #theta1 = np.arccos(np.einsum('ij, ij->i', S1vec, Lvec))
+    #theta2 = np.arccos(np.einsum('ij, ij->i', S2vec, Lvec))
+    theta1 = np.arccos(np.array([np.dot(s1, l) for s1, l in zip(S1vec, Lvec)]))
+    theta2 = np.arccos(np.array([np.dot(s2, l) for s2, l in zip(S2vec, Lvec)]))
+    S1cL = np.cross(S1vec, Lvec)
+    S1cL = S1cL / np.linalg.norm(S1cL, axis=-1)
+    S2cL = np.cross(S2vec, Lvec)
+    S2cL = S2cL / np.linalg.norm(S2cL, axis=-1)
+    #deltaphi = np.arccos(np.einsum('ij, ij->i', S1cL, S2cL))
+    deltaphi = np.arccos(np.array([np.dot(s1cl, s2cl) for s1cl, s2cl in zip(S1cL, S2cL)]))
+
+    return toarray(theta1, theta2, deltaphi)
+
+
+## TODO:
+def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
+    """
+    Convert the conserved quantities to angular momentum vectors in the frame
+    aligned with the total angular momentum.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+
+    J: float
+        Magnitude of the total angular momentum.
+
+    r: float
+        Binary separation.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    xi: float
+        Effective spin.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+
+    """
+
+    S, J = toarray(S, J)
+    L = angularmomentum(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+    #if q == 1:
+    #else:
+    varphi = eval_varphi(S, J, r, xi, q, chi1, chi2)
+    thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
+
+    Jx = 0.0
+    Jy = 0.0
+    Jz = J
+    Jvec = np.array([Jx, Jy, Jz])
+
+    Lx = L * np.sin(thetaL)
+    Ly = 0.0
+    Lz = L * np.cos(thetaL)
+    Lvec = np.array([Lx, Ly, Lz])
+
+    Svec = Jvec - Lvec
+
+    A1 = (J**2 - (L-S)**2)**0.5
+    A2 = ((L+S)**2 - J**2)**0.5
+    A3 = (S**2 - (S1-S2)**2)**0.5
+    A4 = ((S1+S2)**2 - S**2)**0.5
+
+    #Lx_new = A1 * A2 / (2*J)
+    #Ly_new = 0.0
+    #Lz_new = (J**2 + L**2 - S**2) / (2*J)
+    #Lvec_new = np.array([Lx_new, Ly_new, Lz_new])
+
+    S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S1y = A3 * A4 * np.sin(varphi) / (2*S)
+    S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S1vec = np.array([S1x, S1y, S1z])
+
+    S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S2y = -A3*A4*np.sin(varphi) / (2*S)
+    S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S2vec = np.array([S2x, S2y, S2z])
+
+    return np.array([Svec, S1vec, S2vec, Jvec, Lvec])
+
+
+## TODO:
+def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    """
+
+    S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
+
+    return conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
+
+
+## TODO:
+def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    """
+
+    L = angularmomentum(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+
+    Lx = 0.0
+    Ly = 0.0
+    Lz = L
+    Lvec = np.array([Lx, Ly, Lz])
+
+    S1x = np.sin(theta1)
+    S1y = 0.0
+    S1z = np.cos(theta1)
+    S1vec = np.array([S1x, S1y, S1z]) * S1
+
+    S2x = np.sin(theta2) * np.cos(deltaphi)
+    S2y = np.sin(theta2) * np.sin(deltaphi)
+    S2z = np.cos(theta2)
+    S2vec = np.array([S2x, S2y, S2z]) * S2
+
+    Svec = S1vec + S2vec
+    Jvec = Lvec + Svec
+
+    return toarray(Svec, S1vec, S2vec, Jvec, Lvec)
+
+
+## TODO:
+def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
+    """
+    """
+
+    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
+
+    return angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
 
 
 def r_updown(q, chi1, chi2):
