@@ -1175,26 +1175,26 @@ def cubicsolver_distinct(coeff3, coeff2, coeff1, coeff0):
     #TODO: write docstrings
     #root1<=root2<=root3
 
-        coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
-        coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
+    coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
+    coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
 
-        # Mask values if there is only one solution and not three
-        with np.errstate(invalid='ignore'):
-            root2,root3,root1= 2*coeffp**(1/2) * np.sin(np.arcsin(coeffq*coeffp**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(coeffp)))) - coeff2/(3*coeff3)
+    # Mask values if there is only one solution and not three
+    with np.errstate(invalid='ignore'):
+        root2,root3,root1= 2*coeffp**(1/2) * np.sin(np.arcsin(coeffq*coeffp**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(coeffp)))) - coeff2/(3*coeff3)
 
-        return root1,root2,root3
+    return toarray(root1,root2,root3)
 
 def cubicsolver_coincident(coeff3, coeff2, coeff1, coeff0):
     #TODO: write docstrings
     # root1 != root2=root3
 
-        coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
-        coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
+    coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
+    coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
 
-        root1 = -2*coeffq**(1/3) - coeff2/(3*coeff3)
-        root2=root3  = coeffq**(1/3) - coeff2/(3*coeff3)
+    root1 = -2*coeffq**(1/3) - coeff2/(3*coeff3)
+    root2=root3  = coeffq**(1/3) - coeff2/(3*coeff3)
 
-        return root1,root2,root3
+    return toarray(root1,root2,root3)
 
 
 
@@ -2113,9 +2113,50 @@ def angles_to_asymtpotic(theta1inf,theta2inf,q,chi1,chi2):
 
     S1, S2 = spinmags(q, chi1, chi2)
     kappainf = S1*np.cos(theta1inf)+S2*np.cos(theta2inf)
-    xi = eval_xi(theta1,theta2,q,chi1,chi2)
+    xi = eval_xi(theta1inf,theta2inf,q,chi1,chi2)
 
-    return np.array([kappainf,xi])
+    return toarray(kappainf,xi)
+
+
+
+#TODO clean docstrings
+def asymtpotic_to_angles(kappainf,xi,q,chi1,chi2):
+    """
+    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
+
+    Parameters
+    ----------
+    theta1inf: float
+        Angle between orbital angular momentum and primary spin.
+    theta1inf: float
+        Angle between orbital angular momentum and primary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    ----------
+    kappainf: float
+        Asymptotic momentum (J^2-L^2)/(2L).
+    xi: float
+        Effective spin.
+    """
+
+    kappainf,xi = toarray(kappainf,xi)
+    S1, S2 = spinmags(q, chi1, chi2)
+
+    theta1inf = np.arccos( (-xi + kappainf*(1+1/q))/(S1*(1/q-q)) )
+    theta2inf = np.arccos( (xi - kappainf*(1+q))/(S2*(1/q-q)) )
+
+    return toarray(theta1inf,theta2inf)
+
 
 
 
@@ -2639,7 +2680,7 @@ def S2av(J, r, xi, q, chi1, chi2):
 
     return S2
 
-
+#TODO: this function does not work on arrays, but I don't think it should, because the integrator wants as scalar function anayway
 def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
     # TODO: fix docstrings
     """
@@ -2664,10 +2705,16 @@ def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
     -------
     """
 
-    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
-    S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
-    m = elliptic_parameter(Sminus2, Splus2, S32)
-    S2 = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
+    if u==0: # In this case, use analytic result
+        theta1inf,theta2inf = asymtpotic_to_angles(kappainf,xi,q,chi1,chi2)
+        S1, S2 = spinmags(q, chi1, chi2)
+        S2 = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
+
+    else:
+        sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+        S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
+        m = elliptic_parameter(Sminus2, Splus2, S32)
+        S2 = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
 
     return S2
 
@@ -2899,7 +2946,7 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
     return theta2inf
 
 
-## TODO: proably this is not needed anymore
+## TODO: probably this is not needed anymore
 def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the roots of the cubic equation in S^2.
@@ -2946,7 +2993,7 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
 
     return toarray([Sminus2inf, Splus2inf, S32inf])
 
-## TODO: proably this is not needed anymore
+## TODO: probably this is not needed anymore
 def S2rootsinf_NEW(kappainf, xi, q, chi1, chi2):
     """
     """
@@ -2956,7 +3003,7 @@ def S2rootsinf_NEW(kappainf, xi, q, chi1, chi2):
 
     return toarray([Sminus2inf, Splus2inf, S32inf])
 
-## TODO: proably this is not needed anymore
+## TODO: probably this is not needed anymore
 def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the precession averaged values of S^2.
@@ -3015,10 +3062,17 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2):
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
-def Jofr(J0, r, xi, q, chi1, chi2):
+def Jofr(ic, r, xi, q, chi1, chi2):
 
-    kappa0 = eval_kappa(J0, r[0], q)
     u = eval_u(r, q)
+
+    if np.isfinite(r[0]):
+        J0 = ic
+        kappa0 = eval_kappa(J0, r[0], q)
+    else:
+        kappa0 = ic
+
+    print(u)
 
     kappa = kappaofu(kappa0, u, xi, q, chi1, chi2)
     L = angularmomentum(r, q)
@@ -3319,11 +3373,18 @@ if __name__ == '__main__':
     #print(Jofr(J0=1.8, r=np.linspace(100,10,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8))
     #print(time.time()-t0)
 
-    t0=time.time()
-    print(repr(Jofr(J0=203.7430728810311, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
-    print(time.time()-t0)
+    #t0=time.time()
+    #print(repr(Jofr(J0=203.7430728810311, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
+    #print(time.time()-t0)
 
-
+    theta1inf=0.5
+    theta2inf=0.5
+    q=0.5
+    chi1=0.6
+    chi2=0.7
+    kappainf, xi = angles_to_asymtpotic(theta1inf,theta2inf,q,chi1,chi2)
+    r = np.concatenate(([np.inf],np.logspace(6,1,100)))
+    print(Jofr(kappainf, r, xi, q, chi1, chi2))
 
     #print( dSdtprefactor(r,xi,q) )
     #kappa=eval_kappa(J,r,q)
