@@ -1275,7 +1275,7 @@ def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
         Spurious root.
     """
 
-    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2)
+    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
 
     #sigma6bool = sigma6 == 0.0
 
@@ -2427,7 +2427,7 @@ def S2av(J, r, xi, q, chi1, chi2):
     return S2
 
 #TODO: this function does not work on arrays, but I don't think it should, because the integrator wants as scalar function anayway
-def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
+def dkappadu(kappa, u, xi, q, chi1, chi2):
     # TODO: fix docstrings
     """
     Analytic precession averaged expression for the squared total spin.
@@ -2452,17 +2452,18 @@ def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
     """
 
     if u==0: # In this case, use analytic result
-        theta1inf,theta2inf = asymtpotic_to_angles(kappainf,xi,q,chi1,chi2)
+        theta1inf, theta2inf = asymtpotic_to_angles(kappainf,xi,q,chi1,chi2)
         S1, S2 = spinmags(q, chi1, chi2)
-        S2 = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
+        S2av = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
 
     else:
         sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
-        S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
+        #S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
+        S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
         m = elliptic_parameter(Sminus2, Splus2, S32)
-        S2 = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
+        S2av = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
 
-    return S2
+    return S2av, S32, Sminus2, Splus2
 
 
 def eval_kappa(J, r, q):
@@ -2815,20 +2816,12 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
 
     return toarray([Sminus2inf, Splus2inf, S32inf])
 
-## TODO: probably this is not needed anymore
-def S2rootsinf_NEW(kappainf, xi, q, chi1, chi2):
-    """
-    """
-
-    uinf = 0.0
-    Sminus2inf, Splus2inf, S32inf = S2roots_NEW(kappainf, uinf, xi, q, chi1, chi2)
-
-    return toarray([Sminus2inf, Splus2inf, S32inf])
 
 ## TODO: probably this is not needed anymore
-def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
+def S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2):
     """
-    Infinite orbital separation limit of the precession averaged values of S^2.
+    Infinite orbital separation limit of the precession averaged values of S^2
+    from the asymptotic angles theta1, theta2.
 
     Parameters
     ----------
@@ -2855,32 +2848,38 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
         Asymptotic value of S2av.
     """
 
+    theta1inf, theta2inf = toarray(theta1inf, theta2inf)
     S1, S2 = spinmags(q, chi1, chi2)
-    S2inf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
+    S2avinf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
 
-    return S2inf
+    return S2avinf
+
 
 ## TODO: proably this is not needed anymore
-def S2avinf_NEW(kappainf, xi, q, chi1, chi2):
+def S2avinf_kappaxi(kappainf, xi, q, chi1, chi2):
     """
+    Infinite orbital separation limit of the precession averaged values of S^2
+    from the asymptotic kappa, xi.
     """
 
-    #S1, S2 = spinmags(q, chi1, chi2)
-    #eta = symmetricmassratio(q)
-    #S2inf = S1**2 + S2**2 + (2.0*q/(1.0-q)**2)*(kappainf*(xi-kappainf)-xi**2*eta)
+    kappainf, xi, q = toarray(kappainf, xi, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+    eta = symmetricmassratio(q)
+    S2avinf = S1**2 + S2**2 + (2.0*q/(1.0-q)**2)*(kappainf*(xi-kappainf)-xi**2*eta)
 
-    uinf = 0.0
-    Sminus2, Splus2, S32 = S2roots_NEW(kappainf, uinf, xi, q, chi1, chi2)
-    S2inf = (Sminus2+Splus2) / 2.0
+    return S2avinf
 
-    return S2inf
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
 def kappaofu(kappa0, u, xi, q, chi1, chi2):
-    kappa = scipy.integrate.odeint(dkappadu_RHS, kappa0, u, args=(xi,q,chi1,chi2))
+    """
+    """
+
+    kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2))
 
     return toarray(kappa)
+
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
@@ -2903,7 +2902,6 @@ def Jofr(ic, r, xi, q, chi1, chi2):
     return toarray(J)
 
 
-## TODO: A function to precession-average a generic quantity
 def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     """
     Average a function over a precession cycle.
@@ -2942,8 +2940,6 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     func_av: float
         Precession averaged value of func.
     """
-
-    #TODO: add kwargs, not only args
 
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
     a = Speriod_prefactor(r, xi ,q)
