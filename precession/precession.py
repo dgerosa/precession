@@ -1049,7 +1049,8 @@ def Slimits_LJS1S2(J,r,q,chi1,chi2):
     return np.array([Smin,Smax])
 
 
-def Scubic_coefficients(J,r,xi,q,chi1,chi2):
+#TODO: I think this can be removed
+def Scubic_coefficients_OLD(J,r,xi,q,chi1,chi2):
     """
     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
 
@@ -1112,56 +1113,7 @@ def Scubic_coefficients(J,r,xi,q,chi1,chi2):
     return np.array([sigma6, sigma4, sigma2, sigma0])
 
 
-def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
-    """
-    Roots of the cubic equation in S^2 that identifies the effective potentials.
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    xi: float
-        Effective spin
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    coincident: boolean, optional (default: False)
-        If True, assume that the input is a spin-orbit resonance and return repeated roots
-
-    Returns
-    -------
-    Sminus2:
-        Lowest physical root (or unphysical).
-    Splus2:
-        Highest physical root (or unphysical).
-    S32: float
-        Spurious root.
-    """
-
-    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(J,r,xi,q,chi1,chi2)
-
-    sigmap = (sigma4**2/(3*sigma6**2) - sigma2/sigma6)/3
-    sigmaq = ((2*sigma4**3)/(27*sigma6**3) - (sigma4*sigma2)/(3*sigma6**2) + sigma0/sigma6) /2
-    #delta = sigmaq**2+sigmap**3
-
-    if not coincident:
-        # Mask values if there is only one solution and not three
-        with np.errstate(invalid='ignore'):
-            Sminus2,Splus2,S32= 2*sigmap**(1/2) * np.sin(np.arcsin(sigmaq*sigmap**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(sigmap)))) - sigma4/(3*sigma6)
-    elif coincident:
-        S32 = -2*sigmaq**(1/3) - sigma4/(3*sigma6)
-        Sminus2=Splus2  = sigmaq**(1/3) - sigma4/(3*sigma6)
-
-    #print(np.roots([sigma6,sigma4,sigma2,sigma0])) # You can test this against numpy.roots
-    return toarray([Sminus2,Splus2,S32])
-
-
-def Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2):
+def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     """
     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
 
@@ -1169,8 +1121,8 @@ def Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2):
     ----------
     J: float
         Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
+    u: float
+        1/r where Binary separation.
     xi: float
         Effective spin
     q: float
@@ -1192,8 +1144,8 @@ def Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2):
         Coefficient of S^0.
     """
 
-    kappa,u,xi,q=toarray(kappa,u,xi,q)
-    S1,S2= spinmags(q,chi1,chi2)
+    kappa,u,xi,q = toarray(kappa,u,xi,q)
+    S1,S2 = spinmags(q,chi1,chi2)
 
     sigma6 = q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )
 
@@ -1219,7 +1171,78 @@ def Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2):
     return np.array([sigma6, sigma4, sigma2, sigma0])
 
 
-## TODO: generalize sigma6=0 to vector sigma6
+def cubicsolver_distinct(coeff3, coeff2, coeff1, coeff0):
+    #TODO: write docstrings
+    #root1<=root2<=root3
+
+        coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
+        coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
+
+        # Mask values if there is only one solution and not three
+        with np.errstate(invalid='ignore'):
+            root2,root3,root1= 2*coeffp**(1/2) * np.sin(np.arcsin(coeffq*coeffp**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(coeffp)))) - coeff2/(3*coeff3)
+
+        return root1,root2,root3
+
+def cubicsolver_coincident(coeff3, coeff2, coeff1, coeff0):
+    #TODO: write docstrings
+    # root1 != root2=root3
+
+        coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
+        coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
+
+        root1 = -2*coeffq**(1/3) - coeff2/(3*coeff3)
+        root2=root3  = coeffq**(1/3) - coeff2/(3*coeff3)
+
+        return root1,root2,root3
+
+
+
+def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
+    """
+    Roots of the cubic equation in S^2 that identifies the effective potentials.
+
+    Parameters
+    ----------
+    kappa: float
+        Asymptotic momentum (J^2-L^2)/(2L).
+    u: float
+        Compactified momentum 1/(2L).
+    xi: float
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    coincident: boolean, optional (default: False)
+        If True, *assume* that the input is a spin-orbit resonance and return repeated roots
+
+    Returns
+    -------
+    Sminus2:
+        Lowest physical root (or unphysical).
+    Splus2:
+        Highest physical root (or unphysical).
+    S32: float
+        Spurious root.
+    """
+
+    kappa = eval_kappa(J, r, q)
+    u = eval_u(r, q)
+
+    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+
+    if coincident:
+        S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
+    else:
+        S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
+
+    return toarray([Sminus2,Splus2,S32])
+
+
+## TODO: I think this can be deleted
 def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
@@ -2058,7 +2081,46 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     return np.array([S,J,xi])
 
 
-## TODO:
+#TODO clean docstrings
+def angles_to_asymtpotic(theta1inf,theta2inf,q,chi1,chi2):
+    """
+    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
+
+    Parameters
+    ----------
+    theta1inf: float
+        Angle between orbital angular momentum and primary spin.
+    theta1inf: float
+        Angle between orbital angular momentum and primary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    ----------
+    kappainf: float
+        Asymptotic momentum (J^2-L^2)/(2L).
+    xi: float
+        Effective spin.
+    """
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    kappainf = S1*np.cos(theta1inf)+S2*np.cos(theta2inf)
+    xi = eval_xi(theta1,theta2,q,chi1,chi2)
+
+    return np.array([kappainf,xi])
+
+
+
+
+## TODO: fix docstrings
 def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
     """
     """
@@ -2578,7 +2640,8 @@ def S2av(J, r, xi, q, chi1, chi2):
     return S2
 
 
-def S2av_NEW(kappa, u, xi, q, chi1, chi2):
+def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
+    # TODO: fix docstrings
     """
     Analytic precession averaged expression for the squared total spin.
 
@@ -2601,7 +2664,8 @@ def S2av_NEW(kappa, u, xi, q, chi1, chi2):
     -------
     """
 
-    Sminus2, Splus2, S32 = S2roots_NEW(kappa, u, xi, q, chi1, chi2)
+    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+    S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
     m = elliptic_parameter(Sminus2, Splus2, S32)
     S2 = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
 
@@ -2627,7 +2691,7 @@ def eval_kappa(J, r, q):
     Returns
     -------
     kappa: float
-        New dependant variable, (J^2-L^2)/(2L).
+        Asymptotic momentum (J^2-L^2)/(2L).
     """
 
     J = toarray(J)
@@ -2653,7 +2717,7 @@ def eval_u(r, q):
     Returns
     -------
     u: float
-        New independant variable, 1/(2L).
+        Compactified momentum 1/(2L).
     """
 
     L = angularmomentum(r, q)
@@ -2835,7 +2899,7 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
     return theta2inf
 
 
-## TODO: not needed with S2roots_NEW modification for sigma6=0
+## TODO: proably this is not needed anymore
 def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the roots of the cubic equation in S^2.
@@ -2882,7 +2946,7 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
 
     return toarray([Sminus2inf, Splus2inf, S32inf])
 
-
+## TODO: proably this is not needed anymore
 def S2rootsinf_NEW(kappainf, xi, q, chi1, chi2):
     """
     """
@@ -2892,7 +2956,7 @@ def S2rootsinf_NEW(kappainf, xi, q, chi1, chi2):
 
     return toarray([Sminus2inf, Splus2inf, S32inf])
 
-
+## TODO: not needed with ## TODO: proably this is not needed anymore
 def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the precession averaged values of S^2.
@@ -2942,17 +3006,27 @@ def S2avinf_NEW(kappainf, xi, q, chi1, chi2):
 
     return S2inf
 
-
-# TODO: write the integrator. First understand how the S2 roots behave at r->infinity. Write another function for solving the quadratic instead of the cubic?
-#def kappaofu():
-#    scipy.integrate.odeint(S2av, kappa_initial, u_outputs, args=(xi,q,chi1,chi2))
+#TODO: make it work on arrays (multiple evolutions)
+#TODO: write docstrings
 def kappaofu(kappa0, u, xi, q, chi1, chi2):
-    """
-    """
-
-    kappa = scipy.integrate.odeint(S2av_NEW, kappa0, u, args=(xi,q,chi1,chi2))
+    kappa = scipy.integrate.odeint(dkappadu_RHS, kappa0, u, args=(xi,q,chi1,chi2))
 
     return toarray(kappa)
+
+#TODO: make it work on arrays (multiple evolutions)
+#TODO: write docstrings
+def Jofr(J0, r, xi, q, chi1, chi2):
+
+    kappa0 = eval_kappa(J0, r[0], q)
+    u = eval_u(r, q)
+
+    kappa = kappaofu(kappa0, u, xi, q, chi1, chi2)
+    L = angularmomentum(r, q)
+    J = ( 2*L*kappa + L**2 )**0.5
+
+    return toarray(J)
+
+
 
 
 ## TODO: A function to precession-average a generic quantity
@@ -3233,18 +3307,28 @@ def r_wide(q, chi1, chi2):
 
 if __name__ == '__main__':
 
-    r=[10,10]
-    xi=[0.35,-0.675]
-    q=[0.8,0.2]
-    chi1=[1,1]
-    chi2=[1,1]
-    J=[1,0.23]
+    #r=[10,10]
+    #xi=[0.35,-0.675]
+    #q=[0.8,0.2]
+    #chi1=[1,1]
+    #chi2=[1,1]
+    #J=[1,0.23]
 
-    print(S2roots(J,r,xi,q,chi1,chi2))
+    #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
+    #t0=time.time()
+    #print(Jofr(J0=1.8, r=np.linspace(100,10,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8))
+    #print(time.time()-t0)
+
+    t0=time.time()
+    print(repr(Jofr(J0=203.7430728810311, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
+    print(time.time()-t0)
+
+
+
     #print( dSdtprefactor(r,xi,q) )
-    kappa=eval_kappa(J,r,q)
-    u=eval_u(r,q)
-    print(S2roots_NEW(kappa,u,xi,q,chi1,chi2))
+    #kappa=eval_kappa(J,r,q)
+    #u=eval_u(r,q)
+    #print(S2roots_NEW(kappa,u,xi,q,chi1,chi2))
 
 
     #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
