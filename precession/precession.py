@@ -2488,11 +2488,13 @@ def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
     -------
     """
 
-    if u==0: # In this case, use analytic result
+    if u==0:
+        # In this case use analytic result
         theta1inf,theta2inf = asymtpotic_to_angles(kappainf,xi,q,chi1,chi2)
         S2 = S2avinf(theta1inf, theta2inf, q, chi1, chi2)
 
     else:
+        # Repeat instruction instead of calling S2av to avoid converting J->kappa->J.
         sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
         S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
         m = elliptic_parameter(Sminus2, Splus2, S32)
@@ -2804,7 +2806,6 @@ def asymtpotic_to_angles(kappainf, xi, q, chi1, chi2):
     return np.array([theta1inf, theta2inf])
 
 
-## TODO: probably this is not needed anymore
 def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the roots of the cubic equation in S^2.
@@ -2849,32 +2850,8 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     Splus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf + sintheta1inf*sintheta2inf)
     S32inf = -np.inf
 
-    return toarray([Sminus2inf, Splus2inf, S32inf])
+    return toarray(Sminus2inf, Splus2inf, S32inf)
 
-## TODO: probably this is not needed anymore
-def S2rootsinf_NEW(kappainf, xi, q, chi1, chi2):
-    """
-    """
-
-    uinf = 0.0
-    Sminus2inf, Splus2inf, S32inf = S2roots_NEW(kappainf, uinf, xi, q, chi1, chi2)
-
-    return toarray([Sminus2inf, Splus2inf, S32inf])
-
-## TODO: proably this is not needed anymore
-def S2avinf_NEW(kappainf, xi, q, chi1, chi2):
-    """
-    """
-
-    #S1, S2 = spinmags(q, chi1, chi2)
-    #eta = symmetricmassratio(q)
-    #S2inf = S1**2 + S2**2 + (2.0*q/(1.0-q)**2)*(kappainf*(xi-kappainf)-xi**2*eta)
-
-    uinf = 0.0
-    Sminus2, Splus2, S32 = S2roots_NEW(kappainf, uinf, xi, q, chi1, chi2)
-    S2inf = (Sminus2+Splus2) / 2.0
-
-    return S2inf
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
@@ -2882,6 +2859,7 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2):
     kappa = scipy.integrate.odeint(dkappadu_RHS, kappa0, u, args=(xi,q,chi1,chi2))
 
     return toarray(kappa)
+
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
