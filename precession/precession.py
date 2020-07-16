@@ -2175,9 +2175,8 @@ def Speriod_prefactor(r,xi,q):
     return mathcalA
 
 
-
 # J, r, xi, q, chi1, chi2 or Sminus2, Splus2, S32, a?
-def dS2dtsquared(S,J,r,q,chi1,chi2):
+def dS2dtsquared(S,J,r,xi,q,chi1,chi2):
     """
     Squared time derivative of the squared total spin, on the precession timescale.
 
@@ -2191,6 +2190,9 @@ def dS2dtsquared(S,J,r,q,chi1,chi2):
 
     r: float
         Orbital separation.
+
+    xi: float
+        Effective spin
 
     q: float
         Mass ratio.
@@ -2213,7 +2215,7 @@ def dS2dtsquared(S,J,r,q,chi1,chi2):
     return - mathcalA**2 * (S**2-Splus2) * (S**2-Sminus2) * (S**2-S32)
 
 
-def dS2dt(S,J,r,q,chi1,chi2):
+def dS2dt(S,J,r,xi,q,chi1,chi2):
     """
     Time derivative of the squared total spin, on the precession timescale.
 
@@ -2227,6 +2229,9 @@ def dS2dt(S,J,r,q,chi1,chi2):
 
     r: float
         Orbital separation.
+
+    xi: float
+        Effective spin.
 
     q: float
         Mass ratio.
@@ -2243,10 +2248,10 @@ def dS2dt(S,J,r,q,chi1,chi2):
         Time derivative of the squared total spin.
     """
 
-    return dS2dtsquared(S,J,r,q,chi1,chi2)**0.5
+    return dS2dtsquared(S,J,r,xi,q,chi1,chi2)**0.5
 
 
-def dSdt(S,J,r,q,chi1,chi2):
+def dSdt(S,J,r,xi,q,chi1,chi2):
     """
     Ttime derivative of the total spin, on the precession timescale.
 
@@ -2260,6 +2265,9 @@ def dSdt(S,J,r,q,chi1,chi2):
 
     r: float
         Orbital separation.
+
+    xi: float
+        Effective spin.
 
     q: float
         Mass ratio.
@@ -2276,7 +2284,7 @@ def dSdt(S,J,r,q,chi1,chi2):
         Time derivative of the total spin.
     """
 
-    return dS2dt(S,J,r,q,chi1,chi2) / (2*S)
+    return dS2dt(S,J,r,xi,q,chi1,chi2) / (2*S)
 
 
 def elliptic_parameter(Sminus2,Splus2,S32):
@@ -2698,7 +2706,7 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
     return theta2inf
 
 
-def angles_to_asymtpotic(theta1inf, theta2inf, q, chi1, chi2):
+def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     """
     Convert asymptotic angles theta1 theta2 into effective spin and asymptotic kappa.
 
@@ -2735,7 +2743,7 @@ def angles_to_asymtpotic(theta1inf, theta2inf, q, chi1, chi2):
     return np.array([kappainf, xi])
 
 
-def asymtpotic_to_angles(kappainf, xi, q, chi1, chi2):
+def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     """
     Convert asymptotic kappa and xi into asymptotic angles theta1, theta2.
 
@@ -2869,6 +2877,7 @@ def S2avinf_kappaxi(kappainf, xi, q, chi1, chi2):
     S2avinf = S1**2 + S2**2 + (2.0*q/(1.0-q)**2)*(kappainf*(xi-kappainf)-xi**2*eta)
 
     return S2avinf
+
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
@@ -3375,7 +3384,7 @@ if __name__ == '__main__':
     q=0.5
     chi1=0.6
     chi2=0.7
-    kappainf, xi = angles_to_asymtpotic(theta1inf,theta2inf,q,chi1,chi2)
+    kappainf, xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
     r = np.concatenate(([np.inf],np.logspace(6,1,100)))
     print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
