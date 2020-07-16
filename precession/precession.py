@@ -2956,7 +2956,7 @@ def S2rootsinf_NEW(kappainf, xi, q, chi1, chi2):
 
     return toarray([Sminus2inf, Splus2inf, S32inf])
 
-## TODO: not needed with ## TODO: proably this is not needed anymore
+## TODO: proably this is not needed anymore
 def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the precession averaged values of S^2.
@@ -2991,7 +2991,7 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
 
     return S2inf
 
-
+## TODO: proably this is not needed anymore
 def S2avinf_NEW(kappainf, xi, q, chi1, chi2):
     """
     """
