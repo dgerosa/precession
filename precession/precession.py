@@ -2453,10 +2453,11 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
     """
 
     if u==0: # In this case, use analytic result
-        theta1inf,theta2inf = asymptotic_to_angles(kappainf,xi,q,chi1,chi2)
+        theta1inf,theta2inf = asymptotic_to_angles(kappa, xi , q, chi1, chi2)
         S2av = S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2)
 
     else:
+        # Repeat instruction instead of calling S2av to avoid converting J->kappa->J.
         sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
         #S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
         S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
@@ -2769,7 +2770,6 @@ def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     return np.array([theta1inf, theta2inf])
 
 
-## TODO: probably this is not needed anymore
 def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the roots of the cubic equation in S^2.
@@ -2814,7 +2814,7 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     Splus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf + sintheta1inf*sintheta2inf)
     S32inf = -np.inf
 
-    return toarray([Sminus2inf, Splus2inf, S32inf])
+    return toarray(Sminus2inf, Splus2inf, S32inf)
 
 
 ## TODO: probably this is not needed anymore
@@ -2868,7 +2868,6 @@ def S2avinf_kappaxi(kappainf, xi, q, chi1, chi2):
     S2avinf = S1**2 + S2**2 + (2.0*q/(1.0-q)**2)*(kappainf*(xi-kappainf)-xi**2*eta)
 
     return S2avinf
-
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
