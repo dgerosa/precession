@@ -2427,43 +2427,8 @@ def S2av(J, r, xi, q, chi1, chi2):
     return S2
 
 
-def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
-    """
-    Infinite orbital separation limit of the precession averaged values of S^2.
-
-    Parameters
-    ----------
-    theta1inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the primary spin.
-
-    theta2inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the secondary spin.
-
-    q: float
-        Mass ratio: 0 <= q <= 1.
-
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    -------
-    S2avinf: flaot
-        Asymptotic value of S2av.
-    """
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    S2avinf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
-
-    return S2avinf
-
-
 # TODO: this function does not work with numpy arrays, but it doesn't have to, I think, because it's the RHS of quad; user should never call this directly
-def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
+def dkappadu(kappa, u, xi, q, chi1, chi2):
     # TODO: fix docstrings
     """
     Analytic precession averaged expression for the squared total spin.
@@ -2489,7 +2454,7 @@ def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
 
     if u==0: # In this case, use analytic result
         theta1inf,theta2inf = asymtpotic_to_angles(kappainf,xi,q,chi1,chi2)
-        S2 = S2avinf(theta1inf, theta2inf, q, chi1, chi2)
+        S2av = S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2)
 
     else:
         sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
