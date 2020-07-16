@@ -1168,7 +1168,7 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     * S2 ) * ( S1 + S2 ) * xi * kappa + ( -1 + q ) * ( ( 1 + q ) )**( 2 ) \
     * ( q * ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( kappa )**( 2 ) ) )
 
-    return np.array([sigma6, sigma4, sigma2, sigma0])
+    return toarray(sigma6, sigma4, sigma2, sigma0)
 
 
 def cubicsolver_distinct(coeff3, coeff2, coeff1, coeff0):
@@ -2451,12 +2451,12 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
     Returns
     -------
     """
+    kappa=toarray(kappa)
 
     if u==0:
         # In this case use analytic result
-        theta1inf,theta2inf = asymtpotic_to_angles(kappainf,xi,q,chi1,chi2)
+        theta1inf,theta2inf = asymtpotic_to_angles(kappa,xi,q,chi1,chi2)
         S2av = S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2)
-
     else:
         # Repeat instruction instead of calling S2av to avoid converting J->kappa->J.
         sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
@@ -3364,9 +3364,11 @@ if __name__ == '__main__':
     #print(Jofr(J0=1.8, r=np.linspace(100,10,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8))
     #print(time.time()-t0)
 
-    #t0=time.time()
-    #print(repr(Jofr(J0=203.7430728810311, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
-    #print(time.time()-t0)
+    # t0=time.time()
+    # print(repr(Jofr(ic=203.7430728810311, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
+    # print(time.time()-t0)
+
+
 
     theta1inf=0.5
     theta2inf=0.5
@@ -3377,10 +3379,16 @@ if __name__ == '__main__':
     r = np.concatenate(([np.inf],np.logspace(6,1,100)))
     print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
-    #print( dSdtprefactor(r,xi,q) )
-    #kappa=eval_kappa(J,r,q)
-    #u=eval_u(r,q)
-    #print(S2roots_NEW(kappa,u,xi,q,chi1,chi2))
+
+
+
+
+
+
+    # print( dSdtprefactor(r,xi,q) )
+    # kappa=eval_kappa(J,r,q)
+    # u=eval_u(r,q)
+    # print(S2roots_NEW(kappa,u,xi,q,chi1,chi2))
 
 
     #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
