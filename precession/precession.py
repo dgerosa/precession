@@ -2817,8 +2817,6 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
 
     return toarray(Sminus2inf, Splus2inf, S32inf)
 
-<<<<<<< HEAD
-=======
 
 ## TODO: probably this is not needed anymore
 def S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2):
@@ -2871,8 +2869,6 @@ def S2avinf_kappaxi(kappainf, xi, q, chi1, chi2):
     S2avinf = S1**2 + S2**2 + (2.0*q/(1.0-q)**2)*(kappainf*(xi-kappainf)-xi**2*eta)
 
     return S2avinf
-
->>>>>>> 26c5ec4476c89ea07b01219fdaaf2504eed73929
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
