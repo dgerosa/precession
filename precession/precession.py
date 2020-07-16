@@ -2453,7 +2453,7 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
     """
 
     if u==0: # In this case, use analytic result
-        theta1inf,theta2inf = asymtpotic_to_angles(kappainf,xi,q,chi1,chi2)
+        theta1inf,theta2inf = asymptotic_to_angles(kappainf,xi,q,chi1,chi2)
         S2av = S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2)
 
     else:
@@ -2696,7 +2696,7 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
     return theta2inf
 
 
-def angles_to_asymtpotic(theta1inf, theta2inf, q, chi1, chi2):
+def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     """
     Convert asymptotic angles theta1 theta2 into effective spin and asymptotic kappa.
 
@@ -2733,7 +2733,7 @@ def angles_to_asymtpotic(theta1inf, theta2inf, q, chi1, chi2):
     return np.array([kappainf, xi])
 
 
-def asymtpotic_to_angles(kappainf, xi, q, chi1, chi2):
+def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     """
     Convert asymptotic kappa and xi into asymptotic angles theta1, theta2.
 
@@ -3373,7 +3373,7 @@ if __name__ == '__main__':
     q=0.5
     chi1=0.6
     chi2=0.7
-    kappainf, xi = angles_to_asymtpotic(theta1inf,theta2inf,q,chi1,chi2)
+    kappainf, xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
     r = np.concatenate(([np.inf],np.logspace(6,1,100)))
     print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
