@@ -1275,7 +1275,7 @@ def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
         Spurious root.
     """
 
-    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients_NEW(kappa,u,xi,q,chi1,chi2)
+    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
 
     #sigma6bool = sigma6 == 0.0
 
@@ -2427,44 +2427,8 @@ def S2av(J, r, xi, q, chi1, chi2):
     return S2
 
 
-def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
-    """
-    Infinite orbital separation limit of the precession averaged values of S^2.
-
-    Parameters
-    ----------
-    theta1inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the primary spin.
-
-    theta2inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the secondary spin.
-
-    q: float
-        Mass ratio: 0 <= q <= 1.
-
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    -------
-    S2avinf: flaot
-        Asymptotic value of S2av.
-    """
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    S2inf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
-
-    return S2inf
-
-
-
 # TODO: this function does not work with numpy arrays, but it doesn't have to, I think, because it's the RHS of quad; user should never call this directly
-def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
+def dkappadu(kappa, u, xi, q, chi1, chi2):
     # TODO: fix docstrings
     """
     Analytic precession averaged expression for the squared total spin.
@@ -2491,16 +2455,17 @@ def dkappadu_RHS(kappa, u, xi, q, chi1, chi2):
     if u==0:
         # In this case use analytic result
         theta1inf,theta2inf = asymtpotic_to_angles(kappainf,xi,q,chi1,chi2)
-        S2 = S2avinf(theta1inf, theta2inf, q, chi1, chi2)
+        S2av = S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2)
 
     else:
         # Repeat instruction instead of calling S2av to avoid converting J->kappa->J.
         sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
-        S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
+        #S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
+        S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
         m = elliptic_parameter(Sminus2, Splus2, S32)
-        S2 = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
+        S2av = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
 
-    return S2
+    return S2av, S32, Sminus2, Splus2
 
 
 def eval_kappa(J, r, q):
@@ -2852,11 +2817,70 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
 
     return toarray(Sminus2inf, Splus2inf, S32inf)
 
+<<<<<<< HEAD
+=======
+
+## TODO: probably this is not needed anymore
+def S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2):
+    """
+    Infinite orbital separation limit of the precession averaged values of S^2
+    from the asymptotic angles theta1, theta2.
+
+    Parameters
+    ----------
+    theta1inf: float
+        Asymptotic value of the angle between the orbital angular momentum and
+        the primary spin.
+
+    theta2inf: float
+        Asymptotic value of the angle between the orbital angular momentum and
+        the secondary spin.
+
+    q: float
+        Mass ratio: 0 <= q <= 1.
+
+    chi1: float
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+
+    chi2: float
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    S2avinf: flaot
+        Asymptotic value of S2av.
+    """
+
+    theta1inf, theta2inf = toarray(theta1inf, theta2inf)
+    S1, S2 = spinmags(q, chi1, chi2)
+    S2avinf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
+
+    return S2avinf
+
+
+## TODO: proably this is not needed anymore
+def S2avinf_kappaxi(kappainf, xi, q, chi1, chi2):
+    """
+    Infinite orbital separation limit of the precession averaged values of S^2
+    from the asymptotic kappa, xi.
+    """
+
+    kappainf, xi, q = toarray(kappainf, xi, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+    eta = symmetricmassratio(q)
+    S2avinf = S1**2 + S2**2 + (2.0*q/(1.0-q)**2)*(kappainf*(xi-kappainf)-xi**2*eta)
+
+    return S2avinf
+
+>>>>>>> 26c5ec4476c89ea07b01219fdaaf2504eed73929
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
 def kappaofu(kappa0, u, xi, q, chi1, chi2):
-    kappa = scipy.integrate.odeint(dkappadu_RHS, kappa0, u, args=(xi,q,chi1,chi2))
+    """
+    """
+
+    kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2))
 
     return toarray(kappa)
 
@@ -2882,7 +2906,6 @@ def Jofr(ic, r, xi, q, chi1, chi2):
     return toarray(J)
 
 
-## TODO: A function to precession-average a generic quantity
 def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     """
     Average a function over a precession cycle.
@@ -2921,8 +2944,6 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     func_av: float
         Precession averaged value of func.
     """
-
-    #TODO: add kwargs, not only args
 
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
     a = Speriod_prefactor(r, xi ,q)
