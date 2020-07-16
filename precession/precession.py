@@ -2463,7 +2463,7 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
 
     if u==0:
         # In this case use analytic result
-        theta1inf,theta2inf = asymtpotic_to_angles(kappa,xi,q,chi1,chi2)
+        theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
         S2av = S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2)
     else:
         # Repeat instruction instead of calling S2av to avoid converting J->kappa->J.
