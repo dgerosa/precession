@@ -556,7 +556,6 @@ def wraproots(coefficientfunction, *args,**kwargs):
     else:
         sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
 
-    print(coeffs, sols)
     sols = np.real(np.where(np.isreal(sols),sols,np.nan))
 
     return sols
@@ -2920,7 +2919,7 @@ def Jofr(ic, r, xi, q, chi1, chi2):
     else:
         kappa0 = ic
         h0=1e-3
-
+    #h0=0
     kappa = kappaofu(kappa0, u, xi, q, chi1, chi2,h0=h0)
     L = angularmomentum(r, q)
     #TODO: should this be a function?
@@ -3407,9 +3406,9 @@ if __name__ == '__main__':
     # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
 
-    Jmin,Jmax = Jlimits(r=1e12,xi=-0.5,q=0.4,chi1=0.9,chi2=0.8)
-
-    print(repr(Jofr(ic=(Jmin+Jmax)/2, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
+    Jmin,Jmax = Jlimits(r=1e2,xi=-0.5,q=0.4,chi1=0.9,chi2=0.8)
+    print(Jmin,Jmax)
+    # print(repr(Jofr(ic=(Jmin+Jmax)/2, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
 
 
 
