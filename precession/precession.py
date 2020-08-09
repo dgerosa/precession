@@ -556,6 +556,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
     else:
         sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
 
+    print(coeffs, sols)
     sols = np.real(np.where(np.isreal(sols),sols,np.nan))
 
     return sols
@@ -1174,6 +1175,8 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
 def cubicsolver_distinct(coeff3, coeff2, coeff1, coeff0):
     #TODO: write docstrings
     #root1<=root2<=root3
+
+
 
     coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
     coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
@@ -2461,17 +2464,27 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
     """
     kappa=toarray(kappa)
 
+
+    #r = 1 / (2*u*mass1(q)*mass2(q))**2
+    #print('Step', u, r, kappa)
+
     if u==0:
         # In this case use analytic result
         theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
         S2av = S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2)
     else:
+
+
+        #Jlim = Jlimits(xi=xi,r=r,q=q,chi1=chi1,chi2=chi2)
+        #print( eval_kappa(Jlim,[r,r],[q,q]) )
+
         # Repeat instruction instead of calling S2av to avoid converting J->kappa->J.
         sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
         #S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
         S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
         m = elliptic_parameter(Sminus2, Splus2, S32)
         S2av = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
+
 
     return S2av
 
@@ -2881,11 +2894,11 @@ def S2avinf_kappaxi(kappainf, xi, q, chi1, chi2):
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
-def kappaofu(kappa0, u, xi, q, chi1, chi2):
+def kappaofu(kappa0, u, xi, q, chi1, chi2, *args, **kwargs):
     """
     """
 
-    kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2))
+    kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2),*args,**kwargs)
 
     return toarray(kappa)
 
@@ -2896,16 +2909,21 @@ def Jofr(ic, r, xi, q, chi1, chi2):
 
     u = eval_u(r, q)
 
+    # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
+
+    # TODO. This breaks down if r is very large but not infinite.
+
     if np.isfinite(r[0]):
         J0 = ic
         kappa0 = eval_kappa(J0, r[0], q)
+        h0=0
     else:
         kappa0 = ic
+        h0=1e-3
 
-    print(u)
-
-    kappa = kappaofu(kappa0, u, xi, q, chi1, chi2)
+    kappa = kappaofu(kappa0, u, xi, q, chi1, chi2,h0=h0)
     L = angularmomentum(r, q)
+    #TODO: should this be a function?
     J = ( 2*L*kappa + L**2 )**0.5
 
     return toarray(J)
@@ -3370,26 +3388,28 @@ if __name__ == '__main__':
 
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
     #t0=time.time()
-    #print(Jofr(J0=1.8, r=np.linspace(100,10,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8))
+    #print(Jofr(ic=1.8, r=np.linspace(100,10,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8))
     #print(time.time()-t0)
 
     # t0=time.time()
-    # print(repr(Jofr(ic=203.7430728810311, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
+    #print(repr(Jofr(ic=203.7430728810311, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
     # print(time.time()-t0)
 
 
 
-    theta1inf=0.5
-    theta2inf=0.5
-    q=0.5
-    chi1=0.6
-    chi2=0.7
-    kappainf, xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
-    r = np.concatenate(([np.inf],np.logspace(6,1,100)))
-    print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
+    # theta1inf=0.5
+    # theta2inf=0.5
+    # q=0.5
+    # chi1=0.6
+    # chi2=0.7
+    # kappainf, xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
+    # r = np.concatenate(([np.inf],np.logspace(6,1,100)))
+    # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
 
+    Jmin,Jmax = Jlimits(r=1e12,xi=-0.5,q=0.4,chi1=0.9,chi2=0.8)
 
+    print(repr(Jofr(ic=(Jmin+Jmax)/2, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
 
 
 
