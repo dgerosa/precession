@@ -79,6 +79,7 @@ def mass2(q):
 
 def masses(q):
     """
+    TODO write me
     """
 
     m1 = mass1(q)
@@ -274,7 +275,8 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
     return np.array([Jmin,Jmax])
 
 
-def Jdiscriminant_coefficients(r,xi,q,chi1,chi2):
+#TODO fix docstrings
+def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     """
     Coefficients of the quintic equation in J that defines the spin-orbit resonances.
 
@@ -293,277 +295,18 @@ def Jdiscriminant_coefficients(r,xi,q,chi1,chi2):
 
     Returns
     -------
-    sigma10:
-        Coefficient of J^10.
-    sigma8:
-        Coefficient of J^8.
-    sigma6:
-        Coefficient of J^6.
+    sigma5:
+        Coefficient of kappa^5.
     sigma4:
-        Coefficient of J^4.
+        Coefficient of kappa^4.
+    sigma3:
+        Coefficient of kappa^3.
     sigma2:
-        Coefficient of J^2.
+        Coefficient of kappa^2.
+    sigma1:
+        Coefficient of kappa^1.
     sigma0:
-        Coefficient of J^0.
-    """
-
-    q,xi=toarray(q,xi)
-    L=angularmomentum(r,q)
-    S1,S2= spinmags(q,chi1,chi2)
-
-    sigma0 = \
-    ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( ( ( \
-    L )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 + ( q )**( 2 ) ) * ( S1 + \
-    -1 * S2 ) * ( S1 + S2 ) + 2 * L * q * xi ) ) )**( 2 ) * ( ( L )**( 6 \
-    ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 4 ) + ( 4 * ( L )**( 5 ) * ( q \
-    )**( 2 ) * ( ( 1 + q ) )**( 4 ) * xi + ( -4 * L * q * ( ( 1 + q ) \
-    )**( 3 ) * ( q * ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( q * ( -5 + \
-    4 * q ) * ( S1 )**( 2 ) + ( -4 + 5 * q ) * ( S2 )**( 2 ) ) * xi + ( \
-    16 * L * ( q )**( 3 ) * ( 1 + q ) * ( q * ( S1 )**( 2 ) + ( S2 )**( 2 \
-    ) ) * ( xi )**( 3 ) + ( 4 * ( ( 1 + q ) )**( 2 ) * ( ( -1 * q * ( S1 \
-    )**( 2 ) + ( S2 )**( 2 ) ) )**( 2 ) * ( -1 * ( -1 + q ) * ( ( 1 + q ) \
-    )**( 2 ) * ( q * ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) + ( q )**( 2 ) \
-    * ( xi )**( 2 ) ) + ( 4 * ( L )**( 3 ) * q * ( ( 1 + q ) )**( 2 ) * \
-    xi * ( ( 1 + q ) * ( q * ( 1 + ( 6 * q + -4 * ( q )**( 2 ) ) ) * ( S1 \
-    )**( 2 ) + ( -4 + q * ( 6 + q ) ) * ( S2 )**( 2 ) ) + 4 * ( q )**( 2 \
-    ) * ( xi )**( 2 ) ) + ( 2 * ( L )**( 4 ) * ( ( ( 1 + q ) )**( 4 ) * ( \
-    ( q )**( 2 ) * ( 1 + -2 * ( -1 + q ) * q ) * ( S1 )**( 2 ) + ( -2 + q \
-    * ( 2 + q ) ) * ( S2 )**( 2 ) ) + 2 * ( q )**( 2 ) * ( ( 1 + q ) )**( \
-    2 ) * ( 1 + q * ( 4 + q ) ) * ( xi )**( 2 ) ) + ( L )**( 2 ) * ( ( ( \
-    1 + q ) )**( 4 ) * ( ( q )**( 2 ) * ( 1 + -8 * ( -1 + q ) * q ) * ( \
-    S1 )**( 4 ) + ( -2 * q * ( 10 + q * ( -19 + 10 * q ) ) * ( S1 )**( 2 \
-    ) * ( S2 )**( 2 ) + ( -8 + q * ( 8 + q ) ) * ( S2 )**( 4 ) ) ) + ( -8 \
-    * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( ( -4 + q ) * q * ( S1 )**( \
-    2 ) + ( 1 + -4 * q ) * ( S2 )**( 2 ) ) * ( xi )**( 2 ) + 16 * ( q \
-    )**( 4 ) * ( xi )**( 4 ) ) ) ) ) ) ) ) ) )
-
-    sigma2 = \
-    -4 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( \
-    ( L )**( 8 ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( 1 + q * ( 3 + \
-    q ) ) + ( ( L )**( 7 ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( 3 + \
-    q * ( 14 + 3 * q ) ) * xi + ( ( L )**( 5 ) * q * ( ( 1 + q ) )**( 2 ) \
-    * xi * ( ( 1 + q ) * ( q * ( 2 + q * ( 18 + -1 * q * ( 3 + q ) * ( \
-    -19 + 12 * q ) ) ) * ( S1 )**( 2 ) + ( -12 + q * ( -17 + q * ( 57 + 2 \
-    * q * ( 9 + q ) ) ) ) * ( S2 )**( 2 ) ) + 4 * ( q )**( 2 ) * ( 3 + q \
-    * ( 17 + 3 * q ) ) * ( xi )**( 2 ) ) + ( -1 * ( L )**( 6 ) * ( ( 1 + \
-    q ) )**( 2 ) * ( ( ( 1 + q ) )**( 2 ) * ( ( q )**( 2 ) * ( -1 + q * ( \
-    -7 + ( -1 + q ) * q * ( 9 + 2 * q ) ) ) * ( S1 )**( 2 ) + -1 * ( -2 + \
-    q * ( -7 + q * ( 9 + q * ( 7 + q ) ) ) ) * ( S2 )**( 2 ) ) + -2 * ( q \
-    )**( 2 ) * ( 1 + q * ( 14 + q * ( 32 + q * ( 14 + q ) ) ) ) * ( xi \
-    )**( 2 ) ) + ( -1 * ( -1 + q ) * ( ( 1 + q ) )**( 2 ) * ( q * ( S1 \
-    )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( ( -1 + q ) * ( ( 1 + q ) )**( 2 ) \
-    * ( q * ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( q * ( -5 + 2 * q ) * \
-    ( S1 )**( 4 ) + ( 2 * ( 1 + ( q + ( q )**( 2 ) ) ) * ( S1 )**( 2 ) * \
-    ( S2 )**( 2 ) + ( 2 + -5 * q ) * ( S2 )**( 4 ) ) ) + -2 * ( q )**( 2 \
-    ) * ( ( -2 + q ) * q * ( S1 )**( 4 ) + ( ( 1 + ( q )**( 2 ) ) * ( S1 \
-    )**( 2 ) * ( S2 )**( 2 ) + ( 1 + -2 * q ) * ( S2 )**( 4 ) ) ) * ( xi \
-    )**( 2 ) ) + ( ( L )**( 4 ) * ( ( q )**( 2 ) * ( S1 )**( 4 ) + ( 6 * \
-    ( q )**( 3 ) * ( S1 )**( 4 ) + ( 25 * ( q )**( 4 ) * ( S1 )**( 4 ) + \
-    ( 55 * ( q )**( 5 ) * ( S1 )**( 4 ) + ( 49 * ( q )**( 6 ) * ( S1 )**( \
-    4 ) + ( -8 * ( q )**( 7 ) * ( S1 )**( 4 ) + ( -45 * ( q )**( 8 ) * ( \
-    S1 )**( 4 ) + ( -29 * ( q )**( 9 ) * ( S1 )**( 4 ) + ( -6 * ( q )**( \
-    10 ) * ( S1 )**( 4 ) + ( -2 * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -6 * \
-    q * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -32 * ( q )**( 2 ) * ( S1 )**( \
-    2 ) * ( S2 )**( 2 ) + ( -58 * ( q )**( 3 ) * ( S1 )**( 2 ) * ( S2 \
-    )**( 2 ) + ( 10 * ( q )**( 4 ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 80 \
-    * ( q )**( 5 ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 10 * ( q )**( 6 ) \
-    * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -58 * ( q )**( 7 ) * ( S1 )**( 2 \
-    ) * ( S2 )**( 2 ) + ( -32 * ( q )**( 8 ) * ( S1 )**( 2 ) * ( S2 )**( \
-    2 ) + ( -6 * ( q )**( 9 ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -2 * ( \
-    q )**( 10 ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -6 * ( S2 )**( 4 ) + \
-    ( -29 * q * ( S2 )**( 4 ) + ( -45 * ( q )**( 2 ) * ( S2 )**( 4 ) + ( \
-    -8 * ( q )**( 3 ) * ( S2 )**( 4 ) + ( 49 * ( q )**( 4 ) * ( S2 )**( 4 \
-    ) + ( 55 * ( q )**( 5 ) * ( S2 )**( 4 ) + ( 25 * ( q )**( 6 ) * ( S2 \
-    )**( 4 ) + ( 6 * ( q )**( 7 ) * ( S2 )**( 4 ) + ( ( q )**( 8 ) * ( S2 \
-    )**( 4 ) + ( -2 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( ( -1 + q * \
-    ( -4 + q * ( -40 + 3 * q * ( -5 + 3 * q ) ) ) ) * ( S1 )**( 2 ) + -1 \
-    * ( -9 + q * ( 15 + q * ( 40 + q * ( 4 + q ) ) ) ) * ( S2 )**( 2 ) ) \
-    * ( xi )**( 2 ) + 8 * ( q )**( 4 ) * ( 3 + q ) * ( 1 + 3 * q ) * ( xi \
-    )**( 4 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) \
-    + ( -1 * ( L )**( 2 ) * ( -1 * ( q )**( 2 ) * ( S1 )**( 6 ) + ( -7 * \
-    ( q )**( 3 ) * ( S1 )**( 6 ) + ( -9 * ( q )**( 4 ) * ( S1 )**( 6 ) + \
-    ( 3 * ( q )**( 5 ) * ( S1 )**( 6 ) + ( 3 * ( q )**( 6 ) * ( S1 )**( 6 \
-    ) + ( -9 * ( q )**( 7 ) * ( S1 )**( 6 ) + ( ( q )**( 8 ) * ( S1 )**( \
-    6 ) + ( 13 * ( q )**( 9 ) * ( S1 )**( 6 ) + ( 6 * ( q )**( 10 ) * ( \
-    S1 )**( 6 ) + ( 15 * q * ( S1 )**( 4 ) * ( S2 )**( 2 ) + ( 11 * ( q \
-    )**( 2 ) * ( S1 )**( 4 ) * ( S2 )**( 2 ) + ( -35 * ( q )**( 3 ) * ( \
-    S1 )**( 4 ) * ( S2 )**( 2 ) + ( 17 * ( q )**( 4 ) * ( S1 )**( 4 ) * ( \
-    S2 )**( 2 ) + ( 105 * ( q )**( 5 ) * ( S1 )**( 4 ) * ( S2 )**( 2 ) + \
-    ( 9 * ( q )**( 6 ) * ( S1 )**( 4 ) * ( S2 )**( 2 ) + ( -93 * ( q )**( \
-    7 ) * ( S1 )**( 4 ) * ( S2 )**( 2 ) + ( -41 * ( q )**( 8 ) * ( S1 \
-    )**( 4 ) * ( S2 )**( 2 ) + ( 8 * ( q )**( 9 ) * ( S1 )**( 4 ) * ( S2 \
-    )**( 2 ) + ( 4 * ( q )**( 10 ) * ( S1 )**( 4 ) * ( S2 )**( 2 ) + ( 4 \
-    * ( S1 )**( 2 ) * ( S2 )**( 4 ) + ( 8 * q * ( S1 )**( 2 ) * ( S2 )**( \
-    4 ) + ( -41 * ( q )**( 2 ) * ( S1 )**( 2 ) * ( S2 )**( 4 ) + ( -93 * \
-    ( q )**( 3 ) * ( S1 )**( 2 ) * ( S2 )**( 4 ) + ( 9 * ( q )**( 4 ) * ( \
-    S1 )**( 2 ) * ( S2 )**( 4 ) + ( 105 * ( q )**( 5 ) * ( S1 )**( 2 ) * \
-    ( S2 )**( 4 ) + ( 17 * ( q )**( 6 ) * ( S1 )**( 2 ) * ( S2 )**( 4 ) + \
-    ( -35 * ( q )**( 7 ) * ( S1 )**( 2 ) * ( S2 )**( 4 ) + ( 11 * ( q \
-    )**( 8 ) * ( S1 )**( 2 ) * ( S2 )**( 4 ) + ( 15 * ( q )**( 9 ) * ( S1 \
-    )**( 2 ) * ( S2 )**( 4 ) + ( 6 * ( S2 )**( 6 ) + ( 13 * q * ( S2 )**( \
-    6 ) + ( ( q )**( 2 ) * ( S2 )**( 6 ) + ( -9 * ( q )**( 3 ) * ( S2 \
-    )**( 6 ) + ( 3 * ( q )**( 4 ) * ( S2 )**( 6 ) + ( 3 * ( q )**( 5 ) * \
-    ( S2 )**( 6 ) + ( -9 * ( q )**( 6 ) * ( S2 )**( 6 ) + ( -7 * ( q )**( \
-    7 ) * ( S2 )**( 6 ) + ( -1 * ( q )**( 8 ) * ( S2 )**( 6 ) + ( 2 * ( q \
-    )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( q * ( -12 + q * ( 26 + ( -30 * q \
-    + 9 * ( q )**( 2 ) ) ) ) * ( S1 )**( 4 ) + ( 2 * ( 1 + q * ( -5 + q * \
-    ( 15 + ( -5 + q ) * q ) ) ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 9 + \
-    -2 * q * ( 15 + q * ( -13 + 6 * q ) ) ) * ( S2 )**( 4 ) ) ) * ( xi \
-    )**( 2 ) + -8 * ( q )**( 4 ) * ( ( 1 + q * ( -1 + 3 * q ) ) * ( S1 \
-    )**( 2 ) + ( 3 + ( -1 + q ) * q ) * ( S2 )**( 2 ) ) * ( xi )**( 4 ) ) \
-    ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) \
-    ) ) ) + ( ( L )**( 3 ) * q * xi * ( -8 * ( q )**( 8 ) * ( S1 )**( 2 ) \
-    * ( 3 * ( S1 )**( 2 ) + ( S2 )**( 2 ) ) + ( -8 * ( S2 )**( 2 ) * ( ( \
-    S1 )**( 2 ) + 3 * ( S2 )**( 2 ) ) + ( q * ( 3 * ( S1 )**( 4 ) + ( -8 \
-    * ( S1 )**( 2 ) * ( S2 )**( 2 ) + -51 * ( S2 )**( 4 ) ) ) + ( ( q \
-    )**( 7 ) * ( -51 * ( S1 )**( 4 ) + ( -8 * ( S1 )**( 2 ) * ( S2 )**( 2 \
-    ) + 3 * ( S2 )**( 4 ) ) ) + ( 2 * ( q )**( 2 ) * ( 7 * ( S1 )**( 4 ) \
-    + ( 2 * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -1 * ( S2 )**( 4 ) + 4 * ( \
-    ( S1 )**( 2 ) + ( S2 )**( 2 ) ) * ( xi )**( 2 ) ) ) ) + ( ( q )**( 6 \
-    ) * ( -2 * ( S1 )**( 4 ) + ( 4 * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 14 \
-    * ( S2 )**( 4 ) + 8 * ( ( S1 )**( 2 ) + ( S2 )**( 2 ) ) * ( xi )**( 2 \
-    ) ) ) ) + ( ( q )**( 5 ) * ( 65 * ( S1 )**( 4 ) + ( -40 * ( S1 )**( 2 \
-    ) * ( S2 )**( 2 ) + ( 31 * ( S2 )**( 4 ) + 4 * ( 19 * ( S1 )**( 2 ) + \
-    3 * ( S2 )**( 2 ) ) * ( xi )**( 2 ) ) ) ) + ( ( q )**( 3 ) * ( 31 * ( \
-    S1 )**( 4 ) + ( -40 * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 65 * ( S2 \
-    )**( 4 ) + 4 * ( 3 * ( S1 )**( 2 ) + 19 * ( S2 )**( 2 ) ) * ( xi )**( \
-    2 ) ) ) ) + 4 * ( q )**( 4 ) * ( 15 * ( S1 )**( 4 ) + ( -22 * ( S1 \
-    )**( 2 ) * ( S2 )**( 2 ) + ( 15 * ( S2 )**( 4 ) + ( 18 * ( ( S1 )**( \
-    2 ) + ( S2 )**( 2 ) ) * ( xi )**( 2 ) + 4 * ( xi )**( 4 ) ) ) ) ) ) ) \
-    ) ) ) ) ) ) + -1 * L * q * ( 1 + q ) * xi * ( 8 * ( S1 )**( 2 ) * ( \
-    S2 )**( 4 ) + ( 12 * ( S2 )**( 6 ) + ( 4 * ( q )**( 7 ) * ( 3 * ( S1 \
-    )**( 6 ) + 2 * ( S1 )**( 4 ) * ( S2 )**( 2 ) ) + ( ( q )**( 6 ) * ( \
-    -17 * ( S1 )**( 6 ) + ( -6 * ( S1 )**( 4 ) * ( S2 )**( 2 ) + 3 * ( S1 \
-    )**( 2 ) * ( S2 )**( 4 ) ) ) + ( q * ( 3 * ( S1 )**( 4 ) * ( S2 )**( \
-    2 ) + ( -6 * ( S1 )**( 2 ) * ( S2 )**( 4 ) + -17 * ( S2 )**( 6 ) ) ) \
-    + ( -1 * ( q )**( 2 ) * ( 20 * ( S1 )**( 6 ) + ( -3 * ( S1 )**( 4 ) * \
-    ( S2 )**( 2 ) + ( 22 * ( S1 )**( 2 ) * ( S2 )**( 4 ) + ( 21 * ( S2 \
-    )**( 6 ) + 4 * ( S2 )**( 2 ) * ( 2 * ( S1 )**( 2 ) + 3 * ( S2 )**( 2 \
-    ) ) * ( xi )**( 2 ) ) ) ) ) + ( ( q )**( 4 ) * ( 37 * ( S1 )**( 6 ) + \
-    ( 3 * ( S1 )**( 4 ) * ( S2 )**( 2 ) + ( 11 * ( S1 )**( 2 ) * ( S2 \
-    )**( 4 ) + ( 9 * ( S2 )**( 6 ) + 4 * ( 5 * ( S1 )**( 4 ) + ( 3 * ( S1 \
-    )**( 2 ) * ( S2 )**( 2 ) + -3 * ( S2 )**( 4 ) ) ) * ( xi )**( 2 ) ) ) \
-    ) ) + ( ( q )**( 3 ) * ( 9 * ( S1 )**( 6 ) + ( 11 * ( S1 )**( 4 ) * ( \
-    S2 )**( 2 ) + ( 3 * ( S1 )**( 2 ) * ( S2 )**( 4 ) + ( 37 * ( S2 )**( \
-    6 ) + 4 * ( -3 * ( S1 )**( 4 ) + ( 3 * ( S1 )**( 2 ) * ( S2 )**( 2 ) \
-    + 5 * ( S2 )**( 4 ) ) ) * ( xi )**( 2 ) ) ) ) ) + -1 * ( q )**( 5 ) * \
-    ( 21 * ( S1 )**( 6 ) + ( 20 * ( S2 )**( 6 ) + ( 2 * ( S1 )**( 4 ) * ( \
-    11 * ( S2 )**( 2 ) + 6 * ( xi )**( 2 ) ) + ( S1 )**( 2 ) * ( -3 * ( \
-    S2 )**( 4 ) + 8 * ( S2 )**( 2 ) * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) \
-    ) ) ) ) ) ) ) ) )
-
-    sigma4 = \
-    2 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( \
-    ( L )**( 6 ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( 3 + q * ( 14 + \
-    3 * q ) ) + ( -2 * ( -1 + q ) * ( ( 1 + q ) )**( 4 ) * ( q * ( S1 \
-    )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( ( q )**( 2 ) * ( 10 + ( -8 + q ) \
-    * q ) * ( S1 )**( 4 ) + ( -2 * q * ( 4 + q * ( -5 + 4 * q ) ) * ( S1 \
-    )**( 2 ) * ( S2 )**( 2 ) + ( 1 + 2 * q * ( -4 + 5 * q ) ) * ( S2 )**( \
-    4 ) ) ) + ( 6 * ( L )**( 5 ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 4 ) * \
-    ( 1 + q * ( 8 + q ) ) * xi + ( 2 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 \
-    ) * ( ( q )**( 2 ) * ( 6 + ( -6 + q ) * q ) * ( S1 )**( 4 ) + ( -2 * \
-    q * ( 3 + q * ( -5 + 3 * q ) ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 1 \
-    + 6 * ( -1 + q ) * q ) * ( S2 )**( 4 ) ) ) * ( xi )**( 2 ) + ( 2 * ( \
-    L )**( 3 ) * q * ( ( 1 + q ) )**( 2 ) * xi * ( ( 1 + q ) * ( q * ( 3 \
-    + q * ( 31 + -2 * q * ( 6 + q ) * ( -3 + 2 * q ) ) ) * ( S1 )**( 2 ) \
-    + ( -4 + q * ( -18 + q * ( 9 + q ) * ( 4 + 3 * q ) ) ) * ( S2 )**( 2 \
-    ) ) + 4 * ( q )**( 2 ) * ( 1 + q * ( 11 + q ) ) * ( xi )**( 2 ) ) + ( \
-    -2 * ( L )**( 4 ) * ( ( 1 + q ) )**( 2 ) * ( ( ( 1 + q ) )**( 2 ) * ( \
-    ( S2 )**( 2 ) + q * ( q * ( -2 + q * ( -13 + q * ( -9 + q * ( 11 + q \
-    ) ) ) ) * ( S1 )**( 2 ) + -1 * ( 11 + 2 * q ) * ( -1 + ( q + ( q )**( \
-    2 ) ) ) * ( S2 )**( 2 ) ) ) + -1 * ( q )**( 2 ) * ( 1 + q * ( 26 + q \
-    * ( 72 + q * ( 26 + q ) ) ) ) * ( xi )**( 2 ) ) + ( -2 * L * q * ( 1 \
-    + q ) * xi * ( ( ( 1 + q ) )**( 2 ) * ( ( q )**( 2 ) * ( -30 + q * ( \
-    39 + q * ( -19 + 4 * q ) ) ) * ( S1 )**( 4 ) + ( 3 * ( 1 + q ) * ( q \
-    + ( q )**( 3 ) ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 4 + q * ( -19 + \
-    ( 39 * q + -30 * ( q )**( 2 ) ) ) ) * ( S2 )**( 4 ) ) ) + -4 * ( q \
-    )**( 2 ) * ( q * ( 3 + ( -1 + q ) * q ) * ( S1 )**( 2 ) + ( 1 + q * ( \
-    -1 + 3 * q ) ) * ( S2 )**( 2 ) ) * ( xi )**( 2 ) ) + ( L )**( 2 ) * ( \
-    3 * ( q )**( 2 ) * ( S1 )**( 4 ) + ( 36 * ( q )**( 3 ) * ( S1 )**( 4 \
-    ) + ( 101 * ( q )**( 4 ) * ( S1 )**( 4 ) + ( 100 * ( q )**( 5 ) * ( \
-    S1 )**( 4 ) + ( ( q )**( 6 ) * ( S1 )**( 4 ) + ( -68 * ( q )**( 7 ) * \
-    ( S1 )**( 4 ) + ( -53 * ( q )**( 8 ) * ( S1 )**( 4 ) + ( -20 * ( q \
-    )**( 9 ) * ( S1 )**( 4 ) + ( -4 * ( q )**( 10 ) * ( S1 )**( 4 ) + ( \
-    -30 * q * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -74 * ( q )**( 2 ) * ( S1 \
-    )**( 2 ) * ( S2 )**( 2 ) + ( -40 * ( q )**( 3 ) * ( S1 )**( 2 ) * ( \
-    S2 )**( 2 ) + ( 26 * ( q )**( 4 ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( \
-    44 * ( q )**( 5 ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 26 * ( q )**( 6 \
-    ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -40 * ( q )**( 7 ) * ( S1 )**( \
-    2 ) * ( S2 )**( 2 ) + ( -74 * ( q )**( 8 ) * ( S1 )**( 2 ) * ( S2 \
-    )**( 2 ) + ( -30 * ( q )**( 9 ) * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( \
-    -4 * ( S2 )**( 4 ) + ( -20 * q * ( S2 )**( 4 ) + ( -53 * ( q )**( 2 ) \
-    * ( S2 )**( 4 ) + ( -68 * ( q )**( 3 ) * ( S2 )**( 4 ) + ( ( q )**( 4 \
-    ) * ( S2 )**( 4 ) + ( 100 * ( q )**( 5 ) * ( S2 )**( 4 ) + ( 101 * ( \
-    q )**( 6 ) * ( S2 )**( 4 ) + ( 36 * ( q )**( 7 ) * ( S2 )**( 4 ) + ( \
-    3 * ( q )**( 8 ) * ( S2 )**( 4 ) + ( -4 * ( q )**( 2 ) * ( ( 1 + q ) \
-    )**( 2 ) * ( q * ( -12 + q * ( -8 + ( -8 + q ) * q ) ) * ( S1 )**( 2 \
-    ) + ( 1 + -4 * q * ( 2 + q * ( 2 + 3 * q ) ) ) * ( S2 )**( 2 ) ) * ( \
-    xi )**( 2 ) + 8 * ( q )**( 4 ) * ( 1 + q * ( 4 + q ) ) * ( xi )**( 4 \
-    ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) \
-    )
-
-    sigma6 = \
-    -4 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * q * ( ( 1 + q ) )**( 6 ) \
-    * ( ( L )**( 4 ) * q * ( ( 1 + q ) )**( 2 ) * ( 1 + q * ( 8 + q ) ) + \
-    ( ( ( 1 + q ) )**( 2 ) * ( ( q )**( 2 ) * ( 10 + 3 * ( -4 + q ) * q ) \
-    * ( S1 )**( 4 ) + ( -2 * q * ( 6 + q * ( -11 + 6 * q ) ) * ( S1 )**( \
-    2 ) * ( S2 )**( 2 ) + ( 3 + 2 * q * ( -6 + 5 * q ) ) * ( S2 )**( 4 ) \
-    ) ) + ( ( L )**( 3 ) * q * ( ( 1 + q ) )**( 2 ) * ( 1 + q * ( 18 + q \
-    ) ) * xi + ( -1 * L * q * ( 1 + q ) * ( q * ( -20 + q * ( 3 + q ) ) * \
-    ( S1 )**( 2 ) + ( 1 + ( 3 + -20 * q ) * q ) * ( S2 )**( 2 ) ) * xi + \
-    ( -2 * ( q )**( 2 ) * ( ( -2 + q ) * q * ( S1 )**( 2 ) + ( 1 + -2 * q \
-    ) * ( S2 )**( 2 ) ) * ( xi )**( 2 ) + ( 4 * L * ( q )**( 3 ) * ( xi \
-    )**( 3 ) + ( L )**( 2 ) * ( ( ( 1 + q ) )**( 2 ) * ( -1 * q * ( -1 + \
-    q * ( -13 + ( q + 5 * ( q )**( 2 ) ) ) ) * ( S1 )**( 2 ) + ( -5 + q * \
-    ( -1 + q * ( 13 + q ) ) ) * ( S2 )**( 2 ) ) + 4 * ( q )**( 2 ) * ( 2 \
-    + q * ( 7 + 2 * q ) ) * ( xi )**( 2 ) ) ) ) ) ) ) )
-
-    sigma8 = \
-    ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( q )**( 2 ) * ( ( 1 + q ) \
-    )**( 6 ) * ( ( ( 1 + q ) )**( 2 ) * ( ( L )**( 2 ) * ( 1 + q * ( 18 + \
-    q ) ) + ( 4 * ( 5 + -3 * q ) * q * ( S1 )**( 2 ) + 4 * ( -3 + 5 * q ) \
-    * ( S2 )**( 2 ) ) ) + ( 20 * L * q * ( ( 1 + q ) )**( 2 ) * xi + 4 * \
-    ( q )**( 2 ) * ( xi )**( 2 ) ) )
-
-    sigma10 = \
-    -4 * ( L )**( 2 ) * ( ( -1 + q ) )**( 2 ) * ( q )**( 3 ) * ( ( 1 + q \
-    ) )**( 8 )
-
-    return np.array([sigma10, sigma8, sigma6, sigma4, sigma2, sigma0])
-
-
-# TODO: I think can be removed
-def Jdiscriminant_coefficients_ATTEMPTUKAPPA(u,xi,q,chi1,chi2):
-    """
-    Coefficients of the quintic equation in J that defines the spin-orbit resonances.
-
-    Parameters
-    ----------
-    r: float
-        Binary separation.
-    xi: float
-        Effective spin
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    -------
-    sigma10:
-        Coefficient of J^10.
-    sigma8:
-        Coefficient of J^8.
-    sigma6:
-        Coefficient of J^6.
-    sigma4:
-        Coefficient of J^4.
-    sigma2:
-        Coefficient of J^2.
-    sigma0:
-        Coefficient of J^0.
+        Coefficient of kappa^0.
     """
 
     u,q,xi=toarray(u,q,xi)
@@ -681,7 +424,7 @@ def Jdiscriminant_coefficients_ATTEMPTUKAPPA(u,xi,q,chi1,chi2):
     * ( u )**( 3 ) * ( xi )**( 3 ) + 48 * ( u )**( 4 ) * ( xi )**( 4 ) ) \
     ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
 
-    sigma2 = \
+    sigma1 = \
     32 * ( ( 1 + q ) )**( 2 ) * ( ( q )**( 10 ) * ( ( S1 )**( 2 ) + ( S2 \
     )**( 2 ) ) * u * ( ( S1 + 4 * ( S1 )**( 3 ) * ( u )**( 2 ) ) )**( 2 ) \
     + ( ( ( S1 )**( 2 ) + ( S2 )**( 2 ) ) * u * ( ( S2 + 4 * ( S2 )**( 3 \
@@ -807,7 +550,7 @@ def Jdiscriminant_coefficients_ATTEMPTUKAPPA(u,xi,q,chi1,chi2):
     ( 15 * u * xi + ( 76 * ( u )**( 2 ) * ( xi )**( 2 ) + 48 * ( u )**( 3 \
     ) * ( xi )**( 3 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
 
-    sigma4 = \
+    sigma2 = \
     2 * ( u )**( -2 ) * ( -20 * ( q )**( 3 ) * ( ( 1 + q ) )**( 6 ) + ( 3 \
     * ( q )**( 2 ) * ( ( ( 1 + q ) )**( 6 ) * ( 1 + ( 18 * q + ( q )**( 2 \
     ) ) ) + ( 40 * q * ( ( 1 + q ) )**( 6 ) * u * xi + -16 * ( ( 1 + q ) \
@@ -912,7 +655,7 @@ def Jdiscriminant_coefficients_ATTEMPTUKAPPA(u,xi,q,chi1,chi2):
     2 ) ) + ( S1 )**( 2 ) * ( 27 * ( S2 )**( 4 ) + 10 * ( S2 )**( 2 ) * ( \
     xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
 
-    sigma6 = \
+    sigma3 = \
     16 * q * ( u )**( -1 ) * ( -10 * ( q )**( 2 ) * ( ( 1 + q ) )**( 6 ) \
     + ( q * ( ( ( 1 + q ) )**( 6 ) * ( 1 + ( 18 * q + ( q )**( 2 ) ) ) + \
     ( 40 * q * ( ( 1 + q ) )**( 6 ) * u * xi + -16 * ( ( 1 + q ) )**( 4 ) \
@@ -946,7 +689,7 @@ def Jdiscriminant_coefficients_ATTEMPTUKAPPA(u,xi,q,chi1,chi2):
     2 ) ) ) + -2 * ( q )**( 3 ) * ( 13 * ( S1 )**( 2 ) + ( 13 * ( S2 )**( \
     2 ) + 14 * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
 
-    sigma8 = \
+    sigma4 = \
     16 * ( q )**( 2 ) * ( -20 * q * ( ( 1 + q ) )**( 6 ) + ( ( ( 1 + q ) \
     )**( 6 ) * ( 1 + ( 18 * q + ( q )**( 2 ) ) ) + ( 40 * q * ( ( 1 + q ) \
     )**( 6 ) * u * xi + -16 * ( ( 1 + q ) )**( 4 ) * ( u )**( 2 ) * ( 3 * \
@@ -955,10 +698,10 @@ def Jdiscriminant_coefficients_ATTEMPTUKAPPA(u,xi,q,chi1,chi2):
     ( S2 )**( 2 ) ) + -1 * ( q )**( 2 ) * ( 7 * ( S1 )**( 2 ) + ( 7 * ( \
     S2 )**( 2 ) + ( xi )**( 2 ) ) ) ) ) ) ) ) ) )
 
-    sigma10 = \
+    sigma5 = \
     -256 * ( q )**( 3 ) * ( ( 1 + q ) )**( 6 ) * u
 
-    return np.array([sigma10, sigma8, sigma6, sigma4, sigma2, sigma0])
+    return np.array([sigma5, sigma4, sigma3, sigma2, sigma1, sigma0])
 
 
 
@@ -981,7 +724,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
     """
 
     coeffs= coefficientfunction(*args,**kwargs)
-
+    print(coeffs)
     if np.ndim(coeffs)==1:
         sols = np.sort_complex(np.roots(coeffs))
     else:
@@ -1020,19 +763,21 @@ def Jresonances(r,xi,q,chi1,chi2):
     # The good solutions are the last two. That's because the discriminant quintic asymptotes to -infinity and the physical region is when it's positive
 
     print(r,xi,q,chi1,chi2)
+    u = eval_u(r, q)
+    kapparoots = wraproots(Jdiscriminant_coefficients,u,xi,q,chi1,chi2)
 
-    J2roots = wraproots(Jdiscriminant_coefficients,r,xi,q,chi1,chi2)
-    def _compute(J2roots,r,xi,q,chi1,chi2):
+    def _compute(kapparoots,r,xi,q,chi1,chi2):
         with np.errstate(invalid='ignore'):
-            Jroots=J2roots**0.5
+            #Jroots=J2roots**0.5
+            Jroots = np.array([eval_J(kappa=x,r=r,q=q) for x in kapparoots])
             Sroots = np.array([Slimits_plusminus(x,r,xi,q,chi1,chi2,coincident=True)[0] for x in Jroots])
             Smin,Smax = np.array([Slimits_LJS1S2(x,r,q,chi1,chi2) for x in Jroots]).T
             Jres = Jroots[np.logical_and(Sroots>Smin,Sroots<Smax)]
             return Jres
-    if np.ndim(J2roots)==1:
-        Jmin,Jmax =_compute(J2roots,r,xi,q,chi1,chi2)
+    if np.ndim(kapparoots)==1:
+        Jmin,Jmax =_compute(kapparoots,r,xi,q,chi1,chi2)
     else:
-        Jmin,Jmax =np.array(list(map(_compute, J2roots,r,xi,q,chi1,chi2))).T
+        Jmin,Jmax =np.array(list(map(_compute, kapparoots,r,xi,q,chi1,chi2))).T
 
     return np.array([Jmin,Jmax])
 
@@ -1492,70 +1237,7 @@ def Slimits_LJS1S2(J,r,q,chi1,chi2):
     return np.array([Smin,Smax])
 
 
-#TODO: I think this can be removed
-def Scubic_coefficients_OLD(J,r,xi,q,chi1,chi2):
-    """
-    Coefficients of the cubic equation in S^2 that identifies the effective potentials.
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    xi: float
-        Effective spin
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    -------
-    sigma6:
-        Coefficient of S^6.
-    sigma4:
-        Coefficient of S^4.
-    sigma2:
-        Coefficient of S^2.
-    sigma0:
-        Coefficient of S^0.
-    """
-
-    J,xi,q=toarray(J,xi,q)
-    L=angularmomentum(r,q)
-    S1,S2= spinmags(q,chi1,chi2)
-
-    sigma6 = q * ( ( 1 + q ) )**( 2 )
-
-    sigma4 = \
-    ( ( 1 + q ) )**( 2 ) * ( -2 * ( J )**( 2 ) * q + ( ( L )**( 2 ) * ( 1 \
-    + ( q )**( 2 ) ) + ( ( -1 + q ) * ( q * ( S1 )**( 2 ) + -1 * ( S2 \
-    )**( 2 ) ) + 2 * L * q * xi ) ) )
-
-    sigma2 = \
-    ( ( J )**( 4 ) * q * ( ( 1 + q ) )**( 2 ) + ( L * ( L * ( ( 1 + q ) \
-    )**( 2 ) * ( ( L )**( 2 ) * q + 2 * ( -1 + q ) * ( ( S1 )**( 2 ) + -1 \
-    * q * ( S2 )**( 2 ) ) ) + ( 2 * q * ( 1 + q ) * ( ( L )**( 2 ) * ( 1 \
-    + q ) + ( -1 + q ) * ( S1 + -1 * S2 ) * ( S1 + S2 ) ) * xi + 4 * L * \
-    ( q )**( 2 ) * ( xi )**( 2 ) ) ) + -2 * ( J )**( 2 ) * ( ( 1 + q ) \
-    )**( 2 ) * ( ( S2 )**( 2 ) + q * ( ( -1 + q ) * ( S1 )**( 2 ) + ( -1 \
-    * ( S2 )**( 2 ) + L * ( L + xi ) ) ) ) ) )
-
-    sigma0 = \
-    ( -1 + ( q )**( 2 ) ) * ( ( J )**( 4 ) * ( 1 + q ) * ( q * ( S1 )**( \
-    2 ) + -1 * ( S2 )**( 2 ) ) + ( ( L )**( 2 ) * ( ( -1 + ( q )**( 2 ) ) \
-    * ( ( ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) )**( 2 ) + ( ( L )**( 2 ) \
-    * ( 1 + q ) * ( q * ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) + 2 * L * q \
-    * ( S1 + -1 * S2 ) * ( S1 + S2 ) * xi ) ) + 2 * ( J )**( 2 ) * L * ( \
-    L * ( 1 + q ) * ( -1 * q * ( S1 )**( 2 ) + ( S2 )**( 2 ) ) + q * ( -1 \
-    * ( S1 )**( 2 ) + ( S2 )**( 2 ) ) * xi ) ) )
-
-    return np.array([sigma6, sigma4, sigma2, sigma0])
-
-
+#TODO fix docstrings
 def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     """
     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
@@ -1685,64 +1367,6 @@ def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
     else:
         S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
 
-    return toarray([Sminus2,Splus2,S32])
-
-
-## TODO: I think this can be deleted
-def S2roots_NEW(kappa,u,xi,q,chi1,chi2,coincident=False):
-    """
-    Roots of the cubic equation in S^2 that identifies the effective potentials.
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    xi: float
-        Effective spin
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    coincident: boolean, optional (default: False)
-        If True, assume that the input is a spin-orbit resonance and return repeated roots
-
-    Returns
-    -------
-    Sminus2:
-        Lowest physical root (or unphysical).
-    Splus2:
-        Highest physical root (or unphysical).
-    S32: float
-        Spurious root.
-    """
-
-    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
-
-    #sigma6bool = sigma6 == 0.0
-
-    if sigma6 == 0.0:
-        Sminus2 = (-sigma2 - (sigma2**2 - 4*sigma4*sigma0)**0.5) / (2*sigma4)
-        Splus2 = (-sigma2 + (sigma2**2 - 4*sigma4*sigma0)**0.5) / (2*sigma4)
-        S32 = -np.inf
-
-    else:
-        sigmap = (sigma4**2/(3*sigma6**2) - sigma2/sigma6)/3
-        sigmaq = ((2*sigma4**3)/(27*sigma6**3) - (sigma4*sigma2)/(3*sigma6**2) + sigma0/sigma6) /2
-        #delta = sigmaq**2+sigmap**3
-
-        if not coincident:
-            # Mask values if there is only one solution and not three
-            with np.errstate(invalid='ignore'):
-                Sminus2,Splus2,S32= 2*sigmap**(1/2) * np.sin(np.arcsin(sigmaq*sigmap**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(sigmap)))) - sigma4/(3*sigma6)
-        elif coincident:
-            S32 = -2*sigmaq**(1/3) - sigma4/(3*sigma6)
-            Sminus2=Splus2  = sigmaq**(1/3) - sigma4/(3*sigma6)
-
-    #print(np.roots([sigma6,sigma4,sigma2,sigma0])) # You can test this against numpy.roots
     return toarray([Sminus2,Splus2,S32])
 
 
@@ -2401,7 +2025,7 @@ def eval_xi(theta1,theta2,q,chi1,chi2):
     return xi
 
 
-def eval_J(theta1,theta2,deltaphi,r,q,chi1,chi2):
+def eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None):
     """
     Magnitude of the total angular momentum from the spin angles.
 
@@ -2428,11 +2052,25 @@ def eval_J(theta1,theta2,deltaphi,r,q,chi1,chi2):
         Magnitude of the total angular momentum.
     """
 
-    theta1,theta2,deltaphi,q=toarray(theta1,theta2,deltaphi,q)
-    S1,S2 = spinmags(q,chi1,chi2)
-    L = angularmomentum(r,q)
-    S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
-    J=(L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
+
+    if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
+
+        theta1,theta2,deltaphi,q=toarray(theta1,theta2,deltaphi,q)
+        S1,S2 = spinmags(q,chi1,chi2)
+        L = angularmomentum(r,q)
+        S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
+        J=(L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
+
+    elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and r is not None and q is not None and chi1 is None and chi2 is None:
+
+        kappa = toarray(kappa)
+        L = angularmomentum(r,q)
+        J = ( 2*L*kappa + L**2 )**0.5
+
+    else:
+        raise TypeError
+
+
 
     return J
 
@@ -2543,7 +2181,7 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     """
 
     S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
-    J=eval_J(theta1,theta2,deltaphi,r,q,chi1,chi2)
+    J=eval_J(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
     xi=eval_xi(theta1,theta2,q,chi1,chi2)
 
     return np.array([S,J,xi])
@@ -3362,11 +3000,9 @@ def Jofr(ic, r, xi, q, chi1, chi2):
     else:
         kappa0 = ic
         h0=1e-3
-    #h0=0
+
     kappa = kappaofu(kappa0, u, xi, q, chi1, chi2,h0=h0)
-    L = angularmomentum(r, q)
-    #TODO: should this be a function?
-    J = ( 2*L*kappa + L**2 )**0.5
+    J  = eval_J(kappa=kappa,r=r,q=q)
 
     return toarray(J)
 
@@ -3849,7 +3485,7 @@ if __name__ == '__main__':
     # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
 
-    r=1e10
+    r=1e12
     xi=-0.5
     q=0.4
     chi1=0.9
