@@ -719,7 +719,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
     """
 
     coeffs= coefficientfunction(*args,**kwargs)
-    print(coeffs)
+
     if np.ndim(coeffs)==1:
         sols = np.sort_complex(np.roots(coeffs))
     else:
@@ -758,15 +758,17 @@ def Jresonances(r,xi,q,chi1,chi2):
     # The good solutions are the last two. That's because the discriminant quintic asymptotes to -infinity and the physical region is when it's positive
 
     u = eval_u(r, q)
+
     kapparoots = wraproots(kappadiscriminant_coefficients,u,xi,q,chi1,chi2)
+    kapparoots = kapparoots[np.isfinite(kapparoots)]
 
     def _compute(kapparoots,r,xi,q,chi1,chi2):
         with np.errstate(invalid='ignore'):
-            #Jroots=J2roots**0.5
             Jroots = np.array([eval_J(kappa=x,r=r,q=q) for x in kapparoots])
-            Sroots = np.array([Slimits_plusminus(x,r,xi,q,chi1,chi2,coincident=True)[0] for x in Jroots])
+            Sroots = np.array([Satresonance(x,r,xi,q,chi1,chi2) for x in Jroots])
             Smin,Smax = np.array([Slimits_LJS1S2(x,r,q,chi1,chi2) for x in Jroots]).T
             Jres = Jroots[np.logical_and(Sroots>Smin,Sroots<Smax)]
+
             return Jres
     if np.ndim(kapparoots)==1:
         Jmin,Jmax =_compute(kapparoots,r,xi,q,chi1,chi2)
@@ -1187,11 +1189,12 @@ def xiresonances(J,r,q,chi1,chi2):
 
     Smin,Smax = Slimits_LJS1S2(J,r,q,chi1,chi2)
     xiroots= wraproots(xidiscriminant_coefficients,kappa,u,q,chi1,chi2)
+    xiroots = xiroots[np.isfinite(xiroots)]
 
     def _compute(Smin,Smax,J,r,xiroots,q,chi1,chi2):
 
         with np.errstate(invalid='ignore'):
-            Sroots = np.array([Slimits_plusminus(J,r,x,q,chi1,chi2,coincident=True)[0] for x in xiroots])
+            Sroots = np.array([Satresonance(J,r,x,q,chi1,chi2) for x in xiroots])
             xires = xiroots[np.logical_and(Sroots>Smin, Sroots<Smax)]
         return xires
 
@@ -1201,6 +1204,9 @@ def xiresonances(J,r,q,chi1,chi2):
         ximin,ximax =np.array(list(map(_compute, Smin,Smax,J,r,xiroots,q,chi1,chi2))).T
 
     return np.array([ximin,ximax])
+
+
+
 
 
 def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
@@ -1399,41 +1405,43 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
 
     return toarray(sigma6, sigma4, sigma2, sigma0)
 
+#
+# # TODO: can probably be removed
+# def cubicsolver_distinct(coeff3, coeff2, coeff1, coeff0):
+#     #TODO: write docstrings
+#     #root1<=root2<=root3
+#
+#
+#
+#     coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
+#     coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
+#
+#     print("XX", np.roots([coeff3, coeff2, coeff1, coeff0]))
+#
+#     # Mask values if there is only one solution and not three
+#     with np.errstate(invalid='ignore'):
+#         root2,root3,root1= 2*coeffp**(1/2) * np.sin(np.arcsin(coeffq*coeffp**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(coeffp)))) - coeff2/(3*coeff3)
+#
+#     return  toarray(root1,root2,root3)
+#
 
-def cubicsolver_distinct(coeff3, coeff2, coeff1, coeff0):
-    #TODO: write docstrings
-    #root1<=root2<=root3
+# # TODO: can probably be removed
+# def cubicsolver_coincident(coeff3, coeff2, coeff1, coeff0):
+#     #TODO: write docstrings
+#     # root1 != root2=root3
+#
+#     coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
+#     coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
+#
+#     root1 = -2*coeffq**(1/3) - coeff2/(3*coeff3)
+#     root2=root3  = coeffq**(1/3) - coeff2/(3*coeff3)
+#
+#
+#     return toarray(root1,root2,root3)
 
 
 
-    coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
-    coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
-
-    print("XX", np.roots([coeff3, coeff2, coeff1, coeff0]))
-
-    # Mask values if there is only one solution and not three
-    with np.errstate(invalid='ignore'):
-        root2,root3,root1= 2*coeffp**(1/2) * np.sin(np.arcsin(coeffq*coeffp**(-3/2))/3 + (2*np.pi/3)*np.outer([0,1,2],np.ones(flen(coeffp)))) - coeff2/(3*coeff3)
-
-    return toarray(root1,root2,root3)
-
-
-def cubicsolver_coincident(coeff3, coeff2, coeff1, coeff0):
-    #TODO: write docstrings
-    # root1 != root2=root3
-
-    coeffp = (coeff2**2/(3*coeff3**2) - coeff1/coeff3)/3
-    coeffq = ((2*coeff2**3)/(27*coeff3**3) - (coeff2*coeff1)/(3*coeff3**2) + coeff0/coeff3) /2
-
-    root1 = -2*coeffq**(1/3) - coeff2/(3*coeff3)
-    root2=root3  = coeffq**(1/3) - coeff2/(3*coeff3)
-
-
-    return toarray(root1,root2,root3)
-
-
-
-def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
+def S2roots(J,r,xi,q,chi1,chi2):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
 
@@ -1451,8 +1459,6 @@ def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    coincident: boolean, optional (default: False)
-        If True, *assume* that the input is a spin-orbit resonance and return repeated roots
 
     Returns
     -------
@@ -1467,20 +1473,19 @@ def S2roots(J,r,xi,q,chi1,chi2,coincident=False):
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
 
-    sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+    S32, Sminus2, Splus2 = wraproots(Scubic_coefficients,kappa,u,xi,q,chi1,chi2)
 
-    if coincident:
-        S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
-    else:
-        S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
-
-
-
+    # sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+    #
+    # if coincident:
+    #     S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
+    # else:
+    #     S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
 
     return toarray([Sminus2,Splus2,S32])
 
 
-def Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=False):
+def Slimits_plusminus(J,r,xi,q,chi1,chi2):
     """
     Limits on the total spin magnitude compatible with both J and xi.
 
@@ -1509,7 +1514,7 @@ def Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=False):
         Maximum value of the total spin.
     """
 
-    Sminus2,Splus2,_= S2roots(J,r,xi,q,chi1,chi2,coincident=coincident)
+    Sminus2,Splus2,_= S2roots(J,r,xi,q,chi1,chi2)
     with np.errstate(invalid='ignore'):
         Sminus=Sminus2**0.5
         Splus=Splus2**0.5
@@ -1517,7 +1522,24 @@ def Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=False):
     return np.array([Sminus,Splus])
 
 
-def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
+def Satresonance(J,r,xi,q,chi1,chi2):
+    #TODO: write docstrings.
+    # This *assumes* that the input values represent a spin-orbit resonance, and return the corresponding value of S.
+
+    kappa = eval_kappa(J, r, q)
+    u = eval_u(r, q)
+
+    coeffs = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+
+    if np.ndim(coeffs)==1:
+        Sres = np.mean(np.real(np.roots(coeffs))[1:]**0.5)
+    else:
+        Sres = np.array([np.mean(np.real(np.roots(x))[1:]**0.5) for x in coeffs.T])
+
+    return Sres
+
+
+def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     """
     Limits on the total spin magnitude. The contraints considered depend on the inputs provided.
         - If q, chi1, and chi2 are provided, enforce S=S1+S2.
@@ -1539,8 +1561,6 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
         Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
     chi2: float, optional
         Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    conincident: boolean, optional (default: False)
-        If True, assume that the input is a spin-orbit resonance and return repeated roots
 
     Returns
     -------
@@ -1561,7 +1581,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,coincident=False):
 
     elif J is not None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
         #TODO: Assert that Slimits_LJS1S2 is also respected (either explicitely or with a generic 'limits_check' function)
-        Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=coincident)
+        Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
 
     else:
         raise TypeError
@@ -2668,6 +2688,8 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
         #Jlim = Jlimits(xi=xi,r=r,q=q,chi1=chi1,chi2=chi2)
         #print( eval_kappa(Jlim,[r,r],[q,q]) )
 
+        # THIS NEEDS TO BE UPDATED
+
         # Repeat instruction instead of calling S2av to avoid converting J->kappa->J.
         sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
         #S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
@@ -3635,20 +3657,21 @@ if __name__ == '__main__':
     #print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
 
-    r=1e9
+
+    r=1e14
     xi=-0.5
     q=0.4
     chi1=0.9
     chi2=0.8
 
+
     Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
-    J=(Jmin+Jmax)/2
-    print(Jmin,Jmax,J)
+    print(Jmin,Jmax)
 
-    print(S2roots(J,r,xi,q,chi1,chi2))
-    print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
+    print(Satresonance([Jmin,Jmax],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
 
-    #print(xiresonances(J,r,q,chi1,chi2))
+
+    print(xiresonances((Jmin+Jmax)/2,r,q,chi1,chi2))
     #print(xiresonances(J[1],r[1],q[1],chi1[1],chi2[1]))
     #print(xiresonances(J,r,q,chi1,chi2))
 
