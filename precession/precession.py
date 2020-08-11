@@ -85,7 +85,7 @@ def masses(q):
     m1 = mass1(q)
     m2 = mass2(q)
 
-    return np.array([m1, m2])
+    return toarray(m1, m2)
 
 
 def massratio(m1, m2):
@@ -206,7 +206,7 @@ def spinmags(q,chi1,chi2):
     S1 = spin1(q,chi1)
     S2 = spin2(q,chi2)
 
-    return np.array([S1,S2])
+    return toarray(S1,S2)
 
 
 def angularmomentum(r,q):
@@ -272,7 +272,7 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
     Jmin = np.maximum.reduce([np.zeros(flen(L)), L-S1-S2, np.abs(S1-S2)-L])
     Jmax = L+S1+S1
 
-    return np.array([Jmin,Jmax])
+    return toarray(Jmin,Jmax)
 
 
 #TODO fix docstrings
@@ -696,7 +696,7 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     sigma5 = \
     -256 * ( q )**( 3 ) * ( ( 1 + q ) )**( 6 ) * u
 
-    return np.array([sigma5, sigma4, sigma3, sigma2, sigma1, sigma0])
+    return toarray(sigma5, sigma4, sigma3, sigma2, sigma1, sigma0)
 
 
 
@@ -775,12 +775,8 @@ def Jresonances(r,xi,q,chi1,chi2):
     else:
         Jmin,Jmax =np.array(list(map(_compute, kapparoots,r,xi,q,chi1,chi2))).T
 
-    return np.array([Jmin,Jmax])
+    return toarray(Jmin,Jmax)
 
-
-
-
-    #return np.array([kappamin,kappamax])
 
 
 def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
@@ -822,7 +818,7 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
     else:
         raise TypeError
 
-    return np.array([Jmin,Jmax])
+    return toarray(Jmin,Jmax)
 
 
 def xilimits_definition(q,chi1,chi2):
@@ -850,7 +846,7 @@ def xilimits_definition(q,chi1,chi2):
     S1,S2 = spinmags(q,chi1,chi2)
     xilim = (1+q)*S1 + (1+1/q)*S2
 
-    return np.array([-xilim,xilim])
+    return toarray(-xilim,xilim)
 
 
 #TODO: fix docstrings
@@ -1155,7 +1151,7 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     sigma6 = \
     256 * ( q )**( 6 ) * ( u )**( 2 )
 
-    return np.array([sigma6, sigma5, sigma4, sigma3, sigma2, sigma1, sigma0])
+    return toarray(sigma6, sigma5, sigma4, sigma3, sigma2, sigma1, sigma0)
 
 
 def xiresonances(J,r,q,chi1,chi2):
@@ -1203,7 +1199,7 @@ def xiresonances(J,r,q,chi1,chi2):
     else:
         ximin,ximax =np.array(list(map(_compute, Smin,Smax,J,r,xiroots,q,chi1,chi2))).T
 
-    return np.array([ximin,ximax])
+    return toarray(ximin,ximax)
 
 
 
@@ -1249,7 +1245,7 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
     else:
         raise TypeError
 
-    return np.array([ximin,ximax])
+    return toarray(ximin,ximax)
 
 
 def Slimits_S1S2(q,chi1,chi2):
@@ -1277,7 +1273,7 @@ def Slimits_S1S2(q,chi1,chi2):
     Smin = np.abs(S1-S2)
     Smax = S1+S2
 
-    return np.array([Smin,Smax])
+    return toarray(Smin,Smax)
 
 
 def Slimits_LJ(J,r,q):
@@ -1305,7 +1301,7 @@ def Slimits_LJ(J,r,q):
     Smin = np.abs(J-L)
     Smax = J+L
 
-    return np.array([Smin,Smax])
+    return toarray(Smin,Smax)
 
 
 def Slimits_LJS1S2(J,r,q,chi1,chi2):
@@ -1334,7 +1330,7 @@ def Slimits_LJS1S2(J,r,q,chi1,chi2):
     Smin = np.maximum(SminS1S2,SminLJ)
     Smax = np.minimum(SmaxS1S2,SmaxLJ)
 
-    return np.array([Smin,Smax])
+    return toarray(Smin,Smax)
 
 
 #TODO fix docstrings
@@ -1482,7 +1478,7 @@ def S2roots(J,r,xi,q,chi1,chi2):
     # else:
     #     S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
 
-    return toarray([Sminus2,Splus2,S32])
+    return toarray(Sminus2,Splus2,S32)
 
 
 def Slimits_plusminus(J,r,xi,q,chi1,chi2):
@@ -1519,7 +1515,7 @@ def Slimits_plusminus(J,r,xi,q,chi1,chi2):
         Sminus=Sminus2**0.5
         Splus=Splus2**0.5
 
-    return np.array([Sminus,Splus])
+    return toarray(Sminus,Splus)
 
 
 def Satresonance(J,r,xi,q,chi1,chi2):
@@ -1586,7 +1582,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     else:
         raise TypeError
 
-    return np.array([Smin,Smax])
+    return toarray(Smin,Smax)
 
 
 # TODO: Check inter-compatibility of Slimits, Jlimits, xilimits
@@ -2276,7 +2272,7 @@ def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
     theta2=eval_theta2(S,J,r,xi,q,chi1,chi2)
     deltaphi=eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=sign)
 
-    return np.array([theta1,theta2,deltaphi])
+    return toarray(theta1,theta2,deltaphi)
 
 
 def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
@@ -2314,7 +2310,7 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     J=eval_J(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
     xi=eval_xi(theta1,theta2,q,chi1,chi2)
 
-    return np.array([S,J,xi])
+    return toarray(S,J,xi)
 
 
 def morphology(J,r,xi,q,chi1,chi2,simpler=False):
@@ -2605,7 +2601,6 @@ def S2av_mfactor(m):
     -------
     mfactor: float
         Value of the factor for the given m, (1 - E(m)/K(m)) / m.
-        For m=0 the factor is 1/2.
     """
 
     m=toarray(m)
@@ -2672,11 +2667,6 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
     Returns
     -------
     """
-    kappa=toarray(kappa)
-
-
-    #r = 1 / (2*u*mass1(q)*mass2(q))**2
-    #print('Step', u, r, kappa)
 
     if u==0:
         # In this case use analytic result
@@ -2730,7 +2720,7 @@ def eval_kappa(J, r, q):
 
 def eval_u(r, q):
     """
-    Change of independant variable to regularize the infinite orbital separation
+    Change of independent variable to regularize the infinite orbital separation
     limit of the precession-averaged evolution equation.
 
     Parameters
@@ -2963,7 +2953,7 @@ def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     kappainf = eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
     xi = eval_xi(theta1inf, theta2inf, q, chi1, chi2)
 
-    return np.array([kappainf, xi])
+    return toarray(kappainf, xi)
 
 
 def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
@@ -2999,7 +2989,7 @@ def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     theta1inf = eval_theta1inf(kappainf, xi, q, chi1, chi2)
     theta2inf = eval_theta2inf(kappainf, xi, q, chi1, chi2)
 
-    return np.array([theta1inf, theta2inf])
+    return toarray(theta1inf, theta2inf)
 
 
 def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
@@ -3110,7 +3100,7 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2, *args, **kwargs):
 
     kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2),*args,**kwargs)
 
-    return toarray(kappa)
+    return kappa
 
 
 #TODO: make it work on arrays (multiple evolutions)
@@ -3134,7 +3124,7 @@ def Jofr(ic, r, xi, q, chi1, chi2):
     kappa = kappaofu(kappa0, u, xi, q, chi1, chi2,h0=h0)
     J  = eval_J(kappa=kappa,r=r,q=q)
 
-    return toarray(J)
+    return J
 
 
 def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
@@ -3311,7 +3301,7 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
     S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
     S2vec = np.array([S2x, S2y, S2z])
 
-    return np.array([Svec, S1vec, S2vec, Jvec, Lvec])
+    return toarray(Svec, S1vec, S2vec, Jvec, Lvec)
 
 
 ## TODO:
@@ -3392,7 +3382,7 @@ def r_updown(q, chi1, chi2):
     r_plus = (chi1**.5+(q*chi2)**.5)**4./(1.-q)**2.
     r_minus = (chi1**.5-(q*chi2)**.5)**4./(1.-q)**2.
 
-    return np.array([r_plus, r_minus])
+    return toarray(r_plus, r_minus)
 
 
 def omega2_aligned(r, q, chi1, chi2, alpha1, alpha2):
@@ -3586,6 +3576,8 @@ def r_wide(q, chi1, chi2):
 
 
 if __name__ == '__main__':
+
+    print(masses([0.5,0.6]))
 
     #r=[10,10]
     #xi=[0.35,-0.675]
