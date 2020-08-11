@@ -2683,20 +2683,18 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
         theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
         S2av = S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2)
     else:
-
-
         #Jlim = Jlimits(xi=xi,r=r,q=q,chi1=chi1,chi2=chi2)
         #print( eval_kappa(Jlim,[r,r],[q,q]) )
 
-        # THIS NEEDS TO BE UPDATED
-
         # Repeat instruction instead of calling S2av to avoid converting J->kappa->J.
-        sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+
+        #sigma6,sigma4,sigma2,sigma0= Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
         #S32, Sminus2, Splus2 = cubicsolver_coincident(sigma6,sigma4,sigma2,sigma0)
-        S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
+        #S32, Sminus2, Splus2 = cubicsolver_distinct(sigma6,sigma4,sigma2,sigma0)
+
+        S32, Sminus2, Splus2 = wraproots(Scubic_coefficients,kappa,u,xi,q,chi1,chi2)
         m = elliptic_parameter(Sminus2, Splus2, S32)
         S2av = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
-
 
     return S2av
 
@@ -3607,14 +3605,14 @@ if __name__ == '__main__':
 
 
 
-    # theta1inf=0.5
-    # theta2inf=0.5
-    # q=0.5
-    # chi1=0.6
-    # chi2=0.7
-    # kappainf, xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
-    # r = np.concatenate(([np.inf],np.logspace(6,1,100)))
-    # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
+    theta1inf=0.5
+    theta2inf=0.5
+    q=0.5
+    chi1=0.6
+    chi2=0.7
+    kappainf, xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
+    r = np.concatenate(([np.inf],np.logspace(10,1,100)))
+    print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
 
     # r=1e12
@@ -3657,21 +3655,21 @@ if __name__ == '__main__':
     #print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
 
-
-    r=1e14
-    xi=-0.5
-    q=0.4
-    chi1=0.9
-    chi2=0.8
-
-
-    Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
-    print(Jmin,Jmax)
-
-    print(Satresonance([Jmin,Jmax],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
-
-
-    print(xiresonances((Jmin+Jmax)/2,r,q,chi1,chi2))
+    #
+    # r=1e14
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    #
+    #
+    # Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # print(Jmin,Jmax)
+    #
+    # print(Satresonance([Jmin,Jmax],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
+    #
+    #
+    # print(xiresonances((Jmin+Jmax)/2,r,q,chi1,chi2))
     #print(xiresonances(J[1],r[1],q[1],chi1[1],chi2[1]))
     #print(xiresonances(J,r,q,chi1,chi2))
 
