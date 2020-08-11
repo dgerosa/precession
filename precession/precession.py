@@ -3597,26 +3597,25 @@ if __name__ == '__main__':
 
 
 
-    theta1inf=0.5
-    theta2inf=0.5
-    q=0.5
-    chi1=0.6
-    chi2=0.7
-    kappainf, xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
-    r = np.concatenate(([np.inf],np.logspace(10,1,100)))
-    print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
+    # theta1inf=0.5
+    # theta2inf=0.5
+    # q=0.5
+    # chi1=0.6
+    # chi2=0.7
+    # kappainf, xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
+    # r = np.concatenate(([np.inf],np.logspace(10,1,100)))
+    # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
 
-    # r=1e12
-    # xi=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    #
-    # Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
-    # print(Jmin,Jmax)
-    # Jmin,Jmax = Jlimits(r=r,q=q,chi1=chi1,chi2=chi2)
-    # print(Jmin,Jmax)
+    r=1e30
+    xi=-0.5
+    q=0.4
+    chi1=0.9
+    chi2=0.8
+
+    Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    print(Jmin,Jmax)
+    print(Jofr((Jmin+Jmax)/2, np.logspace(np.log10(r),1,100), xi, q, chi1, chi2) )
 
     # J=6.1
     # print("LS",Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
