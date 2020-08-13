@@ -723,8 +723,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
     if np.ndim(coeffs)==1:
         sols = np.sort_complex(np.roots(coeffs))
     else:
-        sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
-
+        sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T]).T
     sols = np.real(np.where(np.isreal(sols),sols,np.nan))
 
     return sols
@@ -2587,6 +2586,15 @@ def Soft(t,J,r,xi,q,chi1,chi2):
 
     return S
 
+def Ssampling(J,r,xi,q,chi1,chi2,N=1):
+    #TODO write docstrings
+    # N is number of samples
+    
+    tau = Speriod(J,r,xi,q,chi1,chi2)
+    t = np.array([np.random.uniform(0,x,y) for x,y in zip(np.atleast_1d(tau),np.atleast_1d(N))])
+    S = Soft(t,J,r,xi,q,chi1,chi2)
+
+    return S
 
 def S2av_mfactor(m):
     """
@@ -3576,8 +3584,8 @@ def r_wide(q, chi1, chi2):
 
 
 if __name__ == '__main__':
-
-    print(masses([0.5,0.6]))
+    np.set_printoptions(threshold=sys.maxsize)
+    #print(masses([0.5,0.6]))
 
     #r=[10,10]
     #xi=[0.35,-0.675]
@@ -3607,15 +3615,22 @@ if __name__ == '__main__':
     # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
 
-    r=1e30
+    r=1e2
     xi=-0.5
     q=0.4
     chi1=0.9
     chi2=0.8
 
     Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
-    print(Jmin,Jmax)
-    print(Jofr((Jmin+Jmax)/2, np.logspace(np.log10(r),1,100), xi, q, chi1, chi2) )
+    J=(Jmin+Jmax)/2
+    print(J)
+    #print(Jmin,Jmax)
+    #print(Jofr((Jmin+Jmax)/2, np.logspace(np.log10(r),1,100), xi, q, chi1, chi2) )
+    S = Ssampling(J,r,xi,q,chi1,chi2,N=1)
+
+    #S = Ssampling([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],N=[10,10])
+
+    print(repr(S))
 
     # J=6.1
     # print("LS",Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
