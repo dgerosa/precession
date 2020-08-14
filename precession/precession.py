@@ -21,6 +21,11 @@ def toarray(*args):
     return np.squeeze(np.array([*args]))
 
 
+def sample_unitsphere(N=1):
+    vec = np.random.randn(3, N)
+    vec /= np.linalg.norm(vec, axis=0)
+    return vec.T
+
 #def isarray(var):
 #    """
 #    Check if a variable is an array
@@ -230,6 +235,17 @@ def angularmomentum(r,q):
     L = mass1(q)*mass2(q)*r**0.5
 
     return L
+
+
+#TODO docstrings
+def orbitalvelocity(r):
+
+    r = toarray(r)
+    v= 1/r**0.5
+
+    return v
+
+
 
 
 def orbitalseparation(L, q):
@@ -2589,7 +2605,7 @@ def Soft(t,J,r,xi,q,chi1,chi2):
 def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     #TODO write docstrings
     # N is number of samples
-    
+
     tau = Speriod(J,r,xi,q,chi1,chi2)
     t = np.array([np.random.uniform(0,x,y) for x,y in zip(np.atleast_1d(tau),np.atleast_1d(N))])
     S = Soft(t,J,r,xi,q,chi1,chi2)
@@ -3583,6 +3599,247 @@ def r_wide(q, chi1, chi2):
 
 
 
+
+#### Orbit averaged things ####
+
+# TODO: this comes straight from precession_V1. Update docstrings
+def orbav_eqs(allvars,v,q,chi1,chi2,quadrupole_formula=False):
+
+    '''
+    Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where
+    allvars is an array with the cartesian components of the unit vectors L, S1
+    and S2. This function is only the actual system of equations, not the ODE
+    solver.
+
+    Equations are the ones reported in Gerosa et al. [Phys.Rev. D87 (2013) 10,
+    104028](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.87.104028);
+    see references therein. In particular, the quadrupole-monopole term computed
+    by Racine is included. The results presented in Gerosa et al. 2013 actually
+    use additional unpublished terms, that are not listed in the published
+    equations and are NOT included here. Radiation reaction is included up to
+    3.5PN.
+
+    The internal quadrupole_formula flag switches off all PN corrections in
+    radiation reaction.
+
+    The integration is carried over in the orbital velocity v (equivalent to the
+    separation), not in time. If an expression for v(t) is needed, the code can
+    be easiliy modified to return time as well.
+
+    **Call:**
+
+        allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False)
+
+    **Parameters:**
+    - `allvars`: array of lenght 9 cointaining the initial condition for numerical integration for the components of the unit vectors L, S1 and S2.
+    - `v`: orbital velocity.
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+    - `eta`: symmetric mass ratio.
+    - `m1`: mass of the primary BH.
+    - `m2`: mass of the secondary BH.
+    - `chi1`: dimensionless spin magnitude of the primary BH. Must be 0<=chi1<=1
+    - `chi2`: dimensionless spin magnitude of the secondary BH. Must be 0<=chi2<=1
+    - `time`: if `True` also integrate t(r).
+
+    **Returns:**
+
+    - `allders`: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.
+    '''
+
+    q,chi1,chi2=toarray(q,chi1,chi2)
+    m1=mass1(q)
+    m2=mass2(q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    eta=symmetricmassratio(q)
+
+    # Read variables
+    if len(allvars)==9:
+        Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz = allvars
+    elif len(allvars)==10:
+        Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,time = allvars
+    else:
+        raise TypeError
+
+    # Angles
+    ct1=(Lhx*S1hx+Lhy*S1hy+Lhz*S1hz)
+    ct2=(Lhx*S2hx+Lhy*S2hy+Lhz*S2hz)
+    ct12=(S1hx*S2hx+S1hy*S2hy+S1hz*S2hz)
+
+    # Spin precession for S1
+    Omega1x= eta*v**5*(2+3*q/2)*Lhx  \
+            + v**6*(S2*S2hx-3*S2*ct2*Lhx-3*q*S1*ct1*Lhx)/2
+    Omega1y= eta*v**5*(2+3*q/2)*Lhy  \
+            + v**6*(S2*S2hy-3*S2*ct2*Lhy-3*q*S1*ct1*Lhy)/2
+    Omega1z= eta*v**5*(2+3*q/2)*Lhz  \
+            + v**6*(S2*S2hz-3*S2*ct2*Lhz-3*q*S1*ct1*Lhz)/2
+
+    dS1hxdt= Omega1y*S1hz - Omega1z*S1hy
+    dS1hydt= Omega1z*S1hx - Omega1x*S1hz
+    dS1hzdt= Omega1x*S1hy - Omega1y*S1hx
+
+    # Spin precession for S2
+    Omega2x= eta*v**5*(2+3/(2*q))*Lhx  \
+            + v**6*(S1*S1hx-3*S1*ct1*Lhx-3*S2*ct2*Lhx/q)/2
+    Omega2y= eta*v**5*(2+3/(2*q))*Lhy  \
+            + v**6*(S1*S1hy-3*S1*ct1*Lhy-3*S2*ct2*Lhy/q)/2
+    Omega2z= eta*v**5*(2+3/(2*q))*Lhz  \
+            + v**6*(S1*S1hz-3*S1*ct1*Lhz-3*S2*ct2*Lhz/q)/2
+
+    dS2hxdt= Omega2y*S2hz - Omega2z*S2hy
+    dS2hydt= Omega2z*S2hx - Omega2x*S2hz
+    dS2hzdt= Omega2x*S2hy - Omega2y*S2hx
+
+    # Conservation of angular momentum
+    dLhxdt= -v*(S1*dS1hxdt+S2*dS2hxdt)/eta
+    dLhydt= -v*(S1*dS1hydt+S2*dS2hydt)/eta
+    dLhzdt= -v*(S1*dS1hzdt+S2*dS2hzdt)/eta
+
+    # Radiation reaction
+    if quadrupole_formula: # Use to switch off higher-order terms
+        dvdt= (32*eta*v**9/5)
+    else:
+        dvdt= (32*eta*v**9/5)* ( 1                                  \
+            - v**2* (743+924*eta)/336                               \
+            + v**3* (4*np.pi                                        \
+                     - chi1*ct1*(113*m1**2/12 + 25*eta/4 )   \
+                     - chi2*ct2*(113*m2**2/12 + 25*eta/4 ))  \
+            + v**4* (34103/18144 + 13661*eta/2016 + 59*eta**2/18    \
+                     + eta*chi1*chi2* (721*ct1*ct2 - 247*ct12) /48  \
+                     + ((m1*chi1)**2 * (719*ct1**2-233))/96       \
+                     + ((m2*chi2)**2 * (719*ct2**2-233))/96)      \
+            - v**5* np.pi*(4159+15876*eta)/672                      \
+            + v**6* (16447322263/139708800 + 16*np.pi**2/3          \
+                     -1712*(0.5772156649+np.log(4*v))/105           \
+                     +(451*np.pi**2/48 - 56198689/217728)*eta       \
+                     +541*eta**2/896 - 5605*eta**3/2592)            \
+            + v**7* np.pi*( -4415/4032 + 358675*eta/6048            \
+                     + 91495*eta**2/1512)                           \
+            )
+
+    # Integrate in v, not in time
+    dtdv=1./dvdt
+    dLhxdv=dLhxdt*dtdv
+    dLhydv=dLhydt*dtdv
+    dLhzdv=dLhzdt*dtdv
+    dS1hxdv=dS1hxdt*dtdv
+    dS1hydv=dS1hydt*dtdv
+    dS1hzdv=dS1hzdt*dtdv
+    dS2hxdv=dS2hxdt*dtdv
+    dS2hydv=dS2hydt*dtdv
+    dS2hzdv=dS2hzdt*dtdv
+
+
+    # Read variables in
+    if len(allvars)==9:
+        return toarray(dLhxdv,dLhydv,dLhzdv,dS1hxdv,dS1hydv,dS1hzdv,dS2hxdv,dS2hydv,dS2hzdv)
+    elif len(allvars)==10:
+        return toarray(dLhxdv,dLhydv,dLhzdv,dS1hxdv,dS1hydv,dS1hzdv,dS2hxdv,dS2hydv,dS2hzdv,dtdv)
+    else:
+        raise TypeError
+
+
+
+# TODO: this comes straight from precession_V1. Update docstrings
+# TODO : still does not work on array, multiple evolutions. Implement a map
+def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,time=False,quadrupole_formula=False):
+
+    '''
+    Single orbit-averaged integration. Integrate the system of ODEs specified in
+    `precession.orbav_eqs`. The initial configuration (at r_vals[0]) is
+    specified through J, xi and S. The components of the unit vectors L, S1 and
+    S2 are returned at the output separations specified by r_vals. The initial
+    values of J and S must be compatible with the initial separation r_vals[0],
+    otherwise an error is raised. Integration is performed in a reference frame
+    in which the z axis is along J and L lies in the x-z plane at the initial
+    separation. Equations are integrated in v (orbital velocity) but outputs are
+    converted to r (separation).
+
+    Of course, this can only integrate to/from FINITE separations.
+
+    Bear in mind that orbit-averaged integrations are tpically possible from
+    r<10000; integrations from larger separations take a very long time and can
+    occasionally crash. If q=1, the initial binary configuration is specified
+    through cos(varphi), not S.
+
+    We recommend to use one of the wrappers `precession.orbit_averaged` and
+    `precession.orbit_angles` provided.
+
+    **Call:**
+        Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2,time=False)
+
+    **Parameters:**
+
+    - `J`: magnitude of the total angular momentum.
+    - `xi`: projection of the effective spin along the orbital angular momentum.
+    - `S`: magnitude of the total spin.
+    - `r_vals`: binary separation (array).
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+    - `time`: if `True` also integrate t(r).
+
+    **Returns:**
+
+    - `Lhx_vals`: x component of the unit vector L/|L|.
+    - `Lhy_vals`: y component of the unit vector L/|L|.
+    - `Lhz_vals`: z component of the unit vector L/|L|.
+    - `S1hx_vals`: x component of the unit vector S1/|S1|.
+    - `S1hy_vals`: y component of the unit vector S1/|S1|.
+    - `S1hz_vals`: z component of the unit vector S1/|S1|.
+    - `S2hx_vals`: x component of the unit vector S2/|S2|.
+    - `S2hy_vals`: y component of the unit vector S2/|S2|.
+    - `S2hz_vals`: z component of the unit vector S2/|S2|.
+    - `t_fvals`: (optional) time as a function of the separation.
+    '''
+
+    assert np.isclose(np.linalg.norm(Lh0),1)
+    assert np.isclose(np.linalg.norm(S1h0),1)
+    assert np.isclose(np.linalg.norm(S2h0),1)
+
+    if time:
+        ic = np.concatenate((Lh0,S1h0,S2h0,0))
+    else:
+        ic = np.concatenate((Lh0,S1h0,S2h0))
+
+    v=orbitalvelocity(r)
+
+    # Integration
+    res =scipy.integrate.odeint(orbav_eqs, ic, v, args=(q,chi1,chi2,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
+
+    Lh = res.T[0:3].T
+    S1h = res.T[3:6].T
+    S2h = res.T[6:9].T
+
+    if time:
+        t = res.T[10].T
+        return Lh,S1h,S2h,t
+    else:
+        return Lh,S1h,S2h
+
+    # # Unzip output
+    # traxres=list(zip(*res))
+    # Lhx_fvals=traxres[0]
+    # Lhy_fvals=traxres[1]
+    # Lhz_fvals=traxres[2]
+    # S1hx_fvals=traxres[3]
+    # S1hy_fvals=traxres[4]
+    # S1hz_fvals=traxres[5]
+    # S2hx_fvals=traxres[6]
+    # S2hy_fvals=traxres[7]
+    # S2hz_fvals=traxres[8]
+    # if time:
+    #     t_fvals=traxres[9]
+    #
+    # if time:
+    #     return Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals,t_fvals
+    #
+    # else:
+    #     return Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals
+
+
+
 if __name__ == '__main__':
     np.set_printoptions(threshold=sys.maxsize)
     #print(masses([0.5,0.6]))
@@ -3615,22 +3872,33 @@ if __name__ == '__main__':
     # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
 
-    r=1e2
+    # r=1e2
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    #
+    # Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # J=(Jmin+Jmax)/2
+    # print(J)
+    # #print(Jmin,Jmax)
+    # #print(Jofr((Jmin+Jmax)/2, np.logspace(np.log10(r),1,100), xi, q, chi1, chi2) )
+    # S = Ssampling(J,r,xi,q,chi1,chi2,N=1)
+    #
+    # #S = Ssampling([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],N=[10,10])
+    #
+    # print(repr(S))
+
+
     xi=-0.5
     q=0.4
     chi1=0.9
     chi2=0.8
+    r=np.logspace(2,1,100)
+    Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2)
+    print(Lh,S1h,S2h)
 
-    Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
-    J=(Jmin+Jmax)/2
-    print(J)
-    #print(Jmin,Jmax)
-    #print(Jofr((Jmin+Jmax)/2, np.logspace(np.log10(r),1,100), xi, q, chi1, chi2) )
-    S = Ssampling(J,r,xi,q,chi1,chi2,N=1)
-
-    #S = Ssampling([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],N=[10,10])
-
-    print(repr(S))
 
     # J=6.1
     # print("LS",Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
