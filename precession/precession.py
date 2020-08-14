@@ -3603,7 +3603,7 @@ def r_wide(q, chi1, chi2):
 #### Orbit averaged things ####
 
 # TODO: this comes straight from precession_V1. Update docstrings
-def orbav_eqs(allvars,v,q,chi1,chi2,quadrupole_formula=False):
+def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_formula=False):
 
     '''
     Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where
@@ -3648,19 +3648,10 @@ def orbav_eqs(allvars,v,q,chi1,chi2,quadrupole_formula=False):
     - `allders`: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.
     '''
 
-    q,chi1,chi2=toarray(q,chi1,chi2)
-    m1=mass1(q)
-    m2=mass2(q)
-    S1,S2 = spinmags(q,chi1,chi2)
-    eta=symmetricmassratio(q)
-
-    # Read variables
-    if len(allvars)==9:
-        Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz = allvars
-    elif len(allvars)==10:
-        Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,time = allvars
+    if tracktime:
+        Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t = allvars
     else:
-        raise TypeError
+        Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz = allvars
 
     # Angles
     ct1=(Lhx*S1hx+Lhy*S1hy+Lhz*S1hz)
@@ -3720,7 +3711,7 @@ def orbav_eqs(allvars,v,q,chi1,chi2,quadrupole_formula=False):
 
     # Integrate in v, not in time
     dtdv=1./dvdt
-    dLhxdv=dLhxdt*dtdv
+    dLhxdv=dLhxdt/dvdt
     dLhydv=dLhydt*dtdv
     dLhzdv=dLhzdt*dtdv
     dS1hxdv=dS1hxdt*dtdv
@@ -3731,19 +3722,15 @@ def orbav_eqs(allvars,v,q,chi1,chi2,quadrupole_formula=False):
     dS2hzdv=dS2hzdt*dtdv
 
 
-    # Read variables in
-    if len(allvars)==9:
-        return toarray(dLhxdv,dLhydv,dLhzdv,dS1hxdv,dS1hydv,dS1hzdv,dS2hxdv,dS2hydv,dS2hzdv)
-    elif len(allvars)==10:
-        return toarray(dLhxdv,dLhydv,dLhzdv,dS1hxdv,dS1hydv,dS1hzdv,dS2hxdv,dS2hydv,dS2hzdv,dtdv)
+
+    if tracktime:
+        return toarray(dLhxdv,dLhydv,dLhzdv,dS1hxdv,dS1hydv,dS1hzdv,dS2hxdv,dS2hydv,dS2hzdv,dtdv)    # Read variables in
     else:
-        raise TypeError
-
-
+        return toarray(dLhxdv,dLhydv,dLhzdv,dS1hxdv,dS1hydv,dS1hzdv,dS2hxdv,dS2hydv,dS2hzdv)
 
 # TODO: this comes straight from precession_V1. Update docstrings
 # TODO : still does not work on array, multiple evolutions. Implement a map
-def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,time=False,quadrupole_formula=False):
+def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_formula=False):
 
     '''
     Single orbit-averaged integration. Integrate the system of ODEs specified in
@@ -3794,49 +3781,38 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,time=False,quadrupole_formula=F
     - `t_fvals`: (optional) time as a function of the separation.
     '''
 
+    # I need unit vectors
     assert np.isclose(np.linalg.norm(Lh0),1)
     assert np.isclose(np.linalg.norm(S1h0),1)
     assert np.isclose(np.linalg.norm(S2h0),1)
 
-    if time:
-        ic = np.concatenate((Lh0,S1h0,S2h0,0))
+    # Pack inputs
+    if tracktime:
+        ic = np.concatenate((Lh0,S1h0,S2h0,[0]))
     else:
         ic = np.concatenate((Lh0,S1h0,S2h0))
 
+    # Compute these quantity here instead of inside the RHS for speed
     v=orbitalvelocity(r)
+    m1=mass1(q)
+    m2=mass2(q)
+    S1,S2 = spinmags(q,chi1,chi2)
+    eta=symmetricmassratio(q)
 
     # Integration
-    res =scipy.integrate.odeint(orbav_eqs, ic, v, args=(q,chi1,chi2,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
+    res =scipy.integrate.odeint(orbav_eqs, ic, v, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
 
+    #Unpack output
     Lh = res.T[0:3].T
     S1h = res.T[3:6].T
     S2h = res.T[6:9].T
 
-    if time:
-        t = res.T[10].T
+    if tracktime:
+        t = res.T[9].T
         return Lh,S1h,S2h,t
     else:
         return Lh,S1h,S2h
 
-    # # Unzip output
-    # traxres=list(zip(*res))
-    # Lhx_fvals=traxres[0]
-    # Lhy_fvals=traxres[1]
-    # Lhz_fvals=traxres[2]
-    # S1hx_fvals=traxres[3]
-    # S1hy_fvals=traxres[4]
-    # S1hz_fvals=traxres[5]
-    # S2hx_fvals=traxres[6]
-    # S2hy_fvals=traxres[7]
-    # S2hz_fvals=traxres[8]
-    # if time:
-    #     t_fvals=traxres[9]
-    #
-    # if time:
-    #     return Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals,t_fvals
-    #
-    # else:
-    #     return Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals
 
 
 
@@ -3895,10 +3871,25 @@ if __name__ == '__main__':
     chi1=0.9
     chi2=0.8
     r=np.logspace(2,1,100)
-    Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2)
-    print(Lh,S1h,S2h)
+    Jmin,Jmax = Jlimits(r=r[0],xi=xi,q=q,chi1=chi1,chi2=chi2)
+    J=(Jmin+Jmax)/2
+    Smin,Smax= Slimits(J=J,r=r[0],xi=xi,q=q,chi1=chi1,chi2=chi2)
+    S=(Smin+Smax)/2
+    Svec, S1vec, S2vec, Jvec, Lvec = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
+    S1h0=S1vec/spin1(q,chi1)
+    S2h0=S2vec/spin2(q,chi2)
+    Lh0=Lvec/angularmomentum(r[0],q)
 
+    print(J,S)
+
+    #Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    t0=time.time()
+    Lh,S1h,S2h,t = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=True)
+    print(time.time()-t0)
+    #print("L",repr(Lh.T))
+    #print("S1",repr(S1h.T))
+    #print("S2",repr(S2h.T))
+    #print("t",repr(t))
 
     # J=6.1
     # print("LS",Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
