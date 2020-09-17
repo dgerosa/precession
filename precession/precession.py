@@ -7,7 +7,7 @@ import scipy, scipy.special, scipy.integrate
 import sys, os, time
 import warnings
 import itertools
-
+warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
 #getnone=itertools.repeat(None)
 def flen(x):
@@ -3122,7 +3122,15 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2, *args, **kwargs):
     """
     """
 
-    kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2),*args,**kwargs)
+    def _compute(kappa0, u, xi, q, chi1, chi2, *args, **kwargs):
+
+        kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2),*args,**kwargs)
+        return toarray(kappa)
+
+    if flen(kappa0)==1:
+        kappa = _compute(kappa0, u, xi, q, chi1, chi2, *args, **kwargs)
+    else:
+        kappa = np.array(list(map(lambda x: _compute(*x, *args, **kwargs), zip(kappa0, u, xi, q, chi1, chi2))))
 
     return kappa
 
@@ -3131,22 +3139,30 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2, *args, **kwargs):
 #TODO: write docstrings
 def Jofr(ic, r, xi, q, chi1, chi2):
 
-    u = eval_u(r, q)
+    def _compute(ic, r, xi, q, chi1, chi2):
+        u = eval_u(r, q)
 
-    # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
+        # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
+        # TODO. This breaks down if r is very large but not infinite.
 
-    # TODO. This breaks down if r is very large but not infinite.
+        if np.isfinite(r[0]):
+            J0 = ic
+            kappa0 = eval_kappa(J0, r[0], q)
+            h0=0
+        else:
+            kappa0 = ic
+            h0=1e-3
 
-    if np.isfinite(r[0]):
-        J0 = ic
-        kappa0 = eval_kappa(J0, r[0], q)
-        h0=0
+        kappa = kappaofu(kappa0, u, xi, q, chi1, chi2,h0=h0)
+        J  = eval_J(kappa=kappa,r=r,q=q)
+
+        return J
+
+
+    if flen(ic)==1:
+        J = _compute(ic, r, xi, q, chi1, chi2)
     else:
-        kappa0 = ic
-        h0=1e-3
-
-    kappa = kappaofu(kappa0, u, xi, q, chi1, chi2,h0=h0)
-    J  = eval_J(kappa=kappa,r=r,q=q)
+        J    = np.array(list(map(lambda x: _compute(*x), zip(ic, r, xi, q, chi1, chi2))))
 
     return J
 
@@ -3792,7 +3808,7 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
     else:
         ic = np.concatenate((Lh0,S1h0,S2h0))
 
-    # Compute these quantity here instead of inside the RHS for speed
+    # Compute these quantities here instead of inside the RHS for speed
     v=orbitalvelocity(r)
     m1=mass1(q)
     m2=mass2(q)
@@ -3802,16 +3818,21 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
     # Integration
     res =scipy.integrate.odeint(orbav_eqs, ic, v, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
 
-    #Unpack output
+    #Unpack outputs
     Lh = res.T[0:3].T
     S1h = res.T[3:6].T
     S2h = res.T[6:9].T
-
     if tracktime:
         t = res.T[9].T
         return Lh,S1h,S2h,t
     else:
         return Lh,S1h,S2h
+
+
+# TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
+def inspiral():
+    pass
+
 
 
 
@@ -3848,44 +3869,67 @@ if __name__ == '__main__':
     # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
 
-    # r=1e2
-    # xi=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    #
-    # Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
-    # J=(Jmin+Jmax)/2
-    # print(J)
-    # #print(Jmin,Jmax)
-    # #print(Jofr((Jmin+Jmax)/2, np.logspace(np.log10(r),1,100), xi, q, chi1, chi2) )
-    # S = Ssampling(J,r,xi,q,chi1,chi2,N=1)
-    #
-    # #S = Ssampling([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],N=[10,10])
-    #
-    # print(repr(S))
-
-
+    r=1e2
     xi=-0.5
     q=0.4
     chi1=0.9
     chi2=0.8
-    r=np.logspace(2,1,100)
-    Jmin,Jmax = Jlimits(r=r[0],xi=xi,q=q,chi1=chi1,chi2=chi2)
-    J=(Jmin+Jmax)/2
-    Smin,Smax= Slimits(J=J,r=r[0],xi=xi,q=q,chi1=chi1,chi2=chi2)
-    S=(Smin+Smax)/2
-    Svec, S1vec, S2vec, Jvec, Lvec = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
-    S1h0=S1vec/spin1(q,chi1)
-    S2h0=S2vec/spin2(q,chi2)
-    Lh0=Lvec/angularmomentum(r[0],q)
 
-    print(J,S)
+    Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    J0=(Jmin+Jmax)/2
+    #print(J)
+    #print(Jmin,Jmax)
+    r = np.logspace(np.log10(r),1,100)
+    J=Jofr(J0, r, xi, q, chi1, chi2)
+    print(J)
 
-    #Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    t0=time.time()
-    Lh,S1h,S2h,t = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=True)
-    print(time.time()-t0)
+    J=Jofr([J0,J0], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2])
+
+    print(J)
+
+
+
+    #S = Ssampling(J,r,xi,q,chi1,chi2,N=1)
+
+    #S = Ssampling([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],N=[10,10])
+
+    #print(repr(S))
+
+
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1inf=0.4
+    # theta2inf=0.5
+    #
+    # kappa0,xi = angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2)
+    # u = np.linspace(0,1,100)
+    # #kappa0=[kappa0]
+    # #xi=[xi]
+    # kappa = kappaofu(kappa0,u , xi, q, chi1, chi2)
+    # print(kappa)
+
+    #
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    # r=np.logspace(2,1,100)
+    # Jmin,Jmax = Jlimits(r=r[0],xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # J=(Jmin+Jmax)/2
+    # Smin,Smax= Slimits(J=J,r=r[0],xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # S=(Smin+Smax)/2
+    # Svec, S1vec, S2vec, Jvec, Lvec = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
+    # S1h0=S1vec/spin1(q,chi1)
+    # S2h0=S2vec/spin2(q,chi2)
+    # Lh0=Lvec/angularmomentum(r[0],q)
+    #
+    # print(J,S)
+    #
+    # #Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    # t0=time.time()
+    # Lh,S1h,S2h,t = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=True)
+    # print(time.time()-t0)
     #print("L",repr(Lh.T))
     #print("S1",repr(S1h.T))
     #print("S2",repr(S2h.T))
