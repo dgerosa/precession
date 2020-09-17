@@ -1,1 +1,1 @@
-grep "def " precession/precession.py 
+grep --color=never "def " precession/precession.py
