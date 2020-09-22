@@ -3063,7 +3063,6 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     return toarray(Sminus2inf, Splus2inf, S32inf)
 
 
-## TODO: probably this is not needed anymore
 def S2avinf_angles(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the precession averaged values of S^2
@@ -3618,7 +3617,7 @@ def r_wide(q, chi1, chi2):
 
 #### Orbit averaged things ####
 
-# TODO: this comes straight from precession_V1. Update docstrings
+# TODO: this comes straight from precession_V1. Update docstrings. It's not necesssary that this function works on arrays
 def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_formula=False):
 
     '''
@@ -3737,8 +3736,6 @@ def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_f
     dS2hydv=dS2hydt*dtdv
     dS2hzdv=dS2hzdt*dtdv
 
-
-
     if tracktime:
         return toarray(dLhxdv,dLhydv,dLhzdv,dS1hxdv,dS1hydv,dS1hzdv,dS2hxdv,dS2hydv,dS2hzdv,dtdv)    # Read variables in
     else:
@@ -3797,36 +3794,51 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
     - `t_fvals`: (optional) time as a function of the separation.
     '''
 
-    # I need unit vectors
-    assert np.isclose(np.linalg.norm(Lh0),1)
-    assert np.isclose(np.linalg.norm(S1h0),1)
-    assert np.isclose(np.linalg.norm(S2h0),1)
 
-    # Pack inputs
-    if tracktime:
-        ic = np.concatenate((Lh0,S1h0,S2h0,[0]))
+    def _compute(Lh0,S1h0,S2h0,r,q,chi1,chi2,quadrupole_formula):
+
+        # I need unit vectors
+        assert np.isclose(np.linalg.norm(Lh0),1)
+        assert np.isclose(np.linalg.norm(S1h0),1)
+        assert np.isclose(np.linalg.norm(S2h0),1)
+
+        # Pack inputs
+        if tracktime:
+            ic = np.concatenate((Lh0,S1h0,S2h0,[0]))
+        else:
+            ic = np.concatenate((Lh0,S1h0,S2h0))
+
+        # Compute these quantities here instead of inside the RHS for speed
+        v=orbitalvelocity(r)
+        m1=mass1(q)
+        m2=mass2(q)
+        S1,S2 = spinmags(q,chi1,chi2)
+        eta=symmetricmassratio(q)
+
+        # Integration
+        res =scipy.integrate.odeint(orbav_eqs, ic, v, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
+
+        # Returned output is
+        # Lx, Ly, Lz, S1x, S1y, S1z, S2x, S2y, S2z
+        return res.T
+
+
+    if np.ndim(Lh0)==1:
+        res = np.array([_compute(Lh0,S1h0,S2h0,r,q,chi1,chi2,quadrupole_formula)])
     else:
-        ic = np.concatenate((Lh0,S1h0,S2h0))
+        res  = np.array(list(map(lambda x: _compute(*x,quadrupole_formula), zip(Lh0,S1h0,S2h0,r,q,chi1,chi2))))
 
-    # Compute these quantities here instead of inside the RHS for speed
-    v=orbitalvelocity(r)
-    m1=mass1(q)
-    m2=mass2(q)
-    S1,S2 = spinmags(q,chi1,chi2)
-    eta=symmetricmassratio(q)
+    Lh = np.squeeze(np.swapaxes(res[:,0:3],1,2))
+    S1h = np.squeeze(np.swapaxes(res[:,3:6],1,2))
+    S2h = np.squeeze(np.swapaxes(res[:,6:9],1,2))
+    t = np.squeeze(res[:,9])
 
-    # Integration
-    res =scipy.integrate.odeint(orbav_eqs, ic, v, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
 
-    #Unpack outputs
-    Lh = res.T[0:3].T
-    S1h = res.T[3:6].T
-    S2h = res.T[6:9].T
     if tracktime:
-        t = res.T[9].T
         return Lh,S1h,S2h,t
     else:
         return Lh,S1h,S2h
+
 
 
 # TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
@@ -3869,23 +3881,23 @@ if __name__ == '__main__':
     # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
 
 
-    r=1e2
-    xi=-0.5
-    q=0.4
-    chi1=0.9
-    chi2=0.8
-
-    Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
-    J0=(Jmin+Jmax)/2
-    #print(J)
-    #print(Jmin,Jmax)
-    r = np.logspace(np.log10(r),1,100)
-    J=Jofr(J0, r, xi, q, chi1, chi2)
-    print(J)
-
-    J=Jofr([J0,J0], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2])
-
-    print(J)
+    # r=1e2
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    #
+    # Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # J0=(Jmin+Jmax)/2
+    # #print(J)
+    # #print(Jmin,Jmax)
+    # r = np.logspace(np.log10(r),1,100)
+    # J=Jofr(J0, r, xi, q, chi1, chi2)
+    # print(J)
+    #
+    # J=Jofr([J0,J0], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2])
+    #
+    # print(J)
 
 
 
@@ -3925,11 +3937,29 @@ if __name__ == '__main__':
     # Lh0=Lvec/angularmomentum(r[0],q)
     #
     # print(J,S)
-    #
-    # #Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    # t0=time.time()
-    # Lh,S1h,S2h,t = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=True)
-    # print(time.time()-t0)
+
+    xi=-0.5
+    q=0.4
+    chi1=0.9
+    chi2=0.8
+    r=np.logspace(2,1,5)
+    Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    #print(Lh0,S1h0,S2h0)
+    t0=time.time()
+    Lh,S1h,S2h,t = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=True)
+
+    print(t)
+
+    Lh,S1h,S2h,t = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)
+
+    print(t)
+
+    print(time.time()-t0)
+    #print(Lh)
+
+
+
+
     #print("L",repr(Lh.T))
     #print("S1",repr(S1h.T))
     #print("S2",repr(S2h.T))
