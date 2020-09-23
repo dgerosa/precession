@@ -3842,10 +3842,35 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
 
 
 # TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
-def inspiral():
-    pass
+def inspiral(theta1=None,theta2=None,deltaphi=None,S=None,Lh0=None,S1h0=None,S2h0=None, J=None,kappa=None,r=None,xi=None,q=None,chi1=None,chi2=None,kind=None,tracktime=False,qquadrupole_formula=False):
+
+    if kind in ['precession','precav','precessionaveraged','precessionaverage']:
+        pass 
+        else:
+            raise TypeError
 
 
+
+    elif kind in ['orbit','orbav','orbitaveraged','orbitaverage']:
+        pass
+        # remember to pass tracktime and quadruple_formula flags
+
+    else:
+        raise ValueError("kind need to be either 'precav' or 'orbav'.")
+
+
+    theta1,theta2,deltaphi
+
+    J,xi,S
+
+    kappa,xi,S
+
+    Lh0,S1h0,S2h0
+
+    orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_formula=False)
+
+
+    Jofr(ic, r, xi, q, chi1, chi2)
 
 
 
