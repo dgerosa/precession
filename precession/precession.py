@@ -3915,7 +3915,7 @@ def inspiral(Lh0=None,S1h0=None,S2h0=None,theta1=None,theta2=None,deltaphi=None,
                 return theta1,theta2,deltaphi
 
             # User provided (J,xi)
-            elif theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is None:
+            elif theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is not None:
 
                 # Obtain kappa
                 kappa = eval_kappa(J, r[0], q)
@@ -3933,7 +3933,7 @@ def inspiral(Lh0=None,S1h0=None,S2h0=None,theta1=None,theta2=None,deltaphi=None,
                     return J
 
             # User provided (kappa,xi)
-            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is None:
+            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
 
                 # Integration
                 kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
@@ -3951,25 +3951,12 @@ def inspiral(Lh0=None,S1h0=None,S2h0=None,theta1=None,theta2=None,deltaphi=None,
 
 
     elif kind in ['orbit','orbav','orbitaveraged','orbitaverage']:
-        pass
+        raise NotImplementedError
         # remember to pass tracktime and quadruple_formula flags
 
     else:
         raise ValueError("kind need to be either 'precav' or 'orbav'.")
 
-
-    theta1,theta2,deltaphi
-
-    J,xi,S
-
-    kappa,xi,S
-
-    Lh0,S1h0,S2h0
-
-    orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_formula=False)
-
-
-    Jofr(ic, r, xi, q, chi1, chi2)
 
 
 
@@ -4035,12 +4022,19 @@ if __name__ == '__main__':
     q=0.5
     chi1=1
     chi2=1
-
     theta1=0.4
     theta2=0.45
     deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa = 0.5784355256550922
     r=np.logspace(2,1,6)
-    d= inspiral(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,kind="precav")
+    # d=inspiral(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,kind="precav")
+    #d=inspiral(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,kind="precav")
+    #d=inspiral(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,kind="precav")
+    d=inspiral(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,kind="precav")
+    #d=inspiral(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,kind="precav")
 
 
     print(d)
