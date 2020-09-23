@@ -3117,7 +3117,8 @@ def S2avinf_kappaxi(kappainf, xi, q, chi1, chi2):
 
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
-def kappaofu(kappa0, u, xi, q, chi1, chi2, *args, **kwargs):
+# Actually, I think this function can be removed because it's never used
+def kappaofu_OLD(kappa0, u, xi, q, chi1, chi2, *args, **kwargs):
     """
     """
 
@@ -3134,8 +3135,31 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2, *args, **kwargs):
     return kappa
 
 
+def kappaofu(kappa0, u, xi, q, chi1, chi2):
+    """
+    """
+
+    def _compute(kappa0, u, xi, q, chi1, chi2):
+
+        # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
+        # TODO. This breaks down if r is very large but not infinite.
+        h0= 0 if u[0]<1e-20 else 1e-3
+
+        kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2), h0=h0)
+        return toarray(kappa)
+
+    if flen(kappa0)==1:
+        kappa = _compute(kappa0, u, xi, q, chi1, chi2)
+    else:
+        kappa = np.array(list(map(lambda x: _compute(*x), zip(kappa0, u, xi, q, chi1, chi2))))
+
+    return kappa
+
+
+
 #TODO: make it work on arrays (multiple evolutions)
 #TODO: write docstrings
+# Actually, I think this function can be removed because it's never used
 def Jofr(ic, r, xi, q, chi1, chi2):
 
     def _compute(ic, r, xi, q, chi1, chi2):
@@ -3152,7 +3176,7 @@ def Jofr(ic, r, xi, q, chi1, chi2):
             kappa0 = ic
             h0=1e-3
 
-        kappa = kappaofu(kappa0, u, xi, q, chi1, chi2,h0=h0)
+        kappa = kappaofu_OLD(kappa0, u, xi, q, chi1, chi2,h0=h0)
         J  = eval_J(kappa=kappa,r=r,q=q)
 
         return J
@@ -3842,13 +3866,88 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
 
 
 # TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
-def inspiral(theta1=None,theta2=None,deltaphi=None,S=None,Lh0=None,S1h0=None,S2h0=None, J=None,kappa=None,r=None,xi=None,q=None,chi1=None,chi2=None,kind=None,tracktime=False,qquadrupole_formula=False):
+def inspiral(Lh0=None,S1h0=None,S2h0=None,theta1=None,theta2=None,deltaphi=None,S=None, J=None,kappa=None,r=None,xi=None,q=None,chi1=None,chi2=None,kind=None,tracktime=False,quadrupole_formula=False):
 
+    if r is None:
+        raise TypeError("Plese provide r; use np.inf for infinity.")
+    if q is None:
+        raise TypeError("Plese provide q.")
+    if chi1 is None:
+        raise TypeError("Plese provide chi1.")
+    if chi2 is None:
+        raise TypeError("Plese provide chi2.")
+
+    # Precession-averaged integrations
     if kind in ['precession','precav','precessionaveraged','precessionaverage']:
-        pass 
-        else:
-            raise TypeError
 
+        # Obtain u
+        u = eval_u(r, np.repeat(q,flen(r)) )
+
+        if Lh0 is not None or S1h0 is not None or S2h0 is not None:
+            raise TypeError("Do not provide Lh0, S1h0, and S2h0 for precession-averaged inspirals.")
+
+        # Start from r=infinity
+        if u[0]==0:
+            raise NotImplementedError
+
+        # Backwards to r=infinity
+        elif u[-1]==0:
+            raise NotImplementedError
+
+        # To/from finite separation
+        else:
+
+            # User provides (theta1,theta2,deltaphi)
+            if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
+
+                # Obtain kappa
+                S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
+                kappa = eval_kappa(J, r[0], q)
+                # Integration
+                kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
+                # Resample S
+                J = eval_J(kappa=kappa,r=r,q=np.repeat(q,flen(r)))
+                S = Ssampling(J, r, np.repeat(xi,flen(r)), np.repeat(q,flen(r)), np.repeat(chi1,flen(r)), np.repeat(chi2,flen(r)), N=1)
+                theta1,theta2,deltaphi = conserved_to_angles(S, J, r, xi, np.repeat(q,flen(r)), np.repeat(chi1,flen(r)), np.repeat(chi2,flen(r)))
+                # Assign random sign to deltaphi (precession cycles are symmetric)
+                deltaphi = deltaphi * np.random.choice([-1,1],flen(r))
+
+                return theta1,theta2,deltaphi
+
+            # User provided (J,xi)
+            elif theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is None:
+
+                # Obtain kappa
+                kappa = eval_kappa(J, r[0], q)
+                # Integration
+                kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
+                # Back to J
+                J = eval_J(kappa=kappa,r=r,q=np.repeat(q,flen(r)))
+
+                # User wants S as well
+                if S is not None:
+                    S = Ssampling(J, r, np.repeat(xi,flen(r)), np.repeat(q,flen(r)), np.repeat(chi1,flen(r)), np.repeat(chi2,flen(r)), N=1)
+                    return S, J
+
+                else:
+                    return J
+
+            # User provided (kappa,xi)
+            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is None:
+
+                # Integration
+                kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
+                # User wants S as well
+                if S is not None:
+                    J = eval_J(kappa=kappa,r=r,q=np.repeat(q,flen(r)))
+                    S = Ssampling(J, r, np.repeat(xi,flen(r)), np.repeat(q,flen(r)), np.repeat(chi1,flen(r)), np.repeat(chi2,flen(r)), N=1)
+                    return S, kappa
+
+                else:
+                    return kappa
+
+            else:
+                TypeError("Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
 
 
     elif kind in ['orbit','orbav','orbitaveraged','orbitaverage']:
@@ -3932,19 +4031,24 @@ if __name__ == '__main__':
 
     #print(repr(S))
 
+    ###### INSPIRAL TESTING #######
+    q=0.5
+    chi1=1
+    chi2=1
 
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1inf=0.4
-    # theta2inf=0.5
-    #
-    # kappa0,xi = angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2)
-    # u = np.linspace(0,1,100)
-    # #kappa0=[kappa0]
-    # #xi=[xi]
-    # kappa = kappaofu(kappa0,u , xi, q, chi1, chi2)
-    # print(kappa)
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    r=np.logspace(2,1,6)
+    d= inspiral(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,kind="precav")
+
+
+    print(d)
+
+    ###### INSPIRAL TESTING #######
+
+
+
 
     #
     # xi=-0.5
@@ -3963,24 +4067,24 @@ if __name__ == '__main__':
     #
     # print(J,S)
 
-    xi=-0.5
-    q=0.4
-    chi1=0.9
-    chi2=0.8
-    r=np.logspace(2,1,5)
-    Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    #print(Lh0,S1h0,S2h0)
-    t0=time.time()
-    Lh,S1h,S2h,t = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=True)
-
-    print(t)
-
-    Lh,S1h,S2h,t = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)
-
-    print(t)
-
-    print(time.time()-t0)
-    #print(Lh)
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    # r=np.logspace(2,1,5)
+    # Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    # #print(Lh0,S1h0,S2h0)
+    # t0=time.time()
+    # Lh,S1h,S2h,t = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=True)
+    #
+    # print(t)
+    #
+    # Lh,S1h,S2h,t = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)
+    #
+    # print(t)
+    #
+    # print(time.time()-t0)
+    # #print(Lh)
 
 
 
