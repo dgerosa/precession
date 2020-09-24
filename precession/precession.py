@@ -3150,9 +3150,11 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # TODO. This breaks down if r is very large but not infinite.
-        h0= 0 if u[0]<1e-20 else 1e-3
+        h0= 1e-3 if u[0]==0 else 0
 
+        #kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2), h0=h0, full_output = 1)
         kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2), h0=h0)
+
         return toarray(kappa)
 
     if flen(kappa0)==1:
@@ -3888,11 +3890,16 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
         raise TypeError("Plese provide chi2.")
 
     if r is not None and u is None:
+        r=toarray(r)
         u = eval_u(r, np.repeat(q,flen(r)) )
     elif r is None and u is not None:
+        u=toarray(u)
         r = eval_r(u, np.repeat(q,flen(u)) )
     else:
         raise TypeError("Please provide either r or u. Use np.inf for infinity")
+
+    assert np.sum(u==0)<=1 and np.sum(u[1:-1]==0)==0, "There can only be one r=np.inf location, either at the beginning or at the end"
+
 
     # Start from r=infinity
     if u[0]==0:
@@ -4067,13 +4074,13 @@ if __name__ == '__main__':
     # xi = 0.9141896967861489
     # kappa = 0.5784355256550922
     # r=np.logspace(2,1,6)
-    # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #
-    # #print(d)
+    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+
+    #print(d)
 
     ###### INSPIRAL TESTING: precav, from infinite #######
     # q=0.5
@@ -4098,17 +4105,19 @@ if __name__ == '__main__':
     theta2=0.45
     deltaphi=0.46
     S = 0.5538768649231461
-    J = 2.740273008918153
+    J = 1.2314871608018418
     xi = 0.9141896967861489
-    kappa = 0.5784355256550922
-    r=np.concatenate((np.logspace(1,2,6),[np.inf]))
-    d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    kappa=0.7276876186801603
+
+    #kappa = 0.5784355256550922
+    r=np.concatenate((np.logspace(1,4,6),[np.inf]))
+    #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
     #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
     #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
     #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
 
-    #print(d)
+    print(d)
 
 
 
