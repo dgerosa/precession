@@ -286,7 +286,7 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
     S1,S2 = spinmags(q,chi1,chi2)
     L = angularmomentum(r,q)
     Jmin = np.maximum.reduce([np.zeros(flen(L)), L-S1-S2, np.abs(S1-S2)-L])
-    Jmax = L+S1+S1 # TODO: This is a bug! Should be S2
+    Jmax = L+S1+S2
 
     return toarray(Jmin,Jmax)
 
@@ -4009,12 +4009,14 @@ if __name__ == '__main__':
     np.set_printoptions(threshold=sys.maxsize)
     #print(masses([0.5,0.6]))
 
-    #r=[10,10]
+    r=[10,10]
     #xi=[0.35,-0.675]
-    #q=[0.8,0.2]
-    #chi1=[1,1]
-    #chi2=[1,1]
+    q=[0.8,0.2]
+    chi1=[1,1]
+    chi2=[1,1]
     #J=[1,0.23]
+
+    print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
     #t0=time.time()
@@ -4098,28 +4100,28 @@ if __name__ == '__main__':
     #
     # print(d)
 
-    ###### INSPIRAL TESTING #######
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    deltaphi=0.46
-    S = 0.5538768649231461
-    J = 1.2314871608018418
-    xi = 0.9141896967861489
-    kappa=0.7276876186801603
-
-    #kappa = 0.5784355256550922
-    r=np.concatenate((np.logspace(1,4,6),[np.inf]))
-    #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-
-    print(d)
-
+    # ###### INSPIRAL TESTING #######
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # deltaphi=0.46
+    # S = 0.5538768649231461
+    # J = 1.2314871608018418
+    # xi = 0.9141896967861489
+    # kappa=0.7276876186801603
+    #
+    # #kappa = 0.5784355256550922
+    # r=np.concatenate((np.logspace(1,4,6),[np.inf]))
+    # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #
+    # print(d)
+    #
 
 
     #
