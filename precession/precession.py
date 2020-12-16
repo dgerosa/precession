@@ -286,7 +286,7 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
     S1,S2 = spinmags(q,chi1,chi2)
     L = angularmomentum(r,q)
     Jmin = np.maximum.reduce([np.zeros(flen(L)), L-S1-S2, np.abs(S1-S2)-L])
-    Jmax = L+S1+S1
+    Jmax = L+S1+S1 # TODO: This is a bug! Should be S2
 
     return toarray(Jmin,Jmax)
 
@@ -770,7 +770,7 @@ def Jresonances(r,xi,q,chi1,chi2):
         Spin-orbit resonance that minimizes J (DeltaPhi=pi)
     """
 
-    # The good solutions are the last two. That's because the discriminant quintic asymptotes to -infinity and the physical region is when it's positive
+    # The good solutions are the last two. That's because the discriminant quintic asymptotes to -infinity and the physical region is when it's positive # TODO I now think this comment is old and should be removed
 
     u = eval_u(r, q)
 
@@ -785,6 +785,7 @@ def Jresonances(r,xi,q,chi1,chi2):
             Jres = Jroots[np.logical_and(Sroots>Smin,Sroots<Smax)]
 
             return Jres
+
     if np.ndim(kapparoots)==1:
         Jmin,Jmax =_compute(kapparoots,r,xi,q,chi1,chi2)
     else:
@@ -2402,7 +2403,7 @@ def Speriod_prefactor(r,xi,q):
 # J, r, xi, q, chi1, chi2 or Sminus2, Splus2, S32, a?
 def dS2dtsquared(S,J,r,xi,q,chi1,chi2):
     """
-    Squared time derivative of the squared total spin, on the precession timescale.
+    Squared first time derivative of the squared total spin, on the precession timescale.
 
     Parameters
     ----------
@@ -2477,7 +2478,7 @@ def dS2dt(S,J,r,xi,q,chi1,chi2):
 
 def dSdt(S,J,r,xi,q,chi1,chi2):
     """
-    Ttime derivative of the total spin, on the precession timescale.
+    Time derivative of the total spin, on the precession timescale.
 
     Parameters
     ----------
@@ -3985,7 +3986,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
 
 # TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
-def inspiral_(Lh0=None,S1h0=None,S2h0=None,theta1=None,theta2=None,deltaphi=None,S=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,kind=None,tracktime=False,quadrupole_formula=False):
+def inspiral(Lh0=None,S1h0=None,S2h0=None,theta1=None,theta2=None,deltaphi=None,S=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,kind=None,tracktime=False,quadrupole_formula=False):
 
     # Precession-averaged integrations
     if kind in ['precession','precav','precessionaveraged','precessionaverage']:
