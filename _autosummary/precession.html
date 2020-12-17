@@ -1,0 +1,2871 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>precession &mdash; precession 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Package documentation" href="../modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> precession
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">precession</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html#dynamics-of-spinning-black-hole-binaries-with-python">DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Package documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">precession</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">precession</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../modules.html">Package documentation</a> &raquo;</li>
+        
+      <li>precession</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_autosummary/precession.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-precession">
+<span id="precession"></span><h1>precession<a class="headerlink" href="#module-precession" title="Permalink to this headline">¶</a></h1>
+<p>precession</p>
+<p class="rubric">Functions</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.Jlimits" title="precession.Jlimits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Jlimits</span></code></a>([r, xi, q, chi1, chi2])</p></td>
+<td><p>Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.Jlimits_LS1S2" title="precession.Jlimits_LS1S2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Jlimits_LS1S2</span></code></a>(r, q, chi1, chi2)</p></td>
+<td><p>Limits on the magnitude of the total angular momentum due to the vector relation J=L+S1+S2</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.Jresonances" title="precession.Jresonances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Jresonances</span></code></a>(r, xi, q, chi1, chi2)</p></td>
+<td><p>Total angular momentum of the two spin-orbit resonances.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.S2av" title="precession.S2av"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S2av</span></code></a>(J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Analytic precession averaged expression for the squared total spin.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.S2av_mfactor" title="precession.S2av_mfactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S2av_mfactor</span></code></a>(m)</p></td>
+<td><p>Factor depending on the elliptic parameter in the precession averaged squared total spin.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.S2avinf" title="precession.S2avinf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S2avinf</span></code></a>(theta1inf, theta2inf, q, chi1, chi2)</p></td>
+<td><p>Infinite orbital separation limit of the precession averaged values of S^2 from the asymptotic angles theta1, theta2.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.S2roots" title="precession.S2roots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S2roots</span></code></a>(J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Roots of the cubic equation in S^2 that identifies the effective potentials.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.S2rootsinf" title="precession.S2rootsinf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">S2rootsinf</span></code></a>(theta1inf, theta2inf, q, chi1, chi2)</p></td>
+<td><p>Infinite orbital separation limit of the roots of the cubic equation in S^2.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.Satresonance" title="precession.Satresonance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Satresonance</span></code></a>(J, r, xi, q, chi1, chi2)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.Scubic_coefficients" title="precession.Scubic_coefficients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scubic_coefficients</span></code></a>(kappa, u, xi, q, chi1, chi2)</p></td>
+<td><p>TODO fix docstrings</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.Slimits" title="precession.Slimits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Slimits</span></code></a>([J, r, xi, q, chi1, chi2])</p></td>
+<td><p>Limits on the total spin magnitude. The contraints considered depend on the inputs provided.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.Slimits_LJ" title="precession.Slimits_LJ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Slimits_LJ</span></code></a>(J, r, q)</p></td>
+<td><p>Limits on the total spin magnitude due to the vector relation S=J-L</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.Slimits_LJS1S2" title="precession.Slimits_LJS1S2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Slimits_LJS1S2</span></code></a>(J, r, q, chi1, chi2)</p></td>
+<td><p>Limits on the total spin magnitude due to the vector relations S=S1+S2 and S=J-L.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.Slimits_S1S2" title="precession.Slimits_S1S2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Slimits_S1S2</span></code></a>(q, chi1, chi2)</p></td>
+<td><p>Limits on the total spin magnitude due to the vector relation S=S1+S2</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.Slimits_plusminus" title="precession.Slimits_plusminus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Slimits_plusminus</span></code></a>(J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Limits on the total spin magnitude compatible with both J and xi.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.Soft" title="precession.Soft"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Soft</span></code></a>(t, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Evolution of S on the precessional timescale (without radiation reaction).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.Speriod" title="precession.Speriod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Speriod</span></code></a>(J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Period of S as it oscillates from S- to S+ and back to S-.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.Speriod_prefactor" title="precession.Speriod_prefactor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Speriod_prefactor</span></code></a>(r, xi, q)</p></td>
+<td><p>Numerical prefactor to the precession period.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.Ssampling" title="precession.Ssampling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ssampling</span></code></a>(J, r, xi, q, chi1, chi2[, N])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.angles_to_Jframe" title="precession.angles_to_Jframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angles_to_Jframe</span></code></a>(theta1, theta2, deltaphi, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.angles_to_Lframe" title="precession.angles_to_Lframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angles_to_Lframe</span></code></a>(theta1, theta2, deltaphi, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.angles_to_asymptotic" title="precession.angles_to_asymptotic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angles_to_asymptotic</span></code></a>(theta1inf, theta2inf, …)</p></td>
+<td><p>Convert asymptotic angles theta1 theta2 into effective spin and asymptotic kappa.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.angles_to_conserved" title="precession.angles_to_conserved"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angles_to_conserved</span></code></a>(theta1, theta2, …)</p></td>
+<td><p>Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.angularmomentum" title="precession.angularmomentum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">angularmomentum</span></code></a>(r, q)</p></td>
+<td><p>Newtonian angular momentum of the binary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.asymptotic_to_angles" title="precession.asymptotic_to_angles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">asymptotic_to_angles</span></code></a>(kappainf, xi, q, chi1, chi2)</p></td>
+<td><p>Convert asymptotic kappa and xi into asymptotic angles theta1, theta2.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.conserved_to_Jframe" title="precession.conserved_to_Jframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conserved_to_Jframe</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Convert the conserved quantities to angular momentum vectors in the frame aligned with the total angular momentum.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.conserved_to_Lframe" title="precession.conserved_to_Lframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conserved_to_Lframe</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.conserved_to_angles" title="precession.conserved_to_angles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conserved_to_angles</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.dS2dt" title="precession.dS2dt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dS2dt</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Time derivative of the squared total spin, on the precession timescale.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.dS2dtsquared" title="precession.dS2dtsquared"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dS2dtsquared</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Squared first time derivative of the squared total spin, on the precession timescale.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.dSdt" title="precession.dSdt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dSdt</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Time derivative of the total spin, on the precession timescale.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.dkappadu" title="precession.dkappadu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dkappadu</span></code></a>(kappa, u, xi, q, chi1, chi2)</p></td>
+<td><p>Analytic precession averaged expression for the squared total spin.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.effectivepotential_Sphi" title="precession.effectivepotential_Sphi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">effectivepotential_Sphi</span></code></a>(S, varphi, J, r, q, …)</p></td>
+<td><p>Effective spin as a function of total spin magnitude S, nutation angle varphi and total angularm momentum J.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.effectivepotential_minus" title="precession.effectivepotential_minus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">effectivepotential_minus</span></code></a>(S, J, r, q, chi1, chi2)</p></td>
+<td><p>Lower effective potential.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.effectivepotential_plus" title="precession.effectivepotential_plus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">effectivepotential_plus</span></code></a>(S, J, r, q, chi1, chi2)</p></td>
+<td><p>Upper effective potential.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.elliptic_parameter" title="precession.elliptic_parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elliptic_parameter</span></code></a>(Sminus2, Splus2, S32)</p></td>
+<td><p>Parameter m entering elliptic functiosn for the evolution of S.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_J" title="precession.eval_J"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_J</span></code></a>([theta1, theta2, deltaphi, kappa, r, …])</p></td>
+<td><p>Magnitude of the total angular momentum from the spin angles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_S" title="precession.eval_S"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_S</span></code></a>(theta1, theta2, deltaphi, q, chi1, chi2)</p></td>
+<td><p>Magnitude of the total spin from the spin angles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_cosdeltaphi" title="precession.eval_cosdeltaphi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_cosdeltaphi</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_costheta1" title="precession.eval_costheta1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_costheta1</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_costheta12" title="precession.eval_costheta12"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_costheta12</span></code></a>(S, q, chi1, chi2)</p></td>
+<td><p>Cosine of the angle theta12 between the two spins.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_costheta1inf" title="precession.eval_costheta1inf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_costheta1inf</span></code></a>(kappainf, xi, q, chi1, chi2)</p></td>
+<td><p>Infinite orbital separation limit of the cosine of the angle between the orbital angular momentum and the primary spin.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_costheta2" title="precession.eval_costheta2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_costheta2</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Cosine of the angle theta2 between the orbital angular momentum and the spin of the secondary black hole.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_costheta2inf" title="precession.eval_costheta2inf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_costheta2inf</span></code></a>(kappainf, xi, q, chi1, chi2)</p></td>
+<td><p>Infinite orbital separation limit of the cosine of the angle between the orbital angular momentum and the secondary spin.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_costhetaL" title="precession.eval_costhetaL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_costhetaL</span></code></a>(S, J, r, q, chi1, chi2)</p></td>
+<td><p>Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_deltaphi" title="precession.eval_deltaphi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_deltaphi</span></code></a>(S, J, r, xi, q, chi1, chi2[, sign])</p></td>
+<td><p>Angle deltaphi between the projections of the two spins onto the orbital plane.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_kappa" title="precession.eval_kappa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_kappa</span></code></a>(J, r, q)</p></td>
+<td><p>Change of dependant variable to regularize the infinite orbital separation limit of the precession-averaged evolution equation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_kappainf" title="precession.eval_kappainf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_kappainf</span></code></a>(theta1inf, theta2inf, q, chi1, …)</p></td>
+<td><p>Infinite orbital separation limit of the parameter kappa.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_r" title="precession.eval_r"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_r</span></code></a>(u, q)</p></td>
+<td><p>TODO docstrings</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_theta1" title="precession.eval_theta1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_theta1</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Angle theta1 between the orbital angular momentum and the spin of the primary black hole.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_theta12" title="precession.eval_theta12"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_theta12</span></code></a>(S, q, chi1, chi2)</p></td>
+<td><p>Angle theta12 between the two spins.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_theta1inf" title="precession.eval_theta1inf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_theta1inf</span></code></a>(kappainf, xi, q, chi1, chi2)</p></td>
+<td><p>Infinite orbital separation limit of the angle between the orbital angular momentum and the primary spin.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_theta2" title="precession.eval_theta2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_theta2</span></code></a>(S, J, r, xi, q, chi1, chi2)</p></td>
+<td><p>Angle theta2 between the orbital angular momentum and the spin of the secondary black hole.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_theta2inf" title="precession.eval_theta2inf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_theta2inf</span></code></a>(kappainf, xi, q, chi1, chi2)</p></td>
+<td><p>Infinite orbital separation limit of the angle between the orbital angular momentum and the secondary spin.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_thetaL" title="precession.eval_thetaL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_thetaL</span></code></a>(S, J, r, q, chi1, chi2)</p></td>
+<td><p>Angle thetaL betwen orbital angular momentum and total angular momentum.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_u" title="precession.eval_u"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_u</span></code></a>(r, q)</p></td>
+<td><p>Change of independent variable to regularize the infinite orbital separation limit of the precession-averaged evolution equation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.eval_varphi" title="precession.eval_varphi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_varphi</span></code></a>(S, J, r, xi, q, chi1, chi2[, sign])</p></td>
+<td><p>TODO: fix docstrings</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.eval_xi" title="precession.eval_xi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_xi</span></code></a>(theta1, theta2, q, chi1, chi2)</p></td>
+<td><p>Effective spin from the spin angles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.flen" title="precession.flen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flen</span></code></a>(x)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.inspiral" title="precession.inspiral"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inspiral</span></code></a>([Lh0, S1h0, S2h0, theta1, theta2, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.inspiral_precav" title="precession.inspiral_precav"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inspiral_precav</span></code></a>([theta1, theta2, deltaphi, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.kappadiscriminant_coefficients" title="precession.kappadiscriminant_coefficients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kappadiscriminant_coefficients</span></code></a>(u, xi, q, …)</p></td>
+<td><p>TODO fix docstrings</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.kappaofu" title="precession.kappaofu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kappaofu</span></code></a>(kappa0, u, xi, q, chi1, chi2)</p></td>
+<td><p>TODO: make it work on arrays (multiple evolutions) TODO: write docstrings</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.limits_check" title="precession.limits_check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">limits_check</span></code></a>([S, J, r, xi, q, chi1, chi2])</p></td>
+<td><p>Check if the inputs are consistent with the geometrical constraints.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.mass1" title="precession.mass1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mass1</span></code></a>(q)</p></td>
+<td><p>Mass of the heavier black hole in units of the total mass.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.mass2" title="precession.mass2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mass2</span></code></a>(q)</p></td>
+<td><p>Mass of the lighter black hole in units of the total mass.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.masses" title="precession.masses"><code class="xref py py-obj docutils literal notranslate"><span class="pre">masses</span></code></a>(q)</p></td>
+<td><p>Masses of the two black holes in units of the total mass.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.massratio" title="precession.massratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">massratio</span></code></a>(m1, m2)</p></td>
+<td><p>Mass ratio, 0 &lt; q = m2/m1 &lt; 1.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.morphology" title="precession.morphology"><code class="xref py py-obj docutils literal notranslate"><span class="pre">morphology</span></code></a>(J, r, xi, q, chi1, chi2[, simpler])</p></td>
+<td><p>Evaluate the spin morphology and return “L0” for librating about DeltaPhi=0, “Lpi” for librating about DeltaPhi=pi, “C-” for circulating from DeltaPhi=pi to DeltaPhi=0, and “C+” for circulating from DeltaPhi=0 to DeltaPhi=pi.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.omega2_aligned" title="precession.omega2_aligned"><code class="xref py py-obj docutils literal notranslate"><span class="pre">omega2_aligned</span></code></a>(r, q, chi1, chi2, alpha1, alpha2)</p></td>
+<td><p>Squared oscillation frequency of a given perturbed aligned-spin binary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.omega2_downdown" title="precession.omega2_downdown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">omega2_downdown</span></code></a>(r, q, chi1, chi2)</p></td>
+<td><p>Squared oscillation frequency of a perturbed down-down binary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.omega2_downup" title="precession.omega2_downup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">omega2_downup</span></code></a>(r, q, chi1, chi2)</p></td>
+<td><p>Squared oscillation frequency of a perturbed down-up binary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.omega2_updown" title="precession.omega2_updown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">omega2_updown</span></code></a>(r, q, chi1, chi2)</p></td>
+<td><p>Squared oscillation frequency of a perturbed up-down binary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.omega2_upup" title="precession.omega2_upup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">omega2_upup</span></code></a>(r, q, chi1, chi2)</p></td>
+<td><p>Squared oscillation frequency of a perturbed up-up binary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.orbav_eqs" title="precession.orbav_eqs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbav_eqs</span></code></a>(allvars, v, q, m1, m2, eta, chi1, …)</p></td>
+<td><p>Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where allvars is an array with the cartesian components of the unit vectors L, S1 and S2.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.orbav_integrator" title="precession.orbav_integrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbav_integrator</span></code></a>(Lh0, S1h0, S2h0, r, q, …)</p></td>
+<td><p>Single orbit-averaged integration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.orbitalseparation" title="precession.orbitalseparation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbitalseparation</span></code></a>(L, q)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.orbitalvelocity" title="precession.orbitalvelocity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">orbitalvelocity</span></code></a>(r)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.precession_average" title="precession.precession_average"><code class="xref py py-obj docutils literal notranslate"><span class="pre">precession_average</span></code></a>(J, r, xi, q, chi1, chi2, …)</p></td>
+<td><p>Average a function over a precession cycle.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.r_updown" title="precession.r_updown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">r_updown</span></code></a>(q, chi1, chi2)</p></td>
+<td><p>The critical separations r_ud+/- marking the region of the up-down precessional instability.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.r_wide" title="precession.r_wide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">r_wide</span></code></a>(q, chi1, chi2)</p></td>
+<td><p>The critical separation r_wide below which the binary component with smaller dimensionless spin may undergo wide nutations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.sample_unitsphere" title="precession.sample_unitsphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample_unitsphere</span></code></a>([N])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.spin1" title="precession.spin1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spin1</span></code></a>(q, chi1)</p></td>
+<td><p>Spin angular momentum of the heavier black hole.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.spin2" title="precession.spin2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spin2</span></code></a>(q, chi2)</p></td>
+<td><p>Spin angular momentum of the lighter black hole.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.spinmags" title="precession.spinmags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spinmags</span></code></a>(q, chi1, chi2)</p></td>
+<td><p>Spins of the black holes in units of the total mass.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.symmetricmassratio" title="precession.symmetricmassratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">symmetricmassratio</span></code></a>(q)</p></td>
+<td><p>Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.toarray" title="precession.toarray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toarray</span></code></a>(*args)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.vectors_to_angles" title="precession.vectors_to_angles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vectors_to_angles</span></code></a>(S1vec, S2vec, Lvec)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.vectors_to_conserved" title="precession.vectors_to_conserved"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vectors_to_conserved</span></code></a>(S1vec, S2vec, Lvec, q)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.wraproots" title="precession.wraproots"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wraproots</span></code></a>(coefficientfunction, *args, **kwargs)</p></td>
+<td><p>Find roots of a polynomial given coefficients.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.xidiscriminant_coefficients" title="precession.xidiscriminant_coefficients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xidiscriminant_coefficients</span></code></a>(kappa, u, q, …)</p></td>
+<td><p>TODO: fix docstrings</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.xilimits" title="precession.xilimits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xilimits</span></code></a>([J, r, q, chi1, chi2])</p></td>
+<td><p>Limits on the projected effective spin. The contraints considered depend on the inputs provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#precession.xilimits_definition" title="precession.xilimits_definition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xilimits_definition</span></code></a>(q, chi1, chi2)</p></td>
+<td><p>Limits on the effective spin based only on the definition xi = (1+q)S1.L + (1+1/q)S2.L</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.xiresonances" title="precession.xiresonances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">xiresonances</span></code></a>(J, r, q, chi1, chi2)</p></td>
+<td><p>Total angular momentum of the two spin-orbit resonances.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="precession.Jlimits">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Jlimits</code><span class="sig-paren">(</span><em class="sig-param">r=None</em>, <em class="sig-param">xi=None</em>, <em class="sig-param">q=None</em>, <em class="sig-param">chi1=None</em>, <em class="sig-param">chi2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Jlimits" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.</dt><dd><ul class="simple">
+<li><p>If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.</p></li>
+<li><p>If r, xi, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float, optional</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float, optional</strong></dt><dd><p>Effective spin</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float, optional</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float, optional</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>conincident: boolean, optional</strong></dt><dd><p>If True, assume that the input is a spin-orbit resonance and return repeated roots</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Jmin:</dt><dd><p>Minimum value of the total angular momentum.</p>
+</dd>
+<dt>Jmax:</dt><dd><p>Maximum value of the total angular momentum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Jlimits_LS1S2">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Jlimits_LS1S2</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Jlimits_LS1S2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits on the magnitude of the total angular momentum due to the vector relation J=L+S1+S2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Jmin:</dt><dd><p>Minimum value of the total angular momentum.</p>
+</dd>
+<dt>Jmax:</dt><dd><p>Maximum value of the total angular momentum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Jresonances">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Jresonances</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Jresonances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total angular momentum of the two spin-orbit resonances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Jmin: float</dt><dd><p>Spin-orbit resonance that minimizes J (DeltaPhi=pi)</p>
+</dd>
+<dt>Jmax: float</dt><dd><p>Spin-orbit resonance that minimizes J (DeltaPhi=pi)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.S2av">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">S2av</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.S2av" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analytic precession averaged expression for the squared total spin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.S2av_mfactor">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">S2av_mfactor</code><span class="sig-paren">(</span><em class="sig-param">m</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.S2av_mfactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factor depending on the elliptic parameter in the precession averaged squared total spin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>m: float</strong></dt><dd><p>Elliptic parameter.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>mfactor: float</dt><dd><p>Value of the factor for the given m, (1 - E(m)/K(m)) / m.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.S2avinf">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">S2avinf</code><span class="sig-paren">(</span><em class="sig-param">theta1inf</em>, <em class="sig-param">theta2inf</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.S2avinf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinite orbital separation limit of the precession averaged values of S^2
+from the asymptotic angles theta1, theta2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1inf: float</strong></dt><dd><p>Asymptotic value of the angle between the orbital angular momentum and
+the primary spin.</p>
+</dd>
+<dt><strong>theta2inf: float</strong></dt><dd><p>Asymptotic value of the angle between the orbital angular momentum and
+the secondary spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>S2avinf: flaot</dt><dd><p>Asymptotic value of S2av.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.S2roots">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">S2roots</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.S2roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Roots of the cubic equation in S^2 that identifies the effective potentials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic momentum (J^2-L^2)/(2L).</p>
+</dd>
+<dt><strong>u: float</strong></dt><dd><p>Compactified momentum 1/(2L).</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Sminus2:</dt><dd><p>Lowest physical root (or unphysical).</p>
+</dd>
+<dt>Splus2:</dt><dd><p>Highest physical root (or unphysical).</p>
+</dd>
+<dt>S32: float</dt><dd><p>Spurious root.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.S2rootsinf">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">S2rootsinf</code><span class="sig-paren">(</span><em class="sig-param">theta1inf</em>, <em class="sig-param">theta2inf</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.S2rootsinf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinite orbital separation limit of the roots of the cubic equation in S^2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1inf: float</strong></dt><dd><p>Asymptotic value of the angle between the orbital angular momentum and
+the primary spin.</p>
+</dd>
+<dt><strong>theta2inf: float</strong></dt><dd><p>Asymptotic value of the angle between the orbital angular momentum and
+the secondary spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Sminus2inf: float</dt><dd><p>Asymptotic value of the root Sminus2.</p>
+</dd>
+<dt>Splus2inf: float</dt><dd><p>Asymptotic value of the root Splus2.</p>
+</dd>
+<dt>S32inf: float</dt><dd><p>Asymptotic value of the root S32, -inf.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Satresonance">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Satresonance</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Satresonance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.Scubic_coefficients">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Scubic_coefficients</code><span class="sig-paren">(</span><em class="sig-param">kappa</em>, <em class="sig-param">u</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Scubic_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO fix docstrings</p>
+<p>Coefficients of the cubic equation in S^2 that identifies the effective potentials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>u: float</strong></dt><dd><p>1/r where Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>sigma6:</dt><dd><p>Coefficient of S^6.</p>
+</dd>
+<dt>sigma4:</dt><dd><p>Coefficient of S^4.</p>
+</dd>
+<dt>sigma2:</dt><dd><p>Coefficient of S^2.</p>
+</dd>
+<dt>sigma0:</dt><dd><p>Coefficient of S^0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Slimits">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Slimits</code><span class="sig-paren">(</span><em class="sig-param">J=None</em>, <em class="sig-param">r=None</em>, <em class="sig-param">xi=None</em>, <em class="sig-param">q=None</em>, <em class="sig-param">chi1=None</em>, <em class="sig-param">chi2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Slimits" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Limits on the total spin magnitude. The contraints considered depend on the inputs provided.</dt><dd><ul class="simple">
+<li><p>If q, chi1, and chi2 are provided, enforce S=S1+S2.</p></li>
+<li><p>If J, r, and q are provided, enforce S=J-L.</p></li>
+<li><p>If J, r, q, chi1, and chi2 are provided, enforce S=S1+S2 and S=J-L.</p></li>
+<li><p>If J, r, xi, q, chi1, and chi2 are provided, compute solve the cubic equation of the effective potentials (Sminus and Splus).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float, optional</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float, optional</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float, optional</strong></dt><dd><p>Effective spin</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float, optional</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float, optional</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Sminus:</dt><dd><p>Minimum value of the total spin.</p>
+</dd>
+<dt>Splus:</dt><dd><p>Maximum value of the total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Slimits_LJ">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Slimits_LJ</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Slimits_LJ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits on the total spin magnitude due to the vector relation S=J-L</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Smin:</dt><dd><p>Minimum value of the total spin.</p>
+</dd>
+<dt>Smax:</dt><dd><p>Maximum value of the total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Slimits_LJS1S2">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Slimits_LJS1S2</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Slimits_LJS1S2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits on the total spin magnitude due to the vector relations S=S1+S2 and S=J-L.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Smin:</dt><dd><p>Minimum value of the total spin.</p>
+</dd>
+<dt>Smax:</dt><dd><p>Maximum value of the total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Slimits_S1S2">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Slimits_S1S2</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Slimits_S1S2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits on the total spin magnitude due to the vector relation S=S1+S2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Smin:</dt><dd><p>Minimum value of the total spin.</p>
+</dd>
+<dt>Smax:</dt><dd><p>Maximum value of the total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Slimits_plusminus">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Slimits_plusminus</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Slimits_plusminus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits on the total spin magnitude compatible with both J and xi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>conincident: boolean, optional (default: False)</strong></dt><dd><p>If True, assume that the input is a spin-orbit resonance and return repeated roots</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Sminus:</dt><dd><p>Minimum value of the total spin.</p>
+</dd>
+<dt>Splus:</dt><dd><p>Maximum value of the total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Soft">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Soft</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Soft" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evolution of S on the precessional timescale (without radiation reaction).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>t: float, array</strong></dt><dd><p>Time</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>S: float</dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Speriod">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Speriod</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Speriod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Period of S as it oscillates from S- to S+ and back to S-.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>tau: string</dt><dd><p>Nutation period.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Speriod_prefactor">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Speriod_prefactor</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Speriod_prefactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numerical prefactor to the precession period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>mathcalA: string</dt><dd><p>Numerical prefactor to the precession period.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.Ssampling">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">Ssampling</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">N=1</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.Ssampling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.angles_to_Jframe">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">angles_to_Jframe</code><span class="sig-paren">(</span><em class="sig-param">theta1</em>, <em class="sig-param">theta2</em>, <em class="sig-param">deltaphi</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.angles_to_Jframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.angles_to_Lframe">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">angles_to_Lframe</code><span class="sig-paren">(</span><em class="sig-param">theta1</em>, <em class="sig-param">theta2</em>, <em class="sig-param">deltaphi</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.angles_to_Lframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.angles_to_asymptotic">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">angles_to_asymptotic</code><span class="sig-paren">(</span><em class="sig-param">theta1inf</em>, <em class="sig-param">theta2inf</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.angles_to_asymptotic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert asymptotic angles theta1 theta2 into effective spin and asymptotic kappa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1inf: float</strong></dt><dd><p>Asymptotic angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>theta2inf: float</strong></dt><dd><p>Asymptotic angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>kappainf: float</dt><dd><p>Asymptotic momentum (J^2-L^2)/(2L).</p>
+</dd>
+<dt>xi: float</dt><dd><p>Effective spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.angles_to_conserved">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">angles_to_conserved</code><span class="sig-paren">(</span><em class="sig-param">theta1</em>, <em class="sig-param">theta2</em>, <em class="sig-param">deltaphi</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.angles_to_conserved" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>deltaphi: float</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>S: float</dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt>J: float</dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt>xi: float</dt><dd><p>Effective spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.angularmomentum">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">angularmomentum</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.angularmomentum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Newtonian angular momentum of the binary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Smin: float</dt><dd><p>Binary angular momentum</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.asymptotic_to_angles">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">asymptotic_to_angles</code><span class="sig-paren">(</span><em class="sig-param">kappainf</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.asymptotic_to_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert asymptotic kappa and xi into asymptotic angles theta1, theta2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1inf: float</strong></dt><dd><p>Asymptotic angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>theta1inf: float</strong></dt><dd><p>Asymptotic angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>theta1inf: float</dt><dd><p>Asymptotic angle between the orbital angular momentum and primary spin.</p>
+</dd>
+<dt>theta2inf: float</dt><dd><p>Asymptotic angle between the orbital angular momentum and secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.conserved_to_Jframe">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">conserved_to_Jframe</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.conserved_to_Jframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the conserved quantities to angular momentum vectors in the frame
+aligned with the total angular momentum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.conserved_to_Lframe">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">conserved_to_Lframe</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.conserved_to_Lframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.conserved_to_angles">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">conserved_to_angles</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">sign=1</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.conserved_to_angles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi).
+Setting sign=+1 (default) returns deltaphi in [0, pi], setting sign=-1 returns deltaphi in [-pi,0].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>sign: optional (default: +1)</strong></dt><dd><p>If positive returns values in [0,pi], if negative returns values in [-pi,0].</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>theta1: float</dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt>theta2: float</dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+</dd>
+<dt>deltaphi: float</dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.dS2dt">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">dS2dt</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.dS2dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time derivative of the squared total spin, on the precession timescale.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Orbital separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>Time derivative of the squared total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.dS2dtsquared">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">dS2dtsquared</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.dS2dtsquared" title="Permalink to this definition">¶</a></dt>
+<dd><p>Squared first time derivative of the squared total spin, on the precession timescale.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Orbital separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>Squared time derivative of the squared total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.dSdt">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">dSdt</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.dSdt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time derivative of the total spin, on the precession timescale.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Orbital separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>Time derivative of the total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.dkappadu">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">dkappadu</code><span class="sig-paren">(</span><em class="sig-param">kappa</em>, <em class="sig-param">u</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.dkappadu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analytic precession averaged expression for the squared total spin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.effectivepotential_Sphi">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">effectivepotential_Sphi</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">varphi</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.effectivepotential_Sphi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Effective spin as a function of total spin magnitude S, nutation angle varphi and total angularm momentum J.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>varphi: float</strong></dt><dd><p>Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>xi: float</dt><dd><p>Effective spin</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.effectivepotential_minus">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">effectivepotential_minus</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.effectivepotential_minus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower effective potential.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>xi: float</dt><dd><p>Effective spin</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.effectivepotential_plus">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">effectivepotential_plus</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.effectivepotential_plus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upper effective potential.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>xi: float</dt><dd><p>Effective spin</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.elliptic_parameter">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">elliptic_parameter</code><span class="sig-paren">(</span><em class="sig-param">Sminus2</em>, <em class="sig-param">Splus2</em>, <em class="sig-param">S32</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.elliptic_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter m entering elliptic functiosn for the evolution of S.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Sminus2, Splus2, S32: floats</strong></dt><dd><p>Roots of d(S^2)/dt=0 with S32&lt;=Sminus2&lt;=Splus2.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>m: string</dt><dd><p>Parameter of the ellptic functions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_J">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_J</code><span class="sig-paren">(</span><em class="sig-param">theta1=None</em>, <em class="sig-param">theta2=None</em>, <em class="sig-param">deltaphi=None</em>, <em class="sig-param">kappa=None</em>, <em class="sig-param">r=None</em>, <em class="sig-param">q=None</em>, <em class="sig-param">chi1=None</em>, <em class="sig-param">chi2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_J" title="Permalink to this definition">¶</a></dt>
+<dd><p>Magnitude of the total angular momentum from the spin angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>deltaphi: float</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>J: float</dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_S">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_S</code><span class="sig-paren">(</span><em class="sig-param">theta1</em>, <em class="sig-param">theta2</em>, <em class="sig-param">deltaphi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_S" title="Permalink to this definition">¶</a></dt>
+<dd><p>Magnitude of the total spin from the spin angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>deltaphi: float</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>S: float</dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_cosdeltaphi">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_cosdeltaphi</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_cosdeltaphi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>cosdeltaphi: float</dt><dd><p>Cosine of the angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_costheta1">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_costheta1</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_costheta1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>costheta1: float</dt><dd><p>Cosine of the angle between orbital angular momentum and primary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_costheta12">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_costheta12</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_costheta12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cosine of the angle theta12 between the two spins.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>costheta12: float</dt><dd><p>Cosine of the angle between the two spins.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_costheta1inf">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_costheta1inf</code><span class="sig-paren">(</span><em class="sig-param">kappainf</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_costheta1inf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinite orbital separation limit of the cosine of the angle between the
+orbital angular momentum and the primary spin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappainf: float</strong></dt><dd><p>Asymptotic value of kappa.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>costheta1inf: float</dt><dd><p>Asymptotic value of the cosine of the angle between the orbital angular
+momentum and the primary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_costheta2">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_costheta2</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_costheta2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cosine of the angle theta2 between the orbital angular momentum and the spin of the secondary black hole.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>costheta2: float</dt><dd><p>Cosine of the angle between orbital angular momentum and secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_costheta2inf">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_costheta2inf</code><span class="sig-paren">(</span><em class="sig-param">kappainf</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_costheta2inf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinite orbital separation limit of the cosine of the angle between the
+orbital angular momentum and the secondary spin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappainf: float</strong></dt><dd><p>Asymptotic value of kappa.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>costheta2inf: float</dt><dd><p>Asymptotic value of the cosine of the angle between the orbital angular
+momentum and the secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_costhetaL">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_costhetaL</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_costhetaL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>costhetaL: float</dt><dd><p>Cosine of the angle betwen orbital angular momentum and total angular momentum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_deltaphi">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_deltaphi</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">sign=1</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_deltaphi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>sign: optional (default: +1)</strong></dt><dd><p>If positive returns values in [0,pi], if negative returns values in [-pi,0].</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>deltaphi: float</dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_kappa">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_kappa</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_kappa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change of dependant variable to regularize the infinite orbital separation
+limit of the precession-averaged evolution equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>kappa: float</dt><dd><p>Asymptotic momentum (J^2-L^2)/(2L).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_kappainf">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_kappainf</code><span class="sig-paren">(</span><em class="sig-param">theta1inf</em>, <em class="sig-param">theta2inf</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_kappainf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinite orbital separation limit of the parameter kappa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1inf: float</strong></dt><dd><p>Asymptotic value of the angle theta1 between S1 and L.</p>
+</dd>
+<dt><strong>theta2inf: float</strong></dt><dd><p>Asymptotic value of the angle theta2 between S2 and L.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>kappainf: float</dt><dd><p>Asymptotic value of kappa.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_r">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_r</code><span class="sig-paren">(</span><em class="sig-param">u</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_r" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO docstrings</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_theta1">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_theta1</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_theta1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angle theta1 between the orbital angular momentum and the spin of the primary black hole.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>theta1: float</dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_theta12">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_theta12</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_theta12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angle theta12 between the two spins.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>theta12: float</dt><dd><p>Angle between the two spins.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_theta1inf">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_theta1inf</code><span class="sig-paren">(</span><em class="sig-param">kappainf</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_theta1inf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinite orbital separation limit of the angle between the orbital angular
+momentum and the primary spin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappainf: float</strong></dt><dd><p>Asymptotic value of kappa.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>theta1inf: float</dt><dd><p>Asymptotic value of the angle between the orbital angular momentum and
+the primary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_theta2">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_theta2</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_theta2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angle theta2 between the orbital angular momentum and the spin of the secondary black hole.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>theta2: float</dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_theta2inf">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_theta2inf</code><span class="sig-paren">(</span><em class="sig-param">kappainf</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_theta2inf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infinite orbital separation limit of the angle between the orbital angular
+momentum and the secondary spin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappainf: float</strong></dt><dd><p>Asymptotic value of kappa.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>theta2inf: float</dt><dd><p>Asymptotic value of the angle between the orbital angular momentum and
+the secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_thetaL">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_thetaL</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_thetaL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Angle thetaL betwen orbital angular momentum and total angular momentum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>thetaL: float</dt><dd><p>Angle betwen orbital angular momentum and total angular momentum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_u">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_u</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_u" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change of independent variable to regularize the infinite orbital separation
+limit of the precession-averaged evolution equation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>u: float</dt><dd><p>Compactified momentum 1/(2L).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_varphi">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_varphi</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">sign=1</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_varphi" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: fix docstrings</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.eval_xi">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_xi</code><span class="sig-paren">(</span><em class="sig-param">theta1</em>, <em class="sig-param">theta2</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_xi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Effective spin from the spin angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>xi: float</dt><dd><p>Effective spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.flen">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">flen</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.flen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.inspiral">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">inspiral</code><span class="sig-paren">(</span><em class="sig-param">Lh0=None</em>, <em class="sig-param">S1h0=None</em>, <em class="sig-param">S2h0=None</em>, <em class="sig-param">theta1=None</em>, <em class="sig-param">theta2=None</em>, <em class="sig-param">deltaphi=None</em>, <em class="sig-param">S=None</em>, <em class="sig-param">J=None</em>, <em class="sig-param">kappa=None</em>, <em class="sig-param">r=None</em>, <em class="sig-param">u=None</em>, <em class="sig-param">xi=None</em>, <em class="sig-param">q=None</em>, <em class="sig-param">chi1=None</em>, <em class="sig-param">chi2=None</em>, <em class="sig-param">kind=None</em>, <em class="sig-param">tracktime=False</em>, <em class="sig-param">quadrupole_formula=False</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.inspiral" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.inspiral_precav">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">inspiral_precav</code><span class="sig-paren">(</span><em class="sig-param">theta1=None</em>, <em class="sig-param">theta2=None</em>, <em class="sig-param">deltaphi=None</em>, <em class="sig-param">S=None</em>, <em class="sig-param">J=None</em>, <em class="sig-param">kappa=None</em>, <em class="sig-param">r=None</em>, <em class="sig-param">u=None</em>, <em class="sig-param">xi=None</em>, <em class="sig-param">q=None</em>, <em class="sig-param">chi1=None</em>, <em class="sig-param">chi2=None</em>, <em class="sig-param">outputs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.inspiral_precav" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.kappadiscriminant_coefficients">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">kappadiscriminant_coefficients</code><span class="sig-paren">(</span><em class="sig-param">u</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.kappadiscriminant_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO fix docstrings</p>
+<p>Coefficients of the quintic equation in J that defines the spin-orbit resonances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>sigma5:</dt><dd><p>Coefficient of kappa^5.</p>
+</dd>
+<dt>sigma4:</dt><dd><p>Coefficient of kappa^4.</p>
+</dd>
+<dt>sigma3:</dt><dd><p>Coefficient of kappa^3.</p>
+</dd>
+<dt>sigma2:</dt><dd><p>Coefficient of kappa^2.</p>
+</dd>
+<dt>sigma1:</dt><dd><p>Coefficient of kappa^1.</p>
+</dd>
+<dt>sigma0:</dt><dd><p>Coefficient of kappa^0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.kappaofu">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">kappaofu</code><span class="sig-paren">(</span><em class="sig-param">kappa0</em>, <em class="sig-param">u</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.kappaofu" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: make it work on arrays (multiple evolutions)
+TODO: write docstrings</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.limits_check">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">limits_check</code><span class="sig-paren">(</span><em class="sig-param">S=None</em>, <em class="sig-param">J=None</em>, <em class="sig-param">r=None</em>, <em class="sig-param">xi=None</em>, <em class="sig-param">q=None</em>, <em class="sig-param">chi1=None</em>, <em class="sig-param">chi2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.limits_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the inputs are consistent with the geometrical constraints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+</dd>
+<dt><strong>J: float, optional</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float, optional</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float, optional</strong></dt><dd><p>Effective spin</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float, optional</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float, optional</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>check: bool</dt><dd><p>True if the given parameters are compatible with each other, false if not.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.mass1">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">mass1</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.mass1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mass of the heavier black hole in units of the total mass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>m1: float</dt><dd><p>Mass of the primary black hole.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.mass2">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">mass2</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.mass2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mass of the lighter black hole in units of the total mass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>m2: float</dt><dd><p>Mass of the secondary black hole.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.masses">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">masses</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.masses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Masses of the two black holes in units of the total mass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>m1: float</dt><dd><p>Mass of the primary black hole.</p>
+</dd>
+<dt>m2: float</dt><dd><p>Mass of the secondary black hole.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.massratio">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">massratio</code><span class="sig-paren">(</span><em class="sig-param">m1</em>, <em class="sig-param">m2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.massratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mass ratio, 0 &lt; q = m2/m1 &lt; 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>m1: float</strong></dt><dd><p>Mass of the primary black hole.</p>
+</dd>
+<dt><strong>m2: float</strong></dt><dd><p>Mass of the secondary black hole.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>q: float</dt><dd><p>Mass ratio, 0 &lt; q &lt; 1.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.morphology">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">morphology</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">simpler=False</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.morphology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the spin morphology and return “L0” for librating about DeltaPhi=0, “Lpi” for librating about DeltaPhi=pi, “C-” for circulating from DeltaPhi=pi to DeltaPhi=0, and “C+” for circulating from DeltaPhi=0 to DeltaPhi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return “C” for both.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>simpler: optional (default: False)</strong></dt><dd><p>If True does not distinguish between positive and negative circulation.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>morph: string</dt><dd><p>Spin morphology.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.omega2_aligned">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">omega2_aligned</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">alpha1</em>, <em class="sig-param">alpha2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.omega2_aligned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Squared oscillation frequency of a given perturbed aligned-spin binary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Orbital separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio m2/m1, 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole, 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole, 0 &lt;= chi2 &lt;= 1.</p>
+</dd>
+<dt><strong>alpha1: int</strong></dt><dd><p>Alignment of the primary black hole, +1 for up or -1 for down.</p>
+</dd>
+<dt><strong>alpha2: int</strong></dt><dd><p>Alignment of the secondary black hole, +1 for up or -1 for down.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>omega2: float</dt><dd><p>Squared oscillation frequency of the given aligned binary.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.omega2_downdown">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">omega2_downdown</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.omega2_downdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Squared oscillation frequency of a perturbed down-down binary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Orbital separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio m2/m1, 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole, 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole, 0 &lt;= chi2 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>omega2: float</dt><dd><p>Squared oscillation frequency of the down-down binary, omega2 &gt; 0 (for r &gt; M).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.omega2_downup">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">omega2_downup</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.omega2_downup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Squared oscillation frequency of a perturbed down-up binary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Orbital separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio m2/m1, 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole, 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole, 0 &lt;= chi2 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>omega2: float</dt><dd><p>Squared oscillation frequency of the down-up binary, omega2 &gt; 0 (for r &gt; M).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.omega2_updown">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">omega2_updown</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.omega2_updown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Squared oscillation frequency of a perturbed up-down binary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Orbital separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio m2/m1, 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole, 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole, 0 &lt;= chi2 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>omega2: float</dt><dd><p>Squared oscillation frequency of the up-down binary, omega2 &lt; 0 when r_ud+ &gt; r &gt; r_ud-.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.omega2_upup">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">omega2_upup</code><span class="sig-paren">(</span><em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.omega2_upup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Squared oscillation frequency of a perturbed up-up binary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Orbital separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio m2/m1, 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole, 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole, 0 &lt;= chi2 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>omega2: float</dt><dd><p>Squared oscillation frequency of the up-up binary, omega2 &gt; 0 (for r &gt; M).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.orbav_eqs">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">orbav_eqs</code><span class="sig-paren">(</span><em class="sig-param">allvars</em>, <em class="sig-param">v</em>, <em class="sig-param">q</em>, <em class="sig-param">m1</em>, <em class="sig-param">m2</em>, <em class="sig-param">eta</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">S1</em>, <em class="sig-param">S2</em>, <em class="sig-param">tracktime=False</em>, <em class="sig-param">quadrupole_formula=False</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.orbav_eqs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where
+allvars is an array with the cartesian components of the unit vectors L, S1
+and S2. This function is only the actual system of equations, not the ODE
+solver.</p>
+<p>Equations are the ones reported in Gerosa et al. [Phys.Rev. D87 (2013) 10,
+104028](<a class="reference external" href="http://journals.aps.org/prd/abstract/10.1103/PhysRevD.87.104028">http://journals.aps.org/prd/abstract/10.1103/PhysRevD.87.104028</a>);
+see references therein. In particular, the quadrupole-monopole term computed
+by Racine is included. The results presented in Gerosa et al. 2013 actually
+use additional unpublished terms, that are not listed in the published
+equations and are NOT included here. Radiation reaction is included up to
+3.5PN.</p>
+<p>The internal quadrupole_formula flag switches off all PN corrections in
+radiation reaction.</p>
+<p>The integration is carried over in the orbital velocity v (equivalent to the
+separation), not in time. If an expression for v(t) is needed, the code can
+be easiliy modified to return time as well.</p>
+<p><strong>Call:</strong></p>
+<blockquote>
+<div><p>allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False)</p>
+</div></blockquote>
+<p><strong>Parameters:</strong>
+- <cite>allvars</cite>: array of lenght 9 cointaining the initial condition for numerical integration for the components of the unit vectors L, S1 and S2.
+- <cite>v</cite>: orbital velocity.
+- <cite>q</cite>: binary mass ratio. Must be q&lt;=1.
+- <cite>S1</cite>: spin magnitude of the primary BH.
+- <cite>S2</cite>: spin magnitude of the secondary BH.
+- <cite>eta</cite>: symmetric mass ratio.
+- <cite>m1</cite>: mass of the primary BH.
+- <cite>m2</cite>: mass of the secondary BH.
+- <cite>chi1</cite>: dimensionless spin magnitude of the primary BH. Must be 0&lt;=chi1&lt;=1
+- <cite>chi2</cite>: dimensionless spin magnitude of the secondary BH. Must be 0&lt;=chi2&lt;=1
+- <cite>time</cite>: if <cite>True</cite> also integrate t(r).</p>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p><cite>allders</cite>: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.orbav_integrator">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">orbav_integrator</code><span class="sig-paren">(</span><em class="sig-param">Lh0</em>, <em class="sig-param">S1h0</em>, <em class="sig-param">S2h0</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">tracktime=False</em>, <em class="sig-param">quadrupole_formula=False</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.orbav_integrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single orbit-averaged integration. Integrate the system of ODEs specified in
+<cite>precession.orbav_eqs</cite>. The initial configuration (at r_vals[0]) is
+specified through J, xi and S. The components of the unit vectors L, S1 and
+S2 are returned at the output separations specified by r_vals. The initial
+values of J and S must be compatible with the initial separation r_vals[0],
+otherwise an error is raised. Integration is performed in a reference frame
+in which the z axis is along J and L lies in the x-z plane at the initial
+separation. Equations are integrated in v (orbital velocity) but outputs are
+converted to r (separation).</p>
+<p>Of course, this can only integrate to/from FINITE separations.</p>
+<p>Bear in mind that orbit-averaged integrations are tpically possible from
+r&lt;10000; integrations from larger separations take a very long time and can
+occasionally crash. If q=1, the initial binary configuration is specified
+through cos(varphi), not S.</p>
+<p>We recommend to use one of the wrappers <cite>precession.orbit_averaged</cite> and
+<cite>precession.orbit_angles</cite> provided.</p>
+<dl class="simple">
+<dt><strong>Call:</strong></dt><dd><p>Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.orbav_integrator(J,xi,S,r_vals,q,S1,S2,time=False)</p>
+</dd>
+</dl>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><cite>J</cite>: magnitude of the total angular momentum.</p></li>
+<li><p><cite>xi</cite>: projection of the effective spin along the orbital angular momentum.</p></li>
+<li><p><cite>S</cite>: magnitude of the total spin.</p></li>
+<li><p><cite>r_vals</cite>: binary separation (array).</p></li>
+<li><p><cite>q</cite>: binary mass ratio. Must be q&lt;=1.</p></li>
+<li><p><cite>S1</cite>: spin magnitude of the primary BH.</p></li>
+<li><p><cite>S2</cite>: spin magnitude of the secondary BH.</p></li>
+<li><p><cite>time</cite>: if <cite>True</cite> also integrate t(r).</p></li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li><p><cite>Lhx_vals</cite>: x component of the unit vector L/<a href="#id5"><span class="problematic" id="id6">|L|</span></a>.</p></li>
+<li><p><cite>Lhy_vals</cite>: y component of the unit vector L/<a href="#id7"><span class="problematic" id="id8">|L|</span></a>.</p></li>
+<li><p><cite>Lhz_vals</cite>: z component of the unit vector L/<a href="#id9"><span class="problematic" id="id10">|L|</span></a>.</p></li>
+<li><p><cite>S1hx_vals</cite>: x component of the unit vector S1/<a href="#id11"><span class="problematic" id="id12">|S1|</span></a>.</p></li>
+<li><p><cite>S1hy_vals</cite>: y component of the unit vector S1/<a href="#id13"><span class="problematic" id="id14">|S1|</span></a>.</p></li>
+<li><p><cite>S1hz_vals</cite>: z component of the unit vector S1/<a href="#id15"><span class="problematic" id="id16">|S1|</span></a>.</p></li>
+<li><p><cite>S2hx_vals</cite>: x component of the unit vector S2/<a href="#id17"><span class="problematic" id="id18">|S2|</span></a>.</p></li>
+<li><p><cite>S2hy_vals</cite>: y component of the unit vector S2/<a href="#id19"><span class="problematic" id="id20">|S2|</span></a>.</p></li>
+<li><p><cite>S2hz_vals</cite>: z component of the unit vector S2/<a href="#id21"><span class="problematic" id="id22">|S2|</span></a>.</p></li>
+<li><p><cite>t_fvals</cite>: (optional) time as a function of the separation.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.orbitalseparation">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">orbitalseparation</code><span class="sig-paren">(</span><em class="sig-param">L</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.orbitalseparation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.orbitalvelocity">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">orbitalvelocity</code><span class="sig-paren">(</span><em class="sig-param">r</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.orbitalvelocity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.precession_average">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">precession_average</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">func</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.precession_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Average a function over a precession cycle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>xi: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>func: function</strong></dt><dd><p>Function to precession-average, with call func(S**2, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs).</p>
+</dd>
+<dt><strong>*args: tuple</strong></dt><dd><p>Extra arguments to pass to func.</p>
+</dd>
+<dt><strong>**kwargs: tuple</strong></dt><dd><p>Extra keyword arguments to pass to func.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>func_av: float</dt><dd><p>Precession averaged value of func.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.r_updown">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">r_updown</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.r_updown" title="Permalink to this definition">¶</a></dt>
+<dd><p>The critical separations r_ud+/- marking the region of the up-down precessional instability.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio m2/m1, 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1:</strong></dt><dd><p>Dimensionless spin of the primary black hole, 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2:</strong></dt><dd><p>Dimensionless spin of the secondary black hole, 0 &lt;= chi2 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>r_udp: float</dt><dd><p>Outer critical separation marking the instability onset.</p>
+</dd>
+<dt>r_udm: float</dt><dd><p>Inner critical separation marking the end of the unstable region.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.r_wide">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">r_wide</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.r_wide" title="Permalink to this definition">¶</a></dt>
+<dd><p>The critical separation r_wide below which the binary component with
+smaller dimensionless spin may undergo wide nutations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio m2/m1, 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1:</strong></dt><dd><p>Dimensionless spin of the primary black hole, 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2:</strong></dt><dd><p>Dimensionless spin of the secondary black hole, 0 &lt;= chi2 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>r_wide: float</dt><dd><p>Critical orbital separation for wide nutation.
+If chi1 &lt; chi2 (chi1 &gt; chi2) the primary (secondary) spin may undergo
+wide nutations.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.sample_unitsphere">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">sample_unitsphere</code><span class="sig-paren">(</span><em class="sig-param">N=1</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.sample_unitsphere" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.spin1">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">spin1</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">chi1</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.spin1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spin angular momentum of the heavier black hole.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float or numpy array</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>S1: float</dt><dd><p>Spin of the primary black hole.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.spin2">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">spin2</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.spin2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spin angular momentum of the lighter black hole.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float or numpy array</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>S2: float</dt><dd><p>Spin of the secondary black hole.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.spinmags">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">spinmags</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.spinmags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spins of the black holes in units of the total mass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float or numpy array</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>S1: float</dt><dd><p>Spin of the primary black hole.</p>
+</dd>
+<dt>S2: float</dt><dd><p>Spin of the secondary black hole.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.symmetricmassratio">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">symmetricmassratio</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.symmetricmassratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>eta: float</dt><dd><p>Symmetric mass ratio.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.toarray">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">toarray</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.toarray" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.vectors_to_angles">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">vectors_to_angles</code><span class="sig-paren">(</span><em class="sig-param">S1vec</em>, <em class="sig-param">S2vec</em>, <em class="sig-param">Lvec</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.vectors_to_angles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.vectors_to_conserved">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">vectors_to_conserved</code><span class="sig-paren">(</span><em class="sig-param">S1vec</em>, <em class="sig-param">S2vec</em>, <em class="sig-param">Lvec</em>, <em class="sig-param">q</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.vectors_to_conserved" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="precession.wraproots">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">wraproots</code><span class="sig-paren">(</span><em class="sig-param">coefficientfunction</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.wraproots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find roots of a polynomial given coefficients. Wrapper of numpy.roots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>coefficientfunction: callable</strong></dt><dd><p>Function returnin the polynomial coefficients ordered from highest to lowest degree.</p>
+</dd>
+<dt><strong>*args, **kwargs:</strong></dt><dd><p>Parameters of <cite>coefficientfunction</cite>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>sols: array</dt><dd><p>Roots of the polynomial, ordered according to their real part. Complex roots are masked with nans.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.xidiscriminant_coefficients">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">xidiscriminant_coefficients</code><span class="sig-paren">(</span><em class="sig-param">kappa</em>, <em class="sig-param">u</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.xidiscriminant_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: fix docstrings</p>
+<p>Coefficients of the 6-degree equation in xi that defines the spin-orbit resonances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>sigma6:</dt><dd><p>Coefficient of xi^6.</p>
+</dd>
+<dt>sigma5:</dt><dd><p>Coefficient of xi^5.</p>
+</dd>
+<dt>sigma4:</dt><dd><p>Coefficient of xi^4.</p>
+</dd>
+<dt>sigma3:</dt><dd><p>Coefficient of xi^3.</p>
+</dd>
+<dt>sigma2:</dt><dd><p>Coefficient of xi^2.</p>
+</dd>
+<dt>sigma1:</dt><dd><p>Coefficient of xi^1.</p>
+</dd>
+<dt>sigma0:</dt><dd><p>Coefficient of xi^0.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.xilimits">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">xilimits</code><span class="sig-paren">(</span><em class="sig-param">J=None</em>, <em class="sig-param">r=None</em>, <em class="sig-param">q=None</em>, <em class="sig-param">chi1=None</em>, <em class="sig-param">chi2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.xilimits" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Limits on the projected effective spin. The contraints considered depend on the inputs provided.</dt><dd><ul class="simple">
+<li><p>If q, chi1, and chi2 are provided, enforce xi = (1+q)S1.L + (1+1/q)S2.L.</p></li>
+<li><p>If J, r, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float, optional</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float, optional</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float, optional</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float, optional</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>conincident: boolean, optional</strong></dt><dd><p>If True, assume that the input is a spin-orbit resonance and return repeated roots</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>ximin:</dt><dd><p>Minimum value of the effective spin.</p>
+</dd>
+<dt>ximax:</dt><dd><p>Maximum value of the effective spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.xilimits_definition">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">xilimits_definition</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.xilimits_definition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Limits on the effective spin based only on the definition xi = (1+q)S1.L + (1+1/q)S2.L</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>ximin:</dt><dd><p>Minimum value of the effective spin.</p>
+</dd>
+<dt>ximax:</dt><dd><p>Maximum value of the effective spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="precession.xiresonances">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">xiresonances</code><span class="sig-paren">(</span><em class="sig-param">J</em>, <em class="sig-param">r</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.xiresonances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total angular momentum of the two spin-orbit resonances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>ximin: float</dt><dd><p>Spin-orbit resonance that minimizes xi (either DeltaPhi=0 or DeltaPhi=pi)</p>
+</dd>
+<dt>ximax: float</dt><dd><p>Spin-orbit resonance that minimizes xi (always DeltaPhi=pi)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../modules.html" class="btn btn-neutral float-left" title="Package documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright Copyright (c) 2020 Davide Gerosa
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

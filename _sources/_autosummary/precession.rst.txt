@@ -1,0 +1,115 @@
+precession
+==========
+
+.. automodule:: precession
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      Jlimits
+      Jlimits_LS1S2
+      Jresonances
+      S2av
+      S2av_mfactor
+      S2avinf
+      S2roots
+      S2rootsinf
+      Satresonance
+      Scubic_coefficients
+      Slimits
+      Slimits_LJ
+      Slimits_LJS1S2
+      Slimits_S1S2
+      Slimits_plusminus
+      Soft
+      Speriod
+      Speriod_prefactor
+      Ssampling
+      angles_to_Jframe
+      angles_to_Lframe
+      angles_to_asymptotic
+      angles_to_conserved
+      angularmomentum
+      asymptotic_to_angles
+      conserved_to_Jframe
+      conserved_to_Lframe
+      conserved_to_angles
+      dS2dt
+      dS2dtsquared
+      dSdt
+      dkappadu
+      effectivepotential_Sphi
+      effectivepotential_minus
+      effectivepotential_plus
+      elliptic_parameter
+      eval_J
+      eval_S
+      eval_cosdeltaphi
+      eval_costheta1
+      eval_costheta12
+      eval_costheta1inf
+      eval_costheta2
+      eval_costheta2inf
+      eval_costhetaL
+      eval_deltaphi
+      eval_kappa
+      eval_kappainf
+      eval_r
+      eval_theta1
+      eval_theta12
+      eval_theta1inf
+      eval_theta2
+      eval_theta2inf
+      eval_thetaL
+      eval_u
+      eval_varphi
+      eval_xi
+      flen
+      inspiral
+      inspiral_precav
+      kappadiscriminant_coefficients
+      kappaofu
+      limits_check
+      mass1
+      mass2
+      masses
+      massratio
+      morphology
+      omega2_aligned
+      omega2_downdown
+      omega2_downup
+      omega2_updown
+      omega2_upup
+      orbav_eqs
+      orbav_integrator
+      orbitalseparation
+      orbitalvelocity
+      precession_average
+      r_updown
+      r_wide
+      sample_unitsphere
+      spin1
+      spin2
+      spinmags
+      symmetricmassratio
+      toarray
+      vectors_to_angles
+      vectors_to_conserved
+      wraproots
+      xidiscriminant_coefficients
+      xilimits
+      xilimits_definition
+      xiresonances
+   
+   
+
+   
+   
+   
+
+   
+   
+   
