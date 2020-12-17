@@ -3189,7 +3189,7 @@ def vectors_to_angles(S1vec, S2vec, Lvec):
     S2cL = S2cL / np.linalg.norm(S2cL, axis=-1)
     #deltaphi = np.arccos(np.einsum('ij, ij->i', S1cL, S2cL))
     deltaphi = np.arccos(np.array([np.dot(s1cl, s2cl) for s1cl, s2cl in zip(S1cL, S2cL)]))
-
+    # TODO: assign sign to deltaphi
     return toarray(theta1, theta2, deltaphi)
 
 
@@ -3508,6 +3508,9 @@ def omega2_updown(r, q, chi1, chi2):
     return omega2
 
 
+
+
+
 # TODO: nutation
 def r_wide(q, chi1, chi2):
     """
@@ -3777,11 +3780,11 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     '''
 
     if q is None:
-        raise TypeError("Plese provide q.")
+        raise TypeError("Please provide q.")
     if chi1 is None:
-        raise TypeError("Plese provide chi1.")
+        raise TypeError("Please provide chi1.")
     if chi2 is None:
-        raise TypeError("Plese provide chi2.")
+        raise TypeError("Please provide chi2.")
 
     if r is not None and u is None:
         r=toarray(r)
@@ -3872,10 +3875,6 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
         for x in outputs:
             outcome.append(locals()[x])
         return outcome
-
-
-
-
 
 
 # TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
