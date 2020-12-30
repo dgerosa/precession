@@ -3073,7 +3073,7 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
 
 def kappaofu(kappa0, u, xi, q, chi1, chi2):
     """
-    TODO: write docstrings
+    TODO: write docstrings. This is the actual precession-averaged integrator
     """
 
     def _compute(kappa0, u, xi, q, chi1, chi2):
@@ -3095,6 +3095,7 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2):
     return kappa
 
 
+#TODO: does this work on arrays?
 def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     """
     Average a function over a precession cycle.
@@ -3146,7 +3147,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     return func_av
 
 
-## TODO:
+## TODO: what defines the x and y axes of the L and J frame?
 def vectors_to_conserved(S1vec, S2vec, Lvec, q):
     """
     """
@@ -3167,7 +3168,6 @@ def vectors_to_conserved(S1vec, S2vec, Lvec, q):
     return toarray(S, J, xi)
 
 
-## TODO:
 def vectors_to_angles(S1vec, S2vec, Lvec):
     """
     """
@@ -3195,7 +3195,6 @@ def vectors_to_angles(S1vec, S2vec, Lvec):
     return toarray(theta1, theta2, deltaphi)
 
 
-## TODO:
 def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
     """
     Convert the conserved quantities to angular momentum vectors in the frame
@@ -3272,7 +3271,6 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
     return toarray(Svec, S1vec, S2vec, Jvec, Lvec)
 
 
-## TODO:
 def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
     """
@@ -3282,7 +3280,6 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     return conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
 
 
-## TODO:
 def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
     """
@@ -3311,7 +3308,6 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     return toarray(Svec, S1vec, S2vec, Jvec, Lvec)
 
 
-## TODO:
 def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
     """
     """
@@ -3769,13 +3765,12 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
         return Lh,S1h,S2h
 
 
-
-# TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
+#TODO: array
 def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,outputs=None):
 
 
     '''
-
+    TODO: docstrings. Precession average evolution; this is the function the user should call (I think)
     '''
 
     if q is None:
@@ -3792,9 +3787,9 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
         u=toarray(u)
         r = eval_r(u, np.repeat(q,flen(u)) )
     else:
-        raise TypeError("Please provide either r or u. Use np.inf for infinity")
+        raise TypeError("Please provide either r or u. Use np.inf for infinity.")
 
-    assert np.sum(u==0)<=1 and np.sum(u[1:-1]==0)==0, "There can only be one r=np.inf location, either at the beginning or at the end"
+    assert np.sum(u==0)<=1 and np.sum(u[1:-1]==0)==0, "There can only be one r=np.inf location, either at the beginning or at the end."
 
 
     # Start from r=infinity
@@ -3861,8 +3856,9 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     else:
         pass
 
+    #TODO: the vectorization should go here, before the output handling
 
-
+    # Handle the outputs
     if outputs is None:
         outcome = {}
         for x in ['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2']:
