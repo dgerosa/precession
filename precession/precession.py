@@ -13,11 +13,14 @@ warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 #### Utilities ####
 
 def flen(x):
-    if hasattr(x, "__len__"):
-        return len(x)
-    else:
-        return 1
+    #https://stackoverflow.com/a/26533085
+    return getattr(x, '__len__', lambda:1)()
 
+#def flen(x):
+#   if hasattr(x, "__len__"):
+#        return len(x)
+#   else:
+#        return 1
 
 def toarray(*args):
     return np.squeeze(np.array([*args]))
@@ -3070,7 +3073,6 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
 
 def kappaofu(kappa0, u, xi, q, chi1, chi2):
     """
-    TODO: make it work on arrays (multiple evolutions)
     TODO: write docstrings
     """
 
@@ -3508,9 +3510,6 @@ def omega2_updown(r, q, chi1, chi2):
     return omega2
 
 
-
-
-
 # TODO: nutation
 def r_wide(q, chi1, chi2):
     """
@@ -3901,14 +3900,14 @@ if __name__ == '__main__':
     np.set_printoptions(threshold=sys.maxsize)
     #print(masses([0.5,0.6]))
 
-    r=[10,10]
-    #xi=[0.35,-0.675]
-    q=[0.8,0.2]
-    chi1=[1,1]
-    chi2=[1,1]
-    #J=[1,0.23]
-
-    print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
+    # r=[10,10]
+    # #xi=[0.35,-0.675]
+    # q=[0.8,0.2]
+    # chi1=[1,1]
+    # chi2=[1,1]
+    # #J=[1,0.23]
+    #
+    # print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
     #t0=time.time()
@@ -4014,6 +4013,22 @@ if __name__ == '__main__':
     #
     # print(d)
     #
+
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa0 = 0.5784355256550922
+    r=np.logspace(2,1,6)
+    u=eval_u(r,q)
+    print(kappaofu(kappa0, u, xi, q, chi1, chi2))
+    print(kappaofu([kappa0,kappa0], [u,u], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
+
 
 
     #
