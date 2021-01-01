@@ -26,6 +26,14 @@ def toarray(*args):
     return np.squeeze(np.array([*args]))
 
 
+
+def normalize_nested(x):
+    return np.squeeze(x/np.atleast_1d(np.linalg.norm(x, axis=-1))[:,None])
+
+def dot_nested(x,y):
+    return np.squeeze(np.diag(np.atleast_1d(np.inner(x,y))))
+
+
 def sample_unitsphere(N=1):
     vec = np.random.randn(3, N)
     vec /= np.linalg.norm(vec, axis=0)
@@ -3287,34 +3295,28 @@ def vectors_to_conserved(S1vec, S2vec, Lvec, q):
     J = np.linalg.norm(S1vec+S2vec+Lvec, axis=-1)
     L = np.linalg.norm(Lvec, axis=-1)
     m1, m2 = masses(q)
-    xi = np.squeeze(np.diag(np.atleast_1d(np.inner(S1vec,Lvec)))/m1 + np.diag(np.atleast_1d(np.inner(S2vec,Lvec)))/m2)
+    xi = dot_nested(S1vec,Lvec)/(m1*L) + dot_nested(S2vec,Lvec)/(m2*L)
+
     return toarray(S, J, xi)
+
+# TODO: function to get theta12 from theta1,theta2 and deltaphi
 
 
 def vectors_to_angles(S1vec, S2vec, Lvec):
     """
+    The sign comes from Eq 2d in the multitimescale paper
     """
 
     S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
-    vecs = [S1vec, S2vec, Lvec]
-    for i in range(len(vecs)):
-        if len(vecs[i].shape) == 1:
-            vecs[i] = np.array([vecs[i]])
-    S1vec, S2vec, Lvec = vecs
-    S1vec = S1vec / np.linalg.norm(S1vec, axis=-1)
-    S2vec = S2vec / np.linalg.norm(S2vec, axis=-1)
-    Lvec = Lvec / np.linalg.norm(Lvec, axis=-1)
-    #theta1 = np.arccos(np.einsum('ij, ij->i', S1vec, Lvec))
-    #theta2 = np.arccos(np.einsum('ij, ij->i', S2vec, Lvec))
-    theta1 = np.arccos(np.array([np.dot(s1, l) for s1, l in zip(S1vec, Lvec)]))
-    theta2 = np.arccos(np.array([np.dot(s2, l) for s2, l in zip(S2vec, Lvec)]))
-    S1cL = np.cross(S1vec, Lvec)
-    S1cL = S1cL / np.linalg.norm(S1cL, axis=-1)
-    S2cL = np.cross(S2vec, Lvec)
-    S2cL = S2cL / np.linalg.norm(S2cL, axis=-1)
-    #deltaphi = np.arccos(np.einsum('ij, ij->i', S1cL, S2cL))
-    deltaphi = np.arccos(np.array([np.dot(s1cl, s2cl) for s1cl, s2cl in zip(S1cL, S2cL)]))
-    # TODO: assign sign to deltaphi
+    S1vec = normalize_nested(S1vec)
+    S2vec = normalize_nested(S2vec)
+    Lvec = normalize_nested(Lvec)
+    theta1 = np.arccos(dot_nested(S1vec,Lvec))
+    theta2 = np.arccos(dot_nested(S2vec,Lvec))
+    absdeltaphi = np.arccos(dot_nested(normalize_nested(np.cross(S1vec, Lvec)), normalize_nested(np.cross(S2vec, Lvec))))
+    signdeltaphi = np.sign(dot_nested(Lvec,np.cross(np.cross(S2vec, Lvec),np.cross(S1vec, Lvec))))
+    deltaphi = absdeltaphi*signdeltaphi
+
     return toarray(theta1, theta2, deltaphi)
 
 
@@ -4345,5 +4347,10 @@ if __name__ == '__main__':
     S2vec = S2*S2h
     Lvec = L*Lh
 
-    print(vectors_to_conserved(S1vec, S2vec, Lvec, q))
-    print(vectors_to_conserved([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec], [q,q]))
+    S, J, xi = vectors_to_conserved(S1vec, S2vec, Lvec, q)
+    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1)
+    print(theta1,theta2,deltaphi)
+    #print(vectors_to_conserved([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec], [q,q+0.1]))
+    #print(' ')
+    print(vectors_to_angles(S1vec, S2vec, Lvec))
+    print(vectors_to_angles([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec]))
