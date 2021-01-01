@@ -3098,6 +3098,132 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2):
     return kappa
 
 
+
+def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,outputs=None):
+    '''
+    TODO: docstrings. Precession average evolution; this is the function the user should call (I think)
+    '''
+
+    def _compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2):
+
+        if q is None:
+            raise TypeError("Please provide q.")
+        if chi1 is None:
+            raise TypeError("Please provide chi1.")
+        if chi2 is None:
+            raise TypeError("Please provide chi2.")
+
+        if r is not None and u is None:
+            r=toarray(r)
+            u = eval_u(r, np.repeat(q,flen(r)) )
+        elif r is None and u is not None:
+            u=toarray(u)
+            r = eval_r(u, np.repeat(q,flen(u)) )
+        else:
+            raise TypeError("Please provide either r or u. Use np.inf for infinity.")
+
+        assert np.sum(u==0)<=1 and np.sum(u[1:-1]==0)==0, "There can only be one r=np.inf location, either at the beginning or at the end."
+
+
+        # Start from r=infinity
+        if u[0]==0:
+
+            if theta1 is not None and theta2 is not None and S is None and J is None and kappa is None and xi is None:
+                kappa, xi = angles_to_asymptotic(theta1,theta2,q,chi1,chi2)
+                theta1inf, theta2inf = theta1, theta2
+
+            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
+                theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
+
+            else:
+                raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,xi).")
+
+
+        # Start from finite separations
+        else:
+
+            # User provides theta1,theta2, and deltaphi.
+            if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
+                S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
+                kappa = eval_kappa(J, r[0], q)
+
+            # User provides J, xi, and maybe S.
+            if theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is not None:
+                kappa = eval_kappa(J, r[0], q)
+
+            if theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
+                pass
+
+            else:
+                TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
+
+        # Integration
+        kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
+
+        # Select finite separations
+        rok = r[u!=0]
+        kappaok = kappa[u!=0]
+
+        # Resample S and assign random sign to deltaphi
+        J = eval_J(kappa=kappaok,r=rok,q=np.repeat(q,flen(rok)))
+        S = Ssampling(J, rok, np.repeat(xi,flen(rok)), np.repeat(q,flen(rok)),
+        np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)), N=1)
+        theta1,theta2,deltaphi = conserved_to_angles(S, J, rok, xi, np.repeat(q,flen(rok)), np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)))
+        deltaphi = deltaphi * np.random.choice([-1,1],flen(deltaphi))
+
+        # Integrating from infinite separation.
+        if u[0]==0:
+            J = np.concatenate(([np.inf],J))
+            S = np.concatenate(([np.nan],S))
+            theta1 = np.concatenate(([theta1inf],theta1))
+            theta2 = np.concatenate(([theta2inf],theta2))
+            deltaphi = np.concatenate(([np.nan],deltaphi))
+        # Integrating backwards to infinity
+        elif u[-1]==0:
+            J = np.concatenate((J,[np.inf]))
+            S = np.concatenate((S,[np.nan]))
+            theta1inf,theta2inf = asymptotic_to_angles(kappa[-1],xi,q,chi1,chi2)
+            theta1 = np.concatenate((theta1,[theta1inf]))
+            theta2 = np.concatenate((theta2,[theta2inf]))
+            deltaphi = np.concatenate((deltaphi,[np.nan]))
+        else:
+            pass
+
+        return np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
+
+    #This array has to match the outputs of _compute (in the right order!)
+    alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
+
+    # allresults is an array of dtype=object because different variables have different shapes
+    if flen(q)==1:
+        allresults =_compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2)
+    else:
+        inputs = np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
+        for k,v in enumerate(inputs):
+            if v==None:
+                inputs[k] = itertools.repeat(None) #TODO: this could be np.repeat(None,flen(q)) if you need to get rid of the itertools dependence
+
+        theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2= inputs
+        allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2))).T
+
+    # Handle the outputs.
+    # Return all
+    if outputs is None:
+        outputs = alloutputs
+    # Return only those requested (in1d return boolean array)
+    wantoutputs = np.in1d(alloutputs,outputs)
+
+    # Store into a dictionary
+    outcome={}
+    for k,v in zip(alloutputs[wantoutputs],allresults[wantoutputs]):
+        # np.stack fixed shapes and object types
+        outcome[k]=np.stack(np.atleast_1d(v))
+
+    return outcome
+
+
+
+
 #TODO: does this work on arrays?
 def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     """
@@ -3546,6 +3672,7 @@ def r_wide(q, chi1, chi2):
 #### Orbit averaged things ####
 
 # TODO: this comes straight from precession_V1. Update docstrings. It's not necesssary that this function works on arrays
+# TODO: replace quadrupole_formula flag with parameter to select a given PN order
 def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_formula=False):
 
     '''
@@ -3591,44 +3718,30 @@ def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_f
     - `allders`: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.
     '''
 
+    # Unpack inputs
+    Lh = np.array(allvars[0:3])
+    S1h = np.array(allvars[3:6])
+    S2h = np.array(allvars[6:9])
     if tracktime:
-        Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t = allvars
-    else:
-        Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz = allvars
+        t = allvars[9]
 
     # Angles
-    ct1=(Lhx*S1hx+Lhy*S1hy+Lhz*S1hz)
-    ct2=(Lhx*S2hx+Lhy*S2hy+Lhz*S2hz)
-    ct12=(S1hx*S2hx+S1hy*S2hy+S1hz*S2hz)
+    ct1 = np.dot(S1h,Lh)
+    ct2 = np.dot(S2h,Lh)
+    ct12 = np.dot(S1h,S2h)
 
     # Spin precession for S1
-    Omega1x= eta*v**5*(2+3*q/2)*Lhx  \
-            + v**6*(S2*S2hx-3*S2*ct2*Lhx-3*q*S1*ct1*Lhx)/2
-    Omega1y= eta*v**5*(2+3*q/2)*Lhy  \
-            + v**6*(S2*S2hy-3*S2*ct2*Lhy-3*q*S1*ct1*Lhy)/2
-    Omega1z= eta*v**5*(2+3*q/2)*Lhz  \
-            + v**6*(S2*S2hz-3*S2*ct2*Lhz-3*q*S1*ct1*Lhz)/2
-
-    dS1hxdt= Omega1y*S1hz - Omega1z*S1hy
-    dS1hydt= Omega1z*S1hx - Omega1x*S1hz
-    dS1hzdt= Omega1x*S1hy - Omega1y*S1hx
+    Omega1= eta*v**5*(2+3*q/2)*Lh  \
+            + v**6*(S2*S2h-3*S2*ct2*Lh-3*q*S1*ct1*Lh)/2
+    dS1hdt = np.cross(Omega1,S1h)
 
     # Spin precession for S2
-    Omega2x= eta*v**5*(2+3/(2*q))*Lhx  \
-            + v**6*(S1*S1hx-3*S1*ct1*Lhx-3*S2*ct2*Lhx/q)/2
-    Omega2y= eta*v**5*(2+3/(2*q))*Lhy  \
-            + v**6*(S1*S1hy-3*S1*ct1*Lhy-3*S2*ct2*Lhy/q)/2
-    Omega2z= eta*v**5*(2+3/(2*q))*Lhz  \
-            + v**6*(S1*S1hz-3*S1*ct1*Lhz-3*S2*ct2*Lhz/q)/2
-
-    dS2hxdt= Omega2y*S2hz - Omega2z*S2hy
-    dS2hydt= Omega2z*S2hx - Omega2x*S2hz
-    dS2hzdt= Omega2x*S2hy - Omega2y*S2hx
+    Omega2= eta*v**5*(2+3/(2*q))*Lh  \
+            + v**6*(S1*S1h-3*S1*ct1*Lh-3*S2*ct2*Lh/q)/2
+    dS2hdt = np.cross(Omega2,S2h)
 
     # Conservation of angular momentum
-    dLhxdt= -v*(S1*dS1hxdt+S2*dS2hxdt)/eta
-    dLhydt= -v*(S1*dS1hydt+S2*dS2hydt)/eta
-    dLhzdt= -v*(S1*dS1hzdt+S2*dS2hzdt)/eta
+    dLhdt= -v*(S1*dS1hdt+S2*dS2hdt)/eta
 
     # Radiation reaction
     if quadrupole_formula: # Use to switch off higher-order terms
@@ -3654,20 +3767,15 @@ def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_f
 
     # Integrate in v, not in time
     dtdv=1./dvdt
-    dLhxdv=dLhxdt/dvdt
-    dLhydv=dLhydt*dtdv
-    dLhzdv=dLhzdt*dtdv
-    dS1hxdv=dS1hxdt*dtdv
-    dS1hydv=dS1hydt*dtdv
-    dS1hzdv=dS1hzdt*dtdv
-    dS2hxdv=dS2hxdt*dtdv
-    dS2hydv=dS2hydt*dtdv
-    dS2hzdv=dS2hzdt*dtdv
+    dLhdv=dLhdt*dtdv
+    dS1hdv=dS1hdt*dtdv
+    dS2hdv=dS2hdt*dtdv
 
+    # Pack outputs
     if tracktime:
-        return toarray(dLhxdv,dLhydv,dLhzdv,dS1hxdv,dS1hydv,dS1hzdv,dS2hxdv,dS2hydv,dS2hzdv,dtdv)    # Read variables in
+        return np.concatenate([dLhdv,dS1hdv,dS2hdv,[dtdv]])
     else:
-        return toarray(dLhxdv,dLhydv,dLhzdv,dS1hxdv,dS1hydv,dS1hzdv,dS2hxdv,dS2hydv,dS2hzdv)
+        return np.concatenate([dLhdv,dS1hdv,dS2hdv])
 
 # TODO: this comes straight from precession_V1. Update docstrings
 # TODO : still does not work on array, multiple evolutions. Implement a map
@@ -3747,7 +3855,7 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
         res =scipy.integrate.odeint(orbav_eqs, ic, v, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
 
         # Returned output is
-        # Lx, Ly, Lz, S1x, S1y, S1z, S2x, S2y, S2z
+        # Lx, Ly, Lz, S1x, S1y, S1z, S2x, S2y, S2z, (t)
         return res.T
 
 
@@ -3759,136 +3867,15 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
     Lh = np.squeeze(np.swapaxes(res[:,0:3],1,2))
     S1h = np.squeeze(np.swapaxes(res[:,3:6],1,2))
     S2h = np.squeeze(np.swapaxes(res[:,6:9],1,2))
-    t = np.squeeze(res[:,9])
-
 
     if tracktime:
+        t = np.squeeze(res[:,9])
         return Lh,S1h,S2h,t
     else:
         return Lh,S1h,S2h
 
 
-def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,outputs=None):
-    '''
-    TODO: docstrings. Precession average evolution; this is the function the user should call (I think)
-    '''
 
-    def _compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2):
-
-        if q is None:
-            raise TypeError("Please provide q.")
-        if chi1 is None:
-            raise TypeError("Please provide chi1.")
-        if chi2 is None:
-            raise TypeError("Please provide chi2.")
-
-        if r is not None and u is None:
-            r=toarray(r)
-            u = eval_u(r, np.repeat(q,flen(r)) )
-        elif r is None and u is not None:
-            u=toarray(u)
-            r = eval_r(u, np.repeat(q,flen(u)) )
-        else:
-            raise TypeError("Please provide either r or u. Use np.inf for infinity.")
-
-        assert np.sum(u==0)<=1 and np.sum(u[1:-1]==0)==0, "There can only be one r=np.inf location, either at the beginning or at the end."
-
-
-        # Start from r=infinity
-        if u[0]==0:
-
-            if theta1 is not None and theta2 is not None and S is None and J is None and kappa is None and xi is None:
-                kappa, xi = angles_to_asymptotic(theta1,theta2,q,chi1,chi2)
-                theta1inf, theta2inf = theta1, theta2
-
-            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
-                theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
-
-            else:
-                raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,xi).")
-
-
-        # Start from finite separations
-        else:
-
-            # User provides theta1,theta2, and deltaphi.
-            if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
-                S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
-                kappa = eval_kappa(J, r[0], q)
-
-            # User provides J, xi, and maybe S.
-            if theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is not None:
-                kappa = eval_kappa(J, r[0], q)
-
-            if theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
-                pass
-
-            else:
-                TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
-
-        # Integration
-        kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
-
-        # Select finite separations
-        rok = r[u!=0]
-        kappaok = kappa[u!=0]
-
-        # Resample S and assign random sign to deltaphi
-        J = eval_J(kappa=kappaok,r=rok,q=np.repeat(q,flen(rok)))
-        S = Ssampling(J, rok, np.repeat(xi,flen(rok)), np.repeat(q,flen(rok)),
-        np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)), N=1)
-        theta1,theta2,deltaphi = conserved_to_angles(S, J, rok, xi, np.repeat(q,flen(rok)), np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)))
-        deltaphi = deltaphi * np.random.choice([-1,1],flen(deltaphi))
-
-        # Integrating from infinite separation.
-        if u[0]==0:
-            J = np.concatenate(([np.inf],J))
-            S = np.concatenate(([np.nan],S))
-            theta1 = np.concatenate(([theta1inf],theta1))
-            theta2 = np.concatenate(([theta2inf],theta2))
-            deltaphi = np.concatenate(([np.nan],deltaphi))
-        # Integrating backwards to infinity
-        elif u[-1]==0:
-            J = np.concatenate((J,[np.inf]))
-            S = np.concatenate((S,[np.nan]))
-            theta1inf,theta2inf = asymptotic_to_angles(kappa[-1],xi,q,chi1,chi2)
-            theta1 = np.concatenate((theta1,[theta1inf]))
-            theta2 = np.concatenate((theta2,[theta2inf]))
-            deltaphi = np.concatenate((deltaphi,[np.nan]))
-        else:
-            pass
-
-        return np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
-
-    #This array has to match the outputs of _compute (in the right order!)
-    alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
-
-    # allresults is an array of dtype=object because different variables have different shapes
-    if flen(q)==1:
-        allresults =_compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2)
-    else:
-        inputs = np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
-        for k,v in enumerate(inputs):
-            if v==None:
-                inputs[k] = itertools.repeat(None) #TODO: this could be np.repeat(None,flen(q)) if you need to get rid of the itertools dependence
-
-        theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2= inputs
-        allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2))).T
-
-    # Handle the outputs.
-    # Return all
-    if outputs is None:
-        outputs = alloutputs
-    # Return only those requested (in1d return boolean array)
-    wantoutputs = np.in1d(alloutputs,outputs)
-
-    # Store into a dictionary
-    outcome={}
-    for k,v in zip(alloutputs[wantoutputs],allresults[wantoutputs]):
-        # np.stack fixed shapes and object types
-        outcome[k]=np.stack(np.atleast_1d(v))
-
-    return outcome
 
 
 # TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
@@ -3999,23 +3986,23 @@ if __name__ == '__main__':
     # print(d)
 
     ###### INSPIRAL TESTING: precav, from infinite #######
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    kappa = 0.50941012
-    xi = 0.9141896967861489
-    r=np.concatenate(([np.inf],np.logspace(2,1,6)))
-
-    #d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
-    d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
-
-    print(d)
-
-    d=inspiral_precav(kappa=[kappa,kappa],xi=[xi,xi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],outputs=['J','theta1'])
-
-    print(d)
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # kappa = 0.50941012
+    # xi = 0.9141896967861489
+    # r=np.concatenate(([np.inf],np.logspace(2,1,6)))
+    #
+    # #d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
+    # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
+    #
+    # print(d)
+    #
+    # d=inspiral_precav(kappa=[kappa,kappa],xi=[xi,xi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],outputs=['J','theta1'])
+    #
+    # print(d)
     # ###### INSPIRAL TESTING #######
     # q=0.5
     # chi1=1
@@ -4073,24 +4060,23 @@ if __name__ == '__main__':
     #
     # print(J,S)
 
-    # xi=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    # r=np.logspace(2,1,5)
-    # Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    # #print(Lh0,S1h0,S2h0)
-    # t0=time.time()
-    # Lh,S1h,S2h,t = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=True)
-    #
-    # print(t)
-    #
-    # Lh,S1h,S2h,t = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)
-    #
-    # print(t)
-    #
-    # print(time.time()-t0)
-    # #print(Lh)
+    xi=-0.5
+    q=0.4
+    chi1=0.9
+    chi2=0.8
+    r=np.logspace(2,1,5)
+    Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    #print(Lh0,S1h0,S2h0)
+    t0=time.time()
+    Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False)
+    print(Lh)
+
+    Lh,S1h,S2h,t = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)
+
+    print(t)
+
+    print(time.time()-t0)
+    #print(Lh)
 
 
 
