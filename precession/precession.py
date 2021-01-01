@@ -3285,8 +3285,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     return func_av
 
 
-## TODO: what defines the x and y axes of the L and J frame?
-def vectors_to_conserved(S1vec, S2vec, Lvec, q):
+def vectors_to_conserved(Lvec, S1vec, S2vec, q):
     """
     """
 
@@ -3299,10 +3298,9 @@ def vectors_to_conserved(S1vec, S2vec, Lvec, q):
 
     return toarray(S, J, xi)
 
-# TODO: function to get theta12 from theta1,theta2 and deltaphi
+# TODO: write function to get theta12 from theta1,theta2 and deltaphi
 
-
-def vectors_to_angles(S1vec, S2vec, Lvec):
+def vectors_to_angles(Lvec, S1vec, S2vec):
     """
     The sign comes from Eq 2d in the multitimescale paper
     """
@@ -3324,6 +3322,7 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
     """
     Convert the conserved quantities to angular momentum vectors in the frame
     aligned with the total angular momentum.
+    TODO: check multitimescale paper for definition of x and y axis
 
     Parameters
     ----------
@@ -3353,49 +3352,42 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
 
     """
 
-    S, J = toarray(S, J)
+    S, J, q = toarray(S, J, q)
     L = angularmomentum(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
-    #if q == 1:
-    #else:
     varphi = eval_varphi(S, J, r, xi, q, chi1, chi2)
     thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
 
-    Jx = 0.0
-    Jy = 0.0
-    Jz = J
-    Jvec = np.array([Jx, Jy, Jz])
+    # Jx = toarray(np.zeros(flen(J)))
+    # Jy = toarray(np.zeros(flen(J)))
+    # Jz = J
+    # Jvec = np.array([Jx, Jy, Jz]).T
+    # Svec = Jvec - Lvec
 
     Lx = L * np.sin(thetaL)
-    Ly = 0.0
+    Ly = toarray(np.zeros(flen(L)))
     Lz = L * np.cos(thetaL)
-    Lvec = np.array([Lx, Ly, Lz])
-
-    Svec = Jvec - Lvec
+    Lvec = np.array([Lx, Ly, Lz]).T
 
     A1 = (J**2 - (L-S)**2)**0.5
     A2 = ((L+S)**2 - J**2)**0.5
     A3 = (S**2 - (S1-S2)**2)**0.5
     A4 = ((S1+S2)**2 - S**2)**0.5
 
-    #Lx_new = A1 * A2 / (2*J)
-    #Ly_new = 0.0
-    #Lz_new = (J**2 + L**2 - S**2) / (2*J)
-    #Lvec_new = np.array([Lx_new, Ly_new, Lz_new])
-
     S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
     S1y = A3 * A4 * np.sin(varphi) / (2*S)
     S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S1vec = np.array([S1x, S1y, S1z])
+    S1vec = np.array([S1x, S1y, S1z]).T
 
     S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
     S2y = -A3*A4*np.sin(varphi) / (2*S)
     S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S2vec = np.array([S2x, S2y, S2z])
-
-    return toarray(Svec, S1vec, S2vec, Jvec, Lvec)
+    S2vec = np.array([S2x, S2y, S2z]).T
 
 
+    return toarray(Lvec, S1vec, S2vec)
+
+# TODO: Davide still need to check this
 def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
     """
@@ -3404,7 +3396,7 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
 
     return conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
 
-
+# TODO: Davide still need to check this
 def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
     """
@@ -3432,7 +3424,7 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
 
     return toarray(Svec, S1vec, S2vec, Jvec, Lvec)
 
-
+# TODO: Davide still need to check this
 def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
     """
     """
@@ -4347,10 +4339,12 @@ if __name__ == '__main__':
     S2vec = S2*S2h
     Lvec = L*Lh
 
-    S, J, xi = vectors_to_conserved(S1vec, S2vec, Lvec, q)
+    S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec, q)
     theta1,theta2,deltaphi = conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1)
-    print(theta1,theta2,deltaphi)
+    #print(theta1,theta2,deltaphi)
     #print(vectors_to_conserved([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec], [q,q+0.1]))
     #print(' ')
-    print(vectors_to_angles(S1vec, S2vec, Lvec))
-    print(vectors_to_angles([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec]))
+    #print(vectors_to_angles(S1vec, S2vec, Lvec))
+    #print(vectors_to_angles([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec]))
+    print(conserved_to_Jframe(S, J, r, xi, q, chi1, chi2))
+    print(conserved_to_Jframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
