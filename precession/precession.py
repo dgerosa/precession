@@ -3151,6 +3151,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
             if theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is not None:
                 kappa = eval_kappa(J, r[0], q)
 
+            # User provides kappa, xi, and maybe S.
             if theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
                 pass
 
@@ -3281,19 +3282,12 @@ def vectors_to_conserved(S1vec, S2vec, Lvec, q):
     """
     """
 
-    S1vec, S2vec, Lvec, q = toarray(S1vec, S2vec, Lvec, q)
-    vecs = [S1vec, S2vec, Lvec]
-    for i in range(len(vecs)):
-        if len(vecs[i].shape) == 1:
-            vecs[i] = np.array([vecs[i]])
-    S1vec, S2vec, Lvec = vecs
+    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
     S = np.linalg.norm(S1vec+S2vec, axis=-1)
     J = np.linalg.norm(S1vec+S2vec+Lvec, axis=-1)
     L = np.linalg.norm(Lvec, axis=-1)
     m1, m2 = masses(q)
-    #xi = np.einsum('ij, ij->i', S1vec/m1 + S2vec/m2, Lvec/L)
-    xi = np.array([np.dot(s0, l) for s0, l in zip(S1vec/m1+S2vec/m2, Lvec/L)])
-
+    xi = np.squeeze(np.diag(np.atleast_1d(np.inner(S1vec,Lvec)))/m1 + np.diag(np.atleast_1d(np.inner(S2vec,Lvec)))/m2)
     return toarray(S, J, xi)
 
 
@@ -3870,9 +3864,125 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
 
     if tracktime:
         t = np.squeeze(res[:,9])
+        #Can't use toarray here because t has different shape
         return Lh,S1h,S2h,t
     else:
-        return Lh,S1h,S2h
+        return toarray(Lh,S1h,S2h)
+
+
+# TODO: one might want to specify Lvec S1vec and S2vec NOT normalized. Mhhh. I'd say this is too complicated.
+def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,tracktime=False,quadrupole_formula=False):
+    '''
+    TODO: docstrings. Orbit average evolution; this is the function the user should call (I think)
+    '''
+
+    def _compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2):
+
+        if q is None:
+            raise TypeError("Please provide q.")
+        if chi1 is None:
+            raise TypeError("Please provide chi1.")
+        if chi2 is None:
+            raise TypeError("Please provide chi2.")
+
+        if r is not None and u is None:
+            r=toarray(r)
+            u = eval_u(r, np.repeat(q,flen(r)) )
+        elif r is None and u is not None:
+            u=toarray(u)
+            r = eval_r(u, np.repeat(q,flen(u)) )
+        else:
+            raise TypeError("Please provide either r or u.")
+
+
+        # User provides Lh0, S1h0, and S2h0
+        if Lh is not None and S1h is not None and S2h is not None and theta1 is None and theta2 is None and deltaphi is None and S is None and J is None and kappa is None and xi is None:
+            pass
+
+        # User provides theta1,theta2, and deltaphi.
+        if Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
+            #TODO: I stopped here. need to review/understand the frames first
+            pass
+
+        # User provides J, xi, and maybe S.
+        if Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is not None:
+            #TODO: need to review/understand the frames first
+            pass
+
+        # User provides kappa, xi, and maybe S.
+        if Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
+            #TODO: need to review/understand the frames first
+            pass
+
+        else:
+            TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
+
+        # Integration
+
+        orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_formula=False)
+
+        kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
+
+        # Select finite separations
+        rok = r[u!=0]
+        kappaok = kappa[u!=0]
+
+        # Resample S and assign random sign to deltaphi
+        J = eval_J(kappa=kappaok,r=rok,q=np.repeat(q,flen(rok)))
+        S = Ssampling(J, rok, np.repeat(xi,flen(rok)), np.repeat(q,flen(rok)),
+        np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)), N=1)
+        theta1,theta2,deltaphi = conserved_to_angles(S, J, rok, xi, np.repeat(q,flen(rok)), np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)))
+        deltaphi = deltaphi * np.random.choice([-1,1],flen(deltaphi))
+
+        # Integrating from infinite separation.
+        if u[0]==0:
+            J = np.concatenate(([np.inf],J))
+            S = np.concatenate(([np.nan],S))
+            theta1 = np.concatenate(([theta1inf],theta1))
+            theta2 = np.concatenate(([theta2inf],theta2))
+            deltaphi = np.concatenate(([np.nan],deltaphi))
+        # Integrating backwards to infinity
+        elif u[-1]==0:
+            J = np.concatenate((J,[np.inf]))
+            S = np.concatenate((S,[np.nan]))
+            theta1inf,theta2inf = asymptotic_to_angles(kappa[-1],xi,q,chi1,chi2)
+            theta1 = np.concatenate((theta1,[theta1inf]))
+            theta2 = np.concatenate((theta2,[theta2inf]))
+            deltaphi = np.concatenate((deltaphi,[np.nan]))
+        else:
+            pass
+
+        return np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
+
+    #This array has to match the outputs of _compute (in the right order!)
+    alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
+
+    # allresults is an array of dtype=object because different variables have different shapes
+    if flen(q)==1:
+        allresults =_compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2)
+    else:
+        inputs = np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
+        for k,v in enumerate(inputs):
+            if v==None:
+                inputs[k] = itertools.repeat(None) #TODO: this could be np.repeat(None,flen(q)) if you need to get rid of the itertools dependence
+
+        theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2= inputs
+        allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2))).T
+
+    # Handle the outputs.
+    # Return all
+    if outputs is None:
+        outputs = alloutputs
+    # Return only those requested (in1d return boolean array)
+    wantoutputs = np.in1d(alloutputs,outputs)
+
+    # Store into a dictionary
+    outcome={}
+    for k,v in zip(alloutputs[wantoutputs],allresults[wantoutputs]):
+        # np.stack fixed shapes and object types
+        outcome[k]=np.stack(np.atleast_1d(v))
+
+    return outcome
 
 
 
@@ -4060,23 +4170,23 @@ if __name__ == '__main__':
     #
     # print(J,S)
 
-    xi=-0.5
-    q=0.4
-    chi1=0.9
-    chi2=0.8
-    r=np.logspace(2,1,5)
-    Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    #print(Lh0,S1h0,S2h0)
-    t0=time.time()
-    Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False)
-    print(Lh)
-
-    Lh,S1h,S2h,t = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)
-
-    print(t)
-
-    print(time.time()-t0)
-    #print(Lh)
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    # r=np.logspace(2,1,5)
+    # Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    # #print(Lh0,S1h0,S2h0)
+    # t0=time.time()
+    # Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False)
+    # print(Lh)
+    #
+    # Lh,S1h,S2h,t = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)
+    #
+    # print(t)
+    #
+    # print(time.time()-t0)
+    # #print(Lh)
 
 
 
@@ -4222,3 +4332,18 @@ if __name__ == '__main__':
     #plt.axhline(Smin)
     #plt.axhline(Smax)
     #plt.show()
+
+
+    chi1=0.9
+    chi2=0.8
+    q=0.8
+    Lh,S1h,S2h = sample_unitsphere(3)
+    S1,S2= spinmags(q,chi1,chi2)
+    r=10
+    L = angularmomentum(r,q)
+    S1vec = S1*S1h
+    S2vec = S2*S2h
+    Lvec = L*Lh
+
+    print(vectors_to_conserved(S1vec, S2vec, Lvec, q))
+    print(vectors_to_conserved([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec], [q,q]))
