@@ -3908,7 +3908,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
             S2h = normalize_nested(S2vec)
 
         # User provides kappa, xi, and maybe S.
-        if Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is None and J is None and kappa is not None and xi is not None:
+        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is None and J is None and kappa is not None and xi is not None:
             J = eval_J(kappa=kappa,r=r,q=q)
             Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
             Lh = normalize_nested(Lvec)
