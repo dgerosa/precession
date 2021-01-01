@@ -59,6 +59,9 @@ def wraproots(coefficientfunction, *args,**kwargs):
 
     return sols
 
+def nones():
+    return intertool.repeat(None)
+
 
 #### Definitions ####
 
@@ -3765,111 +3768,126 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
         return Lh,S1h,S2h
 
 
-#TODO: array
 def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,outputs=None):
-
-
     '''
     TODO: docstrings. Precession average evolution; this is the function the user should call (I think)
     '''
 
-    if q is None:
-        raise TypeError("Please provide q.")
-    if chi1 is None:
-        raise TypeError("Please provide chi1.")
-    if chi2 is None:
-        raise TypeError("Please provide chi2.")
+    def _compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2):
 
-    if r is not None and u is None:
-        r=toarray(r)
-        u = eval_u(r, np.repeat(q,flen(r)) )
-    elif r is None and u is not None:
-        u=toarray(u)
-        r = eval_r(u, np.repeat(q,flen(u)) )
-    else:
-        raise TypeError("Please provide either r or u. Use np.inf for infinity.")
+        if q is None:
+            raise TypeError("Please provide q.")
+        if chi1 is None:
+            raise TypeError("Please provide chi1.")
+        if chi2 is None:
+            raise TypeError("Please provide chi2.")
 
-    assert np.sum(u==0)<=1 and np.sum(u[1:-1]==0)==0, "There can only be one r=np.inf location, either at the beginning or at the end."
-
-
-    # Start from r=infinity
-    if u[0]==0:
-
-        if theta1 is not None and theta2 is not None and S is None and J is None and kappa is None and xi is None:
-            kappa, xi = angles_to_asymptotic(theta1,theta2,q,chi1,chi2)
-            theta1inf, theta2inf = theta1, theta2
-
-        elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
-            theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
-
+        if r is not None and u is None:
+            r=toarray(r)
+            u = eval_u(r, np.repeat(q,flen(r)) )
+        elif r is None and u is not None:
+            u=toarray(u)
+            r = eval_r(u, np.repeat(q,flen(u)) )
         else:
-            raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,xi).")
+            raise TypeError("Please provide either r or u. Use np.inf for infinity.")
+
+        assert np.sum(u==0)<=1 and np.sum(u[1:-1]==0)==0, "There can only be one r=np.inf location, either at the beginning or at the end."
 
 
-    # Start from finite separations
-    else:
+        # Start from r=infinity
+        if u[0]==0:
 
-        # User provides theta1,theta2, and deltaphi.
-        if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
-            S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
-            kappa = eval_kappa(J, r[0], q)
+            if theta1 is not None and theta2 is not None and S is None and J is None and kappa is None and xi is None:
+                kappa, xi = angles_to_asymptotic(theta1,theta2,q,chi1,chi2)
+                theta1inf, theta2inf = theta1, theta2
 
-        # User provides J, xi, and maybe S.
-        if theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is not None:
-            kappa = eval_kappa(J, r[0], q)
+            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
+                theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
 
-        if theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
+            else:
+                raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,xi).")
+
+
+        # Start from finite separations
+        else:
+
+            # User provides theta1,theta2, and deltaphi.
+            if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
+                S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
+                kappa = eval_kappa(J, r[0], q)
+
+            # User provides J, xi, and maybe S.
+            if theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is not None:
+                kappa = eval_kappa(J, r[0], q)
+
+            if theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
+                pass
+
+            else:
+                TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
+
+        # Integration
+        kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
+
+        # Select finite separations
+        rok = r[u!=0]
+        kappaok = kappa[u!=0]
+
+        # Resample S and assign random sign to deltaphi
+        J = eval_J(kappa=kappaok,r=rok,q=np.repeat(q,flen(rok)))
+        S = Ssampling(J, rok, np.repeat(xi,flen(rok)), np.repeat(q,flen(rok)),
+        np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)), N=1)
+        theta1,theta2,deltaphi = conserved_to_angles(S, J, rok, xi, np.repeat(q,flen(rok)), np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)))
+        deltaphi = deltaphi * np.random.choice([-1,1],flen(deltaphi))
+
+        # Integrating from infinite separation.
+        if u[0]==0:
+            J = np.concatenate(([np.inf],J))
+            S = np.concatenate(([np.nan],S))
+            theta1 = np.concatenate(([theta1inf],theta1))
+            theta2 = np.concatenate(([theta2inf],theta2))
+            deltaphi = np.concatenate(([np.nan],deltaphi))
+        # Integrating backwards to infinity
+        elif u[-1]==0:
+            J = np.concatenate((J,[np.inf]))
+            S = np.concatenate((S,[np.nan]))
+            theta1inf,theta2inf = asymptotic_to_angles(kappa[-1],xi,q,chi1,chi2)
+            theta1 = np.concatenate((theta1,[theta1inf]))
+            theta2 = np.concatenate((theta2,[theta2inf]))
+            deltaphi = np.concatenate((deltaphi,[np.nan]))
+        else:
             pass
 
-        else:
-            TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
+        return np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
 
-    # Integration
-    kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
+    #This array has to match the outputs of _compute (in the right order!)
+    alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
 
-    # Select finite separations
-    rok = r[u!=0]
-    kappaok = kappa[u!=0]
-
-    # Resample S and assign random sign to deltaphi
-    J = eval_J(kappa=kappaok,r=rok,q=np.repeat(q,flen(rok)))
-    S = Ssampling(J, rok, np.repeat(xi,flen(rok)), np.repeat(q,flen(rok)),
-    np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)), N=1)
-    theta1,theta2,deltaphi = conserved_to_angles(S, J, rok, xi, np.repeat(q,flen(rok)), np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)))
-    deltaphi = deltaphi * np.random.choice([-1,1],flen(deltaphi))
-
-    # Integrating from infinite separation.
-    if u[0]==0:
-        J = np.concatenate(([np.inf],J))
-        S = np.concatenate(([np.nan],S))
-        theta1 = np.concatenate(([theta1inf],theta1))
-        theta2 = np.concatenate(([theta2inf],theta2))
-        deltaphi = np.concatenate(([np.nan],deltaphi))
-    # Integrating backwards to infinity
-    elif u[-1]==0:
-        J = np.concatenate((J,[np.inf]))
-        S = np.concatenate((S,[np.nan]))
-        theta1inf,theta2inf = asymptotic_to_angles(kappa[-1],xi,q,chi1,chi2)
-        theta1 = np.concatenate((theta1,[theta1inf]))
-        theta2 = np.concatenate((theta2,[theta2inf]))
-        deltaphi = np.concatenate((deltaphi,[np.nan]))
+    # allresults is an array of dtype=object because different variables have different shapes
+    if flen(q)==1:
+        allresults =_compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2)
     else:
-        pass
+        inputs = np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
+        for k,v in enumerate(inputs):
+            if v==None:
+                inputs[k] = np.repeat(None,flen(q))
+        theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2= inputs
+        allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2))).T
 
-    #TODO: the vectorization should go here, before the output handling
-
-    # Handle the outputs
+    # Handle the outputs.
+    # Return all
     if outputs is None:
-        outcome = {}
-        for x in ['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2']:
-            outcome[x]=locals()[x]
-        return outcome
+        outputs = alloutputs
+    # Return only those requested (in1d return boolean array)
+    wantoutputs = np.in1d(alloutputs,outputs)
 
-    else:
-        outcome=[]
-        for x in outputs:
-            outcome.append(locals()[x])
-        return outcome
+    # Store into a dictionary
+    outcome={}
+    for k,v in zip(alloutputs[wantoutputs],allresults[wantoutputs]):
+        # np.stack fixed shapes and object types
+        outcome[k]=np.stack(np.atleast_1d(v))
+
+    return outcome
 
 
 # TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
@@ -3953,24 +3971,31 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ###### INSPIRAL TESTING: precav, to/from finite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # xi = 0.9141896967861489
-    # kappa = 0.5784355256550922
-    # r=np.logspace(2,1,6)
-    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa = 0.5784355256550922
+    r=np.logspace(2,1,6)
+    d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+    print(d)
+    print('')
+
+    d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],outputs=['J'])
+
+    #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['r','theta1'])
+
     #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
     #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
     #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
     #d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
 
-    #print(d)
+    print(d)
 
     ###### INSPIRAL TESTING: precav, from infinite #######
     # q=0.5
@@ -4010,20 +4035,20 @@ if __name__ == '__main__':
     # print(d)
     #
 
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    deltaphi=0.46
-    S = 0.5538768649231461
-    J = 2.740273008918153
-    xi = 0.9141896967861489
-    kappa0 = 0.5784355256550922
-    r=np.logspace(2,1,6)
-    u=eval_u(r,q)
-    print(kappaofu(kappa0, u, xi, q, chi1, chi2))
-    print(kappaofu([kappa0,kappa0], [u,u], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # deltaphi=0.46
+    # S = 0.5538768649231461
+    # J = 2.740273008918153
+    # xi = 0.9141896967861489
+    # kappa0 = 0.5784355256550922
+    # r=np.logspace(2,1,6)
+    # u=eval_u(r,q)
+    # print(kappaofu(kappa0, u, xi, q, chi1, chi2))
+    # print(kappaofu([kappa0,kappa0], [u,u], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
 
 
 
