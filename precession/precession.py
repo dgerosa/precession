@@ -3384,45 +3384,44 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
     S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
     S2vec = np.array([S2x, S2y, S2z]).T
 
-
     return toarray(Lvec, S1vec, S2vec)
 
-# TODO: Davide still need to check this
 def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
+    TODO: write docstrings
     """
 
     S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
 
     return conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
 
-# TODO: Davide still need to check this
+
 def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
+    TODO: write docstrings
     """
 
     L = angularmomentum(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
 
-    Lx = 0.0
-    Ly = 0.0
+    Lx = toarray(np.zeros(flen(L)))
+    Ly = toarray(np.zeros(flen(L)))
     Lz = L
-    Lvec = np.array([Lx, Ly, Lz])
+    Lvec = np.array([Lx, Ly, Lz]).T
 
-    S1x = np.sin(theta1)
-    S1y = 0.0
-    S1z = np.cos(theta1)
-    S1vec = np.array([S1x, S1y, S1z]) * S1
+    S1x = S1 * np.sin(theta1)
+    S1y = toarray(np.zeros(flen(S1)))
+    S1z = S1 * np.cos(theta1)
+    S1vec = np.array([S1x, S1y, S1z]).T
 
-    S2x = np.sin(theta2) * np.cos(deltaphi)
-    S2y = np.sin(theta2) * np.sin(deltaphi)
-    S2z = np.cos(theta2)
-    S2vec = np.array([S2x, S2y, S2z]) * S2
+    S2x = S2 * np.sin(theta2) * np.cos(deltaphi)
+    S2y = S2 * np.sin(theta2) * np.sin(deltaphi)
+    S2z = S2 * np.cos(theta2)
+    S2vec = np.array([S2x, S2y, S2z]).T
 
-    Svec = S1vec + S2vec
-    Jvec = Lvec + Svec
-
-    return toarray(Svec, S1vec, S2vec, Jvec, Lvec)
+    # Svec = S1vec + S2vec
+    # Jvec = Lvec + Svec
+    return toarray(Lvec, S1vec, S2vec)
 
 # TODO: Davide still need to check this
 def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
@@ -4346,5 +4345,11 @@ if __name__ == '__main__':
     #print(' ')
     #print(vectors_to_angles(S1vec, S2vec, Lvec))
     #print(vectors_to_angles([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec]))
-    print(conserved_to_Jframe(S, J, r, xi, q, chi1, chi2))
-    print(conserved_to_Jframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
+    # print(conserved_to_Jframe(S, J, r, xi, q, chi1, chi2))
+    # print(conserved_to_Jframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
+    #
+    # print(angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
+    print(angles_to_Jframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
+
+    #print(angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
+    print(angles_to_Lframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
