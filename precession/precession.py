@@ -3423,9 +3423,9 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     # Jvec = Lvec + Svec
     return toarray(Lvec, S1vec, S2vec)
 
-# TODO: Davide still need to check this
 def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
     """
+    TODO: write docstrings
     """
 
     theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
@@ -4349,7 +4349,9 @@ if __name__ == '__main__':
     # print(conserved_to_Jframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
     #
     # print(angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
-    print(angles_to_Jframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
+    #print(angles_to_Jframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
 
     #print(angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
     print(angles_to_Lframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
+
+    print(conserved_to_Lframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
