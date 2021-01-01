@@ -3931,22 +3931,22 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
         S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec)
         kappa = eval_kappa(J, r, q)
 
-        return np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
+        return np.array([theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2])
 
     #This array has to match the outputs of _compute (in the right order!)
-    alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
+    alloutputs = np.array(['theta1','theta2','deltaphi','S','Lh','S1h','S2h','J','kappa','r','u','xi','q','chi1','chi2'])
 
     # allresults is an array of dtype=object because different variables have different shapes
     if flen(q)==1:
-        allresults =_compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2)
+        allresults =_compute(theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2)
     else:
-        inputs = np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
+        inputs = np.array([theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2])
         for k,v in enumerate(inputs):
             if v==None:
                 inputs[k] = itertools.repeat(None) #TODO: this could be np.repeat(None,flen(q)) if you need to get rid of the itertools dependence
 
-        theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2= inputs
-        allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2))).T
+        theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2= inputs
+        allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2))).T
 
     # Handle the outputs.
     # Return all
