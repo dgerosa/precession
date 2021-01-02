@@ -3465,8 +3465,9 @@ def r_updown(q, chi1, chi2):
     return toarray(r_plus, r_minus)
 
 
-def omega2_aligned(r, q, chi1, chi2, alpha1, alpha2):
+def omega2_aligned(r, q, chi1, chi2, which):
     """
+    TODO: fix docstrings, new which paramters, alphas removed
     Squared oscillation frequency of a given perturbed aligned-spin binary.
 
     Parameters
@@ -3495,6 +3496,21 @@ def omega2_aligned(r, q, chi1, chi2, alpha1, alpha2):
         Squared oscillation frequency of the given aligned binary.
     """
 
+    uulabels=np.array(['uu','up-up','upup','++'])
+    udlabels=np.array(['ud','up-down','updown','+-'])
+    dulabels=np.array(['du','down-up','downup','-+'])
+    ddlabels=np.array(['dd','down-down','downdown','--'])
+
+    assert np.isin(which,np.concatenate([uulabels,udlabels,dulabels,ddlabels])).all(), "Set flag which to uu, ud, du, or dd."
+
+    #+1 if primary is co-aligned, -1 if primary is counter-aligned
+    alpha1 = np.where(np.isin(which,np.concatenate([uulabels,udlabels])), 1,-1)
+    #+1 if secondary is co-aligned, -1 if secondary is counter-aligned
+    alpha2 = np.where(np.isin(which,np.concatenate([uulabels,dulabels])), 1,-1)
+
+    print(alpha1,alpha2)
+
+    q = toarray(q)
     L = angularmomentum(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
     # Slightly rewritten from Eq. 18 in arXiv:2003.02281 to regularized for q=1
@@ -3502,122 +3518,6 @@ def omega2_aligned(r, q, chi1, chi2, alpha1, alpha2):
     b = L**2*(1-q)**2 - 2*L*(q*alpha1*S1-alpha2*S2)*(1-q) + (q*alpha1*S1+alpha2*S2)**2
     c = (L - (q*alpha1*S1+alpha2*S2)/(1+q))**2
     omega2 = a*b*c
-
-    return omega2
-
-
-def omega2_upup(r, q, chi1, chi2):
-    """
-    Squared oscillation frequency of a perturbed up-up binary.
-
-    Parameters
-    ----------
-    r: float
-        Orbital separation.
-
-    q: float
-        Mass ratio m2/m1, 0 <= q <= 1.
-
-    chi1: float
-        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
-
-    chi2: float
-        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-
-    Returns
-    -------
-    omega2: float
-        Squared oscillation frequency of the up-up binary, omega2 > 0 (for r > M).
-    """
-
-    omega2 = omega2_aligned(r, q, chi1, chi2, 1, 1)
-
-    return omega2
-
-
-def omega2_downdown(r, q, chi1, chi2):
-    """
-    Squared oscillation frequency of a perturbed down-down binary.
-
-    Parameters
-    ----------
-    r: float
-        Orbital separation.
-
-    q: float
-        Mass ratio m2/m1, 0 <= q <= 1.
-
-    chi1: float
-        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
-
-    chi2: float
-        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-
-    Returns
-    -------
-    omega2: float
-        Squared oscillation frequency of the down-down binary, omega2 > 0 (for r > M).
-    """
-
-    omega2 = omega2_aligned(r, q, chi1, chi2, -1, -1)
-
-    return omega2
-
-
-def omega2_downup(r, q, chi1, chi2):
-    """
-    Squared oscillation frequency of a perturbed down-up binary.
-
-    Parameters
-    ----------
-    r: float
-        Orbital separation.
-
-    q: float
-        Mass ratio m2/m1, 0 <= q <= 1.
-
-    chi1: float
-        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
-
-    chi2: float
-        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-
-    Returns
-    -------
-    omega2: float
-        Squared oscillation frequency of the down-up binary, omega2 > 0 (for r > M).
-    """
-
-    omega2 = omega2_aligned(r, q, chi1, chi2, -1, 1)
-
-    return omega2
-
-
-def omega2_updown(r, q, chi1, chi2):
-    """
-    Squared oscillation frequency of a perturbed up-down binary.
-
-    Parameters
-    ----------
-    r: float
-        Orbital separation.
-
-    q: float
-        Mass ratio m2/m1, 0 <= q <= 1.
-
-    chi1: float
-        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
-
-    chi2: float
-        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-
-    Returns
-    -------
-    omega2: float
-        Squared oscillation frequency of the up-down binary, omega2 < 0 when r_ud+ > r > r_ud-.
-    """
-
-    omega2 = omega2_aligned(r, q, chi1, chi2, 1, -1)
 
     return omega2
 
@@ -3652,9 +3552,7 @@ def r_wide(q, chi1, chi2):
     r_wide = ((q*chi2 - chi1) / (1-q))**2
 
     return r_wide
-
-
-
+    
 
 #### Orbit averaged things ####
 
@@ -4365,3 +4263,10 @@ if __name__ == '__main__':
     # print(angles_to_Lframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
     #
     # print(conserved_to_Lframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
+
+    r=10
+    q=0.5
+    chi1=2
+    chi2=2
+    which='uu'
+    print(omega2_aligned([r,r], [q,q], [chi1,chi1], [chi2,chi2], 'dd'))
