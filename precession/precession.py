@@ -3198,7 +3198,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
         else:
             pass
 
-        return np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
+        return toarray(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2)
 
     #This array has to match the outputs of _compute (in the right order!)
     alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
@@ -3863,13 +3863,12 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
         return toarray(Lh,S1h,S2h)
 
 
-# TODO: one might want to specify Lvec S1vec and S2vec NOT normalized. Mhhh. I'd say this is too complicated.
-def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,tracktime=False,quadrupole_formula=False):
+def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,tracktime=False,quadrupole_formula=False,outputs=None):
     '''
     TODO: docstrings. Orbit average evolution; this is the function the user should call (I think)
     '''
 
-    def _compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2):
+    def _compute(theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2):
 
         if q is None:
             raise TypeError("Please provide q.")
@@ -3893,45 +3892,40 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
             pass
 
         # User provides theta1,theta2, and deltaphi.
-        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
-            Lvec, S1vec, S2vec = angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
-            Lh = normalize_nested(Lvec)
-            S1h = normalize_nested(S1vec)
-            S2h = normalize_nested(S2vec)
+        elif Lh is None and S1h is None and S2h is None and theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
+            Lh, S1h, S2h = angles_to_Jframe(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
 
         # User provides J, xi, and S.
-        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is None and J is not None and kappa is None and xi is not None:
-            #TODO: need to review/understand the frames first
-            Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
-            Lh = normalize_nested(Lvec)
-            S1h = normalize_nested(S1vec)
-            S2h = normalize_nested(S2vec)
+        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is not None and kappa is None and xi is not None:
+            Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
 
         # User provides kappa, xi, and maybe S.
-        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is None and J is None and kappa is not None and xi is not None:
-            J = eval_J(kappa=kappa,r=r,q=q)
-            Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
-            Lh = normalize_nested(Lvec)
-            S1h = normalize_nested(S1vec)
-            S2h = normalize_nested(S2vec)
+        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is None and kappa is not None and xi is not None:
+            J = eval_J(kappa=kappa,r=r[0],q=q)
+            Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
 
         else:
             TypeError("Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (S,J,xi), (S,kappa,xi).")
 
+        # Make sure vectors are normalized
+        Lh = normalize_nested(Lh)
+        S1h = normalize_nested(S1h)
+        S2h = normalize_nested(S2h)
+
         # Integration
-        Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=tracktime,quadrupole_formula=tracktime)
+        Lh,S1h,S2h = orbav_integrator(Lh,S1h,S2h,r,q,chi1,chi2,tracktime=tracktime,quadrupole_formula=tracktime)
 
         S1,S2= spinmags(q,chi1,chi2)
         L = angularmomentum(r,np.repeat(q,flen(r)))
-        Lvec= L*Lh
+        Lvec= (L*Lh.T).T
         S1vec= S1*S1h
         S2vec= S2*S2h
 
         theta1, theta2, deltaphi = vectors_to_angles(Lvec, S1vec, S2vec)
-        S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec)
+        S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec, q)
         kappa = eval_kappa(J, r, q)
 
-        return np.array([theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2])
+        return toarray(theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2)
 
     #This array has to match the outputs of _compute (in the right order!)
     alloutputs = np.array(['theta1','theta2','deltaphi','S','Lh','S1h','S2h','J','kappa','r','u','xi','q','chi1','chi2'])
@@ -4059,19 +4053,19 @@ if __name__ == '__main__':
     # xi = 0.9141896967861489
     # kappa = 0.5784355256550922
     # r=np.logspace(2,1,6)
-    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-    # print(d)
-    # print('')
+    # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+    # #print(d)
+    # #print('')
     #
-    # d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],outputs=['J'])
+    # d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #
-    # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['r','theta1'])
-    #
-    # #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #
+    # # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['r','theta1'])
+    # #
+    # # #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # # #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # # #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # # #d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # #
     # print(d)
 
     ###### INSPIRAL TESTING: precav, from infinite #######
@@ -4167,13 +4161,43 @@ if __name__ == '__main__':
     # print(time.time()-t0)
     # #print(Lh)
 
+    #### ORBAV TESTING ####
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    # r=np.logspace(2,1,5)
+    # Lh,S1h,S2h = sample_unitsphere(3)
+    #
+    # d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2)
+    # print(d)
+    # print(" ")
+    #
+    # theta1,theta2,deltaphi = vectors_to_angles(Lh,S1h,S2h)
+    # d= inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
+    # print(d)
+    # print(" ")
+    #
+    # S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2)
+    # d= inspiral_orbav(S=S,J=J,xi=xi,r=r,q=q,chi1=chi1,chi2=chi2)
+    # print(d)
+    # print(" ")
+    #
+    #
+    # kappa=eval_kappa(J,r[0],q)
+    # d= inspiral_orbav(S=S,kappa=kappa,xi=xi,r=r,q=q,chi1=chi1,chi2=chi2)
+    # print(d)
+    # print(" ")
+    #
+    # d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2)
+    # print(d)
+    # print(" ")
+    #
+    #
+    # d= inspiral_orbav(Lh=[Lh,Lh],S1h=[S1h,S1h],S2h=[S2h,S2h],r=[r,r],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2])
+    # print(d)
+    # print(" ")
 
-
-
-    #print("L",repr(Lh.T))
-    #print("S1",repr(S1h.T))
-    #print("S2",repr(S2h.T))
-    #print("t",repr(t))
 
     # J=6.1
     # print("LS",Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
@@ -4312,32 +4336,32 @@ if __name__ == '__main__':
     #plt.axhline(Smax)
     #plt.show()
 
-
-    chi1=0.9
-    chi2=0.8
-    q=0.8
-    Lh,S1h,S2h = sample_unitsphere(3)
-    S1,S2= spinmags(q,chi1,chi2)
-    r=10
-    L = angularmomentum(r,q)
-    S1vec = S1*S1h
-    S2vec = S2*S2h
-    Lvec = L*Lh
-
-    S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec, q)
-    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1)
-    #print(theta1,theta2,deltaphi)
-    #print(vectors_to_conserved([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec], [q,q+0.1]))
-    #print(' ')
-    #print(vectors_to_angles(S1vec, S2vec, Lvec))
-    #print(vectors_to_angles([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec]))
-    # print(conserved_to_Jframe(S, J, r, xi, q, chi1, chi2))
-    # print(conserved_to_Jframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
     #
-    # print(angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
-    #print(angles_to_Jframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
-
-    #print(angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
-    print(angles_to_Lframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
-
-    print(conserved_to_Lframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
+    # chi1=0.9
+    # chi2=0.8
+    # q=0.8
+    # Lh,S1h,S2h = sample_unitsphere(3)
+    # S1,S2= spinmags(q,chi1,chi2)
+    # r=10
+    # L = angularmomentum(r,q)
+    # S1vec = S1*S1h
+    # S2vec = S2*S2h
+    # Lvec = L*Lh
+    #
+    # S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec, q)
+    # theta1,theta2,deltaphi = conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1)
+    # #print(theta1,theta2,deltaphi)
+    # #print(vectors_to_conserved([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec], [q,q+0.1]))
+    # #print(' ')
+    # #print(vectors_to_angles(S1vec, S2vec, Lvec))
+    # #print(vectors_to_angles([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec]))
+    # # print(conserved_to_Jframe(S, J, r, xi, q, chi1, chi2))
+    # # print(conserved_to_Jframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
+    # #
+    # # print(angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
+    # #print(angles_to_Jframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
+    #
+    # #print(angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
+    # print(angles_to_Lframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
+    #
+    # print(conserved_to_Lframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
