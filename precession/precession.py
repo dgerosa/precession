@@ -3496,19 +3496,18 @@ def omega2_aligned(r, q, chi1, chi2, which):
         Squared oscillation frequency of the given aligned binary.
     """
 
+    # These are all the valid input flags
     uulabels=np.array(['uu','up-up','upup','++'])
     udlabels=np.array(['ud','up-down','updown','+-'])
     dulabels=np.array(['du','down-up','downup','-+'])
     ddlabels=np.array(['dd','down-down','downdown','--'])
 
-    assert np.isin(which,np.concatenate([uulabels,udlabels,dulabels,ddlabels])).all(), "Set flag which to uu, ud, du, or dd."
+    assert np.isin(which,np.concatenate([uulabels,udlabels,dulabels,ddlabels])).all(), "Set `which` flag to either uu, ud, du, or dd."
 
     #+1 if primary is co-aligned, -1 if primary is counter-aligned
     alpha1 = np.where(np.isin(which,np.concatenate([uulabels,udlabels])), 1,-1)
     #+1 if secondary is co-aligned, -1 if secondary is counter-aligned
     alpha2 = np.where(np.isin(which,np.concatenate([uulabels,dulabels])), 1,-1)
-
-    print(alpha1,alpha2)
 
     q = toarray(q)
     L = angularmomentum(r, q)
@@ -3552,7 +3551,7 @@ def r_wide(q, chi1, chi2):
     r_wide = ((q*chi2 - chi1) / (1-q))**2
 
     return r_wide
-    
+
 
 #### Orbit averaged things ####
 
