@@ -3714,7 +3714,6 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
     - `t_fvals`: (optional) time as a function of the separation.
     '''
 
-
     def _compute(Lh0,S1h0,S2h0,r,q,chi1,chi2,quadrupole_formula):
 
         # I need unit vectors
@@ -3765,6 +3764,13 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     TODO: docstrings. Orbit average evolution; this is the function the user should call (I think)
     '''
 
+    # Overwrite the tracktime flag if the user explicitely asked for the time output
+    try:
+        if 't' in outputs:
+            tracktime=True
+    except:
+        pass
+
     def _compute(theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2):
 
         if q is None:
@@ -3810,7 +3816,12 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
         S2h = normalize_nested(S2h)
 
         # Integration
-        Lh,S1h,S2h = orbav_integrator(Lh,S1h,S2h,r,q,chi1,chi2,tracktime=tracktime,quadrupole_formula=tracktime)
+        outcome = orbav_integrator(Lh,S1h,S2h,r,q,chi1,chi2,tracktime=tracktime,quadrupole_formula=quadrupole_formula)
+        Lh,S1h,S2h = outcome[0:3]
+        if tracktime:
+            t=outcome[3]
+        else:
+            t=None
 
         S1,S2= spinmags(q,chi1,chi2)
         L = angularmomentum(r,np.repeat(q,flen(r)))
@@ -3822,10 +3833,10 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
         S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec, q)
         kappa = eval_kappa(J, r, q)
 
-        return toarray(theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2)
+        return toarray(t,theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2)
 
     #This array has to match the outputs of _compute (in the right order!)
-    alloutputs = np.array(['theta1','theta2','deltaphi','S','Lh','S1h','S2h','J','kappa','r','u','xi','q','chi1','chi2'])
+    alloutputs = np.array(['t','theta1','theta2','deltaphi','S','Lh','S1h','S2h','J','kappa','r','u','xi','q','chi1','chi2'])
 
     # allresults is an array of dtype=object because different variables have different shapes
     if flen(q)==1:
@@ -3849,6 +3860,8 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     # Store into a dictionary
     outcome={}
     for k,v in zip(alloutputs[wantoutputs],allresults[wantoutputs]):
+        if not tracktime and k=='t':
+            continue
         # np.stack fixed shapes and object types
         outcome[k]=np.stack(np.atleast_1d(v))
 
@@ -4058,17 +4071,17 @@ if __name__ == '__main__':
     # print(time.time()-t0)
     # #print(Lh)
 
-    #### ORBAV TESTING ####
-    # xi=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    # r=np.logspace(2,1,5)
-    # Lh,S1h,S2h = sample_unitsphere(3)
-    #
-    # d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2)
-    # print(d)
-    # print(" ")
+    ### ORBAV TESTING ####
+    xi=-0.5
+    q=0.4
+    chi1=0.9
+    chi2=0.8
+    r=np.logspace(2,1,5)
+    Lh,S1h,S2h = sample_unitsphere(3)
+
+    d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2,tracktime=True)
+    print(d)
+    print(" ")
     #
     # theta1,theta2,deltaphi = vectors_to_angles(Lh,S1h,S2h)
     # d= inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
@@ -4091,9 +4104,9 @@ if __name__ == '__main__':
     # print(" ")
     #
     #
-    # d= inspiral_orbav(Lh=[Lh,Lh],S1h=[S1h,S1h],S2h=[S2h,S2h],r=[r,r],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2])
-    # print(d)
-    # print(" ")
+    d= inspiral_orbav(Lh=[Lh,Lh],S1h=[S1h,S1h],S2h=[S2h,S2h],r=[r,r],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],tracktime=True)
+    print(d)
+    print(" ")
 
 
     # J=6.1
@@ -4263,9 +4276,9 @@ if __name__ == '__main__':
     #
     # print(conserved_to_Lframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
 
-    r=10
-    q=0.5
-    chi1=2
-    chi2=2
-    which='uu'
-    print(omega2_aligned([r,r], [q,q], [chi1,chi1], [chi2,chi2], 'dd'))
+    # r=10
+    # q=0.5
+    # chi1=2
+    # chi2=2
+    # which='uu'
+    # print(omega2_aligned([r,r], [q,q], [chi1,chi1], [chi2,chi2], 'dd'))
