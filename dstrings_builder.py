@@ -10,6 +10,8 @@ For each function docstrings, the developer needs to provide the intro blurb and
 
 
 import sys
+import precession
+import pyperclip
 
 fun = sys.argv[1]
 
@@ -25,6 +27,8 @@ def descr(varname,vardef=None):
     lookup['chi2']=["float","Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1"]
     lookup['r']=["float","Binary separation"]
     lookup['L']=["float","Magnitude of the Newtonian orbital angular momentum"]
+    lookup['S1']=["float","Magnitude of the primary spin"]
+    lookup['S2']=["float","Magnitude of the secondary spin"]
     lookup['xi']=["float","Effective spin"]
     lookup['J']=["float","Magnitude of the total angular momentum"]
     lookup['S']=["float","Magnitude of the total spin"]
@@ -34,7 +38,15 @@ def descr(varname,vardef=None):
     lookup['sign']=["integer","Sign, either +1 or -1"]
     lookup['theta1']=["float","Angle between orbital angular momentum and primary spin"]
     lookup['theta2']=["float","Angle between orbital angular momentum and secondary spin"]
+    lookup['theta12']=["float","Angle between the two spins"]
     lookup['deltaphi']=["float","Angle between the projections of the two spins onto the orbital plane"]
+
+    lookup['costheta1']=["float","Cosine of the angle between orbital angular momentum and primary spin"]
+    lookup['costheta2']=["float","Cosine of the angle between orbital angular momentum and secondary spin"]
+    lookup['costheta12']=["float","Cosine of the angle between the two spins"]
+    lookup['cosdeltaphi']=["float","Cosine of the angle between the projections of the two spins onto the orbital plane"]
+
+
     lookup['theta1inf']=["float","Asymptotic value of the angle between orbital angular momentum and primary spin"]
     lookup['theta2inf']=["float","Asymptotic value of the angle between orbital angular momentum and secondary spin"]
     lookup['kappainf']=["float","Asymptotic value of the regularized momentum kappa"]
@@ -46,6 +58,26 @@ def descr(varname,vardef=None):
     lookup['Lh']=["array","Direction of the orbital angular momentum, unit vector"]
     lookup['S1h']=["array","Direction of the primary spin, unit vector"]
     lookup['S2h']=["array","Direction of the secondary spin, unit vector"]
+    lookup['eta']=["float","Symmetric mass ratio 0<=eta<=1/4"]
+    lookup['v']=["float","Newtonian orbital velocity"]
+    lookup['Jmin']=["float","Minimum value of the total angular momentum J"]
+    lookup['Jmax']=["float","Maximum value of the total angular momentum J"]
+    lookup['ximin']=["float","Minimum value of the effective spin xi"]
+    lookup['ximax']=["float","Maximum value of the effective spin xi"]
+    lookup['Smin']=["float","Minimum value of the total spin S"]
+    lookup['Smax']=["float","Maximum value of the total spin S"]
+
+    lookup['coeff6']=["float","Coefficient to the x^6 term in polynomial"]
+    lookup['coeff5']=["float","Coefficient to the x^5 term in polynomial"]
+    lookup['coeff4']=["float","Coefficient to the x^4 term in polynomial"]
+    lookup['coeff3']=["float","Coefficient to the x^3 term in polynomial"]
+    lookup['coeff2']=["float","Coefficient to the x^2 term in polynomial"]
+    lookup['coeff1']=["float","Coefficient to the x^1 term in polynomial"]
+    lookup['coeff0']=["float","Coefficient to the x^0 term in polynomial"]
+
+    lookup['thetaL']=["float","Angle betwen orbital angular momentum and total angular momentum"]
+    lookup['costhetaL']=["float","Cosine of the angle betwen orbital angular momentum and total angular momentum"]
+
 
 
     if varname in lookup:
@@ -67,45 +99,71 @@ def descr(varname,vardef=None):
     return dstrings
 
 
+# A tab is four spaces in standard python
+realtab='    '
 
-docs=""
-with open("precession/precession.py") as file:
-    sourcecode=file.readlines()
+if True:
+    docs='\"\"\"\n'
+    #with open("precession/precession.py") as file:
+    #    sourcecode=file.readlines()
+    #
+
+    # Grab the current docstrings
+    sourcecode = eval("precession."+fun+".__doc__").split('\n')
+    sourcecode = [line.strip() for line in sourcecode]
+    if sourcecode[0]=='':
+        sourcecode=sourcecode[1:]
+
+    intro=None
     for i,line in enumerate(sourcecode):
-        if fun in line:
+        if line =='' and intro is None:
+            intro="\n".join(sourcecode[0:i])
+            docs+=intro
+            if docs[-1]!=".":
+                docs+="."
+            docs+='\n\n'
 
-            if '-' in sourcecode[i-1]:
-                # Remove all the space
-                line= line.replace(' ','').replace('\t','')
-                #print(line)
-                docs+="Call\n----\n"
-                docs+=line.replace('=',' = ')
 
-                # Select string in between parentheses
-                inputs = line.split('(')[1].split(')')[0].split(',')
 
-                docs+="\nParameters\n----------\n"
 
-                # Loop over inputs
-                for var in inputs:
-                    varname = var.split('=')[0]
-                    try:
-                        vardef = var.split('=')[1]
-                    except:
-                        vardef= None
-                    #print(varname,vardef)
-                    docs+=descr(varname,vardef)
+        if fun in line and "=" in line and "(" in line and ")" in line:
+            # Remove all the space
+            line= line.replace(' ','').replace('\t','')
+            docs+="Call\n----\n"
+            docs+=line.replace('=',' = ')
+            docs+='\n'
 
-                # Select before equal sign
-                outputs = line.split('=')[0].split(',')
+            # Select string in between parentheses
+            inputs = line.split('(')[1].split(')')[0].split(',')
 
-                docs+="\nReturns\n-------\n"
-                # Loop over inputs
-                for var in outputs:
-                    docs+=descr(var)
-# Remove last new line
-#docs=docs.rstrip()
-# Indent everything
-docs='\t'+docs.replace('\n','\n\t')
+            docs+="\nParameters\n----------\n"
 
-print(docs)
+            # Loop over inputs
+            for var in inputs:
+                varname = var.split('=')[0]
+                try:
+                    vardef = var.split('=')[1]
+                except:
+                    vardef= None
+                #print(varname,vardef)
+                docs+=descr(varname,vardef)
+
+            # Select before equal sign
+            outputs = line.split('=')[0].split(',')
+
+            docs+="\nReturns\n-------\n"
+            # Loop over inputs
+            for var in outputs:
+                docs+=descr(var)
+
+
+
+    # Remove last new line
+    #docs=docs.rstrip()
+    # Indent everything
+    docs=realtab+docs.replace('\n','\n'+realtab)
+    docs+='\"\"\"\n'
+
+    print(docs) # To screen
+
+    pyperclip.copy(docs) # Copy to clipboard

@@ -68,19 +68,19 @@ def mass1(q):
     """
     Mass of the heavier black hole in units of the total mass.
 
-	Call
-	----
-	m1 = mass1(q)
+    Call
+    ----
+    m1 = mass1(q)
 
-	Parameters
-	----------
-	q: float
-		Mass ratio: 0<=q<=1.
+    Parameters
+    ----------
+    q: float
+    	Mass ratio: 0<=q<=1.
 
-	Returns
-	-------
-	m1: float
-		Mass of the primary (heavier) black hole.
+    Returns
+    -------
+    m1: float
+    	Mass of the primary (heavier) black hole.
     """
 
     q = toarray(q)
@@ -93,19 +93,19 @@ def mass2(q):
     """
     Mass of the lighter black hole in units of the total mass.
 
-	Call
-	----
-	m2 = mass2(q)
+    Call
+    ----
+    m2 = mass2(q)
 
-	Parameters
-	----------
-	q: float
-		Mass ratio: 0<=q<=1.
+    Parameters
+    ----------
+    q: float
+    	Mass ratio: 0<=q<=1.
 
-	Returns
-	-------
-	m2: float
-		Mass of the secondary (lighter) black hole.
+    Returns
+    -------
+    m2: float
+    	Mass of the secondary (lighter) black hole.
     """
 
     q = toarray(q)
@@ -118,18 +118,23 @@ def masses(q):
     """
     Masses of the two black holes in units of the total mass.
 
+    Call
+    ----
+    m1,m2 = masses(q)
+
     Parameters
     ----------
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
 
     Returns
     -------
     m1: float
-        Mass of the primary black hole.
+    	Mass of the primary (heavier) black hole.
     m2: float
-        Mass of the secondary black hole.
+    	Mass of the secondary (lighter) black hole.
     """
+
 
     m1 = mass1(q)
     m2 = mass2(q)
@@ -141,18 +146,21 @@ def massratio(m1, m2):
     """
     Mass ratio, 0 < q = m2/m1 < 1.
 
+    Call
+    ----
+    q = massratio(m1,m2)
+
     Parameters
     ----------
     m1: float
-        Mass of the primary black hole.
-
+    	Mass of the primary (heavier) black hole.
     m2: float
-        Mass of the secondary black hole.
+    	Mass of the secondary (lighter) black hole.
 
     Returns
     -------
     q: float
-        Mass ratio, 0 < q < 1.
+    	Mass ratio: 0<=q<=1.
     """
 
     m1 = toarray(m1)
@@ -164,17 +172,21 @@ def massratio(m1, m2):
 
 def symmetricmassratio(q):
     """
-    Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2
+    Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2.
+
+    Call
+    ----
+    eta = symmetricmassratio(q)
 
     Parameters
     ----------
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
 
     Returns
     -------
     eta: float
-        Symmetric mass ratio.
+    	Symmetric mass ratio 0<=eta<=1/4.
     """
 
     q = toarray(q)
@@ -187,17 +199,21 @@ def spin1(q,chi1):
     """
     Spin angular momentum of the heavier black hole.
 
+    Call
+    ----
+    S1 = spin1(q,chi1)
+
     Parameters
     ----------
     q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float or numpy array
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
 
     Returns
     -------
     S1: float
-        Spin of the primary black hole.
+    	Magnitude of the primary spin.
     """
 
     chi1 = toarray(chi1)
@@ -210,17 +226,21 @@ def spin2(q,chi2):
     """
     Spin angular momentum of the lighter black hole.
 
+    Call
+    ----
+    S2 = spin2(q,chi2)
+
     Parameters
     ----------
     q: float
-        Mass ratio: 0 <= q <= 1.
-    chi2: float or numpy array
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Mass ratio: 0<=q<=1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     S2: float
-        Spin of the secondary black hole.
+    	Magnitude of the secondary spin.
     """
 
     chi2 = toarray(chi2)
@@ -233,21 +253,25 @@ def spinmags(q,chi1,chi2):
     """
     Spins of the black holes in units of the total mass.
 
+    Call
+    ----
+    S1,S2 = spinmags(q,chi1,chi2)
+
     Parameters
     ----------
     q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float or numpy array
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     S1: float
-        Spin of the primary black hole.
+    	Magnitude of the primary spin.
     S2: float
-        Spin of the secondary black hole.
+    	Magnitude of the secondary spin.
     """
 
     S1 = spin1(q,chi1)
@@ -260,17 +284,21 @@ def angularmomentum(r,q):
     """
     Newtonian angular momentum of the binary.
 
+    Call
+    ----
+    L = angularmomentum(r,q)
+
     Parameters
     ----------
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
 
     Returns
     -------
-    Smin: float
-        Binary angular momentum
+    L: float
+    	Magnitude of the Newtonian orbital angular momentum.
     """
 
     r = toarray(r)
@@ -280,7 +308,23 @@ def angularmomentum(r,q):
 
 
 def orbitalvelocity(r):
-    #TODO docstrings
+    """
+    Newtonian orbital velocity of the binary.
+
+    Call
+    ----
+    v = orbitalvelocity(r)
+
+    Parameters
+    ----------
+    r: float
+    	Binary separation.
+
+    Returns
+    -------
+    v: float
+    	Newtonian orbital velocity.
+    """
 
     r = toarray(r)
     v= 1/r**0.5
@@ -290,6 +334,23 @@ def orbitalvelocity(r):
 
 def orbitalseparation(L, q):
     """
+    Orbital separation of the binary.
+
+    Call
+    ----
+    r = orbitalseparation(L,q)
+
+    Parameters
+    ----------
+    L: float
+    	Magnitude of the Newtonian orbital angular momentum.
+    q: float
+    	Mass ratio: 0<=q<=1.
+
+    Returns
+    -------
+    r: float
+    	Binary separation.
     """
 
     L = toarray(L)
@@ -303,27 +364,30 @@ def orbitalseparation(L, q):
 
 def Jlimits_LS1S2(r,q,chi1,chi2):
     """
-    Limits on the magnitude of the total angular momentum due to the vector relation J=L+S1+S2
+    Limits on the magnitude of the total angular momentum due to the vector relation J=L+S1+S2.
+
+    Call
+    ----
+    Jmin,Jmax = Jlimits_LS1S2(r,q,chi1,chi2)
 
     Parameters
     ----------
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    Jmin:
-        Minimum value of the total angular momentum.
-    Jmax:
-        Maximum value of the total angular momentum.
+    Jmin: float
+    	Minimum value of the total angular momentum J.
+    Jmax: float
+    	Maximum value of the total angular momentum J.
     """
-
 
     S1,S2 = spinmags(q,chi1,chi2)
     L = angularmomentum(r,q)
@@ -335,43 +399,46 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
 
 def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     """
-    TODO fix docstrings
+    Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.
 
-    Coefficients of the quintic equation in J that defines the spin-orbit resonances.
+    Call
+    ----
+    coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = kappadiscriminant_coefficients(u,xi,q,chi1,chi2)
 
     Parameters
     ----------
-    r: float
-        Binary separation.
+    u: float
+    	Compactified separation 1/(2L).
     xi: float
-        Effective spin
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    sigma5:
-        Coefficient of kappa^5.
-    sigma4:
-        Coefficient of kappa^4.
-    sigma3:
-        Coefficient of kappa^3.
-    sigma2:
-        Coefficient of kappa^2.
-    sigma1:
-        Coefficient of kappa^1.
-    sigma0:
-        Coefficient of kappa^0.
+    coeff5: float
+    	Coefficient to the x^5 term in polynomial.
+    coeff4: float
+    	Coefficient to the x^4 term in polynomial.
+    coeff3: float
+    	Coefficient to the x^3 term in polynomial.
+    coeff2: float
+    	Coefficient to the x^2 term in polynomial.
+    coeff1: float
+    	Coefficient to the x^1 term in polynomial.
+    coeff0: float
+    	Coefficient to the x^0 term in polynomial.
     """
+
 
     u,q,xi=toarray(u,q,xi)
     S1,S2= spinmags(q,chi1,chi2)
 
-    sigma0 = \
+    coeff0 = \
     ( 16 * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) * ( ( ( -1 + ( q )**( 2 ) ) \
     )**( 2 ) * ( S1 )**( 2 ) + -1 * ( q )**( 2 ) * ( xi )**( 2 ) ) * ( ( \
     ( -1 + ( q )**( 2 ) ) )**( 2 ) * ( S2 )**( 2 ) + -1 * ( q )**( 2 ) * \
@@ -539,7 +606,7 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     * ( S2 )**( 6 ) + ( 52 * ( S2 )**( 4 ) * ( xi )**( 2 ) + 24 * ( S2 \
     )**( 2 ) * ( xi )**( 4 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
 
-    sigma1 = \
+    coeff1 = \
     ( 32 * ( ( -1 + q ) )**( 2 ) * q * ( ( 1 + q ) )**( 4 ) * xi * ( ( q \
     )**( 4 ) * ( S1 )**( 2 ) + ( ( S2 )**( 2 ) + ( q * ( ( S1 )**( 2 ) + \
     -1 * ( S2 )**( 2 ) ) + ( ( q )**( 3 ) * ( -1 * ( S1 )**( 2 ) + ( S2 \
@@ -654,7 +721,7 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     ) * ( xi )**( 2 ) + 8 * ( S2 )**( 2 ) * ( xi )**( 4 ) ) ) ) ) ) ) ) ) \
     ) ) ) ) ) ) ) ) ) ) )
 
-    sigma2 = \
+    coeff2 = \
     ( -16 * ( ( -1 + q ) )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( ( q )**( 6 \
     ) * ( S1 )**( 2 ) + ( ( S2 )**( 2 ) + ( -4 * ( q )**( 3 ) * ( xi )**( \
     2 ) + ( ( q )**( 2 ) * ( ( S1 )**( 2 ) + ( -2 * ( S2 )**( 2 ) + -1 * \
@@ -719,7 +786,7 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     ( 3 * ( S2 )**( 2 ) + ( xi )**( 2 ) ) + -3 * ( 7 * ( S2 )**( 4 ) + 4 \
     * ( S2 )**( 2 ) * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
 
-    sigma3 = \
+    coeff3 = \
     ( -32 * ( ( -1 + q ) )**( 2 ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 6 ) * \
     xi + ( 64 * q * ( ( 1 + q ) )**( 4 ) * u * ( 5 * ( q )**( 6 ) * ( S1 \
     )**( 2 ) + ( 5 * ( S2 )**( 2 ) + ( -1 * q * ( ( S1 )**( 2 ) + ( S2 \
@@ -744,7 +811,7 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     * ( 2 * ( S2 )**( 2 ) + ( xi )**( 2 ) ) + ( S1 )**( 2 ) * ( 5 * ( S2 \
     )**( 2 ) + ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) )
 
-    sigma4 = \
+    coeff4 = \
     ( 16 * ( ( -1 + q ) )**( 2 ) * ( q )**( 2 ) * ( ( 1 + q ) )**( 6 ) + \
     ( 640 * ( q )**( 3 ) * ( ( 1 + q ) )**( 6 ) * u * xi + -256 * ( q \
     )**( 2 ) * ( ( 1 + q ) )**( 4 ) * ( u )**( 2 ) * ( 3 * ( q )**( 4 ) * \
@@ -752,35 +819,39 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     ) + -5 * ( S2 )**( 2 ) ) + ( q * ( -5 * ( S1 )**( 2 ) + ( S2 )**( 2 ) \
     ) + -1 * ( q )**( 2 ) * ( 7 * ( S1 )**( 2 ) + ( 7 * ( S2 )**( 2 ) + ( \
     xi )**( 2 ) ) ) ) ) ) ) ) )
-    sigma5 = \
+    coeff5 = \
     -256 * ( q )**( 3 ) * ( ( 1 + q ) )**( 6 ) * u
 
-    return toarray(sigma5, sigma4, sigma3, sigma2, sigma1, sigma0)
+    return toarray(coeff5, coeff4, coeff3, coeff2, coeff1, coeff0)
 
 
 def Jresonances(r,xi,q,chi1,chi2):
     """
-    Total angular momentum of the two spin-orbit resonances.
+    Total angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes J for a given value of xi. The minimum corresponds to DeltaPhi=pi and the maximum corresponds to DeltaPhi=0.
+
+    Call
+    ----
+    Jmin,Jmax = Jresonances(r,xi,q,chi1,chi2)
 
     Parameters
     ----------
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     Jmin: float
-        Spin-orbit resonance that minimizes J (DeltaPhi=pi)
+    	Minimum value of the total angular momentum J.
     Jmax: float
-        Spin-orbit resonance that minimizes J (DeltaPhi=pi)
+    	Maximum value of the total angular momentum J.
     """
 
     # There are in principle five solutions, but only two are physical.
@@ -810,30 +881,32 @@ def Jresonances(r,xi,q,chi1,chi2):
 def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
-        - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
-        - If r, xi, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
+    - If r, xi, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+
+    Call
+    ----
+    Jmin,Jmax = Jlimits(r = None,xi = None,q = None,chi1 = None,chi2 = None)
 
     Parameters
     ----------
-    r: float, optional
-        Binary separation.
-    xi: float, optional
-        Effective spin
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float, optional
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float, optional
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    conincident: boolean, optional
-        If True, assume that the input is a spin-orbit resonance and return repeated roots
+    r: float, optional (default: None)
+    	Binary separation.
+    xi: float, optional (default: None)
+    	Effective spin.
+    q: float, optional (default: None)
+    	Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float, optional (default: None)
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    Jmin:
-        Minimum value of the total angular momentum.
-    Jmax:
-        Maximum value of the total angular momentum.
+    Jmin: float
+    	Minimum value of the total angular momentum J.
+    Jmax: float
+    	Maximum value of the total angular momentum J.
     """
 
     if r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
@@ -851,23 +924,27 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
 
 def xilimits_definition(q,chi1,chi2):
     """
-    Limits on the effective spin based only on the definition xi = (1+q)S1.L + (1+1/q)S2.L
+    Limits on the effective spin based only on the definition xi = (1+q)S1.L + (1+1/q)S2.L.
+
+    Call
+    ----
+    ximin,ximax = xilimits_definition(q,chi1,chi2)
 
     Parameters
     ----------
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    ximin:
-        Minimum value of the effective spin.
-    ximax:
-        Maximum value of the effective spin.
+    ximin: float
+    	Minimum value of the effective spin xi.
+    ximax: float
+    	Maximum value of the effective spin xi.
     """
 
     q=toarray(q)
@@ -879,46 +956,48 @@ def xilimits_definition(q,chi1,chi2):
 
 def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     """
-    TODO: fix docstrings
+    Coefficients of the sixth-degree equation in xi that defines the spin-orbit resonances.
 
-    Coefficients of the 6-degree equation in xi that defines the spin-orbit resonances.
+    Call
+    ----
+    coeff6,coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = xidiscriminant_coefficients(kappa,u,q,chi1,chi2)
 
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
+    kappa: float
+    	Regularized angular momentum (J^2-L^2)/(2L).
+    u: float
+    	Compactified separation 1/(2L).
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    sigma6:
-        Coefficient of xi^6.
-    sigma5:
-        Coefficient of xi^5.
-    sigma4:
-        Coefficient of xi^4.
-    sigma3:
-        Coefficient of xi^3.
-    sigma2:
-        Coefficient of xi^2.
-    sigma1:
-        Coefficient of xi^1.
-    sigma0:
-        Coefficient of xi^0.
+    coeff6: float
+    	Coefficient to the x^6 term in polynomial.
+    coeff5: float
+    	Coefficient to the x^5 term in polynomial.
+    coeff4: float
+    	Coefficient to the x^4 term in polynomial.
+    coeff3: float
+    	Coefficient to the x^3 term in polynomial.
+    coeff2: float
+    	Coefficient to the x^2 term in polynomial.
+    coeff1: float
+    	Coefficient to the x^1 term in polynomial.
+    coeff0: float
+    	Coefficient to the x^0 term in polynomial.
     """
 
     kappa,u,q=toarray(kappa,u,q)
     S1,S2= spinmags(q,chi1,chi2)
 
 
-    sigma0 = \
+    coeff0 = \
     ( 16 * ( ( -1 + q ) )**( 2 ) * ( ( 1 + q ) )**( 6 ) * ( ( ( -1 + q ) \
     )**( 2 ) * ( S1 )**( 2 ) + -1 * ( kappa )**( 2 ) ) * ( ( ( -1 + q ) \
     )**( 2 ) * ( S2 )**( 2 ) + -1 * ( q )**( 2 ) * ( kappa )**( 2 ) ) + ( \
@@ -1008,7 +1087,7 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     + 20 * ( kappa )**( 4 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
 
 
-    sigma1 = \
+    coeff1 = \
     ( ( u )**( 4 ) * ( -128 * ( ( -1 + q ) )**( 2 ) * q * ( ( 1 + q ) \
     )**( 5 ) * ( ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( 4 * ( S2 )**( 4 \
     ) * ( ( S1 )**( 2 ) + -2 * ( S2 )**( 2 ) ) + ( ( q )**( 3 ) * ( 8 * ( \
@@ -1074,7 +1153,7 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     )**( 2 ) * ( kappa )**( 2 ) ) + -39 * ( ( S2 )**( 6 ) + -4 * ( S2 \
     )**( 4 ) * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) ) )
 
-    sigma2 = \
+    coeff2 = \
     ( 32 * ( q )**( 2 ) * ( ( 1 + q ) )**( 4 ) * u * kappa * ( ( ( -1 + \
     q ) )**( 2 ) * ( -1 + ( 18 * q + 7 * ( q )**( 2 ) ) ) * ( S1 )**( 2 ) \
     + ( -1 * ( ( -1 + q ) )**( 2 ) * ( -7 + ( -18 * q + ( q )**( 2 ) ) ) \
@@ -1127,7 +1206,7 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     ( S2 )**( 4 ) + 12 * ( S2 )**( 2 ) * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) \
     ) ) ) ) )
 
-    sigma3 = \
+    coeff3 = \
     ( -32 * ( ( -1 + q ) )**( 2 ) * ( q )**( 3 ) * ( ( 1 + q ) )**( 4 ) \
     * kappa + ( ( u )**( 4 ) * ( 512 * ( q )**( 3 ) * ( ( 1 + q ) )**( 3 \
     ) * ( ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) * ( ( S2 )**( 2 ) * ( ( S1 \
@@ -1157,7 +1236,7 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     4 * q * ( 3 + ( -1 * q + ( q )**( 2 ) ) ) * ( kappa )**( 2 ) ) ) ) ) \
     ) ) ) )
 
-    sigma4 = \
+    coeff4 = \
     ( 16 * ( q )**( 4 ) * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) + ( 256 * ( q \
     )**( 4 ) * ( ( 1 + q ) )**( 2 ) * ( ( 1 + ( -6 * q + 6 * ( q )**( 2 ) \
     ) ) * ( S1 )**( 4 ) + ( -2 * ( 3 + ( -5 * q + 3 * ( q )**( 2 ) ) ) * \
@@ -1171,41 +1250,45 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     1 + ( 7 * q + -4 * ( q )**( 2 ) ) ) * ( S2 )**( 2 ) + 2 * ( 1 + ( 4 * \
     q + ( q )**( 2 ) ) ) * ( kappa )**( 2 ) ) ) ) ) ) )
 
-    sigma5 = \
+    coeff5 = \
     ( 128 * ( q )**( 5 ) * ( ( 1 + q ) )**( 2 ) * u + ( u )**( 2 ) * ( \
     512 * ( q )**( 5 ) * ( 1 + q ) * ( ( -1 + 2 * q ) * ( S1 )**( 2 ) + \
     -1 * ( -2 + q ) * ( S2 )**( 2 ) ) * u + -512 * ( q )**( 5 ) * ( ( 1 + \
     q ) )**( 2 ) * kappa ) )
 
-    sigma6 = \
+    coeff6 = \
     256 * ( q )**( 6 ) * ( u )**( 2 )
 
-    return toarray(sigma6, sigma5, sigma4, sigma3, sigma2, sigma1, sigma0)
+    return toarray(coeff6, coeff5, coeff4, coeff3, coeff2, coeff1, coeff0)
 
 
 def xiresonances(J,r,q,chi1,chi2):
     """
-    Total angular momentum of the two spin-orbit resonances.
+    Effective spin of the two spin-orbit resonances. The resonances minimizes and maximizes xi for a given value of J. The minimum corresponds to either DeltaPhi=0 or DeltaPhi=pi, the maximum always corresponds to DeltaPhi=pi.
+
+    Call
+    ----
+    ximin,ximax = xiresonances(J,r,q,chi1,chi2)
 
     Parameters
     ----------
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     ximin: float
-        Spin-orbit resonance that minimizes xi (either DeltaPhi=0 or DeltaPhi=pi)
+    	Minimum value of the effective spin xi.
     ximax: float
-        Spin-orbit resonance that minimizes xi (always DeltaPhi=pi)
+    	Maximum value of the effective spin xi.
     """
 
     #Altough there are 6 solutions in general, we know that only two can lie between Smin and Smax.
@@ -1234,30 +1317,32 @@ def xiresonances(J,r,q,chi1,chi2):
 def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
     """
     Limits on the projected effective spin. The contraints considered depend on the inputs provided.
-        - If q, chi1, and chi2 are provided, enforce xi = (1+q)S1.L + (1+1/q)S2.L.
-        - If J, r, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    - If q, chi1, and chi2 are provided, enforce xi = (1+q)S1.L + (1+1/q)S2.L.
+    - If J, r, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+
+    Call
+    ----
+    ximin,ximax = xilimits(J = None,r = None,q = None,chi1 = None,chi2 = None)
 
     Parameters
     ----------
-    J: float, optional
-        Magnitude of the total angular momentum.
-    r: float, optional
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float, optional
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float, optional
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    conincident: boolean, optional
-        If True, assume that the input is a spin-orbit resonance and return repeated roots
+    J: float, optional (default: None)
+    	Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+    	Binary separation.
+    q: float, optional (default: None)
+    	Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float, optional (default: None)
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    ximin:
-        Minimum value of the effective spin.
-    ximax:
-        Maximum value of the effective spin.
+    ximin: float
+    	Minimum value of the effective spin xi.
+    ximax: float
+    	Maximum value of the effective spin xi.
     """
 
     if J is None and r is None and q is not None and chi1 is not None and chi2 is not None:
@@ -1276,23 +1361,27 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
 
 def Slimits_S1S2(q,chi1,chi2):
     """
-    Limits on the total spin magnitude due to the vector relation S=S1+S2
+    Limits on the total spin magnitude due to the vector relation S=S1+S2.
+
+    Call
+    ----
+    Smin,Smax = Slimits_S1S2(q,chi1,chi2)
 
     Parameters
     ----------
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    Smin:
-        Minimum value of the total spin.
-    Smax:
-        Maximum value of the total spin.
+    Smin: float
+    	Minimum value of the total spin S.
+    Smax: float
+    	Maximum value of the total spin S.
     """
 
     S1,S2= spinmags(q,chi1,chi2)
@@ -1304,23 +1393,27 @@ def Slimits_S1S2(q,chi1,chi2):
 
 def Slimits_LJ(J,r,q):
     """
-    Limits on the total spin magnitude due to the vector relation S=J-L
+    Limits on the total spin magnitude due to the vector relation S=J-L.
+
+    Call
+    ----
+    Smin,Smax = Slimits_LJ(J,r,q)
 
     Parameters
     ----------
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
 
     Returns
     -------
-    Smin:
-        Minimum value of the total spin.
-    Smax:
-        Maximum value of the total spin.
+    Smin: float
+    	Minimum value of the total spin S.
+    Smax: float
+    	Maximum value of the total spin S.
     """
 
     L= angularmomentum(r,q)
@@ -1334,21 +1427,29 @@ def Slimits_LJS1S2(J,r,q,chi1,chi2):
     """
     Limits on the total spin magnitude due to the vector relations S=S1+S2 and S=J-L.
 
+    Call
+    ----
+    Smin,Smax = Slimits_LJS1S2(J,r,q,chi1,chi2)
+
     Parameters
     ----------
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    Smin:
-        Minimum value of the total spin.
-    Smax:
-        Maximum value of the total spin.
+    Smin: float
+    	Minimum value of the total spin S.
+    Smax: float
+    	Maximum value of the total spin S.
     """
 
     SminS1S2,SmaxS1S2 = Slimits_S1S2(q,chi1,chi2)
@@ -1361,44 +1462,46 @@ def Slimits_LJS1S2(J,r,q,chi1,chi2):
 
 def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     """
-    TODO fix docstrings
-
     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
+
+    Call
+    ----
+    coeff3,coeff2,coeff1,coeff0 = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
 
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+    	Regularized angular momentum (J^2-L^2)/(2L).
     u: float
-        1/r where Binary separation.
+    	Compactified separation 1/(2L).
     xi: float
-        Effective spin
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    sigma6:
-        Coefficient of S^6.
-    sigma4:
-        Coefficient of S^4.
-    sigma2:
-        Coefficient of S^2.
-    sigma0:
-        Coefficient of S^0.
+    coeff3: float
+    	Coefficient to the x^3 term in polynomial.
+    coeff2: float
+    	Coefficient to the x^2 term in polynomial.
+    coeff1: float
+    	Coefficient to the x^1 term in polynomial.
+    coeff0: float
+    	Coefficient to the x^0 term in polynomial.
     """
 
     kappa,u,xi,q = toarray(kappa,u,xi,q)
     S1,S2 = spinmags(q,chi1,chi2)
 
-    sigma6 = \
+    coeff3 = \
     q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )
 
-    sigma4 = \
+    coeff2 = \
     ( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( \
     1/4 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) \
     )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( \
@@ -1406,7 +1509,7 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     + q ) )**( 2 ) * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 \
     + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) )
 
-    sigma2 = \
+    coeff1 = \
     ( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( 1/2 * ( q \
     )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( -1/2 * ( 1 + \
     -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 \
@@ -1419,16 +1522,17 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) \
     ) )
 
-    sigma0 = \
+    coeff0 = \
     1/4 * ( -1 + ( q )**( 2 ) ) * ( ( -1 + ( q )**( 2 ) ) * ( S1 )**( 4 \
     ) + ( ( -1 + ( q )**( 2 ) ) * ( S2 )**( 4 ) + ( -4 * ( S2 )**( 2 ) * \
     kappa * ( -1 * q * xi + ( kappa + q * kappa ) ) + ( S1 )**( 2 ) * ( \
     -2 * ( -1 + ( q )**( 2 ) ) * ( S2 )**( 2 ) + 4 * q * kappa * ( -1 * \
     xi + ( kappa + q * kappa ) ) ) ) ) )
 
-    return toarray(sigma6, sigma4, sigma2, sigma0)
+    return toarray(coeff3, coeff2, coeff1, coeff0)
 
 
+# TODO: this is a case where we use 2 for square. Fix docstrings
 def S2roots(J,r,xi,q,chi1,chi2):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
@@ -1470,46 +1574,72 @@ def Slimits_plusminus(J,r,xi,q,chi1,chi2):
     """
     Limits on the total spin magnitude compatible with both J and xi.
 
+    Call
+    ----
+    Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    conincident: boolean, optional (default: False)
-        If True, assume that the input is a spin-orbit resonance and return repeated roots
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    Sminus:
-        Minimum value of the total spin.
-    Splus:
-        Maximum value of the total spin.
+    Smin: float
+    	Minimum value of the total spin S.
+    Smax: float
+    	Maximum value of the total spin S.
     """
 
     Sminus2,Splus2,_= S2roots(J,r,xi,q,chi1,chi2)
     with np.errstate(invalid='ignore'):
-        Sminus=Sminus2**0.5
-        Splus=Splus2**0.5
+        Smin=Sminus2**0.5
+        Smax=Splus2**0.5
 
-    return toarray(Sminus,Splus)
+    return toarray(Smin,Smax)
 
 
 def Satresonance(J,r,xi,q,chi1,chi2):
-    #TODO: write docstrings.
-    # This *assumes* that the input values represent a spin-orbit resonance, and return the corresponding value of S.
+    """
+    Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user.
+
+    Call
+    ----
+    S = Satresonance(J,r,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    S: float
+    	Magnitude of the total spin.
+    """
 
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
-
     coeffs = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
 
     if np.ndim(coeffs)==1:
@@ -1523,32 +1653,36 @@ def Satresonance(J,r,xi,q,chi1,chi2):
 def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     """
     Limits on the total spin magnitude. The contraints considered depend on the inputs provided.
-        - If q, chi1, and chi2 are provided, enforce S=S1+S2.
-        - If J, r, and q are provided, enforce S=J-L.
-        - If J, r, q, chi1, and chi2 are provided, enforce S=S1+S2 and S=J-L.
-        - If J, r, xi, q, chi1, and chi2 are provided, compute solve the cubic equation of the effective potentials (Sminus and Splus).
+    - If q, chi1, and chi2 are provided, enforce S=S1+S2.
+    - If J, r, and q are provided, enforce S=J-L.
+    - If J, r, q, chi1, and chi2 are provided, enforce S=S1+S2 and S=J-L.
+    - If J, r, xi, q, chi1, and chi2 are provided, compute solve the cubic equation of the effective potentials (Sminus and Splus).
+
+    Call
+    ----
+    Smin,Smax = Slimits(J = None,r = None,xi = None,q = None,chi1 = None,chi2 = None)
 
     Parameters
     ----------
-    J: float, optional
-        Magnitude of the total angular momentum.
-    r: float, optional
-        Binary separation.
-    xi: float, optional
-        Effective spin
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float, optional
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float, optional
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    J: float, optional (default: None)
+    	Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+    	Binary separation.
+    xi: float, optional (default: None)
+    	Effective spin.
+    q: float, optional (default: None)
+    	Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float, optional (default: None)
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    Sminus:
-        Minimum value of the total spin.
-    Splus:
-        Maximum value of the total spin.
+    Smin: float
+    	Minimum value of the total spin S.
+    Smax: float
+    	Maximum value of the total spin S.
     """
 
     if J is None and r is None and xi is None and q is not None and chi1 is not None and chi2 is not None:
@@ -1571,6 +1705,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
 
 
 # TODO: Check inter-compatibility of Slimits, Jlimits, xilimits
+# TODO: check docstrings
 # Tags for each limit check that fails?
 # Davide: Does this function uses only Jlimits and xilimits or also Slimits? Move later?
 def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
@@ -1652,31 +1787,36 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 
 #### Evaluations and conversions ####
 
+# TODO Should this be called eval_xi?
 def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
     """
     Effective spin as a function of total spin magnitude S, nutation angle varphi and total angularm momentum J.
 
+    Call
+    ----
+    xi = effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     varphi: float
-        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
+    	Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     xi: float
-        Effective spin
+    	Effective spin.
     """
 
     S,varphi,J,q=toarray(S,varphi,J,q)
@@ -1700,25 +1840,29 @@ def effectivepotential_plus(S,J,r,q,chi1,chi2):
     """
     Upper effective potential.
 
+    Call
+    ----
+    xi = effectivepotential_plus(S,J,r,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     xi: float
-        Effective spin
+    	Effective spin.
     """
 
     varphi = np.pi*np.ones(flen(S))
@@ -1731,25 +1875,29 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
     """
     Lower effective potential.
 
+    Call
+    ----
+    xi = effectivepotential_minus(S,J,r,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     xi: float
-        Effective spin
+    	Effective spin.
     """
 
     varphi = np.zeros(flen(S))
@@ -1758,10 +1906,38 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
     return xi
 
 
+# TODO: check the behavior of sign here. Array?
 def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
     """
-    TODO: fix docstrings.
-    TODO: Check sign array.
+    Evaluate the nutation parameter varphi.
+
+    Call
+    ----
+    varphi = eval_varphi(S,J,r,xi,q,chi1,chi2,sign = 1)
+
+    Parameters
+    ----------
+    S: float
+    	Magnitude of the total spin.
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    sign: integer, optional (default: 1)
+    	Sign, either +1 or -1.
+
+    Returns
+    -------
+    varphi: float
+    	Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
     """
 
     L = angularmomentum(r, q)
@@ -1785,27 +1961,31 @@ def eval_costheta1(S,J,r,xi,q,chi1,chi2):
     """
     Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
+    Call
+    ----
+    costheta1 = eval_costheta1(S,J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     costheta1: float
-        Cosine of the angle between orbital angular momentum and primary spin.
+    	Cosine of the angle between orbital angular momentum and primary spin.
     """
 
     S,J,q=toarray(S,J,q)
@@ -1821,27 +2001,31 @@ def eval_theta1(S,J,r,xi,q,chi1,chi2):
     """
     Angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
+    Call
+    ----
+    theta1 = eval_theta1(S,J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     theta1: float
-        Angle between orbital angular momentum and primary spin.
+    	Angle between orbital angular momentum and primary spin.
     """
 
     costheta1=eval_costheta1(S,J,r,xi,q,chi1,chi2)
@@ -1854,27 +2038,31 @@ def eval_costheta2(S,J,r,xi,q,chi1,chi2):
     """
     Cosine of the angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
 
+    Call
+    ----
+    costheta2 = eval_costheta2(S,J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     costheta2: float
-        Cosine of the angle between orbital angular momentum and secondary spin.
+    	Cosine of the angle between orbital angular momentum and secondary spin.
     """
 
     S,J,q=toarray(S,J,q)
@@ -1890,27 +2078,31 @@ def eval_theta2(S,J,r,xi,q,chi1,chi2):
     """
     Angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
 
+    Call
+    ----
+    theta2 = eval_theta2(S,J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     theta2: float
-        Angle between orbital angular momentum and secondary spin.
+    	Angle between orbital angular momentum and secondary spin.
     """
 
     costheta2=eval_costheta2(S,J,r,xi,q,chi1,chi2)
@@ -1923,21 +2115,25 @@ def eval_costheta12(S,q,chi1,chi2):
     """
     Cosine of the angle theta12 between the two spins.
 
+    Call
+    ----
+    costheta12 = eval_costheta12(S,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     costheta12: float
-        Cosine of the angle between the two spins.
+    	Cosine of the angle between the two spins.
     """
 
     S=toarray(S)
@@ -1951,21 +2147,25 @@ def eval_theta12(S,q,chi1,chi2):
     """
     Angle theta12 between the two spins.
 
+    Call
+    ----
+    theta12 = eval_theta12(S,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     theta12: float
-        Angle between the two spins.
+    	Angle between the two spins.
     """
 
     costheta12=eval_costheta12(S,q,chi1,chi2)
@@ -1978,27 +2178,31 @@ def eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
     """
     Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
 
+    Call
+    ----
+    cosdeltaphi = eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     cosdeltaphi: float
-        Cosine of the angle between the projections of the two spins onto the orbital plane.
+    	Cosine of the angle between the projections of the two spins onto the orbital plane.
     """
 
     q=toarray(q)
@@ -2010,34 +2214,38 @@ def eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
 
     return cosdeltaphi
 
-
+# TODO: check the behavior of sign. Array?
 def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     """
     Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].
 
+    Call
+    ----
+    deltaphi = eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign = +1)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    sign: optional (default: +1)
-        If positive returns values in [0,pi], if negative returns values in [-pi,0].
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    sign: integer, optional (default: +1)
+    	Sign, either +1 or -1.
 
     Returns
     -------
     deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
+    	Angle between the projections of the two spins onto the orbital plane.
     """
 
     cosdeltaphi=eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
@@ -2050,26 +2258,31 @@ def eval_costhetaL(S,J,r,q,chi1,chi2):
     """
     Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
 
+    Call
+    ----
+    costhetaL = eval_costhetaL(S,J,r,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     costhetaL: float
-        Cosine of the angle betwen orbital angular momentum and total angular momentum.
+    	Cosine of the angle betwen orbital angular momentum and total angular momentum.
     """
+
 
     S,J=toarray(S,J)
     S1,S2 = spinmags(q,chi1,chi2)
@@ -2083,25 +2296,29 @@ def eval_thetaL(S,J,r,q,chi1,chi2):
     """
     Angle thetaL betwen orbital angular momentum and total angular momentum.
 
+    Call
+    ----
+    thetaL = eval_thetaL(S,J,r,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     thetaL: float
-        Angle betwen orbital angular momentum and total angular momentum.
+    	Angle betwen orbital angular momentum and total angular momentum.
     """
 
     costhetaL=eval_costhetaL(S,J,r,q,chi1,chi2)
@@ -2109,28 +2326,32 @@ def eval_thetaL(S,J,r,q,chi1,chi2):
 
     return thetaL
 
-
+#TODO: there's confusion here with the effective potential, which is also and evaluation of xi
 def eval_xi(theta1,theta2,q,chi1,chi2):
     """
     Effective spin from the spin angles.
 
+    Call
+    ----
+    xi = eval_xi(theta1,theta2,q,chi1,chi2)
+
     Parameters
     ----------
     theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     xi: float
-        Effective spin.
+    	Effective spin.
     """
 
     theta1,theta2,q=toarray(theta1,theta2,q)
@@ -2140,6 +2361,7 @@ def eval_xi(theta1,theta2,q,chi1,chi2):
     return xi
 
 
+#TODO: Docstrings needs to be rewritten
 def eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None):
     """
     Magnitude of the total angular momentum from the spin angles.
@@ -2194,25 +2416,29 @@ def eval_S(theta1,theta2,deltaphi,q,chi1,chi2):
     """
     Magnitude of the total spin from the spin angles.
 
+    Call
+    ----
+    S = eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
+
     Parameters
     ----------
     theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
     deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
+    	Angle between the projections of the two spins onto the orbital plane.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     """
 
     theta1,theta2,deltaphi=toarray(theta1,theta2,deltaphi)
@@ -2228,21 +2454,23 @@ def eval_kappa(J, r, q):
     Change of dependant variable to regularize the infinite orbital separation
     limit of the precession-averaged evolution equation.
 
+    Call
+    ----
+    kappa = eval_kappa(J,r,q)
+
     Parameters
     ----------
     J: float
-        Magnitude of the total angular momentum.
-
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
-
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
 
     Returns
     -------
     kappa: float
-        Asymptotic momentum (J^2-L^2)/(2L).
+    	Regularized angular momentum (J^2-L^2)/(2L).
     """
 
     J = toarray(J)
@@ -2251,6 +2479,8 @@ def eval_kappa(J, r, q):
 
     return kappa
 
+
+#  TODO: Jan 4. all docstrtings from here need to be checked
 
 def eval_u(r, q):
     """
