@@ -16,11 +16,6 @@ def flen(x):
     #https://stackoverflow.com/a/26533085
     return getattr(x, '__len__', lambda:1)()
 
-#def flen(x):
-#   if hasattr(x, "__len__"):
-#        return len(x)
-#   else:
-#        return 1
 
 def toarray(*args):
     return np.squeeze(np.array([*args]))
@@ -67,15 +62,16 @@ def wraproots(coefficientfunction, *args,**kwargs):
 
     return sols
 
-def nones():
-    return intertool.repeat(None)
-
-
 #### Definitions ####
 
 def mass1(q):
     """
     Mass of the heavier black hole in units of the total mass.
+
+    Call
+    ----
+    m1 = mass1(q)
+
 
     Parameters
     ----------
@@ -1761,7 +1757,8 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
 
 def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
     """
-    TODO: fix docstrings
+    TODO: fix docstrings.
+    TODO: Check sign array.
     """
 
     L = angularmomentum(r, q)
@@ -2627,30 +2624,29 @@ def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     """
     Convert asymptotic kappa and xi into asymptotic angles theta1, theta2.
 
-    Parameters
-    ----------
-    theta1inf: float
-        Asymptotic angle between orbital angular momentum and primary spin.
+    Call
+    ----
+    theta1inf,theta2inf=asymptotic_to_angles(kappainf,xi,q,chi1,chi2)
 
-    theta1inf: float
-        Asymptotic angle between orbital angular momentum and primary spin.
+	Parameters
+	----------
+	kappainf: float
+		Asymptotic value of the regularized momentum kappa.
+	xi: float
+		Effective spin.
+	q: float
+		Mass ratio: 0<=q<=1.
+	chi1: float
+		Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+	chi2: float
+		Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
-    q: float
-        Mass ratio: 0 <= q <= 1.
-
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    ----------
-    theta1inf: float
-        Asymptotic angle between the orbital angular momentum and primary spin.
-
-    theta2inf: float
-        Asymptotic angle between the orbital angular momentum and secondary spin.
+	Returns
+	-------
+	theta1inf: float
+		Asymptotic value of the angle between orbital angular momentum and primary spin.
+	theta2inf: float
+		Asymptotic value of the angle between orbital angular momentum and secondary spin.
     """
 
     theta1inf = eval_theta1inf(kappainf, xi, q, chi1, chi2)
@@ -3423,6 +3419,7 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     # Jvec = Lvec + Svec
     return toarray(Lvec, S1vec, S2vec)
 
+
 def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
     """
     TODO: write docstrings
@@ -3869,7 +3866,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
 def inspiral(*args, which=None,**kwargs):
     '''
-    TODO write docstings
+    TODO write docstings. This is the ultimate wrapper the user should call.
     '''
 
     # Precession-averaged integrations
