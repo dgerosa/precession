@@ -49,6 +49,10 @@ def descr(varname,vardef=None):
 
     lookup['theta1inf']=["float","Asymptotic value of the angle between orbital angular momentum and primary spin"]
     lookup['theta2inf']=["float","Asymptotic value of the angle between orbital angular momentum and secondary spin"]
+    lookup['costheta1inf']=["float","Cosine of the asymptotic angle between orbital angular momentum and primary spin"]
+    lookup['costheta2inf']=["float","Cosine of the asymptotic angle between orbital angular momentum and secondary spin"]
+
+
     lookup['kappainf']=["float","Asymptotic value of the regularized momentum kappa"]
     lookup['t']=["float","Time"]
     lookup['m']=["float","Parameter of elliptic function(s)"]
@@ -77,7 +81,9 @@ def descr(varname,vardef=None):
 
     lookup['thetaL']=["float","Angle betwen orbital angular momentum and total angular momentum"]
     lookup['costhetaL']=["float","Cosine of the angle betwen orbital angular momentum and total angular momentum"]
+    lookup['morph']=["string","Spin morphology"]
 
+    lookup['simpler']=["boolean","If True simplifies output"]
 
 
     if varname in lookup:

@@ -64,6 +64,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
 
 #### Definitions ####
 
+# TODO: change name to eval_m1?
 def mass1(q):
     """
     Mass of the heavier black hole in units of the total mass.
@@ -88,7 +89,7 @@ def mass1(q):
 
     return m1
 
-
+# TODO: change name to eval_m2?
 def mass2(q):
     """
     Mass of the lighter black hole in units of the total mass.
@@ -141,7 +142,7 @@ def masses(q):
 
     return toarray(m1, m2)
 
-
+# TODO: change name to eval_q?
 def massratio(m1, m2):
     """
     Mass ratio, 0 < q = m2/m1 < 1.
@@ -169,7 +170,7 @@ def massratio(m1, m2):
 
     return q
 
-
+# TODO: change name to eval_eta?
 def symmetricmassratio(q):
     """
     Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2.
@@ -194,7 +195,7 @@ def symmetricmassratio(q):
 
     return eta
 
-
+# TODO: change name to eval_S1?
 def spin1(q,chi1):
     """
     Spin angular momentum of the heavier black hole.
@@ -221,7 +222,7 @@ def spin1(q,chi1):
 
     return S1
 
-
+# TODO: change name to eval_S2?
 def spin2(q,chi2):
     """
     Spin angular momentum of the lighter black hole.
@@ -279,7 +280,7 @@ def spinmags(q,chi1,chi2):
 
     return toarray(S1,S2)
 
-
+# TODO: change name to eval_L?
 def angularmomentum(r,q):
     """
     Newtonian angular momentum of the binary.
@@ -306,7 +307,7 @@ def angularmomentum(r,q):
 
     return L
 
-
+# TODO: change name to eval_v?
 def orbitalvelocity(r):
     """
     Newtonian orbital velocity of the binary.
@@ -331,7 +332,7 @@ def orbitalvelocity(r):
 
     return v
 
-
+# TODO: This needs to be merged with eval_r
 def orbitalseparation(L, q):
     """
     Orbital separation of the binary.
@@ -2451,7 +2452,7 @@ def eval_S(theta1,theta2,deltaphi,q,chi1,chi2):
 
 def eval_kappa(J, r, q):
     """
-    Change of dependant variable to regularize the infinite orbital separation
+    Change of dependent variable to regularize the infinite orbital separation
     limit of the precession-averaged evolution equation.
 
     Call
@@ -2480,25 +2481,26 @@ def eval_kappa(J, r, q):
     return kappa
 
 
-#  TODO: Jan 4. all docstrtings from here need to be checked
-
 def eval_u(r, q):
     """
     Change of independent variable to regularize the infinite orbital separation
     limit of the precession-averaged evolution equation.
 
+    Call
+    ----
+    u = eval_u(r,q)
+
     Parameters
     ----------
     r: float
-        Binary separation.
-
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
 
     Returns
     -------
     u: float
-        Compactified momentum 1/(2L).
+    	Compactified separation 1/(2L).
     """
 
     L = angularmomentum(r, q)
@@ -2507,6 +2509,7 @@ def eval_u(r, q):
     return u
 
 
+# TODO: this needs to be merged with orbital separation
 def eval_r(u, q):
     '''TODO docstrings'''
 
@@ -2518,29 +2521,29 @@ def eval_r(u, q):
 
 def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
     """
-    Infinite orbital separation limit of the parameter kappa.
+    Infinite orbital-separation limit of the regularized momentum kappa.
+
+    Call
+    ----
+    kappainf = eval_kappainf(theta1inf,theta2inf,q,chi1,chi2)
 
     Parameters
     ----------
     theta1inf: float
-        Asymptotic value of the angle theta1 between S1 and L.
-
+    	Asymptotic value of the angle between orbital angular momentum and primary spin.
     theta2inf: float
-        Asymptotic value of the angle theta2 between S2 and L.
-
+    	Asymptotic value of the angle between orbital angular momentum and secondary spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     kappainf: float
-        Asymptotic value of kappa.
+    	Asymptotic value of the regularized momentum kappa.
     """
 
     theta1inf, theta2inf = toarray(theta1inf, theta2inf)
@@ -2555,29 +2558,29 @@ def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
     Infinite orbital separation limit of the cosine of the angle between the
     orbital angular momentum and the primary spin.
 
+    Call
+    ----
+    costheta1inf = eval_costheta1inf(kappainf,xi,q,chi1,chi2)
+
     Parameters
     ----------
     kappainf: float
-        Asymptotic value of kappa.
-
+    	Asymptotic value of the regularized momentum kappa.
     xi: float
-        Effective spin.
-
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     costheta1inf: float
-        Asymptotic value of the cosine of the angle between the orbital angular
-        momentum and the primary spin.
+    	Cosine of the asymptotic angle between orbital angular momentum and primary spin.
     """
+
 
     kappainf, xi, q = toarray(kappainf, xi, q)
     S1, S2 = spinmags(q, chi1, chi2)
@@ -2591,29 +2594,29 @@ def eval_theta1inf(kappainf, xi, q, chi1, chi2):
     Infinite orbital separation limit of the angle between the orbital angular
     momentum and the primary spin.
 
+    Call
+    ----
+    theta1inf = eval_theta1inf(kappainf,xi,q,chi1,chi2)
+
     Parameters
     ----------
     kappainf: float
-        Asymptotic value of kappa.
-
+    	Asymptotic value of the regularized momentum kappa.
     xi: float
-        Effective spin.
-
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     theta1inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the primary spin.
+    	Asymptotic value of the angle between orbital angular momentum and primary spin.
     """
+
 
     costheta1inf = eval_costheta1inf(kappainf, xi, q, chi1, chi2)
     theta1inf = np.arccos(costheta1inf)
@@ -2626,28 +2629,27 @@ def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
     Infinite orbital separation limit of the cosine of the angle between the
     orbital angular momentum and the secondary spin.
 
+    Call
+    ----
+    theta1inf = eval_costheta2inf(kappainf,xi,q,chi1,chi2)
+
     Parameters
     ----------
     kappainf: float
-        Asymptotic value of kappa.
-
+    	Asymptotic value of the regularized momentum kappa.
     xi: float
-        Effective spin.
-
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    costheta2inf: float
-        Asymptotic value of the cosine of the angle between the orbital angular
-        momentum and the secondary spin.
+    theta1inf: float
+    	Asymptotic value of the angle between orbital angular momentum and primary spin.
     """
 
     kappainf, xi, q = toarray(kappainf, xi, q)
@@ -2662,28 +2664,27 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
     Infinite orbital separation limit of the angle between the orbital angular
     momentum and the secondary spin.
 
+    Call
+    ----
+    theta2inf = eval_theta2inf(kappainf,xi,q,chi1,chi2)
+
     Parameters
     ----------
     kappainf: float
-        Asymptotic value of kappa.
-
+    	Asymptotic value of the regularized momentum kappa.
     xi: float
-        Effective spin.
-
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     theta2inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the secondary spin.
+    	Asymptotic value of the angle between orbital angular momentum and secondary spin.
     """
 
     costheta2inf = eval_costheta2inf(kappainf, xi, q, chi1, chi2)
@@ -2691,32 +2692,36 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
 
     return theta2inf
 
-
+#TODO: check simpler flag and arrays
 def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     """
-    Evaluate the spin morphology and return "L0" for librating about DeltaPhi=0, "Lpi" for librating about DeltaPhi=pi, "C-" for circulating from DeltaPhi=pi to DeltaPhi=0, and "C+" for circulating from DeltaPhi=0 to DeltaPhi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return "C" for both.
+    Evaluate the spin morphology and return `L0` for librating about DeltaPhi=0, `Lpi` for librating about DeltaPhi=pi, `C-` for circulating from DeltaPhi=pi to DeltaPhi=0, and `C+` for circulating from DeltaPhi=0 to DeltaPhi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
+
+    Call
+    ----
+    morph = morphology(J,r,xi,q,chi1,chi2,simpler = False)
 
     Parameters
     ----------
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    simpler: optional (default: False)
-        If True does not distinguish between positive and negative circulation.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    simpler: boolean, optional (default: False)
+    	If True simplifies output.
 
     Returns
     -------
     morph: string
-        Spin morphology.
+    	Spin morphology.
     """
 
     Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
@@ -2736,7 +2741,11 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
 
     return np.squeeze(morphs)
 
+#  TODO: Jan 4. all docstrtings from here need to be checked
 
+
+
+# TODO: check behavior of sign and arrays
 def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
     """
     Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi).
