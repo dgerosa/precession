@@ -26,9 +26,9 @@ def toarray(*args):
     return np.squeeze(np.array([*args]))
 
 
-
 def normalize_nested(x):
     return np.squeeze(x/np.atleast_1d(np.linalg.norm(x, axis=-1))[:,None])
+
 
 def dot_nested(x,y):
     return np.squeeze(np.diag(np.atleast_1d(np.inner(x,y))))
@@ -3512,7 +3512,7 @@ def omega2_aligned(r, q, chi1, chi2, which):
     q = toarray(q)
     L = angularmomentum(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
-    # Slightly rewritten from Eq. 18 in arXiv:2003.02281 to regularized for q=1
+    # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1
     a = (3*q**5/(2*(1+q)**11*L**7))**2
     b = L**2*(1-q)**2 - 2*L*(q*alpha1*S1-alpha2*S2)*(1-q) + (q*alpha1*S1+alpha2*S2)**2
     c = (L - (q*alpha1*S1+alpha2*S2)/(1+q))**2
@@ -3662,7 +3662,6 @@ def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_f
         return np.concatenate([dLhdv,dS1hdv,dS2hdv])
 
 # TODO: this comes straight from precession_V1. Update docstrings
-# TODO : still does not work on array, multiple evolutions. Implement a map
 def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_formula=False):
 
     '''
@@ -3868,24 +3867,14 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     return outcome
 
 
-
-
-
-# TODO: This is a master function that should allow the users to evolve binaries using either orbit- or precession-average, provide different inputs, initial/final conditions at infinity, etc etc
-def inspiral(Lh0=None,S1h0=None,S2h0=None,theta1=None,theta2=None,deltaphi=None,S=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,kind=None,tracktime=False,quadrupole_formula=False):
+def inspiral(*args, which=None,**kwargs):
 
     # Precession-averaged integrations
-    if kind in ['precession','precav','precessionaveraged','precessionaverage']:
-        # TODO: this can be removed if prec-av and orb-av function is divided
-        if Lh0 is not None or S1h0 is not None or S2h0 is not None:
-            raise TypeError("Inputs Lh0, S1h0, and S2h0 not compatible with precession-averaged inspirals.")
+    if which in ['precession','precav','precessionaveraged','precessionaverage','precession-averaged','precession-average']:
+        return inspiral_precav(*args, **kwargs)
 
-        # run precav
-    elif kind in ['orbit','orbav','orbitaveraged','orbitaverage']:
-        raise NotImplementedError
-        # remember to pass tracktime and quadruple_formula flags
-
-        # run orbav
+    elif which in ['orbit','orbav','orbitaveraged','orbitaverage','orbit-averaged','orbit-average']:
+        return inspiral_orbav(*args, **kwargs)
 
     else:
         raise ValueError("kind need to be either 'precav' or 'orbav'.")
@@ -3951,22 +3940,34 @@ if __name__ == '__main__':
 
     #print(repr(S))
 
-    ###### INSPIRAL TESTING: precav, to/from finite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # xi = 0.9141896967861489
-    # kappa = 0.5784355256550922
-    # r=np.logspace(2,1,6)
-    # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-    # #print(d)
-    # #print('')
-    #
+    ##### INSPIRAL TESTING: precav, to/from finite #######
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa = 0.5784355256550922
+    r=np.logspace(2,1,6)
+    d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+    print(d)
+
+    d=inspiral(which='precav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+
+    print(d)
+
+    d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+    print(d)
+
+    d=inspiral(which='orbav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+
+    print(d)
+
+    #print('')
+
     # d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #
     # # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['r','theta1'])
@@ -4071,17 +4072,17 @@ if __name__ == '__main__':
     # print(time.time()-t0)
     # #print(Lh)
 
-    ### ORBAV TESTING ####
-    xi=-0.5
-    q=0.4
-    chi1=0.9
-    chi2=0.8
-    r=np.logspace(2,1,5)
-    Lh,S1h,S2h = sample_unitsphere(3)
-
-    d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2,tracktime=True)
-    print(d)
-    print(" ")
+    # ### ORBAV TESTING ####
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    # r=np.logspace(2,1,5)
+    # Lh,S1h,S2h = sample_unitsphere(3)
+    #
+    # d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2,tracktime=True)
+    # print(d)
+    # print(" ")
     #
     # theta1,theta2,deltaphi = vectors_to_angles(Lh,S1h,S2h)
     # d= inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
@@ -4104,9 +4105,9 @@ if __name__ == '__main__':
     # print(" ")
     #
     #
-    d= inspiral_orbav(Lh=[Lh,Lh],S1h=[S1h,S1h],S2h=[S2h,S2h],r=[r,r],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],tracktime=True)
-    print(d)
-    print(" ")
+    # d= inspiral_orbav(Lh=[Lh,Lh],S1h=[S1h,S1h],S2h=[S2h,S2h],r=[r,r],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],tracktime=True)
+    # print(d)
+    # print(" ")
 
 
     # J=6.1
