@@ -68,20 +68,19 @@ def mass1(q):
     """
     Mass of the heavier black hole in units of the total mass.
 
-    Call
-    ----
-    m1 = mass1(q)
+	Call
+	----
+	m1 = mass1(q)
 
+	Parameters
+	----------
+	q: float
+		Mass ratio: 0<=q<=1.
 
-    Parameters
-    ----------
-    q: float
-        Mass ratio: 0 <= q <= 1.
-
-    Returns
-    -------
-    m1: float
-        Mass of the primary black hole.
+	Returns
+	-------
+	m1: float
+		Mass of the primary (heavier) black hole.
     """
 
     q = toarray(q)
@@ -94,15 +93,19 @@ def mass2(q):
     """
     Mass of the lighter black hole in units of the total mass.
 
-    Parameters
-    ----------
-    q: float
-        Mass ratio: 0 <= q <= 1.
+	Call
+	----
+	m2 = mass2(q)
 
-    Returns
-    -------
-    m2: float
-        Mass of the secondary black hole.
+	Parameters
+	----------
+	q: float
+		Mass ratio: 0<=q<=1.
+
+	Returns
+	-------
+	m2: float
+		Mass of the secondary (lighter) black hole.
     """
 
     q = toarray(q)

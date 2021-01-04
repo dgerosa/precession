@@ -1,10 +1,21 @@
+'''
+This is a semi-automatic docstrings builder for the precession code.
+
+Usage:
+python dstrings_builder.py <name of function>
+
+For each function docstrings, the developer needs to provide the intro blurb and the "Call" line. This code will then try to fill the "Parameters" and "Returns" description.
+'''
+
+
+
 import sys
 
 fun = sys.argv[1]
 
 def descr(varname,vardef=None):
 
-
+    # This is a lookup table
     lookup={}
     lookup['MISSING']=["COULD NOT BUILD","FILL MANUALLY"]
     lookup['q']=["float","Mass ratio: 0<=q<=1"]
@@ -62,15 +73,18 @@ with open("precession/precession.py") as file:
     sourcecode=file.readlines()
     for i,line in enumerate(sourcecode):
         if fun in line:
-            if '----' in sourcecode[i-1]:
 
+            if '-' in sourcecode[i-1]:
                 # Remove all the space
-                line= line.replace(' ','')
+                line= line.replace(' ','').replace('\t','')
+                #print(line)
+                docs+="Call\n----\n"
+                docs+=line.replace('=',' = ')
 
                 # Select string in between parentheses
                 inputs = line.split('(')[1].split(')')[0].split(',')
 
-                docs+="Parameters\n----------\n"
+                docs+="\nParameters\n----------\n"
 
                 # Loop over inputs
                 for var in inputs:
@@ -90,7 +104,7 @@ with open("precession/precession.py") as file:
                 for var in outputs:
                     docs+=descr(var)
 # Remove last new line
-docs=docs.rstrip()
+#docs=docs.rstrip()
 # Indent everything
 docs='\t'+docs.replace('\n','\n\t')
 
