@@ -3868,6 +3868,9 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
 
 def inspiral(*args, which=None,**kwargs):
+    '''
+    TODO write docstings
+    '''
 
     # Precession-averaged integrations
     if which in ['precession','precav','precessionaveraged','precessionaverage','precession-averaged','precession-average']:
