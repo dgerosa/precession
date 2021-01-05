@@ -19,6 +19,24 @@ def flen(x):
 
 
 def toarray(*args):
+    """
+    Convert a series of variables to numpy arrays if necessary.
+
+    Call
+    ----
+    x,y,z,... = toarray(x,y,z,...)
+
+    Parameters
+    ----------
+    x,y,z,...: generic
+        Any number of input quantities.
+
+    Returns
+    -------
+    x,y,z,...: array
+        Converted to numpy arrays.
+    """
+
     if flen(args) == 1 :
         return np.squeeze(args)
     else:
@@ -2719,7 +2737,7 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
 
     return theta2inf
 
-#TODO: check simpler flag and arrays
+
 def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     """
     Evaluate the spin morphology and return `L0` for librating about DeltaPhi=0, `Lpi` for librating about DeltaPhi=pi, `C-` for circulating from DeltaPhi=pi to DeltaPhi=0, and `C+` for circulating from DeltaPhi=0 to DeltaPhi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
@@ -4054,8 +4072,7 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
 
     if tracktime:
         t = np.squeeze(res[:,9])
-        #Can't use toarray here because t has different shape
-        return Lh,S1h,S2h,t
+        return toarray(Lh,S1h,S2h,t)
     else:
         return toarray(Lh,S1h,S2h)
 
@@ -4359,18 +4376,18 @@ if __name__ == '__main__':
     #
     # print(J,S)
 
-    # xi=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    # r=np.logspace(2,1,5)
-    # Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    # #print(Lh0,S1h0,S2h0)
-    # t0=time.time()
-    # Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False)
-    # print(Lh)
-    #
-    # Lh,S1h,S2h,t = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)
+    xi=-0.5
+    q=0.4
+    chi1=0.9
+    chi2=0.8
+    r=np.logspace(2,1,5)
+    Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    #print(Lh0,S1h0,S2h0)
+    t0=time.time()
+    Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False)
+    print(Lh)
+
+    print( [orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)])
     #
     # print(t)
     #
