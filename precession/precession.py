@@ -34,7 +34,7 @@ def toarray(*args):
     Returns
     -------
     x,y,z,...: array
-        Converted to numpy arrays.
+        Corresponding number of output quantities.
     """
 
     if flen(args) == 1 :
@@ -78,7 +78,7 @@ def sample_unitsphere(N=1):
 
 def wraproots(coefficientfunction, *args,**kwargs):
     """
-    Find roots of a polynomial given coefficients. Wrapper of numpy.roots.
+    Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is a wrapper to numpy.roots.
 
     Call
     ----
@@ -94,7 +94,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
     Returns
     -------
     sols: array
-        Roots of the polynomial, ordered according to their real part. Complex roots are masked with nans.
+        Roots of the polynomial.
     """
 
     coeffs= np.array(coefficientfunction(*args,**kwargs))
