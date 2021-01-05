@@ -13,23 +13,46 @@ warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 #### Utilities ####
 
 def flen(x):
+    # TODO: write docstrings
     #https://stackoverflow.com/a/26533085
     return getattr(x, '__len__', lambda:1)()
 
 
 def toarray(*args):
-    return np.squeeze(np.array([*args]))
-
+    if flen(args) == 1 :
+        return np.squeeze(args)
+    else:
+        return [np.squeeze(x) for x in args]
 
 def normalize_nested(x):
+    # TODO: write docstrings
     return np.squeeze(x/np.atleast_1d(np.linalg.norm(x, axis=-1))[:,None])
 
 
 def dot_nested(x,y):
+    # TODO: write docstrings
     return np.squeeze(np.diag(np.atleast_1d(np.inner(x,y))))
 
 
 def sample_unitsphere(N=1):
+    """
+    Sample points uniformly on a sphere of unit radius. Returns array of shape (N,3).
+
+    Call
+    ----
+    vec = sample_unitsphere(N = 1)
+
+    Parameters
+    ----------
+    N: integer, optional (default: 1)
+    	Number of samples.
+
+    Returns
+    -------
+    vec: array
+    	Vector in Cartesian coomponents.
+    """
+
     vec = np.random.randn(3, N)
     vec /= np.linalg.norm(vec, axis=0)
     return vec.T
@@ -39,10 +62,14 @@ def wraproots(coefficientfunction, *args,**kwargs):
     """
     Find roots of a polynomial given coefficients. Wrapper of numpy.roots.
 
+    Call
+    ----
+    sols = precession.wraproots(coefficientfunction, *args,**kwargs)
+
     Parameters
     ----------
     coefficientfunction: callable
-        Function returnin the polynomial coefficients ordered from highest to lowest degree.
+        Function returning  the polynomial coefficients ordered from highest to lowest degree.
     *args, **kwargs:
         Parameters of `coefficientfunction`.
 
@@ -52,7 +79,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
         Roots of the polynomial, ordered according to their real part. Complex roots are masked with nans.
     """
 
-    coeffs= coefficientfunction(*args,**kwargs)
+    coeffs= np.array(coefficientfunction(*args,**kwargs))
 
     if np.ndim(coeffs)==1:
         sols = np.sort_complex(np.roots(coeffs))
@@ -83,7 +110,6 @@ def mass1(q):
     m1: float
     	Mass of the primary (heavier) black hole.
     """
-
     q = toarray(q)
     m1 = 1/(1+q)
 
@@ -1907,7 +1933,6 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
     return xi
 
 
-# TODO: check the behavior of sign here. Array?
 def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
     """
     Evaluate the nutation parameter varphi.
@@ -1943,6 +1968,7 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
 
     L = angularmomentum(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
+    S,J,xi,q,sign= toarray(S,J,xi,q,sign)
 
     t1 = (1+q) / (4*q * S**2 * L)
     t2 = J**2 - L**2 - S**2
@@ -2215,7 +2241,7 @@ def eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
 
     return cosdeltaphi
 
-# TODO: check the behavior of sign. Array?
+
 def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     """
     Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].
@@ -2249,6 +2275,7 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     	Angle between the projections of the two spins onto the orbital plane.
     """
 
+    sign = toarray(sign)
     cosdeltaphi=eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
     deltaphi = np.sign(sign)*np.arccos(cosdeltaphi)
 
@@ -2726,7 +2753,8 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
 
     Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
     # Pairs of booleans based on the values of deltaphi at S- and S+
-    status = np.array([eval_cosdeltaphi(Smin,J,r,xi,q,chi1,chi2) >0.5 ,eval_cosdeltaphi(Smax,J,r,xi,q,chi1,chi2) >0.5]).T
+    status = np.atleast_2d(np.array([eval_cosdeltaphi(Smin,J,r,xi,q,chi1,chi2)>0 ,eval_cosdeltaphi(Smax,J,r,xi,q,chi1,chi2) >0]).T)
+
 
     # Map to labels
     if simpler:
@@ -2737,6 +2765,7 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     # Subsitute pairs with labels
     morphs = np.zeros(flen(J))
     for k, v in dictlabel.items():
+        #print(status==k).all()
         morphs=np.where((status == k).all(axis=1),v,morphs)
 
     return np.squeeze(morphs)
@@ -3636,8 +3665,39 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
 
 def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
-    TODO: write docstrings
+    TODO: write descr.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+    	Angle between the projections of the two spins onto the orbital plane.
+    r: float
+    	Binary separation.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array
+    	Cartesian vector of the primary spin.
+    S2vec: array
+    	Cartesian vector of the secondary spin.
     """
+
 
     L = angularmomentum(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
@@ -3675,6 +3735,9 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
 def r_updown(q, chi1, chi2):
     """
     The critical separations r_ud+/- marking the region of the up-down precessional instability.
+
+
+    r_udp,r_udm = r_updown(q, chi1, chi2)
 
     Parameters
     ----------
@@ -4183,30 +4246,30 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    deltaphi=0.46
-    S = 0.5538768649231461
-    J = 2.740273008918153
-    xi = 0.9141896967861489
-    kappa = 0.5784355256550922
-    r=np.logspace(2,1,6)
-    d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-    print(d)
-
-    d=inspiral(which='precav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-
-    print(d)
-
-    d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-    print(d)
-
-    d=inspiral(which='orbav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-
-    print(d)
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # deltaphi=0.46
+    # S = 0.5538768649231461
+    # J = 2.740273008918153
+    # xi = 0.9141896967861489
+    # kappa = 0.5784355256550922
+    # r=np.logspace(2,1,6)
+    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+    # print(d)
+    #
+    # d=inspiral(which='precav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+    #
+    # print(d)
+    #
+    # d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+    # print(d)
+    #
+    # d=inspiral(which='orbav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
+    #
+    # print(d)
 
     #print('')
 
@@ -4444,17 +4507,25 @@ if __name__ == '__main__':
 
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
 
-    # q=[0.7,0.7]
-    # chi1=[0.7,0.7]
-    # chi2=[0.9,0.9]
-    # r=[30,30]
-    # J=[1.48,1.48]
-    # xi=[0.25,0.18]
-    #print("stillworks",S2roots(J,r,xi,q,chi1,chi2))
+    q=0.7
+    chi1=0.7
+    chi2=0.9
+    r=30
+    J=1.48
+    xi=0.25
+    S = 0.3
+    #print("stillworks",S2roots(J,r,xi,q,chi1,chi2)**0.5)
+
+    #print(eval_deltaphi(S,J,r,xi,q,chi1,chi2, sign=1))
+
+    #print(eval_deltaphi([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], sign=[1,1]))
+    #print(eval_deltaphi([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], sign=1))
+
+    print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
 
 
     #print(morphology(J,r,xi,q,chi1,chi2))
-    #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    print(morphology([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
 
     # theta1=[0.567,1]
     # theta2=[1,1]

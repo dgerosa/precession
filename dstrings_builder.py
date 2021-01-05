@@ -84,6 +84,8 @@ def descr(varname,vardef=None):
     lookup['morph']=["string","Spin morphology"]
 
     lookup['simpler']=["boolean","If True simplifies output"]
+    lookup['N']=["integer","Number of samples"]
+    lookup['vec']=["array","Vector in Cartesian coomponents"]
 
 
     if varname in lookup:
