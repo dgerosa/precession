@@ -105,6 +105,13 @@ def descr(varname,vardef=None):
     lookup['outputs']=["dictionary","Set of outputs"]
     lookup['requested_outputs']=["list","Set of outputs"]
 
+    lookup['r_udp']=["float","Outer orbital separation in the up-down instability."]
+    lookup['r_udm']=["float","Inner orbital separation in the up-down instability."]
+    lookup['r_wide']=["float","Orbital separation where wide nutations becomes possible."]
+    lookup['omegasq']=["float","Squared frequency."]
+    lookup['which']=["string","Select function behavior."]
+
+    lookup['allvars']=["array","Packed ODE input variables."]
 
     if varname in lookup:
         pass

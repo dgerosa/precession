@@ -4008,67 +4008,62 @@ def r_updown(q, chi1, chi2):
     """
     The critical separations r_ud+/- marking the region of the up-down precessional instability.
 
-
-    r_udp,r_udm = r_updown(q, chi1, chi2)
+    Call
+    ----
+    r_udp,r_udm = r_updown(q,chi1,chi2)
 
     Parameters
     ----------
     q: float
-        Mass ratio m2/m1, 0 <= q <= 1.
-
-    chi1:
-        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
-
-    chi2:
-        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     r_udp: float
-        Outer critical separation marking the instability onset.
-
+    	Outer orbital separation in the up-down instability.
     r_udm: float
-        Inner critical separation marking the end of the unstable region.
-
+    	Inner orbital separation in the up-down instability.
     """
 
+
     q, chi1, chi2 = toarray(q, chi1, chi2)
-    r_plus = (chi1**.5+(q*chi2)**.5)**4./(1.-q)**2.
-    r_minus = (chi1**.5-(q*chi2)**.5)**4./(1.-q)**2.
+    r_udp = (chi1**.5+(q*chi2)**.5)**4./(1.-q)**2.
+    r_udm = (chi1**.5-(q*chi2)**.5)**4./(1.-q)**2.
 
     return toarray(r_plus, r_minus)
 
 
-def omega2_aligned(r, q, chi1, chi2, which):
+def omegasq_aligned(r, q, chi1, chi2, which):
     """
-    TODO: fix docstrings, new which paramters, alphas removed
-    Squared oscillation frequency of a given perturbed aligned-spin binary.
+    Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
+
+    Call
+    ----
+    omegasq = omegasq_aligned(r,q,chi1,chi2,which)
 
     Parameters
     ----------
     r: float
-        Orbital separation.
-
+    	Binary separation.
     q: float
-        Mass ratio m2/m1, 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
-
-    alpha1: int
-        Alignment of the primary black hole, +1 for up or -1 for down.
-
-    alpha2: int
-        Alignment of the secondary black hole, +1 for up or -1 for down.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    which: string
+    	Select function behavior.
 
     Returns
     -------
-    omega2: float
-        Squared oscillation frequency of the given aligned binary.
+    omegasq: float
+    	Squared frequency.
     """
+
 
     # These are all the valid input flags
     uulabels=np.array(['uu','up-up','upup','++'])
@@ -4090,41 +4085,39 @@ def omega2_aligned(r, q, chi1, chi2, which):
     a = (3*q**5/(2*(1+q)**11*L**7))**2
     b = L**2*(1-q)**2 - 2*L*(q*alpha1*S1-alpha2*S2)*(1-q) + (q*alpha1*S1+alpha2*S2)**2
     c = (L - (q*alpha1*S1+alpha2*S2)/(1+q))**2
-    omega2 = a*b*c
+    omegasq = a*b*c
 
-    return omega2
+    return omegasq
 
 
-# TODO: nutation
-def r_wide(q, chi1, chi2):
+def widenutation(q, chi1, chi2):
     """
     The critical separation r_wide below which the binary component with
     smaller dimensionless spin may undergo wide nutations.
 
+    Call
+    ----
+    r_wide = widenutation(q,chi1,chi2)
+
     Parameters
     ----------
     q: float
-        Mass ratio m2/m1, 0 <= q <= 1.
-
-    chi1:
-        Dimensionless spin of the primary black hole, 0 <= chi1 <= 1.
-
-    chi2:
-        Dimensionless spin of the secondary black hole, 0 <= chi2 <= 1.
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     r_wide: float
-        Critical orbital separation for wide nutation.
-        If chi1 < chi2 (chi1 > chi2) the primary (secondary) spin may undergo
-        wide nutations.
-
+    	Orbital separation where wide nutations becomes possible.
     """
 
     q, chi1, chi2 = toarray(q, chi1, chi2)
     r_wide = ((q*chi2 - chi1) / (1-q))**2
 
-    return r_wide
+    return r_w
 
 
 #### Orbit averaged things ####
