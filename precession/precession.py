@@ -2956,6 +2956,305 @@ def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
 
 
 
+def vectors_to_conserved(Lvec, S1vec, S2vec, q):
+    """
+    Convert cartesian vectors (L,S1,S2) into conserved quantities (S,J,xi).
+
+    Call
+    ----
+    S,J,xi = vectors_to_conserved(Lvec,S1vec,S2vec,q)
+
+    Parameters
+    ----------
+    Lvec: array
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array
+    	Cartesian vector of the primary spin.
+    S2vec: array
+    	Cartesian vector of the secondary spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+
+    Returns
+    -------
+    S: float
+    	Magnitude of the total spin.
+    J: float
+    	Magnitude of the total angular momentum.
+    xi: float
+    	Effective spin.
+    """
+
+    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
+    S = np.linalg.norm(S1vec+S2vec, axis=-1)
+    J = np.linalg.norm(S1vec+S2vec+Lvec, axis=-1)
+    L = np.linalg.norm(Lvec, axis=-1)
+    m1, m2 = masses(q)
+    xi = dot_nested(S1vec,Lvec)/(m1*L) + dot_nested(S2vec,Lvec)/(m2*L)
+
+    return toarray(S, J, xi)
+
+# TODO: write function to get theta12 from theta1,theta2 and deltaphi
+
+def vectors_to_angles(Lvec, S1vec, S2vec):
+    """
+    Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi). The convention for the sign of deltaphi is given in Eq. (2d) of arxiv:1506.03492.
+
+    Call
+    ----
+    theta1,theta2,deltaphi = vectors_to_angles(Lvec,S1vec,S2vec,q)
+
+    Parameters
+    ----------
+    Lvec: array
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array
+    	Cartesian vector of the primary spin.
+    S2vec: array
+    	Cartesian vector of the secondary spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+
+    Returns
+    -------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+    	Angle between the projections of the two spins onto the orbital plane.
+    """
+
+
+    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
+    S1vec = normalize_nested(S1vec)
+    S2vec = normalize_nested(S2vec)
+    Lvec = normalize_nested(Lvec)
+    theta1 = np.arccos(dot_nested(S1vec,Lvec))
+    theta2 = np.arccos(dot_nested(S2vec,Lvec))
+    absdeltaphi = np.arccos(dot_nested(normalize_nested(np.cross(S1vec, Lvec)), normalize_nested(np.cross(S2vec, Lvec))))
+    signdeltaphi = np.sign(dot_nested(Lvec,np.cross(np.cross(S2vec, Lvec),np.cross(S1vec, Lvec))))
+    deltaphi = absdeltaphi*signdeltaphi
+
+    return toarray(theta1, theta2, deltaphi)
+
+
+def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
+    """
+    Convert the conserved quantities (S,J,xi) to angular momentum vectors (L,S1,S2) in the frame
+    aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+    	Magnitude of the total spin.
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array
+    	Cartesian vector of the primary spin.
+    S2vec: array
+    	Cartesian vector of the secondary spin.
+    """
+
+
+    S, J, q = toarray(S, J, q)
+    L = angularmomentum(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+    varphi = eval_varphi(S, J, r, xi, q, chi1, chi2)
+    thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
+
+    # Jx = toarray(np.zeros(flen(J)))
+    # Jy = toarray(np.zeros(flen(J)))
+    # Jz = J
+    # Jvec = np.array([Jx, Jy, Jz]).T
+    # Svec = Jvec - Lvec
+
+    Lx = L * np.sin(thetaL)
+    Ly = toarray(np.zeros(flen(L)))
+    Lz = L * np.cos(thetaL)
+    Lvec = np.array([Lx, Ly, Lz]).T
+
+    A1 = (J**2 - (L-S)**2)**0.5
+    A2 = ((L+S)**2 - J**2)**0.5
+    A3 = (S**2 - (S1-S2)**2)**0.5
+    A4 = ((S1+S2)**2 - S**2)**0.5
+
+    S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S1y = A3 * A4 * np.sin(varphi) / (2*S)
+    S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S1vec = np.array([S1x, S1y, S1z]).T
+
+    S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S2y = -A3*A4*np.sin(varphi) / (2*S)
+    S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S2vec = np.array([S2x, S2y, S2z]).T
+
+    return toarray(Lvec, S1vec, S2vec)
+
+def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame
+    aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+    	Angle between the projections of the two spins onto the orbital plane.
+    r: float
+    	Binary separation.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array
+    	Cartesian vector of the primary spin.
+    S2vec: array
+    	Cartesian vector of the secondary spin.
+    """
+
+    S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
+    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
+    return toarray(Lvec, S1vec, S2vec)
+
+
+
+
+def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+    	Angle between the projections of the two spins onto the orbital plane.
+    r: float
+    	Binary separation.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array
+    	Cartesian vector of the primary spin.
+    S2vec: array
+    	Cartesian vector of the secondary spin.
+    """
+
+
+    L = angularmomentum(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+
+    Lx = toarray(np.zeros(flen(L)))
+    Ly = toarray(np.zeros(flen(L)))
+    Lz = L
+    Lvec = np.array([Lx, Ly, Lz]).T
+
+    S1x = S1 * np.sin(theta1)
+    S1y = toarray(np.zeros(flen(S1)))
+    S1z = S1 * np.cos(theta1)
+    S1vec = np.array([S1x, S1y, S1z]).T
+
+    S2x = S2 * np.sin(theta2) * np.cos(deltaphi)
+    S2y = S2 * np.sin(theta2) * np.sin(deltaphi)
+    S2z = S2 * np.cos(theta2)
+    S2vec = np.array([S2x, S2y, S2z]).T
+
+    # Svec = S1vec + S2vec
+    # Jvec = Lvec + Svec
+    return toarray(Lvec, S1vec, S2vec)
+
+
+
+
+
+def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
+    """
+    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = conserved_to_Lframe(S,J,r,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+    	Magnitude of the total spin.
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array
+    	Cartesian vector of the primary spin.
+    S2vec: array
+    	Cartesian vector of the secondary spin.
+    """
+
+    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
+    Lvec, S1vec, S2vec = angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
+    return toarray(Lvec, S1vec, S2vec)
+
+
 #### Precessional timescale dynamics ####
 
 def Speriod_prefactor(r,xi,q):
@@ -3703,186 +4002,6 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     func_av = (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2)[0]
 
     return func_av
-
-
-def vectors_to_conserved(Lvec, S1vec, S2vec, q):
-    """
-    """
-
-    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
-    S = np.linalg.norm(S1vec+S2vec, axis=-1)
-    J = np.linalg.norm(S1vec+S2vec+Lvec, axis=-1)
-    L = np.linalg.norm(Lvec, axis=-1)
-    m1, m2 = masses(q)
-    xi = dot_nested(S1vec,Lvec)/(m1*L) + dot_nested(S2vec,Lvec)/(m2*L)
-
-    return toarray(S, J, xi)
-
-# TODO: write function to get theta12 from theta1,theta2 and deltaphi
-
-def vectors_to_angles(Lvec, S1vec, S2vec):
-    """
-    The sign comes from Eq 2d in the multitimescale paper
-    """
-
-    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
-    S1vec = normalize_nested(S1vec)
-    S2vec = normalize_nested(S2vec)
-    Lvec = normalize_nested(Lvec)
-    theta1 = np.arccos(dot_nested(S1vec,Lvec))
-    theta2 = np.arccos(dot_nested(S2vec,Lvec))
-    absdeltaphi = np.arccos(dot_nested(normalize_nested(np.cross(S1vec, Lvec)), normalize_nested(np.cross(S2vec, Lvec))))
-    signdeltaphi = np.sign(dot_nested(Lvec,np.cross(np.cross(S2vec, Lvec),np.cross(S1vec, Lvec))))
-    deltaphi = absdeltaphi*signdeltaphi
-
-    return toarray(theta1, theta2, deltaphi)
-
-
-def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
-    """
-    Convert the conserved quantities to angular momentum vectors in the frame
-    aligned with the total angular momentum.
-    TODO: check multitimescale paper for definition of x and y axis
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-
-    J: float
-        Magnitude of the total angular momentum.
-
-    r: float
-        Binary separation.
-
-    q: float
-        Mass ratio: 0 <= q <= 1.
-
-    xi: float
-        Effective spin.
-
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    -------
-
-    """
-
-    S, J, q = toarray(S, J, q)
-    L = angularmomentum(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
-    varphi = eval_varphi(S, J, r, xi, q, chi1, chi2)
-    thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
-
-    # Jx = toarray(np.zeros(flen(J)))
-    # Jy = toarray(np.zeros(flen(J)))
-    # Jz = J
-    # Jvec = np.array([Jx, Jy, Jz]).T
-    # Svec = Jvec - Lvec
-
-    Lx = L * np.sin(thetaL)
-    Ly = toarray(np.zeros(flen(L)))
-    Lz = L * np.cos(thetaL)
-    Lvec = np.array([Lx, Ly, Lz]).T
-
-    A1 = (J**2 - (L-S)**2)**0.5
-    A2 = ((L+S)**2 - J**2)**0.5
-    A3 = (S**2 - (S1-S2)**2)**0.5
-    A4 = ((S1+S2)**2 - S**2)**0.5
-
-    S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S1y = A3 * A4 * np.sin(varphi) / (2*S)
-    S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S1vec = np.array([S1x, S1y, S1z]).T
-
-    S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S2y = -A3*A4*np.sin(varphi) / (2*S)
-    S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S2vec = np.array([S2x, S2y, S2z]).T
-
-    return toarray(Lvec, S1vec, S2vec)
-
-def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
-    """
-    TODO: write docstrings
-    """
-
-    S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
-    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
-    return toarray(Lvec, S1vec, S2vec)
-
-
-def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
-    """
-    TODO: write descr.
-
-    Call
-    ----
-    Lvec,S1vec,S2vec = angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-    	Angle between orbital angular momentum and primary spin.
-    theta2: float
-    	Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-    	Angle between the projections of the two spins onto the orbital plane.
-    r: float
-    	Binary separation.
-    q: float
-    	Mass ratio: 0<=q<=1.
-    chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
-    chi2: float
-    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Lvec: array
-    	Cartesian vector of the orbital angular momentum.
-    S1vec: array
-    	Cartesian vector of the primary spin.
-    S2vec: array
-    	Cartesian vector of the secondary spin.
-    """
-
-
-    L = angularmomentum(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
-
-    Lx = toarray(np.zeros(flen(L)))
-    Ly = toarray(np.zeros(flen(L)))
-    Lz = L
-    Lvec = np.array([Lx, Ly, Lz]).T
-
-    S1x = S1 * np.sin(theta1)
-    S1y = toarray(np.zeros(flen(S1)))
-    S1z = S1 * np.cos(theta1)
-    S1vec = np.array([S1x, S1y, S1z]).T
-
-    S2x = S2 * np.sin(theta2) * np.cos(deltaphi)
-    S2y = S2 * np.sin(theta2) * np.sin(deltaphi)
-    S2z = S2 * np.cos(theta2)
-    S2vec = np.array([S2x, S2y, S2z]).T
-
-    # Svec = S1vec + S2vec
-    # Jvec = Lvec + Svec
-    return toarray(Lvec, S1vec, S2vec)
-
-
-def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
-    """
-    TODO: write docstrings
-    """
-
-    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
-    Lvec, S1vec, S2vec = angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
-    return toarray(Lvec, S1vec, S2vec)
 
 
 def r_updown(q, chi1, chi2):
