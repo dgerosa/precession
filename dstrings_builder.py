@@ -32,6 +32,8 @@ def descr(varname,vardef=None):
     lookup['xi']=["float","Effective spin"]
     lookup['J']=["float","Magnitude of the total angular momentum"]
     lookup['S']=["float","Magnitude of the total spin"]
+    lookup['Ssq']=["float","Squared magnitude of the total spin"]
+
     lookup['kappa']=["float","Regularized angular momentum (J^2-L^2)/(2L)"]
     lookup['u']=["float","Compactified separation 1/(2L)"]
     lookup['varphi']=["float","Generalized nutation coordinate (Eq 9 in arxiv:1506.03492)."]
@@ -78,6 +80,7 @@ def descr(varname,vardef=None):
     lookup['coeff2']=["float","Coefficient to the x^2 term in polynomial"]
     lookup['coeff1']=["float","Coefficient to the x^1 term in polynomial"]
     lookup['coeff0']=["float","Coefficient to the x^0 term in polynomial"]
+    lookup['coeff']=["float","Coefficient"]
 
     lookup['thetaL']=["float","Angle betwen orbital angular momentum and total angular momentum"]
     lookup['costhetaL']=["float","Cosine of the angle betwen orbital angular momentum and total angular momentum"]
@@ -86,6 +89,21 @@ def descr(varname,vardef=None):
     lookup['simpler']=["boolean","If True simplifies output"]
     lookup['N']=["integer","Number of samples"]
     lookup['vec']=["array","Vector in Cartesian coomponents"]
+    lookup['dS2dt2']=["float","Squared time derivative of the squared total spin."]
+    lookup['dS2dt']=["float","Time derivative of the squared total spin"]
+    lookup['dSdt']=["float","Time derivative of the total spin"]
+
+    lookup['Sminus2']=["float","Lowest physical root, if present, of the effective potential equation"]
+    lookup['Splus2']=["float","Largest physical root, if present, of the effective potential equation"]
+    lookup['S32']=["float","Spurious root of the effective potential equation"]
+    lookup['tau']=["float","Nutation period"]
+
+    lookup['Sminus2inf']=["float","Asymptotic value of the lowest physical root, if present, of the effective potential equation"]
+    lookup['Splus2inf']=["float","Asymptotic value of the largest physical root, if present, of the effective potential equation"]
+    lookup['S32inf']=["float","Asymptotic value of the spurious root of the effective potential equation"]
+    lookup['RHS']=["float","Right-hand side"]
+    lookup['outputs']=["dictionary","Set of outputs"]
+    lookup['requested_outputs']=["list","Set of outputs"]
 
 
     if varname in lookup:

@@ -1582,30 +1582,35 @@ def S2roots(J,r,xi,q,chi1,chi2):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
 
+    Call
+    ----
+    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
-    kappa: float
-        Asymptotic momentum (J^2-L^2)/(2L).
-    u: float
-        Compactified momentum 1/(2L).
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
     xi: float
-        Effective spin
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    Sminus2:
-        Lowest physical root (or unphysical).
-    Splus2:
-        Highest physical root (or unphysical).
+    Sminus2: float
+    	Lowest physical root, if present, of the effective potential equation.
+    Splus2: float
+    	Largest physical root, if present, of the effective potential equation.
     S32: float
-        Spurious root.
+    	Spurious root of the effective potential equation.
     """
+
 
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
@@ -2792,39 +2797,42 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
 
 
 
-# TODO: check behavior of sign and arrays
 def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
     """
     Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi).
     Setting sign=+1 (default) returns deltaphi in [0, pi], setting sign=-1 returns deltaphi in [-pi,0].
 
+    Call
+    ----
+    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign = +1)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-    sign: optional (default: +1)
-        If positive returns values in [0,pi], if negative returns values in [-pi,0].
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    sign: integer, optional (default: +1)
+    	Sign, either +1 or -1.
 
     Returns
     -------
     theta1: float
-        Angle between orbital angular momentum and primary spin.
+    	Angle between orbital angular momentum and primary spin.
     theta2: float
-        Angle between orbital angular momentum and secondary spin.
+    	Angle between orbital angular momentum and secondary spin.
     deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
+    	Angle between the projections of the two spins onto the orbital plane.
     """
 
     theta1=eval_theta1(S,J,r,xi,q,chi1,chi2)
@@ -2838,31 +2846,35 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     """
     Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
 
+    Call
+    ----
+    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
+
     Parameters
     ----------
     theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
     deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
+    	Angle between the projections of the two spins onto the orbital plane.
     r: float
-        Binary separation.
+    	Binary separation.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
-    ----------
+    -------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     xi: float
-        Effective spin.
+    	Effective spin.
     """
 
     S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
@@ -2874,32 +2886,31 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
 
 def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     """
-    Convert asymptotic angles theta1 theta2 into effective spin and asymptotic kappa.
+    Convert asymptotic angles (theta1, theta2) into regularized momentum and effective spin (kappa, xi).
+
+    Call
+    ----
+    kappainf,xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
 
     Parameters
     ----------
     theta1inf: float
-        Asymptotic angle between orbital angular momentum and primary spin.
-
+    	Asymptotic value of the angle between orbital angular momentum and primary spin.
     theta2inf: float
-        Asymptotic angle between orbital angular momentum and primary spin.
-
+    	Asymptotic value of the angle between orbital angular momentum and secondary spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
-    ----------
+    -------
     kappainf: float
-        Asymptotic momentum (J^2-L^2)/(2L).
-
+    	Asymptotic value of the regularized momentum kappa.
     xi: float
-        Effective spin.
+    	Effective spin.
     """
 
     S1, S2 = spinmags(q, chi1, chi2)
@@ -2911,31 +2922,31 @@ def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
 
 def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     """
-    Convert asymptotic kappa and xi into asymptotic angles theta1, theta2.
+    Convert regularized momentum and effective spin (kappa, xi) into asymptotic angles (theta1, theta2).
 
     Call
     ----
-    theta1inf,theta2inf=asymptotic_to_angles(kappainf,xi,q,chi1,chi2)
+    theta1inf,theta2inf = asymptotic_to_angles(kappainf,xi,q,chi1,chi2)
 
-	Parameters
-	----------
-	kappainf: float
-		Asymptotic value of the regularized momentum kappa.
-	xi: float
-		Effective spin.
-	q: float
-		Mass ratio: 0<=q<=1.
-	chi1: float
-		Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
-	chi2: float
-		Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    Parameters
+    ----------
+    kappainf: float
+    	Asymptotic value of the regularized momentum kappa.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
-	Returns
-	-------
-	theta1inf: float
-		Asymptotic value of the angle between orbital angular momentum and primary spin.
-	theta2inf: float
-		Asymptotic value of the angle between orbital angular momentum and secondary spin.
+    Returns
+    -------
+    theta1inf: float
+    	Asymptotic value of the angle between orbital angular momentum and primary spin.
+    theta2inf: float
+    	Asymptotic value of the angle between orbital angular momentum and secondary spin.
     """
 
     theta1inf = eval_theta1inf(kappainf, xi, q, chi1, chi2)
@@ -2951,60 +2962,65 @@ def Speriod_prefactor(r,xi,q):
     """
     Numerical prefactor to the precession period.
 
+    Call
+    ----
+    coeff = Speriod_prefactor(r,xi,q)
+
     Parameters
     ----------
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
 
     Returns
     -------
-    mathcalA: string
-        Numerical prefactor to the precession period.
+    coeff: float
+    	Coefficient.
     """
+
 
     r,xi=toarray(r,xi)
     eta=symmetricmassratio(q)
-    mathcalA = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
+    coeff = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
 
-    return mathcalA
+    return coeff
 
 
+# TODO: Here we use S2 for square...
 def dS2dtsquared(S,J,r,xi,q,chi1,chi2):
     """
     Squared first time derivative of the squared total spin, on the precession timescale.
 
+    Call
+    ----
+    dS2dt2 = dS2dtsquared(S,J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
-
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
-
+    	Magnitude of the total angular momentum.
     r: float
-        Orbital separation.
-
+    	Binary separation.
     xi: float
-        Effective spin
-
+    	Effective spin.
     q: float
-        Mass ratio.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    float
-        Squared time derivative of the squared total spin.
+    dS2dt2: float
+    	Squared first derivative of the squared total spin.
     """
+
 
     mathcalA = Speriod_prefactor(r,xi,q)
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
@@ -3012,73 +3028,70 @@ def dS2dtsquared(S,J,r,xi,q,chi1,chi2):
     return - mathcalA**2 * (S**2-Splus2) * (S**2-Sminus2) * (S**2-S32)
 
 
+# Change name to this function, otherwise is identical to the returned variable.
 def dS2dt(S,J,r,xi,q,chi1,chi2):
     """
     Time derivative of the squared total spin, on the precession timescale.
 
+    Call
+    ----
+    dS2dt = dS2dt(S,J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
-
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
-
+    	Magnitude of the total angular momentum.
     r: float
-        Orbital separation.
-
+    	Binary separation.
     xi: float
-        Effective spin.
-
+    	Effective spin.
     q: float
-        Mass ratio.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    float
-        Time derivative of the squared total spin.
+    dS2dt: float
+    	Time derivative of the squared total spin.
     """
 
     return dS2dtsquared(S,J,r,xi,q,chi1,chi2)**0.5
 
-
+# Change name to this function, otherwise is identical to the returned variable.
 def dSdt(S,J,r,xi,q,chi1,chi2):
     """
     Time derivative of the total spin, on the precession timescale.
 
+    Call
+    ----
+    dSdt = dSdt(S,J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     S: float
-        Magnitude of the total spin.
-
+    	Magnitude of the total spin.
     J: float
-        Magnitude of the total angular momentum.
-
+    	Magnitude of the total angular momentum.
     r: float
-        Orbital separation.
-
+    	Binary separation.
     xi: float
-        Effective spin.
-
+    	Effective spin.
     q: float
-        Mass ratio.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    float
-        Time derivative of the total spin.
+    dSdt: float
+    	Time derivative of the total spin.
     """
 
     return dS2dt(S,J,r,xi,q,chi1,chi2) / (2*S)
@@ -3088,15 +3101,23 @@ def elliptic_parameter(Sminus2,Splus2,S32):
     """
     Parameter m entering elliptic functiosn for the evolution of S.
 
+    Call
+    ----
+    m = elliptic_parameter(Sminus2,Splus2,S32)
+
     Parameters
     ----------
-    Sminus2, Splus2, S32: floats
-        Roots of d(S^2)/dt=0 with S32<=Sminus2<=Splus2.
+    Sminus2: float
+    	Lowest physical root, if present, of the effective potential equation.
+    Splus2: float
+    	Largest physical root, if present, of the effective potential equation.
+    S32: float
+    	Spurious root of the effective potential equation.
 
     Returns
     -------
-    m: string
-        Parameter of the ellptic functions.
+    m: float
+    	Parameter of elliptic function(s).
     """
 
     m = (Splus2-Sminus2)/(Splus2-S32)
@@ -3108,25 +3129,29 @@ def Speriod(J,r,xi,q,chi1,chi2):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
 
+    Call
+    ----
+    tau = Speriod(J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    tau: string
-        Nutation period.
+    tau: float
+    	Nutation period.
     """
 
     mathcalA=Speriod_prefactor(r,xi,q)
@@ -3141,27 +3166,31 @@ def Soft(t,J,r,xi,q,chi1,chi2):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
 
+    Call
+    ----
+    S = Soft(t,J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
-    t: float, array
-        Time
+    t: float
+    	Time.
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     S: float
-        Magnitude of the total spin.
+    	Magnitude of the total spin.
     """
 
     t=toarray(t)
@@ -3176,6 +3205,36 @@ def Soft(t,J,r,xi,q,chi1,chi2):
 
 
 def Ssampling(J,r,xi,q,chi1,chi2,N=1):
+    """
+    Sample N values of S at fixed separation accoring to its PN-weighted distribution function.
+
+    Call
+    ----
+    S = Ssampling(J,r,xi,q,chi1,chi2,N = 1)
+
+    Parameters
+    ----------
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    N: integer, optional (default: 1)
+    	Number of samples.
+
+    Returns
+    -------
+    S: float
+    	Magnitude of the total spin.
+    """
+
     #TODO write docstrings
     # N is number of samples
 
@@ -3188,17 +3247,21 @@ def Ssampling(J,r,xi,q,chi1,chi2,N=1):
 
 def S2av_mfactor(m):
     """
-    Factor depending on the elliptic parameter in the precession averaged squared total spin.
+    Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
+
+    Call
+    ----
+    coeff = S2av_mfactor(m)
 
     Parameters
     ----------
     m: float
-        Elliptic parameter.
+    	Parameter of elliptic function(s).
 
     Returns
     -------
-    mfactor: float
-        Value of the factor for the given m, (1 - E(m)/K(m)) / m.
+    coeff: float
+    	Coefficient.
     """
 
     m=toarray(m)
@@ -3210,70 +3273,73 @@ def S2av_mfactor(m):
     # If m=0 return the limit 1/2
     return np.where(m==0, 1/2, mfactor)
 
-
+# TODO: change name to this function
 def S2av(J, r, xi, q, chi1, chi2):
     """
     Analytic precession averaged expression for the squared total spin.
 
+    Call
+    ----
+    Ssq = S2av(J,r,xi,q,chi1,chi2)
+
     Parameters
     ----------
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
+    	Binary separation.
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
+    Ssq: float
+    	Squared magnitude of the total spin.
     """
+
 
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
     m = elliptic_parameter(Sminus2, Splus2, S32)
-    S2 = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
+    Ssq = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
 
-    return S2
+    return Ssq
 
-
+# TODO again S2 instead of Ssq
 def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the roots of the cubic equation in S^2.
 
+    Call
+    ----
+    Sminus2inf,Splus2inf,S32inf = S2rootsinf(theta1inf,theta2inf,q,chi1,chi2)
+
     Parameters
     ----------
     theta1inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the primary spin.
-
+    	Asymptotic value of the angle between orbital angular momentum and primary spin.
     theta2inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the secondary spin.
-
+    	Asymptotic value of the angle between orbital angular momentum and secondary spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     Sminus2inf: float
-        Asymptotic value of the root Sminus2.
-
+    	Asymptotic value of the lowest physical root, if present, of the effective potential equation.
     Splus2inf: float
-        Asymptotic value of the root Splus2.
-
+    	Asymptotic value of the largest physical root, if present, of the effective potential equation.
     S32inf: float
-        Asymptotic value of the root S32, -inf.
+    	Asymptotic value of the spurious root of the effective potential equation.
     """
 
     S1, S2 = spinmags(q, chi1, chi2)
@@ -3291,31 +3357,29 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
 def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the precession averaged values of S^2
-    from the asymptotic angles theta1, theta2.
+    from the asymptotic angles (theta1, theta2).
+
+    Call
+    ----
+    Ssq = S2avinf(theta1inf,theta2inf,q,chi1,chi2)
 
     Parameters
     ----------
     theta1inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the primary spin.
-
+    	Asymptotic value of the angle between orbital angular momentum and primary spin.
     theta2inf: float
-        Asymptotic value of the angle between the orbital angular momentum and
-        the secondary spin.
-
+    	Asymptotic value of the angle between orbital angular momentum and secondary spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
-    S2avinf: flaot
-        Asymptotic value of S2av.
+    Ssq: float
+    	Squared magnitude of the total spin.
     """
 
     theta1inf, theta2inf = toarray(theta1inf, theta2inf)
@@ -3328,29 +3392,32 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
 #### Precession-averaged evolution ####
 
 def dkappadu(kappa, u, xi, q, chi1, chi2):
-    # TODO: fix docstrings
-    # TODO: this function does not work with numpy arrays, but it doesn't have to, I think, because it's the RHS of quad; user should never call this directly
-
     """
-    Analytic precession averaged expression for the squared total spin.
+    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This function is not vectorized.
+
+    Call
+    ----
+    RHS = dkappadu(kappa,u,xi,q,chi1,chi2)
 
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
+    kappa: float
+    	Regularized angular momentum (J^2-L^2)/(2L).
+    u: float
+    	Compactified separation 1/(2L).
     xi: float
-        Effective spin.
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
+    RHS: float
+    	Right-hand side.
     """
 
     if u==0:
@@ -3369,7 +3436,31 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
 
 def kappaofu(kappa0, u, xi, q, chi1, chi2):
     """
-    TODO: write docstrings. This is the actual precession-averaged integrator
+    Integration of ODE describing precession-averaged inspirals. Returns kappa(u) for a given initial condition kappa, sampled at given outputs u. The initial condition corresponds to the value of kappa at u[0].
+
+    Call
+    ----
+    kappa = kappaofu(kappa,u,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    kappa: float
+    	Regularized angular momentum (J^2-L^2)/(2L).
+    u: float
+    	Compactified separation 1/(2L).
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    kappa: float
+    	Regularized angular momentum (J^2-L^2)/(2L).
     """
 
     def _compute(kappa0, u, xi, q, chi1, chi2):
@@ -3392,10 +3483,53 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2):
 
 
 
-def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,outputs=None):
-    '''
-    TODO: docstrings. Precession average evolution; this is the function the user should call (I think)
-    '''
+def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs=None):
+    """
+    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowting to integrate forward and backward in time. In addition, integration can be be done between finite separation, forward from infinite to finite separation, or backward from finite to infinite separation. For infinity, use r=np.inf or u=0.
+    The initial conditions must be specified in terms of one an only one of the following:
+    - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
+    - J, xi (only if integrating from finite separations because J otherwise diverges).
+    - kappa, xi.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default.
+
+    Call
+    ----
+    outputs = inspiral_precav(theta1 = None,theta2 = None,deltaphi = None,S = None,J = None,kappa = None,r = None,u = None,xi = None,q = None,chi1 = None,chi2 = None,requested_outputs = None)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+    	Angle between the projections of the two spins onto the orbital plane.
+    S: float, optional (default: None)
+    	Magnitude of the total spin.
+    J: float, optional (default: None)
+    	Magnitude of the total angular momentum.
+    kappa: float, optional (default: None)
+    	Regularized angular momentum (J^2-L^2)/(2L).
+    r: float, optional (default: None)
+    	Binary separation.
+    u: float, optional (default: None)
+    	Compactified separation 1/(2L).
+    xi: float, optional (default: None)
+    	Effective spin.
+    q: float, optional (default: None)
+    	Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float, optional (default: None)
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    requested_outputs: list, optional (default: None)
+    	Set of outputs.
+
+    Returns
+    -------
+    outputs: dictionary
+    	Set of outputs.
+    """
 
     def _compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2):
 
@@ -3502,10 +3636,10 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
     # Handle the outputs.
     # Return all
-    if outputs is None:
-        outputs = alloutputs
+    if requested_outputs is None:
+        requested_outputs = alloutputs
     # Return only those requested (in1d return boolean array)
-    wantoutputs = np.in1d(alloutputs,outputs)
+    wantoutputs = np.in1d(alloutputs,requested_outputs)
 
     # Store into a dictionary
     outcome={}
@@ -3519,6 +3653,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
 
 #TODO: does this work on arrays?
+# TODO: docstrings
 def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     """
     Average a function over a precession cycle.
@@ -4077,14 +4212,14 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
         return toarray(Lh,S1h,S2h)
 
 
-def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,tracktime=False,quadrupole_formula=False,outputs=None):
+def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,tracktime=False,quadrupole_formula=False,requested_outputs=None):
     '''
     TODO: docstrings. Orbit average evolution; this is the function the user should call (I think)
     '''
 
     # Overwrite the tracktime flag if the user explicitely asked for the time output
     try:
-        if 't' in outputs:
+        if 't' in requested_outputs:
             tracktime=True
     except:
         pass
@@ -4170,10 +4305,10 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
     # Handle the outputs.
     # Return all
-    if outputs is None:
-        outputs = alloutputs
+    if requested_outputs is None:
+        requested_outputs = alloutputs
     # Return only those requested (in1d return boolean array)
-    wantoutputs = np.in1d(alloutputs,outputs)
+    wantoutputs = np.in1d(alloutputs,requested_outputs)
 
     # Store into a dictionary
     outcome={}
