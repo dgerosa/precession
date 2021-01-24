@@ -34,11 +34,13 @@ def toarray(*args):
     x,y,z,...: array
         Corresponding number of output quantities.
     """
-
     if flen(args) == 1 :
         return np.squeeze(args)
+#    elif all(flen(x)==flen(args[0]) for x in args):
+#        return np.squeeze(np.array([*args]))
     else:
         return [np.squeeze(x) for x in args]
+
 
 def normalize_nested(x):
     """
@@ -412,7 +414,7 @@ def eval_r(L=None, u=None, q=None):
 
     Call
     ----
-    r = eval_r(L = None,u = None,q = None)
+    r = eval_r(L=None,u=None,q=None)
 
     Parameters
     ----------
@@ -953,7 +955,6 @@ def Jresonances(r,xi,q,chi1,chi2):
             Sroots = np.array([Satresonance(x,r,xi,q,chi1,chi2) for x in Jroots])
             Smin,Smax = np.array([Slimits_LJS1S2(x,r,q,chi1,chi2) for x in Jroots]).T
             Jres = Jroots[np.logical_and(Sroots>Smin,Sroots<Smax)]
-
             return Jres
 
     if np.ndim(kapparoots)==1:
@@ -972,7 +973,7 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
 
     Call
     ----
-    Jmin,Jmax = Jlimits(r = None,xi = None,q = None,chi1 = None,chi2 = None)
+    Jmin,Jmax = Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
@@ -1407,22 +1408,38 @@ def spinorbitresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
 
         Jmin, Jmax = Jresonances(r,xi,q,chi1,chi2)
         Satmin = Satresonance(Jmin,r,xi,q,chi1,chi2)
-        Satmax = Satresonance(Jmax,r,xi,q,chi1,chi2)
-        theta1atmin,theta2atmin,deltaphiatmin = conserved_to_angles(Satmin,Jmin,r,xi,q,chi1,chi2)
-        theta1atmax,theta2atmax,deltaphiatmax = conserved_to_angles(Satmax,Jmax,r,xi,q,chi1,chi2)
+        theta1atmin = eval_theta1(Satmin,Jmin,r,xi,q,chi1,chi2)
+        theta2atmin = eval_theta2(Satmin,Jmin,r,xi,q,chi1,chi2)
+        deltaphiatmin=toarray(np.pi*np.ones(flen(q)))
 
+        Satmax = Satresonance(Jmax,r,xi,q,chi1,chi2)
+        theta1atmax = eval_theta1(Satmax,Jmax,r,xi,q,chi1,chi2)
+        theta2atmax = eval_theta2(Satmax,Jmax,r,xi,q,chi1,chi2)
+        deltaphiatmax=toarray(np.zeros(flen(q)))
 
 
     elif J is not None and r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
 
         ximin, ximax = xiresonances(J,r,q,chi1,chi2)
+
         Satmin = Satresonance(J,r,ximin,q,chi1,chi2)
+        theta1atmin = eval_theta1(Satmin,J,r,ximin,q,chi1,chi2)
+        theta2atmin = eval_theta2(Satmin,J,r,ximin,q,chi1,chi2)
+        # See Fig 5 in arxiv:1506.03492
+        J=toarray(J)
+        S1,S2 = spinmags(q,chi1,chi2)
+        L = eval_L(r,q)
+        deltaphiatmin=np.where(J>np.abs(L-S1-S2), 0, np.pi)
+
         Satmax = Satresonance(J,r,ximax,q,chi1,chi2)
-        theta1atmin,theta2atmin,deltaphiatmin = conserved_to_angles(Satmin,J,r,ximin,q,chi1,chi2)
-        theta1atmax,theta2atmax,deltaphiatmax = conserved_to_angles(Satmax,J,r,ximax,q,chi1,chi2)
+        theta1atmax = eval_theta1(Satmax,J,r,ximax,q,chi1,chi2)
+        theta2atmax = eval_theta2(Satmax,J,r,ximax,q,chi1,chi2)
+        deltaphiatmax=toarray(np.pi*np.ones(flen(q)))
 
-    return theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax
+    else:
+        raise TypeError
 
+    return toarray([theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax])
 
 
 def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
@@ -1433,7 +1450,7 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
 
     Call
     ----
-    ximin,ximax = xilimits(J = None,r = None,q = None,chi1 = None,chi2 = None)
+    ximin,ximax = xilimits(J=None,r=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
@@ -1458,7 +1475,6 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
 
     if J is None and r is None and q is not None and chi1 is not None and chi2 is not None:
         ximin,ximax = xilimits_definition(q,chi1,chi2)
-
 
     elif J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
         #TODO: Assert that the xi values are compatible with q,chi1,chi2 (either explicitely or with a generic 'limits_check' function)
@@ -1757,11 +1773,10 @@ def Satresonance(J,r,xi,q,chi1,chi2):
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
     coeffs = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
-
     if np.ndim(coeffs)==1:
-        Sres = np.mean(np.real(np.roots(coeffs))[1:]**0.5)
+        Sres = np.mean(np.sort(np.real(np.roots(coeffs)))[1:]**0.5)
     else:
-        Sres = np.array([np.mean(np.real(np.roots(x))[1:]**0.5) for x in coeffs.T])
+        Sres = np.array([np.mean(np.sort(np.real(np.roots(x)))[1:]**0.5) for x in coeffs.T])
 
     return Sres
 
@@ -1776,7 +1791,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
 
     Call
     ----
-    Smin,Smax = Slimits(J = None,r = None,xi = None,q = None,chi1 = None,chi2 = None)
+    Smin,Smax = Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
@@ -2484,7 +2499,7 @@ def eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=N
 
     Call
     ----
-    J = eval_J(theta1 = None,theta2 = None,deltaphi = None,kappa = None,r = None,q = None,chi1 = None,chi2 = None)
+    J = eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
@@ -3851,7 +3866,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
     Call
     ----
-    outputs = inspiral_precav(theta1 = None,theta2 = None,deltaphi = None,S = None,J = None,kappa = None,r = None,u = None,xi = None,q = None,chi1 = None,chi2 = None,requested_outputs = None)
+    outputs = inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs=None)
 
     Parameters
     ----------
@@ -4000,7 +4015,8 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
     # Store into a dictionary
     outcome={}
-    for k,v in zip(alloutputs[wantoutputs],allresults[wantoutputs]):
+
+    for k,v in zip(alloutputs[wantoutputs],np.array(allresults)[wantoutputs]):
         # np.stack fixed shapes and object types
         outcome[k]=np.stack(np.atleast_1d(v))
 
@@ -4579,8 +4595,8 @@ if __name__ == '__main__':
     # xi = 0.9141896967861489
     # kappa = 0.5784355256550922
     # r=np.logspace(2,1,6)
-    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-    # print(d)
+    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
+    # print(d['xi'])
     #
     # d=inspiral(which='precav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
     #
@@ -4681,19 +4697,19 @@ if __name__ == '__main__':
     #
     # print(J,S)
 
-    xi=-0.5
-    q=0.4
-    chi1=0.9
-    chi2=0.8
-    r=np.logspace(2,1,5)
-    Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    #print(Lh0,S1h0,S2h0)
-    t0=time.time()
-    Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False)
-    print(Lh)
-
-    print( [orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)])
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    # r=np.logspace(2,1,5)
+    # Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    # #print(Lh0,S1h0,S2h0)
+    # t0=time.time()
+    # Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False)
+    # print(Lh)
     #
+    # print( [orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)])
+    # #
     # print(t)
     #
     # print(time.time()-t0)
@@ -4829,25 +4845,31 @@ if __name__ == '__main__':
 
     #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
 
-    q=0.7
-    chi1=0.7
-    chi2=0.9
-    r=30
-    J=1.48
-    xi=0.25
-    S = 0.3
-    #print("stillworks",S2roots(J,r,xi,q,chi1,chi2)**0.5)
+    # q=0.7
+    # chi1=0.7
+    # chi2=0.9
+    # r=30
+    # J=1.48
+    # xi=0.25
+    # S = 0.3
+    # #print("stillworks",S2roots(J,r,xi,q,chi1,chi2)**0.5)
+    #
+    # #print(eval_deltaphi(S,J,r,xi,q,chi1,chi2, sign=1))
+    #
+    # #print(eval_deltaphi([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], sign=[1,1]))
+    # #print(eval_deltaphi([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], sign=1))
+    #
+    # print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
+    #
+    #
+    # #print(morphology(J,r,xi,q,chi1,chi2))
+    # print(morphology([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
 
-    #print(eval_deltaphi(S,J,r,xi,q,chi1,chi2, sign=1))
-
-    #print(eval_deltaphi([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], sign=[1,1]))
-    #print(eval_deltaphi([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], sign=1))
-
-    print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
 
 
-    #print(morphology(J,r,xi,q,chi1,chi2))
-    print(morphology([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
+    print(spinorbitresonances(J=0.0001,r=10,xi=None,q=0.32,chi1=1,chi2=1))
+
+    #print(xilimits(J=0.05,r=10,q=0.32,chi1=1,chi2=1))
 
     # theta1=[0.567,1]
     # theta2=[1,1]

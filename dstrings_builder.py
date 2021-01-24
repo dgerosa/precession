@@ -163,7 +163,7 @@ if True:
             # Remove all the space
             line= line.replace(' ','').replace('\t','')
             docs+="Call\n----\n"
-            docs+=line.replace('=',' = ')
+            docs+=line.replace('=',' = ',1)
             docs+='\n'
 
             # Select string in between parentheses
