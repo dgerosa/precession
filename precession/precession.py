@@ -132,6 +132,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
     sols: array
         Roots of the polynomial.
     """
+    # TODO: should this function have np.atleast_1d's instead of np.array's?
 
     coeffs= np.array(coefficientfunction(*args,**kwargs))
 
@@ -163,7 +164,7 @@ def eval_m1(q):
     m1: float
     	Mass of the primary (heavier) black hole.
     """
-    q = toarray(q)
+    q = np.atleast_1d(q)
     m1 = 1/(1+q)
 
     return m1
@@ -187,7 +188,7 @@ def eval_m2(q):
     	Mass of the secondary (lighter) black hole.
     """
 
-    q = toarray(q)
+    q = np.atleast_1d(q)
     m2 = q/(1+q)
 
     return m2
@@ -218,7 +219,7 @@ def masses(q):
     m1 = eval_m1(q)
     m2 = eval_m2(q)
 
-    return toarray(m1, m2)
+    return m1, m2
 
 
 def eval_q(m1, m2):
@@ -242,9 +243,10 @@ def eval_q(m1, m2):
     	Mass ratio: 0<=q<=1.
     """
 
-    m1 = toarray(m1)
-    m2 = toarray(m2)
+    m1 = np.atleast_1d(m1)
+    m2 = np.atleast_1d(m2)
     q = m2 / m1
+    assert (q<1).all(), "The convention used in this code is q=m2/m1<1."
 
     return q
 
@@ -267,7 +269,7 @@ def eval_eta(q):
     	Symmetric mass ratio 0<=eta<=1/4.
     """
 
-    q = toarray(q)
+    q = np.atleast_1d(q)
     eta = q/(1+q)**2
 
     return eta
@@ -293,7 +295,7 @@ def eval_S1(q,chi1):
     	Magnitude of the primary spin.
     """
 
-    chi1 = toarray(chi1)
+    chi1 = np.atleast_1d(chi1)
     S1 = chi1*(eval_m1(q))**2
 
     return S1
@@ -319,7 +321,7 @@ def eval_S2(q,chi2):
     	Magnitude of the secondary spin.
     """
 
-    chi2 = toarray(chi2)
+    chi2 = np.atleast_1d(chi2)
     S2 = chi2*(eval_m2(q))**2
 
     return S2
@@ -353,7 +355,7 @@ def spinmags(q,chi1,chi2):
     S1 = eval_S1(q,chi1)
     S2 = eval_S2(q,chi2)
 
-    return toarray(S1,S2)
+    return S1,S2
 
 
 def eval_L(r,q):
@@ -377,7 +379,7 @@ def eval_L(r,q):
     	Magnitude of the Newtonian orbital angular momentum.
     """
 
-    r = toarray(r)
+    r = np.atleast_1d(r)
     L = eval_m1(q)*eval_m2(q)*r**0.5
 
     return L
@@ -402,7 +404,7 @@ def eval_v(r):
     	Newtonian orbital velocity.
     """
 
-    r = toarray(r)
+    r = np.atleast_1d(r)
     v= 1/r**0.5
 
     return v
@@ -433,13 +435,13 @@ def eval_r(L=None, u=None, q=None):
 
     if L is not None and u is None and q is not None:
 
-        L = toarray(L)
+        L = np.atleast_1d(L)
         m1, m2 = masses(q)
         r = (L / (m1 * m2))**2
 
     elif L is None and u is not None and q is not None:
 
-        u = toarray(u)
+        u = np.atleast_1d(u)
         r= (2*eval_m1(q)*eval_m2(q)*u)**(-2)
 
     else:
@@ -4534,6 +4536,13 @@ def inspiral(*args, which=None,**kwargs):
 
 if __name__ == '__main__':
     np.set_printoptions(threshold=sys.maxsize)
+
+    print(eval_r(u=1, L=None, q=1))
+
+    #print(spinmags([0.5,0.5],[1,1],[1,1]))
+    #print(spinmags(0.5,1,1))
+    #print(eval_S2([0.5,0.5],[1,1]))
+
     #print(masses([0.5,0.6]))
 
     # r=[10,10]
@@ -4876,8 +4885,8 @@ if __name__ == '__main__':
 
 
 
-    print(spinorbitresonances(J=0.0001,r=10,xi=None,q=0.32,chi1=1,chi2=1))
-    print(spinorbitresonances(J=[0.0001,0.0001],r=[10,10],xi=None,q=[0.32,0.32],chi1=[1,1],chi2=[1,1]))
+    #print(spinorbitresonances(J=0.0001,r=10,xi=None,q=0.32,chi1=1,chi2=1))
+    #print(spinorbitresonances(J=[0.0001,0.0001],r=[10,10],xi=None,q=[0.32,0.32],chi1=[1,1],chi2=[1,1]))
 
     #print(xilimits(J=0.05,r=10,q=0.32,chi1=1,chi2=1))
 
