@@ -1401,8 +1401,17 @@ def xiresonances(J,r,q,chi1,chi2):
     return toarray(ximin,ximax)
 
 
-# TODO: test this. Numerical accuracy in deltaphi?
+
 def spinorbitresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
+    '''
+    Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
+
+
+    Provide either
+
+    '''
+
+
 
     if J is None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
 
@@ -1439,7 +1448,7 @@ def spinorbitresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     else:
         raise TypeError
 
-    return toarray([theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax])
+    return np.array([theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax])
 
 
 def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
@@ -4868,6 +4877,7 @@ if __name__ == '__main__':
 
 
     print(spinorbitresonances(J=0.0001,r=10,xi=None,q=0.32,chi1=1,chi2=1))
+    print(spinorbitresonances(J=[0.0001,0.0001],r=[10,10],xi=None,q=[0.32,0.32],chi1=[1,1],chi2=[1,1]))
 
     #print(xilimits(J=0.05,r=10,q=0.32,chi1=1,chi2=1))
 
