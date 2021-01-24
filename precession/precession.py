@@ -11,12 +11,10 @@ warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
 
 
 #### Utilities ####
-
 def flen(x):
     # TODO: write docstrings
     #https://stackoverflow.com/a/26533085
     return getattr(x, '__len__', lambda:1)()
-
 
 def toarray(*args):
     """
@@ -43,12 +41,48 @@ def toarray(*args):
         return [np.squeeze(x) for x in args]
 
 def normalize_nested(x):
-    # TODO: write docstrings
+    """
+    Normalize 2D array (x,3) along last axis.
+
+    Call
+    ----
+    x = normalize_nested(x)
+
+    Parameters
+    ----------
+    x : array
+        Input array.
+
+    Returns
+    -------
+    x : array
+        Normalized array.
+    """
+
     return np.squeeze(x/np.atleast_1d(np.linalg.norm(x, axis=-1))[:,None])
 
 
 def dot_nested(x,y):
-    # TODO: write docstrings
+    """
+    Dot product between 2D arrays along last axis.
+
+    Call
+    ----
+    z = dot_nested(x,y)
+
+    Parameters
+    ----------
+    x : array
+        Input array.
+    y : array
+        Input array.
+
+    Returns
+    -------
+    z : array
+        Dot product array.
+    """
+    
     return np.squeeze(np.diag(np.atleast_1d(np.inner(x,y))))
 
 
@@ -3212,9 +3246,6 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     # Svec = S1vec + S2vec
     # Jvec = Lvec + Svec
     return toarray(Lvec, S1vec, S2vec)
-
-
-
 
 
 def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
