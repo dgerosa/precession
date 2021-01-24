@@ -109,14 +109,13 @@ def wraproots(coefficientfunction, *args,**kwargs):
 
 #### Definitions ####
 
-# TODO: change name to eval_m1?
-def mass1(q):
+def eval_m1(q):
     """
     Mass of the heavier black hole in units of the total mass.
 
     Call
     ----
-    m1 = mass1(q)
+    m1 = eval_m1(q)
 
     Parameters
     ----------
@@ -133,14 +132,13 @@ def mass1(q):
 
     return m1
 
-# TODO: change name to eval_m2?
-def mass2(q):
+def eval_m2(q):
     """
     Mass of the lighter black hole in units of the total mass.
 
     Call
     ----
-    m2 = mass2(q)
+    m2 = eval_m2(q)
 
     Parameters
     ----------
@@ -181,19 +179,19 @@ def masses(q):
     """
 
 
-    m1 = mass1(q)
-    m2 = mass2(q)
+    m1 = eval_m1(q)
+    m2 = eval_m2(q)
 
     return toarray(m1, m2)
 
-# TODO: change name to eval_q?
-def massratio(m1, m2):
+
+def eval_q(m1, m2):
     """
     Mass ratio, 0 < q = m2/m1 < 1.
 
     Call
     ----
-    q = massratio(m1,m2)
+    q = eval_q(m1,m2)
 
     Parameters
     ----------
@@ -214,14 +212,13 @@ def massratio(m1, m2):
 
     return q
 
-# TODO: change name to eval_eta?
-def symmetricmassratio(q):
+def eval_eta(q):
     """
     Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2.
 
     Call
     ----
-    eta = symmetricmassratio(q)
+    eta = eval_eta(q)
 
     Parameters
     ----------
@@ -239,14 +236,13 @@ def symmetricmassratio(q):
 
     return eta
 
-# TODO: change name to eval_S1?
-def spin1(q,chi1):
+def eval_S1(q,chi1):
     """
     Spin angular momentum of the heavier black hole.
 
     Call
     ----
-    S1 = spin1(q,chi1)
+    S1 = eval_S1(q,chi1)
 
     Parameters
     ----------
@@ -262,18 +258,17 @@ def spin1(q,chi1):
     """
 
     chi1 = toarray(chi1)
-    S1 = chi1*(mass1(q))**2
+    S1 = chi1*(eval_m1(q))**2
 
     return S1
 
-# TODO: change name to eval_S2?
-def spin2(q,chi2):
+def eval_S2(q,chi2):
     """
     Spin angular momentum of the lighter black hole.
 
     Call
     ----
-    S2 = spin2(q,chi2)
+    S2 = eval_S2(q,chi2)
 
     Parameters
     ----------
@@ -289,7 +284,7 @@ def spin2(q,chi2):
     """
 
     chi2 = toarray(chi2)
-    S2 = chi2*(mass2(q))**2
+    S2 = chi2*(eval_m2(q))**2
 
     return S2
 
@@ -319,19 +314,19 @@ def spinmags(q,chi1,chi2):
     	Magnitude of the secondary spin.
     """
 
-    S1 = spin1(q,chi1)
-    S2 = spin2(q,chi2)
+    S1 = eval_S1(q,chi1)
+    S2 = eval_S2(q,chi2)
 
     return toarray(S1,S2)
 
-# TODO: change name to eval_L?
-def angularmomentum(r,q):
+
+def eval_L(r,q):
     """
     Newtonian angular momentum of the binary.
 
     Call
     ----
-    L = angularmomentum(r,q)
+    L = eval_L(r,q)
 
     Parameters
     ----------
@@ -347,18 +342,18 @@ def angularmomentum(r,q):
     """
 
     r = toarray(r)
-    L = mass1(q)*mass2(q)*r**0.5
+    L = eval_m1(q)*eval_m2(q)*r**0.5
 
     return L
 
-# TODO: change name to eval_v?
-def orbitalvelocity(r):
+
+def eval_v(r):
     """
     Newtonian orbital velocity of the binary.
 
     Call
     ----
-    v = orbitalvelocity(r)
+    v = eval_v(r)
 
     Parameters
     ----------
@@ -376,20 +371,22 @@ def orbitalvelocity(r):
 
     return v
 
-# TODO: This needs to be merged with eval_r
-def orbitalseparation(L, q):
+
+def eval_r(L=None, u=None, q=None):
     """
-    Orbital separation of the binary.
+    Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).
 
     Call
     ----
-    r = orbitalseparation(L,q)
+    r = eval_r(L = None,u = None,q = None)
 
     Parameters
     ----------
-    L: float
+    L: float, optional (default: None)
     	Magnitude of the Newtonian orbital angular momentum.
-    q: float
+    u: float, optional (default: None)
+    	Compactified separation 1/(2L).
+    q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
 
     Returns
@@ -398,9 +395,19 @@ def orbitalseparation(L, q):
     	Binary separation.
     """
 
-    L = toarray(L)
-    m1, m2 = masses(q)
-    r = (L / (m1 * m2))**2
+    if L is not None and u is None and q is not None:
+
+        L = toarray(L)
+        m1, m2 = masses(q)
+        r = (L / (m1 * m2))**2
+
+    elif L is None and u is not None and q is not None:
+
+        u = toarray(u)
+        r= (2*eval_m1(q)*eval_m2(q)*u)**(-2)
+
+    else:
+        raise TypeError
 
     return r
 
@@ -435,7 +442,7 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
     """
 
     S1,S2 = spinmags(q,chi1,chi2)
-    L = angularmomentum(r,q)
+    L = eval_L(r,q)
     Jmin = np.maximum.reduce([np.zeros(flen(L)), L-S1-S2, np.abs(S1-S2)-L])
     Jmax = L+S1+S2
 
@@ -1461,7 +1468,7 @@ def Slimits_LJ(J,r,q):
     	Maximum value of the total spin S.
     """
 
-    L= angularmomentum(r,q)
+    L= eval_L(r,q)
     Smin = np.abs(J-L)
     Smax = J+L
 
@@ -1871,7 +1878,7 @@ def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
 
     S,varphi,J,q=toarray(S,varphi,J,q)
     S1,S2 = spinmags(q,chi1,chi2)
-    L = angularmomentum(r,q)
+    L = eval_L(r,q)
 
     xi = \
     1/4 * ( L )**( -1 ) * ( q )**( -1 ) * ( S )**( -2 ) * ( ( ( J )**( 2 \
@@ -1989,7 +1996,7 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
     	Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
     """
 
-    L = angularmomentum(r, q)
+    L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
     S,J,xi,q,sign= toarray(S,J,xi,q,sign)
 
@@ -2040,7 +2047,7 @@ def eval_costheta1(S,J,r,xi,q,chi1,chi2):
 
     S,J,q=toarray(S,J,q)
     S1,S2 = spinmags(q,chi1,chi2)
-    L = angularmomentum(r,q)
+    L = eval_L(r,q)
 
     costheta1= ( ((J**2-L**2-S**2)/L) - (2.*q*xi)/(1.+q) )/(2.*(1.-q)*S1)
 
@@ -2117,7 +2124,7 @@ def eval_costheta2(S,J,r,xi,q,chi1,chi2):
 
     S,J,q=toarray(S,J,q)
     S1,S2 = spinmags(q,chi1,chi2)
-    L = angularmomentum(r,q)
+    L = eval_L(r,q)
 
     costheta2= ( ((J**2-L**2-S**2)*(-q/L)) + (2*q*xi)/(1+q) )/(2*(1-q)*S2)
 
@@ -2337,7 +2344,7 @@ def eval_costhetaL(S,J,r,q,chi1,chi2):
 
     S,J=toarray(S,J)
     S1,S2 = spinmags(q,chi1,chi2)
-    L = angularmomentum(r,q)
+    L = eval_L(r,q)
     costhetaL=(J**2+L**2-S**2)/(2*J*L)
 
     return costhetaL
@@ -2412,53 +2419,55 @@ def eval_xi(theta1,theta2,q,chi1,chi2):
     return xi
 
 
-#TODO: Docstrings needs to be rewritten
 def eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None):
     """
-    Magnitude of the total angular momentum from the spin angles.
+    Magnitude of the total angular momentum from the spin angles. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q,chi1,chhi2).
+
+    Call
+    ----
+    J = eval_J(theta1 = None,theta2 = None,deltaphi = None,kappa = None,r = None,q = None,chi1 = None,chi2 = None)
 
     Parameters
     ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+    theta1: float, optional (default: None)
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+    	Angle between the projections of the two spins onto the orbital plane.
+    kappa: float, optional (default: None)
+    	Regularized angular momentum (J^2-L^2)/(2L).
+    r: float, optional (default: None)
+    	Binary separation.
+    q: float, optional (default: None)
+    	Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float, optional (default: None)
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
     -------
     J: float
-        Magnitude of the total angular momentum.
+    	Magnitude of the total angular momentum.
     """
-
 
     if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
         theta1,theta2,deltaphi,q=toarray(theta1,theta2,deltaphi,q)
         S1,S2 = spinmags(q,chi1,chi2)
-        L = angularmomentum(r,q)
+        L = eval_L(r,q)
         S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
         J=(L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
 
     elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and r is not None and q is not None and chi1 is None and chi2 is None:
 
         kappa = toarray(kappa)
-        L = angularmomentum(r,q)
+        L = eval_L(r,q)
         J = ( 2*L*kappa + L**2 )**0.5
 
     else:
         raise TypeError
-
-
 
     return J
 
@@ -2525,7 +2534,7 @@ def eval_kappa(J, r, q):
     """
 
     J = toarray(J)
-    L = angularmomentum(r, q)
+    L = eval_L(r, q)
     kappa = (J**2 - L**2) / (2*L)
 
     return kappa
@@ -2553,20 +2562,13 @@ def eval_u(r, q):
     	Compactified separation 1/(2L).
     """
 
-    L = angularmomentum(r, q)
+    L = eval_L(r, q)
     u = 1 / (2*L)
 
     return u
 
 
-# TODO: this needs to be merged with orbital separation
-def eval_r(u, q):
-    '''TODO docstrings'''
 
-    u = toarray(u)
-    r= (2*mass1(q)*mass2(q)*u)**(-2)
-
-    return r
 
 
 def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
@@ -3077,7 +3079,7 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
 
 
     S, J, q = toarray(S, J, q)
-    L = angularmomentum(r, q)
+    L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
     varphi = eval_varphi(S, J, r, xi, q, chi1, chi2)
     thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
@@ -3189,7 +3191,7 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
 
 
-    L = angularmomentum(r, q)
+    L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
 
     Lx = toarray(np.zeros(flen(L)))
@@ -3282,7 +3284,7 @@ def Speriod_prefactor(r,xi,q):
 
 
     r,xi=toarray(r,xi)
-    eta=symmetricmassratio(q)
+    eta=eval_eta(q)
     coeff = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
 
     return coeff
@@ -3844,7 +3846,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
             u = eval_u(r, np.repeat(q,flen(r)) )
         elif r is None and u is not None:
             u=toarray(u)
-            r = eval_r(u, np.repeat(q,flen(u)) )
+            r = eval_r(u=u, q=np.repeat(q,flen(u)) )
         else:
             raise TypeError("Please provide either r or u. Use np.inf for infinity.")
 
@@ -4079,7 +4081,7 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     alpha2 = np.where(np.isin(which,np.concatenate([uulabels,dulabels])), 1,-1)
 
     q = toarray(q)
-    L = angularmomentum(r, q)
+    L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
     # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1
     a = (3*q**5/(2*(1+q)**11*L**7))**2
@@ -4294,11 +4296,11 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
             ic = np.concatenate((Lh0,S1h0,S2h0))
 
         # Compute these quantities here instead of inside the RHS for speed
-        v=orbitalvelocity(r)
-        m1=mass1(q)
-        m2=mass2(q)
+        v=eval_v(r)
+        m1=eval_m1(q)
+        m2=eval_m2(q)
         S1,S2 = spinmags(q,chi1,chi2)
-        eta=symmetricmassratio(q)
+        eta=eval_eta(q)
 
         # Integration
         res =scipy.integrate.odeint(orbav_eqs, ic, v, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
@@ -4350,7 +4352,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
             u = eval_u(r, np.repeat(q,flen(r)) )
         elif r is None and u is not None:
             u=toarray(u)
-            r = eval_r(u, np.repeat(q,flen(u)) )
+            r = eval_r(u=u, q=np.repeat(q,flen(u)) )
         else:
             raise TypeError("Please provide either r or u.")
 
@@ -4389,7 +4391,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
             t=None
 
         S1,S2= spinmags(q,chi1,chi2)
-        L = angularmomentum(r,np.repeat(q,flen(r)))
+        L = eval_L(r,np.repeat(q,flen(r)))
         Lvec= (L*Lh.T).T
         S1vec= S1*S1h
         S2vec= S2*S2h
@@ -4617,9 +4619,9 @@ if __name__ == '__main__':
     # Smin,Smax= Slimits(J=J,r=r[0],xi=xi,q=q,chi1=chi1,chi2=chi2)
     # S=(Smin+Smax)/2
     # Svec, S1vec, S2vec, Jvec, Lvec = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
-    # S1h0=S1vec/spin1(q,chi1)
-    # S2h0=S2vec/spin2(q,chi2)
-    # Lh0=Lvec/angularmomentum(r[0],q)
+    # S1h0=S1vec/eval_S1(q,chi1)
+    # S2h0=S2vec/eval_S2(q,chi2)
+    # Lh0=Lvec/eval_L(r[0],q)
     #
     # print(J,S)
 
@@ -4831,7 +4833,7 @@ if __name__ == '__main__':
     # Lh,S1h,S2h = sample_unitsphere(3)
     # S1,S2= spinmags(q,chi1,chi2)
     # r=10
-    # L = angularmomentum(r,q)
+    # L = eval_L(r,q)
     # S1vec = S1*S1h
     # S2vec = S2*S2h
     # Lvec = L*Lh
