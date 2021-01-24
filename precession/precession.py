@@ -82,7 +82,7 @@ def dot_nested(x,y):
     z : array
         Dot product array.
     """
-    
+
     return np.squeeze(np.diag(np.atleast_1d(np.inner(x,y))))
 
 
@@ -1398,6 +1398,31 @@ def xiresonances(J,r,q,chi1,chi2):
         ximin,ximax =np.array(list(map(_compute, Smin,Smax,J,r,xiroots,q,chi1,chi2))).T
 
     return toarray(ximin,ximax)
+
+
+# TODO: test this. Numerical accuracy in deltaphi?
+def spinorbitresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
+
+    if J is None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
+
+        Jmin, Jmax = Jresonances(r,xi,q,chi1,chi2)
+        Satmin = Satresonance(Jmin,r,xi,q,chi1,chi2)
+        Satmax = Satresonance(Jmax,r,xi,q,chi1,chi2)
+        theta1atmin,theta2atmin,deltaphiatmin = conserved_to_angles(Satmin,Jmin,r,xi,q,chi1,chi2)
+        theta1atmax,theta2atmax,deltaphiatmax = conserved_to_angles(Satmax,Jmax,r,xi,q,chi1,chi2)
+
+
+
+    elif J is not None and r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
+
+        ximin, ximax = xiresonances(J,r,q,chi1,chi2)
+        Satmin = Satresonance(J,r,ximin,q,chi1,chi2)
+        Satmax = Satresonance(J,r,ximax,q,chi1,chi2)
+        theta1atmin,theta2atmin,deltaphiatmin = conserved_to_angles(Satmin,J,r,ximin,q,chi1,chi2)
+        theta1atmax,theta2atmax,deltaphiatmax = conserved_to_angles(Satmax,J,r,ximax,q,chi1,chi2)
+
+    return theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax
+
 
 
 def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
