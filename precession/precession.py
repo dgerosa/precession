@@ -134,12 +134,8 @@ def wraproots(coefficientfunction, *args,**kwargs):
     """
     # TODO: should this function have np.atleast_1d's instead of np.array's?
 
-    coeffs= np.array(coefficientfunction(*args,**kwargs))
-
-    if np.ndim(coeffs)==1:
-        sols = np.sort_complex(np.roots(coeffs))
-    else:
-        sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T]).T
+    coeffs= coefficientfunction(*args,**kwargs)
+    sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
     sols = np.real(np.where(np.isreal(sols),sols,np.nan))
 
     return sols
@@ -219,7 +215,7 @@ def masses(q):
     m1 = eval_m1(q)
     m2 = eval_m2(q)
 
-    return m1, m2
+    return np.stack([m1,m2])
 
 
 def eval_q(m1, m2):
@@ -355,7 +351,7 @@ def spinmags(q,chi1,chi2):
     S1 = eval_S1(q,chi1)
     S2 = eval_S2(q,chi2)
 
-    return S1,S2
+    return np.stack([S1,S2])
 
 
 def eval_L(r,q):
@@ -484,7 +480,7 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
     Jmin = np.maximum.reduce([np.zeros(flen(L)), L-S1-S2, np.abs(S1-S2)-L])
     Jmax = L+S1+S2
 
-    return toarray(Jmin,Jmax)
+    return np.stack([Jmin,Jmax])
 
 
 def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
@@ -524,8 +520,9 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     	Coefficient to the x^0 term in polynomial.
     """
 
-
-    u,q,xi=toarray(u,q,xi)
+    u=np.atleast_1d(u)
+    q=np.atleast_1d(q)
+    xi=np.atleast_1d(xi)
     S1,S2= spinmags(q,chi1,chi2)
 
     coeff0 = \
@@ -912,7 +909,7 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     coeff5 = \
     -256 * ( q )**( 3 ) * ( ( 1 + q ) )**( 6 ) * u
 
-    return toarray(coeff5, coeff4, coeff3, coeff2, coeff1, coeff0)
+    return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
 def Jresonances(r,xi,q,chi1,chi2):
@@ -946,25 +943,25 @@ def Jresonances(r,xi,q,chi1,chi2):
 
     # There are in principle five solutions, but only two are physical.
 
+    r=np.atleast_1d(r)
+    xi=np.atleast_1d(xi)
+    q=np.atleast_1d(q)
+    chi1=np.atleast_1d(chi1)
+    chi2=np.atleast_1d(chi2)
+
     u = eval_u(r, q)
-
     kapparoots = wraproots(kappadiscriminant_coefficients,u,xi,q,chi1,chi2)
-    kapparoots = kapparoots[np.isfinite(kapparoots)]
-
     def _compute(kapparoots,r,xi,q,chi1,chi2):
-        with np.errstate(invalid='ignore'):
-            Jroots = np.array([eval_J(kappa=x,r=r,q=q) for x in kapparoots])
-            Sroots = np.array([Satresonance(x,r,xi,q,chi1,chi2) for x in Jroots])
-            Smin,Smax = np.array([Slimits_LJS1S2(x,r,q,chi1,chi2) for x in Jroots]).T
-            Jres = Jroots[np.logical_and(Sroots>Smin,Sroots<Smax)]
-            return Jres
+        kapparoots = kapparoots[np.isfinite(kapparoots)]
+        Jroots = eval_J(kappa=kapparoots,r=np.tile(r,kapparoots.shape),q=np.tile(q,kapparoots.shape))
+        Sroots = Satresonance(Jroots,np.tile(r,Jroots.shape),np.tile(xi,Jroots.shape),np.tile(q,Jroots.shape),np.tile(chi1,Jroots.shape),np.tile(chi2,Jroots.shape))
+        Smin,Smax = Slimits_LJS1S2(Jroots,np.tile(r,Jroots.shape),np.tile(q,Jroots.shape),np.tile(chi1,Jroots.shape),np.tile(chi2,Jroots.shape))
+        Jres = Jroots[np.logical_and(Sroots>Smin,Sroots<Smax)]
+        return Jres
 
-    if np.ndim(kapparoots)==1:
-        Jmin,Jmax =_compute(kapparoots,r,xi,q,chi1,chi2)
-    else:
-        Jmin,Jmax =np.array(list(map(_compute, kapparoots,r,xi,q,chi1,chi2))).T
+    Jmin,Jmax =np.array(list(map(_compute, kapparoots,r,xi,q,chi1,chi2))).T
 
-    return toarray(Jmin,Jmax)
+    return np.stack([Jmin,Jmax])
 
 
 def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
@@ -1526,7 +1523,7 @@ def Slimits_S1S2(q,chi1,chi2):
     Smin = np.abs(S1-S2)
     Smax = S1+S2
 
-    return toarray(Smin,Smax)
+    return np.stack([Smin,Smax])
 
 
 def Slimits_LJ(J,r,q):
@@ -1558,7 +1555,7 @@ def Slimits_LJ(J,r,q):
     Smin = np.abs(J-L)
     Smax = J+L
 
-    return toarray(Smin,Smax)
+    return np.stack([Smin,Smax])
 
 
 def Slimits_LJS1S2(J,r,q,chi1,chi2):
@@ -1595,7 +1592,7 @@ def Slimits_LJS1S2(J,r,q,chi1,chi2):
     Smin = np.maximum(SminS1S2,SminLJ)
     Smax = np.minimum(SmaxS1S2,SmaxLJ)
 
-    return toarray(Smin,Smax)
+    return np.stack([Smin,Smax])
 
 
 def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
@@ -1633,7 +1630,10 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     	Coefficient to the x^0 term in polynomial.
     """
 
-    kappa,u,xi,q = toarray(kappa,u,xi,q)
+    kappa=np.atleast_1d(kappa)
+    u=np.atleast_1d(u)
+    xi=np.atleast_1d(xi)
+    q=np.atleast_1d(q)
     S1,S2 = spinmags(q,chi1,chi2)
 
     coeff3 = \
@@ -1667,7 +1667,7 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     -2 * ( -1 + ( q )**( 2 ) ) * ( S2 )**( 2 ) + 4 * q * kappa * ( -1 * \
     xi + ( kappa + q * kappa ) ) ) ) ) )
 
-    return toarray(coeff3, coeff2, coeff1, coeff0)
+    return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
 # TODO: this is a case where we use 2 for square. Fix docstrings
@@ -1781,14 +1781,14 @@ def Satresonance(J,r,xi,q,chi1,chi2):
     	Magnitude of the total spin.
     """
 
+    # TODO: can I remove this for loop and use some array magic? np.roots requires a rank 1 array.
+
+
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
     coeffs = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
-    if np.ndim(coeffs)==1:
-        Sres = np.mean(np.sort(np.real(np.roots(coeffs)))[1:]**0.5)
-    else:
-        Sres = np.array([np.mean(np.sort(np.real(np.roots(x)))[1:]**0.5) for x in coeffs.T])
-
+    with np.errstate(invalid='ignore'): # nan is ok here
+        Sres = np.array([np.mean(np.real(np.sort_complex(np.roots(x))[1:]))**0.5 for x in coeffs.T])
     return Sres
 
 
@@ -4537,20 +4537,29 @@ def inspiral(*args, which=None,**kwargs):
 if __name__ == '__main__':
     np.set_printoptions(threshold=sys.maxsize)
 
-    print(eval_r(u=1, L=None, q=1))
+    #print(eval_r(u=1, L=None, q=1))
 
     #print(spinmags([0.5,0.5],[1,1],[1,1]))
     #print(spinmags(0.5,1,1))
+    #print(eval_S1(0.5,1))
+
     #print(eval_S2([0.5,0.5],[1,1]))
 
     #print(masses([0.5,0.6]))
 
-    # r=[10,10]
-    # #xi=[0.35,-0.675]
-    # q=[0.8,0.2]
-    # chi1=[1,1]
-    # chi2=[1,1]
-    # #J=[1,0.23]
+
+    r=[10,10]
+    xi=[0.35,0.35]
+    q=[0.8,0.8]
+    chi1=[1,1]
+    chi2=[1,1]
+    #J=[1,0.23]
+    u=[1/10,1/10]
+    #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
+    #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
+    print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
+    print("on many", Jresonances(r,xi,q,chi1,chi2))
     #
     # print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
@@ -4795,7 +4804,7 @@ if __name__ == '__main__':
 
     #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
     #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
-    #print(Jresonances(r,xi,q,chi1,chi2))
+    #  print(Jresonances(r,xi,q,chi1,chi2))
     #print(Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2))
     #print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
