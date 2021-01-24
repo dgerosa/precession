@@ -132,7 +132,6 @@ def wraproots(coefficientfunction, *args,**kwargs):
     sols: array
         Roots of the polynomial.
     """
-    # TODO: should this function have np.atleast_1d's instead of np.array's?
 
     coeffs= coefficientfunction(*args,**kwargs)
     sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
@@ -1005,7 +1004,7 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
     else:
         raise TypeError
 
-    return toarray(Jmin,Jmax)
+    return np.stack([Jmin,Jmax])
 
 
 def xilimits_definition(q,chi1,chi2):
@@ -1033,11 +1032,11 @@ def xilimits_definition(q,chi1,chi2):
     	Maximum value of the effective spin xi.
     """
 
-    q=toarray(q)
+    q=np.atleast_1d(q)
     S1,S2 = spinmags(q,chi1,chi2)
     xilim = (1+q)*S1 + (1+1/q)*S2
 
-    return toarray(-xilim,xilim)
+    return np.stack([-xilim,xilim])
 
 
 def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
