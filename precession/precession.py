@@ -4036,7 +4036,7 @@ def r_updown(q, chi1, chi2):
     r_udp = (chi1**.5+(q*chi2)**.5)**4./(1.-q)**2.
     r_udm = (chi1**.5-(q*chi2)**.5)**4./(1.-q)**2.
 
-    return toarray(r_plus, r_minus)
+    return toarray(r_udp, r_udm)
 
 
 def omegasq_aligned(r, q, chi1, chi2, which):
@@ -4119,7 +4119,7 @@ def widenutation(q, chi1, chi2):
     q, chi1, chi2 = toarray(q, chi1, chi2)
     r_wide = ((q*chi2 - chi1) / (1-q))**2
 
-    return r_w
+    return r_wide
 
 
 #### Orbit averaged things ####
