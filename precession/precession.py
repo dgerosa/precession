@@ -1483,7 +1483,7 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
         ximin,ximax = xilimits_definition(q,chi1,chi2)
 
     elif J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
-        #TODO: Assert that the xi values are compatible with q,chi1,chi2 (either explicitely or with a generic 'limits_check' function)
+        #TODO: Assert that the J values are compatible with q,chi1,chi2 (either explicitely or with a generic 'limits_check' function)
         ximin,ximax = xiresonances(J,r,q,chi1,chi2)
 
     else:
@@ -1668,7 +1668,7 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
-# TODO: this is a case where we use 2 for square. Fix docstrings
+# TODO: this is a case where we use 2 for square.
 def S2roots(J,r,xi,q,chi1,chi2):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
@@ -1705,10 +1705,9 @@ def S2roots(J,r,xi,q,chi1,chi2):
 
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
+    S32, Sminus2, Splus2 = wraproots(Scubic_coefficients,kappa,u,xi,q,chi1,chi2).T
 
-    S32, Sminus2, Splus2 = wraproots(Scubic_coefficients,kappa,u,xi,q,chi1,chi2)
-
-    return toarray(Sminus2,Splus2,S32)
+    return np.stack([Sminus2,Splus2,S32])
 
 
 def Slimits_plusminus(J,r,xi,q,chi1,chi2):
@@ -4548,10 +4547,10 @@ if __name__ == '__main__':
 
     r=[10,10]
     xi=[0.35,0.35]
-    q=[0.8,0.32]
+    q=[0.8,0.8]
     chi1=[1,1]
     chi2=[1,1]
-    J=[1,0.001]
+    J=[1,1]
     u=[1/10,1/10]
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
@@ -4563,10 +4562,11 @@ if __name__ == '__main__':
 
     #print("on many", xiresonances(J,r,q,chi1,chi2) )
 
-    print(anglesresonances(J=J[0],r=r[0],xi=None,q=q[0],chi1=chi1[0],chi2=chi2[0]))
+    #print(anglesresonances(J=J[0],r=r[0],xi=None,q=q[0],chi1=chi1[0],chi2=chi2[0]))
 
-    print(anglesresonances(J=J,r=r,xi=None,q=q,chi1=chi1,chi2=chi2))
-
+    #print(anglesresonances(J=J,r=r,xi=None,q=q,chi1=chi1,chi2=chi2))
+    print(S2roots(J,r,xi,q,chi1,chi2))
+    print(S2roots(J[0],r[0],xi[0],q[0],chi1[0],[chi2[0]]))
 
     # print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
