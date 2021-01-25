@@ -1746,7 +1746,7 @@ def Slimits_plusminus(J,r,xi,q,chi1,chi2):
         Smin=Sminus2**0.5
         Smax=Splus2**0.5
 
-    return toarray(Smin,Smax)
+    return np.stack([Smin,Smax])
 
 
 def Satresonance(J,r,xi,q,chi1,chi2):
@@ -1840,7 +1840,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     else:
         raise TypeError
 
-    return toarray(Smin,Smax)
+    return np.stack([Smin,Smax])
 
 
 # TODO: Check inter-compatibility of Slimits, Jlimits, xilimits
@@ -4565,8 +4565,8 @@ if __name__ == '__main__':
     #print(anglesresonances(J=J[0],r=r[0],xi=None,q=q[0],chi1=chi1[0],chi2=chi2[0]))
 
     #print(anglesresonances(J=J,r=r,xi=None,q=q,chi1=chi1,chi2=chi2))
-    print(S2roots(J,r,xi,q,chi1,chi2))
-    print(S2roots(J[0],r[0],xi[0],q[0],chi1[0],[chi2[0]]))
+    print(Slimits(J,r,xi,q,chi1,chi2))
+    print(Slimits(J[0],r[0],xi[0],q[0],chi1[0],[chi2[0]]))
 
     # print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
