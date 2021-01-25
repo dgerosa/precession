@@ -956,6 +956,9 @@ def Jresonances(r,xi,q,chi1,chi2):
         Sroots = Satresonance(Jroots,np.tile(r,Jroots.shape),np.tile(xi,Jroots.shape),np.tile(q,Jroots.shape),np.tile(chi1,Jroots.shape),np.tile(chi2,Jroots.shape))
         Smin,Smax = Slimits_LJS1S2(Jroots,np.tile(r,Jroots.shape),np.tile(q,Jroots.shape),np.tile(chi1,Jroots.shape),np.tile(chi2,Jroots.shape))
         Jres = Jroots[np.logical_and(Sroots>Smin,Sroots<Smax)]
+        assert len(Jres)<=2, "I found more than two resonances, this should not be possible."
+        # If you didn't find enough solutions, append nans
+        Jres=np.concatenate([Jres,np.repeat(np.nan,2-len(Jres))])
         return Jres
 
     Jmin,Jmax =np.array(list(map(_compute, kapparoots,r,xi,q,chi1,chi2))).T
@@ -1396,6 +1399,9 @@ def xiresonances(J,r,q,chi1,chi2):
         xiroots = xiroots[np.isfinite(xiroots)]
         Sroots = Satresonance(np.tile(J,xiroots.shape),np.tile(r,xiroots.shape),xiroots,np.tile(q,xiroots.shape),np.tile(chi1,xiroots.shape),np.tile(chi2,xiroots.shape))
         xires = xiroots[np.logical_and(Sroots>Smin, Sroots<Smax)]
+        assert len(xires)<=2, "I found more than two resonances, this should not be possible."
+        # If you didn't find enough solutions, append nans
+        xires=np.concatenate([xires,np.repeat(np.nan,2-len(xires))])
         return xires
 
     ximin,ximax =np.array(list(map(_compute, Smin,Smax,J,r,xiroots,q,chi1,chi2))).T
@@ -4559,7 +4565,7 @@ if __name__ == '__main__':
     q=[0.8,0.8]
     chi1=[1,1]
     chi2=[1,1]
-    J=[1,1]
+    J=[1,0]
     u=[1/10,1/10]
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
@@ -4574,10 +4580,10 @@ if __name__ == '__main__':
     #print(anglesresonances(J=J[0],r=r[0],xi=None,q=q[0],chi1=chi1[0],chi2=chi2[0]))
 
     #print(anglesresonances(J=J,r=r,xi=None,q=q,chi1=chi1,chi2=chi2))
-    print(Slimits(J,r,xi,q,chi1,chi2))
-    print(Slimits(J[0],r[0],xi[0],q[0],chi1[0],[chi2[0]]))
+    #print(Slimits(J,r,xi,q,chi1,chi2))
+    #print(Slimits(J[0],r[0],xi[0],q[0],chi1[0],[chi2[0]]))
 
-    # print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
+    print(xilimits(J=J, r=r,q=q,chi1=chi1,chi2=chi2))
 
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
     #t0=time.time()
