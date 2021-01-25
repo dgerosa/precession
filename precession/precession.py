@@ -998,8 +998,10 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
         Jmin,Jmax = Jlimits_LS1S2(r,q,chi1,chi2)
 
     elif r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
-        #TODO: Assert that the xi values are compatible with q,chi1,chi2 (either explicitely or with a generic 'limits_check' function)
         Jmin,Jmax = Jresonances(r,xi,q,chi1,chi2)
+        # Check precondition
+        Jmin_cond,Jmax_cond = Jlimits_LS1S2(r,q,chi1,chi2)
+        assert (Jmin>Jmin_cond).all() and (Jmax<Jmax_cond).all(), "Input values are incompatible."
 
     else:
         raise TypeError
@@ -1483,8 +1485,10 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
         ximin,ximax = xilimits_definition(q,chi1,chi2)
 
     elif J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
-        #TODO: Assert that the J values are compatible with q,chi1,chi2 (either explicitely or with a generic 'limits_check' function)
         ximin,ximax = xiresonances(J,r,q,chi1,chi2)
+        # Check precondition
+        ximin_cond,ximax_cond = xilimits_definition(q,chi1,chi2)
+        assert (ximin>ximin_cond).all() and (ximax<ximax_cond).all(), "Input values are incompatible."
 
     else:
         raise TypeError
