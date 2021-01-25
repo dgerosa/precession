@@ -440,7 +440,7 @@ def eval_r(L=None, u=None, q=None):
         r= (2*eval_m1(q)*eval_m2(q)*u)**(-2)
 
     else:
-        raise TypeError
+        raise TypeError("Provide either (L,q) or (u,q).")
 
     return r
 
@@ -1007,7 +1007,7 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
         assert (Jmin>Jmin_cond).all() and (Jmax<Jmax_cond).all(), "Input values are incompatible."
 
     else:
-        raise TypeError
+        raise TypeError("Provide either (r,q,chi1,chi2) or (r,xi,q,chi1,chi2).")
 
     return np.stack([Jmin,Jmax])
 
@@ -1451,7 +1451,7 @@ def anglesresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
         deltaphiatmax=np.tile(np.pi,q.shape)
 
     else:
-        raise TypeError
+        raise TypeError("Provide either (r,xi,q,chi1,chi2) or (J,r,q,chi1,chi2).")
 
     return np.stack([theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax])
 
@@ -1497,7 +1497,7 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
         assert (ximin>ximin_cond).all() and (ximax<ximax_cond).all(), "Input values are incompatible."
 
     else:
-        raise TypeError
+        raise TypeError("Provide either (q,chi1,chi2) or (J,r,q,chi1,chi2).")
 
     return np.stack([ximin,ximax])
 
@@ -1850,10 +1850,8 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
         Smin_cond,Smax_cond = Slimits_LJS1S2(J,r,q,chi1,chi2)
         assert (Smin>Smin_cond).all() and (Smax<Smax_cond).all(), "Input values are incompatible."
 
-
-
     else:
-        raise TypeError
+        raise TypeError("Provide one of the following: (q,chi1,chi2), (J,r,q), (J,r,q,chi1,chi2), (J,r,xi,q,chi1,chi2).")
 
     return np.stack([Smin,Smax])
 
@@ -1942,7 +1940,7 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 #### Evaluations and conversions ####
 
 # TODO Should this be called eval_xi?
-def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
+def eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None):
     """
     Effective spin as a function of total spin magnitude S, nutation angle varphi and total angularm momentum J.
 
@@ -1973,19 +1971,34 @@ def effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2):
     	Effective spin.
     """
 
-    S,varphi,J,q=toarray(S,varphi,J,q)
-    S1,S2 = spinmags(q,chi1,chi2)
-    L = eval_L(r,q)
+    if theta1 is not None and theta2 is not None and S is None and varphi is None and J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
-    xi = \
-    1/4 * ( L )**( -1 ) * ( q )**( -1 ) * ( S )**( -2 ) * ( ( ( J )**( 2 \
-    ) + ( -1 * ( L )**( 2 ) + -1 * ( S )**( 2 ) ) ) * ( ( ( 1 + q ) )**( \
-    2 ) * ( S )**( 2 ) + ( -1 + ( q )**( 2 ) ) * ( ( S1 )**( 2 ) + -1 * ( \
-    S2 )**( 2 ) ) ) + -1 * ( 1 + -1 * ( q )**( 2 ) ) * ( ( ( J )**( 2 ) + \
-    -1 * ( ( L + -1 * S ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( J )**( 2 ) + \
-    ( ( L + S ) )**( 2 ) ) )**( 1/2 ) * ( ( ( S )**( 2 ) + -1 * ( ( S1 + \
-    -1 * S2 ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( S )**( 2 ) + ( ( S1 + S2 \
-    ) )**( 2 ) ) )**( 1/2 ) * np.cos( varphi ) )
+        theta1=np.atleast_1d(theta1)
+        theta2=np.atleast_1d(theta2)
+        q=np.atleast_1d(q)
+        S1,S2 = spinmags(q,chi1,chi2)
+        xi=(1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
+
+    if theta1 is None and theta2 is None and S is not None and varphi is not None and J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
+
+        S=np.atleast_1d(S)
+        varphi=np.atleast_1d(varphi)
+        J=np.atleast_1d(J)
+        q=np.atleast_1d(q)
+        S1,S2 = spinmags(q,chi1,chi2)
+        L = eval_L(r,q)
+
+        xi = \
+        1/4 * ( L )**( -1 ) * ( q )**( -1 ) * ( S )**( -2 ) * ( ( ( J )**( 2 \
+        ) + ( -1 * ( L )**( 2 ) + -1 * ( S )**( 2 ) ) ) * ( ( ( 1 + q ) )**( \
+        2 ) * ( S )**( 2 ) + ( -1 + ( q )**( 2 ) ) * ( ( S1 )**( 2 ) + -1 * ( \
+        S2 )**( 2 ) ) ) + -1 * ( 1 + -1 * ( q )**( 2 ) ) * ( ( ( J )**( 2 ) + \
+        -1 * ( ( L + -1 * S ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( J )**( 2 ) + \
+        ( ( L + S ) )**( 2 ) ) )**( 1/2 ) * ( ( ( S )**( 2 ) + -1 * ( ( S1 + \
+        -1 * S2 ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( S )**( 2 ) + ( ( S1 + S2 \
+        ) )**( 2 ) ) )**( 1/2 ) * np.cos( varphi ) )
+
+    raise TypeError("Provide either (theta1,theta2,J,r,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).")
 
     return xi
 
@@ -2481,39 +2494,6 @@ def eval_thetaL(S,J,r,q,chi1,chi2):
 
     return thetaL
 
-#TODO: there's confusion here with the effective potential, which is also and evaluation of xi
-def eval_xi(theta1,theta2,q,chi1,chi2):
-    """
-    Effective spin from the spin angles.
-
-    Call
-    ----
-    xi = eval_xi(theta1,theta2,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-    	Angle between orbital angular momentum and primary spin.
-    theta2: float
-    	Angle between orbital angular momentum and secondary spin.
-    q: float
-    	Mass ratio: 0<=q<=1.
-    chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
-    chi2: float
-    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    xi: float
-    	Effective spin.
-    """
-
-    theta1,theta2,q=toarray(theta1,theta2,q)
-    S1,S2 = spinmags(q,chi1,chi2)
-    xi=(1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
-
-    return xi
 
 
 def eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None):
@@ -2564,7 +2544,7 @@ def eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=N
         J = ( 2*L*kappa + L**2 )**0.5
 
     else:
-        raise TypeError
+        raise TypeError("Provide either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (kappa,r,q,chi1,chi2).")
 
     return J
 
@@ -4567,6 +4547,8 @@ if __name__ == '__main__':
     chi2=[1,1]
     J=[1,0]
     u=[1/10,1/10]
+    theta1=[1,1]
+    theta2=[1,1]
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
     #print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
@@ -4583,7 +4565,8 @@ if __name__ == '__main__':
     #print(Slimits(J,r,xi,q,chi1,chi2))
     #print(Slimits(J[0],r[0],xi[0],q[0],chi1[0],[chi2[0]]))
 
-    print(xilimits(J=J, r=r,q=q,chi1=chi1,chi2=chi2))
+    #print(xilimits(J=J, r=r,q=q,chi1=chi1,chi2=chi2))
+    print(eval_xi(theta1=theta1,theta2=theta2,S=[1,1],varphi=[1,1],J=J,r=r,q=q,chi1=chi1,chi2=chi2))
 
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
     #t0=time.time()
