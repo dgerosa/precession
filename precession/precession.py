@@ -1400,7 +1400,7 @@ def xiresonances(J,r,q,chi1,chi2):
     return np.stack([ximin,ximax])
 
 
-def spinorbitresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
+def anglesresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     '''
     Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
 
@@ -1408,8 +1408,7 @@ def spinorbitresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     Provide either
 
     '''
-
-
+    q=np.atleast_1d(q)
 
     if J is None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
 
@@ -1417,12 +1416,12 @@ def spinorbitresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
         Satmin = Satresonance(Jmin,r,xi,q,chi1,chi2)
         theta1atmin = eval_theta1(Satmin,Jmin,r,xi,q,chi1,chi2)
         theta2atmin = eval_theta2(Satmin,Jmin,r,xi,q,chi1,chi2)
-        deltaphiatmin=toarray(np.pi*np.ones(flen(q)))
+        deltaphiatmin=np.tile(np.pi,q.shape)
 
         Satmax = Satresonance(Jmax,r,xi,q,chi1,chi2)
         theta1atmax = eval_theta1(Satmax,Jmax,r,xi,q,chi1,chi2)
         theta2atmax = eval_theta2(Satmax,Jmax,r,xi,q,chi1,chi2)
-        deltaphiatmax=toarray(np.zeros(flen(q)))
+        deltaphiatmax=np.tile(0,q.shape)
 
 
     elif J is not None and r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
@@ -1441,12 +1440,12 @@ def spinorbitresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
         Satmax = Satresonance(J,r,ximax,q,chi1,chi2)
         theta1atmax = eval_theta1(Satmax,J,r,ximax,q,chi1,chi2)
         theta2atmax = eval_theta2(Satmax,J,r,ximax,q,chi1,chi2)
-        deltaphiatmax=toarray(np.pi*np.ones(flen(q)))
+        deltaphiatmax=np.tile(np.pi,q.shape)
 
     else:
         raise TypeError
 
-    return np.array([theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax])
+    return np.stack([theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax])
 
 
 def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
@@ -4549,10 +4548,10 @@ if __name__ == '__main__':
 
     r=[10,10]
     xi=[0.35,0.35]
-    q=[0.8,0.8]
+    q=[0.8,0.32]
     chi1=[1,1]
     chi2=[1,1]
-    J=[1,1]
+    J=[1,0.001]
     u=[1/10,1/10]
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
@@ -4560,10 +4559,13 @@ if __name__ == '__main__':
     #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
     #print("on many", Jresonances(r,xi,q,chi1,chi2))
 
-    print("on one", xiresonances(J[0],r[0],q[0],chi1[0],chi2[0]) )
+    #print("on one", xiresonances(J[0],r[0],q[0],chi1[0],chi2[0]) )
 
-    print("on many", xiresonances(J,r,q,chi1,chi2) )
+    #print("on many", xiresonances(J,r,q,chi1,chi2) )
 
+    print(anglesresonances(J=J[0],r=r[0],xi=None,q=q[0],chi1=chi1[0],chi2=chi2[0]))
+
+    print(anglesresonances(J=J,r=r,xi=None,q=q,chi1=chi1,chi2=chi2))
 
 
     # print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
