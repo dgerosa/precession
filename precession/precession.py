@@ -1834,8 +1834,13 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
         Smin,Smax = Slimits_LJS1S2(J,r,q,chi1,chi2)
 
     elif J is not None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
-        #TODO: Assert that Slimits_LJS1S2 is also respected (either explicitely or with a generic 'limits_check' function)
+        # Compute limits
         Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
+        # Check precondition
+        Smin_cond,Smax_cond = Slimits_LJS1S2(J,r,q,chi1,chi2)
+        assert (Smin>Smin_cond).all() and (Smax<Smax_cond).all(), "Input values are incompatible."
+
+
 
     else:
         raise TypeError
