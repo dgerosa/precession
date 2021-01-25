@@ -1942,27 +1942,31 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 # TODO Should this be called eval_xi?
 def eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None):
     """
-    Effective spin as a function of total spin magnitude S, nutation angle varphi and total angularm momentum J.
+    Eftective spin. Provide either (theta1,theta2,J,r,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
 
     Call
     ----
-    xi = effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2)
+    xi = eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
-    S: float
+    theta1: float, optional (default: None)
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+    	Angle between orbital angular momentum and secondary spin.
+    S: float, optional (default: None)
     	Magnitude of the total spin.
-    varphi: float
+    varphi: float, optional (default: None)
     	Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
-    J: float
+    J: float, optional (default: None)
     	Magnitude of the total angular momentum.
-    r: float
+    r: float, optional (default: None)
     	Binary separation.
-    q: float
+    q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
-    chi1: float
+    chi1: float, optional (default: None)
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
-    chi2: float
+    chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
@@ -1979,7 +1983,7 @@ def eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1
         S1,S2 = spinmags(q,chi1,chi2)
         xi=(1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
 
-    if theta1 is None and theta2 is None and S is not None and varphi is not None and J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
+    elif theta1 is None and theta2 is None and S is not None and varphi is not None and J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
         S=np.atleast_1d(S)
         varphi=np.atleast_1d(varphi)
@@ -1998,7 +2002,8 @@ def eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1
         -1 * S2 ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( S )**( 2 ) + ( ( S1 + S2 \
         ) )**( 2 ) ) )**( 1/2 ) * np.cos( varphi ) )
 
-    raise TypeError("Provide either (theta1,theta2,J,r,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).")
+    else:
+        raise TypeError("Provide either (theta1,theta2,J,r,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).")
 
     return xi
 
@@ -2032,8 +2037,9 @@ def effectivepotential_plus(S,J,r,q,chi1,chi2):
     	Effective spin.
     """
 
-    varphi = np.pi*np.ones(flen(S))
-    xi = effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2)
+    q=np.atleast_1d(q)
+    varphi = np.tile(np.pi,q.shape)
+    xi = eval_xi(S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2)
 
     return xi
 
@@ -2067,8 +2073,9 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
     	Effective spin.
     """
 
-    varphi = np.zeros(flen(S))
-    xi = effectivepotential_Sphi(S,varphi,J,r,q,chi1,chi2)
+    q=np.atleast_1d(q)
+    varphi = np.tile(0,q.shape)
+    xi = eval_xi(S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2)
 
     return xi
 
@@ -2498,7 +2505,7 @@ def eval_thetaL(S,J,r,q,chi1,chi2):
 
 def eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None):
     """
-    Magnitude of the total angular momentum from the spin angles. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q,chi1,chhi2).
+    Magnitude of the total angular momentum. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q,chi1,chhi2).
 
     Call
     ----
@@ -2958,7 +2965,7 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
 
     S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
     J=eval_J(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
-    xi=eval_xi(theta1,theta2,q,chi1,chi2)
+    xi=eval_xi(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2)
 
     return toarray(S,J,xi)
 
@@ -2994,7 +3001,7 @@ def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
 
     S1, S2 = spinmags(q, chi1, chi2)
     kappainf = eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
-    xi = eval_xi(theta1inf, theta2inf, q, chi1, chi2)
+    xi=eval_xi(theta1=theta1inf,theta2=theta2inf,q=q,chi1=chi1,chi2=chi2)
 
     return toarray(kappainf, xi)
 
@@ -4545,10 +4552,11 @@ if __name__ == '__main__':
     q=[0.8,0.8]
     chi1=[1,1]
     chi2=[1,1]
-    J=[1,0]
+    J=[1,1]
     u=[1/10,1/10]
     theta1=[1,1]
     theta2=[1,1]
+    S=[0.3,0.3]
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
     #print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
@@ -4566,8 +4574,10 @@ if __name__ == '__main__':
     #print(Slimits(J[0],r[0],xi[0],q[0],chi1[0],[chi2[0]]))
 
     #print(xilimits(J=J, r=r,q=q,chi1=chi1,chi2=chi2))
-    print(eval_xi(theta1=theta1,theta2=theta2,S=[1,1],varphi=[1,1],J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+    #print(eval_xi(theta1=theta1,theta2=theta2,S=[1,1],varphi=[1,1],J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+    print(effectivepotential_minus(S[0],J[0],r[0],q[0],chi1[0],chi2[0]))
 
+    print(effectivepotential_minus(S,J,r,q,chi1,chi2))
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
     #t0=time.time()
     #print(Jofr(ic=1.8, r=np.linspace(100,10,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8))
