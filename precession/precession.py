@@ -1078,9 +1078,10 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     	Coefficient to the x^0 term in polynomial.
     """
 
-    kappa,u,q=toarray(kappa,u,q)
+    kappa=np.atleast_1d(kappa)
+    u=np.atleast_1d(u)
+    q=np.atleast_1d(q)
     S1,S2= spinmags(q,chi1,chi2)
-
 
     coeff0 = \
     ( 16 * ( ( -1 + q ) )**( 2 ) * ( ( 1 + q ) )**( 6 ) * ( ( ( -1 + q ) \
@@ -1344,7 +1345,7 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     coeff6 = \
     256 * ( q )**( 6 ) * ( u )**( 2 )
 
-    return toarray(coeff6, coeff5, coeff4, coeff3, coeff2, coeff1, coeff0)
+    return np.stack([coeff6, coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
 def xiresonances(J,r,q,chi1,chi2):
@@ -1377,27 +1378,26 @@ def xiresonances(J,r,q,chi1,chi2):
     """
 
     #Altough there are 6 solutions in general, we know that only two can lie between Smin and Smax.
+    J=np.atleast_1d(J)
+    r=np.atleast_1d(r)
+    q=np.atleast_1d(q)
+    chi1=np.atleast_1d(chi1)
+    chi2=np.atleast_1d(chi2)
+
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
 
     Smin,Smax = Slimits_LJS1S2(J,r,q,chi1,chi2)
     xiroots= wraproots(xidiscriminant_coefficients,kappa,u,q,chi1,chi2)
-    xiroots = xiroots[np.isfinite(xiroots)]
 
     def _compute(Smin,Smax,J,r,xiroots,q,chi1,chi2):
-
-        with np.errstate(invalid='ignore'):
-            Sroots = np.array([Satresonance(J,r,x,q,chi1,chi2) for x in xiroots])
-            xires = xiroots[np.logical_and(Sroots>Smin, Sroots<Smax)]
+        xiroots = xiroots[np.isfinite(xiroots)]
+        Sroots = Satresonance(np.tile(J,xiroots.shape),np.tile(r,xiroots.shape),xiroots,np.tile(q,xiroots.shape),np.tile(chi1,xiroots.shape),np.tile(chi2,xiroots.shape))
+        xires = xiroots[np.logical_and(Sroots>Smin, Sroots<Smax)]
         return xires
 
-    if np.ndim(xiroots)==1:
-        ximin,ximax =_compute(Smin,Smax,J,r,xiroots,q,chi1,chi2)
-    else:
-        ximin,ximax =np.array(list(map(_compute, Smin,Smax,J,r,xiroots,q,chi1,chi2))).T
-
-    return toarray(ximin,ximax)
-
+    ximin,ximax =np.array(list(map(_compute, Smin,Smax,J,r,xiroots,q,chi1,chi2))).T
+    return np.stack([ximin,ximax])
 
 
 def spinorbitresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
@@ -4552,14 +4552,20 @@ if __name__ == '__main__':
     q=[0.8,0.8]
     chi1=[1,1]
     chi2=[1,1]
-    #J=[1,0.23]
+    J=[1,1]
     u=[1/10,1/10]
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
-    print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
     #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
-    print("on many", Jresonances(r,xi,q,chi1,chi2))
-    #
+    #print("on many", Jresonances(r,xi,q,chi1,chi2))
+
+    print("on one", xiresonances(J[0],r[0],q[0],chi1[0],chi2[0]) )
+
+    print("on many", xiresonances(J,r,q,chi1,chi2) )
+
+
+
     # print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
