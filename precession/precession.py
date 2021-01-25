@@ -1489,7 +1489,7 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
     else:
         raise TypeError
 
-    return toarray(ximin,ximax)
+    return np.stack([ximin,ximax])
 
 
 def Slimits_S1S2(q,chi1,chi2):
