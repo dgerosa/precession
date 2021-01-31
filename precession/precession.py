@@ -2951,7 +2951,7 @@ def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
     theta2=eval_theta2(S,J,r,xi,q,chi1,chi2)
     deltaphi=eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=sign)
 
-    return toarray(theta1,theta2,deltaphi)
+    return np.stack([theta1,theta2,deltaphi])
 
 
 def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
@@ -2993,7 +2993,7 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     J=eval_J(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
     xi=eval_xi(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2)
 
-    return toarray(S,J,xi)
+    return np.stack([S,J,xi])
 
 
 def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
@@ -3025,14 +3025,13 @@ def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     	Effective spin.
     """
 
-    S1, S2 = spinmags(q, chi1, chi2)
     kappainf = eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
     xi=eval_xi(theta1=theta1inf,theta2=theta2inf,q=q,chi1=chi1,chi2=chi2)
 
-    return toarray(kappainf, xi)
+    return np.stack([kappainf, xi])
 
 
-def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
+def asymptotic_to_angles(kappa, xi, q, chi1, chi2):
     """
     Convert regularized momentum and effective spin (kappa, xi) into asymptotic angles (theta1, theta2).
 
@@ -3064,7 +3063,7 @@ def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     theta1inf = eval_theta1inf(kappainf, xi, q, chi1, chi2)
     theta2inf = eval_theta2inf(kappainf, xi, q, chi1, chi2)
 
-    return toarray(theta1inf, theta2inf)
+    return np.stack([theta1inf, theta2inf])
 
 
 
