@@ -85,7 +85,7 @@ def dot_nested(x,y):
         Dot product array.
     """
 
-    return np.squeeze(np.diag(np.atleast_1d(np.inner(x,y))))
+    return np.einsum('ij,ij->i',x,y)
 
 
 def sample_unitsphere(N=1):
@@ -3096,14 +3096,20 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q):
     	Effective spin.
     """
 
-    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
-    S = np.linalg.norm(S1vec+S2vec, axis=-1)
-    J = np.linalg.norm(S1vec+S2vec+Lvec, axis=-1)
-    L = np.linalg.norm(Lvec, axis=-1)
+    #S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
+
+    Lvec = np.atleast_2d(Lvec)
+    S1vec = np.atleast_2d(S1vec)
+    S2vec = np.atleast_2d(S2vec)
+
+    S = np.linalg.norm(S1vec+S2vec, axis=1)
+    J = np.linalg.norm(S1vec+S2vec+Lvec, axis=1)
+    L = np.linalg.norm(Lvec, axis=1)
     m1, m2 = masses(q)
+
     xi = dot_nested(S1vec,Lvec)/(m1*L) + dot_nested(S2vec,Lvec)/(m2*L)
 
-    return toarray(S, J, xi)
+    return np.stack([S, J, xi])
 
 # TODO: write function to get theta12 from theta1,theta2 and deltaphi
 
@@ -4584,8 +4590,18 @@ if __name__ == '__main__':
     S=[0.3,0.3]
 
 
-    print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
-    print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],simpler=True))
+    #print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
+    #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],simpler=True))
+
+
+
+    Lvec = [[1,2,3],[1,2,3]]
+    S1vec = [[1,2,3],[1,2,3]]
+    S2vec = [[1,2,3],[1,2,3]]
+
+    print(vectors_to_conserved(Lvec[0], S1vec[0], S2vec[0], q[0]))
+
+    print(vectors_to_conserved(Lvec, S1vec, S2vec, q))
 
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
