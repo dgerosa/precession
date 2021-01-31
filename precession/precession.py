@@ -2460,7 +2460,7 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     	Angle between the projections of the two spins onto the orbital plane.
     """
 
-    sign = atleast_1d(sign)
+    sign = np.atleast_1d(sign)
     cosdeltaphi=eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
     deltaphi = np.sign(sign)*np.arccos(cosdeltaphi)
 
