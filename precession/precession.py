@@ -2555,16 +2555,23 @@ def eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=N
 
     if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
-        theta1,theta2,deltaphi,q=toarray(theta1,theta2,deltaphi,q)
+        theta1=np.atleast_1d(theta1)
+        theta2=np.atleast_1d(theta2)
+        deltaphi=np.atleast_1d(deltaphi)
+        q=np.atleast_1d(q)
+
         S1,S2 = spinmags(q,chi1,chi2)
         L = eval_L(r,q)
         S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
+
         J=(L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
 
     elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and r is not None and q is not None and chi1 is None and chi2 is None:
 
-        kappa = toarray(kappa)
+        kappa=np.atleast_1d(kappa)
+
         L = eval_L(r,q)
+
         J = ( 2*L*kappa + L**2 )**0.5
 
     else:
@@ -2602,7 +2609,10 @@ def eval_S(theta1,theta2,deltaphi,q,chi1,chi2):
     	Magnitude of the total spin.
     """
 
-    theta1,theta2,deltaphi=toarray(theta1,theta2,deltaphi)
+    theta1=np.atleast_1d(theta1)
+    theta2=np.atleast_1d(theta2)
+    deltaphi=np.atleast_1d(deltaphi)
+
     S1,S2 = spinmags(q,chi1,chi2)
 
     S=(S1**2+S2**2+2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
@@ -2634,7 +2644,8 @@ def eval_kappa(J, r, q):
     	Regularized angular momentum (J^2-L^2)/(2L).
     """
 
-    J = toarray(J)
+    J=np.atleast_1d(J)
+
     L = eval_L(r, q)
     kappa = (J**2 - L**2) / (2*L)
 
@@ -2670,8 +2681,6 @@ def eval_u(r, q):
 
 
 
-
-
 def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital-separation limit of the regularized momentum kappa.
@@ -2699,7 +2708,9 @@ def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
     	Asymptotic value of the regularized momentum kappa.
     """
 
-    theta1inf, theta2inf = toarray(theta1inf, theta2inf)
+    theta1inf=np.atleast_1d(theta1inf)
+    theta2inf=np.atleast_1d(theta2inf)
+
     S1, S2 = spinmags(q, chi1, chi2)
     kappainf = S1*np.cos(theta1inf) + S2*np.cos(theta2inf)
 
@@ -2734,8 +2745,10 @@ def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
     	Cosine of the asymptotic angle between orbital angular momentum and primary spin.
     """
 
+    kappainf=np.atleast_1d(kappainf)
+    xi=np.atleast_1d(xi)
+    q=np.atleast_1d(q)
 
-    kappainf, xi, q = toarray(kappainf, xi, q)
     S1, S2 = spinmags(q, chi1, chi2)
     costheta1inf = (-xi + kappainf*(1+1/q)) / (S1*(1/q-q))
 
@@ -2805,7 +2818,10 @@ def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
     	Asymptotic value of the angle between orbital angular momentum and primary spin.
     """
 
-    kappainf, xi, q = toarray(kappainf, xi, q)
+    kappainf=np.atleast_1d(kappainf)
+    xi=np.atleast_1d(xi)
+    q=np.atleast_1d(q)
+
     S1, S2 = spinmags(q, chi1, chi2)
     costheta2inf = (xi - kappainf*(1+q)) / (S2*(1/q-q))
 
