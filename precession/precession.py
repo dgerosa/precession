@@ -1440,7 +1440,7 @@ def anglesresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
         theta1atmin = eval_theta1(Satmin,J,r,ximin,q,chi1,chi2)
         theta2atmin = eval_theta2(Satmin,J,r,ximin,q,chi1,chi2)
         # See Fig 5 in arxiv:1506.03492
-        J=toarray(J)
+        J=np.atleast_1d(J)
         S1,S2 = spinmags(q,chi1,chi2)
         L = eval_L(r,q)
         deltaphiatmin=np.where(J>np.abs(L-S1-S2), 0, np.pi)
@@ -2113,19 +2113,25 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
     	Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
     """
 
+    S=np.atleast_1d(S)
+    J=np.atleast_1d(J)
+    xi=np.atleast_1d(xi)
+    q=np.atleast_1d(q)
+    sign=np.atleast_1d(sign)
+
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
-    S,J,xi,q,sign= toarray(S,J,xi,q,sign)
 
-    t1 = (1+q) / (4*q * S**2 * L)
-    t2 = J**2 - L**2 - S**2
-    t3 = S**2 * (1+q) - (S1**2 - S2**2) * (1-q)
-    t4 = (1-q) * ((L+S)**2 - J**2)**0.5
-    t5 = (J**2 - (L-S)**2)**0.5
-    t6 = ((S1+S2)**2 - S**2)**0.5
-    t7 = (S**2 - (S1-S2)**2)**0.5
+    cosvarphi = \
+    ( xi /(1/4 * ( L )**( -1 ) * ( q )**( -1 ) * ( S )**( -2 ) ) - ( ( ( J \
+    )**( 2 ) + ( -1 * ( L )**( 2 ) + -1 * ( S )**( 2 ) ) ) * ( ( ( 1 + q ) \
+    )**( 2 ) * ( S )**( 2 ) + ( -1 + ( q )**( 2 ) ) * ( ( S1 )**( 2 ) + -1 \
+    * ( S2 )**( 2 ) ) ) ) ) / (-1 * ( 1 + -1 * ( q )**( 2 ) ) * ( ( ( J    \
+    )**( 2 ) + -1 * ( ( L + -1 * S ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( J  \
+    )**( 2 ) + ( ( L + S ) )**( 2 ) ) )**( 1/2 ) * ( ( ( S )**( 2 ) + -1 * \
+    ( ( S1 + -1 * S2 ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( S )**( 2 ) + ( ( \
+    S1 + S2 ) )**( 2 ) ) )**( 1/2 ) )
 
-    cosvarphi= ((t2*t3) - (xi/t1)) / (t4*t5*t6*t7)
     varphi = np.arccos(cosvarphi) * sign
 
     return varphi
@@ -4557,6 +4563,11 @@ if __name__ == '__main__':
     theta1=[1,1]
     theta2=[1,1]
     S=[0.3,0.3]
+
+
+    print(eval_varphi(S[0], J[0], r[0], xi[0], q[0], chi1[0], chi2[0], sign=1))
+    print(eval_varphi(S, J, r, xi, q, chi1, chi2, sign=[1,1]))
+
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
     #print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
@@ -4575,9 +4586,9 @@ if __name__ == '__main__':
 
     #print(xilimits(J=J, r=r,q=q,chi1=chi1,chi2=chi2))
     #print(eval_xi(theta1=theta1,theta2=theta2,S=[1,1],varphi=[1,1],J=J,r=r,q=q,chi1=chi1,chi2=chi2))
-    print(effectivepotential_minus(S[0],J[0],r[0],q[0],chi1[0],chi2[0]))
+    #print(effectivepotential_minus(S[0],J[0],r[0],q[0],chi1[0],chi2[0]))
 
-    print(effectivepotential_minus(S,J,r,q,chi1,chi2))
+    #print(effectivepotential_minus(S,J,r,q,chi1,chi2))
     #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
     #t0=time.time()
     #print(Jofr(ic=1.8, r=np.linspace(100,10,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8))
