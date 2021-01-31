@@ -42,6 +42,28 @@ def toarray(*args):
         return [np.squeeze(x) for x in args]
 
 
+def norm_nested(x):
+    """
+    Norm of 2D array of shape (x,3) along last axis.
+
+    Call
+    ----
+    x = normalize_nested(x)
+
+    Parameters
+    ----------
+    x : array
+        Input array.
+
+    Returns
+    -------
+    x : array
+        Normalized array.
+    """
+
+    return np.linalg.norm(x, axis=1)
+
+
 def normalize_nested(x):
     """
     Normalize 2D array (x,3) along last axis.
@@ -61,7 +83,7 @@ def normalize_nested(x):
         Normalized array.
     """
 
-    return np.squeeze(x/np.atleast_1d(np.linalg.norm(x, axis=-1))[:,None])
+    return x/norm_nested(x)[:,None]
 
 
 def dot_nested(x,y):
@@ -3096,15 +3118,13 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q):
     	Effective spin.
     """
 
-    #S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
-
     Lvec = np.atleast_2d(Lvec)
     S1vec = np.atleast_2d(S1vec)
     S2vec = np.atleast_2d(S2vec)
 
-    S = np.linalg.norm(S1vec+S2vec, axis=1)
-    J = np.linalg.norm(S1vec+S2vec+Lvec, axis=1)
-    L = np.linalg.norm(Lvec, axis=1)
+    S = norm_nested(S1vec+S2vec)
+    J = norm_nested(S1vec+S2vec+Lvec)
+    L = norm_nested(Lvec)
     m1, m2 = masses(q)
 
     xi = dot_nested(S1vec,Lvec)/(m1*L) + dot_nested(S2vec,Lvec)/(m2*L)
@@ -3142,18 +3162,24 @@ def vectors_to_angles(Lvec, S1vec, S2vec):
     	Angle between the projections of the two spins onto the orbital plane.
     """
 
+    Lvec = np.atleast_2d(Lvec)
+    S1vec = np.atleast_2d(S1vec)
+    S2vec = np.atleast_2d(S2vec)
 
-    S1vec, S2vec, Lvec = toarray(S1vec, S2vec, Lvec)
     S1vec = normalize_nested(S1vec)
     S2vec = normalize_nested(S2vec)
     Lvec = normalize_nested(Lvec)
+
     theta1 = np.arccos(dot_nested(S1vec,Lvec))
     theta2 = np.arccos(dot_nested(S2vec,Lvec))
-    absdeltaphi = np.arccos(dot_nested(normalize_nested(np.cross(S1vec, Lvec)), normalize_nested(np.cross(S2vec, Lvec))))
-    signdeltaphi = np.sign(dot_nested(Lvec,np.cross(np.cross(S2vec, Lvec),np.cross(S1vec, Lvec))))
+    S1crL = np.cross(S1vec, Lvec)
+    S2crL = np.cross(S2vec, Lvec)
+
+    absdeltaphi = np.arccos(dot_nested(normalize_nested(S1crL), normalize_nested(S2crL)))
+    signdeltaphi = np.sign(dot_nested(Lvec,np.cross(S1crL,S2crL)))
     deltaphi = absdeltaphi*signdeltaphi
 
-    return toarray(theta1, theta2, deltaphi)
+    return np.stack([theta1, theta2, deltaphi])
 
 
 def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
@@ -3192,40 +3218,40 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
     	Cartesian vector of the secondary spin.
     """
 
+    S=np.atleast_1d(S)
+    J=np.atleast_1d(J)
 
-    S, J, q = toarray(S, J, q)
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
     varphi = eval_varphi(S, J, r, xi, q, chi1, chi2)
     thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
 
-    # Jx = toarray(np.zeros(flen(J)))
-    # Jy = toarray(np.zeros(flen(J)))
-    # Jz = J
-    # Jvec = np.array([Jx, Jy, Jz]).T
-    # Svec = Jvec - Lvec
-
     Lx = L * np.sin(thetaL)
-    Ly = toarray(np.zeros(flen(L)))
+    Ly = np.zeros(L.shape)
     Lz = L * np.cos(thetaL)
-    Lvec = np.array([Lx, Ly, Lz]).T
+    Lvec = np.transpose([Lx, Ly, Lz])
 
     A1 = (J**2 - (L-S)**2)**0.5
     A2 = ((L+S)**2 - J**2)**0.5
     A3 = (S**2 - (S1-S2)**2)**0.5
     A4 = ((S1+S2)**2 - S**2)**0.5
 
-    S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) \
+        / (4*J*S**2)
     S1y = A3 * A4 * np.sin(varphi) / (2*S)
-    S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S1vec = np.array([S1x, S1y, S1z]).T
+    S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) \
+        / (4*J*S**2)
+    S1vec = np.transpose([S1x, S1y, S1z])
 
-    S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) / (4*J*S**2)
+    S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) \
+        / (4*J*S**2)
     S2y = -A3*A4*np.sin(varphi) / (2*S)
-    S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) / (4*J*S**2)
-    S2vec = np.array([S2x, S2y, S2z]).T
+    S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) \
+        / (4*J*S**2)
+    S2vec = np.transpose([S2x, S2y, S2z])
 
-    return toarray(Lvec, S1vec, S2vec)
+    return np.stack([Lvec, S1vec, S2vec])
+
 
 def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
@@ -3265,9 +3291,8 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
 
     S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
     Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
-    return toarray(Lvec, S1vec, S2vec)
 
-
+    return np.stack([Lvec, S1vec, S2vec])
 
 
 def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
@@ -3305,28 +3330,25 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     	Cartesian vector of the secondary spin.
     """
 
-
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
 
-    Lx = toarray(np.zeros(flen(L)))
-    Ly = toarray(np.zeros(flen(L)))
+    Lx = np.zeros(L.shape)
+    Ly = np.zeros(L.shape)
     Lz = L
-    Lvec = np.array([Lx, Ly, Lz]).T
+    Lvec = np.transpose([Lx, Ly, Lz])
 
     S1x = S1 * np.sin(theta1)
-    S1y = toarray(np.zeros(flen(S1)))
+    S1y = np.zeros(S1.shape)
     S1z = S1 * np.cos(theta1)
-    S1vec = np.array([S1x, S1y, S1z]).T
+    S1vec = np.transpose([S1x, S1y, S1z])
 
     S2x = S2 * np.sin(theta2) * np.cos(deltaphi)
     S2y = S2 * np.sin(theta2) * np.sin(deltaphi)
     S2z = S2 * np.cos(theta2)
-    S2vec = np.array([S2x, S2y, S2z]).T
+    S2vec = np.transpose([S2x, S2y, S2z])
 
-    # Svec = S1vec + S2vec
-    # Jvec = Lvec + Svec
-    return toarray(Lvec, S1vec, S2vec)
+    return np.stack([Lvec, S1vec, S2vec])
 
 
 def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
@@ -3366,7 +3388,8 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
 
     theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
     Lvec, S1vec, S2vec = angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
-    return toarray(Lvec, S1vec, S2vec)
+
+    return np.stack([Lvec, S1vec, S2vec])
 
 
 #### Precessional timescale dynamics ####
@@ -3393,7 +3416,6 @@ def Speriod_prefactor(r,xi,q):
     coeff: float
     	Coefficient.
     """
-
 
     r,xi=toarray(r,xi)
     eta=eval_eta(q)
@@ -4595,13 +4617,16 @@ if __name__ == '__main__':
 
 
 
-    Lvec = [[1,2,3],[1,2,3]]
-    S1vec = [[1,2,3],[1,2,3]]
-    S2vec = [[1,2,3],[1,2,3]]
+    Lvec = [[1,2454,3],[1,2,334]]
+    S1vec = [[13,20,30],[1,21,3]]
+    S2vec = [[12,23,33],[1,23,3]]
 
-    print(vectors_to_conserved(Lvec[0], S1vec[0], S2vec[0], q[0]))
+    v1,v2,v3 = conserved_to_Jframe(S[1], J[1], r[1], xi[1], q[1], chi1[1], chi2[1])
+    print(v1)
 
-    print(vectors_to_conserved(Lvec, S1vec, S2vec, q))
+    v1,v2,v3 = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
+    print(v1)
+
 
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
