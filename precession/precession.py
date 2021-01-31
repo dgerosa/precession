@@ -2895,25 +2895,18 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
 
     Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
     # Pairs of booleans based on the values of deltaphi at S- and S+
-    status = np.atleast_2d(np.array([eval_cosdeltaphi(Smin,J,r,xi,q,chi1,chi2)>0 ,eval_cosdeltaphi(Smax,J,r,xi,q,chi1,chi2) >0]).T)
-
-
+    status = np.transpose([eval_cosdeltaphi(Smin,J,r,xi,q,chi1,chi2) >0,eval_cosdeltaphi(Smax,J,r,xi,q,chi1,chi2) >0])
     # Map to labels
-    if simpler:
-        dictlabel = {(False,False):"Lpi", (True,True):"L0", (False, True):"C", (True, False):"C"}
-    else:
-        dictlabel = {(False,False):"Lpi", (True,True):"L0", (False, True):"C-", (True, False):"C+"}
-
+    dictlabel = {(False,False):"Lpi", (True,True):"L0", (False, True):"C-", (True, False):"C+"}
     # Subsitute pairs with labels
-    morphs = np.zeros(flen(J))
+    morphs = np.zeros(Smin.shape)
     for k, v in dictlabel.items():
-        #print(status==k).all()
         morphs=np.where((status == k).all(axis=1),v,morphs)
+    # Simplifies output, only one circulating morphology
+    if simpler:
+        morphs = np.where( np.logical_or(morphs == 'C+',morphs == 'C-'), 'C', morphs)
 
-    return np.squeeze(morphs)
-
-#  TODO: Jan 4. all docstrtings from here need to be checked
-
+    return morphs
 
 
 def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
@@ -4592,8 +4585,8 @@ if __name__ == '__main__':
     S=[0.3,0.3]
 
 
-    print(eval_varphi(S[0], J[0], r[0], xi[0], q[0], chi1[0], chi2[0], sign=1))
-    print(eval_varphi(S, J, r, xi, q, chi1, chi2, sign=[1,1]))
+    print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
+    print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],simpler=True))
 
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
