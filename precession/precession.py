@@ -3053,7 +3053,7 @@ def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     return np.stack([kappainf, xi])
 
 
-def asymptotic_to_angles(kappa, xi, q, chi1, chi2):
+def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     """
     Convert regularized momentum and effective spin (kappa, xi) into asymptotic angles (theta1, theta2).
 
