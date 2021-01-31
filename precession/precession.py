@@ -2168,11 +2168,14 @@ def eval_costheta1(S,J,r,xi,q,chi1,chi2):
     	Cosine of the angle between orbital angular momentum and primary spin.
     """
 
-    S,J,q=toarray(S,J,q)
+    S=np.atleast_1d(S)
+    J=np.atleast_1d(J)
+    q=np.atleast_1d(q)
+
     S1,S2 = spinmags(q,chi1,chi2)
     L = eval_L(r,q)
 
-    costheta1= ( ((J**2-L**2-S**2)/L) - (2.*q*xi)/(1.+q) )/(2.*(1.-q)*S1)
+    costheta1= ( ((J**2-L**2-S**2)/L) - (2*q*xi)/(1+q) )/(2*(1-q)*S1)
 
     return costheta1
 
@@ -2245,7 +2248,10 @@ def eval_costheta2(S,J,r,xi,q,chi1,chi2):
     	Cosine of the angle between orbital angular momentum and secondary spin.
     """
 
-    S,J,q=toarray(S,J,q)
+    S=np.atleast_1d(S)
+    J=np.atleast_1d(J)
+    q=np.atleast_1d(q)
+
     S1,S2 = spinmags(q,chi1,chi2)
     L = eval_L(r,q)
 
@@ -2316,8 +2322,10 @@ def eval_costheta12(S,q,chi1,chi2):
     	Cosine of the angle between the two spins.
     """
 
-    S=toarray(S)
+    S=np.atleast_1d(S)
+
     S1,S2 = spinmags(q,chi1,chi2)
+
     costheta12=(S**2-S1**2-S2**2)/(2*S1*S2)
 
     return costheta12
@@ -2385,11 +2393,13 @@ def eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
     	Cosine of the angle between the projections of the two spins onto the orbital plane.
     """
 
-    q=toarray(q)
+    q=np.atleast_1d(q)
+
     S1,S2 = spinmags(q,chi1,chi2)
     costheta1=eval_costheta1(S,J,r,xi,q,chi1,chi2)
     costheta2=eval_costheta2(S,J,r,xi,q,chi1,chi2)
     costheta12=eval_costheta12(S,q,chi1,chi2)
+
     cosdeltaphi= (costheta12 - costheta1*costheta2)/((1-costheta1**2)*(1-costheta2**2))**0.5
 
     return cosdeltaphi
@@ -2428,7 +2438,7 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     	Angle between the projections of the two spins onto the orbital plane.
     """
 
-    sign = toarray(sign)
+    sign = atleast_1d(sign)
     cosdeltaphi=eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
     deltaphi = np.sign(sign)*np.arccos(cosdeltaphi)
 
@@ -2464,8 +2474,9 @@ def eval_costhetaL(S,J,r,q,chi1,chi2):
     	Cosine of the angle betwen orbital angular momentum and total angular momentum.
     """
 
+    S=np.atleast_1d(S)
+    J=np.atleast_1d(J)
 
-    S,J=toarray(S,J)
     S1,S2 = spinmags(q,chi1,chi2)
     L = eval_L(r,q)
     costhetaL=(J**2+L**2-S**2)/(2*J*L)
