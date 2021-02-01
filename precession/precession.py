@@ -156,6 +156,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
     """
 
     coeffs= coefficientfunction(*args,**kwargs)
+    # TODO: can I remove this for loop?
     sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
     sols = np.real(np.where(np.isreal(sols),sols,np.nan))
 
@@ -4152,8 +4153,8 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
     a = Speriod_prefactor(r, xi ,q)
 
-    def _integrand(S2):
-        return func(S2, *args, **kwargs) / np.abs(dS2dt(S2, Sminus2, Splus2, S32, a))
+    def _integrand(Ssq):
+        return func(Ssq, *args, **kwargs) / np.abs(dS2dt(Ssq, Sminus2, Splus2, S32, a))
 
     tau = Speriod(J, r, xi, q, chi1, chi2)
     func_av = (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2)[0]
