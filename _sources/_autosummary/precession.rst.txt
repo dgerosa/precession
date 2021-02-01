@@ -32,7 +32,7 @@ precession
       angles_to_Lframe
       angles_to_asymptotic
       angles_to_conserved
-      angularmomentum
+      anglesresonances
       asymptotic_to_angles
       conserved_to_Jframe
       conserved_to_Lframe
@@ -41,12 +41,15 @@ precession
       dS2dtsquared
       dSdt
       dkappadu
-      effectivepotential_Sphi
+      dot_nested
       effectivepotential_minus
       effectivepotential_plus
       elliptic_parameter
       eval_J
+      eval_L
       eval_S
+      eval_S1
+      eval_S2
       eval_cosdeltaphi
       eval_costheta1
       eval_costheta12
@@ -55,8 +58,12 @@ precession
       eval_costheta2inf
       eval_costhetaL
       eval_deltaphi
+      eval_eta
       eval_kappa
       eval_kappainf
+      eval_m1
+      eval_m2
+      eval_q
       eval_r
       eval_theta1
       eval_theta12
@@ -65,39 +72,31 @@ precession
       eval_theta2inf
       eval_thetaL
       eval_u
+      eval_v
       eval_varphi
       eval_xi
       flen
       inspiral
+      inspiral_orbav
       inspiral_precav
       kappadiscriminant_coefficients
       kappaofu
       limits_check
-      mass1
-      mass2
       masses
-      massratio
       morphology
-      omega2_aligned
-      omega2_downdown
-      omega2_downup
-      omega2_updown
-      omega2_upup
+      norm_nested
+      normalize_nested
+      omegasq_aligned
       orbav_eqs
       orbav_integrator
-      orbitalseparation
-      orbitalvelocity
       precession_average
       r_updown
-      r_wide
       sample_unitsphere
-      spin1
-      spin2
       spinmags
-      symmetricmassratio
       toarray
       vectors_to_angles
       vectors_to_conserved
+      widenutation
       wraproots
       xidiscriminant_coefficients
       xilimits
