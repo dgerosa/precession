@@ -3836,7 +3836,7 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
 
 #### Precession-averaged evolution ####
 
-def dkappadu(kappa, u, xi, q, chi1, chi2):
+def dkappadu(u, kappa, xi, q, chi1, chi2):
     """
     Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to S2av and S2avinf and it has been re-written for optimization purposes.
 
@@ -3866,19 +3866,20 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
     """
 
     if u==0:
-        # In this case use analytic result
-        theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
-        S2av = S2avinf(theta1inf, theta2inf, q, chi1, chi2)
+       # In this case use analytic result
+       theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
+       S2av = S2avinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
-        # This is equivalent to S2av, but we avoid multiple conversions J <--> kappa and repated calculation of the S^2 roots.
-        S32, Sminus2, Splus2 = wraproots(Scubic_coefficients,kappa,u,xi,q,chi1,chi2)
+        #This is equivalent to S2av, but we avoid multiple conversions J <--> kappa and repated calculation of the S^2 roots.
+        S32, Sminus2, Splus2 = np.squeeze(wraproots(Scubic_coefficients,kappa,u,xi,q,chi1,chi2))
         m = elliptic_parameter(Sminus2, Splus2, S32)
         S2av = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
 
     return S2av
 
 
-def kappaofu(kappa0, u, xi, q, chi1, chi2):
+# TODO: update docstrings
+def kappaofu(kappa0, uinitial, ufinal, xi, q, chi1, chi2):
     """
     Integration of ODE describing precession-averaged inspirals. Returns kappa(u) for a given initial condition kappa, sampled at given outputs u. The initial condition corresponds to the value of kappa at u[0].
 
@@ -3907,23 +3908,33 @@ def kappaofu(kappa0, u, xi, q, chi1, chi2):
     	Regularized angular momentum (J^2-L^2)/(2L).
     """
 
-    def _compute(kappa0, u, xi, q, chi1, chi2):
+    print("all", kappa0)
+
+    kappa0 = np.atleast_1d(kappa0)
+    uinitial = np.atleast_1d(uinitial)
+    ufinal = np.atleast_1d(ufinal)
+    xi = np.atleast_1d(xi)
+    q= np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    def _compute(kappa0, uinitial, ufinal, xi, q, chi1, chi2):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # TODO. This breaks down if r is very large but not infinite.
-        h0= 1e-3 if u[0]==0 else 0
+        #h0= 1e-3 if u[0]==0 else 0
+        # TODO: I disabled the intial timestep check when I switched to solve_ivp. This needs to be tested!
 
-        #kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2), h0=h0, full_output = 1)
-        kappa = scipy.integrate.odeint(dkappadu, kappa0, u, args=(xi,q,chi1,chi2), h0=h0)
+        # As far as I understand by inspective the scipy code, the "vectorized" option is ignored if a jacobian is not provided. If you decide it's needed, a vectorized implementation of "dkappadu" requires substituting that if statement with np.where
 
-        return toarray(kappa)
+        ODEsolution = scipy.integrate.solve_ivp(dkappadu, (uinitial, ufinal), np.atleast_1d(kappa0), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi,q,chi1,chi2))
 
-    if flen(kappa0)==1:
-        kappa = _compute(kappa0, u, xi, q, chi1, chi2)
-    else:
-        kappa = np.array(list(map(lambda x: _compute(*x), zip(kappa0, u, xi, q, chi1, chi2))))
+        # Return ODE object. The key methods is .sol --callable, sol(t).
+        return ODEsolution
 
-    return kappa
+    ODEsolution = np.array(list(map(_compute, kappa0, uinitial,ufinal, xi, q, chi1, chi2)))
+
+    return ODEsolution
 
 
 
@@ -4609,22 +4620,22 @@ if __name__ == '__main__':
     #print(masses([0.5,0.6]))
 
 
-    r=[10,10]
-    xi=[0.35,0.35]
-    q=[0.8,0.8]
-    chi1=[1,1]
-    chi2=[1,1]
-    J=[1,1]
-    u=[1/10,1/10]
-    theta1=[1,1]
-    theta2=[1,1]
-    S=[0.3,0.3]
-    t=[1,100]
-
-
-    for x in np.linspace()
-
-    print(S2av_mfactor([0,1e-,0.2]))
+    # r=[10,10]
+    # xi=[0.35,0.35]
+    # q=[0.8,0.8]
+    # chi1=[1,1]
+    # chi2=[1,1]
+    # J=[1,1]
+    # u=[1/10,1/10]
+    # theta1=[1,1]
+    # theta2=[1,1]
+    # S=[0.3,0.3]
+    # t=[1,100]
+    #
+    #
+    # for x in np.linspace()
+    #
+    # print(S2av_mfactor([0,1e-,0.2]))
 
     #print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
     #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],simpler=True))
@@ -4806,21 +4817,21 @@ if __name__ == '__main__':
     # print(d)
     #
 
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # xi = 0.9141896967861489
-    # kappa0 = 0.5784355256550922
-    # r=np.logspace(2,1,6)
-    # u=eval_u(r,q)
-    # print(kappaofu(kappa0, u, xi, q, chi1, chi2))
-    # print(kappaofu([kappa0,kappa0], [u,u], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
-
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa0 = 0.5784355256550922
+    r=np.logspace(2,1,6)
+    u=eval_u(r,q)
+    #print(kappaofu(kappa0, u[0],u[-1], xi, q, chi1, chi2))
+    sols = kappaofu([kappa0,kappa0], [u[0],u[0]], [u[1],u[1]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2])
+    print(sols[1])
 
 
     #
