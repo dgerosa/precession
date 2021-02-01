@@ -3602,6 +3602,7 @@ def Speriod(J,r,xi,q,chi1,chi2):
 def Soft(t,J,r,xi,q,chi1,chi2):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
+    The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
 
     Call
     ----
@@ -3635,9 +3636,9 @@ def Soft(t,J,r,xi,q,chi1,chi2):
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
     m = elliptic_parameter(Sminus2,Splus2,S32)
 
-    sn,_,dn,_ = scipy.special.ellipj(t*mathcalA*(Splus2-S32)**0.5/2,m)
+    sn,_,dn,_ = scipy.special.ellipj(t.T*mathcalA*(Splus2-S32)**0.5/2,m)
     Ssq = Sminus2 + (Splus2-Sminus2)*((Sminus2-S32)/(Splus2-S32)) *(sn/dn)**2
-    S=Ssq**0.5
+    S=Ssq.T**0.5
 
     return S
 
@@ -3674,7 +3675,9 @@ def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     """
 
     tau = Speriod(J,r,xi,q,chi1,chi2)
-    t = np.array([np.random.uniform(0,x,y) for x,y in zip(np.atleast_1d(tau),np.atleast_1d(N))])
+    # For each binary, generate N samples between 0 and tau.
+    t = np.random.uniform(size=tau.size*N).reshape((tau.size,N)) * tau[:,None]
+    # Note the special broadcasting rules of Soft, see Soft.__docs__
     S = Soft(t,J,r,xi,q,chi1,chi2)
 
     return S
@@ -4615,18 +4618,18 @@ if __name__ == '__main__':
     #print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
     #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],simpler=True))
 
-    print(Soft(t[0],J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
-    print(Soft(t[1],J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
-    print(Soft(t[1],J[1],r[1],xi[1],q[1],chi1[1],chi2[1]))
+    # print(Soft(t[0],J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    # print(Soft(t[1],J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    # print(Soft(t[1],J[1],r[1],xi[1],q[1],chi1[1],chi2[1]))
+    #
+    # print(Soft(t,J,r,xi,q,chi1,chi2))
+    #
+    # print(Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #
+    #
+    # print(Soft([[1,100,1,100],[500,600,500,600]],J,r,xi,q,chi1,chi2))
 
-    print(Soft(t,J,r,xi,q,chi1,chi2))
-
-    print(Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
-
-
-    print(Soft([t,[500,600]],J,r,xi,q,chi1,chi2)[0])
-
-
+    print(Ssampling(J,r,xi,q,chi1,chi2,N=10))
 
     #Lvec = [[1,2454,3],[1,2,334]]
     #S1vec = [[13,20,30],[1,21,3]]
