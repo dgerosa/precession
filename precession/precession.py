@@ -3749,7 +3749,6 @@ def S2av(J, r, xi, q, chi1, chi2):
     	Squared magnitude of the total spin.
     """
 
-
     Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
     m = elliptic_parameter(Sminus2, Splus2, S32)
     Ssq = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
@@ -3789,12 +3788,10 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     """
 
     S1, S2 = spinmags(q, chi1, chi2)
-    costheta1inf = np.cos(theta1inf)
-    costheta2inf = np.cos(theta2inf)
-    sintheta1inf = np.sin(theta1inf)
-    sintheta2inf = np.sin(theta2inf)
-    Sminus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf - sintheta1inf*sintheta2inf)
-    Splus2inf = S1**2 + S2**2 + 2*S1*S2*(costheta1inf*costheta2inf + sintheta1inf*sintheta2inf)
+    coscos = np.cos(theta1inf)*np.cos(theta2inf)
+    sinsin = np.sin(theta1inf)*np.sin(theta2inf)
+    Sminus2inf = S1**2 + S2**2 + 2*S1*S2*(coscos - sinsin)
+    Splus2inf = S1**2 + S2**2 + 2*S1*S2*(coscos + sinsin)
     S32inf = -np.inf
 
     return toarray(Sminus2inf, Splus2inf, S32inf)
@@ -3828,7 +3825,9 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     	Squared magnitude of the total spin.
     """
 
-    theta1inf, theta2inf = toarray(theta1inf, theta2inf)
+    theta1inf = np.atleast_1d(theta1inf)
+    theta2inf = np.atleast_1d(theta2inf)
+
     S1, S2 = spinmags(q, chi1, chi2)
     S2avinf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
 
