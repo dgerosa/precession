@@ -3417,7 +3417,9 @@ def Speriod_prefactor(r,xi,q):
     	Coefficient.
     """
 
-    r,xi=toarray(r,xi)
+    r=np.atleast_1d(r)
+    xi=np.atleast_1d(xi)
+
     eta=eval_eta(q)
     coeff = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
 
@@ -3456,11 +3458,11 @@ def dS2dtsquared(S,J,r,xi,q,chi1,chi2):
     	Squared first derivative of the squared total spin.
     """
 
-
     mathcalA = Speriod_prefactor(r,xi,q)
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+    dS2dt2 = - mathcalA**2 * (S**2-Splus2) * (S**2-Sminus2) * (S**2-S32)
 
-    return - mathcalA**2 * (S**2-Splus2) * (S**2-Sminus2) * (S**2-S32)
+    return dS2dt2
 
 
 # Change name to this function, otherwise is identical to the returned variable.
@@ -3628,13 +3630,14 @@ def Soft(t,J,r,xi,q,chi1,chi2):
     	Magnitude of the total spin.
     """
 
-    t=toarray(t)
+    t=np.atleast_1d(t)
     mathcalA=Speriod_prefactor(r,xi,q)
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
     m = elliptic_parameter(Sminus2,Splus2,S32)
-    sn,cn,dn,pn = scipy.special.ellipj(t.T*mathcalA*(Splus2-S32)**0.5/2,m)
-    S2 = Sminus2 + (Splus2-Sminus2)*((Sminus2-S32)/(Splus2-S32)) *(sn/dn)**2
-    S=S2.T**0.5
+
+    sn,_,dn,_ = scipy.special.ellipj(t*mathcalA*(Splus2-S32)**0.5/2,m)
+    Ssq = Sminus2 + (Splus2-Sminus2)*((Sminus2-S32)/(Splus2-S32)) *(sn/dn)**2
+    S=Ssq**0.5
 
     return S
 
@@ -3669,9 +3672,6 @@ def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     S: float
     	Magnitude of the total spin.
     """
-
-    #TODO write docstrings
-    # N is number of samples
 
     tau = Speriod(J,r,xi,q,chi1,chi2)
     t = np.array([np.random.uniform(0,x,y) for x,y in zip(np.atleast_1d(tau),np.atleast_1d(N))])
@@ -4610,22 +4610,33 @@ if __name__ == '__main__':
     theta1=[1,1]
     theta2=[1,1]
     S=[0.3,0.3]
-
+    t=[1,100]
 
     #print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
     #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],simpler=True))
 
+    print(Soft(t[0],J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    print(Soft(t[1],J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    print(Soft(t[1],J[1],r[1],xi[1],q[1],chi1[1],chi2[1]))
+
+    print(Soft(t,J,r,xi,q,chi1,chi2))
+
+    print(Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
 
 
-    Lvec = [[1,2454,3],[1,2,334]]
-    S1vec = [[13,20,30],[1,21,3]]
-    S2vec = [[12,23,33],[1,23,3]]
+    print(Soft([t,[500,600]],J,r,xi,q,chi1,chi2)[0])
 
-    v1,v2,v3 = conserved_to_Jframe(S[1], J[1], r[1], xi[1], q[1], chi1[1], chi2[1])
-    print(v1)
 
-    v1,v2,v3 = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
-    print(v1)
+
+    #Lvec = [[1,2454,3],[1,2,334]]
+    #S1vec = [[13,20,30],[1,21,3]]
+    #S2vec = [[12,23,33],[1,23,3]]
+
+    #v1,v2,v3 = conserved_to_Jframe(S[1], J[1], r[1], xi[1], q[1], chi1[1], chi2[1])
+    #print(v1)
+
+    #v1,v2,v3 = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
+    #print(v1)
 
 
     #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
