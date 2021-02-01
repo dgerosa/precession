@@ -3838,7 +3838,7 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
 
 def dkappadu(kappa, u, xi, q, chi1, chi2):
     """
-    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This function is not vectorized.
+    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to S2av and S2avinf and it has been re-written for optimization purposes.
 
     Call
     ----
@@ -3870,8 +3870,7 @@ def dkappadu(kappa, u, xi, q, chi1, chi2):
         theta1inf,theta2inf = asymptotic_to_angles(kappa,xi,q,chi1,chi2)
         S2av = S2avinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
-
-        # This is equivalent to S2av, but we avoid multiple conversions J <--> kappa.
+        # This is equivalent to S2av, but we avoid multiple conversions J <--> kappa and repated calculation of the S^2 roots.
         S32, Sminus2, Splus2 = wraproots(Scubic_coefficients,kappa,u,xi,q,chi1,chi2)
         m = elliptic_parameter(Sminus2, Splus2, S32)
         S2av = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
