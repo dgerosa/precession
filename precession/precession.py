@@ -3646,6 +3646,10 @@ def Soft(t,J,r,xi,q,chi1,chi2):
 def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     """
     Sample N values of S at fixed separation accoring to its PN-weighted distribution function.
+    Can only be used to sample the *same* number of configuration for each binary. If the inputs J,r,xi,q,chi1, and chi2 have shape (M,) the output will have shape
+    - (M,N) if M>1 and N>1;
+    - (M,) if N=1;
+    - (N,) if M=1.
 
     Call
     ----
@@ -3678,9 +3682,12 @@ def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     # For each binary, generate N samples between 0 and tau.
     t = np.random.uniform(size=tau.size*N).reshape((tau.size,N)) * tau[:,None]
     # Note the special broadcasting rules of Soft, see Soft.__docs__
+    # S has shape (M,N).
     S = Soft(t,J,r,xi,q,chi1,chi2)
 
-    return S
+    # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
+    # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
+    return np.atleast_1d(np.squeeze(S))
 
 
 def S2av_mfactor(m):
@@ -4629,7 +4636,12 @@ if __name__ == '__main__':
     #
     # print(Soft([[1,100,1,100],[500,600,500,600]],J,r,xi,q,chi1,chi2))
 
-    print(Ssampling(J,r,xi,q,chi1,chi2,N=10))
+    #print(Ssampling(J,r,xi,q,chi1,chi2,N=10).shape)
+    #print(Ssampling(J,r,xi,q,chi1,chi2,N=1).shape)
+    #print(Ssampling(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],N=1).shape)
+    #print(Ssampling(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],N=10).shape)
+
+
 
     #Lvec = [[1,2454,3],[1,2,334]]
     #S1vec = [[13,20,30],[1,21,3]]
