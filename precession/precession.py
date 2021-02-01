@@ -3709,14 +3709,15 @@ def S2av_mfactor(m):
     	Coefficient.
     """
 
-    m=toarray(m)
+    m=np.atleast_1d(m)
+    # The limit of the S2av coefficient as m->0 is finite and equal to 1/2.
+    # This is implementation is numerically stable up to m~1e-10.
+    # For m=1e-7, the analytic m=0 limit is returned with a precision of 1e-9, which is enough.
+    m=np.maximum(1e-7,m)
+    coeff = (1- scipy.special.ellipe(m)/scipy.special.ellipk(m))/m
 
-    with warnings.catch_warnings(): #Filter out warning for m=0
-        warnings.filterwarnings("ignore", category=RuntimeWarning)
-        mfactor = (1- scipy.special.ellipe(m)/scipy.special.ellipk(m))/m
+    return coeff
 
-    # If m=0 return the limit 1/2
-    return np.where(m==0, 1/2, mfactor)
 
 # TODO: change name to this function
 def S2av(J, r, xi, q, chi1, chi2):
@@ -4621,6 +4622,11 @@ if __name__ == '__main__':
     theta2=[1,1]
     S=[0.3,0.3]
     t=[1,100]
+
+
+    for x in np.linspace()
+
+    print(S2av_mfactor([0,1e-,0.2]))
 
     #print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
     #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],simpler=True))
