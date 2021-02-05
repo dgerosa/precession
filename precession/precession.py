@@ -502,7 +502,7 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
 
     S1,S2 = spinmags(q,chi1,chi2)
     L = eval_L(r,q)
-    Jmin = np.maximum.reduce([np.zeros(flen(L)), L-S1-S2, np.abs(S1-S2)-L])
+    Jmin = np.maximum.reduce([np.zeros(L.shape), L-S1-S2, np.abs(S1-S2)-L])
     Jmax = L+S1+S2
 
     return np.stack([Jmin,Jmax])
@@ -3795,7 +3795,7 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     Splus2inf = S1**2 + S2**2 + 2*S1*S2*(coscos + sinsin)
     S32inf = -np.inf
 
-    return toarray(Sminus2inf, Splus2inf, S32inf)
+    return np.stack([Sminus2inf, Splus2inf, S32inf])
 
 
 def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
@@ -4065,7 +4065,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
         kappaok = kappa[u!=0]
 
         # Resample S and assign random sign to deltaphi
-        J = eval_J(kappa=kappaok,r=rok,q=np.repeat(q,flen(rok)))
+        J = eval_J(kappa=kappaok,r=rok,q=np.tile(q,rok.shape))
         S = Ssampling(J, rok, np.tile(xi,rok.shape), np.tile(q,rok.shape),
         np.tile(chi1,rok.shape), np.tile(chi2,rok.shape), N=1)
         theta1,theta2,deltaphi = conserved_to_angles(S, J, rok, xi, np.tile(q,rok.shape),
@@ -4203,7 +4203,6 @@ def rupdown(q, chi1, chi2):
     chi1=np.atleast_1d(chi1)
     chi2=np.atleast_1d(chi2)
 
-    q, chi1, chi2 = toarray(q, chi1, chi2)
     rudp = (chi1**0.5+(q*chi2)**0.5)**4/(1-q)**2
     rudm = (chi1**0.5-(q*chi2)**0.5)**4/(1-q)**2
 
