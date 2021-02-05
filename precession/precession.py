@@ -4201,8 +4201,8 @@ def rupdown(q, chi1, chi2):
     chi2=np.atleast_1d(chi2)
 
     q, chi1, chi2 = toarray(q, chi1, chi2)
-    r_udp = (chi1**0.5+(q*chi2)**0.5)**4/(1-q)**2
-    r_udm = (chi1**0.5-(q*chi2)**0.5)**4/(1-q)**2
+    rudp = (chi1**0.5+(q*chi2)**0.5)**4/(1-q)**2
+    rudm = (chi1**0.5-(q*chi2)**0.5)**4/(1-q)**2
 
     return np.stack([rudp, rudm])
 
