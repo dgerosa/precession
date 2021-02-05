@@ -156,8 +156,11 @@ def wraproots(coefficientfunction, *args,**kwargs):
     """
 
     coeffs= coefficientfunction(*args,**kwargs)
-    # TODO: can I remove this for loop?
+
     sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
+    #This avoid a for loop, but its not reliable because enforces the same dtype to all outputs
+    #sols = np.sort_complex(np.apply_along_axis(np.roots,0,coeffs).T)
+
     sols = np.real(np.where(np.isreal(sols),sols,np.nan))
 
     return sols
@@ -1811,9 +1814,6 @@ def Satresonance(J,r,xi,q,chi1,chi2):
     	Magnitude of the total spin.
     """
 
-    # TODO: can I remove this for loop and use some array magic? np.roots requires a rank 1 array.
-
-
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
     coeffs = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
@@ -1965,7 +1965,7 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 # TODO Should this be called eval_xi?
 def eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None):
     """
-    Eftective spin. Provide either (theta1,theta2,J,r,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
+    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
 
     Call
     ----
@@ -1998,7 +1998,7 @@ def eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1
     	Effective spin.
     """
 
-    if theta1 is not None and theta2 is not None and S is None and varphi is None and J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
+    if theta1 is not None and theta2 is not None and S is None and varphi is None and J is None and r is None and q is not None and chi1 is not None and chi2 is not None:
 
         theta1=np.atleast_1d(theta1)
         theta2=np.atleast_1d(theta2)
@@ -3880,7 +3880,8 @@ def dkappadu(u, kappa, xi, q, chi1, chi2):
 
 
 # TODO: update docstrings
-def kappaofu(kappa0, uinitial, ufinal, xi, q, chi1, chi2):
+# If debug return ODE object
+def kappaofu(kappainitial, uinitial, ufinal, xi, q, chi1, chi2, usteps=None, debug=False):
     """
     Integration of ODE describing precession-averaged inspirals. Returns kappa(u) for a given initial condition kappa, sampled at given outputs u. The initial condition corresponds to the value of kappa at u[0].
 
@@ -3909,17 +3910,21 @@ def kappaofu(kappa0, uinitial, ufinal, xi, q, chi1, chi2):
     	Regularized angular momentum (J^2-L^2)/(2L).
     """
 
-    print("all", kappa0)
-
-    kappa0 = np.atleast_1d(kappa0)
+    kappainitial = np.atleast_1d(kappainitial)
     uinitial = np.atleast_1d(uinitial)
     ufinal = np.atleast_1d(ufinal)
+
+    if usteps is None:
+        usteps = np.stack([uinitial,ufinal],axis=1)
+    else:
+        usteps=np.atleast_2d(usteps)
+
     xi = np.atleast_1d(xi)
     q= np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    def _compute(kappa0, uinitial, ufinal, xi, q, chi1, chi2):
+    def _compute(kappainitial, uinitial, ufinal, usteps, xi, q, chi1, chi2):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # TODO. This breaks down if r is very large but not infinite.
@@ -3928,12 +3933,16 @@ def kappaofu(kappa0, uinitial, ufinal, xi, q, chi1, chi2):
 
         # As far as I understand by inspective the scipy code, the "vectorized" option is ignored if a jacobian is not provided. If you decide it's needed, a vectorized implementation of "dkappadu" requires substituting that if statement with np.where
 
-        ODEsolution = scipy.integrate.solve_ivp(dkappadu, (uinitial, ufinal), np.atleast_1d(kappa0), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi,q,chi1,chi2))
+        ODEsolution = scipy.integrate.solve_ivp(dkappadu, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=usteps, dense_output=True, args=(xi,q,chi1,chi2))
+        evaluations = np.squeeze(ODEsolution.y)
 
         # Return ODE object. The key methods is .sol --callable, sol(t).
-        return ODEsolution
+        if debug:
+            return evaluations, ODEsolution
+        else:
+            return evaluations
 
-    ODEsolution = np.array(list(map(_compute, kappa0, uinitial,ufinal, xi, q, chi1, chi2)))
+    ODEsolution = np.array(list(map(_compute, kappainitial, uinitial,ufinal, usteps, xi, q, chi1, chi2)))
 
     return ODEsolution
 
@@ -4042,7 +4051,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
                 TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
 
         # Integration
-        kappa = kappaofu(kappa, u, xi, q, chi1, chi2)
+        kappa = np.squeeze(kappaofu(kappa, u[0],u[-1], xi, q, chi1, chi2, usteps=u))
 
         # Select finite separations
         rok = r[u!=0]
@@ -4162,13 +4171,13 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
     return func_av
 
 
-def r_updown(q, chi1, chi2):
+def rupdown(q, chi1, chi2):
     """
     The critical separations r_ud+/- marking the region of the up-down precessional instability.
 
     Call
     ----
-    r_udp,r_udm = r_updown(q,chi1,chi2)
+    rudp,rudm = rupdown(q,chi1,chi2)
 
     Parameters
     ----------
@@ -4181,18 +4190,21 @@ def r_updown(q, chi1, chi2):
 
     Returns
     -------
-    r_udp: float
+    rudp: float
     	Outer orbital separation in the up-down instability.
-    r_udm: float
+    rudm: float
     	Inner orbital separation in the up-down instability.
     """
 
+    q=np.atleast_1d(q)
+    chi1=np.atleast_1d(chi1)
+    chi2=np.atleast_1d(chi2)
 
     q, chi1, chi2 = toarray(q, chi1, chi2)
-    r_udp = (chi1**.5+(q*chi2)**.5)**4./(1.-q)**2.
-    r_udm = (chi1**.5-(q*chi2)**.5)**4./(1.-q)**2.
+    r_udp = (chi1**0.5+(q*chi2)**0.5)**4/(1-q)**2
+    r_udm = (chi1**0.5-(q*chi2)**0.5)**4/(1-q)**2
 
-    return toarray(r_udp, r_udm)
+    return np.stack([rudp, rudm])
 
 
 def omegasq_aligned(r, q, chi1, chi2, which):
@@ -4222,6 +4234,7 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     	Squared frequency.
     """
 
+    q=np.atleast_1d(q)
 
     # These are all the valid input flags
     uulabels=np.array(['uu','up-up','upup','++'])
@@ -4236,14 +4249,13 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     #+1 if secondary is co-aligned, -1 if secondary is counter-aligned
     alpha2 = np.where(np.isin(which,np.concatenate([uulabels,dulabels])), 1,-1)
 
-    q = toarray(q)
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
     # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1
-    a = (3*q**5/(2*(1+q)**11*L**7))**2
-    b = L**2*(1-q)**2 - 2*L*(q*alpha1*S1-alpha2*S2)*(1-q) + (q*alpha1*S1+alpha2*S2)**2
-    c = (L - (q*alpha1*S1+alpha2*S2)/(1+q))**2
-    omegasq = a*b*c
+    omegasq = ( 3 * q**5 / ( 2 * ( 1 + q )**11 * L**7 ) )**2 * ( L - ( q *     \
+        alpha1 * S1 + alpha2 * S2 ) / ( 1 + q ) )**2 * ( L**2 * ( 1 - q )**2 - \
+        2 * L * ( q * alpha1 * S1 - alpha2 * S2 ) * ( 1 - q ) + ( q * alpha1 * \
+        S1 + alpha2 * S2 )**2 )
 
     return omegasq
 
@@ -4272,7 +4284,10 @@ def widenutation(q, chi1, chi2):
     	Orbital separation where wide nutations becomes possible.
     """
 
-    q, chi1, chi2 = toarray(q, chi1, chi2)
+    q=np.atleast_1d(q)
+    chi1=np.atleast_1d(chi1)
+    chi2=np.atleast_1d(chi2)
+
     r_wide = ((q*chi2 - chi1) / (1-q))**2
 
     return r_wide
@@ -4621,18 +4636,27 @@ if __name__ == '__main__':
     #print(masses([0.5,0.6]))
 
 
-    # r=[10,10]
-    # xi=[0.35,0.35]
-    # q=[0.8,0.8]
-    # chi1=[1,1]
-    # chi2=[1,1]
-    # J=[1,1]
-    # u=[1/10,1/10]
-    # theta1=[1,1]
-    # theta2=[1,1]
-    # S=[0.3,0.3]
-    # t=[1,100]
+    r=[10,10]
+    xi=[0.35,0.35]
+    q=[0.8,0.8]
+    chi1=[1,1]
+    chi2=[1,1]
+    J=[1,1]
+    u=[1/10,1/10]
+    theta1=[1,1]
+    theta2=[1,1]
+    S=[0.3,0.3]
+    t=[1,100]
+
+    print(omegasq_aligned(r, q, chi1, chi2, ['uu','ud']))
+
+    # print("on many", Jresonances(r,xi,q,chi1,chi2))
     #
+    # print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #
+    #
+    # sys.exit()
+    # #
     #
     # for x in np.linspace()
     #
@@ -4778,16 +4802,18 @@ if __name__ == '__main__':
     # print(d)
 
     ###### INSPIRAL TESTING: precav, from infinite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # kappa = 0.50941012
-    # xi = 0.9141896967861489
-    # r=np.concatenate(([np.inf],np.logspace(2,1,6)))
-    #
-    # #d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    kappa = 0.50941012
+    xi = 0.9141896967861489
+    r=np.concatenate(([np.inf],np.logspace(2,1,6)))
+
+
+
+    #d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
     # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
     #
     # print(d)
@@ -4818,23 +4844,23 @@ if __name__ == '__main__':
     # print(d)
     #
 
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    deltaphi=0.46
-    S = 0.5538768649231461
-    J = 2.740273008918153
-    xi = 0.9141896967861489
-    kappa0 = 0.5784355256550922
-    r=np.logspace(2,1,6)
-    u=eval_u(r,q)
-    #print(kappaofu(kappa0, u[0],u[-1], xi, q, chi1, chi2))
-    sols = kappaofu([kappa0,kappa0], [u[0],u[0]], [u[1],u[1]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2])
-    print(sols[1])
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # deltaphi=0.46
+    # S = 0.5538768649231461
+    # J = 2.740273008918153
+    # xi = 0.9141896967861489
+    # kappa0 = 0.5784355256550922
+    # r=np.logspace(2,1,100)
+    # u=eval_u(r,q)
+    # #print(kappaofu(kappa0, u[0],u[-1], xi, q, chi1, chi2))
+    # sols = kappaofu([kappa0,kappa0], [u[0],u[0]], [u[-1],u[-1]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2],usteps=[u,u])
+    # print(sols[0])
 
-
+    #ode_kappaofu(kappa0, uinitial, ufinal, xi, q, chi1, chi2)
     #
     # xi=-0.5
     # q=0.4
