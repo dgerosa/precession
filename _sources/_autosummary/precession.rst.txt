@@ -90,7 +90,7 @@ precession
       orbav_eqs
       orbav_integrator
       precession_average
-      r_updown
+      rupdown
       sample_unitsphere
       spinmags
       toarray

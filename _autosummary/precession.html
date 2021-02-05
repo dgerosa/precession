@@ -388,7 +388,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#precession.kappadiscriminant_coefficients" title="precession.kappadiscriminant_coefficients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kappadiscriminant_coefficients</span></code></a>(u, xi, q, …)</p></td>
 <td><p>Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#precession.kappaofu" title="precession.kappaofu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kappaofu</span></code></a>(kappa0, uinitial, ufinal, xi, q, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.kappaofu" title="precession.kappaofu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kappaofu</span></code></a>(kappainitial, uinitial, ufinal, xi, …)</p></td>
 <td><p>Integration of ODE describing precession-averaged inspirals.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#precession.limits_check" title="precession.limits_check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">limits_check</span></code></a>([S, J, r, xi, q, chi1, chi2])</p></td>
@@ -418,7 +418,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#precession.precession_average" title="precession.precession_average"><code class="xref py py-obj docutils literal notranslate"><span class="pre">precession_average</span></code></a>(J, r, xi, q, chi1, chi2, …)</p></td>
 <td><p>Average a function over a precession cycle.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#precession.r_updown" title="precession.r_updown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">r_updown</span></code></a>(q, chi1, chi2)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#precession.rupdown" title="precession.rupdown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rupdown</span></code></a>(q, chi1, chi2)</p></td>
 <td><p>The critical separations r_ud+/- marking the region of the up-down precessional instability.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#precession.sample_unitsphere" title="precession.sample_unitsphere"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample_unitsphere</span></code></a>([N])</p></td>
@@ -2341,7 +2341,7 @@ limit of the precession-averaged evolution equation.</p>
 <dl class="function">
 <dt id="precession.eval_xi">
 <code class="sig-prename descclassname">precession.</code><code class="sig-name descname">eval_xi</code><span class="sig-paren">(</span><em class="sig-param">theta1=None</em>, <em class="sig-param">theta2=None</em>, <em class="sig-param">S=None</em>, <em class="sig-param">varphi=None</em>, <em class="sig-param">J=None</em>, <em class="sig-param">r=None</em>, <em class="sig-param">q=None</em>, <em class="sig-param">chi1=None</em>, <em class="sig-param">chi2=None</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.eval_xi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Eftective spin. Provide either (theta1,theta2,J,r,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).</p>
+<dd><p>Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -2480,7 +2480,7 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 
 <dl class="function">
 <dt id="precession.kappaofu">
-<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">kappaofu</code><span class="sig-paren">(</span><em class="sig-param">kappa0</em>, <em class="sig-param">uinitial</em>, <em class="sig-param">ufinal</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.kappaofu" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">kappaofu</code><span class="sig-paren">(</span><em class="sig-param">kappainitial</em>, <em class="sig-param">uinitial</em>, <em class="sig-param">ufinal</em>, <em class="sig-param">xi</em>, <em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em>, <em class="sig-param">usteps=None</em>, <em class="sig-param">debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.kappaofu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integration of ODE describing precession-averaged inspirals. Returns kappa(u) for a given initial condition kappa, sampled at given outputs u. The initial condition corresponds to the value of kappa at u[0].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2789,8 +2789,8 @@ through cos(varphi), not S.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="precession.r_updown">
-<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">r_updown</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.r_updown" title="Permalink to this definition">¶</a></dt>
+<dt id="precession.rupdown">
+<code class="sig-prename descclassname">precession.</code><code class="sig-name descname">rupdown</code><span class="sig-paren">(</span><em class="sig-param">q</em>, <em class="sig-param">chi1</em>, <em class="sig-param">chi2</em><span class="sig-paren">)</span><a class="headerlink" href="#precession.rupdown" title="Permalink to this definition">¶</a></dt>
 <dd><p>The critical separations r_ud+/- marking the region of the up-down precessional instability.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2805,9 +2805,9 @@ through cos(varphi), not S.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt>r_udp: float</dt><dd><p>Outer orbital separation in the up-down instability.</p>
+<dt>rudp: float</dt><dd><p>Outer orbital separation in the up-down instability.</p>
 </dd>
-<dt>r_udm: float</dt><dd><p>Inner orbital separation in the up-down instability.</p>
+<dt>rudm: float</dt><dd><p>Inner orbital separation in the up-down instability.</p>
 </dd>
 </dl>
 </dd>
