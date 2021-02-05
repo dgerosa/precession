@@ -7,39 +7,6 @@ import scipy, scipy.special, scipy.integrate
 import sys, os, time
 import warnings
 import itertools
-warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
-
-
-#### Utilities ####
-def flen(x):
-    # TODO: write docstrings
-    #https://stackoverflow.com/a/26533085
-    return getattr(x, '__len__', lambda:1)()
-
-def toarray(*args):
-    """
-    Convert a series of variables to numpy arrays if necessary.
-
-    Call
-    ----
-    x,y,z,... = toarray(x,y,z,...)
-
-    Parameters
-    ----------
-    x,y,z,...: generic
-        Any number of input quantities.
-
-    Returns
-    -------
-    x,y,z,...: array
-        Corresponding number of output quantities.
-    """
-    if flen(args) == 1 :
-        return np.squeeze(args)
-#    elif all(flen(x)==flen(args[0]) for x in args):
-#        return np.squeeze(np.array([*args]))
-    else:
-        return [np.squeeze(x) for x in args]
 
 
 def norm_nested(x):
@@ -158,7 +125,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
     coeffs= coefficientfunction(*args,**kwargs)
 
     sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
-    #This avoid a for loop, but its not reliable because enforces the same dtype to all outputs
+    #This avoids a for loop but is not reliable because it enforces the same dtype to all outputs, including float vs complex
     #sols = np.sort_complex(np.apply_along_axis(np.roots,0,coeffs).T)
 
     sols = np.real(np.where(np.isreal(sols),sols,np.nan))
@@ -4095,8 +4062,8 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     #This array has to match the outputs of _compute (in the right order!)
     alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
 
-    # The output is dtype=object
-    allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2))).T
+    # Here I force dtype=object because the outputs have different shapes
+    allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2)),dtype=object).T
 
     # Handle the outputs.
     # If in doubt, return everything
@@ -4500,12 +4467,18 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     TODO: docstrings. Orbit average evolution; this is the function the user should call (I think)
     '''
 
-    # Overwrite the tracktime flag if the user explicitely asked for the time output
-    try:
-        if 't' in requested_outputs:
-            tracktime=True
-    except:
-        pass
+    # Substitute None inputs with arrays of Nones
+    inputs = [theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2]
+    for k,v in enumerate(inputs):
+        if v is None:
+            inputs[k] = np.tile(None,np.atleast_1d(q).shape)
+        else:
+            if k == 4 or k == 5 or k== 6 or k ==9 or k==10: # Lh,S1h,S2h, u, or r
+                inputs[k]= np.atleast_2d(inputs[k])
+            else: #Any of the others
+                inputs[k] = np.atleast_1d(inputs[k])
+    theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2 = inputs
+
 
     def _compute(theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2):
 
@@ -4517,11 +4490,11 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
             raise TypeError("Please provide chi2.")
 
         if r is not None and u is None:
-            r=toarray(r)
-            u = eval_u(r, np.repeat(q,flen(r)) )
+            r=np.atleast_1d(r)
+            u = eval_u(r, np.tile(q,r.shape) )
         elif r is None and u is not None:
-            u=toarray(u)
-            r = eval_r(u=u, q=np.repeat(q,flen(u)) )
+            u=np.atleast_1d(u)
+            r = eval_r(u=u, q=np.tile(q,u.shape)  )
         else:
             raise TypeError("Please provide either r or u.")
 
@@ -4549,7 +4522,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
         # Make sure vectors are normalized
         Lh = Lh/np.linalg.norm(Lh)
         S1h = S1h/np.linalg.norm(S1h)
-        S2h = S1h/np.linalg.norm(S2h)
+        S2h = S2h/np.linalg.norm(S2h)
 
         v=eval_v(r)
 
@@ -4566,7 +4539,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
         #TODO: Should I renormalize here? The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
 
         S1,S2= spinmags(q,chi1,chi2)
-        L = eval_L(r,np.repeat(q,flen(r)))
+        L = eval_L(r,np.tile(q,r.shape) )
         Lvec= (L*Lh.T).T
         S1vec= S1*S1h
         S2vec= S2*S2h
@@ -4575,22 +4548,13 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
         S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec, q)
         kappa = eval_kappa(J, r, q)
 
-        return toarray(t,theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2)
+        return t,theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2
 
     #This array has to match the outputs of _compute (in the right order!)
     alloutputs = np.array(['t','theta1','theta2','deltaphi','S','Lh','S1h','S2h','J','kappa','r','u','xi','q','chi1','chi2'])
 
-    # allresults is an array of dtype=object because different variables have different shapes
-    if flen(q)==1:
-        allresults =_compute(theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2)
-    else:
-        inputs = np.array([theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2])
-        for k,v in enumerate(inputs):
-            if v==None:
-                inputs[k] = itertools.repeat(None) #TODO: this could be np.repeat(None,flen(q)) if you need to get rid of the itertools dependence
-
-        theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2= inputs
-        allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2))).T
+    # Here I force dtype=object because the outputs have different shapes
+    allresults = np.array(list(map(_compute,theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2)),dtype=object).T
 
     # Handle the outputs.
     # Return all
@@ -4602,12 +4566,16 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     # Store into a dictionary
     outcome={}
     for k,v in zip(alloutputs[wantoutputs],allresults[wantoutputs]):
-        if not tracktime and k=='t':
-            continue
-        # np.stack fixed shapes and object types
-        outcome[k]=np.stack(np.atleast_1d(v))
+        outcome[k] = np.squeeze(np.stack(v))
+
+        if k == 'q' or k =='chi1' or k =='chi2': # Constants of motion
+            outcome[k] = np.atleast_1d(outcome[k])
+        else:
+            outcome[k] = np.atleast_2d(outcome[k])
 
     return outcome
+
+
 
 
 def inspiral(*args, which=None,**kwargs):
@@ -4781,20 +4749,20 @@ if __name__ == '__main__':
     xi = 0.9141896967861489
     kappa = 0.5784355256550922
     r=np.logspace(2,1,6)
-    d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
+    #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
     #
     #
     # #
     # #
-    print(d['J'])
+    #print(d['J'])
     # #
-    d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],requested_outputs=None)
+    #d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],requested_outputs=None)
     #
     #
     # #print(d)
     #
     # #
-    print(d['J'])
+    #print(d['J'])
     #
     #
     # sys.exit()
@@ -4803,8 +4771,13 @@ if __name__ == '__main__':
     #
     # print(d)
     #
-    # d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-    # print(d)
+    d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    print(d['xi'])
+
+    d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
+    print(d['xi'])
+
+
     #
     # d=inspiral(which='orbav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
     #
