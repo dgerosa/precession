@@ -3931,7 +3931,7 @@ def kappaofu(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
         ODEsolution = scipy.integrate.solve_ivp(dkappadu, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi,q,chi1,chi2))
 
-        # Also return ODE object. The key methods is .sol --callable, sol(t).
+        # Return ODE object. The key methods is .sol --callable, sol(t).
         return ODEsolution
 
     ODEsolution = np.array(list(map(_compute, kappainitial, uinitial,ufinal, xi, q, chi1, chi2)))
@@ -4291,7 +4291,7 @@ def widenutation(q, chi1, chi2):
 
 # TODO: this comes straight from precession_V1. Update docstrings. It's not necesssary that this function works on arrays
 # TODO: replace quadrupole_formula flag with parameter to select a given PN order
-def orbav_RHS(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_formula=False):
+def orbav_RHS(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula=False):
 
     '''
     Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where
@@ -4340,8 +4340,7 @@ def orbav_RHS(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_f
     Lh = allvars[0:3]
     S1h = allvars[3:6]
     S2h = allvars[6:9]
-    if tracktime:
-        t = allvars[9]
+    t = allvars[9]
 
     # Angles
     ct1 = np.dot(S1h,Lh)
@@ -4390,13 +4389,11 @@ def orbav_RHS(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_f
     dS2hdv=dS2hdt*dtdv
 
     # Pack outputs
-    if tracktime:
-        return np.concatenate([dLhdv,dS1hdv,dS2hdv,[dtdv]])
-    else:
-        return np.concatenate([dLhdv,dS1hdv,dS2hdv])
+    return np.concatenate([dLhdv,dS1hdv,dS2hdv,[dtdv]])
+
 
 # TODO: this comes straight from precession_V1. Update docstrings
-def orbav_integrator(Lhinitial,S1hinitial,S2hinitial,rinitial,rfinal,q,chi1,chi2,tracktime=False,quadrupole_formula=False,rsteps = None):
+def orbav_integrator(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2,quadrupole_formula=False):
 
     '''
     Single orbit-averaged integration. Integrate the system of ODEs specified in
@@ -4450,72 +4447,44 @@ def orbav_integrator(Lhinitial,S1hinitial,S2hinitial,rinitial,rfinal,q,chi1,chi2
     Lhinitial=np.atleast_2d(Lhinitial)
     S1hinitial=np.atleast_2d(S1hinitial)
     S2hinitial=np.atleast_2d(S2hinitial)
-    rinitial= np.atleast_1d(rinitial)
-    rfinal=np.atleast_1d(rfinal)
-    q= np.atleast_1d(q)
-
+    vinitial= np.atleast_1d(vinitial)
+    vfinal=np.atleast_1d(vfinal)
     q= np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    if rsteps is None:
-        rsteps = np.stack([rinitial,rfinal],axis=1)
-    else:
-        rsteps=np.atleast_2d(rsteps)
 
 
-    def _compute(Lhinitial,S1hinitial,S2hinitial,rinitial,rfinal,rsteps,q,chi1,chi2):
+    def _compute(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2):
 
         # I need unit vectors
-        assert np.isclose(np.linalg.norm(Lh0),1)
-        assert np.isclose(np.linalg.norm(S1h0),1)
-        assert np.isclose(np.linalg.norm(S2h0),1)
+        assert np.isclose(np.linalg.norm(Lhinitial),1)
+        assert np.isclose(np.linalg.norm(S1hinitial),1)
+        assert np.isclose(np.linalg.norm(S2hinitial),1)
 
         # Pack inputs
-        if tracktime:
-            ic = np.concatenate([Lh0,S1h0,S2h0,[0]])
-        else:
-            ic = np.concatenate([Lh0,S1h0,S2h0])
+        ic = np.concatenate([Lhinitial,S1hinitial,S2hinitial,[0]])
 
         # Compute these quantities here instead of inside the RHS for speed
-        vinitial=eval_v(rinitial)
-        vfinal=eval_v(rfinal)
-        vsteps=eval_v(rsteps)
-        m1=eval_m1(q)
-        m2=eval_m2(q)
-        S1,S2 = spinmags(q,chi1,chi2)
-        eta=eval_eta(q)
+        m1=eval_m1(q).item()
+        m2=eval_m2(q).item()
+        S1= eval_S1(q,chi1).item()
+        S2= eval_S2(q,chi2).item()
+        eta=eval_eta(q).item()
 
         # Integration
         #t0=time.time()
         #res =scipy.integrate.odeint(orbav_RHS, ic, v, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
         #print(time.time()-t0)
-        print(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula)
 
-        ODEsolution = scipy.integrate.solve_ivp(orbav_RHS, (vinitial, vfinal), ic, method='RK45', t_eval=vsteps, dense_output=True, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula))
+        ODEsolution = scipy.integrate.solve_ivp(orbav_RHS, (vinitial, vfinal), ic, method='RK45', t_eval=(vinitial, vfinal), dense_output=True, args=(q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula))
 
-        # Returned output is
-        # Lx, Ly, Lz, S1x, S1y, S1z, S2x, S2y, S2z, (t)
-        evaluations = np.squeeze(ODEsolution.y).T
+        # Return ODE object. The key methods is .sol --callable, sol(t).
+        return ODEsolution
 
-        # Also return ODE object. The key methods is .sol --callable, sol(t).
-        return evaluations, ODEsolution
+    ODEsolution  = np.array(list(map(_compute, Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2)))
 
-
-
-    evaluations, ODEsolution  = np.squeeze(list(map(_compute, Lhinitial,S1hinitial,S2hinitial,rinitial,rfinal,rsteps,q,chi1,chi2))).T
-
-    print(evaluations.shape)
-
-    Lh = np.squeeze(np.swapaxes(evaluations[:,0:3],1,2))
-    S1h = np.squeeze(np.swapaxes(evaluations[:,3:6],1,2))
-    S2h = np.squeeze(np.swapaxes(evaluations[:,6:9],1,2))
-
-    if tracktime:
-        t = np.squeeze(evaluations[:,9])
-        return toarray(Lh,S1h,S2h,t)
-    else:
-        return toarray(Lh,S1h,S2h)
+    return ODEsolution
 
 
 def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,tracktime=False,quadrupole_formula=False,requested_outputs=None):
@@ -4570,17 +4539,23 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
             TypeError("Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (S,J,xi), (S,kappa,xi).")
 
         # Make sure vectors are normalized
-        Lh = normalize_nested(Lh)
-        S1h = normalize_nested(S1h)
-        S2h = normalize_nested(S2h)
+        Lh = Lh/np.linalg.norm(Lh)
+        S1h = S1h/np.linalg.norm(S1h)
+        S2h = S1h/np.linalg.norm(S2h)
+
+        v=eval_v(r)
 
         # Integration
-        outcome = orbav_integrator(Lh,S1h,S2h,r,q,chi1,chi2,tracktime=tracktime,quadrupole_formula=quadrupole_formula)
-        Lh,S1h,S2h = outcome[0:3]
-        if tracktime:
-            t=outcome[3]
-        else:
-            t=None
+        ODEsolution = orbav_integrator(Lh,S1h,S2h,v[0],v[-1],q,chi1,chi2,quadrupole_formula=quadrupole_formula)
+
+        evaluations = np.squeeze(ODEsolution.item().sol(v))
+        # Returned output is
+        # Lx, Ly, Lz, S1x, S1y, S1z, S2x, S2y, S2z, (t)
+        Lh = evaluations[0:3,:].T
+        S1h = evaluations[3:6,:].T
+        S2h = evaluations[6:9,:].T
+        t = evaluations[9,:]
+        #TODO: Should I renormalize here? The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
 
         S1,S2= spinmags(q,chi1,chi2)
         L = eval_L(r,np.repeat(q,flen(r)))
@@ -4645,6 +4620,9 @@ def inspiral(*args, which=None,**kwargs):
 
 if __name__ == '__main__':
     np.set_printoptions(threshold=sys.maxsize)
+
+    #print(normalize_nested(Lh))
+
 
     #print(eval_r(u=1, L=None, q=1))
 
@@ -4916,17 +4894,17 @@ if __name__ == '__main__':
     #
     # print(J,S)
 
-    xi=-0.5
-    q=0.4
-    chi1=0.9
-    chi2=0.8
-    r=np.logspace(2,1,5)
-    Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    #print(Lh0,S1h0,S2h0)
-    #t0=time.time()
-    #Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r[0],r[-1],q,chi1,chi2,rsteps=r, tracktime=False)
-
-    Lh,S1h,S2h = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r[0],r[0]],[r[-1],r[-1]],[q,q],[chi1,chi1],[chi2,chi2],rsteps=[r,r], tracktime=False)
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    # r=np.logspace(2,1,5)
+    # Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    # #print(Lh0,S1h0,S2h0)
+    # #t0=time.time()
+    # #Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r[0],r[-1],q,chi1,chi2,rsteps=r, tracktime=False)
+    #
+    # print( orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r[0],r[0]],[r[-1],r[-1]],[q,q],[chi1,chi1],[chi2,chi2],rsteps=[r,r], tracktime=False) )
     #
     #
     # print(Lh)
@@ -4939,16 +4917,16 @@ if __name__ == '__main__':
     # #print(Lh)
 
     # ### ORBAV TESTING ####
-    # xi=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    # r=np.logspace(2,1,5)
-    # Lh,S1h,S2h = sample_unitsphere(3)
-    #
-    # d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2,tracktime=True)
-    # print(d)
-    # print(" ")
+    xi=-0.5
+    q=0.4
+    chi1=0.9
+    chi2=0.8
+    r=np.logspace(2,1,4)
+    Lh,S1h,S2h = sample_unitsphere(3)
+
+    d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2,tracktime=True)
+    #print(d)
+    #print(" ")
     #
     # theta1,theta2,deltaphi = vectors_to_angles(Lh,S1h,S2h)
     # d= inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
