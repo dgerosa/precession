@@ -3988,6 +3988,19 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     	Set of outputs.
     """
 
+
+    # Substitute None inputs with arrays of Nones
+    inputs = [theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2]
+    for k,v in enumerate(inputs):
+        if v is None:
+            inputs[k] = np.tile(None,np.atleast_1d(q).shape)
+        else:
+            if k == 6 or k ==7: # Either u or r
+                inputs[k]= np.atleast_2d(inputs[k])
+            else: #Any of the others
+                inputs[k] = np.atleast_1d(inputs[k])
+    theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2 = inputs
+
     def _compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2):
 
         if q is None:
@@ -3998,16 +4011,15 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
             raise TypeError("Please provide chi2.")
 
         if r is not None and u is None:
-            r=toarray(r)
-            u = eval_u(r, np.repeat(q,flen(r)) )
+            r=np.atleast_1d(r)
+            u = eval_u(r, np.tile(q,r.shape))
         elif r is None and u is not None:
-            u=toarray(u)
-            r = eval_r(u=u, q=np.repeat(q,flen(u)) )
+            u=np.atleast_1d(u)
+            r = eval_r(u=u, q=np.tile(q,u.shape) )
         else:
             raise TypeError("Please provide either r or u. Use np.inf for infinity.")
 
         assert np.sum(u==0)<=1 and np.sum(u[1:-1]==0)==0, "There can only be one r=np.inf location, either at the beginning or at the end."
-
 
         # Start from r=infinity
         if u[0]==0:
@@ -4044,6 +4056,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
         # Integration. Return interpolant along the solution
         ODEsolution = kappaofu(kappa, u[0],u[-1], xi, q, chi1, chi2)
+
         # Evaluate the interpolant at the requested values of u
         kappa=np.squeeze(ODEsolution.item().sol(u))
 
@@ -4053,10 +4066,11 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
         # Resample S and assign random sign to deltaphi
         J = eval_J(kappa=kappaok,r=rok,q=np.repeat(q,flen(rok)))
-        S = Ssampling(J, rok, np.repeat(xi,flen(rok)), np.repeat(q,flen(rok)),
-        np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)), N=1)
-        theta1,theta2,deltaphi = conserved_to_angles(S, J, rok, xi, np.repeat(q,flen(rok)), np.repeat(chi1,flen(rok)), np.repeat(chi2,flen(rok)))
-        deltaphi = deltaphi * np.random.choice([-1,1],flen(deltaphi))
+        S = Ssampling(J, rok, np.tile(xi,rok.shape), np.tile(q,rok.shape),
+        np.tile(chi1,rok.shape), np.tile(chi2,rok.shape), N=1)
+        theta1,theta2,deltaphi = conserved_to_angles(S, J, rok, xi, np.tile(q,rok.shape),
+        np.tile(chi1,rok.shape), np.tile(chi2,rok.shape) )
+        deltaphi = deltaphi * np.random.choice([-1,1],deltaphi.shape)
 
         # Integrating from infinite separation.
         if u[0]==0:
@@ -4076,25 +4090,16 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
         else:
             pass
 
-        return toarray(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2)
+        return theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2
 
     #This array has to match the outputs of _compute (in the right order!)
     alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
 
-    # allresults is an array of dtype=object because different variables have different shapes
-    if flen(q)==1:
-        allresults =_compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2)
-    else:
-        inputs = np.array([theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2])
-        for k,v in enumerate(inputs):
-            if v==None:
-                inputs[k] = itertools.repeat(None) #TODO: this could be np.repeat(None,flen(q)) if you need to get rid of the itertools dependence
-
-        theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2= inputs
-        allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2))).T
+    # The output is dtype=object
+    allresults = np.array(list(map(_compute, theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2))).T
 
     # Handle the outputs.
-    # Return all
+    # If in doubt, return everything
     if requested_outputs is None:
         requested_outputs = alloutputs
     # Return only those requested (in1d return boolean array)
@@ -4103,9 +4108,13 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     # Store into a dictionary
     outcome={}
 
-    for k,v in zip(alloutputs[wantoutputs],np.array(allresults)[wantoutputs]):
-        # np.stack fixed shapes and object types
-        outcome[k]=np.stack(np.atleast_1d(v))
+    for k,v in zip(alloutputs[wantoutputs],allresults[wantoutputs]):
+        outcome[k] = np.squeeze(np.stack(v))
+
+        if k == 'xi' or k == 'q' or k =='chi1' or k =='chi2': # Constants of motion
+            outcome[k] = np.atleast_1d(outcome[k])
+        else:
+            outcome[k] = np.atleast_2d(outcome[k])
 
     return outcome
 
@@ -4762,31 +4771,31 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # xi = 0.9141896967861489
-    # kappa = 0.5784355256550922
-    # r=np.logspace(2,1,6)
-    # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa = 0.5784355256550922
+    r=np.logspace(2,1,6)
+    d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
     #
     #
     # #
     # #
-    # # print(d['theta1'])
+    print(d['J'])
     # #
-    # d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],requested_outputs=None)
+    d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],requested_outputs=None)
     #
     #
     # #print(d)
     #
     # #
-    # print(d['theta1'])
+    print(d['J'])
     #
     #
     # sys.exit()
@@ -4917,14 +4926,14 @@ if __name__ == '__main__':
     # #print(Lh)
 
     # ### ORBAV TESTING ####
-    xi=-0.5
-    q=0.4
-    chi1=0.9
-    chi2=0.8
-    r=np.logspace(2,1,4)
-    Lh,S1h,S2h = sample_unitsphere(3)
-
-    d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2,tracktime=True)
+    # xi=-0.5
+    # q=0.4
+    # chi1=0.9
+    # chi2=0.8
+    # r=np.logspace(2,1,4)
+    # Lh,S1h,S2h = sample_unitsphere(3)
+    #
+    # d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2,tracktime=True)
     #print(d)
     #print(" ")
     #
