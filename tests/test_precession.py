@@ -2,13 +2,13 @@ import pytest
 import numpy as np
 import precession as pre
 
-#
-# def test_silly():
-#     """
-#     Test the test procedure.
-#     """
-#
-#     assert True
+
+def test_silly():
+    """
+    Test the test procedure.
+    """
+
+    assert True
 #
 #
 # def assert_scalar(testval, func, *args):
