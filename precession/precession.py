@@ -3880,8 +3880,9 @@ def dkappadu(u, kappa, xi, q, chi1, chi2):
 
 
 # TODO: update docstrings
+# TODO: change names to precav_integrator and precav_RHS
 # If debug return ODE object
-def kappaofu(kappainitial, uinitial, ufinal, xi, q, chi1, chi2, usteps=None, debug=False):
+def kappaofu(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     """
     Integration of ODE describing precession-averaged inspirals. Returns kappa(u) for a given initial condition kappa, sampled at given outputs u. The initial condition corresponds to the value of kappa at u[0].
 
@@ -3914,17 +3915,12 @@ def kappaofu(kappainitial, uinitial, ufinal, xi, q, chi1, chi2, usteps=None, deb
     uinitial = np.atleast_1d(uinitial)
     ufinal = np.atleast_1d(ufinal)
 
-    if usteps is None:
-        usteps = np.stack([uinitial,ufinal],axis=1)
-    else:
-        usteps=np.atleast_2d(usteps)
-
     xi = np.atleast_1d(xi)
     q= np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    def _compute(kappainitial, uinitial, ufinal, usteps, xi, q, chi1, chi2):
+    def _compute(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # TODO. This breaks down if r is very large but not infinite.
@@ -3933,16 +3929,12 @@ def kappaofu(kappainitial, uinitial, ufinal, xi, q, chi1, chi2, usteps=None, deb
 
         # As far as I understand by inspective the scipy code, the "vectorized" option is ignored if a jacobian is not provided. If you decide it's needed, a vectorized implementation of "dkappadu" requires substituting that if statement with np.where
 
-        ODEsolution = scipy.integrate.solve_ivp(dkappadu, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=usteps, dense_output=True, args=(xi,q,chi1,chi2))
-        evaluations = np.squeeze(ODEsolution.y)
+        ODEsolution = scipy.integrate.solve_ivp(dkappadu, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi,q,chi1,chi2))
 
-        # Return ODE object. The key methods is .sol --callable, sol(t).
-        if debug:
-            return evaluations, ODEsolution
-        else:
-            return evaluations
+        # Also return ODE object. The key methods is .sol --callable, sol(t).
+        return ODEsolution
 
-    ODEsolution = np.array(list(map(_compute, kappainitial, uinitial,ufinal, usteps, xi, q, chi1, chi2)))
+    ODEsolution = np.array(list(map(_compute, kappainitial, uinitial,ufinal, xi, q, chi1, chi2)))
 
     return ODEsolution
 
@@ -4050,8 +4042,10 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
             else:
                 TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
 
-        # Integration
-        kappa = np.squeeze(kappaofu(kappa, u[0],u[-1], xi, q, chi1, chi2, usteps=u))
+        # Integration. Return interpolant along the solution
+        ODEsolution = kappaofu(kappa, u[0],u[-1], xi, q, chi1, chi2)
+        # Evaluate the interpolant at the requested values of u
+        kappa=np.squeeze(ODEsolution.item().sol(u))
 
         # Select finite separations
         rok = r[u!=0]
@@ -4288,16 +4282,16 @@ def widenutation(q, chi1, chi2):
     chi1=np.atleast_1d(chi1)
     chi2=np.atleast_1d(chi2)
 
-    r_wide = ((q*chi2 - chi1) / (1-q))**2
+    rwide = ((q*chi2 - chi1) / (1-q))**2
 
-    return r_wide
+    return rwide
 
 
 #### Orbit averaged things ####
 
 # TODO: this comes straight from precession_V1. Update docstrings. It's not necesssary that this function works on arrays
 # TODO: replace quadrupole_formula flag with parameter to select a given PN order
-def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_formula=False):
+def orbav_RHS(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_formula=False):
 
     '''
     Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where
@@ -4322,7 +4316,7 @@ def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_f
 
     **Call:**
 
-        allders=precession.orbav_eqs(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False)
+        allders=precession.orbav_RHS(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False)
 
     **Parameters:**
     - `allvars`: array of lenght 9 cointaining the initial condition for numerical integration for the components of the unit vectors L, S1 and S2.
@@ -4343,9 +4337,9 @@ def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_f
     '''
 
     # Unpack inputs
-    Lh = np.array(allvars[0:3])
-    S1h = np.array(allvars[3:6])
-    S2h = np.array(allvars[6:9])
+    Lh = allvars[0:3]
+    S1h = allvars[3:6]
+    S2h = allvars[6:9]
     if tracktime:
         t = allvars[9]
 
@@ -4402,11 +4396,11 @@ def orbav_eqs(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,tracktime=False,quadrupole_f
         return np.concatenate([dLhdv,dS1hdv,dS2hdv])
 
 # TODO: this comes straight from precession_V1. Update docstrings
-def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_formula=False):
+def orbav_integrator(Lhinitial,S1hinitial,S2hinitial,rinitial,rfinal,q,chi1,chi2,tracktime=False,quadrupole_formula=False,rsteps = None):
 
     '''
     Single orbit-averaged integration. Integrate the system of ODEs specified in
-    `precession.orbav_eqs`. The initial configuration (at r_vals[0]) is
+    `precession.orbav_RHS`. The initial configuration (at r_vals[0]) is
     specified through J, xi and S. The components of the unit vectors L, S1 and
     S2 are returned at the output separations specified by r_vals. The initial
     values of J and S must be compatible with the initial separation r_vals[0],
@@ -4453,7 +4447,24 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
     - `t_fvals`: (optional) time as a function of the separation.
     '''
 
-    def _compute(Lh0,S1h0,S2h0,r,q,chi1,chi2,quadrupole_formula):
+    Lhinitial=np.atleast_2d(Lhinitial)
+    S1hinitial=np.atleast_2d(S1hinitial)
+    S2hinitial=np.atleast_2d(S2hinitial)
+    rinitial= np.atleast_1d(rinitial)
+    rfinal=np.atleast_1d(rfinal)
+    q= np.atleast_1d(q)
+
+    q= np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    if rsteps is None:
+        rsteps = np.stack([rinitial,rfinal],axis=1)
+    else:
+        rsteps=np.atleast_2d(rsteps)
+
+
+    def _compute(Lhinitial,S1hinitial,S2hinitial,rinitial,rfinal,rsteps,q,chi1,chi2):
 
         # I need unit vectors
         assert np.isclose(np.linalg.norm(Lh0),1)
@@ -4462,36 +4473,46 @@ def orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False,quadrupole_form
 
         # Pack inputs
         if tracktime:
-            ic = np.concatenate((Lh0,S1h0,S2h0,[0]))
+            ic = np.concatenate([Lh0,S1h0,S2h0,[0]])
         else:
-            ic = np.concatenate((Lh0,S1h0,S2h0))
+            ic = np.concatenate([Lh0,S1h0,S2h0])
 
         # Compute these quantities here instead of inside the RHS for speed
-        v=eval_v(r)
+        vinitial=eval_v(rinitial)
+        vfinal=eval_v(rfinal)
+        vsteps=eval_v(rsteps)
         m1=eval_m1(q)
         m2=eval_m2(q)
         S1,S2 = spinmags(q,chi1,chi2)
         eta=eval_eta(q)
 
         # Integration
-        res =scipy.integrate.odeint(orbav_eqs, ic, v, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
+        #t0=time.time()
+        #res =scipy.integrate.odeint(orbav_RHS, ic, v, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0,rtol=1e-12,atol=1e-12)
+        #print(time.time()-t0)
+        print(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula)
+
+        ODEsolution = scipy.integrate.solve_ivp(orbav_RHS, (vinitial, vfinal), ic, method='RK45', t_eval=vsteps, dense_output=True, args=(q,m1,m2,eta,chi1,chi2,S1,S2,tracktime,quadrupole_formula))
 
         # Returned output is
         # Lx, Ly, Lz, S1x, S1y, S1z, S2x, S2y, S2z, (t)
-        return res.T
+        evaluations = np.squeeze(ODEsolution.y).T
+
+        # Also return ODE object. The key methods is .sol --callable, sol(t).
+        return evaluations, ODEsolution
 
 
-    if np.ndim(Lh0)==1:
-        res = np.array([_compute(Lh0,S1h0,S2h0,r,q,chi1,chi2,quadrupole_formula)])
-    else:
-        res  = np.array(list(map(lambda x: _compute(*x,quadrupole_formula), zip(Lh0,S1h0,S2h0,r,q,chi1,chi2))))
 
-    Lh = np.squeeze(np.swapaxes(res[:,0:3],1,2))
-    S1h = np.squeeze(np.swapaxes(res[:,3:6],1,2))
-    S2h = np.squeeze(np.swapaxes(res[:,6:9],1,2))
+    evaluations, ODEsolution  = np.squeeze(list(map(_compute, Lhinitial,S1hinitial,S2hinitial,rinitial,rfinal,rsteps,q,chi1,chi2))).T
+
+    print(evaluations.shape)
+
+    Lh = np.squeeze(np.swapaxes(evaluations[:,0:3],1,2))
+    S1h = np.squeeze(np.swapaxes(evaluations[:,3:6],1,2))
+    S2h = np.squeeze(np.swapaxes(evaluations[:,6:9],1,2))
 
     if tracktime:
-        t = np.squeeze(res[:,9])
+        t = np.squeeze(evaluations[:,9])
         return toarray(Lh,S1h,S2h,t)
     else:
         return toarray(Lh,S1h,S2h)
@@ -4635,20 +4656,20 @@ if __name__ == '__main__':
 
     #print(masses([0.5,0.6]))
 
-
-    r=[10,10]
-    xi=[0.35,0.35]
-    q=[0.8,0.8]
-    chi1=[1,1]
-    chi2=[1,1]
-    J=[1,1]
-    u=[1/10,1/10]
-    theta1=[1,1]
-    theta2=[1,1]
-    S=[0.3,0.3]
-    t=[1,100]
-
-    print(omegasq_aligned(r, q, chi1, chi2, ['uu','ud']))
+    #
+    # r=[10,10]
+    # xi=[0.35,0.35]
+    # q=[0.8,0.8]
+    # chi1=[1,1]
+    # chi2=[1,1]
+    # J=[1,1]
+    # u=[1/10,1/10]
+    # theta1=[1,1]
+    # theta2=[1,1]
+    # S=[0.3,0.3]
+    # t=[1,100]
+    #
+    # print(omegasq_aligned(r, q, chi1, chi2, ['uu','ud']))
 
     # print("on many", Jresonances(r,xi,q,chi1,chi2))
     #
@@ -4774,8 +4795,23 @@ if __name__ == '__main__':
     # xi = 0.9141896967861489
     # kappa = 0.5784355256550922
     # r=np.logspace(2,1,6)
-    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
-    # print(d['xi'])
+    # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
+    #
+    #
+    # #
+    # #
+    # # print(d['theta1'])
+    # #
+    # d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],requested_outputs=None)
+    #
+    #
+    # #print(d)
+    #
+    # #
+    # print(d['theta1'])
+    #
+    #
+    # sys.exit()
     #
     # d=inspiral(which='precav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
     #
@@ -4802,15 +4838,15 @@ if __name__ == '__main__':
     # print(d)
 
     ###### INSPIRAL TESTING: precav, from infinite #######
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    kappa = 0.50941012
-    xi = 0.9141896967861489
-    r=np.concatenate(([np.inf],np.logspace(2,1,6)))
-
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # kappa = 0.50941012
+    # xi = 0.9141896967861489
+    # r=np.concatenate(([np.inf],np.logspace(2,1,6)))
+    #
 
 
     #d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
@@ -4835,7 +4871,8 @@ if __name__ == '__main__':
     #
     # #kappa = 0.5784355256550922
     # r=np.concatenate((np.logspace(1,4,6),[np.inf]))
-    # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #sys.exit()
     # #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
     # #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
     # #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
@@ -4854,11 +4891,12 @@ if __name__ == '__main__':
     # J = 2.740273008918153
     # xi = 0.9141896967861489
     # kappa0 = 0.5784355256550922
-    # r=np.logspace(2,1,100)
+    # r=np.logspace(2,1,3)
     # u=eval_u(r,q)
     # #print(kappaofu(kappa0, u[0],u[-1], xi, q, chi1, chi2))
-    # sols = kappaofu([kappa0,kappa0], [u[0],u[0]], [u[-1],u[-1]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2],usteps=[u,u])
-    # print(sols[0])
+    # sols = kappaofu([kappa0,kappa0], [u[0],u[0]], [u[-1],u[-1]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2])
+    # print(sols)
+    #print(sols[0])
 
     #ode_kappaofu(kappa0, uinitial, ufinal, xi, q, chi1, chi2)
     #
@@ -4878,15 +4916,19 @@ if __name__ == '__main__':
     #
     # print(J,S)
 
-    # xi=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    # r=np.logspace(2,1,5)
-    # Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    # #print(Lh0,S1h0,S2h0)
-    # t0=time.time()
-    # Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r,q,chi1,chi2,tracktime=False)
+    xi=-0.5
+    q=0.4
+    chi1=0.9
+    chi2=0.8
+    r=np.logspace(2,1,5)
+    Lh0,S1h0,S2h0 = sample_unitsphere(3)
+    #print(Lh0,S1h0,S2h0)
+    #t0=time.time()
+    #Lh,S1h,S2h = orbav_integrator(Lh0,S1h0,S2h0,r[0],r[-1],q,chi1,chi2,rsteps=r, tracktime=False)
+
+    Lh,S1h,S2h = orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r[0],r[0]],[r[-1],r[-1]],[q,q],[chi1,chi1],[chi2,chi2],rsteps=[r,r], tracktime=False)
+    #
+    #
     # print(Lh)
     #
     # print( [orbav_integrator([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)])
