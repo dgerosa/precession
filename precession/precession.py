@@ -9,6 +9,33 @@ import warnings
 import itertools
 
 
+def roots_vec(p):
+    """
+    Vectorized version of numpy.roots. Equivalent to: [np.roots(x) for x in p]
+    Credit https://stackoverflow.com/a/35853977
+
+    Call
+    ----
+    roots = roots_vec(p)
+
+    Parameters
+    ----------
+    p: array
+    	Polynomial coefficients.
+
+    Returns
+    -------
+    roots: array
+    	Polynomial roots.
+    """
+
+    p = np.atleast_1d(p)
+    n = p.shape[-1]
+    A = np.zeros(p.shape[:1] + (n-1, n-1), float)
+    A[...,1:,:-1] = np.eye(n-2)
+    A[...,0,:] = -p[...,1:]/p[...,None,0]
+    return np.linalg.eigvals(A)
+
 def norm_nested(x):
     """
     Norm of 2D array of shape (x,3) along last axis.
@@ -124,11 +151,15 @@ def wraproots(coefficientfunction, *args,**kwargs):
 
     coeffs= coefficientfunction(*args,**kwargs)
 
-    sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
-    #This avoids a for loop but is not reliable because it enforces the same dtype to all outputs, including float vs complex
+    # This is with a simple for loop
+    #sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
+    # This avoids a for loop but is not reliable because it enforces the same dtype to all outputs, including float vs complex
     #sols = np.sort_complex(np.apply_along_axis(np.roots,0,coeffs).T)
+    # Native numpy vectorization
+    sols = np.sort_complex(roots_vec(coeffs.T))
 
     sols = np.real(np.where(np.isreal(sols),sols,np.nan))
+
 
     return sols
 
@@ -1785,7 +1816,12 @@ def Satresonance(J,r,xi,q,chi1,chi2):
     u = eval_u(r, q)
     coeffs = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
     with np.errstate(invalid='ignore'): # nan is ok here
-        Sres = np.array([np.mean(np.real(np.sort_complex(np.roots(x))[1:]))**0.5 for x in coeffs.T])
+
+        # This is with a simple for loop
+        # Sres = np.array([np.mean(np.real(np.sort_complex(np.roots(x))[1:]))**0.5 for x in coeffs.T])
+        # Native numpy vectorization
+        Sres = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:,1:])**0.5,axis=1)
+
     return Sres
 
 
@@ -4651,23 +4687,31 @@ if __name__ == '__main__':
     #print(masses([0.5,0.6]))
 
     #
-    # r=[10,10]
-    # xi=[0.35,0.35]
-    # q=[0.8,0.8]
-    # chi1=[1,1]
-    # chi2=[1,1]
-    # J=[1,1]
-    # u=[1/10,1/10]
-    # theta1=[1,1]
-    # theta2=[1,1]
-    # S=[0.3,0.3]
-    # t=[1,100]
-    #
-    # print(omegasq_aligned(r, q, chi1, chi2, ['uu','ud']))
+    r=[10,1]
+    xi=[0.35,0.35]
+    q=[0.8,0.8]
+    chi1=[1,1]
+    chi2=[1,1]
+    J=[1,1]
+    u=[1/10,1/10]
+    theta1=[1,1]
+    theta2=[1,1]
+    S=[0.3,0.3]
+    t=[1,100]
 
-    # print("on many", Jresonances(r,xi,q,chi1,chi2))
-    #
-    # print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #t0=time.time()
+    #print(S2roots(J,r,xi,q,chi1,chi2))
+    #print(time.time()-t0)
+    #sys.exit()
+
+
+    #print(omegasq_aligned(r, q, chi1, chi2, ['uu','ud']))
+
+    #print("on many", Jresonances(r,xi,q,chi1,chi2))
+
+    #print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #print(Satresonance(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #sys.exit()
     #
     #
     # sys.exit()
@@ -4788,22 +4832,22 @@ if __name__ == '__main__':
     J = 2.740273008918153
     xi = 0.9141896967861489
     kappa = 0.5784355256550922
-    r=np.logspace(2,1,100)
-
-    print(S2av(J, r[0], xi, q, chi1, chi2))
-
-
-    print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='montecarlo'))
-
-
-    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='montecarlo'))
-
-
-    print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='quadrature'))
-    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='quadrature'))
-
-
-    sys.exit()
+    r=np.logspace(2,1,1000)
+    #
+    # print(S2av(J, r[0], xi, q, chi1, chi2))
+    #
+    #
+    # print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='montecarlo'))
+    #
+    #
+    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='montecarlo'))
+    #
+    #
+    # print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='quadrature'))
+    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='quadrature'))
+    #
+    #
+    # sys.exit()
 
 
     #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
