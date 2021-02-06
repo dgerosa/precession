@@ -4102,9 +4102,10 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
 
 
-#TODO: does this work on arrays?
+#TODO: does this work on arrays? Yes but only if func is wihtout args and kwargs. Not sure sure how to generalize it
 # TODO: docstrings
-def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
+
+def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadrature', Nsamples = 1e4, **kwargs):
     """
     Average a function over a precession cycle.
 
@@ -4143,16 +4144,38 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, **kwargs):
         Precession averaged value of func.
     """
 
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
-    a = Speriod_prefactor(r, xi ,q)
+    if method == 'quadrature':
+        Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
+        mathcalA = Speriod_prefactor(r, xi ,q)
+        m = elliptic_parameter(Sminus2,Splus2,S32)
+        # This is proportional to tau, takes care of the denominator
+        tau_prop = scipy.special.ellipk(m) / ((Splus2-S32)**0.5)
 
-    def _integrand(Ssq):
-        return func(Ssq, *args, **kwargs) / np.abs(dS2dt(Ssq, Sminus2, Splus2, S32, a))
+        # Compute the numerator explicitely
+        def _integrand(S,Sminus2,Splus2,S32):
+            # This is proportional to dSdt
+            dSdt_prop = (-(S**2-Splus2) * (S**2-Sminus2) * (S**2-S32))**0.5 /S
+            return func(S, *args, **kwargs) / dSdt_prop
 
-    tau = Speriod(J, r, xi, q, chi1, chi2)
-    func_av = (2/tau) * scipy.integrate.quad(_integrand, Sminus2, Splus2)[0]
+        def _compute(Sminus2, Splus2, S32):
+            return scipy.integrate.quad(_integrand, Sminus2**0.5, Splus2**0.5,args=(Sminus2, Splus2, S32))[0]
+
+        func_av = np.array(list(map(_compute,Sminus2, Splus2, S32))) / tau_prop
+
+    elif method == 'montecarlo':
+
+        S = Ssampling(J,r,xi,q,chi1,chi2,N=int(Nsamples))
+        evals = func(S, *args, **kwargs)
+        func_av = np.sum(evals,axis=-1)/Nsamples
+        func_av = np.atleast_1d(func_av)
+
+    else:
+        raise ValueError("Available methods are 'quadrature' and 'montecarlo'.")
 
     return func_av
+
+
+
 
 
 def rupdown(q, chi1, chi2):
@@ -4766,6 +4789,21 @@ if __name__ == '__main__':
     xi = 0.9141896967861489
     kappa = 0.5784355256550922
     r=np.logspace(2,1,100)
+
+    print(S2av(J, r[0], xi, q, chi1, chi2))
+
+
+    print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='montecarlo'))
+
+
+    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='montecarlo'))
+
+
+    print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='quadrature'))
+    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='quadrature'))
+
+
+    sys.exit()
 
 
     #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
