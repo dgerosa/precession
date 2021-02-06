@@ -3530,7 +3530,8 @@ def elliptic_parameter(Sminus2,Splus2,S32):
     return m
 
 
-def Speriod(J,r,xi,q,chi1,chi2):
+# TODO: docstrings add precomputedroots
+def Speriod(J,r,xi,q,chi1,chi2, precomputedroots = None):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
 
@@ -3560,14 +3561,20 @@ def Speriod(J,r,xi,q,chi1,chi2):
     """
 
     mathcalA=Speriod_prefactor(r,xi,q)
-    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+
+    # For optimization, compute the roots only if you don't have them already
+    if precomputedroots is None:
+        Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+    else:
+        Sminus2,Splus2,S32= precomputedroots
+
     m = elliptic_parameter(Sminus2,Splus2,S32)
     tau = 4*scipy.special.ellipk(m) / (mathcalA* (Splus2-S32)**0.5)
 
     return tau
 
-
-def Soft(t,J,r,xi,q,chi1,chi2):
+# TODO: docstrings add precomputedroots
+def Soft(t,J,r,xi,q,chi1,chi2, precomputedroots=None):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
     The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
@@ -3601,7 +3608,13 @@ def Soft(t,J,r,xi,q,chi1,chi2):
 
     t=np.atleast_1d(t)
     mathcalA=Speriod_prefactor(r,xi,q)
-    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+
+    # For optimization, compute the roots only if you don't have them already
+    if precomputedroots is None:
+        Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+    else:
+        Sminus2,Splus2,S32= precomputedroots
+
     m = elliptic_parameter(Sminus2,Splus2,S32)
 
     sn,_,dn,_ = scipy.special.ellipj(t.T*mathcalA*(Splus2-S32)**0.5/2,m)
@@ -3646,12 +3659,15 @@ def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     	Magnitude of the total spin.
     """
 
-    tau = Speriod(J,r,xi,q,chi1,chi2)
+    # Compute the S roots only once and pass them to both functions
+    precomputedroots = S2roots(J,r,xi,q,chi1,chi2)
+
+    tau = Speriod(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
     # For each binary, generate N samples between 0 and tau.
     t = np.random.uniform(size=tau.size*N).reshape((tau.size,N)) * tau[:,None]
     # Note the special broadcasting rules of Soft, see Soft.__docs__
     # S has shape (M,N).
-    S = Soft(t,J,r,xi,q,chi1,chi2)
+    S = Soft(t,J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
 
     # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
     # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
@@ -3960,7 +3976,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     inputs = [theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2]
     for k,v in enumerate(inputs):
         if v is None:
-            inputs[k] = np.tile(None,np.atleast_1d(q).shape)
+            inputs[k] = np.squeeze(np.tile(None,np.atleast_1d(q).shape))
         else:
             if k == 6 or k ==7: # Either u or r
                 inputs[k]= np.atleast_2d(inputs[k])
@@ -3978,10 +3994,8 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
             raise TypeError("Please provide chi2.")
 
         if r is not None and u is None:
-            r=np.atleast_1d(r)
             u = eval_u(r, np.tile(q,r.shape))
         elif r is None and u is not None:
-            u=np.atleast_1d(u)
             r = eval_r(u=u, q=np.tile(q,u.shape) )
         else:
             raise TypeError("Please provide either r or u. Use np.inf for infinity.")
@@ -4474,7 +4488,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     inputs = [theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2]
     for k,v in enumerate(inputs):
         if v is None:
-            inputs[k] = np.tile(None,np.atleast_1d(q).shape)
+            inputs[k] = np.squeeze(np.tile(None,np.atleast_1d(q).shape))
         else:
             if k == 4 or k == 5 or k== 6 or k ==9 or k==10: # Lh,S1h,S2h, u, or r
                 inputs[k]= np.atleast_2d(inputs[k])
@@ -4751,7 +4765,9 @@ if __name__ == '__main__':
     J = 2.740273008918153
     xi = 0.9141896967861489
     kappa = 0.5784355256550922
-    r=np.logspace(2,1,6)
+    r=np.logspace(2,1,100)
+
+
     #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
     #
     #
@@ -4774,11 +4790,26 @@ if __name__ == '__main__':
     #
     # print(d)
     #
-    d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    print(d['xi'])
+    #d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #print(d['xi'])
 
-    d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
-    print(d['xi'])
+    #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
+    #print(d['xi'])
+
+    N=200
+    theta1=np.tile(theta1,(N,1))
+    theta2=np.tile(theta2,(N,1))
+    deltaphi=np.tile(deltaphi,(N,1))
+    q=np.tile(q,(N,1))
+    chi1=np.tile(chi1,(N,1))
+    chi2=np.tile(chi2,(N,1))
+    r=np.tile(r,(N,1))
+    #print(chi1.shape)
+    #sys.exit()
+    #print(inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r))
+    import cProfile
+    cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","prof.prof")
+    #print(d['xi'])")
 
 
     #
@@ -5126,3 +5157,9 @@ if __name__ == '__main__':
     # chi2=2
     # which='uu'
     # print(omega2_aligned([r,r], [q,q], [chi1,chi1], [chi2,chi2], 'dd'))
+
+    #
+    # print(Speriod([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
+    # pr = S2roots([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
+    # print(Speriod([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
+    # sys.exit()
