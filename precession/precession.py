@@ -1965,7 +1965,6 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 
 #### Evaluations and conversions ####
 
-# TODO Should this be called eval_xi?
 def eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None):
     """
     Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
@@ -3566,14 +3565,14 @@ def elliptic_parameter(Sminus2,Splus2,S32):
     return m
 
 
-# TODO: docstrings add precomputedroots
 def Speriod(J,r,xi,q,chi1,chi2, precomputedroots = None):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
+    For optimization purposes, the flag `precomputedroots` passing the output of S2roots instead of recomputing it.
 
     Call
     ----
-    tau = Speriod(J,r,xi,q,chi1,chi2)
+    tau = Speriod(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -3589,6 +3588,8 @@ def Speriod(J,r,xi,q,chi1,chi2, precomputedroots = None):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+    	Output of S2roots.
 
     Returns
     -------
@@ -3609,15 +3610,16 @@ def Speriod(J,r,xi,q,chi1,chi2, precomputedroots = None):
 
     return tau
 
-# TODO: docstrings add precomputedroots
+
 def Soft(t,J,r,xi,q,chi1,chi2, precomputedroots=None):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
     The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
+    For optimization purposes, the flag `precomputedroots` passing the output of S2roots instead of recomputing it.
 
     Call
     ----
-    S = Soft(t,J,r,xi,q,chi1,chi2)
+    S = Soft(t,J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -3635,12 +3637,15 @@ def Soft(t,J,r,xi,q,chi1,chi2, precomputedroots=None):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+    	Output of S2roots.
 
     Returns
     -------
     S: float
     	Magnitude of the total spin.
     """
+
 
     t=np.atleast_1d(t)
     mathcalA=Speriod_prefactor(r,xi,q)
@@ -3898,23 +3903,22 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
     return S2av
 
 
-# TODO: update docstrings
-# TODO: change names to integrator_precav and rhs_precav
-# If debug return ODE object
 def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     """
-    Integration of ODE describing precession-averaged inspirals. Returns kappa(u) for a given initial condition kappa, sampled at given outputs u. The initial condition corresponds to the value of kappa at u[0].
+    Integration of ODE describing precession-averaged inspirals.
 
     Call
     ----
-    kappa = integrator_precav(kappa,u,xi,q,chi1,chi2)
+    kappa = integrator_precav(kappainitial,uinitial,ufinal,xi,q,chi1,chi2)
 
     Parameters
     ----------
-    kappa: float
-    	Regularized angular momentum (J^2-L^2)/(2L).
-    u: float
-    	Compactified separation 1/(2L).
+    kappainitial: float
+    	Initial value of the regularized momentum kappa.
+    uinitial: float
+    	Initial value of the compactified separation 1/(2L).
+    ufinal: float
+    	Final value of the compactified separation 1/(2L).
     xi: float
     	Effective spin.
     q: float
@@ -3929,6 +3933,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     kappa: float
     	Regularized angular momentum (J^2-L^2)/(2L).
     """
+
 
     kappainitial = np.atleast_1d(kappainitial)
     uinitial = np.atleast_1d(uinitial)
@@ -3958,7 +3963,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     return ODEsolution
 
 
-
+# TODO: return Sminus and Splus along the solution. Right now these are computed inside Ssampling but not stored
 def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs=None):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowting to integrate forward and backward in time. In addition, integration can be be done between finite separation, forward from infinite to finite separation, or backward from finite to infinite separation. For infinity, use r=np.inf or u=0.
