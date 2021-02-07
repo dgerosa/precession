@@ -118,6 +118,11 @@ def descr(varname,vardef=None):
     lookup['kappainitial']=["float","Initial value of the regularized momentum kappa"]
     lookup['uinitial']=["float","Initial value of the compactified separation 1/(2L)"]
     lookup['ufinal']=["float","Final value of the compactified separation 1/(2L)"]
+    lookup['Lhinitial']=["array","Initial direction of the orbital angular momentum, unit vector"]
+    lookup['S1hinitial']=["array","Initial direction of the primary spin, unit vector"]
+    lookup['S2hinitial']=["array","Initial direction of the secondary spin, unit vector"]
+    lookup['vinitial']=["float","Initial value of the newtonian orbital velocity"]
+    lookup['vfinal']=["float","Final value of the newtonian orbital velocity"]
 
 
     if varname in lookup:

@@ -3905,7 +3905,7 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
 
 def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     """
-    Integration of ODE describing precession-averaged inspirals.
+    Integration of ODE dkappa/du describing precession-averaged inspirals.
 
     Call
     ----
@@ -3966,7 +3966,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 # TODO: return Sminus and Splus along the solution. Right now these are computed inside Ssampling but not stored
 def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs=None):
     """
-    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowting to integrate forward and backward in time. In addition, integration can be be done between finite separation, forward from infinite to finite separation, or backward from finite to infinite separation. For infinity, use r=np.inf or u=0.
+    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. In addition, integration can be done between finite separations, forward from infinite to finite separation, or backward from finite to infinite separation. For infinity, use r=np.inf or u=0.
     The initial conditions must be specified in terms of one an only one of the following:
     - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
     - J, xi (only if integrating from finite separations because J otherwise diverges).
@@ -4217,7 +4217,9 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
 
 
 
+#TODO Add updown endpoint.
 
+#TODO Add limits of the resonances at small separations from the endpoint paper
 
 def rupdown(q, chi1, chi2):
     """
@@ -4343,54 +4345,49 @@ def widenutation(q, chi1, chi2):
 # TODO: Omegaz and alpha. For alpha use precession_average
 # TOOD: chip
 
+# TODO: Write a function that evolves the orbit-averaged spin precession eqs in time, without any radiation reaction
+
 #### Orbit averaged things ####
 
-# TODO: this comes straight from precession_V1. Update docstrings. It's not necesssary that this function works on arrays
-# TODO: replace quadrupole_formula flag with parameter to select a given PN order
+# TODO: replace quadrupole_formula flag with parameter to select a given PN order. Update docstrings when you do it
 def rhs_orbav(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula=False):
+    """
+    Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unite vectors, v is the orbital velocity, and t is time. This is an internal function used by the ODE integrator and is not array-compatible.
 
-    '''
-    Right-hand side of the orbit-averaged PN equations: d[allvars]/dv=RHS, where
-    allvars is an array with the cartesian components of the unit vectors L, S1
-    and S2. This function is only the actual system of equations, not the ODE
-    solver.
+    Call
+    ----
+    RHS = rhs_orbav(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula=False)
 
-    Equations are the ones reported in Gerosa et al. [Phys.Rev. D87 (2013) 10,
-    104028](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.87.104028);
-    see references therein. In particular, the quadrupole-monopole term computed
-    by Racine is included. The results presented in Gerosa et al. 2013 actually
-    use additional unpublished terms, that are not listed in the published
-    equations and are NOT included here. Radiation reaction is included up to
-    3.5PN.
+    Parameters
+    ----------
+    v: float
+    	Newtonian orbital velocity.
+    allvars: array
+    	Packed ODE input variables.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    m1: float
+    	Mass of the primary (heavier) black hole.
+    m2: float
+    	Mass of the secondary (lighter) black hole.
+    eta: float
+    	Symmetric mass ratio 0<=eta<=1/4.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    S1: float
+    	Magnitude of the primary spin.
+    S2: float
+    	Magnitude of the secondary spin.
+    MISSING: COULD NOT BUILD, optional (default: False)
+    	FILL MANUALLY.
 
-    The internal quadrupole_formula flag switches off all PN corrections in
-    radiation reaction.
-
-    The integration is carried over in the orbital velocity v (equivalent to the
-    separation), not in time. If an expression for v(t) is needed, the code can
-    be easiliy modified to return time as well.
-
-    **Call:**
-
-        allders=precession.rhs_orbav(allvars,v,q,S1,S2,eta,m1,m2,chi1,chi2,time=False)
-
-    **Parameters:**
-    - `allvars`: array of lenght 9 cointaining the initial condition for numerical integration for the components of the unit vectors L, S1 and S2.
-    - `v`: orbital velocity.
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
-    - `eta`: symmetric mass ratio.
-    - `m1`: mass of the primary BH.
-    - `m2`: mass of the secondary BH.
-    - `chi1`: dimensionless spin magnitude of the primary BH. Must be 0<=chi1<=1
-    - `chi2`: dimensionless spin magnitude of the secondary BH. Must be 0<=chi2<=1
-    - `time`: if `True` also integrate t(r).
-
-    **Returns:**
-
-    - `allders`: array of lenght 9 cointaining the derivatives of allvars with respect to the orbital velocity v.
-    '''
+    Returns
+    -------
+    RHS: float
+    	Right-hand side.
+    """
 
     # Unpack inputs
     Lh = allvars[0:3]
@@ -4448,57 +4445,42 @@ def rhs_orbav(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula=False):
     return np.concatenate([dLhdv,dS1hdv,dS2hdv,[dtdv]])
 
 
-# TODO: this comes straight from precession_V1. Update docstrings
+# TODO: update docstrings when you fix the quadrupole_formula flag
 def integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2,quadrupole_formula=False):
+    """
+    Integration of the systems of ODEs describing orbit-averaged inspirals. Integration is performed in a reference frame
+    where the z axis is along J and L lies in the x-z plane at the initial separation.
 
-    '''
-    Single orbit-averaged integration. Integrate the system of ODEs specified in
-    `precession.rhs_orbav`. The initial configuration (at r_vals[0]) is
-    specified through J, xi and S. The components of the unit vectors L, S1 and
-    S2 are returned at the output separations specified by r_vals. The initial
-    values of J and S must be compatible with the initial separation r_vals[0],
-    otherwise an error is raised. Integration is performed in a reference frame
-    in which the z axis is along J and L lies in the x-z plane at the initial
-    separation. Equations are integrated in v (orbital velocity) but outputs are
-    converted to r (separation).
+    Call
+    ----
+    ODEsolution = integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2,quadrupole_formula=False)
 
-    Of course, this can only integrate to/from FINITE separations.
+    Parameters
+    ----------
+    Lhinitial: array
+    	Initial direction of the orbital angular momentum, unit vector.
+    S1hinitial: array
+    	Initial direction of the primary spin, unit vector.
+    S2hinitial: array
+    	Initial direction of the secondary spin, unit vector.
+    vinitial: float
+    	Initial value of the newtonian orbital velocity.
+    vfinal: float
+    	Final value of the newtonian orbital velocity.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    MISSING: COULD NOT BUILD, optional (default: False)
+    	FILL MANUALLY.
 
-    Bear in mind that orbit-averaged integrations are tpically possible from
-    r<10000; integrations from larger separations take a very long time and can
-    occasionally crash. If q=1, the initial binary configuration is specified
-    through cos(varphi), not S.
-
-    We recommend to use one of the wrappers `precession.orbit_averaged` and
-    `precession.orbit_angles` provided.
-
-    **Call:**
-        Lhx_fvals,Lhy_fvals,Lhz_fvals,S1hx_fvals,S1hy_fvals,S1hz_fvals,S2hx_fvals,S2hy_fvals,S2hz_fvals=precession.integrator_orbav(J,xi,S,r_vals,q,S1,S2,time=False)
-
-    **Parameters:**
-
-    - `J`: magnitude of the total angular momentum.
-    - `xi`: projection of the effective spin along the orbital angular momentum.
-    - `S`: magnitude of the total spin.
-    - `r_vals`: binary separation (array).
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
-    - `time`: if `True` also integrate t(r).
-
-    **Returns:**
-
-    - `Lhx_vals`: x component of the unit vector L/|L|.
-    - `Lhy_vals`: y component of the unit vector L/|L|.
-    - `Lhz_vals`: z component of the unit vector L/|L|.
-    - `S1hx_vals`: x component of the unit vector S1/|S1|.
-    - `S1hy_vals`: y component of the unit vector S1/|S1|.
-    - `S1hz_vals`: z component of the unit vector S1/|S1|.
-    - `S2hx_vals`: x component of the unit vector S2/|S2|.
-    - `S2hy_vals`: y component of the unit vector S2/|S2|.
-    - `S2hz_vals`: z component of the unit vector S2/|S2|.
-    - `t_fvals`: (optional) time as a function of the separation.
-    '''
+    Returns
+    -------
+    ODEsolution: array of scipy OdeSolution objects
+    	Solution of the ODE. Key method is .sol(t).
+    """
 
     Lhinitial=np.atleast_2d(Lhinitial)
     S1hinitial=np.atleast_2d(S1hinitial)
@@ -4508,8 +4490,6 @@ def integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2
     q= np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
-
-
 
     def _compute(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2):
 
@@ -4542,11 +4522,63 @@ def integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2
 
     return ODEsolution
 
+# TODO: update docstrings when you fix the quadrupole_formula flag
+def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None):
+    """
+    Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. Orbit-averaged integration can only be done between finite separations.
+    The initial conditions must be specified in terms of one an only one of the following:
+    - Lh, S1h, and S2h
+    - theta1,theta2, and deltaphi.
+    - J, xi, and S.
+    - kappa, xi, and S.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default.
 
-def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,tracktime=False,quadrupole_formula=False,requested_outputs=None):
-    '''
-    TODO: docstrings. Orbit average evolution; this is the function the user should call (I think)
-    '''
+    Call
+    ----
+    outputs = inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+    	Angle between the projections of the two spins onto the orbital plane.
+    S: float, optional (default: None)
+    	Magnitude of the total spin.
+    Lh: array, optional (default: None)
+    	Direction of the orbital angular momentum, unit vector.
+    S1h: array, optional (default: None)
+    	Direction of the primary spin, unit vector.
+    S2h: array, optional (default: None)
+    	Direction of the secondary spin, unit vector.
+    J: float, optional (default: None)
+    	Magnitude of the total angular momentum.
+    kappa: float, optional (default: None)
+    	Regularized angular momentum (J^2-L^2)/(2L).
+    r: float, optional (default: None)
+    	Binary separation.
+    u: float, optional (default: None)
+    	Compactified separation 1/(2L).
+    xi: float, optional (default: None)
+    	Effective spin.
+    q: float, optional (default: None)
+    	Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float, optional (default: None)
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    MISSING: COULD NOT BUILD, optional (default: False)
+    	FILL MANUALLY.
+    requested_outputs: list, optional (default: None)
+    	Set of outputs.
+
+    Returns
+    -------
+    outputs: dictionary
+    	Set of outputs.
+    """
 
     # Substitute None inputs with arrays of Nones
     inputs = [theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2]
@@ -4592,7 +4624,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is not None and kappa is None and xi is not None:
             Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
 
-        # User provides kappa, xi, and maybe S.
+        # User provides kappa, xi, and S.
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is None and kappa is not None and xi is not None:
             J = eval_J(kappa=kappa,r=r[0],q=q)
             Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
