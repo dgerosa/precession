@@ -4704,7 +4704,7 @@ def inspiral(*args, which=None,**kwargs):
         return inspiral_orbav(*args, **kwargs)
 
     else:
-        raise ValueError("kind need to be either 'precav' or 'orbav'.")
+        raise ValueError("`which` needs to be either `precav` or `orbav`.")
 
 
 if __name__ == '__main__':
