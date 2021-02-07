@@ -4012,7 +4012,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     inputs = [theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2]
     for k,v in enumerate(inputs):
         if v is None:
-            inputs[k] = np.squeeze(np.tile(None,np.atleast_1d(q).shape))
+            inputs[k] = np.tile(None,np.atleast_1d(q).shape)
         else:
             if k == 6 or k ==7: # Either u or r
                 inputs[k]= np.atleast_2d(inputs[k])
@@ -4093,16 +4093,16 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
         if u[0]==0:
             J = np.concatenate(([np.inf],J))
             S = np.concatenate(([np.nan],S))
-            theta1 = np.concatenate(([theta1inf],theta1))
-            theta2 = np.concatenate(([theta2inf],theta2))
+            theta1 = np.concatenate((theta1inf,theta1))
+            theta2 = np.concatenate((theta2inf,theta2))
             deltaphi = np.concatenate(([np.nan],deltaphi))
         # Integrating backwards to infinity
         elif u[-1]==0:
             J = np.concatenate((J,[np.inf]))
             S = np.concatenate((S,[np.nan]))
             theta1inf,theta2inf = asymptotic_to_angles(kappa[-1],xi,q,chi1,chi2)
-            theta1 = np.concatenate((theta1,[theta1inf]))
-            theta2 = np.concatenate((theta2,[theta2inf]))
+            theta1 = np.concatenate((theta1,theta1inf))
+            theta2 = np.concatenate((theta2,theta2inf))
             deltaphi = np.concatenate((deltaphi,[np.nan]))
         else:
             pass
@@ -4547,7 +4547,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     inputs = [theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2]
     for k,v in enumerate(inputs):
         if v is None:
-            inputs[k] = np.squeeze(np.tile(None,np.atleast_1d(q).shape))
+            inputs[k] = np.tile(None,np.atleast_1d(q).shape)
         else:
             if k == 4 or k == 5 or k== 6 or k ==9 or k==10: # Lh,S1h,S2h, u, or r
                 inputs[k]= np.atleast_2d(inputs[k])
@@ -4822,17 +4822,17 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    deltaphi=0.46
-    S = 0.5538768649231461
-    J = 2.740273008918153
-    xi = 0.9141896967861489
-    kappa = 0.5784355256550922
-    r=np.logspace(2,1,1000)
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # deltaphi=0.46
+    # S = 0.5538768649231461
+    # J = 2.740273008918153
+    # xi = 0.9141896967861489
+    # kappa = 0.5784355256550922
+    # r=np.logspace(2,1,1000)
     #
     # print(S2av(J, r[0], xi, q, chi1, chi2))
     #
@@ -4850,14 +4850,18 @@ if __name__ == '__main__':
     # sys.exit()
 
 
-    #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
+    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
+    # print(d)
+    # #
+    # #
+    # # #
+    # # #
+    # #print(d['J'])
+    # # #
+    # d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],requested_outputs=None)
     #
-    #
-    # #
-    # #
-    #print(d['J'])
-    # #
-    #d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],requested_outputs=None)
+    # print(d)
+
     #
     #
     # #print(d)
@@ -4878,20 +4882,20 @@ if __name__ == '__main__':
     #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #print(d['xi'])
 
-    N=200
-    theta1=np.tile(theta1,(N,1))
-    theta2=np.tile(theta2,(N,1))
-    deltaphi=np.tile(deltaphi,(N,1))
-    q=np.tile(q,(N,1))
-    chi1=np.tile(chi1,(N,1))
-    chi2=np.tile(chi2,(N,1))
-    r=np.tile(r,(N,1))
-    #print(chi1.shape)
-    #sys.exit()
-    #print(inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r))
-    import cProfile
-    cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","prof.prof")
-    #print(d['xi'])")
+    # N=200
+    # theta1=np.tile(theta1,(N,1))
+    # theta2=np.tile(theta2,(N,1))
+    # deltaphi=np.tile(deltaphi,(N,1))
+    # q=np.tile(q,(N,1))
+    # chi1=np.tile(chi1,(N,1))
+    # chi2=np.tile(chi2,(N,1))
+    # r=np.tile(r,(N,1))
+    # #print(chi1.shape)
+    # #sys.exit()
+    # #print(inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r))
+    # import cProfile
+    # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","prof.prof")
+    # #print(d['xi'])")
 
 
     #
@@ -4912,7 +4916,7 @@ if __name__ == '__main__':
     # #
     # print(d)
 
-    ###### INSPIRAL TESTING: precav, from infinite #######
+    ##### INSPIRAL TESTING: precav, from infinite #######
     # q=0.5
     # chi1=1
     # chi2=1
@@ -4920,19 +4924,19 @@ if __name__ == '__main__':
     # theta2=0.45
     # kappa = 0.50941012
     # xi = 0.9141896967861489
-    # r=np.concatenate(([np.inf],np.logspace(2,1,6)))
+    # r=np.concatenate(([np.inf],np.logspace(2,1,100)))
     #
 
 
     #d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
     # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
     #
-    # print(d)
+    #print(d)
     #
-    # d=inspiral_precav(kappa=[kappa,kappa],xi=[xi,xi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],outputs=['J','theta1'])
+    #d=inspiral_precav(kappa=[kappa,kappa],xi=[xi,xi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #
-    # print(d)
-    # ###### INSPIRAL TESTING #######
+    #print(d)
+    # ###### INSPIRAL TESTING to infinite #######
     # q=0.5
     # chi1=1
     # chi2=1
@@ -4947,13 +4951,14 @@ if __name__ == '__main__':
     # #kappa = 0.5784355256550922
     # r=np.concatenate((np.logspace(1,4,6),[np.inf]))
     # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #sys.exit()
-    # #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #
     # print(d)
+    # sys.exit()
+    #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+
+    #print(d)
     #
 
     # q=0.5
