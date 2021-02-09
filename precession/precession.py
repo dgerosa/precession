@@ -4017,13 +4017,14 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     inputs = [theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2]
     for k,v in enumerate(inputs):
         if v is None:
-            inputs[k] = np.tile(None,np.atleast_1d(q).shape)
+            inputs[k] = np.atleast_1d(np.squeeze(np.tile(None,np.atleast_1d(q).shape)))
         else:
             if k == 6 or k ==7: # Either u or r
                 inputs[k]= np.atleast_2d(inputs[k])
             else: #Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
     theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2 = inputs
+
 
     def _compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2):
 
@@ -4584,7 +4585,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     inputs = [theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2]
     for k,v in enumerate(inputs):
         if v is None:
-            inputs[k] = np.tile(None,np.atleast_1d(q).shape)
+            inputs[k] = np.atleast_1d(np.squeeze(np.tile(None,np.atleast_1d(q).shape)))
         else:
             if k == 4 or k == 5 or k== 6 or k ==9 or k==10: # Lh,S1h,S2h, u, or r
                 inputs[k]= np.atleast_2d(inputs[k])
@@ -4724,17 +4725,17 @@ if __name__ == '__main__':
     #print(masses([0.5,0.6]))
 
     #
-    r=[10,1]
-    xi=[0.35,0.35]
-    q=[0.8,0.8]
-    chi1=[1,1]
-    chi2=[1,1]
-    J=[1,1]
-    u=[1/10,1/10]
-    theta1=[1,1]
-    theta2=[1,1]
-    S=[0.3,0.3]
-    t=[1,100]
+    # r=[10,1]
+    # xi=[0.35,0.35]
+    # q=[0.8,0.8]
+    # chi1=[1,1]
+    # chi2=[1,1]
+    # J=[1,1]
+    # u=[1/10,1/10]
+    # theta1=[1,1]
+    # theta2=[1,1]
+    # S=[0.3,0.3]
+    # t=[1,100]
 
     #t0=time.time()
     #print(S2roots(J,r,xi,q,chi1,chi2))
@@ -4859,17 +4860,35 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # xi = 0.9141896967861489
-    # kappa = 0.5784355256550922
-    # r=np.logspace(2,1,1000)
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa = 0.5784355256550922
+    r=np.logspace(2,1,1000)
+
+    N=1000
+    theta1=np.tile(theta1,(N,1))
+    theta2=np.tile(theta2,(N,1))
+    deltaphi=np.tile(deltaphi,(N,1))
+    q=np.tile(q,(N,1))
+    chi1=np.tile(chi1,(N,1))
+    chi2=np.tile(chi2,(N,1))
+    r=np.tile(r,(N,1))
+
+
+    #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #print(d['xi'])
+    import cProfile
+    cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","manybinaries.prof")
+
+
+
     #
     # print(S2av(J, r[0], xi, q, chi1, chi2))
     #
@@ -4919,20 +4938,7 @@ if __name__ == '__main__':
     #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #print(d['xi'])
 
-    # N=200
-    # theta1=np.tile(theta1,(N,1))
-    # theta2=np.tile(theta2,(N,1))
-    # deltaphi=np.tile(deltaphi,(N,1))
-    # q=np.tile(q,(N,1))
-    # chi1=np.tile(chi1,(N,1))
-    # chi2=np.tile(chi2,(N,1))
-    # r=np.tile(r,(N,1))
-    # #print(chi1.shape)
-    # #sys.exit()
-    # #print(inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r))
-    # import cProfile
-    # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","prof.prof")
-    # #print(d['xi'])")
+
 
 
     #
