@@ -3,11 +3,10 @@ precession
 """
 
 import numpy as np
-import scipy, scipy.special, scipy.integrate
+import scipy.special, scipy.integrate
 import sys, os, time
 import warnings
-import itertools
-
+from sympy import elliptic_pi
 
 def roots_vec(p):
     """
@@ -130,7 +129,7 @@ def sample_unitsphere(N=1):
 
 def wraproots(coefficientfunction, *args,**kwargs):
     """
-    Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is a wrapper to numpy.roots.
+    Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is essentially a wrapper of numpy.roots.
 
     Call
     ----
@@ -162,6 +161,34 @@ def wraproots(coefficientfunction, *args,**kwargs):
 
 
     return sols
+
+
+@np.vectorize
+def ellippi(n,phi,m):
+    """
+    Incomplete elliptic integral of the third kind. At the time of writing, this has not been implemented in scipy yet; here wrapping the sympy implementation.
+
+    Call
+    ----
+    piintegral = precession.ellippi(n,phi,m)
+
+    Parameters
+    ----------
+    n: foat
+        Characheristic of the elliptic integral.
+    phi: float
+        Amplitude of the elliptic integral.
+    m: float
+        Parameter of the elliptic integral
+
+    Returns
+    -------
+    piintegral: float
+        Incomplete elliptic integral of the third kind
+    """
+
+    return float(elliptic_pi(n,phi,m))
+
 
 #### Definitions ####
 
@@ -4721,7 +4748,7 @@ def inspiral(*args, which=None,**kwargs):
 
 
 
-def eval_OmegaL(S,J,r,xi,q,chi1,chi2):
+def eval_omegaL(S,J,r,xi,q,chi1,chi2):
 
     S=np.atleast_1d(S)
     J=np.atleast_1d(J)
@@ -5341,24 +5368,28 @@ if __name__ == '__main__':
     # print(insp)
 
 
-    q=0.95
-    chi1=0.1
-    chi2=1
-    theta1=np.arccos(-0.95)
-    theta2=np.arccos(-0.9)
+    # q=0.95
+    # chi1=0.1
+    # chi2=1
+    # theta1=np.arccos(-0.95)
+    # theta2=np.arccos(-0.9)
+    #
+    # r=np.concatenate([[np.inf],np.logspace(np.log10(105),np.log10(90),1000)])
+    #
+    # insp = inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
+    #
+    # J= insp['J'][0,1:]
+    # r= insp['r'][0,1:]
+    # xi = np.tile(insp['xi'],r.shape)
+    # q = np.tile(q,r.shape)
+    # chi1 = np.tile(chi1,r.shape)
+    # chi2 = np.tile(chi2,r.shape)
+    #
+    # Sminus, Splus = Slimits(J=J,r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
 
-    r=np.concatenate([[np.inf],np.logspace(np.log10(105),np.log10(90),1000)])
-
-    insp = inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
-
-    J= insp['J'][0,1:]
-    r= insp['r'][0,1:]
-    xi = np.tile(insp['xi'],r.shape)
-    q = np.tile(q,r.shape)
-    chi1 = np.tile(chi1,r.shape)
-    chi2 = np.tile(chi2,r.shape)
-
-    Sminus, Splus = Slimits(J=J,r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
     #print(Sminus)
     #omegaminus= precession.eval_OmegaL(Sminus,J,r,xi,q,chi1,chi2)
     #omegaplus= precession.eval_OmegaL(Splus,J,r,xi,q,chi1,chi2)
+
+
+    #print(ellippi(np.array([0.5,0.5]),np.array([0.5,0.5]),np.array([0.5,0.5])))
