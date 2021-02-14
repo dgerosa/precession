@@ -1028,7 +1028,12 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
         Jmin,Jmax = Jresonances(r,xi,q,chi1,chi2)
         # Check precondition
         Jmin_cond,Jmax_cond = Jlimits_LS1S2(r,q,chi1,chi2)
-        assert (Jmin>Jmin_cond).all() and (Jmax<Jmax_cond).all(), "Input values are incompatible."
+
+        if (Jmin>Jmin_cond).all() and (Jmax<Jmax_cond).all():
+            pass
+        else:
+            warnings.warn("Input values may be incompatible [Jlimits].", Warning)
+
 
     else:
         raise TypeError("Provide either (r,q,chi1,chi2) or (r,xi,q,chi1,chi2).")
@@ -1518,7 +1523,10 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
         ximin,ximax = xiresonances(J,r,q,chi1,chi2)
         # Check precondition
         ximin_cond,ximax_cond = xilimits_definition(q,chi1,chi2)
-        assert (ximin>ximin_cond).all() and (ximax<ximax_cond).all(), "Input values are incompatible."
+        if (ximin>ximin_cond).all() and (ximax<ximax_cond).all():
+            pass
+        else:
+            warnings.warn("Input values may be incompatible [xilimits].", Warning)
 
     else:
         raise TypeError("Provide either (q,chi1,chi2) or (J,r,q,chi1,chi2).")
@@ -1874,7 +1882,11 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
         Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
         # Check precondition
         Smin_cond,Smax_cond = Slimits_LJS1S2(J,r,q,chi1,chi2)
-        assert (Smin>Smin_cond).all() and (Smax<Smax_cond).all(), "Input values are incompatible."
+        if (Smin>Smin_cond).all() and (Smax<Smax_cond).all():
+            pass
+        else:
+            warnings.warn("Input values may be incompatible [Slimits].", Warning)
+
 
     else:
         raise TypeError("Provide one of the following: (q,chi1,chi2), (J,r,q), (J,r,q,chi1,chi2), (J,r,xi,q,chi1,chi2).")
@@ -5317,13 +5329,36 @@ if __name__ == '__main__':
     # print(Speriod([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
     # sys.exit()
 
-    q=0.8
-    chi1=1
-    chi2=1
-    theta1=1
-    theta2=1
+    # q=0.8
+    # chi1=1
+    # chi2=1
+    # theta1=1
+    # theta2=1
+    #
+    # r=np.concatenate([[np.inf],np.logspace(2,1,100)])
+    #
+    # insp = inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
+    # print(insp)
 
-    r=np.concatenate([[np.inf],np.logspace(2,1,100)])
+
+    q=0.95
+    chi1=0.1
+    chi2=1
+    theta1=np.arccos(-0.95)
+    theta2=np.arccos(-0.9)
+
+    r=np.concatenate([[np.inf],np.logspace(np.log10(105),np.log10(90),1000)])
 
     insp = inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
-    print(insp)
+
+    J= insp['J'][0,1:]
+    r= insp['r'][0,1:]
+    xi = np.tile(insp['xi'],r.shape)
+    q = np.tile(q,r.shape)
+    chi1 = np.tile(chi1,r.shape)
+    chi2 = np.tile(chi2,r.shape)
+
+    Sminus, Splus = Slimits(J=J,r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    #print(Sminus)
+    #omegaminus= precession.eval_OmegaL(Sminus,J,r,xi,q,chi1,chi2)
+    #omegaplus= precession.eval_OmegaL(Splus,J,r,xi,q,chi1,chi2)
