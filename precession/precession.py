@@ -4746,11 +4746,8 @@ def inspiral(*args, which=None,**kwargs):
     else:
         raise ValueError("`which` needs to be either `precav` or `orbav`.")
 
+def frequency_prefactor(J,r,xi,q,chi1,chi2):
 
-
-def eval_omegaL(S,J,r,xi,q,chi1,chi2):
-
-    S=np.atleast_1d(S)
     J=np.atleast_1d(J)
     xi =np.atleast_1d(xi)
     q=np.atleast_1d(q)
@@ -4762,10 +4759,46 @@ def eval_omegaL(S,J,r,xi,q,chi1,chi2):
     mathcalCplus = 3/2 * (L*(1+q)**2 - q*xi)/(J*q*(1+q)**2) * ( (1+q)*( (1+q)*(J+L)**2 - (1-q)*(S1**2-S2**2) ) + 2*q*xi*(L+J) )
     mathcalCminus = - 3/2 * (L*(1+q)**2 - q*xi)/(J*q*(1+q)**2) * ( (1+q)*( (1+q)*(J-L)**2 - (1-q)*(S1**2-S2**2) ) + 2*q*xi*(L-J) )
 
+    return np.stack([mathcalC0,mathcalCplus,mathcalCminus])
+
+def eval_omegaL(S,J,r,xi,q,chi1,chi2):
+
+    S=np.atleast_1d(S)
+    J=np.atleast_1d(J)
+    L = eval_L(r,q)
+
+    mathcalC0, mathcalCplus, mathcalCminus =  frequency_prefactor(J,r,xi,q,chi1,chi2)
+
     OmegaL = mathcalC0* (1+ mathcalCplus/((J+L)**2 -S**2) + mathcalCminus/((J-L)**2 -S**2) )
 
     return OmegaL
 
+def eval_phiL(t,J,r,xi,q,chi1,chi2):
+
+    t=np.atleast_1d(t)
+    J=np.atleast_1d(J)
+    L = eval_L(r,q)
+
+    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+    m = elliptic_parameter(Sminus2,Splus2,S32)
+    mathcalA = Speriod_prefactor(r,xi,q)
+    mathcalC0, mathcalCplus, mathcalCminus =  frequency_prefactor(J,r,xi,q,chi1,chi2)
+    mathcalD0 = 2*mathcalC0/(mathcalA*(Splus2-S32)**0.5)
+    mathcalDplus = mathcalCplus*(Splus2-S32)/((Splus2-S32)*(Sminus2-S32))
+    mathcalDminus = mathcalCminus*(Splus2-S32)/((Splus2-S32)*(Sminus2-S32))
+    mathcalFplus = (Splus2-S32)*(Sminus2-S32)/(( (J+L)**2 - Sminus2 )*(Splus2-S32))
+    mathcalFminus = (Splus2-S32)*(Sminus2-S32)/(( (J-L)**2 - Sminus2 )*(Splus2-S32))
+
+    _,_,_,ph = scipy.special.ellipj(t.T*mathcalA*(Splus2-S32)**0.5/2,m)
+
+    phiL = mathcalC0*t.T*( 1                                                                \
+        + mathcalDplus*m*mathcalFplus/(m+mathcalFplus)                                      \
+        + mathcalDminus*m*mathcalFminus/(m+mathcalFminus) )                                 \
+        + mathcalD0*(                                                                       \
+          mathcalDplus*(mathcalFplus**2)/(m+mathcalFplus)*ellippi(m+mathcalFplus,ph,m)      \
+        + mathcalDminus*(mathcalFminus**2)/(m+mathcalFminus)*ellippi(m+mathcalFminus,ph,m) )
+
+    return phiL
 
 if __name__ == '__main__':
     np.set_printoptions(threshold=sys.maxsize)
@@ -4784,17 +4817,21 @@ if __name__ == '__main__':
     #print(masses([0.5,0.6]))
 
     #
-    # r=[10,10]
-    # xi=[0.35,0.35]
-    # q=[0.8,0.8]
-    # chi1=[1,1]
-    # chi2=[1,1]
-    # J=[1,1]
-    # u=[1/10,1/10]
-    # theta1=[1,1]
-    # theta2=[1,1]
-    # S=[0.3,0.3]
-    # t=[1,100]
+    r=[10,10]
+    xi=[0.35,0.35]
+    q=[0.8,0.8]
+    chi1=[1,1]
+    chi2=[1,1]
+    J=[1,1]
+    u=[1/10,1/10]
+    theta1=[1,1]
+    theta2=[1,1]
+    S=[0.3,0.3]
+    t=[0,100]
+
+
+    print(eval_phiL(t,J,r,xi,q,chi1,chi2))
+
     #
     # #t0=time.time()
     # #print(S2roots(J,r,xi,q,chi1,chi2))
@@ -5386,10 +5423,11 @@ if __name__ == '__main__':
     # chi2 = np.tile(chi2,r.shape)
     #
     # Sminus, Splus = Slimits(J=J,r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
-
-    #print(Sminus)
-    #omegaminus= precession.eval_OmegaL(Sminus,J,r,xi,q,chi1,chi2)
-    #omegaplus= precession.eval_OmegaL(Splus,J,r,xi,q,chi1,chi2)
-
+    #
+    # omegaminus= eval_omegaL(Sminus,J,r,xi,q,chi1,chi2)
+    # omegaplus= eval_omegaL(Splus,J,r,xi,q,chi1,chi2)
+    #
+    #
+    # print(omegaminus)
 
     #print(ellippi(np.array([0.5,0.5]),np.array([0.5,0.5]),np.array([0.5,0.5])))
