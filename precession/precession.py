@@ -10,8 +10,8 @@ from sympy import elliptic_pi
 
 def roots_vec(p):
     """
-    Vectorized version of numpy.roots. Equivalent to: [np.roots(x) for x in p]
-    Credit https://stackoverflow.com/a/35853977
+    Vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p] but faster.
+    Credits: https://stackoverflow.com/a/35853977
 
     Call
     ----
@@ -37,7 +37,7 @@ def roots_vec(p):
 
 def norm_nested(x):
     """
-    Norm of 2D array of shape (x,3) along last axis.
+    Norm of 2D array of shape (N,3) along last axis.
 
     Call
     ----
@@ -59,7 +59,7 @@ def norm_nested(x):
 
 def normalize_nested(x):
     """
-    Normalize 2D array (x,3) along last axis.
+    Normalize 2D array of shape (N,3) along last axis.
 
     Call
     ----
@@ -3654,7 +3654,7 @@ def Soft(t,J,r,xi,q,chi1,chi2, precomputedroots=None):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
     The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
-    For optimization purposes, the flag `precomputedroots` passing the output of S2roots instead of recomputing it.
+    For optimization purposes, the flag `precomputedroots` can be used to pass the outputs of S2roots instead of recomputing them.
 
     Call
     ----
@@ -3703,6 +3703,57 @@ def Soft(t,J,r,xi,q,chi1,chi2, precomputedroots=None):
 
     return S
 
+
+def tofS(S,J,r,xi,q,chi1,chi2,precomputedroots=None,sign=1):
+    """
+    Time t as a function of S (without radiation reaction). Only covers half of a precession cycle, assuming t=0 at S=S- and t=tau/2 at S=S+. Set sign=-1 to cover the second half, i.e. from t=tau/2 at S=S+ to t=tau at S=S-.
+    For optimization purposes, the flag `precomputedroots` can be used to pass the outputs of S2roots instead of recomputing them.
+
+    Call
+    ----
+    t = tofS(S,J,r,xi,q,chi1,chi2,precomputedroots=None,sign=1)
+
+    Parameters
+    ----------
+    S: float
+    	Magnitude of the total spin.
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+    	Output of S2roots.
+    sign: integer, optional (default: 1)
+    	Sign, either +1 or -1.
+
+    Returns
+    -------
+    t: float
+    	Time.
+    """
+
+    S=np.atleast_1d(S)
+
+    # For optimization, compute the roots only if you don't have them already
+    if precomputedroots is None:
+        Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
+    else:
+        Sminus2,Splus2,S32= precomputedroots
+
+    mathcalA=Speriod_prefactor(r,xi,q)
+    m = elliptic_parameter(Sminus2,Splus2,S32)
+    phi = np.arccos( ( (S**2 - Sminus2) / (Splus2 - Sminus2) )**0.5 )
+    t = 2* ( scipy.special.ellipk(m) - scipy.special.ellipkinc(phi, m) ) / (mathcalA * (Splus2-S32)**0.5)
+
+    return np.where(sign>0,t,tau-t)
 
 def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     """
@@ -4817,24 +4868,40 @@ if __name__ == '__main__':
     #print(masses([0.5,0.6]))
 
     #
-    r=[10,10]
-    xi=[0.35,0.35]
-    q=[0.8,0.8]
-    chi1=[1,1]
-    chi2=[1,1]
-    J=[1,1]
-    u=[1/10,1/10]
-    theta1=[1,1]
-    theta2=[1,1]
-    S=[0.3,0.3]
-    t=[0,100]
+    r=[10,10][0]
+    xi=[0.35,0.35][0]
+    q=[0.8,0.8][0]
+    chi1=[1,1][0]
+    chi2=[1,1][0]
+    J=[1,1][0]
+    u=[1/10,1/10][0]
+    theta1=[1,1][0]
+    theta2=[1,1][0]
+    S=[0.3,0.35][0]
+    t=[0,100][0]
 
+    Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
 
-    print(eval_phiL(t,J,r,xi,q,chi1,chi2))
+    tau = Speriod(J,r,xi,q,chi1,chi2)
+    t= np.linspace(0,np.squeeze(tau),100)
+    S = Soft(t,np.tile(J,t.shape),np.tile(r,t.shape),np.tile(xi,t.shape),np.tile(q,t.shape),np.tile(chi1,t.shape),np.tile(chi2,t.shape))
+    print(t)
+    print(S)
+
+    Snew = np.linspace(np.squeeze(Sminus),np.squeeze(Splus),100)
+    tnew = tofS(Snew,np.tile(J,Snew.shape),np.tile(r,Snew.shape),np.tile(xi,Snew.shape),np.tile(q,Snew.shape),np.tile(chi1,Snew.shape),np.tile(chi2,Snew.shape),sign = np.tile(-1,Snew.shape))
+    print(tnew)
+    print(Snew)
+    #
+    # print(tnew)
+    # print(Snew)
+    #
+    # pritn
+
+    #print(eval_phiL(t,J,r,xi,q,chi1,chi2))
 
     #
     # #t0=time.time()
-    # #print(S2roots(J,r,xi,q,chi1,chi2))
     # #print(time.time()-t0)
     # #sys.exit()
     #
