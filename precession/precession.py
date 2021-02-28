@@ -148,16 +148,8 @@ def wraproots(coefficientfunction, *args,**kwargs):
     """
 
     coeffs= coefficientfunction(*args,**kwargs)
-
-    # This is with a simple for loop
-    #sols = np.array([np.sort_complex(np.roots(x)) for x in coeffs.T])
-    # This avoids a for loop but is not reliable because it enforces the same dtype to all outputs, including float vs complex
-    #sols = np.sort_complex(np.apply_along_axis(np.roots,0,coeffs).T)
-    # Native numpy vectorization
     sols = np.sort_complex(roots_vec(coeffs.T))
-
     sols = np.real(np.where(np.isreal(sols),sols,np.nan))
-
 
     return sols
 
@@ -165,7 +157,7 @@ def wraproots(coefficientfunction, *args,**kwargs):
 @np.vectorize
 def ellippi(n,phi,m):
     """
-    Incomplete elliptic integral of the third kind. At the time of writing, this has not been implemented in scipy yet; here wrapping the sympy implementation.
+    Incomplete elliptic integral of the third kind. At the time of writing, this has not been implemented in scipy yet; here wrapping the sympy implementation. For the complete integral, set phi=np.pi/2.
 
     Call
     ----
