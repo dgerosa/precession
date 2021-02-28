@@ -180,7 +180,6 @@ def ellippi(n,phi,m):
 
     return float(elliptic_pi(n,phi,m))
 
-
 #### Definitions ####
 
 def eval_m1(q):
@@ -3432,13 +3431,13 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
 
 #### Precessional timescale dynamics ####
 
-def Speriod_prefactor(r,xi,q):
+def derS_prefactor(r,xi,q):
     """
     Numerical prefactor to the precession period.
 
     Call
     ----
-    coeff = Speriod_prefactor(r,xi,q)
+    coeff = derS_prefactor(r,xi,q)
 
     Parameters
     ----------
@@ -3451,17 +3450,17 @@ def Speriod_prefactor(r,xi,q):
 
     Returns
     -------
-    coeff: float
-    	Coefficient.
+    mathcalA: float
+    	Prefactor in the dSdt equation.
     """
 
     r=np.atleast_1d(r)
     xi=np.atleast_1d(xi)
 
     eta=eval_eta(q)
-    coeff = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
+    mathcalA = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
 
-    return coeff
+    return mathcalA
 
 
 # TODO: Here we use S2 for square...
@@ -3496,7 +3495,7 @@ def dS2dtsquared(S,J,r,xi,q,chi1,chi2):
     	Squared first derivative of the squared total spin.
     """
 
-    mathcalA = Speriod_prefactor(r,xi,q)
+    mathcalA = derS_prefactor(r,xi,q)
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
     dS2dt2 = - mathcalA**2 * (S**2-Splus2) * (S**2-Sminus2) * (S**2-S32)
 
@@ -3572,6 +3571,7 @@ def dSdt(S,J,r,xi,q,chi1,chi2):
     return dS2dt(S,J,r,xi,q,chi1,chi2) / (2*S)
 
 
+# TODO: use precomputedroots in here?
 def elliptic_parameter(Sminus2,Splus2,S32):
     """
     Parameter m entering elliptic functiosn for the evolution of S.
@@ -3595,10 +3595,48 @@ def elliptic_parameter(Sminus2,Splus2,S32):
     	Parameter of elliptic function(s).
     """
 
+    Sminus2=np.atleast_1d(Sminus2)
+    Splus2=np.atleast_1d(Splus2)
+    S32=np.atleast_1d(S32)
+
     m = (Splus2-Sminus2)/(Splus2-S32)
 
     return m
 
+#TODO: docstrings
+# TODO: use precomputedroots in here?
+def elliptic_amplitude(S,Sminus2,Splus2):
+
+    S=np.atleast_1d(S)
+    Sminus2=np.atleast_1d(Sminus2)
+    Splus2=np.atleast_1d(Splus2)
+
+    phi = np.arccos( ( (S**2 - Sminus2) / (Splus2 - Sminus2) )**0.5 )
+
+    return phi
+
+#TODO: docstrings
+def elliptic_characheristic(Sminus2,Splus2,J,L,sign):
+
+    Sminus2 = np.atleast_1d(Sminus2)
+    Splus2 = np.atleast_1d(Splus2)
+    J = np.atleast_1d(J)
+    L = np.atleast_1d(L)
+
+    n = (Splus2 - Sminus2)/(Splus2- (J +np.sign(sign)*L)**2)
+
+    return n
+
+# TODO: docstrings
+def time_normalization(Splus2,S32,r,xi,q):
+
+    Splus2=np.atleast_1d(Splus2)
+    S32=np.atleast_1d(S32)
+
+    mathcalA= derS_prefactor(r,xi,q)
+    mathcalT = 2/(mathcalA*(Splus2-S32)**0.5)
+
+    return mathcalT
 
 def Speriod(J,r,xi,q,chi1,chi2, precomputedroots = None):
     """
@@ -3632,11 +3670,10 @@ def Speriod(J,r,xi,q,chi1,chi2, precomputedroots = None):
     	Nutation period.
     """
 
-    mathcalA=Speriod_prefactor(r,xi,q)
-
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
+    mathcalT = time_normalization(Splus2,S32,r,xi,q)
     m = elliptic_parameter(Sminus2,Splus2,S32)
-    tau = 4*scipy.special.ellipk(m) / (mathcalA* (Splus2-S32)**0.5)
+    tau = 2*mathcalT*scipy.special.ellipk(m)
 
     return tau
 
@@ -3678,27 +3715,25 @@ def Soft(t,J,r,xi,q,chi1,chi2, precomputedroots=None):
 
 
     t=np.atleast_1d(t)
-    mathcalA=Speriod_prefactor(r,xi,q)
-
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
-
+    mathcalT = time_normalization(Splus2,S32,r,xi,q)
     m = elliptic_parameter(Sminus2,Splus2,S32)
 
-    sn,_,dn,_ = scipy.special.ellipj(t.T*mathcalA*(Splus2-S32)**0.5/2,m)
+    sn,_,dn,_ = scipy.special.ellipj(t.T/mathcalT,m)
     Ssq = Sminus2 + (Splus2-Sminus2)*((Sminus2-S32)/(Splus2-S32)) *(sn/dn)**2
     S=Ssq.T**0.5
 
     return S
 
 
-def tofS(S,J,r,xi,q,chi1,chi2,precomputedroots=None,sign=1):
+def tofS(S,J,r,xi,q,chi1,chi2,sign=1,precomputedroots=None,):
     """
     Time t as a function of S (without radiation reaction). Only covers half of a precession cycle, assuming t=0 at S=S- and t=tau/2 at S=S+. Set sign=-1 to cover the second half, i.e. from t=tau/2 at S=S+ to t=tau at S=S-.
     For optimization purposes, the flag `precomputedroots` can be used to pass the outputs of S2roots instead of recomputing them.
 
     Call
     ----
-    t = tofS(S,J,r,xi,q,chi1,chi2,precomputedroots=None,sign=1)
+    t = tofS(S,J,r,xi,q,chi1,chi2,sign=1,precomputedroots=None)
 
     Parameters
     ----------
@@ -3716,10 +3751,10 @@ def tofS(S,J,r,xi,q,chi1,chi2,precomputedroots=None,sign=1):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    precomputedroots: array, optional (default: None)
-    	Output of S2roots.
     sign: integer, optional (default: 1)
     	Sign, either +1 or -1.
+    precomputedroots: array, optional (default: None)
+    	Output of S2roots.
 
     Returns
     -------
@@ -3731,12 +3766,13 @@ def tofS(S,J,r,xi,q,chi1,chi2,precomputedroots=None,sign=1):
 
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
 
-    mathcalA=Speriod_prefactor(r,xi,q)
     m = elliptic_parameter(Sminus2,Splus2,S32)
-    phi = np.arccos( ( (S**2 - Sminus2) / (Splus2 - Sminus2) )**0.5 )
-    t = 2* ( scipy.special.ellipk(m) - scipy.special.ellipkinc(phi, m) ) / (mathcalA * (Splus2-S32)**0.5)
+    mathcalT = time_normalization(Splus2,S32,r,xi,q)
+    phi = elliptic_amplitude(S,Sminus2,Splus2)
+    tau = Speriod(J,r,xi,q,chi1,chi2,precomputedroots=np.stack([Sminus2,Splus2,S32]))
+    t = tau/2 - np.sign(sign)*mathcalT*scipy.special.ellipkinc(phi, m)
 
-    return np.where(sign>0,t,tau-t)
+    return t
 
 def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     """
@@ -3774,14 +3810,14 @@ def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     """
 
     # Compute the S roots only once and pass them to both functions
-    precomputedroots = S2roots(J,r,xi,q,chi1,chi2)
+    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2)
 
-    tau = Speriod(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
+    tau = Speriod(J,r,xi,q,chi1,chi2,precomputedroots=np.stack([Sminus2,Splus2,S32]))
     # For each binary, generate N samples between 0 and tau.
     t = np.random.uniform(size=tau.size*N).reshape((tau.size,N)) * tau[:,None]
     # Note the special broadcasting rules of Soft, see Soft.__docs__
     # S has shape (M,N).
-    S = Soft(t,J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
+    S = Soft(t,J,r,xi,q,chi1,chi2,precomputedroots=np.stack([Sminus2,Splus2,S32]))
 
     # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
     # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
@@ -4261,7 +4297,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
 
     if method == 'quadrature':
         Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
-        mathcalA = Speriod_prefactor(r, xi ,q)
+        mathcalA = derS_prefactor(r, xi ,q)
         m = elliptic_parameter(Sminus2,Splus2,S32)
         # This is proportional to tau, takes care of the denominator
         tau_prop = scipy.special.ellipk(m) / ((Splus2-S32)**0.5)
@@ -4795,6 +4831,23 @@ def frequency_prefactor(J,r,xi,q,chi1,chi2):
 
     return np.stack([mathcalC0,mathcalCplus,mathcalCminus])
 
+def azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None):
+
+    J=np.atleast_1d(J)
+    L = eval_L(r,q)
+
+    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
+
+    mathcalC0,mathcalCplus, mathcalCminus = frequency_prefactor(J,r,xi,q,chi1,chi2)
+    mathcalT = time_normalization(Splus2,S32,r,xi,q)
+
+    mathcalC0prime = mathcalT*mathcalC0
+    mathcalCplusprime = -mathcalT*mathcalC0*mathcalCplus/( Splus2 - (J+L)**2 )
+    mathcalCminusprime = -mathcalT*mathcalC0*mathcalCminus/( Splus2 - (J-L)**2 )
+
+    return np.stack([mathcalC0prime,mathcalCplusprime,mathcalCminusprime])
+
+
 def eval_omegaL(S,J,r,xi,q,chi1,chi2):
 
     S=np.atleast_1d(S)
@@ -4808,42 +4861,38 @@ def eval_omegaL(S,J,r,xi,q,chi1,chi2):
     return OmegaL
 
 
-# TODO: this only covers half of a precession cycle. Implement the other half with a sign argument
-def eval_phiL(S,J,r,xi,q,chi1,chi2, precomputedroots=None):
+# TODO docstrings
+def eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=None):
 
-    S=np.atleast_1d(S)
-    J=np.atleast_1d(J)
     L = eval_L(r,q)
-
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
-
-    mathcalA=Speriod_prefactor(r,xi,q)
     m = elliptic_parameter(Sminus2,Splus2,S32)
-    phi = np.arccos( ( (S**2 - Sminus2) / (Splus2 - Sminus2) )**0.5 )
-    mathcalC0, mathcalCplus, mathcalCminus =  frequency_prefactor(J,r,xi,q,chi1,chi2)
-    nplus = (Splus2 - Sminus2) / ( Splus2 - (J+L)**2 )
-    nminus = (Splus2 - Sminus2) / ( Splus2 - (J-L)**2 )
+    nplus = elliptic_characheristic(Sminus2,Splus2,J,L,+1)
+    nminus = elliptic_characheristic(Sminus2,Splus2,J,L,-1)
+    mathcalC0prime,mathcalCplusprime,mathcalCminusprime = azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=np.stack([Sminus2,Splus2,S32]))
 
-    phiL = (2*mathcalC0/(mathcalA * (Splus2-S32)**0.5)) * (            \
-        scipy.special.ellipk(m) - scipy.special.ellipkinc(phi, m) + \
-        ( mathcalCplus /  ( Splus2 - (J+L)**2 )) * (                \
-        ellippi(nplus,phi,m) - ellippi(nplus,np.pi/2,m) ) +         \
-        ( mathcalCminus /  ( Splus2 - (J-L)**2 )) * (               \
-        ellippi(nminus,phi,m) - ellippi(nminus,np.pi/2,m) )         \
-        )
+    alpha = 2*(mathcalC0prime*scipy.special.ellipk(m) + mathcalCplusprime*ellippi(nplus,np.pi/2,m)  + mathcalCminusprime*ellippi(nminus,np.pi/2,m))
+
+    return alpha
+
+# TODO: this only covers half of a precession cycle. Implement the other half with a sign argument
+def eval_phiL(S,J,r,xi,q,chi1,chi2, precomputedroots=None,sign=+1):
+
+    L = eval_L(r,q)
+    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
+    alpha = eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=np.stack([Sminus2,Splus2,S32]))
+    m = elliptic_parameter(Sminus2,Splus2,S32)
+    phi = elliptic_amplitude(S,Sminus2,Splus2)
+    nplus = elliptic_characheristic(Sminus2,Splus2,J,L,+1)
+    nminus = elliptic_characheristic(Sminus2,Splus2,J,L,-1)
+    mathcalC0prime,mathcalCplusprime,mathcalCminusprime = azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=np.stack([Sminus2,Splus2,S32]))
+
+    phiL = alpha/2 -np.sign(sign)*(mathcalC0prime*scipy.special.ellipkinc(phi,m) + mathcalCplusprime*ellippi(nplus,phi,m)  + mathcalCminusprime*ellippi(nminus,phi,m))
 
     return phiL
 
 
-def eval_alpha(J,r,xi,q,chi1,chi2):
 
-    precomputedroots = S2roots(J,r,xi,q,chi1,chi2)
-    Sminus2,Splus2,S32 = precomputedroots
-    Splus = Splus2**0.5
-
-    alpha = 2*eval_phiL(Splus,J,r,xi,q,chi1,chi2, precomputedroots=precomputedroots)
-
-    return alpha
 
 
 if __name__ == '__main__':
@@ -4875,35 +4924,43 @@ if __name__ == '__main__':
     S=[0.3,0.3][0]
     t=[0,100][0]
 
+    # r=[10,10]
+    # xi=[0.35,0.35]
+    # q=[0.8,0.8]
+    # chi1=[1,1]
+    # chi2=[1,1]
+    # J=[1,1]
+    # u=[1/10,1/10]
+    # theta1=[1,1]
+    # theta2=[1,1]
+    # S=[0.3,0.3]
+    # t=[0,100]
+
+
     Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
-    #
-    # tau = Speriod(J,r,xi,q,chi1,chi2)
-    # t= np.linspace(0,np.squeeze(tau),100)
-    # S = Soft(t,np.tile(J,t.shape),np.tile(r,t.shape),np.tile(xi,t.shape),np.tile(q,t.shape),np.tile(chi1,t.shape),np.tile(chi2,t.shape))
-    # print(t)
-    # print(S)
-    #
-    # Snew = np.linspace(np.squeeze(Sminus),np.squeeze(Splus),100)
-    # tnew = tofS(Snew,np.tile(J,Snew.shape),np.tile(r,Snew.shape),np.tile(xi,Snew.shape),np.tile(q,Snew.shape),np.tile(chi1,Snew.shape),np.tile(chi2,Snew.shape),sign = np.tile(-1,Snew.shape))
-    # print(tnew)
-    # print(Snew)
-    #
-    # print(tnew)
-    # print(Snew)
-    #
-    # pritn
-    S=np.linspace(np.squeeze(Sminus),np.squeeze(Splus),200)
+
+    tau = Speriod(J,r,xi,q,chi1,chi2)
+    #print(tau)
+
+    #print(tofS(Sminus,J,r,xi,q,chi1,chi2,sign=-1))
+
+    # print(eval_alpha(J,r,xi,q,chi1,chi2))
+    # print(2*eval_phiL(Splus,J,r,xi,q,chi1,chi2,sign=1))
+
+    #t= np.linspace(0,np.squeeze(tau),100)
+    #S = Soft(t,np.tile(J,t.shape),np.tile(r,t.shape),np.tile(xi,t.shape),np.tile(q,t.shape),np.tile(chi1,t.shape),np.tile(chi2,t.shape))
+    #print(t)
+    #print(S)
+
+    S = np.linspace(np.squeeze(Sminus),np.squeeze(Splus),100)
+    t = tofS(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(xi,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape),sign = np.tile(1,S.shape))
+
+    phiL = eval_phiL(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(xi,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape))
+
+
     print(S)
-    print(eval_phiL(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(xi,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape)))
-    #print(eval_phiL(Sminus,J,r,xi,q,chi1,chi2))
-    #print(eval_phiL(Splus,J,r,xi,q,chi1,chi2))
-    #print(eval_alpha(J,r,xi,q,chi1,chi2))
-    #
-    # #t0=time.time()
-    # #print(time.time()-t0)
-    # #sys.exit()
-    #
-    # print(eval_OmegaL(S,J,r,xi,q,chi1,chi2))
+    print(t)
+    print(phiL)
 
 
     #print(omegasq_aligned(r, q, chi1, chi2, ['uu','ud']))
