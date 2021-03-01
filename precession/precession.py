@@ -2,15 +2,18 @@
 precession
 """
 
-import sys, os, time, warnings
+
+import warnings
 import numpy as np
-import scipy.special, scipy.integrate
+import scipy.special
+import scipy.integrate
 from sympy import elliptic_pi
+
 
 def roots_vec(p):
     """
-    Vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p] but faster.
-    Credits: https://stackoverflow.com/a/35853977
+    Vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p]
+    but faster. Credits: https://stackoverflow.com/a/35853977
 
     Call
     ----
@@ -19,7 +22,7 @@ def roots_vec(p):
     Parameters
     ----------
     p: array
-    	Polynomial coefficients.
+        Polynomial coefficients.
 
     Returns
     -------
@@ -30,8 +33,8 @@ def roots_vec(p):
     p = np.atleast_1d(p)
     n = p.shape[-1]
     A = np.zeros(p.shape[:1] + (n-1, n-1), float)
-    A[...,1:,:-1] = np.eye(n-2)
-    A[...,0,:] = -p[...,1:]/p[...,None,0]
+    A[..., 1:, :-1] = np.eye(n-2)
+    A[..., 0, :] = -p[..., 1:]/p[..., None, 0]
     return np.linalg.eigvals(A)
 
 def norm_nested(x):
@@ -179,6 +182,36 @@ def ellippi(n,phi,m):
     """
 
     return float(elliptic_pi(n,phi,m))
+
+
+def rotate_zaxis(vec,angle):
+    """
+    Rotate series of arrays along the z axis of a given angle. Input vec has shape (N,3) and input angle has shape (N,).
+
+    Call
+    ----
+        newvec = rotate_zaxis(vec,angle)
+
+    Parameters
+    ----------
+    vec: array
+        Input array.
+    angle: float
+        Rotation angle.
+
+    Returns
+    -------
+    newvec: array
+        Rotated array.
+
+    """
+
+    newx = vec[:,0]*np.cos(angle) - vec[:,1]*np.sin(angle)
+    newy = vec[:,0]*np.sin(angle) + vec[:,1]*np.cos(angle)
+    newz = vec[:,2]
+    newvec = np.transpose([newx,newy,newz])
+
+    return newvec
 
 #### Definitions ####
 
@@ -1455,13 +1488,13 @@ def xiresonances(J,r,q,chi1,chi2):
 
 
 def anglesresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
-    '''
+    """
     Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
 
 
     Provide either
 
-    '''
+    """
     q=np.atleast_1d(q)
 
     if J is None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
@@ -4802,9 +4835,9 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
 
 def inspiral(*args, which=None,**kwargs):
-    '''
+    """
     TODO write docstings. This is the ultimate wrapper the user should call.
-    '''
+    """
 
     # Precession-averaged integrations
     if which in ['precession','precav','precessionaveraged','precessionaverage','precession-averaged','precession-average']:
@@ -4896,6 +4929,10 @@ def eval_phiL(S,J,r,xi,q,chi1,chi2, precomputedroots=None,sign=+1):
 
 
 if __name__ == '__main__':
+
+    import sys
+    import os
+    import time
     np.set_printoptions(threshold=sys.maxsize)
 
     #print(normalize_nested(Lh))
@@ -4924,22 +4961,60 @@ if __name__ == '__main__':
     S=[0.3,0.3][0]
     t=[0,100][0]
 
-    # r=[10,10]
-    # xi=[0.35,0.35]
-    # q=[0.8,0.8]
-    # chi1=[1,1]
-    # chi2=[1,1]
-    # J=[1,1]
-    # u=[1/10,1/10]
-    # theta1=[1,1]
-    # theta2=[1,1]
-    # S=[0.3,0.3]
-    # t=[0,100]
+    # Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
+    # print(Lvec,S1vec,S2vec)
+    #
+    # phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
+    # print(phiL)
+    #
+    # def rotation_zaxis(angle):
+    #     rotmatrix = np.array([ [np.cos(angle), -np.sin(angle), 0],\
+    #                          [np.sin(angle),  np.cos(angle), 0],\
+    #                          [0            ,  0            , 1]])
+    #     return rotmatrix
+    #
+    #
+    # print(np.dot(rotation_zaxis(np.squeeze(phiL)),np.squeeze(Lvec)))
+    #
+    # print('more')
 
+    r=[10,10]
+    xi=[0.35,0.35]
+    q=[0.8,0.8]
+    chi1=[1,1]
+    chi2=[1,1]
+    J=[1,1]
+    u=[1/10,1/10]
+    theta1=[1,1]
+    theta2=[1,1]
+    S=[0.3,0.3]
+    t=[0,100]
 
-    Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
+    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
+    print(Lvec)
+    phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
+    print(phiL)
 
-    tau = Speriod(J,r,xi,q,chi1,chi2)
+    def rotate_zaxis(vec,angle):
+
+        newx = vec[:,0]*np.cos(angle) - vec[:,1]*np.sin(angle)
+        newy = vec[:,0]*np.sin(angle) + vec[:,1]*np.cos(angle)
+        newz = vec[:,2]
+        newvec = np.transpose([newx,newy,newz])
+
+        return newvec
+
+    phiL=0.01
+    Lvec = rotate_zaxis(Lvec,phiL)
+    S1vec = rotate_zaxis(S1vec,phiL)
+    S2vec = rotate_zaxis(S2vec,phiL)
+    print(Lvec)
+
+    #print(rotation_zaxis(phiL))
+
+    #Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
+
+    #tau = Speriod(J,r,xi,q,chi1,chi2)
     #print(tau)
 
     #print(tofS(Sminus,J,r,xi,q,chi1,chi2,sign=-1))
@@ -4952,15 +5027,15 @@ if __name__ == '__main__':
     #print(t)
     #print(S)
 
-    S = np.linspace(np.squeeze(Sminus),np.squeeze(Splus),100)
-    t = tofS(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(xi,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape),sign = np.tile(1,S.shape))
-
-    phiL = eval_phiL(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(xi,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape))
-
-
-    print(S)
-    print(t)
-    print(phiL)
+    # S = np.linspace(np.squeeze(Sminus),np.squeeze(Splus),100)
+    # t = tofS(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(xi,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape),sign = np.tile(1,S.shape))
+    #
+    # phiL = eval_phiL(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(xi,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape))
+    #
+    #
+    # print(S)
+    # print(t)
+    # print(phiL)
 
 
     #print(omegasq_aligned(r, q, chi1, chi2, ['uu','ud']))
