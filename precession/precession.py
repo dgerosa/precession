@@ -3462,6 +3462,31 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
     return np.stack([Lvec, S1vec, S2vec])
 
 
+# TODO: docstrings. ``Inertial'' is a frame that is equal to the Jframe only at S=S- but does not co-precesses with L
+def conserved_to_inertial(S,J,r,xi,q,chi1,chi2):
+
+    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
+    phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
+
+    Lvec = rotate_zaxis(Lvec,phiL)
+    S1vec = rotate_zaxis(S1vec,phiL)
+    S2vec = rotate_zaxis(S2vec,phiL)
+
+    return np.stack([Lvec, S1vec, S2vec])
+
+# TODO: docstrings. ``Inertial'' is a frame that is equal to the Jframe only at S=S- but does not co-precesses with L
+def angles_to_inertial(theta1,theta2,deltaphi,r,q,chi1,chi2):
+
+    Lvec,S1vec,S2vec = angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
+    phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
+
+    Lvec = rotate_zaxis(Lvec,phiL)
+    S1vec = rotate_zaxis(S1vec,phiL)
+    S2vec = rotate_zaxis(S2vec,phiL)
+
+    return np.stack([Lvec, S1vec, S2vec])
+
+
 #### Precessional timescale dynamics ####
 
 def derS_prefactor(r,xi,q):
