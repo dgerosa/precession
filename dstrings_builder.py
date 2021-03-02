@@ -38,6 +38,8 @@ def descr(varname,vardef=None):
     lookup['u']=["float","Compactified separation 1/(2L)"]
     lookup['varphi']=["float","Generalized nutation coordinate (Eq 9 in arxiv:1506.03492)."]
     lookup['sign']=["integer","Sign, either +1 or -1"]
+    lookup['cyclesign']=["integer","Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi)"]
+
     lookup['theta1']=["float","Angle between orbital angular momentum and primary spin"]
     lookup['theta2']=["float","Angle between orbital angular momentum and secondary spin"]
     lookup['theta12']=["float","Angle between the two spins"]

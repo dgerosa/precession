@@ -2172,13 +2172,13 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
     return xi
 
 
-def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
+def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
     """
     Evaluate the nutation parameter varphi.
 
     Call
     ----
-    varphi = eval_varphi(S,J,r,xi,q,chi1,chi2,sign = 1)
+    varphi = eval_varphi(S,J,r,xi,q,chi1,chi2,cyclesign=-1)
 
     Parameters
     ----------
@@ -2196,8 +2196,8 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    sign: integer, optional (default: 1)
-    	Sign, either +1 or -1.
+    cyclesign: integer, optional (default: -1)
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
 
     Returns
     -------
@@ -2205,11 +2205,12 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
     	Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
     """
 
+
     S=np.atleast_1d(S)
     J=np.atleast_1d(J)
     xi=np.atleast_1d(xi)
     q=np.atleast_1d(q)
-    sign=np.atleast_1d(sign)
+    cyclesign=np.atleast_1d(cyclesign)
 
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
@@ -2224,7 +2225,9 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, sign=1):
     ( ( S1 + -1 * S2 ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( S )**( 2 ) + ( ( \
     S1 + S2 ) )**( 2 ) ) )**( 1/2 ) )
 
-    varphi = np.arccos(cosvarphi) * sign
+    # If cosvarphi is very close but slighly outside [-1,1], assume either -1 or 1.
+    cosvarphi= np.where(np.logical_and(np.abs(cosvarphi)>1,np.isclose(np.abs(cosvarphi),1)),np.sign(cosvarphi),cosvarphi)
+    varphi = - np.arccos(cosvarphi) * cyclesign
 
     return varphi
 
@@ -2497,13 +2500,13 @@ def eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
     return cosdeltaphi
 
 
-def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
+def eval_deltaphi(S,J,r,xi,q,chi1,chi2,cyclesign=-1):
     """
     Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].
 
     Call
     ----
-    deltaphi = eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign = +1)
+    deltaphi = eval_deltaphi(S,J,r,xi,q,chi1,chi2,cyclesign=-1)
 
     Parameters
     ----------
@@ -2521,8 +2524,8 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    sign: integer, optional (default: +1)
-    	Sign, either +1 or -1.
+    cyclesign: integer, optional (default: -1)
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
 
     Returns
     -------
@@ -2530,9 +2533,10 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=+1):
     	Angle between the projections of the two spins onto the orbital plane.
     """
 
-    sign = np.atleast_1d(sign)
+
+    cyclesign = np.atleast_1d(cyclesign)
     cosdeltaphi=eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
-    deltaphi = np.sign(sign)*np.arccos(cosdeltaphi)
+    deltaphi = -np.sign(cyclesign)*np.arccos(cosdeltaphi)
 
     return deltaphi
 
@@ -3001,14 +3005,13 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     return morphs
 
 
-def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
+def conserved_to_angles(S,J,r,xi,q,chi1,chi2,cyclesign=+1):
     """
     Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi).
-    Setting sign=+1 (default) returns deltaphi in [0, pi], setting sign=-1 returns deltaphi in [-pi,0].
 
     Call
     ----
-    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign = +1)
+    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,xi,q,chi1,chi2,cyclesign=+1)
 
     Parameters
     ----------
@@ -3026,8 +3029,8 @@ def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    sign: integer, optional (default: +1)
-    	Sign, either +1 or -1.
+    cyclesign: integer, optional (default: +1)
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
 
     Returns
     -------
@@ -3041,7 +3044,7 @@ def conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1):
 
     theta1=eval_theta1(S,J,r,xi,q,chi1,chi2)
     theta2=eval_theta2(S,J,r,xi,q,chi1,chi2)
-    deltaphi=eval_deltaphi(S,J,r,xi,q,chi1,chi2,sign=sign)
+    deltaphi=eval_deltaphi(S,J,r,xi,q,chi1,chi2,cyclesign=cyclesign)
 
     return np.stack([theta1,theta2,deltaphi])
 
@@ -3203,6 +3206,20 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q):
 
 # TODO: write function to get theta12 from theta1,theta2 and deltaphi
 
+
+#Todo docstrings. Here using a simpler but equivalent expression compared to the multitimescale paper
+# Cyclesign is the sign of dS/dt which is opposite the sign of deltaphi
+def eval_cyclesign(Lvec, S1vec, S2vec):
+
+    Lvec = np.atleast_2d(Lvec)
+    S1vec = np.atleast_2d(S1vec)
+    S2vec = np.atleast_2d(S2vec)
+
+    cyclesign = -np.sign(dot_nested(S1vec,np.cross(S2vec,Lvec)))
+
+    return cyclesign
+
+
 def vectors_to_angles(Lvec, S1vec, S2vec):
     """
     Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi). The convention for the sign of deltaphi is given in Eq. (2d) of arxiv:1506.03492.
@@ -3246,13 +3263,13 @@ def vectors_to_angles(Lvec, S1vec, S2vec):
     S2crL = np.cross(S2vec, Lvec)
 
     absdeltaphi = np.arccos(dot_nested(normalize_nested(S1crL), normalize_nested(S2crL)))
-    signdeltaphi = np.sign(dot_nested(Lvec,np.cross(S1crL,S2crL)))
-    deltaphi = absdeltaphi*signdeltaphi
+    cyclesign = eval_cyclesign(Lvec, S1vec, S2vec)
+    deltaphi = -absdeltaphi*cyclesign
 
     return np.stack([theta1, theta2, deltaphi])
 
 
-def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
+def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
     """
     Convert the conserved quantities (S,J,xi) to angular momentum vectors (L,S1,S2) in the frame
     aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
@@ -3288,12 +3305,13 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2):
     	Cartesian vector of the secondary spin.
     """
 
+
     S=np.atleast_1d(S)
     J=np.atleast_1d(J)
 
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
-    varphi = eval_varphi(S, J, r, xi, q, chi1, chi2)
+    varphi = eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
     thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
 
     Lx = L * np.sin(thetaL)
@@ -3360,7 +3378,8 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
 
     S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
-    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
+    #sign(dS/dt) = - sign(deltaphi)
+    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign = -np.sign(deltaphi))
 
     return np.stack([Lvec, S1vec, S2vec])
 
@@ -3463,10 +3482,10 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
 
 
 # TODO: docstrings. ``Inertial'' is a frame that is equal to the Jframe only at S=S- but does not co-precesses with L
-def conserved_to_inertial(S,J,r,xi,q,chi1,chi2):
+def conserved_to_inertial(S,J,r,xi,q,chi1,chi2,cyclesign=1):
 
-    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
-    phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
+    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2,cyclesign=cyclesign)
+    phiL= eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=cyclesign)
 
     Lvec = rotate_zaxis(Lvec,phiL)
     S1vec = rotate_zaxis(S1vec,phiL)
@@ -3477,12 +3496,9 @@ def conserved_to_inertial(S,J,r,xi,q,chi1,chi2):
 # TODO: docstrings. ``Inertial'' is a frame that is equal to the Jframe only at S=S- but does not co-precesses with L
 def angles_to_inertial(theta1,theta2,deltaphi,r,q,chi1,chi2):
 
-    Lvec,S1vec,S2vec = angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
-    phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
-
-    Lvec = rotate_zaxis(Lvec,phiL)
-    S1vec = rotate_zaxis(S1vec,phiL)
-    S2vec = rotate_zaxis(S2vec,phiL)
+    deltaphi=np.atleast_1d(deltaphi)
+    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
+    Lvec, S1vec, S2vec= conserved_to_inertial(S,J,r,xi,q,chi1,chi2,cyclesign=-np.sign(deltaphi))
 
     return np.stack([Lvec, S1vec, S2vec])
 
@@ -3561,13 +3577,13 @@ def dS2dtsquared(S,J,r,xi,q,chi1,chi2):
 
 
 # Change name to this function, otherwise is identical to the returned variable.
-def dS2dt(S,J,r,xi,q,chi1,chi2):
+def dS2dt(S,J,r,xi,q,chi1,chi2,cyclesign=1):
     """
     Time derivative of the squared total spin, on the precession timescale.
 
     Call
     ----
-    dS2dt = dS2dt(S,J,r,xi,q,chi1,chi2)
+    dS2dt = dS2dt(S,J,r,xi,q,chi1,chi2,cyclesign=1)
 
     Parameters
     ----------
@@ -3585,6 +3601,8 @@ def dS2dt(S,J,r,xi,q,chi1,chi2):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: 1)
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. One has sign(deltaphi)=sign(varphi)=-sign(dS/dt).
 
     Returns
     -------
@@ -3592,7 +3610,9 @@ def dS2dt(S,J,r,xi,q,chi1,chi2):
     	Time derivative of the squared total spin.
     """
 
-    return dS2dtsquared(S,J,r,xi,q,chi1,chi2)**0.5
+    cyclesign =np.atleast_1d(cyclesign)
+
+    return cyclesign*dS2dtsquared(S,J,r,xi,q,chi1,chi2)**0.5
 
 # Change name to this function, otherwise is identical to the returned variable.
 def dSdt(S,J,r,xi,q,chi1,chi2):
@@ -3673,7 +3693,7 @@ def elliptic_amplitude(S,Sminus2,Splus2):
 
     return phi
 
-#TODO: docstrings
+#TODO: docstrings. Sign here is not cyclesign!
 def elliptic_characheristic(Sminus2,Splus2,J,L,sign):
 
     Sminus2 = np.atleast_1d(Sminus2)
@@ -3783,15 +3803,16 @@ def Soft(t,J,r,xi,q,chi1,chi2, precomputedroots=None):
 
     return S
 
+# TODO: Careful here with sign and cyclesign
 
-def tofS(S,J,r,xi,q,chi1,chi2,sign=1,precomputedroots=None,):
+def tofS(S,J,r,xi,q,chi1,chi2,cyclesign=1,precomputedroots=None,):
     """
     Time t as a function of S (without radiation reaction). Only covers half of a precession cycle, assuming t=0 at S=S- and t=tau/2 at S=S+. Set sign=-1 to cover the second half, i.e. from t=tau/2 at S=S+ to t=tau at S=S-.
     For optimization purposes, the flag `precomputedroots` can be used to pass the outputs of S2roots instead of recomputing them.
 
     Call
     ----
-    t = tofS(S,J,r,xi,q,chi1,chi2,sign=1,precomputedroots=None)
+    t = tofS(S,J,r,xi,q,chi1,chi2,cyclesign=1,precomputedroots=None)
 
     Parameters
     ----------
@@ -3809,8 +3830,8 @@ def tofS(S,J,r,xi,q,chi1,chi2,sign=1,precomputedroots=None,):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    sign: integer, optional (default: 1)
-    	Sign, either +1 or -1.
+    cyclesign: integer, optional (default: 1)
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
     precomputedroots: array, optional (default: None)
     	Output of S2roots.
 
@@ -3828,7 +3849,7 @@ def tofS(S,J,r,xi,q,chi1,chi2,sign=1,precomputedroots=None,):
     mathcalT = time_normalization(Splus2,S32,r,xi,q)
     phi = elliptic_amplitude(S,Sminus2,Splus2)
     tau = Speriod(J,r,xi,q,chi1,chi2,precomputedroots=np.stack([Sminus2,Splus2,S32]))
-    t = tau/2 - np.sign(sign)*mathcalT*scipy.special.ellipkinc(phi, m)
+    t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
 
     return t
 
@@ -4790,11 +4811,13 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
         # User provides J, xi, and S.
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is not None and kappa is None and xi is not None:
+            #TODO: how do I set cyclesign here?
             Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
 
         # User provides kappa, xi, and S.
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is None and kappa is not None and xi is not None:
             J = eval_J(kappa=kappa,r=r[0],q=q)
+            #TODO: how do I set cyclesign here?
             Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
 
         else:
@@ -4933,8 +4956,9 @@ def eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=None):
 
     return alpha
 
-# TODO: this only covers half of a precession cycle. Implement the other half with a sign argument
-def eval_phiL(S,J,r,xi,q,chi1,chi2, precomputedroots=None,sign=+1):
+# TODO: Careful here with sign and cyclesign
+
+def eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=1, precomputedroots=None,sign=+1):
 
     L = eval_L(r,q)
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
@@ -4945,7 +4969,7 @@ def eval_phiL(S,J,r,xi,q,chi1,chi2, precomputedroots=None,sign=+1):
     nminus = elliptic_characheristic(Sminus2,Splus2,J,L,-1)
     mathcalC0prime,mathcalCplusprime,mathcalCminusprime = azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=np.stack([Sminus2,Splus2,S32]))
 
-    phiL = alpha/2 -np.sign(sign)*(mathcalC0prime*scipy.special.ellipkinc(phi,m) + mathcalCplusprime*ellippi(nplus,phi,m)  + mathcalCminusprime*ellippi(nminus,phi,m))
+    phiL = alpha/2 -np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi,m) + mathcalCplusprime*ellippi(nplus,phi,m)  + mathcalCminusprime*ellippi(nminus,phi,m))
 
     return phiL
 
@@ -4974,17 +4998,19 @@ if __name__ == '__main__':
     #print(masses([0.5,0.6]))
 
     #
-    r=[10,10][0]
-    xi=[0.35,0.35][0]
-    q=[0.8,0.8][0]
-    chi1=[1,1][0]
-    chi2=[1,1][0]
-    J=[1,1][0]
-    u=[1/10,1/10][0]
-    theta1=[1,1][0]
-    theta2=[1,1][0]
-    S=[0.3,0.3][0]
-    t=[0,100][0]
+    # r=[10,10][0]
+    # xi=[0.35,0.35][0]
+    # q=[0.8,0.8][0]
+    # chi1=[1,1][0]
+    # chi2=[1,1][0]
+    # J=[1,1][0]
+    # u=[1/10,1/10][0]
+    # theta1=[1,1][0]
+    # theta2=[1,1][0]
+    # S=[0.3,0.3][0]
+    # t=[0,100][0]
+
+
 
     # Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
     # print(Lvec,S1vec,S2vec)
@@ -5003,37 +5029,60 @@ if __name__ == '__main__':
     #
     # print('more')
 
-    r=[10,10]
-    xi=[0.35,0.35]
-    q=[0.8,0.8]
-    chi1=[1,1]
-    chi2=[1,1]
-    J=[1,1]
-    u=[1/10,1/10]
-    theta1=[1,1]
-    theta2=[1,1]
-    S=[0.3,0.3]
-    t=[0,100]
+    # r=[10,10]
+    # xi=[0.35,0.35]
+    # q=[0.8,0.8]
+    # chi1=[1,1]
+    # chi2=[1,1]
+    # J=[1,1]
+    # u=[1/10,1/10]
+    # theta1=[1,1]
+    # theta2=[1,1]
+    # S=[0.3,0.3]
+    # t=[0,100]
 
-    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
-    print(Lvec)
-    phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
-    print(phiL)
+    # Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
+    # print(Lvec)
+    # phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
+    # print(phiL)
+    #
+    # def rotate_zaxis(vec,angle):
+    #
+    #     newx = vec[:,0]*np.cos(angle) - vec[:,1]*np.sin(angle)
+    #     newy = vec[:,0]*np.sin(angle) + vec[:,1]*np.cos(angle)
+    #     newz = vec[:,2]
+    #     newvec = np.transpose([newx,newy,newz])
+    #
+    #     return newvec
+    #
+    # phiL=0.01
+    # Lvec = rotate_zaxis(Lvec,phiL)
+    # S1vec = rotate_zaxis(S1vec,phiL)
+    # S2vec = rotate_zaxis(S2vec,phiL)
+    # print(Lvec)
+    r=10
+    xi=0.35
+    q=0.8
+    chi1=1
+    chi2=1
+    J=1
 
-    def rotate_zaxis(vec,angle):
+    Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
+    S =np.linspace(np.squeeze(Sminus),np.squeeze(Splus),100)
+    r=np.tile(r,S.shape)
+    xi=np.tile(xi,S.shape)
+    q=np.tile(q,S.shape)
+    chi1=np.tile(chi1,S.shape)
+    chi2=np.tile(chi2,S.shape)
+    J=np.tile(J,S.shape)
 
-        newx = vec[:,0]*np.cos(angle) - vec[:,1]*np.sin(angle)
-        newy = vec[:,0]*np.sin(angle) + vec[:,1]*np.cos(angle)
-        newz = vec[:,2]
-        newvec = np.transpose([newx,newy,newz])
 
-        return newvec
+    Lvec, S1vec,S2vec = conserved_to_inertial(S,J,r,xi,q,chi1,chi2)
 
-    phiL=0.01
-    Lvec = rotate_zaxis(Lvec,phiL)
-    S1vec = rotate_zaxis(S1vec,phiL)
-    S2vec = rotate_zaxis(S2vec,phiL)
-    print(Lvec)
+
+    eval_cyclesign(Lvec, S1vec, S2vec)
+
+    print(S1vec[0])
 
     #print(rotation_zaxis(phiL))
 
@@ -5042,7 +5091,7 @@ if __name__ == '__main__':
     #tau = Speriod(J,r,xi,q,chi1,chi2)
     #print(tau)
 
-    #print(tofS(Sminus,J,r,xi,q,chi1,chi2,sign=-1))
+        #print(tofS(Sminus,J,r,xi,q,chi1,chi2,sign=-1))
 
     # print(eval_alpha(J,r,xi,q,chi1,chi2))
     # print(2*eval_phiL(Splus,J,r,xi,q,chi1,chi2,sign=1))
