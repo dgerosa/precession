@@ -5,6 +5,7 @@ precession
 
 import warnings
 import numpy as np
+import numexpr
 import scipy.special
 import scipy.integrate
 from sympy import elliptic_pi
@@ -12,8 +13,8 @@ from sympy import elliptic_pi
 
 def roots_vec(p):
     """
-    Vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p]
-    but faster. Credits: https://stackoverflow.com/a/35853977
+    Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
+    Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977
 
     Call
     ----
@@ -35,6 +36,7 @@ def roots_vec(p):
     A = np.zeros(p.shape[:1] + (n-1, n-1), float)
     A[..., 1:, :-1] = np.eye(n-2)
     A[..., 0, :] = -p[..., 1:]/p[..., None, 0]
+
     return np.linalg.eigvals(A)
 
 def norm_nested(x):
@@ -1758,6 +1760,65 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     xi + ( kappa + q * kappa ) ) ) ) ) )
 
     return np.stack([coeff3, coeff2, coeff1, coeff0])
+
+
+
+
+def Scubic_coefficients_fast(kappa,u,xi,q,chi1,chi2):
+    """
+    Coefficients of the cubic equation in S^2 that identifies the effective potentials.
+
+    Call
+    ----
+    coeff3,coeff2,coeff1,coeff0 = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    kappa: float
+    	Regularized angular momentum (J^2-L^2)/(2L).
+    u: float
+    	Compactified separation 1/(2L).
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    coeff3: float
+    	Coefficient to the x^3 term in polynomial.
+    coeff2: float
+    	Coefficient to the x^2 term in polynomial.
+    coeff1: float
+    	Coefficient to the x^1 term in polynomial.
+    coeff0: float
+    	Coefficient to the x^0 term in polynomial.
+    """
+
+    kappa=np.atleast_1d(kappa)
+    u=np.atleast_1d(u)
+    xi=np.atleast_1d(xi)
+    q=np.atleast_1d(q)
+
+    S1 = numexpr.evaluate("chi1*(1/(1+q))**2")
+    S2 = numexpr.evaluate("chi2*(q/(1+q))**2")
+
+
+    coeff3 = numexpr.evaluate("q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )")
+
+    coeff2 = numexpr.evaluate("( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( 1/4 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) + -1 * q * ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) ) ")
+
+    coeff1 = numexpr.evaluate("( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( u * ( -1 * q * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * ( xi + -2 * kappa ) + ( q * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * ( xi + -2 * kappa ) + ( 2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * kappa + -2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * kappa ) ) ) + q * ( kappa * ( -1 * xi + kappa ) + ( ( q )**( 2 ) * kappa * ( -1 * xi + kappa ) + q * ( ( xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) ) ")
+
+    coeff0 = numexpr.evaluate("1/4 * ( -1 + ( q )**( 2 ) ) * ( ( -1 + ( q )**( 2 ) ) * ( S1 )**( 4 ) + ( ( -1 + ( q )**( 2 ) ) * ( S2 )**( 4 ) + ( -4 * ( S2 )**( 2 ) * kappa * ( -1 * q * xi + ( kappa + q * kappa ) ) + ( S1 )**( 2 ) * ( -2 * ( -1 + ( q )**( 2 ) ) * ( S2 )**( 2 ) + 4 * q * kappa * ( -1 * xi + ( kappa + q * kappa ) ) ) ) ) ) ")
+
+
+    return np.stack([coeff3, coeff2, coeff1, coeff0])
+
 
 
 # TODO: this is a case where we use 2 for square.
@@ -5008,7 +5069,6 @@ def eval_omegaL(S,J,r,xi,q,chi1,chi2):
     return OmegaL
 
 
-# TODO docstrings
 def eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=None):
     """
     Compute the azimuthal angle spanned by L about J during an entire nutation cycle.
@@ -5052,7 +5112,6 @@ def eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=None):
 
     return alpha
 
-# TODO: docstrings
 def eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=1, precomputedroots=None):
     """
     Compute the azimuthal angle spanned by L about J. This is the integral of the frequency OmegaL.
@@ -5189,24 +5248,24 @@ if __name__ == '__main__':
     # S1vec = rotate_zaxis(S1vec,phiL)
     # S2vec = rotate_zaxis(S2vec,phiL)
     # print(Lvec)
-    r=10
-    xi=0.35
-    q=0.8
-    chi1=1
-    chi2=1
-    J=1
-
-    Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
-    S =np.linspace(np.squeeze(Sminus),np.squeeze(Splus),1000)
-    r=np.tile(r,S.shape)
-    xi=np.tile(xi,S.shape)
-    q=np.tile(q,S.shape)
-    chi1=np.tile(chi1,S.shape)
-    chi2=np.tile(chi2,S.shape)
-    J=np.tile(J,S.shape)
-
-
-    Lvec, S1vec,S2vec = conserved_to_inertial(S,J,r,xi,q,chi1,chi2)
+    # r=10
+    # xi=0.35
+    # q=0.8
+    # chi1=1
+    # chi2=1
+    # J=1
+    #
+    # Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
+    # S =np.linspace(np.squeeze(Sminus),np.squeeze(Splus),1000)
+    # r=np.tile(r,S.shape)
+    # xi=np.tile(xi,S.shape)
+    # q=np.tile(q,S.shape)
+    # chi1=np.tile(chi1,S.shape)
+    # chi2=np.tile(chi2,S.shape)
+    # J=np.tile(J,S.shape)
+    #
+    #
+    # Lvec, S1vec,S2vec = conserved_to_inertial(S,J,r,xi,q,chi1,chi2)
 
 
     #print(rotation_zaxis(phiL))
@@ -5354,32 +5413,32 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # xi = 0.9141896967861489
-    # kappa = 0.5784355256550922
-    # r=np.logspace(2,1,1000)
-    #
-    # N=1000
-    # theta1=np.tile(theta1,(N,1))
-    # theta2=np.tile(theta2,(N,1))
-    # deltaphi=np.tile(deltaphi,(N,1))
-    # q=np.tile(q,(N,1))
-    # chi1=np.tile(chi1,(N,1))
-    # chi2=np.tile(chi2,(N,1))
-    # r=np.tile(r,(N,1))
-    #
-    #
-    # #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #print(d['xi'])
-    # import cProfile
-    # #cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","manybinaries.prof")
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa = 0.5784355256550922
+    r=np.logspace(2,1,100000)
+
+    N=100
+    theta1=np.tile(theta1,(N,1))
+    theta2=np.tile(theta2,(N,1))
+    deltaphi=np.tile(deltaphi,(N,1))
+    q=np.tile(q,(N,1))
+    chi1=np.tile(chi1,(N,1))
+    chi2=np.tile(chi2,(N,1))
+    r=np.tile(r,(N,1))
+
+
+    #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #print(d['xi'])
+    import cProfile
+    cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
     #
     # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","manybinaries.prof")
 
