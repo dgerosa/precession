@@ -3507,11 +3507,11 @@ def angles_to_inertial(theta1,theta2,deltaphi,r,q,chi1,chi2):
 
 def derS_prefactor(r,xi,q):
     """
-    Numerical prefactor to the precession period.
+    Numerical prefactor to the S derivative.
 
     Call
     ----
-    coeff = derS_prefactor(r,xi,q)
+    mathcalA = derS_prefactor(r,xi,q)
 
     Parameters
     ----------
@@ -4897,7 +4897,40 @@ def inspiral(*args, which=None,**kwargs):
     else:
         raise ValueError("`which` needs to be either `precav` or `orbav`.")
 
+
+
 def frequency_prefactor(J,r,xi,q,chi1,chi2):
+    """
+    Numerical prefactors entering the precession frequency.
+
+    Call
+    ----
+    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor(J,r,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    mathcalC0: float
+    	Prefactor in the OmegaL equation.
+    mathcalCplus: float
+    	Prefactor in the OmegaL equation.
+    mathcalCminus: float
+    	Prefactor in the OmegaL equation.
+    """
 
     J=np.atleast_1d(J)
     xi =np.atleast_1d(xi)
@@ -4913,6 +4946,39 @@ def frequency_prefactor(J,r,xi,q,chi1,chi2):
     return np.stack([mathcalC0,mathcalCplus,mathcalCminus])
 
 def azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None):
+    """
+    Numerical prefactors entering the precession frequency.
+
+    Call
+    ----
+    mathcalC0prime,mathcalCplusprime,mathcalCminusprime = azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None)
+
+    Parameters
+    ----------
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+    	Output of S2roots.
+
+    Returns
+    -------
+    mathcalC0prime: float
+    	Prefactor in the PhiL equation.
+    mathcalCplusprime: float
+    	Prefactor in the PhiL equation.
+    mathcalCminusprime: float
+    	Prefactor in the PhiL equation.
+    """
 
     J=np.atleast_1d(J)
     L = eval_L(r,q)
@@ -4944,6 +5010,36 @@ def eval_omegaL(S,J,r,xi,q,chi1,chi2):
 
 # TODO docstrings
 def eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=None):
+    """
+    Compute the azimuthal angle spanned by L about J during an entire nutation cycle.
+
+    Call
+    ----
+    alpha = eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=None)
+
+    Parameters
+    ----------
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+    	Output of S2roots.
+
+    Returns
+    -------
+    alpha: float
+    	Azimuthal angle spanned by L about J during an entire cycle.
+    """
+
 
     L = eval_L(r,q)
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
@@ -4956,9 +5052,42 @@ def eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=None):
 
     return alpha
 
-# TODO: Careful here with sign and cyclesign
+# TODO: docstrings
+def eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=1, precomputedroots=None):
+    """
+    Compute the azimuthal angle spanned by L about J. This is the integral of the frequency OmegaL.
 
-def eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=1, precomputedroots=None,sign=+1):
+    Call
+    ----
+    phiL = eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=1,precomputedroots=None)
+
+    Parameters
+    ----------
+    S: float
+    	Magnitude of the total spin.
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: 1)
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
+    precomputedroots: array, optional (default: None)
+    	Output of S2roots.
+
+    Returns
+    -------
+    phiL: float
+    	Azimuthal angle spanned by L about J.
+    """
+
 
     L = eval_L(r,q)
     Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=precomputedroots)
@@ -5068,7 +5197,7 @@ if __name__ == '__main__':
     J=1
 
     Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
-    S =np.linspace(np.squeeze(Sminus),np.squeeze(Splus),100)
+    S =np.linspace(np.squeeze(Sminus),np.squeeze(Splus),1000)
     r=np.tile(r,S.shape)
     xi=np.tile(xi,S.shape)
     q=np.tile(q,S.shape)
@@ -5079,10 +5208,6 @@ if __name__ == '__main__':
 
     Lvec, S1vec,S2vec = conserved_to_inertial(S,J,r,xi,q,chi1,chi2)
 
-
-    eval_cyclesign(Lvec, S1vec, S2vec)
-
-    print(S1vec[0])
 
     #print(rotation_zaxis(phiL))
 

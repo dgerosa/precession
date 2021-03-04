@@ -126,6 +126,16 @@ def descr(varname,vardef=None):
     lookup['vinitial']=["float","Initial value of the newtonian orbital velocity"]
     lookup['vfinal']=["float","Final value of the newtonian orbital velocity"]
 
+    lookup['mathcalC0']=["float","Prefactor in the OmegaL equation"]
+    lookup['mathcalCplus']=["float","Prefactor in the OmegaL equation"]
+    lookup['mathcalCminus']=["float","Prefactor in the OmegaL equation"]
+
+    lookup['mathcalC0prime']=["float","Prefactor in the PhiL equation"]
+    lookup['mathcalCplusprime']=["float","Prefactor in the PhiL equation"]
+    lookup['mathcalCminusprime']=["float","Prefactor in the PhiL equation"]
+    lookup['alpha']=['float', "Azimuthal angle spanned by L about J during an entire cycle"]
+    lookup['phiL']=['float', "Azimuthal angle spanned by L about J"]
+    lookup['Omega']=['float', "Precession frequency of L about J"]
 
     if varname in lookup:
         pass
