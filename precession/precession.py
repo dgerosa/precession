@@ -4453,7 +4453,6 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
         def _compute(Sminus2, Splus2, S32, *sargs):
             return scipy.integrate.quad(_integrand, Sminus2**0.5, Splus2**0.5,args=(Sminus2, Splus2, S32,*sargs))[0]
 
-
         func_av = np.array(list(map(_compute,Sminus2, Splus2, S32, *args))) / tau_prop
 
     elif method == 'montecarlo':
