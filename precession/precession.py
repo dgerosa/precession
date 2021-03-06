@@ -4395,39 +4395,38 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
 #TODO: does this work on arrays? Yes but only if func is wihtout args and kwargs. Not sure sure how to generalize it
 # TODO: docstrings
-
-def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadrature', Nsamples = 1e4, **kwargs):
+def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadrature', Nsamples = 1e4):
     """
-    Average a function over a precession cycle.
+    Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported. Two integration methods are implemented
+    - method='quadrature' uses scipy.integrate.quad. This is set by default and should be preferred.
+    - method='montecarlo' samples t(S) and approximate the integral with a Monte Carlo sum. The number of samples can be specifed by Nsamples.
+
+    Call
+    ----
+    func_av = precession_average(J,r,xi,q,chi1,chi2,func,*args,method='quadrature',Nsamples=1e4)
 
     Parameters
     ----------
     J: float
-        Magnitude of the total angular momentum.
-
+    	Magnitude of the total angular momentum.
     r: float
-        Binary separation.
-
+    	Binary separation.
     xi: float
-        Effective spin.
-
+    	Effective spin.
     q: float
-        Mass ratio: 0 <= q <= 1.
-
+    	Mass ratio: 0<=q<=1.
     chi1: float
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     func: function
-        Function to precession-average, with call func(S**2, *args, **kwargs).
-
+        Function to precession-average.
     *args: tuple
         Extra arguments to pass to func.
-
-    **kwargs: tuple
-        Extra keyword arguments to pass to func.
+    method: string (default: 'quadrature')
+    	Either 'quadrature' or 'montecarlo'
+    Nsamples: integer (default: 1e4)
+    	Number of Monte Carlo samples.
 
     Returns
     -------
@@ -4436,27 +4435,31 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
     """
 
     if method == 'quadrature':
+
         Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
-        mathcalA = derS_prefactor(r, xi ,q)
         m = elliptic_parameter(Sminus2,Splus2,S32)
         # This is proportional to tau, takes care of the denominator
         tau_prop = scipy.special.ellipk(m) / ((Splus2-S32)**0.5)
 
+        # Each args needs to be iterable
+        args = [np.atleast_1d(a) for a in args]
+
         # Compute the numerator explicitely
-        def _integrand(S,Sminus2,Splus2,S32):
+        def _integrand(S,Sminus2,Splus2,S32,*sargs):
             # This is proportional to dSdt
             dSdt_prop = (-(S**2-Splus2) * (S**2-Sminus2) * (S**2-S32))**0.5 /S
-            return func(S, *args, **kwargs) / dSdt_prop
+            return func(S, *sargs) / dSdt_prop
 
-        def _compute(Sminus2, Splus2, S32):
-            return scipy.integrate.quad(_integrand, Sminus2**0.5, Splus2**0.5,args=(Sminus2, Splus2, S32))[0]
+        def _compute(Sminus2, Splus2, S32, *sargs):
+            return scipy.integrate.quad(_integrand, Sminus2**0.5, Splus2**0.5,args=(Sminus2, Splus2, S32,*sargs))[0]
 
-        func_av = np.array(list(map(_compute,Sminus2, Splus2, S32))) / tau_prop
+
+        func_av = np.array(list(map(_compute,Sminus2, Splus2, S32, *args))) / tau_prop
 
     elif method == 'montecarlo':
 
-        S = Ssampling(J,r,xi,q,chi1,chi2,N=int(Nsamples))
-        evals = func(S, *args, **kwargs)
+        S = np.transpose(Ssampling(J,r,xi,q,chi1,chi2,N=int(Nsamples)))
+        evals = np.transpose(func(S, *args))
         func_av = np.sum(evals,axis=-1)/Nsamples
         func_av = np.atleast_1d(func_av)
 
@@ -5425,20 +5428,20 @@ if __name__ == '__main__':
     kappa = 0.5784355256550922
     r=np.logspace(2,1,100000)
 
-    N=100
-    theta1=np.tile(theta1,(N,1))
-    theta2=np.tile(theta2,(N,1))
-    deltaphi=np.tile(deltaphi,(N,1))
-    q=np.tile(q,(N,1))
-    chi1=np.tile(chi1,(N,1))
-    chi2=np.tile(chi2,(N,1))
-    r=np.tile(r,(N,1))
-
-
-    #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #print(d['xi'])
-    import cProfile
-    cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
+    # N=100
+    # theta1=np.tile(theta1,(N,1))
+    # theta2=np.tile(theta2,(N,1))
+    # deltaphi=np.tile(deltaphi,(N,1))
+    # q=np.tile(q,(N,1))
+    # chi1=np.tile(chi1,(N,1))
+    # chi2=np.tile(chi2,(N,1))
+    # r=np.tile(r,(N,1))
+    #
+    #
+    # #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # #print(d['xi'])
+    # import cProfile
+    # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
     #
     # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","manybinaries.prof")
 
@@ -5447,15 +5450,48 @@ if __name__ == '__main__':
     # print(S2av(J, r[0], xi, q, chi1, chi2))
     #
     #
-    # print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='montecarlo'))
+    #print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='montecarlo'))
     #
     #
     # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='montecarlo'))
     #
     #
-    # print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='quadrature'))
-    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='quadrature'))
+
+    def func(S,x,y):
+        return x*y+S**2
+
+    x=np.array([1,2])
+    y=np.array([1,2])
+    print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0],y[0], method='quadrature'))
+    print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0],y[0], method='montecarlo'))
+
+    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='quadrature'))
+    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='montecarlo'))
     #
+
+    def func(S,x):
+        return x+S**2
+
+    x=np.array([1,2])
+    print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0], method='quadrature'))
+    print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0], method='montecarlo'))
+
+    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='quadrature'))
+    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='montecarlo'))
+
+
+    def func(S):
+        return S**2
+
+    print(precession_average(J, r[0], xi, q, chi1, chi2, func, method='quadrature'))
+    print(precession_average(J, r[0], xi, q, chi1, chi2, func, method='montecarlo'))
+
+    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature'))
+
+    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func, method='montecarlo'))
+
+    #
+
     #
     # sys.exit()
 
