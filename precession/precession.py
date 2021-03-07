@@ -5,7 +5,7 @@ precession
 
 import warnings
 import numpy as np
-import numexpr
+#import numexpr
 import scipy.special
 import scipy.integrate
 from sympy import elliptic_pi
@@ -1763,61 +1763,62 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
 
 
 
-
-def Scubic_coefficients_fast(kappa,u,xi,q,chi1,chi2):
-    """
-    Coefficients of the cubic equation in S^2 that identifies the effective potentials.
-
-    Call
-    ----
-    coeff3,coeff2,coeff1,coeff0 = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
-
-    Parameters
-    ----------
-    kappa: float
-    	Regularized angular momentum (J^2-L^2)/(2L).
-    u: float
-    	Compactified separation 1/(2L).
-    xi: float
-    	Effective spin.
-    q: float
-    	Mass ratio: 0<=q<=1.
-    chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
-    chi2: float
-    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    coeff3: float
-    	Coefficient to the x^3 term in polynomial.
-    coeff2: float
-    	Coefficient to the x^2 term in polynomial.
-    coeff1: float
-    	Coefficient to the x^1 term in polynomial.
-    coeff0: float
-    	Coefficient to the x^0 term in polynomial.
-    """
-
-    kappa=np.atleast_1d(kappa)
-    u=np.atleast_1d(u)
-    xi=np.atleast_1d(xi)
-    q=np.atleast_1d(q)
-
-    S1 = numexpr.evaluate("chi1*(1/(1+q))**2")
-    S2 = numexpr.evaluate("chi2*(q/(1+q))**2")
-
-
-    coeff3 = numexpr.evaluate("q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )")
-
-    coeff2 = numexpr.evaluate("( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( 1/4 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) + -1 * q * ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) ) ")
-
-    coeff1 = numexpr.evaluate("( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( u * ( -1 * q * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * ( xi + -2 * kappa ) + ( q * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * ( xi + -2 * kappa ) + ( 2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * kappa + -2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * kappa ) ) ) + q * ( kappa * ( -1 * xi + kappa ) + ( ( q )**( 2 ) * kappa * ( -1 * xi + kappa ) + q * ( ( xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) ) ")
-
-    coeff0 = numexpr.evaluate("1/4 * ( -1 + ( q )**( 2 ) ) * ( ( -1 + ( q )**( 2 ) ) * ( S1 )**( 4 ) + ( ( -1 + ( q )**( 2 ) ) * ( S2 )**( 4 ) + ( -4 * ( S2 )**( 2 ) * kappa * ( -1 * q * xi + ( kappa + q * kappa ) ) + ( S1 )**( 2 ) * ( -2 * ( -1 + ( q )**( 2 ) ) * ( S2 )**( 2 ) + 4 * q * kappa * ( -1 * xi + ( kappa + q * kappa ) ) ) ) ) ) ")
-
-
-    return np.stack([coeff3, coeff2, coeff1, coeff0])
+#
+# def Scubic_coefficients_fast(kappa,u,xi,q,chi1,chi2):
+#     """
+#     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
+#
+#     Call
+#     ----
+#     coeff3,coeff2,coeff1,coeff0 = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+#
+#     Parameters
+#     ----------
+#     kappa: float
+#     	Regularized angular momentum (J^2-L^2)/(2L).
+#     u: float
+#     	Compactified separation 1/(2L).
+#     xi: float
+#     	Effective spin.
+#     q: float
+#     	Mass ratio: 0<=q<=1.
+#     chi1: float
+#     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+#     chi2: float
+#     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+#
+#     Returns
+#     -------
+#     coeff3: float
+#     	Coefficient to the x^3 term in polynomial.
+#     coeff2: float
+#     	Coefficient to the x^2 term in polynomial.
+#     coeff1: float
+#     	Coefficient to the x^1 term in polynomial.
+#     coeff0: float
+#     	Coefficient to the x^0 term in polynomial.
+#     """
+#
+#     kappa=np.atleast_1d(kappa)
+#     u=np.atleast_1d(u)
+#     xi=np.atleast_1d(xi)
+#     q=np.atleast_1d(q)
+#
+#     S1 = numexpr.evaluate("chi1*(1/(1+q))**2")
+#     S2 = numexpr.evaluate("chi2*(q/(1+q))**2")
+#
+#
+#     coeff3 = numexpr.evaluate("q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )")
+#
+#     coeff2 = numexpr.evaluate("( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( 1/4 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) + -1 * q * ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) ) ")
+#
+#     coeff1 = numexpr.evaluate("( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( u * ( -1 * q * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * ( xi + -2 * kappa ) + ( q * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * ( xi + -2 * kappa ) + ( 2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * kappa + -2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * kappa ) ) ) + q * ( kappa * ( -1 * xi + kappa ) + ( ( q )**( 2 ) * kappa * ( -1 * xi + kappa ) + q * ( ( xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) ) ")
+#
+#     coeff0 = numexpr.evaluate("1/4 * ( -1 + ( q )**( 2 ) ) * ( ( -1 + ( q )**( 2 ) ) * ( S1 )**( 4 ) + ( ( -1 + ( q )**( 2 ) ) * ( S2 )**( 4 ) + ( -4 * ( S2 )**( 2 ) * kappa * ( -1 * q * xi + ( kappa + q * kappa ) ) + ( S1 )**( 2 ) * ( -2 * ( -1 + ( q )**( 2 ) ) * ( S2 )**( 2 ) + 4 * q * kappa * ( -1 * xi + ( kappa + q * kappa ) ) ) ) ) ) ")
+#
+#
+#     return np.stack([coeff3, coeff2, coeff1, coeff0])
+#
 
 
 
