@@ -33,30 +33,23 @@ def descr(varname,vardef=None):
     lookup['J']=["float","Magnitude of the total angular momentum"]
     lookup['S']=["float","Magnitude of the total spin"]
     lookup['Ssq']=["float","Squared magnitude of the total spin"]
-
     lookup['kappa']=["float","Regularized angular momentum (J^2-L^2)/(2L)"]
     lookup['u']=["float","Compactified separation 1/(2L)"]
     lookup['varphi']=["float","Generalized nutation coordinate (Eq 9 in arxiv:1506.03492)."]
     lookup['sign']=["integer","Sign, either +1 or -1"]
-    lookup['cyclesign']=["integer","Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi)"]
-
+    lookup['cyclesign']=["integer","Sign (either +1 or -1) to cover the two halves of a precesion cycle"]
     lookup['theta1']=["float","Angle between orbital angular momentum and primary spin"]
     lookup['theta2']=["float","Angle between orbital angular momentum and secondary spin"]
     lookup['theta12']=["float","Angle between the two spins"]
     lookup['deltaphi']=["float","Angle between the projections of the two spins onto the orbital plane"]
-
     lookup['costheta1']=["float","Cosine of the angle between orbital angular momentum and primary spin"]
     lookup['costheta2']=["float","Cosine of the angle between orbital angular momentum and secondary spin"]
     lookup['costheta12']=["float","Cosine of the angle between the two spins"]
     lookup['cosdeltaphi']=["float","Cosine of the angle between the projections of the two spins onto the orbital plane"]
-
-
     lookup['theta1inf']=["float","Asymptotic value of the angle between orbital angular momentum and primary spin"]
     lookup['theta2inf']=["float","Asymptotic value of the angle between orbital angular momentum and secondary spin"]
     lookup['costheta1inf']=["float","Cosine of the asymptotic angle between orbital angular momentum and primary spin"]
     lookup['costheta2inf']=["float","Cosine of the asymptotic angle between orbital angular momentum and secondary spin"]
-
-
     lookup['kappainf']=["float","Asymptotic value of the regularized momentum kappa"]
     lookup['t']=["float","Time"]
     lookup['m']=["float","Parameter of elliptic function(s)"]
@@ -74,7 +67,6 @@ def descr(varname,vardef=None):
     lookup['ximax']=["float","Maximum value of the effective spin xi"]
     lookup['Smin']=["float","Minimum value of the total spin S"]
     lookup['Smax']=["float","Maximum value of the total spin S"]
-
     lookup['coeff6']=["float","Coefficient to the x^6 term in polynomial"]
     lookup['coeff5']=["float","Coefficient to the x^5 term in polynomial"]
     lookup['coeff4']=["float","Coefficient to the x^4 term in polynomial"]
@@ -83,40 +75,33 @@ def descr(varname,vardef=None):
     lookup['coeff1']=["float","Coefficient to the x^1 term in polynomial"]
     lookup['coeff0']=["float","Coefficient to the x^0 term in polynomial"]
     lookup['coeff']=["float","Coefficient"]
-
     lookup['thetaL']=["float","Angle betwen orbital angular momentum and total angular momentum"]
     lookup['costhetaL']=["float","Cosine of the angle betwen orbital angular momentum and total angular momentum"]
     lookup['morph']=["string","Spin morphology"]
-
     lookup['simpler']=["boolean","If True simplifies output"]
     lookup['N']=["integer","Number of samples"]
     lookup['vec']=["array","Vector in Cartesian coomponents"]
     lookup['dS2dt2']=["float","Squared time derivative of the squared total spin."]
     lookup['dS2dt']=["float","Time derivative of the squared total spin"]
     lookup['dSdt']=["float","Time derivative of the total spin"]
-
     lookup['Sminus2']=["float","Lowest physical root, if present, of the effective potential equation"]
     lookup['Splus2']=["float","Largest physical root, if present, of the effective potential equation"]
     lookup['S32']=["float","Spurious root of the effective potential equation"]
     lookup['tau']=["float","Nutation period"]
-
     lookup['Sminus2inf']=["float","Asymptotic value of the lowest physical root, if present, of the effective potential equation"]
     lookup['Splus2inf']=["float","Asymptotic value of the largest physical root, if present, of the effective potential equation"]
     lookup['S32inf']=["float","Asymptotic value of the spurious root of the effective potential equation"]
     lookup['RHS']=["float","Right-hand side"]
     lookup['outputs']=["dictionary","Set of outputs"]
     lookup['requested_outputs']=["list","Set of outputs"]
-
     lookup['r_udp']=["float","Outer orbital separation in the up-down instability."]
     lookup['r_udm']=["float","Inner orbital separation in the up-down instability."]
     lookup['r_wide']=["float","Orbital separation where wide nutations becomes possible."]
     lookup['omegasq']=["float","Squared frequency."]
     lookup['which']=["string","Select function behavior."]
-
     lookup['allvars']=["array","Packed ODE input variables."]
     lookup['precomputedroots']=["array","Output of S2roots."]
     lookup['ODEsolution']=["array of scipy OdeSolution objects", "Solution of the ODE. Key method is .sol(t)"]
-
     lookup['kappainitial']=["float","Initial value of the regularized momentum kappa"]
     lookup['uinitial']=["float","Initial value of the compactified separation 1/(2L)"]
     lookup['ufinal']=["float","Final value of the compactified separation 1/(2L)"]
@@ -125,17 +110,17 @@ def descr(varname,vardef=None):
     lookup['S2hinitial']=["array","Initial direction of the secondary spin, unit vector"]
     lookup['vinitial']=["float","Initial value of the newtonian orbital velocity"]
     lookup['vfinal']=["float","Final value of the newtonian orbital velocity"]
-
     lookup['mathcalC0']=["float","Prefactor in the OmegaL equation"]
     lookup['mathcalCplus']=["float","Prefactor in the OmegaL equation"]
     lookup['mathcalCminus']=["float","Prefactor in the OmegaL equation"]
-
     lookup['mathcalC0prime']=["float","Prefactor in the PhiL equation"]
     lookup['mathcalCplusprime']=["float","Prefactor in the PhiL equation"]
     lookup['mathcalCminusprime']=["float","Prefactor in the PhiL equation"]
     lookup['alpha']=['float', "Azimuthal angle spanned by L about J during an entire cycle"]
     lookup['phiL']=['float', "Azimuthal angle spanned by L about J"]
-    lookup['Omega']=['float', "Precession frequency of L about J"]
+    lookup['OmegaL']=['float', "Precession frequency of L about J"]
+    lookup['full_output']=['boolean', "Return additional outputs"]
+
 
     if varname in lookup:
         pass
@@ -159,31 +144,34 @@ def descr(varname,vardef=None):
 # A tab is four spaces in standard python
 realtab='    '
 
-if True:
-    docs='\"\"\"\n'
-    #with open("precession/precession.py") as file:
-    #    sourcecode=file.readlines()
-    #
 
-    # Grab the current docstrings
-    sourcecode = eval("precession."+fun+".__doc__").split('\n')
-    sourcecode = [line.strip() for line in sourcecode]
-    if sourcecode[0]=='':
-        sourcecode=sourcecode[1:]
+foundone=False
 
-    intro=None
-    for i,line in enumerate(sourcecode):
-        if line =='' and intro is None:
-            intro="\n".join(sourcecode[0:i])
-            docs+=intro
-            if docs[-1]!=".":
-                docs+="."
-            docs+='\n\n'
+docs='\"\"\"\n'
+#with open("precession/precession.py") as file:
+#    sourcecode=file.readlines()
+#
 
+# Grab the current docstrings
+sourcecode = eval("precession."+fun+".__doc__").split('\n')
+sourcecode = [line.strip() for line in sourcecode]
+if sourcecode[0]=='':
+    sourcecode=sourcecode[1:]
 
+intro=None
+for i,line in enumerate(sourcecode):
+    if line =='' and intro is None:
+        intro="\n".join(sourcecode[0:i])
+        docs+=intro
+        if docs[-1]!=".":
+            docs+="."
+        docs+='\n\n'
 
+    if fun in line and "=" in line and "(" in line and ")" in line:
 
-        if fun in line and "=" in line and "(" in line and ")" in line:
+        # This is the first occurrence
+        if not foundone:
+
             # Remove all the space
             line= line.replace(' ','').replace('\t','')
             docs+="Call\n----\n"
@@ -213,14 +201,48 @@ if True:
             for var in outputs:
                 docs+=descr(var)
 
+            foundone=True
 
 
-    # Remove last new line
-    #docs=docs.rstrip()
-    # Indent everything
-    docs=realtab+docs.replace('\n','\n'+realtab)
-    docs+='\"\"\"\n'
+        else:
+            newdocs =''
+            for j, dline in enumerate(docs.split('\n')):
+                if fun not in dline:
+                    newdocs+=dline+"\n"
 
-    print(docs) # To screen
+                if fun in dline:
+                    newdocs+=dline+"\n"
 
-    pyperclip.copy(docs) # Copy to clipboard
+                    line= line.replace(' ','').replace('\t','')
+                    line = line.replace('=',' = ',1)
+                    newdocs+=line+"\n"
+
+                newoutputs = line.replace(' ','').split('=')[0].split(',')
+
+            firstnewoutput=True
+            for newoutput in newoutputs:
+                if newoutput not in outputs:
+                    if firstnewoutput:
+                        newdocs+="Other parameters\n-------\n"
+                        firstnewoutput=False
+                    #print(newoutput)
+                    newdocs+=descr(newoutput)
+
+                #for var in outputs:
+                #    docs+=descr(var)
+
+
+            foundone=True
+
+            docs=newdocs
+
+# Remove last new line
+#docs=docs.rstrip()
+# Indent everything
+
+docs=realtab+docs.replace('\n','\n'+realtab)
+docs+='\"\"\"\n'
+
+print(docs) # To screen
+
+pyperclip.copy(docs) # Copy to clipboard
