@@ -120,6 +120,10 @@ def descr(varname,vardef=None):
     lookup['phiL']=['float', "Azimuthal angle spanned by L about J"]
     lookup['OmegaL']=['float', "Precession frequency of L about J"]
     lookup['full_output']=['boolean', "Return additional outputs"]
+    lookup['chipterm1']=['float', "Term in effective precessing spin chip"]
+    lookup['chipterm2']=['float', "Term in effective precessing spin chip"]
+    lookup['chip']=['float', "Effective precessing spin chip"]
+    lookup['Nsamples']=['integer', "Number of Monte Carlo samples"]
 
 
     if varname in lookup:

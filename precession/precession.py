@@ -4424,12 +4424,8 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
     def _compute(theta1,theta2,deltaphi,S,J,kappa,r,u,xi,q,chi1,chi2):
 
-        if q is None:
-            raise TypeError("Please provide q.")
-        if chi1 is None:
-            raise TypeError("Please provide chi1.")
-        if chi2 is None:
-            raise TypeError("Please provide chi2.")
+        if q is None or chi1 is None or chi2 is None:
+            raise TypeError("Please provide q, chi1, and chi2.")
 
         if r is not None and u is None:
             u = eval_u(r, np.tile(q,r.shape))
@@ -4994,12 +4990,8 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
     def _compute(theta1,theta2,deltaphi,S,Lh,S1h,S2h,J,kappa,r,u,xi,q,chi1,chi2):
 
-        if q is None:
-            raise TypeError("Please provide q.")
-        if chi1 is None:
-            raise TypeError("Please provide chi1.")
-        if chi2 is None:
-            raise TypeError("Please provide chi2.")
+        if q is None or chi1 is None or chi2 is None:
+            raise TypeError("Please provide q, chi1, and chi2.")
 
         if r is not None and u is None:
             r=np.atleast_1d(r)
@@ -5311,7 +5303,268 @@ def eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=1, precomputedroots=None):
     return phiL
 
 
+def chip_terms(theta1,theta2,q,chi1,chi2):
+    """
+    Compute the two terms entering the effective precessing spin chip.
 
+    Call
+    ----
+    chipterm1,chipterm2 = chip_terms(theta1,theta2,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chipterm1: float
+    	Term in effective precessing spin chip.
+    chipterm2: float
+    	Term in effective precessing spin chip.
+    """
+
+    theta1=np.atleast_1d(theta1)
+    theta2=np.atleast_1d(theta2)
+    q=np.atleast_1d(q)
+
+    chipterm1 = chi1*np.sin(theta1)
+    omegatilde = q*(4*q+3)/(4+3*q)
+    chipterm2 = omegatilde * chi2*np.sin(theta2)
+
+    return np.stack([chipterm1,chipterm2])
+
+
+def eval_chip_heuristic(theta1,theta2,q,chi1,chi2):
+    """
+    Heuristic definition of the effective precessing spin chip (Schmidt et al 2015), see arxiv:2011.11948. This definition inconsistently averages over some, but not all, variations on the precession timescale.
+
+    Call
+    ----
+    chip = eval_chip_heuristic(theta1,theta2,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chip: float
+    	Effective precessing spin chip.
+    """
+
+
+    term1, term2 = chip_terms(theta1,theta2,q,chi1,chi2)
+    chip= np.maximum(term1,term2)
+    return chip
+
+def eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2):
+    """
+    Generalized definition of the effective precessing spin chip, see arxiv:2011.11948. This definition retains all variations on the precession timescale.
+
+    Call
+    ----
+    chip = eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+    	Angle between the projections of the two spins onto the orbital plane.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chip: float
+    	Effective precessing spin chip.
+    """
+
+    term1, term2 = chip_terms(theta1,theta2,q,chi1,chi2)
+    chip = (term1**2 + term2**2 + 2*term1*term2*np.cos(deltaphi))**0.5
+    return chip
+
+
+def eval_chip_asymptotic(theta1,theta2,q,chi1,chi2):
+    """
+    Asymptotic definition of the effective precessing spin chip, see arxiv:2011.11948. This definition is valid when spin-spin couplings can be neglected, notably at infinitely large separations.
+
+    Call
+    ----
+    chip = eval_chip_asymptotic(theta1,theta2,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chip: float
+    	Effective precessing spin chip.
+    """
+
+    term1, term2 = chip_terms(theta1,theta2,q,chi1,chi2)
+    chip = (np.abs(term1-term2) * scipy.special.ellipe(-4*term1*term2/(term1-term2)**2) + np.abs(term1+term2) * scipy.special.ellipe(4*term1*term2/(term1+term2)**2))/np.pi
+    return chip
+
+
+def eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4):
+    """
+    Averaged definition of the effective precessing spin chip, see arxiv:2011.11948. This definition consistently averages over all variations on the precession timescale. Valid inputs are one of the following (but not both)
+    - theta1, theta2, deltaphi
+    - J, xi
+    The parameters r, q, chi1, and chi2 should always be provided. The keywords arguments method and Nsamples are passed directly to `precession_average`.
+
+    Call
+    ----
+    chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+    	Angle between the projections of the two spins onto the orbital plane.
+    J: float, optional (default: None)
+    	Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+    	Binary separation.
+    xi: float, optional (default: None)
+    	Effective spin.
+    q: float, optional (default: None)
+    	Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float, optional (default: None)
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    method: string (default: 'quadrature')
+    	Either 'quadrature' or 'montecarlo'
+    Nsamples: integer (default: 1e4)
+    	Number of Monte Carlo samples.
+
+    Returns
+    -------
+    chip: float
+    	Effective precessing spin chip.
+    """
+
+    if r is None or q is None or chi1 is None or chi2 is None:
+        raise TypeError("Please provide r, q, chi1, and chi2.")
+
+    if theta1 is not None and theta2 is not None and deltaphi is not None and J is None and xi is None:
+        # cyclesign doesn't matter here. Outout S is not needed
+        _,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
+
+    elif theta1 is None and theta2 is None and deltaphi is None and J is not None and xi is not None:
+        pass
+
+    else:
+        raise TypeError("Please provide either (theta1,theta2,deltaphi) or (J,xi).")
+
+    def _integrand(S,J,r,xi,q,chi1,chi2):
+        theta1,theta2,deltaphi=conserved_to_angles(S,J,r,xi,q,chi1,chi2)
+        chip_integrand = eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)
+        return chip_integrand
+
+    chip = precession_average(J,r,xi,q,chi1,chi2, _integrand ,J,r,xi,q,chi1,chi2, method=method,Nsamples=1e4)
+
+    return chip
+
+
+def eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None,chi1=None,chi2=None,which ="averaged", method='quadrature',Nsamples=1e4):
+    """
+    Compute the effective precessing spin chip, see arxiv:2011.11948. The keyword `which` one of the following definitions:
+    - `heuristic`, as in Schmidt et al 2015. Required inputs: theta1,theta2,q,chi1,chi2
+    - `generalized`, retail all precession-timescale variations. Required inputs: theta1,theta2,deltaphi,q,chi1,chi2
+    - `asymptotic`, large-separation limit. Required inputs: theta1,theta2,q,chi1,chi2
+    - `averaged` (default), averages over all precession-timescale variations. Required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (J,r,xi,q,chi1,chi2). The additional keywords `methods` and `Nsamples` are passed to `precession_average`.
+
+    Call
+    ----
+    chip = eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None,chi1=None,chi2=None,which="averaged",method='quadrature',Nsamples=1e4)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+    	Angle between the projections of the two spins onto the orbital plane.
+    J: float, optional (default: None)
+    	Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+    	Binary separation.
+    xi: float, optional (default: None)
+    	Effective spin.
+    q: float, optional (default: None)
+    	Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float, optional (default: None)
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    which: string, optional (default: "averaged")
+    	Select function behavior.
+    method: string (default: 'quadrature')
+    	Either 'quadrature' or 'montecarlo'
+    Nsamples: integer (default: 1e4)
+    	Number of Monte Carlo samples.
+
+    Returns
+    -------
+    chip: float
+    	Effective precessing spin chip.
+    """
+
+    if which =='heuristic':
+        chip = eval_chip_heuristic(theta1,theta2,q,chi1,chi2)
+
+    elif which =='generalized':
+        chip = eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)
+
+    elif which =='asymptotic':
+        chip = eval_chip_asymptotic(theta1,theta2,q,chi1,chi2)
+
+    elif which =='averaged':
+        chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4)
+
+    else:
+        raise ValueError("`which` needs to be one of the following: `heuristic`, `generalized`, `asymptotic`, `averaged`.")
 
 
 if __name__ == '__main__':
@@ -5321,6 +5574,26 @@ if __name__ == '__main__':
     import time
     np.set_printoptions(threshold=sys.maxsize)
 
+    q=0.7
+    chi1=0.3
+    chi2=1
+    theta1=np.pi/3
+    theta2=np.pi/4
+    deltaphi=np.pi/5
+    r=10
+
+    q=[0.7,0.7]
+    chi1=[0.3,0.3]
+    chi2=[1,1]
+    theta1=[np.pi/3,np.pi/3]
+    theta2=[np.pi/4,np.pi/4]
+    deltaphi=[np.pi/5,np.pi/5]
+    r=[10,10]
+
+    print(eval_chip_heuristic(theta1,theta2,q,chi1,chi2))
+    print(eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2))
+    print(eval_chip_asymptotic(theta1,theta2,q,chi1,chi2))
+    print(eval_chip_averaged(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,method='quadrature',Nsamples=1e4))
     #print(normalize_nested(Lh))
 
 
@@ -5562,17 +5835,17 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    deltaphi=0.46
-    S = 0.5538768649231461
-    J = 2.740273008918153
-    xi = 0.9141896967861489
-    kappa = 0.5784355256550922
-    r=np.logspace(2,1,100000)
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # deltaphi=0.46
+    # S = 0.5538768649231461
+    # J = 2.740273008918153
+    # xi = 0.9141896967861489
+    # kappa = 0.5784355256550922
+    # r=np.logspace(2,1,100000)
 
     # N=100
     # theta1=np.tile(theta1,(N,1))
@@ -5603,38 +5876,38 @@ if __name__ == '__main__':
     #
     #
 
-    def func(S,x,y):
-        return x*y+S**2
-
-    x=np.array([1,2])
-    y=np.array([1,2])
-    print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0],y[0], method='quadrature'))
-    print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0],y[0], method='montecarlo'))
-
-    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='quadrature'))
-    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='montecarlo'))
+    # def func(S,x,y):
+    #     return x*y+S**2
     #
-
-    def func(S,x):
-        return x+S**2
-
-    x=np.array([1,2])
-    print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0], method='quadrature'))
-    print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0], method='montecarlo'))
-
-    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='quadrature'))
-    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='montecarlo'))
-
-
-    def func(S):
-        return S**2
-
-    print(precession_average(J, r[0], xi, q, chi1, chi2, func, method='quadrature'))
-    print(precession_average(J, r[0], xi, q, chi1, chi2, func, method='montecarlo'))
-
-    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature'))
-
-    print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func, method='montecarlo'))
+    # x=np.array([1,2])
+    # y=np.array([1,2])
+    # print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0],y[0], method='quadrature'))
+    # print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0],y[0], method='montecarlo'))
+    #
+    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='quadrature'))
+    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='montecarlo'))
+    # #
+    #
+    # def func(S,x):
+    #     return x+S**2
+    #
+    # x=np.array([1,2])
+    # print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0], method='quadrature'))
+    # print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0], method='montecarlo'))
+    #
+    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='quadrature'))
+    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='montecarlo'))
+    #
+    #
+    # def func(S):
+    #     return S**2
+    #
+    # print(precession_average(J, r[0], xi, q, chi1, chi2, func, method='quadrature'))
+    # print(precession_average(J, r[0], xi, q, chi1, chi2, func, method='montecarlo'))
+    #
+    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature'))
+    #
+    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func, method='montecarlo'))
 
     #
 
