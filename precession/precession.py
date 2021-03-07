@@ -5561,11 +5561,12 @@ def eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None
         chip = eval_chip_asymptotic(theta1,theta2,q,chi1,chi2)
 
     elif which =='averaged':
-        chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4)
+        chip = eval_chip_averaged(theta1=theta1,theta2=theta2,deltaphi=deltaphi,J=J,r=r,xi=xi,q=q,chi1=chi1,chi2=chi2,method='quadrature',Nsamples=1e4)
 
     else:
         raise ValueError("`which` needs to be one of the following: `heuristic`, `generalized`, `asymptotic`, `averaged`.")
 
+    return chip
 
 if __name__ == '__main__':
 
@@ -5590,10 +5591,10 @@ if __name__ == '__main__':
     deltaphi=[np.pi/5,np.pi/5]
     r=[10,10]
 
-    print(eval_chip_heuristic(theta1,theta2,q,chi1,chi2))
-    print(eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2))
-    print(eval_chip_asymptotic(theta1,theta2,q,chi1,chi2))
-    print(eval_chip_averaged(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,method='quadrature',Nsamples=1e4))
+    print(eval_chip(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,which='heuristic'))
+    print(eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,which='generalized'))
+    print(eval_chip(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,which='asymptotic'))
+    print(eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,method='quadrature',Nsamples=1e4,which='averaged'))
     #print(normalize_nested(Lh))
 
 
