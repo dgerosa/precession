@@ -989,7 +989,7 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
 
 def Jresonances(r,xi,q,chi1,chi2):
     """
-    Total angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes J for a given value of xi. The minimum corresponds to DeltaPhi=pi and the maximum corresponds to DeltaPhi=0.
+    Total angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes J for a given value of xi. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
 
     Call
     ----
@@ -1436,7 +1436,7 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
 
 def xiresonances(J,r,q,chi1,chi2):
     """
-    Effective spin of the two spin-orbit resonances. The resonances minimizes and maximizes xi for a given value of J. The minimum corresponds to either DeltaPhi=0 or DeltaPhi=pi, the maximum always corresponds to DeltaPhi=pi.
+    Effective spin of the two spin-orbit resonances. The resonances minimizes and maximizes xi for a given value of J. The minimum corresponds to either deltaphi=0 or deltaphi=pi, the maximum always corresponds to deltaphi=pi.
 
     Call
     ----
@@ -2258,7 +2258,7 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: -1)
-    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
 
     Returns
     -------
@@ -2288,7 +2288,7 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
 
     # If cosvarphi is very close but slighly outside [-1,1], assume either -1 or 1.
     cosvarphi= np.where(np.logical_and(np.abs(cosvarphi)>1,np.isclose(np.abs(cosvarphi),1)),np.sign(cosvarphi),cosvarphi)
-    varphi = - np.arccos(cosvarphi) * cyclesign
+    varphi = - np.arccos(cosvarphi) * np.sign(cyclesign)
 
     return varphi
 
@@ -2586,7 +2586,7 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,cyclesign=-1):
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: -1)
-    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
 
     Returns
     -------
@@ -3021,7 +3021,7 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
 
 def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     """
-    Evaluate the spin morphology and return `L0` for librating about DeltaPhi=0, `Lpi` for librating about DeltaPhi=pi, `C-` for circulating from DeltaPhi=pi to DeltaPhi=0, and `C+` for circulating from DeltaPhi=0 to DeltaPhi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
+    Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
 
     Call
     ----
@@ -3066,6 +3066,67 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     return morphs
 
 
+#Todo docstrings. Here using a simpler but equivalent expression compared to the multitimescale paper
+# Cyclesign is the sign of dS/dt which is opposite the sign of deltaphi
+def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None):
+    """
+    Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the 'sign' of a precession cycle, defined as +1 if S is increasing and -1 S is decreasing. Valid inputs are one and not more of the following:
+    - dSdt
+    - deltaphi
+    - varphi
+    - Lvec, S1vec, S2vec.
+
+    Call
+    ----
+    cyclesign = eval_cyclesign(dSdt=None,deltaphi=None,varphi=None,Lvec=None,S1vec=None,S2vec=None)
+
+    Parameters
+    ----------
+    dSdt: float, optional (default: None)
+    	Time derivative of the total spin.
+    deltaphi: float, optional (default: None)
+    	Angle between the projections of the two spins onto the orbital plane.
+    varphi: float, optional (default: None)
+    	Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
+    Lvec: array, optional (default: None)
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array, optional (default: None)
+    	Cartesian vector of the primary spin.
+    S2vec: array, optional (default: None)
+    	Cartesian vector of the secondary spin.
+
+    Returns
+    -------
+    cyclesign: integer
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    """
+
+
+
+    if dSdt is not None and deltaphi is None and varphi is None and Lvec is None and S1vec is None and S2vec is None:
+        dSdt = np.atleast_1d(dSdt)
+        cyclesign = np.sign(dSdt)
+
+    elif dSdt is None and deltaphi is not None and varphi is None and Lvec is None and S1vec is None and S2vec is None:
+        deltaphi = np.atleast_1d(deltaphi)
+        cyclesign = -np.sign(deltaphi)
+
+    elif dSdt is None and deltaphi is None and varphi is not None and Lvec is None and S1vec is None and S2vec is None:
+        varphi = np.atleast_1d(varphi)
+        cyclesign = -np.sign(varphi)
+
+    elif dSdt is None and deltaphi is None and varphi is None and Lvec is not None and S1vec is not None and S2vec is not None:
+        Lvec = np.atleast_2d(Lvec)
+        S1vec = np.atleast_2d(S1vec)
+        S2vec = np.atleast_2d(S2vec)
+        cyclesign = -np.sign(dot_nested(S1vec,np.cross(S2vec,Lvec)))
+
+    else:
+        TypeError("Please provide one and not more of the following: dSdt, deltaphi, (Lvec, S1vec, S2vec).")
+
+    return cyclesign
+
+
 def conserved_to_angles(S,J,r,xi,q,chi1,chi2,cyclesign=+1):
     """
     Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi).
@@ -3091,7 +3152,7 @@ def conserved_to_angles(S,J,r,xi,q,chi1,chi2,cyclesign=+1):
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: +1)
-    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
 
     Returns
     -------
@@ -3110,13 +3171,14 @@ def conserved_to_angles(S,J,r,xi,q,chi1,chi2,cyclesign=+1):
     return np.stack([theta1,theta2,deltaphi])
 
 
-def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
+def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False):
     """
     Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
 
     Call
     ----
-    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
+    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False)
+    S,J,xi,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
 
     Parameters
     ----------
@@ -3134,6 +3196,8 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    full_output: boolean, optional (default: False)
+    	Return additional outputs.
 
     Returns
     -------
@@ -3143,13 +3207,25 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2):
     	Magnitude of the total angular momentum.
     xi: float
     	Effective spin.
+
+    Other parameters
+    -------
+    cyclesign: integer
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
     """
+
 
     S=eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
     J=eval_J(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
     xi=eval_xi(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2)
 
-    return np.stack([S,J,xi])
+    if full_output:
+        cyclesign = eval_cyclesign(deltaphi=deltaphi)
+
+        return np.stack([S,J,xi,cyclesign])
+
+    else:
+        return np.stack([S,J,xi])
 
 
 def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
@@ -3222,14 +3298,14 @@ def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     return np.stack([theta1inf, theta2inf])
 
 
-
-def vectors_to_conserved(Lvec, S1vec, S2vec, q):
+def vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False):
     """
     Convert cartesian vectors (L,S1,S2) into conserved quantities (S,J,xi).
 
     Call
     ----
-    S,J,xi = vectors_to_conserved(Lvec,S1vec,S2vec,q)
+    S,J,xi = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=False)
+    S,J,xi,cyclesign = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=True)
 
     Parameters
     ----------
@@ -3241,6 +3317,8 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q):
     	Cartesian vector of the secondary spin.
     q: float
     	Mass ratio: 0<=q<=1.
+    full_output: boolean, optional (default: False)
+    	Return additional outputs.
 
     Returns
     -------
@@ -3250,7 +3328,13 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q):
     	Magnitude of the total angular momentum.
     xi: float
     	Effective spin.
+
+    Other parameters
+    -------
+    cyclesign: integer
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
     """
+
 
     Lvec = np.atleast_2d(Lvec)
     S1vec = np.atleast_2d(S1vec)
@@ -3263,22 +3347,15 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q):
 
     xi = dot_nested(S1vec,Lvec)/(m1*L) + dot_nested(S2vec,Lvec)/(m2*L)
 
-    return np.stack([S, J, xi])
+    if full_output:
+        cyclesign = eval_cyclesign(Lvec=Lvec,S1vec=S1vec,S2vec=S2vec)
+
+        return np.stack([S,J,xi,cyclesign])
+
+    else:
+        return np.stack([S,J,xi])
 
 # TODO: write function to get theta12 from theta1,theta2 and deltaphi
-
-
-#Todo docstrings. Here using a simpler but equivalent expression compared to the multitimescale paper
-# Cyclesign is the sign of dS/dt which is opposite the sign of deltaphi
-def eval_cyclesign(Lvec, S1vec, S2vec):
-
-    Lvec = np.atleast_2d(Lvec)
-    S1vec = np.atleast_2d(S1vec)
-    S2vec = np.atleast_2d(S2vec)
-
-    cyclesign = -np.sign(dot_nested(S1vec,np.cross(S2vec,Lvec)))
-
-    return cyclesign
 
 
 def vectors_to_angles(Lvec, S1vec, S2vec):
@@ -3438,9 +3515,8 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     	Cartesian vector of the secondary spin.
     """
 
-    S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
-    #sign(dS/dt) = - sign(deltaphi)
-    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign = -np.sign(deltaphi))
+    S, J, xi, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
+    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign = cyclesign)
 
     return np.stack([Lvec, S1vec, S2vec])
 
@@ -3501,13 +3577,13 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     return np.stack([Lvec, S1vec, S2vec])
 
 
-def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
+def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2,cyclesign=1):
     """
-    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
+    Convert the conserved quantities (S,J,xi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
 
     Call
     ----
-    Lvec,S1vec,S2vec = conserved_to_Lframe(S,J,r,xi,q,chi1,chi2)
+    Lvec,S1vec,S2vec = conserved_to_Lframe(S,J,r,xi,q,chi1,chi2,cyclesign=1)
 
     Parameters
     ----------
@@ -3525,6 +3601,8 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: 1)
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
 
     Returns
     -------
@@ -3536,14 +3614,48 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2):
     	Cartesian vector of the secondary spin.
     """
 
-    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
+    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2,cyclesign=cyclesign)
     Lvec, S1vec, S2vec = angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
 
     return np.stack([Lvec, S1vec, S2vec])
 
 
-# TODO: docstrings. ``Inertial'' is a frame that is equal to the Jframe only at S=S- but does not co-precesses with L
 def conserved_to_inertial(S,J,r,xi,q,chi1,chi2,cyclesign=1):
+    """
+    Convert the conserved quantities (S,J,xi) to angular momentum vectors (L,S1,S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = conserved_to_inertial(S,J,r,xi,q,chi1,chi2,cyclesign=1)
+
+    Parameters
+    ----------
+    S: float
+    	Magnitude of the total spin.
+    J: float
+    	Magnitude of the total angular momentum.
+    r: float
+    	Binary separation.
+    xi: float
+    	Effective spin.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: 1)
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+
+    Returns
+    -------
+    Lvec: array
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array
+    	Cartesian vector of the primary spin.
+    S2vec: array
+    	Cartesian vector of the secondary spin.
+    """
 
     Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2,cyclesign=cyclesign)
     phiL= eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=cyclesign)
@@ -3554,12 +3666,46 @@ def conserved_to_inertial(S,J,r,xi,q,chi1,chi2,cyclesign=1):
 
     return np.stack([Lvec, S1vec, S2vec])
 
-# TODO: docstrings. ``Inertial'' is a frame that is equal to the Jframe only at S=S- but does not co-precesses with L
+
 def angles_to_inertial(theta1,theta2,deltaphi,r,q,chi1,chi2):
+    """
+    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = angles_to_inertial(theta1,theta2,deltaphi,r,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+    	Angle between the projections of the two spins onto the orbital plane.
+    r: float
+    	Binary separation.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+    	Cartesian vector of the orbital angular momentum.
+    S1vec: array
+    	Cartesian vector of the primary spin.
+    S2vec: array
+    	Cartesian vector of the secondary spin.
+    """
+
 
     deltaphi=np.atleast_1d(deltaphi)
-    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
-    Lvec, S1vec, S2vec= conserved_to_inertial(S,J,r,xi,q,chi1,chi2,cyclesign=-np.sign(deltaphi))
+    S,J,xi,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
+    Lvec, S1vec, S2vec= conserved_to_inertial(S,J,r,xi,q,chi1,chi2,cyclesign=cyclesign)
 
     return np.stack([Lvec, S1vec, S2vec])
 
@@ -3892,7 +4038,7 @@ def tofS(S,J,r,xi,q,chi1,chi2,cyclesign=1,precomputedroots=None,):
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: 1)
-    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
     precomputedroots: array, optional (default: None)
     	Output of S2roots.
 
@@ -5139,7 +5285,7 @@ def eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=1, precomputedroots=None):
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: 1)
-    	Sign (either +1 or -1) to cover the two halves of a precesion cycle. Equal to sign(dS/dt)=-sign(deltaphi)=-sign(varphi).
+    	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
     precomputedroots: array, optional (default: None)
     	Output of S2roots.
 
