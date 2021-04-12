@@ -215,6 +215,20 @@ def rotate_zaxis(vec,angle):
 
     return newvec
 
+# TODO docstrings. Check if a 1d array is monotonic.
+def ismonotonic(vec,which):
+    if which=='<':
+        return np.all(vec[:-1]<vec[1:])
+    elif which=='<=':
+        return np.all(vec[:-1]<=vec[1:])
+    elif which=='>':
+        return np.all(vec[:-1]>vec[1:])
+    elif which=='>=':
+        return np.all(vec[:-1]>=vec[1:])
+    else:
+        raise ValueError("`which` needs to be one of the following: `>`, `>=`, `<`, `<=`.")
+
+
 #### Definitions ####
 
 def eval_m1(q):
@@ -3102,8 +3116,6 @@ def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None,
     	Sign (either +1 or -1) to cover the two halves of a precesion cycle.
     """
 
-
-
     if dSdt is not None and deltaphi is None and varphi is None and Lvec is None and S1vec is None and S2vec is None:
         dSdt = np.atleast_1d(dSdt)
         cyclesign = np.sign(dSdt)
@@ -3365,7 +3377,7 @@ def vectors_to_angles(Lvec, S1vec, S2vec):
 
     Call
     ----
-    theta1,theta2,deltaphi = vectors_to_angles(Lvec,S1vec,S2vec,q)
+    theta1,theta2,deltaphi = eval_cyclesign(Lvec,S1vec,S2vec,q)
 
     Parameters
     ----------
@@ -3402,7 +3414,7 @@ def vectors_to_angles(Lvec, S1vec, S2vec):
     S2crL = np.cross(S2vec, Lvec)
 
     absdeltaphi = np.arccos(dot_nested(normalize_nested(S1crL), normalize_nested(S2crL)))
-    cyclesign = eval_cyclesign(Lvec, S1vec, S2vec)
+    cyclesign = eval_cyclesign(Lvec=Lvec, S1vec=S1vec, S2vec=S2vec)
     deltaphi = -absdeltaphi*cyclesign
 
     return np.stack([theta1, theta2, deltaphi])
@@ -4428,10 +4440,10 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
             raise TypeError("Please provide q, chi1, and chi2.")
 
         if r is not None and u is None:
-            assert np.logical_or(np.all(r[1:]>=r[:-1]),np.all(r[1:]<=r[:-1])), 'r must be monotonic'
+            assert np.logical_or(ismonotonic(r,'<='),ismonotonic(r,'>=')), 'r must be monotonic'
             u = eval_u(r, np.tile(q,r.shape))
         elif r is None and u is not None:
-            assert np.logical_or(np.all(u[1:]>=u[:-1]),np.all(u[1:]<=u[:-1])), 'u must be monotonic'
+            assert np.logical_or(ismonotonic(u,'<='),ismonotonic(u,'>=')), 'u must be monotonic'
             r = eval_r(u=u, q=np.tile(q,u.shape) )
         else:
             raise TypeError("Please provide either r or u. Use np.inf for infinity.")
@@ -4994,10 +5006,10 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
             raise TypeError("Please provide q, chi1, and chi2.")
 
         if r is not None and u is None:
-            assert np.logical_or(np.all(r[1:]>=r[:-1]),np.all(r[1:]<=r[:-1])), 'r must be monotonic'
+            assert np.logical_or(ismonotonic(r,'<='),ismonotonic(r,'>=')), 'r must be monotonic'
             u = eval_u(r, np.tile(q,r.shape) )
         elif r is None and u is not None:
-            assert np.logical_or(np.all(u[1:]>=u[:-1]),np.all(u[1:]<=u[:-1])), 'u must be monotonic'
+            assert np.logical_or(ismonotonic(u,'<='),ismonotonic(u,'>=')), 'u must be monotonic'
             r = eval_r(u=u, q=np.tile(q,u.shape)  )
         else:
             raise TypeError("Please provide either r or u.")
@@ -5084,29 +5096,88 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
 def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,rswitch=None,uswitch=None, xi=None,q=None,chi1=None,chi2=None,requested_outputs=None):
 
+    # Outputs available in both orbit-averaged and precession-averaged evolutions
+    alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
+    if requested_outputs is None:
+        requested_outputs = alloutputs
+        # Return only those requested (in1d return boolean array)
+    wantoutputs = np.intersect1d(alloutputs,requested_outputs)
 
-    # TODO: THIS NOW WORKS ONLY FOR A SINGLE BINARY. WILL NEED TO BE WRAPPED INTO A _COMPUTE FUNCTION
-    if r is not None and rswitch is not None and u is None and uswitch is None:
+
+    # TODO: THIS NOW WORKS ONLY FOR A SINGLE BINARY. WILL NEED TO BE WRAPPED INTO A _COMPUTE FUNCTION FROM THIS POINT
+    if r is None and rswitch is None and u is not None and uswitch is not None:
+        r = eval_r(u=u, q=np.tile(q,u.shape))
+        rswitch = eval_r(u=uswitch, q=np.tile(q,uswitch.shape)  )
+
+    # Integrating forwards: precession average first, then orbit average
+    if ismonotonic(r,">="):
+        rpre = r[r>=rswitch]
+        rorb = r[r<rswitch]
+        rpre = np.append(rpre,rswitch)
+        rorb = np.append(rswitch,rorb)
+
+        precavevolution = inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,S=S,J=J,kappa=kappa,r=rpre,xi=xi,q=q,chi1=chi1,chi2=chi2,requested_outputs=alloutputs)
+
+        orbavevolution = inspiral_orbav(theta1=precavevolution['theta1'][-1],theta2=precavevolution['theta2'][-1],deltaphi=precavevolution['deltaphi'][-1],r=rorb,q=q,chi1=chi1,chi2=chi2,requested_outputs=alloutputs)
+
+        fullevolution = {}
+        for k in wantoutputs:
+            # Quantities that vary in both the precession-averaged and the orbit-averaged evolution
+            if k in ['theta1','theta2','deltaphi','S','J','kappa','r','u']:
+                fullevolution[k] = np.atleast_2d(np.append(precavevolution[k][:,:-1],orbavevolution[k][:,1:]))
+            # Quantities that vary only in the orbit-averaged evolution
+            if k in ['xi']:
+                fullevolution[k] = np.atleast_2d(np.append(np.tile(precavevolution[k][:],rpre[:-1].shape),orbavevolution[k][:,1:]))
+            # Quanties that do not vary
+            if k in ['q','chi1','chi2']:
+                fullevolution[k] = precavevolution[k]
 
 
-    #Here need to to the separation splitting
-    if rswitch is not None and uswitch is None:
-        rswitch=np.atleast_1d(rswitch)
-        uswitch = eval_u(rswitch, np.tile(q,rswitch.shape) )
-    elif r is None and u is not None:
-        uswitch=np.atleast_1d(uswitch)
-        rswitch = eval_r(u=uswitch, q=np.tile(qswitch,u.shape)  )
+    # Integrating backwards: orbit average first, then precession average
+    elif ismonotonic(r,"<="):
+        rorb=np.append(rorb,rswitch)
+        rpre=np.append(rswitch,rpre)
+
+        raise NotImplementedError
+
     else:
-        raise TypeError("Please provide either r or u.")
+        raise ValueError('r must be monotonic')
 
 
-    # Also need to check which outputs are requested and which are available in each step.
+    # if r is not None and rswitch is not None and u is None and uswitch is None:
+    #
+    #
+    #     rpre = r[r>=rswitch]
+    #     rorb = r[r<rswitch]
+    #     if ismonotonic(r,">="): # Forwards: precession average first, then orbit average
+    #         rpre = np.append(rpre,rswitch)
+    #         rorb = np.append(rswitch,rorb)
+    #     elif ismonotonic(r,"<="): # Backwards: orbit average first, then precession average
+    #         rorb=np.append(rorb,rswitch)
+    #         rpre=np.append(rswitch,rpre)
+    #     else:
+    #         raise ValueError('r must be monotonic')
 
 
-    earlyevolution = inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,S=S,J=J,kappa=kappa,rearly=rearly,uearly=uearly,xi=xi,q=q,chi1=chi1,chi2=chi2)
 
-    lateevolution = inspiral_orbav(theta1=DOIT,theta2=DOIT,deltaphi=DOIT,r=rlate,u-ulate, q=q,chi1=chi1,chi2=chi2,quadrupole_formula=False)
-
+    # #Here need to to the separation splitting
+    # if rswitch is not None and uswitch is None:
+    #     rswitch=np.atleast_1d(rswitch)
+    #     uswitch = eval_u(rswitch, np.tile(q,rswitch.shape) )
+    # elif r is None and u is not None:
+    #     uswitch=np.atleast_1d(uswitch)
+    #     rswitch = eval_r(u=uswitch, q=np.tile(qswitch,u.shape)  )
+    # else:
+    #     raise TypeError("Please provide either r or u.")
+    #
+    #
+    # # Also need to check which outputs are requested and which are available in each step.
+    #
+    #
+    # earlyevolution = inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,S=S,J=J,kappa=kappa,rearly=rearly,uearly=uearly,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    #
+    # lateevolution = inspiral_orbav(theta1=DOIT,theta2=DOIT,deltaphi=DOIT,r=rlate,u-ulate, q=q,chi1=chi1,chi2=chi2,quadrupole_formula=False)
+    #
 
 
 
@@ -5612,27 +5683,27 @@ if __name__ == '__main__':
     import time
     np.set_printoptions(threshold=sys.maxsize)
 
-    q=0.7
-    chi1=0.3
-    chi2=1
-    theta1=np.pi/3
-    theta2=np.pi/4
-    deltaphi=np.pi/5
-    r=10
-
-    q=[0.7,0.7]
-    chi1=[0.3,0.3]
-    chi2=[1,1]
-    theta1=[np.pi/3,np.pi/3]
-    theta2=[np.pi/4,np.pi/4]
-    deltaphi=[np.pi/5,np.pi/5]
-    r=[10,10]
-
-    print(eval_chip(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,which='heuristic'))
-    print(eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,which='generalized'))
-    print(eval_chip(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,which='asymptotic'))
-    print(eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,method='quadrature',Nsamples=1e4,which='averaged'))
-    #print(normalize_nested(Lh))
+    # q=0.7
+    # chi1=0.3
+    # chi2=1
+    # theta1=np.pi/3
+    # theta2=np.pi/4
+    # deltaphi=np.pi/5
+    # r=10
+    #
+    # q=[0.7,0.7]
+    # chi1=[0.3,0.3]
+    # chi2=[1,1]
+    # theta1=[np.pi/3,np.pi/3]
+    # theta2=[np.pi/4,np.pi/4]
+    # deltaphi=[np.pi/5,np.pi/5]
+    # r=[10,10]
+    #
+    # print(eval_chip(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,which='heuristic'))
+    # print(eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,which='generalized'))
+    # print(eval_chip(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,which='asymptotic'))
+    # print(eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,method='quadrature',Nsamples=1e4,which='averaged'))
+    # #print(normalize_nested(Lh))
 
 
     #print(eval_r(u=1, L=None, q=1))
@@ -5873,19 +5944,19 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # xi = 0.9141896967861489
-    # kappa = 0.5784355256550922
-    # r=np.logspace(2,1,100000)
-
-    # N=100
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa = 0.5784355256550922
+    r=np.logspace(2,1,100)
+    rswitch =50
+    # N=2
     # theta1=np.tile(theta1,(N,1))
     # theta2=np.tile(theta2,(N,1))
     # deltaphi=np.tile(deltaphi,(N,1))
@@ -5893,6 +5964,8 @@ if __name__ == '__main__':
     # chi1=np.tile(chi1,(N,1))
     # chi2=np.tile(chi2,(N,1))
     # r=np.tile(r,(N,1))
+    # rswitch=np.tile(rswitch,(N,1))
+
     #
     #
     # #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
@@ -5901,6 +5974,12 @@ if __name__ == '__main__':
     # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
     #
     # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","manybinaries.prof")
+    #print('x')
+    #inspiral_hybrid(q=q,r=r,rswitch=rswitch)
+    #print(inspiral_hybrid(u=np.array([0,1,2,3,4]),uswitch=np.array([2]),q=np.array([0.4])))
+    #print(inspiral_hybrid(u=[[0,1,2,3,4],[0,1,2,3,4]],uswitch=[2,2],q=[0.4,0.4]))
+
+    d= inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,rswitch=rswitch)
 
 
     #
