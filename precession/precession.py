@@ -4994,10 +4994,10 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
             raise TypeError("Please provide q, chi1, and chi2.")
 
         if r is not None and u is None:
-            r=np.atleast_1d(r)
+            assert np.logical_or(np.all(r[1:]>=r[:-1]),np.all(r[1:]<=r[:-1])), 'r must be monotonic'
             u = eval_u(r, np.tile(q,r.shape) )
         elif r is None and u is not None:
-            u=np.atleast_1d(u)
+            assert np.logical_or(np.all(u[1:]>=u[:-1]),np.all(u[1:]<=u[:-1])), 'u must be monotonic'
             r = eval_r(u=u, q=np.tile(q,u.shape)  )
         else:
             raise TypeError("Please provide either r or u.")
