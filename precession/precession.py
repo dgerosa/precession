@@ -4428,8 +4428,10 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
             raise TypeError("Please provide q, chi1, and chi2.")
 
         if r is not None and u is None:
+            assert np.logical_or(np.all(r[1:]>=r[:-1]),np.all(r[1:]<=r[:-1])), 'r must be monotonic'
             u = eval_u(r, np.tile(q,r.shape))
         elif r is None and u is not None:
+            assert np.logical_or(np.all(u[1:]>=u[:-1]),np.all(u[1:]<=u[:-1])), 'u must be monotonic'
             r = eval_r(u=u, q=np.tile(q,u.shape) )
         else:
             raise TypeError("Please provide either r or u. Use np.inf for infinity.")
@@ -4534,13 +4536,11 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     return outcome
 
 
-
-
-#TODO: does this work on arrays? Yes but only if func is wihtout args and kwargs. Not sure sure how to generalize it
-# TODO: docstrings
 def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadrature', Nsamples = 1e4):
     """
-    Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported. Two integration methods are implemented
+    Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported.
+
+    There are integration methods implemented:
     - method='quadrature' uses scipy.integrate.quad. This is set by default and should be preferred.
     - method='montecarlo' samples t(S) and approximate the integral with a Monte Carlo sum. The number of samples can be specifed by Nsamples.
 
@@ -5082,6 +5082,34 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     return outcome
 
 
+def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,rswitch=None,uswitch=None, xi=None,q=None,chi1=None,chi2=None,requested_outputs=None):
+
+
+    # TODO: THIS NOW WORKS ONLY FOR A SINGLE BINARY. WILL NEED TO BE WRAPPED INTO A _COMPUTE FUNCTION
+    if r is not None and rswitch is not None and u is None and uswitch is None:
+
+
+    #Here need to to the separation splitting
+    if rswitch is not None and uswitch is None:
+        rswitch=np.atleast_1d(rswitch)
+        uswitch = eval_u(rswitch, np.tile(q,rswitch.shape) )
+    elif r is None and u is not None:
+        uswitch=np.atleast_1d(uswitch)
+        rswitch = eval_r(u=uswitch, q=np.tile(qswitch,u.shape)  )
+    else:
+        raise TypeError("Please provide either r or u.")
+
+
+    # Also need to check which outputs are requested and which are available in each step.
+
+
+    earlyevolution = inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,S=S,J=J,kappa=kappa,rearly=rearly,uearly=uearly,xi=xi,q=q,chi1=chi1,chi2=chi2)
+
+    lateevolution = inspiral_orbav(theta1=DOIT,theta2=DOIT,deltaphi=DOIT,r=rlate,u-ulate, q=q,chi1=chi1,chi2=chi2,quadrupole_formula=False)
+
+
+
+
 
 
 def inspiral(*args, which=None,**kwargs):
@@ -5090,11 +5118,17 @@ def inspiral(*args, which=None,**kwargs):
     """
 
     # Precession-averaged integrations
-    if which in ['precession','precav','precessionaveraged','precessionaverage','precession-averaged','precession-average']:
+    if which in ['precession','precav','precessionaveraged','precessionaverage','precession-averaged','precession-average','precessionav']:
         return inspiral_precav(*args, **kwargs)
 
-    elif which in ['orbit','orbav','orbitaveraged','orbitaverage','orbit-averaged','orbit-average']:
+    elif which in ['orbit','orbav','orbitaveraged','orbitaverage','orbit-averaged','orbit-average','orbitav']:
         return inspiral_orbav(*args, **kwargs)
+
+    #elif which in ['hybrid']:
+    #    rswitch = 100
+
+    #    new_kwargs = {k: v for k, v in kwargs.items() if k in ["name"]}
+
 
     else:
         raise ValueError("`which` needs to be either `precav` or `orbav`.")
@@ -5567,6 +5601,9 @@ def eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None
         raise ValueError("`which` needs to be one of the following: `heuristic`, `generalized`, `asymptotic`, `averaged`.")
 
     return chip
+
+
+
 
 if __name__ == '__main__':
 
