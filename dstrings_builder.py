@@ -124,6 +124,8 @@ def descr(varname,vardef=None):
     lookup['chipterm2']=['float', "Term in effective precessing spin chip"]
     lookup['chip']=['float', "Effective precessing spin chip"]
     lookup['Nsamples']=['integer', "Number of Monte Carlo samples"]
+    lookup['rswitch']=["float","Matching separation between the precession- and orbit-averaged chunks"]
+    lookup['uswitch']=["float","Matching compactified separation between the precession- and orbit-averaged chunks"]
 
 
     if varname in lookup:

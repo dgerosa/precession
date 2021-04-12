@@ -5095,6 +5095,57 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
 
 def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None, xi=None,q=None,chi1=None,chi2=None,requested_outputs=None):
+    """
+    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. If integrating forward in time, perform the precession-average evolution first and then swith to orbit averaging.   If integrating backward in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0.
+    The initial conditions must be specified in terms of one an only one of the following:
+    - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
+    - J, xi (only if integrating from finite separations because J otherwise diverges).
+    - kappa, xi.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default.
+
+    Call
+    ----
+    outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs=None)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+    	Angle between the projections of the two spins onto the orbital plane.
+    S: float, optional (default: None)
+    	Magnitude of the total spin.
+    J: float, optional (default: None)
+    	Magnitude of the total angular momentum.
+    kappa: float, optional (default: None)
+    	Regularized angular momentum (J^2-L^2)/(2L).
+    r: float, optional (default: None)
+    	Binary separation.
+    rswitch: float, optional (default: None)
+    	Matching separation between the precession- and orbit-averaged chunks.
+    u: float, optional (default: None)
+    	Compactified separation 1/(2L).
+    uswitch: float, optional (default: None)
+    	Matching compactified separation between the precession- and orbit-averaged chunks.
+    xi: float, optional (default: None)
+    	Effective spin.
+    q: float, optional (default: None)
+    	Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    chi2: float, optional (default: None)
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    requested_outputs: list, optional (default: None)
+    	Set of outputs.
+
+    Returns
+    -------
+    outputs: dictionary
+    	Set of outputs.
+    """
+
 
     # Outputs available in both orbit-averaged and precession-averaged evolutions
     alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
@@ -5140,7 +5191,7 @@ def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
         elif backwards:
             inspiral_first = inspiral_orbav
             rfirst = np.append(rsmall,rswitch)
-            inspiral_second = inspiral_precbav
+            inspiral_second = inspiral_precav
             rsecond = np.append(rswitch,rlarge)
 
         # First chunk of the evolution
@@ -5948,7 +5999,7 @@ if __name__ == '__main__':
     J = 2.740273008918153
     xi = 0.9141896967861489
     kappa = 0.5784355256550922
-    r=np.logspace(2,1,5)
+    r=np.logspace(1,2,5)
     rswitch =50
     # N=2
     # theta1=np.tile(theta1,(N,1))
