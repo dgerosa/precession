@@ -5096,7 +5096,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
 def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None, xi=None,q=None,chi1=None,chi2=None,requested_outputs=None):
     """
-    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. If integrating forwards in time, perform the precession-average evolution first and then swith to orbit averaging.   If integrating backwards in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0.
+    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. If integrating forwards in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backwards in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.
     The initial conditions must be specified in terms of one an only one of the following:
     - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
     - J, xi (only if integrating from finite separations because J otherwise diverges).
@@ -5177,6 +5177,10 @@ def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
         assert np.logical_or(forwards,backwards), "r must be monotonic"
 
+
+        assert rswitch>np.min(r) and rswitch<np.max(r), "The switching condition must to be within the range spanned by r or u."
+
+
         rlarge = r[r>=rswitch]
         rsmall = r[r<rswitch]
 
@@ -5193,6 +5197,7 @@ def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
             rfirst = np.append(rsmall,rswitch)
             inspiral_second = inspiral_precav
             rsecond = np.append(rswitch,rlarge)
+
 
         # First chunk of the evolution
         evolution_first = inspiral_first(theta1=theta1,theta2=theta2,deltaphi=deltaphi,S=S,J=J,kappa=kappa,r=rfirst,xi=xi,q=q,chi1=chi1,chi2=chi2,requested_outputs=alloutputs)
@@ -5999,8 +6004,8 @@ if __name__ == '__main__':
     J = 2.740273008918153
     xi = 0.9141896967861489
     kappa = 0.5784355256550922
-    r=np.logspace(1,2,5)
-    rswitch =50
+    r=np.logspace(3,1,5)
+    rswitch =1000
     # N=2
     # theta1=np.tile(theta1,(N,1))
     # theta2=np.tile(theta2,(N,1))
