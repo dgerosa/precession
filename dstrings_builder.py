@@ -248,7 +248,7 @@ for i,line in enumerate(sourcecode):
 #docs=docs.rstrip()
 # Indent everything
 
-docs=realtab+docs.replace('\n','\n'+realtab)
+docs=realtab+docs.replace('\n','\n'+realtab).replace('\t',realtab)
 docs+='\"\"\"\n'
 
 print(docs) # To screen
