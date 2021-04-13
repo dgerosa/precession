@@ -2504,7 +2504,7 @@ def eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=Non
 
         costheta12 = np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2)
 
-    if theta1 is None and theta2 is None and deltaphi is None and S is not None and q is not None and chi1 is not None and chi2 is not None:
+    elif theta1 is None and theta2 is None and deltaphi is None and S is not None and q is not None and chi1 is not None and chi2 is not None:
 
         S=np.atleast_1d(S)
         S1,S2 = spinmags(q,chi1,chi2)
@@ -5739,7 +5739,6 @@ def eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None
 
 
 # TODO: insert flag to select PN order
-
 def gwfrequency_to_pnseparation(theta1, theta2, deltaphi,f,q, chi1, chi2,M_msun):
     """
     Convert GW frequency in Hz to PN orbital separation in natural units (c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.
@@ -5781,7 +5780,8 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi,f,q, chi1, chi2,M_msun)
     M_msun=np.atleast_1d(M_msun)
 
     # Convert GW frequency in hz to orbital velocity in natural units.
-    # Prefactor is Msun*G/c^3/s : https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
+    # Prefactor is Msun*G/c^3/s with values of the constants as given by Mathematica:
+    # https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
     # Factor of pi and not 2pi because of f is the GW frequency while omega is the orbital angular velocity
     omega = 4.93e-6* M_msun * np.pi * f
 
@@ -5792,12 +5792,14 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi,f,q, chi1, chi2,M_msun)
     ct12 = eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)
     # Eq. 4.13, Kidder 1995. gr-qc/9506022
     r = omega**(-2/3)*(1 \
-                    - (1/3)*(3-eta)*omega**(2/3)  \
-                    - (1/3)* ( chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))*omega \
-                    + ( eta*(19/4 + eta/9) -eta*chi1*chi2/2 * (ct12 - 3*ct1*ct2 ))*omega**(4/3)\
-                    )
+            - (1/3)*(3-eta)*omega**(2/3)  \
+            - (1/3)* ( chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))*omega \
+            + ( eta*(19/4 + eta/9) -eta*chi1*chi2/2 * (ct12 - 3*ct1*ct2 ))*omega**(4/3)\
+            )
     return r
 
+
+# TODO: insert flag to select PN order
 def pnseparation_to_gwfrequency(theta1,theta2,deltaphi,r,q,chi1,chi2,M_msun):
     """
     Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.
@@ -5851,7 +5853,8 @@ def pnseparation_to_gwfrequency(theta1,theta2,deltaphi,r,q,chi1,chi2,M_msun):
         )
 
     # Convert orbital velocity in natural units to GW frequency in Hz.
-    # Prefactor is Msun*G/c^3/s : https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
+    # Prefactor is Msun*G/c^3/s with values of the constants as given by Mathematica:
+    # https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
     # Factor of pi and not 2pi because of f is the GW frequency while omega is the orbital angular velocity
     f = np.sqrt(omegasquared) / (4.93e-6* M_msun * np.pi)
 
@@ -6126,18 +6129,18 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    deltaphi=0.46
-    S = 0.5538768649231461
-    J = 2.740273008918153
-    xi = 0.9141896967861489
-    kappa = 0.5784355256550922
-    r=np.logspace(3,1,5)
-    rswitch =1000
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # deltaphi=0.46
+    # S = 0.5538768649231461
+    # J = 2.740273008918153
+    # xi = 0.9141896967861489
+    # kappa = 0.5784355256550922
+    # r=np.logspace(3,1,5)
+    # rswitch =1000
     # N=2
     # theta1=np.tile(theta1,(N,1))
     # theta2=np.tile(theta2,(N,1))
@@ -6160,12 +6163,12 @@ if __name__ == '__main__':
     #inspiral_hybrid(q=q,r=r,rswitch=rswitch)
     #print(inspiral_hybrid(u=np.array([0,1,2,3,4]),uswitch=np.array([2]),q=np.array([0.4])))
     #print(inspiral_hybrid(u=[[0,1,2,3,4],[0,1,2,3,4]],uswitch=[2,2],q=[0.4,0.4]))
-
-    d= inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,rswitch=rswitch)
-    for k in d:
-        print(k, d[k].shape)
-
-    print(d['r'])
+    #
+    # d= inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,rswitch=rswitch)
+    # for k in d:
+    #     print(k, d[k].shape)
+    #
+    # print(d['r'])
     #
     # print(S2av(J, r[0], xi, q, chi1, chi2))
     #
@@ -6642,3 +6645,6 @@ if __name__ == '__main__':
     # print(omegaminus)
 
     #print(ellippi(np.array([0.5,0.5]),np.array([0.5,0.5]),np.array([0.5,0.5])))
+
+    print(gwfrequency_to_pnseparation(0, 0, 0,20,0,0,0,25))
+    print(pnseparation_to_gwfrequency(0,0,0,10,0,0,0,25))
