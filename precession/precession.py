@@ -372,7 +372,7 @@ def eval_S1(q,chi1):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
 
     Returns
     -------
@@ -425,7 +425,7 @@ def spinmags(q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -552,7 +552,7 @@ def Jlimits_LS1S2(r,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -589,7 +589,7 @@ def kappadiscriminant_coefficients(u,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1018,7 +1018,7 @@ def Jresonances(r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1075,7 +1075,7 @@ def Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None):
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1120,7 +1120,7 @@ def xilimits_definition(q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1156,7 +1156,7 @@ def xidiscriminant_coefficients(kappa,u,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1465,7 +1465,7 @@ def xiresonances(J,r,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1570,7 +1570,7 @@ def xilimits(J=None,r=None,q=None,chi1=None,chi2=None):
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1613,7 +1613,7 @@ def Slimits_S1S2(q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1681,7 +1681,7 @@ def Slimits_LJS1S2(J,r,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1720,7 +1720,7 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1797,7 +1797,7 @@ def Scubic_coefficients(kappa,u,xi,q,chi1,chi2):
 #     q: float
 #     	Mass ratio: 0<=q<=1.
 #     chi1: float
-#     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+#     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
 #     chi2: float
 #     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 #
@@ -1857,7 +1857,7 @@ def S2roots(J,r,xi,q,chi1,chi2,precomputedroots=None):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1902,7 +1902,7 @@ def Slimits_plusminus(J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1941,7 +1941,7 @@ def Satresonance(J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -1987,7 +1987,7 @@ def Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None):
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2133,7 +2133,7 @@ def eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2195,7 +2195,7 @@ def effectivepotential_plus(S,J,r,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2231,7 +2231,7 @@ def effectivepotential_minus(S,J,r,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2269,7 +2269,7 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: -1)
@@ -2329,7 +2329,7 @@ def eval_costheta1(S,J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2372,7 +2372,7 @@ def eval_theta1(S,J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2409,7 +2409,7 @@ def eval_costheta2(S,J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2452,7 +2452,7 @@ def eval_theta2(S,J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2468,23 +2468,29 @@ def eval_theta2(S,J,r,xi,q,chi1,chi2):
     return theta2
 
 
-def eval_costheta12(S,q,chi1,chi2):
+def eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None):
     """
-    Cosine of the angle theta12 between the two spins.
+    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
 
     Call
     ----
-    costheta12 = eval_costheta12(S,q,chi1,chi2)
+    costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
-    S: float
+    theta1: float, optional (default: None)
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+    	Angle between the projections of the two spins onto the orbital plane.
+    S: float, optional (default: None)
     	Magnitude of the total spin.
-    q: float
+    q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
-    chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
-    chi2: float
+    chi1: float, optional (default: None)
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
@@ -2493,18 +2499,26 @@ def eval_costheta12(S,q,chi1,chi2):
     	Cosine of the angle between the two spins.
     """
 
-    S=np.atleast_1d(S)
 
-    S1,S2 = spinmags(q,chi1,chi2)
+    if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and q is None and chi1 is None and chi2 is None:
 
-    costheta12=(S**2-S1**2-S2**2)/(2*S1*S2)
+        costheta12 = np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2)
+
+    if theta1 is None and theta2 is None and deltaphi is None and S is not None and q is not None and chi1 is not None and chi2 is not None:
+
+        S=np.atleast_1d(S)
+        S1,S2 = spinmags(q,chi1,chi2)
+        costheta12=(S**2-S1**2-S2**2)/(2*S1*S2)
+
+    else:
+        raise TypeError("Provide either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).")
 
     return costheta12
 
 
-def eval_theta12(S,q,chi1,chi2):
+def eval_theta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None):
     """
-    Angle theta12 between the two spins.
+    Angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
 
     Call
     ----
@@ -2517,7 +2531,7 @@ def eval_theta12(S,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2527,7 +2541,7 @@ def eval_theta12(S,q,chi1,chi2):
     	Angle between the two spins.
     """
 
-    costheta12=eval_costheta12(S,q,chi1,chi2)
+    costheta12=eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi,S=S,q=q,chi1=chi1,chi2=chi2)
     theta12 = np.arccos(costheta12)
 
     return theta12
@@ -2554,7 +2568,7 @@ def eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2569,7 +2583,7 @@ def eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2):
     S1,S2 = spinmags(q,chi1,chi2)
     costheta1=eval_costheta1(S,J,r,xi,q,chi1,chi2)
     costheta2=eval_costheta2(S,J,r,xi,q,chi1,chi2)
-    costheta12=eval_costheta12(S,q,chi1,chi2)
+    costheta12=eval_costheta12(S=S,q=q,chi1=chi1,chi2=chi2)
 
     cosdeltaphi= (costheta12 - costheta1*costheta2)/((1-costheta1**2)*(1-costheta2**2))**0.5
 
@@ -2597,7 +2611,7 @@ def eval_deltaphi(S,J,r,xi,q,chi1,chi2,cyclesign=-1):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: -1)
@@ -2636,7 +2650,7 @@ def eval_costhetaL(S,J,r,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2675,7 +2689,7 @@ def eval_thetaL(S,J,r,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2715,7 +2729,7 @@ def eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=N
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2771,7 +2785,7 @@ def eval_S(theta1,theta2,deltaphi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2870,7 +2884,7 @@ def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2907,7 +2921,7 @@ def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2945,7 +2959,7 @@ def eval_theta1inf(kappainf, xi, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -2980,7 +2994,7 @@ def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3018,7 +3032,7 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3053,7 +3067,7 @@ def morphology(J,r,xi,q,chi1,chi2,simpler=False):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     simpler: boolean, optional (default: False)
@@ -3161,7 +3175,7 @@ def conserved_to_angles(S,J,r,xi,q,chi1,chi2,cyclesign=+1):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: +1)
@@ -3206,7 +3220,7 @@ def angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     full_output: boolean, optional (default: False)
@@ -3258,7 +3272,7 @@ def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3293,7 +3307,7 @@ def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3442,7 +3456,7 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3514,7 +3528,7 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3555,7 +3569,7 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3611,7 +3625,7 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2,cyclesign=1):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: 1)
@@ -3654,7 +3668,7 @@ def conserved_to_inertial(S,J,r,xi,q,chi1,chi2,cyclesign=1):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: 1)
@@ -3701,7 +3715,7 @@ def angles_to_inertial(theta1,theta2,deltaphi,r,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3779,7 +3793,7 @@ def dS2dtsquared(S,J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3818,7 +3832,7 @@ def dS2dt(S,J,r,xi,q,chi1,chi2,cyclesign=1):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: 1)
@@ -3856,7 +3870,7 @@ def dSdt(S,J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -3956,7 +3970,7 @@ def Speriod(J,r,xi,q,chi1,chi2, precomputedroots = None):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
@@ -3999,7 +4013,7 @@ def Soft(t,J,r,xi,q,chi1,chi2, precomputedroots=None):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
@@ -4047,7 +4061,7 @@ def tofS(S,J,r,xi,q,chi1,chi2,cyclesign=1,precomputedroots=None,):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: 1)
@@ -4096,7 +4110,7 @@ def Ssampling(J,r,xi,q,chi1,chi2,N=1):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     N: integer, optional (default: 1)
@@ -4172,7 +4186,7 @@ def S2av(J, r, xi, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -4206,7 +4220,7 @@ def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -4248,7 +4262,7 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -4288,7 +4302,7 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -4332,7 +4346,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -4408,7 +4422,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     requested_outputs: list, optional (default: None)
@@ -4571,7 +4585,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     func: function
@@ -4641,7 +4655,7 @@ def rupdown(q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -4678,7 +4692,7 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     which: string
@@ -4730,7 +4744,7 @@ def widenutation(q, chi1, chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -4780,7 +4794,7 @@ def rhs_orbav(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula=False):
     eta: float
     	Symmetric mass ratio 0<=eta<=1/4.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     S1: float
@@ -4877,7 +4891,7 @@ def integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     MISSING: COULD NOT BUILD, optional (default: False)
@@ -4973,7 +4987,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     MISSING: COULD NOT BUILD, optional (default: False)
@@ -5134,7 +5148,7 @@ def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     requested_outputs: list, optional (default: None)
@@ -5275,7 +5289,7 @@ def frequency_prefactor(J,r,xi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -5321,7 +5335,7 @@ def azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
@@ -5384,7 +5398,7 @@ def eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=None):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
@@ -5429,7 +5443,7 @@ def eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=1, precomputedroots=None):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: 1)
@@ -5475,7 +5489,7 @@ def chip_terms(theta1,theta2,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -5515,7 +5529,7 @@ def eval_chip_heuristic(theta1,theta2,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -5549,7 +5563,7 @@ def eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -5581,7 +5595,7 @@ def eval_chip_asymptotic(theta1,theta2,q,chi1,chi2):
     q: float
     	Mass ratio: 0<=q<=1.
     chi1: float
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
@@ -5624,7 +5638,7 @@ def eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=No
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     method: string (default: 'quadrature')
@@ -5690,7 +5704,7 @@ def eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None
     q: float, optional (default: None)
     	Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
-    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     which: string, optional (default: "averaged")
@@ -5724,6 +5738,124 @@ def eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None
     return chip
 
 
+# TODO: insert flag to select PN order
+
+def gwfrequency_to_pnseparation(theta1, theta2, deltaphi,f,q, chi1, chi2,M_msun):
+    """
+    Convert GW frequency in Hz to PN orbital separation in natural units (c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.
+
+    Call
+    ----
+    r = gwfrequency_to_pnseparation(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+    	Angle between the projections of the two spins onto the orbital plane.
+    f: float
+    	Gravitational-wave frequency in Hz.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    M_msun: float
+    	Total mass of the binary in solar masses.
+
+    Returns
+    -------
+    r: float
+    	Binary separation.
+    """
+
+    theta1=np.atleast_1d(theta1)
+    theta2=np.atleast_1d(theta2)
+    f=np.atleast_1d(f)
+    chi1=np.atleast_1d(chi1)
+    chi2=np.atleast_1d(chi2)
+    M_msun=np.atleast_1d(M_msun)
+
+    # Convert GW frequency in hz to orbital velocity in natural units.
+    # Prefactor is Msun*G/c^3/s : https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
+    # Factor of pi and not 2pi because of f is the GW frequency while omega is the orbital angular velocity
+    omega = 4.93e-6* M_msun * np.pi * f
+
+    m1,m2 = masses(q)
+    eta = eval_eta(q)
+    ct1 = np.cos(theta1)
+    ct2 = np.cos(theta2)
+    ct12 = eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)
+    # Eq. 4.13, Kidder 1995. gr-qc/9506022
+    r = omega**(-2/3)*(1 \
+                    - (1/3)*(3-eta)*omega**(2/3)  \
+                    - (1/3)* ( chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))*omega \
+                    + ( eta*(19/4 + eta/9) -eta*chi1*chi2/2 * (ct12 - 3*ct1*ct2 ))*omega**(4/3)\
+                    )
+    return r
+
+def pnseparation_to_gwfrequency(theta1,theta2,deltaphi,r,q,chi1,chi2,M_msun):
+    """
+    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.
+
+    Call
+    ----
+    r = pnseparation_to_gwfrequency(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)
+
+    Parameters
+    ----------
+    theta1: float
+    	Angle between orbital angular momentum and primary spin.
+    theta2: float
+    	Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+    	Angle between the projections of the two spins onto the orbital plane.
+    f: float
+    	Gravitational-wave frequency in Hz.
+    q: float
+    	Mass ratio: 0<=q<=1.
+    chi1: float
+    	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+    	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    M_msun: float
+    	Total mass of the binary in solar masses.
+
+    Returns
+    -------
+    r: float
+    	Binary separation.
+    """
+
+    theta1=np.atleast_1d(theta1)
+    theta2=np.atleast_1d(theta2)
+    r=np.atleast_1d(r)
+    chi1=np.atleast_1d(chi1)
+    chi2=np.atleast_1d(chi2)
+    M_msun=np.atleast_1d(M_msun)
+
+    m1,m2 = masses(q)
+    eta = eval_eta(q)
+    ct1 = np.cos(theta1)
+    ct2 = np.cos(theta2)
+    ct12 = eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)
+
+    omegasquared = (1/r**3)*(1 \
+        - (3-eta)/r \
+        - ( chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta) )/r**(3/2) \
+        + ( 6 + 41/4*eta + eta**2 - 3/2*eta*chi1*chi2*(ct12-3*ct1*ct2) )/r**(2)\
+        )
+
+    # Convert orbital velocity in natural units to GW frequency in Hz.
+    # Prefactor is Msun*G/c^3/s : https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
+    # Factor of pi and not 2pi because of f is the GW frequency while omega is the orbital angular velocity
+    f = np.sqrt(omegasquared) / (4.93e-6* M_msun * np.pi)
+
+    return f
 
 
 if __name__ == '__main__':

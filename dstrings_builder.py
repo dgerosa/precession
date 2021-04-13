@@ -23,7 +23,7 @@ def descr(varname,vardef=None):
     lookup['q']=["float","Mass ratio: 0<=q<=1"]
     lookup['m1']=["float","Mass of the primary (heavier) black hole"]
     lookup['m2']=["float","Mass of the secondary (lighter) black hole"]
-    lookup['chi1']=["float","Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1"]
+    lookup['chi1']=["float","Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1"]
     lookup['chi2']=["float","Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1"]
     lookup['r']=["float","Binary separation"]
     lookup['L']=["float","Magnitude of the Newtonian orbital angular momentum"]
@@ -127,6 +127,8 @@ def descr(varname,vardef=None):
     lookup['rswitch']=["float","Matching separation between the precession- and orbit-averaged chunks"]
     lookup['uswitch']=["float","Matching compactified separation between the precession- and orbit-averaged chunks"]
 
+    lookup['M_msun']=["float","Total mass of the binary in solar masses"]
+    lookup['f']=["float","Gravitational-wave frequency in Hz"]
 
     if varname in lookup:
         pass
