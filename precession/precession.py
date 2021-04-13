@@ -1503,15 +1503,45 @@ def xiresonances(J, r, q, chi1, chi2):
     ximin, ximax =np.array(list(map(_compute, Smin, Smax, J, r, xiroots, q, chi1, chi2))).T
     return np.stack([ximin, ximax])
 
-#TODO DOCSTINGS!
 def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     """
     Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
 
+    Call
+    ----
+    theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = anglesresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None)
 
-    Provide either
+    Parameters
+    ----------
+    J: float, optional (default: None)
+        Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+        Binary separation.
+    xi: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
+    Returns
+    -------
+    theta1atmin: float
+        Value of the angle theta1 at the resonance that minimizes either J or xi, depending on the input.
+    theta2atmin: float
+        Value of the angle theta2 at the resonance that minimizes either J or xi, depending on the input.
+    deltaphiatmin: float
+        Value of the angle deltaphi at the resonance that minimizes either J or xi, depending on the input.
+    theta1atmax: float
+        Value of the angle theta1 at the resonance that maximizes either J or xi, depending on the input.
+    theta2atmax: float
+        Value of the angle theta2 at the resonance that maximizes either J or xi, depending on the input.
+    deltaphiatmax: float
+        Value of the angle deltaphi at the resonance that maximizes either J or xi, depending on the input.
     """
+
     q=np.atleast_1d(q)
 
     if J is None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:

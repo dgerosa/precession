@@ -129,6 +129,14 @@ def descr(varname,vardef=None):
 
     lookup['M_msun']=["float","Total mass of the binary in solar masses"]
     lookup['f']=["float","Gravitational-wave frequency in Hz"]
+    lookup['theta1atmin']=["float","Value of the angle theta1 at the resonance that minimizes either J or xi, depending on the input"]
+    lookup['theta1atmax']=["float","Value of the angle theta1 at the resonance that maximizes either J or xi, depending on the input"]
+    lookup['theta2atmin']=["float","Value of the angle theta2 at the resonance that minimizes either J or xi, depending on the input"]
+    lookup['theta2atmax']=["float","Value of the angle theta2 at the resonance that maximizes either J or xi, depending on the input"]
+    lookup['deltaphiatmin']=["float","Value of the angle deltaphi at the resonance that minimizes either J or xi, depending on the input"]
+    lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes either J or xi, depending on the input"]
+
+
 
     if varname in lookup:
         pass
