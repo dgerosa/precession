@@ -619,7 +619,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     ( 16 * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) * ( ( ( -1 + ( q )**( 2 ) ) \
     )**( 2 ) * ( S1 )**( 2 ) + -1 * ( q )**( 2 ) * ( xi )**( 2 ) ) * ( ( \
     ( -1 + ( q )**( 2 ) ) )**( 2 ) * ( S2 )**( 2 ) + -1 * ( q )**( 2 ) * \
-    ( xi )**( 2 ) ) + ( -32 * q * qp1t2 * u * xi * ( -5 * \
+    ( xi )**( 2 ) ) + ( -32 * q * ( ( 1 + q ) )**( 2 ) * u * xi * ( -5 * \
     ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( ( S2 )**( 4 ) + ( ( q )**( 8 ) * ( \
     ( S1 )**( 4 ) + -5 * ( S1 )**( 2 ) * ( S2 )**( 2 ) ) + ( q * ( ( S1 \
     )**( 4 ) + -1 * ( S2 )**( 4 ) ) + ( ( q )**( 7 ) * ( -1 * ( S1 )**( 4 \
@@ -713,7 +713,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     ) * ( 153 * ( S2 )**( 2 ) + 91 * ( xi )**( 2 ) ) + -1 * ( S1 )**( 2 ) \
     * ( 153 * ( S2 )**( 4 ) + ( 74 * ( S2 )**( 2 ) * ( xi )**( 2 ) + 44 * \
     ( xi )**( 4 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) + ( u )**( 4 \
-    ) * ( -256 * qp1t2 * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) \
+    ) * ( -256 * ( ( 1 + q ) )**( 2 ) * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) \
     * ( ( ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) )**( 2 ) * ( ( -1 * q * ( \
     S1 )**( 2 ) + ( S2 )**( 2 ) ) )**( 2 ) * ( u )**( 2 ) * ( ( q )**( 4 \
     ) * ( S1 )**( 2 ) + ( ( S2 )**( 2 ) + ( ( q )**( 3 ) * ( ( S1 )**( 2 \
@@ -735,7 +735,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     * ( xi )**( 2 ) ) ) ) ) ) + ( q )**( 4 ) * ( -13 * ( S1 )**( 6 ) + ( \
     5 * ( S2 )**( 6 ) + ( -1 * ( S1 )**( 4 ) * ( ( S2 )**( 2 ) + 8 * ( xi \
     )**( 2 ) ) + ( S1 )**( 2 ) * ( 5 * ( S2 )**( 4 ) + 4 * ( S2 )**( 2 ) \
-    * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) + -16 * qp1t2 * \
+    * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) + -16 * ( ( 1 + q ) )**( 2 ) * \
     ( 8 * ( q )**( 10 ) * ( S1 )**( 4 ) * ( ( S1 )**( 4 ) + ( -4 * ( S1 \
     )**( 2 ) * ( S2 )**( 2 ) + ( S2 )**( 4 ) ) ) + ( 8 * ( S2 )**( 4 ) * \
     ( ( S1 )**( 4 ) + ( -4 * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( S2 )**( 4 \
@@ -788,7 +788,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     )**( 4 ) * ( S1 )**( 2 ) + ( ( S2 )**( 2 ) + ( q * ( ( S1 )**( 2 ) + \
     -1 * ( S2 )**( 2 ) ) + ( ( q )**( 3 ) * ( -1 * ( S1 )**( 2 ) + ( S2 \
     )**( 2 ) ) + -1 * ( q )**( 2 ) * ( ( S1 )**( 2 ) + ( ( S2 )**( 2 ) + \
-    ( xi )**( 2 ) ) ) ) ) ) ) + ( 32 * qp1t2 * u * ( -12 * \
+    ( xi )**( 2 ) ) ) ) ) ) ) + ( 32 * ( ( 1 + q ) )**( 2 ) * u * ( -12 * \
     q * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -12 * ( q )**( 9 ) * ( S1 )**( \
     2 ) * ( S2 )**( 2 ) + ( ( q )**( 10 ) * ( S1 )**( 2 ) * ( ( S1 )**( 2 \
     ) + ( S2 )**( 2 ) ) + ( ( S2 )**( 2 ) * ( ( S1 )**( 2 ) + ( S2 )**( 2 \
@@ -862,7 +862,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     ) * ( ( S2 )**( 2 ) + 38 * ( xi )**( 2 ) ) ) ) ) + ( q )**( 3 ) * ( \
     71 * ( S1 )**( 4 ) + ( -2 * ( S1 )**( 2 ) * ( ( S2 )**( 2 ) + -6 * ( \
     xi )**( 2 ) ) + -19 * ( 7 * ( S2 )**( 4 ) + 4 * ( S2 )**( 2 ) * ( xi \
-    )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) + 64 * qp1t2 * u * ( 4 \
+    )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) + 64 * ( ( 1 + q ) )**( 2 ) * u * ( 4 \
     * ( q )**( 10 ) * ( S1 )**( 4 ) * ( ( S1 )**( 2 ) + ( S2 )**( 2 ) ) + \
     ( 4 * ( S2 )**( 4 ) * ( ( S1 )**( 2 ) + ( S2 )**( 2 ) ) + ( ( q )**( \
     9 ) * ( 23 * ( S1 )**( 6 ) + ( 26 * ( S1 )**( 4 ) * ( S2 )**( 2 ) + \
@@ -928,7 +928,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     + 2 * ( xi )**( 2 ) ) + ( 2 * ( S2 )**( 4 ) * ( ( S2 )**( 2 ) + 3 * ( \
     xi )**( 2 ) ) + ( S1 )**( 2 ) * ( 27 * ( S2 )**( 4 ) + 10 * ( S2 )**( \
     2 ) * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) ) + ( u )**( 2 ) * ( -32 * \
-    qp1t2 * ( 4 * ( q )**( 10 ) * ( S1 )**( 4 ) + ( 4 * ( \
+    ( ( 1 + q ) )**( 2 ) * ( 4 * ( q )**( 10 ) * ( S1 )**( 4 ) + ( 4 * ( \
     S2 )**( 4 ) + ( ( q )**( 9 ) * ( 38 * ( S1 )**( 4 ) + 30 * ( S1 )**( \
     2 ) * ( S2 )**( 2 ) ) + ( q * ( 30 * ( S1 )**( 2 ) * ( S2 )**( 2 ) + \
     38 * ( S2 )**( 4 ) ) + ( ( q )**( 2 ) * ( -3 * ( S1 )**( 4 ) + ( 2 * \
@@ -1425,12 +1425,12 @@ def xidiscriminant_coefficients(kappa, u, q, chi1, chi2):
 
     coeff4 = \
     ( 16 * ( q )**( 4 ) * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) + ( 256 * ( q \
-    )**( 4 ) * qp1t2 * ( ( 1 + ( -6 * q + 6 * ( q )**( 2 ) \
+    )**( 4 ) * ( ( 1 + q ) )**( 2 ) * ( ( 1 + ( -6 * q + 6 * ( q )**( 2 ) \
     ) ) * ( S1 )**( 4 ) + ( -2 * ( 3 + ( -5 * q + 3 * ( q )**( 2 ) ) ) * \
     ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 6 + ( -6 * q + ( q )**( 2 ) ) ) * ( \
     S2 )**( 4 ) ) ) * ( u )**( 4 ) + ( -256 * ( q )**( 4 ) * ( ( 1 + q ) \
     )**( 2 ) * ( 1 + ( 3 * q + ( q )**( 2 ) ) ) * u * kappa + ( u )**( 2 \
-    ) * ( -512 * ( q )**( 4 ) * qp1t2 * ( ( 1 + ( -1 * q + \
+    ) * ( -512 * ( q )**( 4 ) * ( ( 1 + q ) )**( 2 ) * ( ( 1 + ( -1 * q + \
     3 * ( q )**( 2 ) ) ) * ( S1 )**( 2 ) + ( 3 + ( -1 * q + ( q )**( 2 ) \
     ) ) * ( S2 )**( 2 ) ) * u * kappa + 128 * ( q )**( 4 ) * ( ( 1 + q ) \
     )**( 2 ) * ( ( -4 + ( 7 * q + ( q )**( 2 ) ) ) * ( S1 )**( 2 ) + ( ( \
@@ -1438,7 +1438,7 @@ def xidiscriminant_coefficients(kappa, u, q, chi1, chi2):
     q + ( q )**( 2 ) ) ) * ( kappa )**( 2 ) ) ) ) ) ) )
 
     coeff5 = \
-    ( 128 * ( q )**( 5 ) * qp1t2 * u + ( u )**( 2 ) * ( \
+    ( 128 * ( q )**( 5 ) * ( ( 1 + q ) )**( 2 ) * u + ( u )**( 2 ) * ( \
     512 * ( q )**( 5 ) * ( 1 + q ) * ( ( -1 + 2 * q ) * ( S1 )**( 2 ) + \
     -1 * ( -2 + q ) * ( S2 )**( 2 ) ) * u + -512 * ( q )**( 5 ) * ( ( 1 + \
     q ) )**( 2 ) * kappa ) )
@@ -1774,15 +1774,15 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
     S1, S2 = spinmags(q, chi1, chi2)
 
     coeff3 = \
-    q * qp1t2 * ( u )**( 2 )
+    q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )
 
     coeff2 = \
-    ( 1/4 * qp1t2 + ( -1/2 * q * qp1t2 + ( \
-    1/4 * ( q )**( 2 ) * qp1t2 + ( ( -1 * q * ( ( 1 + q ) \
-    )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * qp1t2 * ( \
-    S1 )**( 2 ) + ( qp1t2 * ( S2 )**( 2 ) + -1 * q * ( ( 1 \
+    ( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( \
+    1/4 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) \
+    )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( \
+    S1 )**( 2 ) + ( ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) + -1 * q * ( ( 1 \
     + q ) )**( 2 ) * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 \
-    + q ) )**( 2 ) * xi + -2 * q * qp1t2 * kappa ) ) ) ) )
+    + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) )
 
     coeff1 = \
     ( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( 1/2 * ( q \
@@ -1851,12 +1851,12 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
 #
 #     S1t2 = S1**2
 #     S2t2 = S2**2
-#     qp1t2 = (1+q)**2
+#     ( ( 1 + q ) )**( 2 ) = (1+q)**2
 #     qt2 = q**2
 #     qt2m1 = q**2-1
-#     coeff3 = q * qp1t2 * ( u )**( 2 )
+#     coeff3 = q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )
 #
-#     coeff2 = ( 1/4 * qp1t2 + ( -1/2 * q * qp1t2 + ( 1/4 * qt2 * qp1t2 + ( ( -1 * q * qp1t2 * S1t2 + ( qt2 * qp1t2 * S1t2 + ( qp1t2 * S2t2 - q * qp1t2 * S2t2 ) ) ) * ( u )**( 2 ) + u * ( q * qp1t2 * xi + -2 * q * qp1t2 * kappa ) ) ) ) )
+#     coeff2 = ( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( 1/4 * qt2 * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) )**( 2 ) * S1t2 + ( qt2 * ( ( 1 + q ) )**( 2 ) * S1t2 + ( ( ( 1 + q ) )**( 2 ) * S2t2 - q * ( ( 1 + q ) )**( 2 ) * S2t2 ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) )
 #
 #     coeff1 = ( -1/2 * -qt2m1 * S1t2 + ( 1/2 * qt2 * -qt2m1 * S1t2 + ( -1/2 * -qt2m1 * S2t2 + ( 1/2 * qt2 * -qt2m1 * S2t2 + ( u * ( -1 * q * -qt2m1 * S1t2 * ( xi + -2 * kappa ) + ( q * -qt2m1 * S2t2 * ( xi + -2 * kappa ) + ( 2 * qt2 * -qt2m1 * S1t2 * kappa + -2 * -qt2m1 * S2t2 * kappa ) ) ) + q * ( kappa * ( -1 * xi + kappa ) + ( qt2 * kappa * ( -1 * xi + kappa ) + q * ( ( xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) )
 #
@@ -1912,9 +1912,9 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
 #     S2 = numexpr.evaluate("chi2*(q/(1+q))**2")
 #
 #
-#     coeff3 = numexpr.evaluate("q * qp1t2 * ( u )**( 2 )")
+#     coeff3 = numexpr.evaluate("q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )")
 #
-#     coeff2 = numexpr.evaluate("( 1/4 * qp1t2 + ( -1/2 * q * qp1t2 + ( 1/4 * ( q )**( 2 ) * qp1t2 + ( ( -1 * q * qp1t2 * ( S1 )**( 2 ) + ( ( q )**( 2 ) * qp1t2 * ( S1 )**( 2 ) + ( qp1t2 * ( S2 )**( 2 ) + -1 * q * qp1t2 * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * qp1t2 * xi + -2 * q * qp1t2 * kappa ) ) ) ) ) ")
+#     coeff2 = numexpr.evaluate("( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( 1/4 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) + -1 * q * ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) ) ")
 #
 #     coeff1 = numexpr.evaluate("( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( u * ( -1 * q * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * ( xi + -2 * kappa ) + ( q * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * ( xi + -2 * kappa ) + ( 2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * kappa + -2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * kappa ) ) ) + q * ( kappa * ( -1 * xi + kappa ) + ( ( q )**( 2 ) * kappa * ( -1 * xi + kappa ) + q * ( ( xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) ) ")
 #
@@ -3171,7 +3171,7 @@ def morphology(J, r, xi, q, chi1, chi2, simpler=False):
 
     Smin, Smax = Slimits_plusminus(J, r, xi, q, chi1, chi2)
     # Pairs of booleans based on the values of deltaphi at S- and S+
-    status = np.transpose([eval_cosdeltaphi(Smin, J, r, xi, q, chi1, chi2) >0, eval_cosdeltaphi(Smax, J, r, xi, q, chi1, chi2) >0])
+    status = np.transpose([eval_cosdeltaphi(Smin, J, r, xi, q, chi1, chi2)>0, eval_cosdeltaphi(Smax, J, r, xi, q, chi1, chi2)>0])
     # Map to labels
     dictlabel = {(False, False):"Lpi", (True, True):"L0", (False, True):"C-", (True, False):"C+"}
     # Subsitute pairs with labels
@@ -3185,8 +3185,7 @@ def morphology(J, r, xi, q, chi1, chi2, simpler=False):
     return morphs
 
 
-#Todo docstrings. Here using a simpler but equivalent expression compared to the multitimescale paper
-# Cyclesign is the sign of dS/dt which is opposite the sign of deltaphi
+
 def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None):
     """
     Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the 'sign' of a precession cycle, defined as +1 if S is increasing and -1 S is decreasing. Valid inputs are one and not more of the following:
@@ -4017,7 +4016,7 @@ def elliptic_amplitude(S, Sminus2, Splus2):
 
     return phi
 
-#TODO: docstrings. Sign here is not cyclesign!
+#TODO: docstrings.
 def elliptic_characheristic(Sminus2, Splus2, J, L, sign):
 
     Sminus2 = np.atleast_1d(Sminus2)
@@ -4025,6 +4024,7 @@ def elliptic_characheristic(Sminus2, Splus2, J, L, sign):
     J = np.atleast_1d(J)
     L = np.atleast_1d(L)
 
+    #Note: sign here is not cyclesign!
     n = (Splus2 - Sminus2)/(Splus2- (J +np.sign(sign)*L)**2)
 
     return n
@@ -4040,6 +4040,7 @@ def time_normalization(Splus2, S32, r, xi, q):
 
     return mathcalT
 
+# TODO: Should this be eval_tau
 def Speriod(J, r, xi, q, chi1, chi2, precomputedroots = None):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
