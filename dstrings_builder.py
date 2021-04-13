@@ -23,7 +23,7 @@ def descr(varname,vardef=None):
     lookup['q']=["float","Mass ratio: 0<=q<=1"]
     lookup['m1']=["float","Mass of the primary (heavier) black hole"]
     lookup['m2']=["float","Mass of the secondary (lighter) black hole"]
-    lookup['chi1']=["float","Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1"]
+    lookup['chi1']=["float","Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1"]
     lookup['chi2']=["float","Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1"]
     lookup['r']=["float","Binary separation"]
     lookup['L']=["float","Magnitude of the Newtonian orbital angular momentum"]
@@ -120,6 +120,22 @@ def descr(varname,vardef=None):
     lookup['phiL']=['float', "Azimuthal angle spanned by L about J"]
     lookup['OmegaL']=['float', "Precession frequency of L about J"]
     lookup['full_output']=['boolean', "Return additional outputs"]
+    lookup['chipterm1']=['float', "Term in effective precessing spin chip"]
+    lookup['chipterm2']=['float', "Term in effective precessing spin chip"]
+    lookup['chip']=['float', "Effective precessing spin chip"]
+    lookup['Nsamples']=['integer', "Number of Monte Carlo samples"]
+    lookup['rswitch']=["float","Matching separation between the precession- and orbit-averaged chunks"]
+    lookup['uswitch']=["float","Matching compactified separation between the precession- and orbit-averaged chunks"]
+
+    lookup['M_msun']=["float","Total mass of the binary in solar masses"]
+    lookup['f']=["float","Gravitational-wave frequency in Hz"]
+    lookup['theta1atmin']=["float","Value of the angle theta1 at the resonance that minimizes either J or xi, depending on the input"]
+    lookup['theta1atmax']=["float","Value of the angle theta1 at the resonance that maximizes either J or xi, depending on the input"]
+    lookup['theta2atmin']=["float","Value of the angle theta2 at the resonance that minimizes either J or xi, depending on the input"]
+    lookup['theta2atmax']=["float","Value of the angle theta2 at the resonance that maximizes either J or xi, depending on the input"]
+    lookup['deltaphiatmin']=["float","Value of the angle deltaphi at the resonance that minimizes either J or xi, depending on the input"]
+    lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes either J or xi, depending on the input"]
+
 
 
     if varname in lookup:
@@ -240,7 +256,7 @@ for i,line in enumerate(sourcecode):
 #docs=docs.rstrip()
 # Indent everything
 
-docs=realtab+docs.replace('\n','\n'+realtab)
+docs=realtab+docs.replace('\n','\n'+realtab).replace('\t',realtab)
 docs+='\"\"\"\n'
 
 print(docs) # To screen
