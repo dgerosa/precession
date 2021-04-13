@@ -619,7 +619,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     ( 16 * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) * ( ( ( -1 + ( q )**( 2 ) ) \
     )**( 2 ) * ( S1 )**( 2 ) + -1 * ( q )**( 2 ) * ( xi )**( 2 ) ) * ( ( \
     ( -1 + ( q )**( 2 ) ) )**( 2 ) * ( S2 )**( 2 ) + -1 * ( q )**( 2 ) * \
-    ( xi )**( 2 ) ) + ( -32 * q * ( ( 1 + q ) )**( 2 ) * u * xi * ( -5 * \
+    ( xi )**( 2 ) ) + ( -32 * q * qp1t2 * u * xi * ( -5 * \
     ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( ( S2 )**( 4 ) + ( ( q )**( 8 ) * ( \
     ( S1 )**( 4 ) + -5 * ( S1 )**( 2 ) * ( S2 )**( 2 ) ) + ( q * ( ( S1 \
     )**( 4 ) + -1 * ( S2 )**( 4 ) ) + ( ( q )**( 7 ) * ( -1 * ( S1 )**( 4 \
@@ -713,7 +713,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     ) * ( 153 * ( S2 )**( 2 ) + 91 * ( xi )**( 2 ) ) + -1 * ( S1 )**( 2 ) \
     * ( 153 * ( S2 )**( 4 ) + ( 74 * ( S2 )**( 2 ) * ( xi )**( 2 ) + 44 * \
     ( xi )**( 4 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) + ( u )**( 4 \
-    ) * ( -256 * ( ( 1 + q ) )**( 2 ) * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) \
+    ) * ( -256 * qp1t2 * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) \
     * ( ( ( S1 )**( 2 ) + -1 * ( S2 )**( 2 ) ) )**( 2 ) * ( ( -1 * q * ( \
     S1 )**( 2 ) + ( S2 )**( 2 ) ) )**( 2 ) * ( u )**( 2 ) * ( ( q )**( 4 \
     ) * ( S1 )**( 2 ) + ( ( S2 )**( 2 ) + ( ( q )**( 3 ) * ( ( S1 )**( 2 \
@@ -735,7 +735,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     * ( xi )**( 2 ) ) ) ) ) ) + ( q )**( 4 ) * ( -13 * ( S1 )**( 6 ) + ( \
     5 * ( S2 )**( 6 ) + ( -1 * ( S1 )**( 4 ) * ( ( S2 )**( 2 ) + 8 * ( xi \
     )**( 2 ) ) + ( S1 )**( 2 ) * ( 5 * ( S2 )**( 4 ) + 4 * ( S2 )**( 2 ) \
-    * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) + -16 * ( ( 1 + q ) )**( 2 ) * \
+    * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) + -16 * qp1t2 * \
     ( 8 * ( q )**( 10 ) * ( S1 )**( 4 ) * ( ( S1 )**( 4 ) + ( -4 * ( S1 \
     )**( 2 ) * ( S2 )**( 2 ) + ( S2 )**( 4 ) ) ) + ( 8 * ( S2 )**( 4 ) * \
     ( ( S1 )**( 4 ) + ( -4 * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( S2 )**( 4 \
@@ -788,7 +788,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     )**( 4 ) * ( S1 )**( 2 ) + ( ( S2 )**( 2 ) + ( q * ( ( S1 )**( 2 ) + \
     -1 * ( S2 )**( 2 ) ) + ( ( q )**( 3 ) * ( -1 * ( S1 )**( 2 ) + ( S2 \
     )**( 2 ) ) + -1 * ( q )**( 2 ) * ( ( S1 )**( 2 ) + ( ( S2 )**( 2 ) + \
-    ( xi )**( 2 ) ) ) ) ) ) ) + ( 32 * ( ( 1 + q ) )**( 2 ) * u * ( -12 * \
+    ( xi )**( 2 ) ) ) ) ) ) ) + ( 32 * qp1t2 * u * ( -12 * \
     q * ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( -12 * ( q )**( 9 ) * ( S1 )**( \
     2 ) * ( S2 )**( 2 ) + ( ( q )**( 10 ) * ( S1 )**( 2 ) * ( ( S1 )**( 2 \
     ) + ( S2 )**( 2 ) ) + ( ( S2 )**( 2 ) * ( ( S1 )**( 2 ) + ( S2 )**( 2 \
@@ -862,7 +862,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     ) * ( ( S2 )**( 2 ) + 38 * ( xi )**( 2 ) ) ) ) ) + ( q )**( 3 ) * ( \
     71 * ( S1 )**( 4 ) + ( -2 * ( S1 )**( 2 ) * ( ( S2 )**( 2 ) + -6 * ( \
     xi )**( 2 ) ) + -19 * ( 7 * ( S2 )**( 4 ) + 4 * ( S2 )**( 2 ) * ( xi \
-    )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) + 64 * ( ( 1 + q ) )**( 2 ) * u * ( 4 \
+    )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) + 64 * qp1t2 * u * ( 4 \
     * ( q )**( 10 ) * ( S1 )**( 4 ) * ( ( S1 )**( 2 ) + ( S2 )**( 2 ) ) + \
     ( 4 * ( S2 )**( 4 ) * ( ( S1 )**( 2 ) + ( S2 )**( 2 ) ) + ( ( q )**( \
     9 ) * ( 23 * ( S1 )**( 6 ) + ( 26 * ( S1 )**( 4 ) * ( S2 )**( 2 ) + \
@@ -928,7 +928,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     + 2 * ( xi )**( 2 ) ) + ( 2 * ( S2 )**( 4 ) * ( ( S2 )**( 2 ) + 3 * ( \
     xi )**( 2 ) ) + ( S1 )**( 2 ) * ( 27 * ( S2 )**( 4 ) + 10 * ( S2 )**( \
     2 ) * ( xi )**( 2 ) ) ) ) ) ) ) ) ) ) ) ) ) + ( u )**( 2 ) * ( -32 * \
-    ( ( 1 + q ) )**( 2 ) * ( 4 * ( q )**( 10 ) * ( S1 )**( 4 ) + ( 4 * ( \
+    qp1t2 * ( 4 * ( q )**( 10 ) * ( S1 )**( 4 ) + ( 4 * ( \
     S2 )**( 4 ) + ( ( q )**( 9 ) * ( 38 * ( S1 )**( 4 ) + 30 * ( S1 )**( \
     2 ) * ( S2 )**( 2 ) ) + ( q * ( 30 * ( S1 )**( 2 ) * ( S2 )**( 2 ) + \
     38 * ( S2 )**( 4 ) ) + ( ( q )**( 2 ) * ( -3 * ( S1 )**( 4 ) + ( 2 * \
@@ -1425,12 +1425,12 @@ def xidiscriminant_coefficients(kappa, u, q, chi1, chi2):
 
     coeff4 = \
     ( 16 * ( q )**( 4 ) * ( ( -1 + ( q )**( 2 ) ) )**( 2 ) + ( 256 * ( q \
-    )**( 4 ) * ( ( 1 + q ) )**( 2 ) * ( ( 1 + ( -6 * q + 6 * ( q )**( 2 ) \
+    )**( 4 ) * qp1t2 * ( ( 1 + ( -6 * q + 6 * ( q )**( 2 ) \
     ) ) * ( S1 )**( 4 ) + ( -2 * ( 3 + ( -5 * q + 3 * ( q )**( 2 ) ) ) * \
     ( S1 )**( 2 ) * ( S2 )**( 2 ) + ( 6 + ( -6 * q + ( q )**( 2 ) ) ) * ( \
     S2 )**( 4 ) ) ) * ( u )**( 4 ) + ( -256 * ( q )**( 4 ) * ( ( 1 + q ) \
     )**( 2 ) * ( 1 + ( 3 * q + ( q )**( 2 ) ) ) * u * kappa + ( u )**( 2 \
-    ) * ( -512 * ( q )**( 4 ) * ( ( 1 + q ) )**( 2 ) * ( ( 1 + ( -1 * q + \
+    ) * ( -512 * ( q )**( 4 ) * qp1t2 * ( ( 1 + ( -1 * q + \
     3 * ( q )**( 2 ) ) ) * ( S1 )**( 2 ) + ( 3 + ( -1 * q + ( q )**( 2 ) \
     ) ) * ( S2 )**( 2 ) ) * u * kappa + 128 * ( q )**( 4 ) * ( ( 1 + q ) \
     )**( 2 ) * ( ( -4 + ( 7 * q + ( q )**( 2 ) ) ) * ( S1 )**( 2 ) + ( ( \
@@ -1438,7 +1438,7 @@ def xidiscriminant_coefficients(kappa, u, q, chi1, chi2):
     q + ( q )**( 2 ) ) ) * ( kappa )**( 2 ) ) ) ) ) ) )
 
     coeff5 = \
-    ( 128 * ( q )**( 5 ) * ( ( 1 + q ) )**( 2 ) * u + ( u )**( 2 ) * ( \
+    ( 128 * ( q )**( 5 ) * qp1t2 * u + ( u )**( 2 ) * ( \
     512 * ( q )**( 5 ) * ( 1 + q ) * ( ( -1 + 2 * q ) * ( S1 )**( 2 ) + \
     -1 * ( -2 + q ) * ( S2 )**( 2 ) ) * u + -512 * ( q )**( 5 ) * ( ( 1 + \
     q ) )**( 2 ) * kappa ) )
@@ -1744,15 +1744,15 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
     S1, S2 = spinmags(q, chi1, chi2)
 
     coeff3 = \
-    q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )
+    q * qp1t2 * ( u )**( 2 )
 
     coeff2 = \
-    ( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( \
-    1/4 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) \
-    )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( \
-    S1 )**( 2 ) + ( ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) + -1 * q * ( ( 1 \
+    ( 1/4 * qp1t2 + ( -1/2 * q * qp1t2 + ( \
+    1/4 * ( q )**( 2 ) * qp1t2 + ( ( -1 * q * ( ( 1 + q ) \
+    )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * qp1t2 * ( \
+    S1 )**( 2 ) + ( qp1t2 * ( S2 )**( 2 ) + -1 * q * ( ( 1 \
     + q ) )**( 2 ) * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 \
-    + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) )
+    + q ) )**( 2 ) * xi + -2 * q * qp1t2 * kappa ) ) ) ) )
 
     coeff1 = \
     ( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( 1/2 * ( q \
@@ -1777,6 +1777,65 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
+# Another attempt at making it faster
+# def Scubic_coefficients_SUBS(kappa, u, xi, q, chi1, chi2):
+#     """
+#     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
+#
+#     Call
+#     ----
+#     coeff3,coeff2,coeff1,coeff0 = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+#
+#     Parameters
+#     ----------
+#     kappa: float
+#         Regularized angular momentum (J^2-L^2)/(2L).
+#     u: float
+#         Compactified separation 1/(2L).
+#     xi: float
+#         Effective spin.
+#     q: float
+#         Mass ratio: 0<=q<=1.
+#     chi1: float
+#         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+#     chi2: float
+#         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+#
+#     Returns
+#     -------
+#     coeff3: float
+#         Coefficient to the x^3 term in polynomial.
+#     coeff2: float
+#         Coefficient to the x^2 term in polynomial.
+#     coeff1: float
+#         Coefficient to the x^1 term in polynomial.
+#     coeff0: float
+#         Coefficient to the x^0 term in polynomial.
+#     """
+#
+#     kappa=np.atleast_1d(kappa)
+#     u=np.atleast_1d(u)
+#     xi=np.atleast_1d(xi)
+#     q=np.atleast_1d(q)
+#     S1, S2 = spinmags(q, chi1, chi2)
+#
+#     S1t2 = S1**2
+#     S2t2 = S2**2
+#     qp1t2 = (1+q)**2
+#     qt2 = q**2
+#     qt2m1 = q**2-1
+#     coeff3 = q * qp1t2 * ( u )**( 2 )
+#
+#     coeff2 = ( 1/4 * qp1t2 + ( -1/2 * q * qp1t2 + ( 1/4 * qt2 * qp1t2 + ( ( -1 * q * qp1t2 * S1t2 + ( qt2 * qp1t2 * S1t2 + ( qp1t2 * S2t2 - q * qp1t2 * S2t2 ) ) ) * ( u )**( 2 ) + u * ( q * qp1t2 * xi + -2 * q * qp1t2 * kappa ) ) ) ) )
+#
+#     coeff1 = ( -1/2 * -qt2m1 * S1t2 + ( 1/2 * qt2 * -qt2m1 * S1t2 + ( -1/2 * -qt2m1 * S2t2 + ( 1/2 * qt2 * -qt2m1 * S2t2 + ( u * ( -1 * q * -qt2m1 * S1t2 * ( xi + -2 * kappa ) + ( q * -qt2m1 * S2t2 * ( xi + -2 * kappa ) + ( 2 * qt2 * -qt2m1 * S1t2 * kappa + -2 * -qt2m1 * S2t2 * kappa ) ) ) + q * ( kappa * ( -1 * xi + kappa ) + ( qt2 * kappa * ( -1 * xi + kappa ) + q * ( ( xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) )
+#
+#     coeff0 = 1/4 * qt2m1 * ( qt2m1 * ( S1 )**( 4 ) + ( qt2m1 * ( S2 )**( 4 ) + ( -4 * S2t2 * kappa * ( -1 * q * xi + ( kappa + q * kappa ) ) + S1t2 * ( -2 * qt2m1 * S2t2 + 4 * q * kappa * ( -1 * xi + ( kappa + q * kappa ) ) ) ) ) )
+#
+#     return np.stack([coeff3, coeff2, coeff1, coeff0])
+#
+#
+#
 
 #
 # def Scubic_coefficients_fast(kappa, u, xi, q, chi1, chi2):
@@ -1823,9 +1882,9 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
 #     S2 = numexpr.evaluate("chi2*(q/(1+q))**2")
 #
 #
-#     coeff3 = numexpr.evaluate("q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )")
+#     coeff3 = numexpr.evaluate("q * qp1t2 * ( u )**( 2 )")
 #
-#     coeff2 = numexpr.evaluate("( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( 1/4 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) + -1 * q * ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) ) ")
+#     coeff2 = numexpr.evaluate("( 1/4 * qp1t2 + ( -1/2 * q * qp1t2 + ( 1/4 * ( q )**( 2 ) * qp1t2 + ( ( -1 * q * qp1t2 * ( S1 )**( 2 ) + ( ( q )**( 2 ) * qp1t2 * ( S1 )**( 2 ) + ( qp1t2 * ( S2 )**( 2 ) + -1 * q * qp1t2 * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * qp1t2 * xi + -2 * q * qp1t2 * kappa ) ) ) ) ) ")
 #
 #     coeff1 = numexpr.evaluate("( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( u * ( -1 * q * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * ( xi + -2 * kappa ) + ( q * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * ( xi + -2 * kappa ) + ( 2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * kappa + -2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * kappa ) ) ) + q * ( kappa * ( -1 * xi + kappa ) + ( ( q )**( 2 ) * kappa * ( -1 * xi + kappa ) + q * ( ( xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) ) ")
 #
@@ -6130,36 +6189,36 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # xi = 0.9141896967861489
-    # kappa = 0.5784355256550922
-    # r=np.logspace(3,1,5)
-    # rswitch =1000
-    # N=2
-    # theta1=np.tile(theta1,(N,1))
-    # theta2=np.tile(theta2,(N,1))
-    # deltaphi=np.tile(deltaphi,(N,1))
-    # q=np.tile(q,(N,1))
-    # chi1=np.tile(chi1,(N,1))
-    # chi2=np.tile(chi2,(N,1))
-    # r=np.tile(r,(N,1))
-    # rswitch=np.tile(rswitch,(N,1))
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    deltaphi=0.46
+    S = 0.5538768649231461
+    J = 2.740273008918153
+    xi = 0.9141896967861489
+    kappa = 0.5784355256550922
+    r=np.logspace(3,1,500)
+    rswitch =1000
+    N=100
+    theta1=np.tile(theta1,(N,1))
+    theta2=np.tile(theta2,(N,1))
+    deltaphi=np.tile(deltaphi,(N,1))
+    q=np.tile(q,(N,1))
+    chi1=np.tile(chi1,(N,1))
+    chi2=np.tile(chi2,(N,1))
+    r=np.tile(r,(N,1))
+    rswitch=np.tile(rswitch,(N,1))
 
     #
     #
-    # #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #print(d['xi'])
-    # import cProfile
-    # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
+    #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #print(d['xi'])
+    import cProfile
+    #cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
     #
-    # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","manybinaries.prof")
+    cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","subsscubic.prof")
     #print('x')
     #inspiral_hybrid(q=q,r=r,rswitch=rswitch)
     #print(inspiral_hybrid(u=np.array([0,1,2,3,4]),uswitch=np.array([2]),q=np.array([0.4])))
@@ -6649,4 +6708,6 @@ if __name__ == '__main__':
 
     #print(gwfrequency_to_pnseparation(0, 0, 0,20,0,0,0,25))
     #print(pnseparation_to_gwfrequency(0,0,0,10,0,0,0,25))
-    print(kappadiscriminant_coefficients(3.4, 5.6, 1.1, 1.4, 3.4))
+    #print(kappadiscriminant_coefficients(3.4, 5.6, 1.1, 1.4, 3.4))
+
+    print(Scubic_coefficients(0.4, 0.456, 1.3, 0.2, 0.8, 0.9))
