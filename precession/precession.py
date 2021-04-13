@@ -4372,7 +4372,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
 
 # TODO: return Sminus and Splus along the solution. Right now these are computed inside Ssampling but not stored
-def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs='all'):
+def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs=None):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. In addition, integration can be done between finite separations, forwards from infinite to finite separation, or backwards from finite to infinite separation. For infinity, use r=np.inf or u=0.
     The initial conditions must be specified in terms of one an only one of the following:
@@ -4411,7 +4411,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    requested_outputs: list, optional (default: 'all')
+    requested_outputs: list, optional (default: None)
     	Set of outputs.
 
     Returns
@@ -4529,7 +4529,7 @@ def inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
     # Handle the outputs.
     # If in doubt, return everything
-    if requested_outputs == 'all':
+    if requested_outputs is None:
         requested_outputs = alloutputs
     # Return only those requested (in1d return boolean array)
     wantoutputs = np.in1d(alloutputs,requested_outputs)
@@ -4930,7 +4930,7 @@ def integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2
     return ODEsolution
 
 # TODO: update docstrings when you fix the quadrupole_formula flag
-def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs='all'):
+def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None, J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None):
     """
     Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. Orbit-averaged integration can only be done between finite separations.
     The initial conditions must be specified in terms of one an only one of the following:
@@ -4942,7 +4942,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
     Call
     ----
-    outputs = inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs='all')
+    outputs = inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None)
 
     Parameters
     ----------
@@ -4978,7 +4978,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     MISSING: COULD NOT BUILD, optional (default: False)
     	FILL MANUALLY.
-    requested_outputs: list, optional (default: 'all')
+    requested_outputs: list, optional (default: None)
     	Set of outputs.
 
     Returns
@@ -5076,7 +5076,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
 
     # Handle the outputs.
     # Return all
-    if requested_outputs == 'all':
+    if requested_outputs is None:
         requested_outputs = alloutputs
     # Return only those requested (in1d return boolean array)
     wantoutputs = np.in1d(alloutputs,requested_outputs)
@@ -5094,7 +5094,7 @@ def inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None
     return outcome
 
 
-def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None, xi=None,q=None,chi1=None,chi2=None,requested_outputs='all'):
+def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None, xi=None,q=None,chi1=None,chi2=None,requested_outputs=None):
     """
     Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. If integrating forwards in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backwards in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.
     The initial conditions must be specified in terms of one an only one of the following:
@@ -5105,7 +5105,7 @@ def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
     Call
     ----
-    outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs='all')
+    outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs=None)
 
     Parameters
     ----------
@@ -5137,7 +5137,7 @@ def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
     	Dimensionless spin of the primary (heavier) black hole: 0<=chi1<= 1.
     chi2: float, optional (default: None)
     	Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    requested_outputs: list, optional (default: 'all')
+    requested_outputs: list, optional (default: None)
     	Set of outputs.
 
     Returns
@@ -5149,7 +5149,7 @@ def inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=No
 
     # Outputs available in both orbit-averaged and precession-averaged evolutions
     alloutputs = np.array(['theta1','theta2','deltaphi','S','J','kappa','r','u','xi','q','chi1','chi2'])
-    if requested_outputs == 'all':
+    if requested_outputs is None:
         requested_outputs = alloutputs
         # Return only those requested (in1d return boolean array)
     wantoutputs = np.intersect1d(alloutputs,requested_outputs)
