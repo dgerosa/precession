@@ -205,7 +205,6 @@ def rotate_zaxis(vec, angle):
     -------
     newvec: array
         Rotated array.
-
     """
 
     newx = vec[:, 0]*np.cos(angle) - vec[:, 1]*np.sin(angle)
@@ -215,8 +214,33 @@ def rotate_zaxis(vec, angle):
 
     return newvec
 
-# TODO docstrings. Check if a 1d array is monotonic.
+
 def ismonotonic(vec, which):
+    """
+    Check if an array is monotonic. The parameter `which` can takes the following values:
+    - `<` check array is strictly increasing.
+    - `<=` check array is increasing.
+    - `>` check array is strictly decreasing.
+    - `>=` check array is decreasing.
+
+    Call
+    ----
+        check = ismonotonic(vec, which):
+
+    Parameters
+    ----------
+    vec: array
+        Input array.
+    which: string
+        Select function behavior.
+
+    Returns
+    -------
+    check: boolean
+        Result
+    """
+
+
     if which=='<':
         return np.all(vec[:-1]<vec[1:])
     elif which=='<=':
@@ -1925,16 +1949,13 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
 #
 
 
-
-# TODO: this is a case where we use 2 for square.
-# TODO: update docstrings on precomputedroots. Not just here but in the entire code
-def S2roots(J, r, xi, q, chi1, chi2, precomputedroots=None):
+def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
 
     Call
     ----
-    Sminus2,Splus2,S32 = S2roots(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    Sminus2,Splus2,S32 = Ssroots(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -1950,6 +1971,8 @@ def S2roots(J, r, xi, q, chi1, chi2, precomputedroots=None):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
 
     Returns
     -------
@@ -1960,6 +1983,7 @@ def S2roots(J, r, xi, q, chi1, chi2, precomputedroots=None):
     S32: float
         Spurious root of the effective potential equation.
     """
+
 
     if precomputedroots is None:
 
@@ -2004,7 +2028,7 @@ def Slimits_plusminus(J, r, xi, q, chi1, chi2):
         Maximum value of the total spin S.
     """
 
-    Sminus2, Splus2, _= S2roots(J, r, xi, q, chi1, chi2)
+    Sminus2, Splus2, _= Ssroots(J, r, xi, q, chi1, chi2)
     with np.errstate(invalid='ignore'):
         Smin=Sminus2**0.5
         Smax=Splus2**0.5
@@ -3893,7 +3917,7 @@ def dS2dtsquared(S, J, r, xi, q, chi1, chi2):
     """
 
     mathcalA = derS_prefactor(r, xi, q)
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
+    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2)
     dS2dt2 = - mathcalA**2 * (S**2-Splus2) * (S**2-Sminus2) * (S**2-S32)
 
     return dS2dt2
@@ -4044,7 +4068,6 @@ def time_normalization(Splus2, S32, r, xi, q):
 def Speriod(J, r, xi, q, chi1, chi2, precomputedroots = None):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
-    For optimization purposes, the flag `precomputedroots` passing the output of S2roots instead of recomputing it.
 
     Call
     ----
@@ -4065,7 +4088,7 @@ def Speriod(J, r, xi, q, chi1, chi2, precomputedroots = None):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
-        Output of S2roots.
+        Pre-computed output of Ssroots for computational efficiency.
 
     Returns
     -------
@@ -4073,7 +4096,8 @@ def Speriod(J, r, xi, q, chi1, chi2, precomputedroots = None):
         Nutation period.
     """
 
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
     mathcalT = time_normalization(Splus2, S32, r, xi, q)
     m = elliptic_parameter(Sminus2, Splus2, S32)
     tau = 2*mathcalT*scipy.special.ellipk(m)
@@ -4085,7 +4109,6 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
     The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
-    For optimization purposes, the flag `precomputedroots` can be used to pass the outputs of S2roots instead of recomputing them.
 
     Call
     ----
@@ -4108,7 +4131,7 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
-        Output of S2roots.
+        Pre-computed output of Ssroots for computational efficiency.
 
     Returns
     -------
@@ -4118,7 +4141,7 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
 
 
     t=np.atleast_1d(t)
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
     mathcalT = time_normalization(Splus2, S32, r, xi, q)
     m = elliptic_parameter(Sminus2, Splus2, S32)
 
@@ -4128,12 +4151,10 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
 
     return S
 
-# TODO: Careful here with sign and cyclesign
 
 def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     """
     Time t as a function of S (without radiation reaction). Only covers half of a precession cycle, assuming t=0 at S=S- and t=tau/2 at S=S+. Set sign=-1 to cover the second half, i.e. from t=tau/2 at S=S+ to t=tau at S=S-.
-    For optimization purposes, the flag `precomputedroots` can be used to pass the outputs of S2roots instead of recomputing them.
 
     Call
     ----
@@ -4158,7 +4179,7 @@ def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     cyclesign: integer, optional (default: 1)
         Sign (either +1 or -1) to cover the two halves of a precesion cycle.
     precomputedroots: array, optional (default: None)
-        Output of S2roots.
+        Pre-computed output of Ssroots for computational efficiency.
 
     Returns
     -------
@@ -4166,9 +4187,10 @@ def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
         Time.
     """
 
+
     S=np.atleast_1d(S)
 
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
 
     m = elliptic_parameter(Sminus2, Splus2, S32)
     mathcalT = time_normalization(Splus2, S32, r, xi, q)
@@ -4214,7 +4236,7 @@ def Ssampling(J, r, xi, q, chi1, chi2, N=1):
     """
 
     # Compute the S roots only once and pass them to both functions
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
+    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2)
 
     tau = Speriod(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminus2, Splus2, S32]))
     # For each binary, generate N samples between 0 and tau.
@@ -4287,20 +4309,19 @@ def S2av(J, r, xi, q, chi1, chi2):
         Squared magnitude of the total spin.
     """
 
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
+    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2)
     m = elliptic_parameter(Sminus2, Splus2, S32)
     Ssq = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
 
     return Ssq
 
-# TODO again S2 instead of Ssq
-def S2rootsinf(theta1inf, theta2inf, q, chi1, chi2):
+def Ssrootsinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the roots of the cubic equation in S^2.
 
     Call
     ----
-    Sminus2inf,Splus2inf,S32inf = S2rootsinf(theta1inf,theta2inf,q,chi1,chi2)
+    Sminus2inf,Splus2inf,S32inf = Ssrootsinf(theta1inf,theta2inf,q,chi1,chi2)
 
     Parameters
     ----------
@@ -4696,7 +4717,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
 
     if method == 'quadrature':
 
-        Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2)
+        Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2)
         m = elliptic_parameter(Sminus2, Splus2, S32)
         # This is proportional to tau, takes care of the denominator
         tau_prop = scipy.special.ellipk(m) / ((Splus2-S32)**0.5)
@@ -4854,10 +4875,6 @@ def widenutation(q, chi1, chi2):
     return rwide
 
 # TODO: write function with values of J and xi where wide nutation happens
-# TODO: Omegaz and alpha. For alpha use precession_average
-# TOOD: chip
-
-# TODO: Write a function that evolves the orbit-averaged spin precession eqs in time, without any radiation reaction
 
 #### Orbit averaged things ####
 
@@ -5348,16 +5365,11 @@ def inspiral(*args, which=None, **kwargs):
     elif which in ['orbit', 'orbav', 'orbitaveraged', 'orbitaverage', 'orbit-averaged', 'orbit-average', 'orbitav']:
         return inspiral_orbav(*args, **kwargs)
 
-    # TODO add hybrid here
-
-    #elif which in ['hybrid']:
-    #    rswitch = 100
-
-    #    new_kwargs = {k: v for k, v in kwargs.items() if k in ["name"]}
-
+    elif which in ['hybrid']:
+        return inspiral_hybrid(*args, **kwargs)
 
     else:
-        raise ValueError("`which` needs to be either `precav` or `orbav`.")
+        raise ValueError("`which` needs to be `precav`, `orbav` or `hybrid`.")
 
 
 
@@ -5407,7 +5419,8 @@ def frequency_prefactor(J, r, xi, q, chi1, chi2):
 
     return np.stack([mathcalC0, mathcalCplus, mathcalCminus])
 
-def azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=None):
+
+def azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None):
     """
     Numerical prefactors entering the precession frequency.
 
@@ -5430,7 +5443,7 @@ def azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=None):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
-        Output of S2roots.
+        Pre-computed output of Ssroots for computational efficiency.
 
     Returns
     -------
@@ -5445,7 +5458,7 @@ def azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=None):
     J=np.atleast_1d(J)
     L = eval_L(r, q)
 
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
 
     mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor(J, r, xi, q, chi1, chi2)
     mathcalT = time_normalization(Splus2, S32, r, xi, q)
@@ -5457,7 +5470,36 @@ def azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=None):
     return np.stack([mathcalC0prime, mathcalCplusprime, mathcalCminusprime])
 
 
-def eval_omegaL(S, J, r, xi, q, chi1, chi2):
+def eval_OmegaL(S, J, r, xi, q, chi1, chi2):
+    """
+    Compute the precession frequency OmegaL along the precession cycle.
+
+    Call
+    ----
+    OmegaL = eval_OmegaL(S,J,r,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    OmegaL: float
+        Precession frequency of L about J.
+    """
 
     S=np.atleast_1d(S)
     J=np.atleast_1d(J)
@@ -5493,7 +5535,7 @@ def eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=None):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
-        Output of S2roots.
+        Pre-computed output of Ssroots for computational efficiency.
 
     Returns
     -------
@@ -5501,9 +5543,8 @@ def eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=None):
         Azimuthal angle spanned by L about J during an entire cycle.
     """
 
-
     L = eval_L(r, q)
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
     m = elliptic_parameter(Sminus2, Splus2, S32)
     nplus = elliptic_characheristic(Sminus2, Splus2, J, L, +1)
     nminus = elliptic_characheristic(Sminus2, Splus2, J, L, -1)
@@ -5540,7 +5581,7 @@ def eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     cyclesign: integer, optional (default: 1)
         Sign (either +1 or -1) to cover the two halves of a precesion cycle.
     precomputedroots: array, optional (default: None)
-        Output of S2roots.
+        Pre-computed output of Ssroots for computational efficiency.
 
     Returns
     -------
@@ -5548,9 +5589,8 @@ def eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
         Azimuthal angle spanned by L about J.
     """
 
-
     L = eval_L(r, q)
-    Sminus2, Splus2, S32 = S2roots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
     alpha = eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminus2, Splus2, S32]))
     m = elliptic_parameter(Sminus2, Splus2, S32)
     phi = elliptic_amplitude(S, Sminus2, Splus2)
@@ -6220,36 +6260,36 @@ if __name__ == '__main__':
     #print(repr(S))
 
     ##### INSPIRAL TESTING: precav, to/from finite #######
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    deltaphi=0.46
-    S = 0.5538768649231461
-    J = 2.740273008918153
-    xi = 0.9141896967861489
-    kappa = 0.5784355256550922
-    r=np.logspace(3,1,500)
-    rswitch =1000
-    N=100
-    theta1=np.tile(theta1,(N,1))
-    theta2=np.tile(theta2,(N,1))
-    deltaphi=np.tile(deltaphi,(N,1))
-    q=np.tile(q,(N,1))
-    chi1=np.tile(chi1,(N,1))
-    chi2=np.tile(chi2,(N,1))
-    r=np.tile(r,(N,1))
-    rswitch=np.tile(rswitch,(N,1))
-
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # deltaphi=0.46
+    # S = 0.5538768649231461
+    # J = 2.740273008918153
+    # xi = 0.9141896967861489
+    # kappa = 0.5784355256550922
+    # r=np.logspace(3,1,500)
+    # rswitch =1000
+    # N=100
+    # theta1=np.tile(theta1,(N,1))
+    # theta2=np.tile(theta2,(N,1))
+    # deltaphi=np.tile(deltaphi,(N,1))
+    # q=np.tile(q,(N,1))
+    # chi1=np.tile(chi1,(N,1))
+    # chi2=np.tile(chi2,(N,1))
+    # r=np.tile(r,(N,1))
+    # rswitch=np.tile(rswitch,(N,1))
     #
-    #
-    #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #print(d['xi'])
-    import cProfile
-    #cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
-    #
-    cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","subsscubic.prof")
+    # #
+    # #
+    # #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # #print(d['xi'])
+    # import cProfile
+    # #cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
+    # #
+    # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","subsscubic.prof")
     #print('x')
     #inspiral_hybrid(q=q,r=r,rswitch=rswitch)
     #print(inspiral_hybrid(u=np.array([0,1,2,3,4]),uswitch=np.array([2]),q=np.array([0.4])))
@@ -6505,11 +6545,11 @@ if __name__ == '__main__':
 
     # J=6.1
     # print("LS",Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
-    # print(S2roots(J,r,xi,q,chi1,chi2))
+    # print(Ssroots(J,r,xi,q,chi1,chi2))
     #
     # J=6.6
     # print(Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
-    # print(S2roots(J,r,xi,q,chi1,chi2))
+    # print(Ssroots(J,r,xi,q,chi1,chi2))
     #
     # # print(repr(Jofr(ic=(Jmin+Jmax)/2, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
     # for J in [5.99355616 ,6.0354517,6.20850742,6.57743474,6.94028614]:
@@ -6522,7 +6562,7 @@ if __name__ == '__main__':
     # print( dSdtprefactor(r,xi,q) )
     # kappa=eval_kappa(J,r,q)
     # u=eval_u(r,q)
-    # print(S2roots_NEW(kappa,u,xi,q,chi1,chi2))
+    # print(Ssroots_NEW(kappa,u,xi,q,chi1,chi2))
 
 
     #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
@@ -6552,7 +6592,7 @@ if __name__ == '__main__':
 
     #
     # t0=time.time()
-    # [S2roots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]) for i in range(100)]
+    # [Ssroots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]) for i in range(100)]
     # #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
     # print(time.time()-t0)
     #
@@ -6589,7 +6629,7 @@ if __name__ == '__main__':
 
 
     #print(Jlimits(r,q,chi1,chi2))
-    #print(S2roots(J,r,xi,q,chi1,chi2))
+    #print(Ssroots(J,r,xi,q,chi1,chi2))
 
 
 
@@ -6602,7 +6642,7 @@ if __name__ == '__main__':
     # J=1.48
     # xi=0.25
     # S = 0.3
-    # #print("stillworks",S2roots(J,r,xi,q,chi1,chi2)**0.5)
+    # #print("stillworks",Ssroots(J,r,xi,q,chi1,chi2)**0.5)
     #
     # #print(eval_deltaphi(S,J,r,xi,q,chi1,chi2, sign=1))
     #
@@ -6694,7 +6734,7 @@ if __name__ == '__main__':
 
     #
     # print(Speriod([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
-    # pr = S2roots([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
+    # pr = Ssroots([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
     # print(Speriod([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
     # sys.exit()
 
@@ -6741,4 +6781,6 @@ if __name__ == '__main__':
     #print(pnseparation_to_gwfrequency(0,0,0,10,0,0,0,25))
     #print(kappadiscriminant_coefficients(3.4, 5.6, 1.1, 1.4, 3.4))
 
-    print(Scubic_coefficients(0.4, 0.456, 1.3, 0.2, 0.8, 0.9))
+    #print(Scubic_coefficients(0.4, 0.456, 1.3, 0.2, 0.8, 0.9))
+    #print(Slimits_plusminus(2.34, 100, 0, 0.6, 1, 1))
+    #print(xiresonances(2.34, 100, 0.6, 1, 1))

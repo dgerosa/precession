@@ -100,7 +100,6 @@ def descr(varname,vardef=None):
     lookup['omegasq']=["float","Squared frequency."]
     lookup['which']=["string","Select function behavior."]
     lookup['allvars']=["array","Packed ODE input variables."]
-    lookup['precomputedroots']=["array","Output of S2roots."]
     lookup['ODEsolution']=["array of scipy OdeSolution objects", "Solution of the ODE. Key method is .sol(t)"]
     lookup['kappainitial']=["float","Initial value of the regularized momentum kappa"]
     lookup['uinitial']=["float","Initial value of the compactified separation 1/(2L)"]
@@ -135,6 +134,7 @@ def descr(varname,vardef=None):
     lookup['theta2atmax']=["float","Value of the angle theta2 at the resonance that maximizes either J or xi, depending on the input"]
     lookup['deltaphiatmin']=["float","Value of the angle deltaphi at the resonance that minimizes either J or xi, depending on the input"]
     lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes either J or xi, depending on the input"]
+    lookup['precomputedroots']=["array","Pre-computed output of Ssroots for computational efficiency"]
 
 
 
