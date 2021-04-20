@@ -1955,7 +1955,7 @@ def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
 
     Call
     ----
-    Sminus2,Splus2,S32 = Ssroots(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    Sminuss,Spluss,S3s = Ssroots(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -1976,11 +1976,11 @@ def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
 
     Returns
     -------
-    Sminus2: float
+    Sminuss: float
         Lowest physical root, if present, of the effective potential equation.
-    Splus2: float
+    Spluss: float
         Largest physical root, if present, of the effective potential equation.
-    S32: float
+    S3s: float
         Spurious root of the effective potential equation.
     """
 
@@ -1989,9 +1989,9 @@ def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
 
         kappa = eval_kappa(J, r, q)
         u = eval_u(r, q)
-        S32, Sminus2, Splus2 = wraproots(Scubic_coefficients, kappa, u, xi, q, chi1, chi2).T
+        S3s, Sminuss, Spluss = wraproots(Scubic_coefficients, kappa, u, xi, q, chi1, chi2).T
 
-        return np.stack([Sminus2, Splus2, S32])
+        return np.stack([Sminuss, Spluss, S3s])
 
     else:
         return precomputedroots
@@ -2028,10 +2028,10 @@ def Slimits_plusminus(J, r, xi, q, chi1, chi2):
         Maximum value of the total spin S.
     """
 
-    Sminus2, Splus2, _= Ssroots(J, r, xi, q, chi1, chi2)
+    Sminuss, Spluss, _= Ssroots(J, r, xi, q, chi1, chi2)
     with np.errstate(invalid='ignore'):
-        Smin=Sminus2**0.5
-        Smax=Splus2**0.5
+        Smin=Sminuss**0.5
+        Smax=Spluss**0.5
 
     return np.stack([Smin, Smax])
 
@@ -3885,13 +3885,13 @@ def derS_prefactor(r, xi, q):
 
 
 # TODO: Here we use S2 for square...
-def dS2dtsquared(S, J, r, xi, q, chi1, chi2):
+def dSsdtsquared(S, J, r, xi, q, chi1, chi2):
     """
     Squared first time derivative of the squared total spin, on the precession timescale.
 
     Call
     ----
-    dS2dt2 = dS2dtsquared(S,J,r,xi,q,chi1,chi2)
+    dSsdts = dSsdtsquared(S,J,r,xi,q,chi1,chi2)
 
     Parameters
     ----------
@@ -3912,25 +3912,25 @@ def dS2dtsquared(S, J, r, xi, q, chi1, chi2):
 
     Returns
     -------
-    dS2dt2: float
+    dSsdts: float
         Squared first derivative of the squared total spin.
     """
 
     mathcalA = derS_prefactor(r, xi, q)
-    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2)
-    dS2dt2 = - mathcalA**2 * (S**2-Splus2) * (S**2-Sminus2) * (S**2-S32)
+    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
+    dSsdts = - mathcalA**2 * (S**2-Spluss) * (S**2-Sminuss) * (S**2-S3s)
 
-    return dS2dt2
+    return dSsdts
 
 
 # Change name to this function, otherwise is identical to the returned variable.
-def dS2dt(S, J, r, xi, q, chi1, chi2, cyclesign=1):
+def dSsdt(S, J, r, xi, q, chi1, chi2, cyclesign=1):
     """
     Time derivative of the squared total spin, on the precession timescale.
 
     Call
     ----
-    dS2dt = dS2dt(S,J,r,xi,q,chi1,chi2,cyclesign=1)
+    dSsdt = dSsdt(S,J,r,xi,q,chi1,chi2,cyclesign=1)
 
     Parameters
     ----------
@@ -3953,13 +3953,13 @@ def dS2dt(S, J, r, xi, q, chi1, chi2, cyclesign=1):
 
     Returns
     -------
-    dS2dt: float
+    dSsdt: float
         Time derivative of the squared total spin.
     """
 
     cyclesign =np.atleast_1d(cyclesign)
 
-    return cyclesign*dS2dtsquared(S, J, r, xi, q, chi1, chi2)**0.5
+    return cyclesign*dSsdtsquared(S, J, r, xi, q, chi1, chi2)**0.5
 
 # Change name to this function, otherwise is identical to the returned variable.
 def dSdt(S, J, r, xi, q, chi1, chi2):
@@ -3993,25 +3993,25 @@ def dSdt(S, J, r, xi, q, chi1, chi2):
         Time derivative of the total spin.
     """
 
-    return dS2dt(S, J, r, xi, q, chi1, chi2) / (2*S)
+    return dSsdt(S, J, r, xi, q, chi1, chi2) / (2*S)
 
 
 # TODO: use precomputedroots in here?
-def elliptic_parameter(Sminus2, Splus2, S32):
+def elliptic_parameter(Sminuss, Spluss, S3s):
     """
     Parameter m entering elliptic functiosn for the evolution of S.
 
     Call
     ----
-    m = elliptic_parameter(Sminus2,Splus2,S32)
+    m = elliptic_parameter(Sminuss,Spluss,S3s)
 
     Parameters
     ----------
-    Sminus2: float
+    Sminuss: float
         Lowest physical root, if present, of the effective potential equation.
-    Splus2: float
+    Spluss: float
         Largest physical root, if present, of the effective potential equation.
-    S32: float
+    S3s: float
         Spurious root of the effective potential equation.
 
     Returns
@@ -4020,47 +4020,47 @@ def elliptic_parameter(Sminus2, Splus2, S32):
         Parameter of elliptic function(s).
     """
 
-    Sminus2=np.atleast_1d(Sminus2)
-    Splus2=np.atleast_1d(Splus2)
-    S32=np.atleast_1d(S32)
+    Sminuss=np.atleast_1d(Sminuss)
+    Spluss=np.atleast_1d(Spluss)
+    S3s=np.atleast_1d(S3s)
 
-    m = (Splus2-Sminus2)/(Splus2-S32)
+    m = (Spluss-Sminuss)/(Spluss-S3s)
 
     return m
 
 #TODO: docstrings
 # TODO: use precomputedroots in here?
-def elliptic_amplitude(S, Sminus2, Splus2):
+def elliptic_amplitude(S, Sminuss, Spluss):
 
     S=np.atleast_1d(S)
-    Sminus2=np.atleast_1d(Sminus2)
-    Splus2=np.atleast_1d(Splus2)
+    Sminuss=np.atleast_1d(Sminuss)
+    Spluss=np.atleast_1d(Spluss)
 
-    phi = np.arccos( ( (S**2 - Sminus2) / (Splus2 - Sminus2) )**0.5 )
+    phi = np.arccos( ( (S**2 - Sminuss) / (Spluss - Sminuss) )**0.5 )
 
     return phi
 
 #TODO: docstrings.
-def elliptic_characheristic(Sminus2, Splus2, J, L, sign):
+def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
 
-    Sminus2 = np.atleast_1d(Sminus2)
-    Splus2 = np.atleast_1d(Splus2)
+    Sminuss = np.atleast_1d(Sminuss)
+    Spluss = np.atleast_1d(Spluss)
     J = np.atleast_1d(J)
     L = np.atleast_1d(L)
 
     #Note: sign here is not cyclesign!
-    n = (Splus2 - Sminus2)/(Splus2- (J +np.sign(sign)*L)**2)
+    n = (Spluss - Sminuss)/(Spluss- (J +np.sign(sign)*L)**2)
 
     return n
 
 # TODO: docstrings
-def time_normalization(Splus2, S32, r, xi, q):
+def time_normalization(Spluss, S3s, r, xi, q):
 
-    Splus2=np.atleast_1d(Splus2)
-    S32=np.atleast_1d(S32)
+    Spluss=np.atleast_1d(Spluss)
+    S3s=np.atleast_1d(S3s)
 
     mathcalA= derS_prefactor(r, xi, q)
-    mathcalT = 2/(mathcalA*(Splus2-S32)**0.5)
+    mathcalT = 2/(mathcalA*(Spluss-S3s)**0.5)
 
     return mathcalT
 
@@ -4097,9 +4097,9 @@ def Speriod(J, r, xi, q, chi1, chi2, precomputedroots = None):
     """
 
 
-    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
-    mathcalT = time_normalization(Splus2, S32, r, xi, q)
-    m = elliptic_parameter(Sminus2, Splus2, S32)
+    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    mathcalT = time_normalization(Spluss, S3s, r, xi, q)
+    m = elliptic_parameter(Sminuss, Spluss, S3s)
     tau = 2*mathcalT*scipy.special.ellipk(m)
 
     return tau
@@ -4141,12 +4141,12 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
 
 
     t=np.atleast_1d(t)
-    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
-    mathcalT = time_normalization(Splus2, S32, r, xi, q)
-    m = elliptic_parameter(Sminus2, Splus2, S32)
+    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    mathcalT = time_normalization(Spluss, S3s, r, xi, q)
+    m = elliptic_parameter(Sminuss, Spluss, S3s)
 
     sn, _, dn, _ = scipy.special.ellipj(t.T/mathcalT, m)
-    Ssq = Sminus2 + (Splus2-Sminus2)*((Sminus2-S32)/(Splus2-S32)) *(sn/dn)**2
+    Ssq = Sminuss + (Spluss-Sminuss)*((Sminuss-S3s)/(Spluss-S3s)) *(sn/dn)**2
     S=Ssq.T**0.5
 
     return S
@@ -4190,12 +4190,12 @@ def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
 
     S=np.atleast_1d(S)
 
-    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
 
-    m = elliptic_parameter(Sminus2, Splus2, S32)
-    mathcalT = time_normalization(Splus2, S32, r, xi, q)
-    phi = elliptic_amplitude(S, Sminus2, Splus2)
-    tau = Speriod(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminus2, Splus2, S32]))
+    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    mathcalT = time_normalization(Spluss, S3s, r, xi, q)
+    phi = elliptic_amplitude(S, Sminuss, Spluss)
+    tau = Speriod(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
 
     return t
@@ -4236,27 +4236,27 @@ def Ssampling(J, r, xi, q, chi1, chi2, N=1):
     """
 
     # Compute the S roots only once and pass them to both functions
-    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2)
+    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
 
-    tau = Speriod(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminus2, Splus2, S32]))
+    tau = Speriod(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     # For each binary, generate N samples between 0 and tau.
     t = np.random.uniform(size=tau.size*N).reshape((tau.size, N)) * tau[:, None]
     # Note the special broadcasting rules of Soft, see Soft.__docs__
     # S has shape (M, N).
-    S = Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminus2, Splus2, S32]))
+    S = Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
     # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
     # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
     return np.atleast_1d(np.squeeze(S))
 
 
-def S2av_mfactor(m):
+def Ssav_mfactor(m):
     """
     Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
 
     Call
     ----
-    coeff = S2av_mfactor(m)
+    coeff = Ssav_mfactor(m)
 
     Parameters
     ----------
@@ -4270,7 +4270,7 @@ def S2av_mfactor(m):
     """
 
     m=np.atleast_1d(m)
-    # The limit of the S2av coefficient as m->0 is finite and equal to 1/2.
+    # The limit of the Ssav coefficient as m->0 is finite and equal to 1/2.
     # This is implementation is numerically stable up to m~1e-10.
     # For m=1e-7, the analytic m=0 limit is returned with a precision of 1e-9, which is enough.
     m=np.maximum(1e-7, m)
@@ -4280,13 +4280,13 @@ def S2av_mfactor(m):
 
 
 # TODO: change name to this function
-def S2av(J, r, xi, q, chi1, chi2):
+def Ssav(J, r, xi, q, chi1, chi2):
     """
     Analytic precession averaged expression for the squared total spin.
 
     Call
     ----
-    Ssq = S2av(J,r,xi,q,chi1,chi2)
+    Ssq = Ssav(J,r,xi,q,chi1,chi2)
 
     Parameters
     ----------
@@ -4309,9 +4309,9 @@ def S2av(J, r, xi, q, chi1, chi2):
         Squared magnitude of the total spin.
     """
 
-    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2)
-    m = elliptic_parameter(Sminus2, Splus2, S32)
-    Ssq = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
+    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
+    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    Ssq = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
 
     return Ssq
 
@@ -4321,7 +4321,7 @@ def Ssrootsinf(theta1inf, theta2inf, q, chi1, chi2):
 
     Call
     ----
-    Sminus2inf,Splus2inf,S32inf = Ssrootsinf(theta1inf,theta2inf,q,chi1,chi2)
+    Sminussinf,Splussinf,S3sinf = Ssrootsinf(theta1inf,theta2inf,q,chi1,chi2)
 
     Parameters
     ----------
@@ -4338,32 +4338,32 @@ def Ssrootsinf(theta1inf, theta2inf, q, chi1, chi2):
 
     Returns
     -------
-    Sminus2inf: float
+    Sminussinf: float
         Asymptotic value of the lowest physical root, if present, of the effective potential equation.
-    Splus2inf: float
+    Splussinf: float
         Asymptotic value of the largest physical root, if present, of the effective potential equation.
-    S32inf: float
+    S3sinf: float
         Asymptotic value of the spurious root of the effective potential equation.
     """
 
     S1, S2 = spinmags(q, chi1, chi2)
     coscos = np.cos(theta1inf)*np.cos(theta2inf)
     sinsin = np.sin(theta1inf)*np.sin(theta2inf)
-    Sminus2inf = S1**2 + S2**2 + 2*S1*S2*(coscos - sinsin)
-    Splus2inf = S1**2 + S2**2 + 2*S1*S2*(coscos + sinsin)
-    S32inf = -np.inf
+    Sminussinf = S1**2 + S2**2 + 2*S1*S2*(coscos - sinsin)
+    Splussinf = S1**2 + S2**2 + 2*S1*S2*(coscos + sinsin)
+    S3sinf = -np.inf
 
-    return np.stack([Sminus2inf, Splus2inf, S32inf])
+    return np.stack([Sminussinf, Splussinf, S3sinf])
 
 
-def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
+def Ssavinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the precession averaged values of S^2
     from the asymptotic angles (theta1, theta2).
 
     Call
     ----
-    Ssq = S2avinf(theta1inf,theta2inf,q,chi1,chi2)
+    Ssq = Ssavinf(theta1inf,theta2inf,q,chi1,chi2)
 
     Parameters
     ----------
@@ -4388,16 +4388,16 @@ def S2avinf(theta1inf, theta2inf, q, chi1, chi2):
     theta2inf = np.atleast_1d(theta2inf)
 
     S1, S2 = spinmags(q, chi1, chi2)
-    S2avinf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
+    Ssavinf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
 
-    return S2avinf
+    return Ssavinf
 
 
 #### Precession-averaged evolution ####
 
 def rhs_precav(u, kappa, xi, q, chi1, chi2):
     """
-    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to S2av and S2avinf and it has been re-written for optimization purposes.
+    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
 
     Call
     ----
@@ -4427,14 +4427,14 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
     if u==0:
        # In this case use analytic result
        theta1inf, theta2inf = asymptotic_to_angles(kappa, xi, q, chi1, chi2)
-       S2av = S2avinf(theta1inf, theta2inf, q, chi1, chi2)
+       Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
-        #This is equivalent to S2av, but we avoid multiple conversions J <--> kappa and repated calculation of the S^2 roots.
-        S32, Sminus2, Splus2 = np.squeeze(wraproots(Scubic_coefficients, kappa, u, xi, q, chi1, chi2))
-        m = elliptic_parameter(Sminus2, Splus2, S32)
-        S2av = Splus2 - (Splus2-Sminus2)*S2av_mfactor(m)
+        #This is equivalent to Ssav, but we avoid multiple conversions J <--> kappa and repated calculation of the S^2 roots.
+        S3s, Sminuss, Spluss = np.squeeze(wraproots(Scubic_coefficients, kappa, u, xi, q, chi1, chi2))
+        m = elliptic_parameter(Sminuss, Spluss, S3s)
+        Ssav = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
 
-    return S2av
+    return Ssav
 
 
 def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
@@ -4717,24 +4717,24 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
 
     if method == 'quadrature':
 
-        Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2)
-        m = elliptic_parameter(Sminus2, Splus2, S32)
+        Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
+        m = elliptic_parameter(Sminuss, Spluss, S3s)
         # This is proportional to tau, takes care of the denominator
-        tau_prop = scipy.special.ellipk(m) / ((Splus2-S32)**0.5)
+        tau_prop = scipy.special.ellipk(m) / ((Spluss-S3s)**0.5)
 
         # Each args needs to be iterable
         args = [np.atleast_1d(a) for a in args]
 
         # Compute the numerator explicitely
-        def _integrand(S, Sminus2, Splus2, S32, *sargs):
+        def _integrand(S, Sminuss, Spluss, S3s, *sargs):
             # This is proportional to dSdt
-            dSdt_prop = (-(S**2-Splus2) * (S**2-Sminus2) * (S**2-S32))**0.5 /S
+            dSdt_prop = (-(S**2-Spluss) * (S**2-Sminuss) * (S**2-S3s))**0.5 /S
             return func(S, *sargs) / dSdt_prop
 
-        def _compute(Sminus2, Splus2, S32, *sargs):
-            return scipy.integrate.quad(_integrand, Sminus2**0.5, Splus2**0.5, args=(Sminus2, Splus2, S32, *sargs))[0]
+        def _compute(Sminuss, Spluss, S3s, *sargs):
+            return scipy.integrate.quad(_integrand, Sminuss**0.5, Spluss**0.5, args=(Sminuss, Spluss, S3s, *sargs))[0]
 
-        func_av = np.array(list(map(_compute, Sminus2, Splus2, S32, *args))) / tau_prop
+        func_av = np.array(list(map(_compute, Sminuss, Spluss, S3s, *args))) / tau_prop
 
     elif method == 'montecarlo':
 
@@ -5458,14 +5458,14 @@ def azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None):
     J=np.atleast_1d(J)
     L = eval_L(r, q)
 
-    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
 
     mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor(J, r, xi, q, chi1, chi2)
-    mathcalT = time_normalization(Splus2, S32, r, xi, q)
+    mathcalT = time_normalization(Spluss, S3s, r, xi, q)
 
     mathcalC0prime = mathcalT*mathcalC0
-    mathcalCplusprime = -mathcalT*mathcalC0*mathcalCplus/( Splus2 - (J+L)**2 )
-    mathcalCminusprime = -mathcalT*mathcalC0*mathcalCminus/( Splus2 - (J-L)**2 )
+    mathcalCplusprime = -mathcalT*mathcalC0*mathcalCplus/( Spluss - (J+L)**2 )
+    mathcalCminusprime = -mathcalT*mathcalC0*mathcalCminus/( Spluss - (J-L)**2 )
 
     return np.stack([mathcalC0prime, mathcalCplusprime, mathcalCminusprime])
 
@@ -5544,11 +5544,11 @@ def eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=None):
     """
 
     L = eval_L(r, q)
-    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
-    m = elliptic_parameter(Sminus2, Splus2, S32)
-    nplus = elliptic_characheristic(Sminus2, Splus2, J, L, +1)
-    nminus = elliptic_characheristic(Sminus2, Splus2, J, L, -1)
-    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminus2, Splus2, S32]))
+    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
+    nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
+    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
     alpha = 2*(mathcalC0prime*scipy.special.ellipk(m) + mathcalCplusprime*ellippi(nplus, np.pi/2, m)  + mathcalCminusprime*ellippi(nminus, np.pi/2, m))
 
@@ -5590,13 +5590,13 @@ def eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     """
 
     L = eval_L(r, q)
-    Sminus2, Splus2, S32 = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
-    alpha = eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminus2, Splus2, S32]))
-    m = elliptic_parameter(Sminus2, Splus2, S32)
-    phi = elliptic_amplitude(S, Sminus2, Splus2)
-    nplus = elliptic_characheristic(Sminus2, Splus2, J, L, +1)
-    nminus = elliptic_characheristic(Sminus2, Splus2, J, L, -1)
-    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminus2, Splus2, S32]))
+    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    alpha = eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    phi = elliptic_amplitude(S, Sminuss, Spluss)
+    nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
+    nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
+    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
     phiL = alpha/2 -np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi, m) + mathcalCplusprime*ellippi(nplus, phi, m)  + mathcalCminusprime*ellippi(nminus, phi, m))
 
@@ -6157,7 +6157,7 @@ if __name__ == '__main__':
     #
     # for x in np.linspace()
     #
-    # print(S2av_mfactor([0,1e-,0.2]))
+    # print(Ssav_mfactor([0,1e-,0.2]))
 
     #print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
     #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],simpler=True))
@@ -6301,7 +6301,7 @@ if __name__ == '__main__':
     #
     # print(d['r'])
     #
-    # print(S2av(J, r[0], xi, q, chi1, chi2))
+    # print(Ssav(J, r[0], xi, q, chi1, chi2))
     #
     #
     #print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='montecarlo'))
