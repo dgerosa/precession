@@ -1828,6 +1828,8 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
     -2 * ( -1 + ( q )**( 2 ) ) * ( S2 )**( 2 ) + 4 * q * kappa * ( -1 * \
     xi + ( kappa + q * kappa ) ) ) ) ) )
 
+    print("coeff", coeff3, coeff2, coeff1, coeff0)
+
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
@@ -4430,9 +4432,18 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
        Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
         #This is equivalent to Ssav, but we avoid multiple conversions J <--> kappa and repated calculation of the S^2 roots.
+        print("RHS", kappa, u, xi, q, chi1, chi2)
+
+        Jres1, Jres2 = Jlimits(r=eval_r(u=u,q=q), xi=xi, q=q, chi1=chi1, chi2=chi2)
+
+        print("resonances", Jres1, eval_J(kappa=kappa,r=eval_r(u=u,q=q),q=q), Jres2)
+
         S3s, Sminuss, Spluss = np.squeeze(wraproots(Scubic_coefficients, kappa, u, xi, q, chi1, chi2))
         m = elliptic_parameter(Sminuss, Spluss, S3s)
         Ssav = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
+
+        print("RHS after", S3s, Sminuss, Spluss)
+
 
     return Ssav
 
@@ -4487,7 +4498,9 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
         # As far as I understand by inspective the scipy code, the "vectorized" option is ignored if a jacobian is not provided. If you decide it's needed, a vectorized implementation of "rhs_precav" requires substituting that if statement with np.where
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2))
+        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2,atol=1e-6, rtol=1e-6)
+
+        #TODO: let user pick rtol and atol
 
         # Return ODE object. The key methods is .sol --callable, sol(t).
         return ODEsolution
@@ -6784,3 +6797,13 @@ if __name__ == '__main__':
     #print(Scubic_coefficients(0.4, 0.456, 1.3, 0.2, 0.8, 0.9))
     #print(Slimits_plusminus(2.34, 100, 0, 0.6, 1, 1))
     #print(xiresonances(2.34, 100, 0.6, 1, 1))
+
+
+    r = [10.0, np.inf]
+    theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
+
+    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
+
+    Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
+    J=Jmax-1e-7
+    result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
