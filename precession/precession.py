@@ -4498,7 +4498,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
         # As far as I understand by inspective the scipy code, the "vectorized" option is ignored if a jacobian is not provided. If you decide it's needed, a vectorized implementation of "rhs_precav" requires substituting that if statement with np.where
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2,atol=1e-6, rtol=1e-6)
+        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-6, rtol=1e-6)
 
         #TODO: let user pick rtol and atol
 
