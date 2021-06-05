@@ -4484,20 +4484,15 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
         coeffs= Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
         sols = roots_vec(coeffs.T)
         S3s, Sminuss, Spluss = np.squeeze(np.sort_complex(sols))
-        #print(S3s, Sminuss, Spluss)
-        #if False:
-        if np.iscomplex([Sminuss, Spluss]).any():
-            Ssav = np.mean(np.real([Sminuss, Spluss]))
-            print('Warning: sanitizer', S3s, Sminuss, Spluss,(Spluss-Sminuss)/Ssav)
-            sys.exit()
-            #print(sols)
 
+        if np.iscomplex([Sminuss, Spluss]).any():
+            warnings.warn("Sanitizing RHS output [rhs_precav].", Warning)
+            Ssav = np.mean(np.real([Sminuss, Spluss]))
         else:
             S3s, Sminuss, Spluss = np.real([S3s, Sminuss, Spluss])
             m = elliptic_parameter(Sminuss, Spluss, S3s)
             Ssav = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
 
-        #print(u,kappa,Ssav,[S3s, Sminuss, Spluss])
     return Ssav
 
 
