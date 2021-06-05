@@ -1026,6 +1026,62 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
+
+def kapparesonances(u, xi, q, chi1, chi2):
+    """
+    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of xi. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
+
+    Call
+    ----
+    kappamin,kappamax = kapparesonances(u,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    u: float
+        Compactified separation 1/(2L).
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    kappamin: float
+        Minimum value of the regularized angular momentum kappa.
+    kappamax: float
+        Maximum value of the regularized angular momentum kappa.
+    """
+
+    # There are in principle five solutions, but only two are physical.
+
+    u=np.atleast_1d(u)
+    xi=np.atleast_1d(xi)
+    q=np.atleast_1d(q)
+    chi1=np.atleast_1d(chi1)
+    chi2=np.atleast_1d(chi2)
+
+    kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
+    def _compute(kapparoots, u, xi, q, chi1, chi2):
+        kapparoots = kapparoots[np.isfinite(kapparoots)]
+        Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
+        #TODO: This is a guess! I'm not sure Slimits_S1S2 is enough here. Jresonances had Slimits_JLS1S2. Needs to be tested!
+        Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
+        kappares = kapparoots[np.logical_and(Sroots>Smin, Sroots<Smax)]
+        assert len(kappares)<=2, "I found more than two resonances, this should not be possible."
+        # If you didn't find enough solutions, append nans
+        kappares=np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
+        return kappares
+
+    kappamin, kappamax =np.array(list(map(_compute, kapparoots, u, xi, q, chi1, chi2))).T
+
+    return np.stack([kappamin, kappamax])
+
+
+
 def Jresonances(r, xi, q, chi1, chi2):
     """
     Total angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes J for a given value of xi. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
@@ -1055,28 +1111,10 @@ def Jresonances(r, xi, q, chi1, chi2):
         Maximum value of the total angular momentum J.
     """
 
-    # There are in principle five solutions, but only two are physical.
-
-    r=np.atleast_1d(r)
-    xi=np.atleast_1d(xi)
-    q=np.atleast_1d(q)
-    chi1=np.atleast_1d(chi1)
-    chi2=np.atleast_1d(chi2)
-
     u = eval_u(r, q)
-    kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
-    def _compute(kapparoots, r, xi, q, chi1, chi2):
-        kapparoots = kapparoots[np.isfinite(kapparoots)]
-        Jroots = eval_J(kappa=kapparoots, r=np.tile(r, kapparoots.shape), q=np.tile(q, kapparoots.shape))
-        Sroots = Satresonance(Jroots, np.tile(r, Jroots.shape), np.tile(xi, Jroots.shape), np.tile(q, Jroots.shape), np.tile(chi1, Jroots.shape), np.tile(chi2, Jroots.shape))
-        Smin, Smax = Slimits_LJS1S2(Jroots, np.tile(r, Jroots.shape), np.tile(q, Jroots.shape), np.tile(chi1, Jroots.shape), np.tile(chi2, Jroots.shape))
-        Jres = Jroots[np.logical_and(Sroots>Smin, Sroots<Smax)]
-        assert len(Jres)<=2, "I found more than two resonances, this should not be possible."
-        # If you didn't find enough solutions, append nans
-        Jres=np.concatenate([Jres, np.repeat(np.nan, 2-len(Jres))])
-        return Jres
-
-    Jmin, Jmax =np.array(list(map(_compute, kapparoots, r, xi, q, chi1, chi2))).T
+    kappamin,kappamax = kapparesonances(u, xi, q, chi1, chi2)
+    Jmin = eval_J(kappa=kappamin, r=r, q=q)
+    Jmax = eval_J(kappa=kappamax, r=r, q=q)
 
     return np.stack([Jmin, Jmax])
 
@@ -1517,7 +1555,7 @@ def xiresonances(J, r, q, chi1, chi2):
 
     def _compute(Smin, Smax, J, r, xiroots, q, chi1, chi2):
         xiroots = xiroots[np.isfinite(xiroots)]
-        Sroots = Satresonance(np.tile(J, xiroots.shape), np.tile(r, xiroots.shape), xiroots, np.tile(q, xiroots.shape), np.tile(chi1, xiroots.shape), np.tile(chi2, xiroots.shape))
+        Sroots = Satresonance(J=np.tile(J, xiroots.shape), r=np.tile(r, xiroots.shape), xi=xiroots, q=np.tile(q, xiroots.shape), chi1=np.tile(chi1, xiroots.shape), chi2=np.tile(chi2, xiroots.shape))
         xires = xiroots[np.logical_and(Sroots>Smin, Sroots<Smax)]
         assert len(xires)<=2, "I found more than two resonances, this should not be possible."
         # If you didn't find enough solutions, append nans
@@ -1571,12 +1609,12 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     if J is None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
 
         Jmin, Jmax = Jresonances(r, xi, q, chi1, chi2)
-        Satmin = Satresonance(Jmin, r, xi, q, chi1, chi2)
+        Satmin = Satresonance(J=Jmin, r=r, xi=xi, q=q, chi1=chi1, chi2=chi2)
         theta1atmin = eval_theta1(Satmin, Jmin, r, xi, q, chi1, chi2)
         theta2atmin = eval_theta2(Satmin, Jmin, r, xi, q, chi1, chi2)
         deltaphiatmin=np.tile(np.pi, q.shape)
 
-        Satmax = Satresonance(Jmax, r, xi, q, chi1, chi2)
+        Satmax = Satresonance(J=Jmax, r=r, xi=xi, q=q, chi1=chi1, chi2=chi2)
         theta1atmax = eval_theta1(Satmax, Jmax, r, xi, q, chi1, chi2)
         theta2atmax = eval_theta2(Satmax, Jmax, r, xi, q, chi1, chi2)
         deltaphiatmax=np.tile(0, q.shape)
@@ -1586,7 +1624,7 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 
         ximin, ximax = xiresonances(J, r, q, chi1, chi2)
 
-        Satmin = Satresonance(J, r, ximin, q, chi1, chi2)
+        Satmin = Satresonance(J=J, r=r, xi=ximin, q=q, chi1=chi1, chi2=chi2)
         theta1atmin = eval_theta1(Satmin, J, r, ximin, q, chi1, chi2)
         theta2atmin = eval_theta2(Satmin, J, r, ximin, q, chi1, chi2)
         # See Fig 5 in arxiv:1506.03492
@@ -1595,7 +1633,7 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
         L = eval_L(r, q)
         deltaphiatmin=np.where(J>np.abs(L-S1-S2), 0, np.pi)
 
-        Satmax = Satresonance(J, r, ximax, q, chi1, chi2)
+        Satmax = Satresonance(J=J, r=r, xi=ximax, q=q, chi1=chi1, chi2=chi2)
         theta1atmax = eval_theta1(Satmax, J, r, ximax, q, chi1, chi2)
         theta2atmax = eval_theta2(Satmax, J, r, ximax, q, chi1, chi2)
         deltaphiatmax=np.tile(np.pi, q.shape)
@@ -1828,8 +1866,6 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
     -2 * ( -1 + ( q )**( 2 ) ) * ( S2 )**( 2 ) + 4 * q * kappa * ( -1 * \
     xi + ( kappa + q * kappa ) ) ) ) ) )
 
-    print("coeff", coeff3, coeff2, coeff1, coeff0)
-
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
@@ -2037,10 +2073,10 @@ def Slimits_plusminus(J, r, xi, q, chi1, chi2):
 
     return np.stack([Smin, Smax])
 
-
-def Satresonance(J, r, xi, q, chi1, chi2):
+#TODO regen docstrings
+def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None, chi2=None):
     """
-    Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user.
+    Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user. Provide either J or kappa and either r or u.
 
     Call
     ----
@@ -2067,14 +2103,27 @@ def Satresonance(J, r, xi, q, chi1, chi2):
         Magnitude of the total spin.
     """
 
-    kappa = eval_kappa(J, r, q)
-    u = eval_u(r, q)
+    if q is None or chi1 is None or chi2 is None:
+        raise TypeError("Please provide q, chi1, and chi2.")
+
+    if r is None and u is None:
+        raise TypeError("Please provide either r or u.")
+    elif r is not None and u is None:
+        u = eval_u(r=r, q=q)
+
+    if J is None and kappa is not None:
+        pass # I don't need J
+    elif J is not None and kappa is None:
+        if r is None and u is not None:
+            r= eval_r(u=u, q=q)
+        kappa = eval_kappa(J, r, q)
+    else:
+        raise TypeError("Please provide either J or kappa.")
+
     coeffs = Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
     with np.errstate(invalid='ignore'): # nan is ok here
-
         # This is with a simple for loop
         # Sres = np.array([np.mean(np.real(np.sort_complex(np.roots(x))[1:]))**0.5 for x in coeffs.T])
-        # Native numpy vectorization
         Sres = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:, 1:])**0.5, axis=1)
 
     return Sres
@@ -2824,7 +2873,7 @@ def eval_thetaL(S, J, r, q, chi1, chi2):
 
 def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, chi1=None, chi2=None):
     """
-    Magnitude of the total angular momentum. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q,chi1,chhi2).
+    Magnitude of the total angular momentum. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).
 
     Call
     ----
@@ -4432,19 +4481,23 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
        Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
         #This is equivalent to Ssav, but we avoid multiple conversions J <--> kappa and repated calculation of the S^2 roots.
-        print("RHS", kappa, u, xi, q, chi1, chi2)
+        coeffs= Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
+        sols = roots_vec(coeffs.T)
+        S3s, Sminuss, Spluss = np.squeeze(np.sort_complex(sols))
+        #print(S3s, Sminuss, Spluss)
+        #if False:
+        if np.iscomplex([Sminuss, Spluss]).any():
+            Ssav = np.mean(np.real([Sminuss, Spluss]))
+            print('Warning: sanitizer', S3s, Sminuss, Spluss,(Spluss-Sminuss)/Ssav)
+            sys.exit()
+            #print(sols)
 
-        Jres1, Jres2 = Jlimits(r=eval_r(u=u,q=q), xi=xi, q=q, chi1=chi1, chi2=chi2)
+        else:
+            S3s, Sminuss, Spluss = np.real([S3s, Sminuss, Spluss])
+            m = elliptic_parameter(Sminuss, Spluss, S3s)
+            Ssav = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
 
-        print("resonances", Jres1, eval_J(kappa=kappa,r=eval_r(u=u,q=q),q=q), Jres2)
-
-        S3s, Sminuss, Spluss = np.squeeze(wraproots(Scubic_coefficients, kappa, u, xi, q, chi1, chi2))
-        m = elliptic_parameter(Sminuss, Spluss, S3s)
-        Ssav = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
-
-        print("RHS after", S3s, Sminuss, Spluss)
-
-
+        #print(u,kappa,Ssav,[S3s, Sminuss, Spluss])
     return Ssav
 
 
@@ -4498,7 +4551,18 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
         # As far as I understand by inspective the scipy code, the "vectorized" option is ignored if a jacobian is not provided. If you decide it's needed, a vectorized implementation of "rhs_precav" requires substituting that if statement with np.where
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-6, rtol=1e-6)
+        # def event(u,kappa,xi, q, chi1, chi2,terminal=True):
+        #     if u==0:
+        #         return 1
+        #     r= eval_r(u=u, q=q)
+        #     Jmin,Jmax = Jresonances(r, xi, q, chi1, chi2)
+        #     J = eval_J(kappa=kappa, r=r, q=q)
+        #     if J<Jmin or J>Jmax>J:
+        #         return -1
+        #     else:
+        #         return 1
+
+        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-6, rtol=1e-6)#,events=event)
 
         #TODO: let user pick rtol and atol
 
@@ -6111,18 +6175,18 @@ if __name__ == '__main__':
     # r=10
     # xi=0.35
     # q=0.8
-    # chi1=1
-    # chi2=1
-    # J=1
+    # chi1=0.6
+    # chi2=0.3
+    # #J=0.2
     #
-    # Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
-    # S =np.linspace(np.squeeze(Sminus),np.squeeze(Splus),1000)
+    # #Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
+    # S =np.linspace(0,1,1000)
     # r=np.tile(r,S.shape)
     # xi=np.tile(xi,S.shape)
     # q=np.tile(q,S.shape)
     # chi1=np.tile(chi1,S.shape)
     # chi2=np.tile(chi2,S.shape)
-    # J=np.tile(J,S.shape)
+    #J=np.tile(J,S.shape)
     #
     #
     # Lvec, S1vec,S2vec = conserved_to_inertial(S,J,r,xi,q,chi1,chi2)
@@ -6160,7 +6224,13 @@ if __name__ == '__main__':
 
     #print("on many", Jresonances(r,xi,q,chi1,chi2))
 
-    #print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    # print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    # u=eval_u(r=r,q=q)
+    # kres = kapparesonances(u,xi,q,chi1,chi2)
+    # J = eval_J(kappa=kres,r=r,q=r)
+    # print("on one", J)
+
+
     #print(Satresonance(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
     #sys.exit()
     #
@@ -6799,11 +6869,28 @@ if __name__ == '__main__':
     #print(xiresonances(2.34, 100, 0.6, 1, 1))
 
 
-    r = [10.0, np.inf]
-    theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
 
-    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
+    #### TEST SANITIZER #####
+    # r = [10.0, np.inf]
+    # theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
+    #
+    # S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
+    #
+    # Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
+    # J=Jmax-1e-6
+    # result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
 
-    Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
-    J=Jmax-1e-7
-    result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
+
+    # while True:
+    #     q=np.random.uniform(0.01,1)
+    #     chi1=np.random.uniform(0.01,1)
+    #     chi2=np.random.uniform(0.01,1)
+    #     ximin,ximax = xilimits_definition(q,chi1,chi2)
+    #     xi=np.random.uniform(ximin,ximax)
+    #     r=10
+    #
+    #     Jres = Jresonances(r,xi,q,chi1,chi2)
+    #     u=eval_u(r=r,q=q)
+    #     kres = kapparesonances(u,xi,q,chi1,chi2)
+    #     J = eval_J(kappa=kres,r=r,q=q)
+    #     print(Jres-J)
