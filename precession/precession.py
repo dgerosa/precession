@@ -279,6 +279,7 @@ def eval_m1(q):
 
     return m1
 
+
 def eval_m2(q):
     """
     Mass of the lighter black hole in units of the total mass.
@@ -360,6 +361,7 @@ def eval_q(m1, m2):
 
     return q
 
+
 def eval_eta(q):
     """
     Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2.
@@ -383,6 +385,7 @@ def eval_eta(q):
     eta = q/(1+q)**2
 
     return eta
+
 
 def eval_S1(q, chi1):
     """
@@ -409,6 +412,7 @@ def eval_S1(q, chi1):
     S1 = chi1*(eval_m1(q))**2
 
     return S1
+
 
 def eval_S2(q, chi2):
     """
@@ -1066,14 +1070,21 @@ def kapparesonances(u, xi, q, chi1, chi2):
 
     kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
     def _compute(kapparoots, u, xi, q, chi1, chi2):
-        kapparoots = kapparoots[np.isfinite(kapparoots)]
-        Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
-        #TODO: This is a guess! I'm not sure Slimits_S1S2 is enough here. Jresonances had Slimits_JLS1S2. Needs to be tested!
-        Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
-        kappares = kapparoots[np.logical_and(Sroots>Smin, Sroots<Smax)]
-        assert len(kappares)<=2, "I found more than two resonances, this should not be possible."
-        # If you didn't find enough solutions, append nans
-        kappares=np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
+        if u==0:
+            # At infinitely large separation
+            S1, S2 = spinmags(q, chi1, chi2)
+            kappainfmin = np.maximum( (xi - (q**-1-q)*S2)/(1+q) , (xi - (q**-1-q)*S1)/(1+q**-1) )
+            kappainfmax = np.minimum( (xi + (q**-1-q)*S2)/(1+q) , (xi + (q**-1-q)*S1)/(1+q**-1) )
+            kappares = np.array([kappainfmin,kappainfmax])
+        else:
+            # At finite separation
+            kapparoots = kapparoots[np.isfinite(kapparoots)]
+            Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
+            Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
+            kappares = kapparoots[np.logical_and(Sroots>Smin, Sroots<Smax)]
+            assert len(kappares)<=2, "I found more than two resonances, this should not be possible."
+            # If you didn't find enough solutions, append nans
+            kappares=np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
         return kappares
 
     kappamin, kappamax =np.array(list(map(_compute, kapparoots, u, xi, q, chi1, chi2))).T
@@ -1119,7 +1130,8 @@ def Jresonances(r, xi, q, chi1, chi2):
     return np.stack([Jmin, Jmax])
 
 
-def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None):
+#TODO: docstrings
+def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
     - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
@@ -1161,11 +1173,68 @@ def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None):
         if (Jmin>Jmin_cond).all() and (Jmax<Jmax_cond).all():
             pass
         else:
-            warnings.warn("Input values may be incompatible [Jlimits].", Warning)
-
+            if enforce:
+                raise ValueError("Input values are not compatible [Jlimits].")
+            else:
+                warnings.warn("Input values are not compatible [Jlimits].", Warning)
 
     else:
         raise TypeError("Provide either (r,q,chi1,chi2) or (r,xi,q,chi1,chi2).")
+
+    return np.stack([Jmin, Jmax])
+
+
+
+#TODO: docstrings
+def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
+    """
+    Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
+    - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
+    - If r, xi, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+
+    Call
+    ----
+    Jmin,Jmax = Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None)
+
+    Parameters
+    ----------
+    r: float, optional (default: None)
+        Binary separation.
+    xi: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Jmin: float
+        Minimum value of the total angular momentum J.
+    Jmax: float
+        Maximum value of the total angular momentum J.
+    """
+
+    if xi is None and q is not None and chi1 is not None and chi2 is not None:
+        kappainfmin, kappainfmin = Slimits_S1S2(q, chi1, chi2)
+
+    elif xi is not None and q is not None and chi1 is not None and chi2 is not None:
+        kappainfmin, kappainfmin = kapparesonances(np.tile(0,xi.shape), xi, q, chi1, chi2)
+        # Check precondition
+        kappainfmin_cond, kappainfmax_cond = Slimits_S1S2(q, chi1, chi2)
+
+        if (kappainfmin>kappainfmin_cond).all() and (kappainfmax<kappainfmax_cond).all():
+            pass
+        else:
+            if enforce:
+                raise ValueError("Input values are not compatible [kappainflimits].")
+            else:
+                warnings.warn("Input values are not compatible [kappainflimits].", Warning)
+
+    else:
+        raise TypeError("Provide either (q,chi1,chi2) or (xi,q,chi1,chi2).")
 
     return np.stack([Jmin, Jmax])
 
@@ -1643,8 +1712,8 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 
     return np.stack([theta1atmin, theta2atmin, deltaphiatmin, theta1atmax, theta2atmax, deltaphiatmax])
 
-
-def xilimits(J=None, r=None, q=None, chi1=None, chi2=None):
+#TODO: docstrings
+def xilimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the projected effective spin. The contraints considered depend on the inputs provided.
     - If q, chi1, and chi2 are provided, enforce xi = (1+q)S1.L + (1+1/q)S2.L.
@@ -1685,7 +1754,10 @@ def xilimits(J=None, r=None, q=None, chi1=None, chi2=None):
         if (ximin>ximin_cond).all() and (ximax<ximax_cond).all():
             pass
         else:
-            warnings.warn("Input values may be incompatible [xilimits].", Warning)
+            if enforce:
+                raise ValueError("Input values are not compatible [xilimits].")
+            else:
+                warnings.warn("Input values are not compatible [xilimits].", Warning)
 
     else:
         raise TypeError("Provide either (q,chi1,chi2) or (J,r,q,chi1,chi2).")
@@ -1869,123 +1941,6 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
-# Another attempt at making it faster
-# def Scubic_coefficients_SUBS(kappa, u, xi, q, chi1, chi2):
-#     """
-#     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
-#
-#     Call
-#     ----
-#     coeff3,coeff2,coeff1,coeff0 = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
-#
-#     Parameters
-#     ----------
-#     kappa: float
-#         Regularized angular momentum (J^2-L^2)/(2L).
-#     u: float
-#         Compactified separation 1/(2L).
-#     xi: float
-#         Effective spin.
-#     q: float
-#         Mass ratio: 0<=q<=1.
-#     chi1: float
-#         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-#     chi2: float
-#         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-#
-#     Returns
-#     -------
-#     coeff3: float
-#         Coefficient to the x^3 term in polynomial.
-#     coeff2: float
-#         Coefficient to the x^2 term in polynomial.
-#     coeff1: float
-#         Coefficient to the x^1 term in polynomial.
-#     coeff0: float
-#         Coefficient to the x^0 term in polynomial.
-#     """
-#
-#     kappa=np.atleast_1d(kappa)
-#     u=np.atleast_1d(u)
-#     xi=np.atleast_1d(xi)
-#     q=np.atleast_1d(q)
-#     S1, S2 = spinmags(q, chi1, chi2)
-#
-#     S1t2 = S1**2
-#     S2t2 = S2**2
-#     ( ( 1 + q ) )**( 2 ) = (1+q)**2
-#     qt2 = q**2
-#     qt2m1 = q**2-1
-#     coeff3 = q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )
-#
-#     coeff2 = ( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( 1/4 * qt2 * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) )**( 2 ) * S1t2 + ( qt2 * ( ( 1 + q ) )**( 2 ) * S1t2 + ( ( ( 1 + q ) )**( 2 ) * S2t2 - q * ( ( 1 + q ) )**( 2 ) * S2t2 ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) )
-#
-#     coeff1 = ( -1/2 * -qt2m1 * S1t2 + ( 1/2 * qt2 * -qt2m1 * S1t2 + ( -1/2 * -qt2m1 * S2t2 + ( 1/2 * qt2 * -qt2m1 * S2t2 + ( u * ( -1 * q * -qt2m1 * S1t2 * ( xi + -2 * kappa ) + ( q * -qt2m1 * S2t2 * ( xi + -2 * kappa ) + ( 2 * qt2 * -qt2m1 * S1t2 * kappa + -2 * -qt2m1 * S2t2 * kappa ) ) ) + q * ( kappa * ( -1 * xi + kappa ) + ( qt2 * kappa * ( -1 * xi + kappa ) + q * ( ( xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) )
-#
-#     coeff0 = 1/4 * qt2m1 * ( qt2m1 * ( S1 )**( 4 ) + ( qt2m1 * ( S2 )**( 4 ) + ( -4 * S2t2 * kappa * ( -1 * q * xi + ( kappa + q * kappa ) ) + S1t2 * ( -2 * qt2m1 * S2t2 + 4 * q * kappa * ( -1 * xi + ( kappa + q * kappa ) ) ) ) ) )
-#
-#     return np.stack([coeff3, coeff2, coeff1, coeff0])
-#
-#
-#
-
-#
-# def Scubic_coefficients_fast(kappa, u, xi, q, chi1, chi2):
-#     """
-#     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
-#
-#     Call
-#     ----
-#     coeff3,coeff2,coeff1,coeff0 = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
-#
-#     Parameters
-#     ----------
-#     kappa: float
-#         Regularized angular momentum (J^2-L^2)/(2L).
-#     u: float
-#         Compactified separation 1/(2L).
-#     xi: float
-#         Effective spin.
-#     q: float
-#         Mass ratio: 0<=q<=1.
-#     chi1: float
-#         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-#     chi2: float
-#         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-#
-#     Returns
-#     -------
-#     coeff3: float
-#         Coefficient to the x^3 term in polynomial.
-#     coeff2: float
-#         Coefficient to the x^2 term in polynomial.
-#     coeff1: float
-#         Coefficient to the x^1 term in polynomial.
-#     coeff0: float
-#         Coefficient to the x^0 term in polynomial.
-#     """
-#
-#     kappa=np.atleast_1d(kappa)
-#     u=np.atleast_1d(u)
-#     xi=np.atleast_1d(xi)
-#     q=np.atleast_1d(q)
-#
-#     S1 = numexpr.evaluate("chi1*(1/(1+q))**2")
-#     S2 = numexpr.evaluate("chi2*(q/(1+q))**2")
-#
-#
-#     coeff3 = numexpr.evaluate("q * ( ( 1 + q ) )**( 2 ) * ( u )**( 2 )")
-#
-#     coeff2 = numexpr.evaluate("( 1/4 * ( ( 1 + q ) )**( 2 ) + ( -1/2 * q * ( ( 1 + q ) )**( 2 ) + ( 1/4 * ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) + ( ( -1 * q * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( q )**( 2 ) * ( ( 1 + q ) )**( 2 ) * ( S1 )**( 2 ) + ( ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) + -1 * q * ( ( 1 + q ) )**( 2 ) * ( S2 )**( 2 ) ) ) ) * ( u )**( 2 ) + u * ( q * ( ( 1 + q ) )**( 2 ) * xi + -2 * q * ( ( 1 + q ) )**( 2 ) * kappa ) ) ) ) ) ")
-#
-#     coeff1 = numexpr.evaluate("( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) + ( -1/2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( 1/2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) + ( u * ( -1 * q * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * ( xi + -2 * kappa ) + ( q * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * ( xi + -2 * kappa ) + ( 2 * ( q )**( 2 ) * ( 1 + -1 * ( q )**( 2 ) ) * ( S1 )**( 2 ) * kappa + -2 * ( 1 + -1 * ( q )**( 2 ) ) * ( S2 )**( 2 ) * kappa ) ) ) + q * ( kappa * ( -1 * xi + kappa ) + ( ( q )**( 2 ) * kappa * ( -1 * xi + kappa ) + q * ( ( xi )**( 2 ) + ( -2 * xi * kappa + 2 * ( kappa )**( 2 ) ) ) ) ) ) ) ) ) ) ")
-#
-#     coeff0 = numexpr.evaluate("1/4 * ( -1 + ( q )**( 2 ) ) * ( ( -1 + ( q )**( 2 ) ) * ( S1 )**( 4 ) + ( ( -1 + ( q )**( 2 ) ) * ( S2 )**( 4 ) + ( -4 * ( S2 )**( 2 ) * kappa * ( -1 * q * xi + ( kappa + q * kappa ) ) + ( S1 )**( 2 ) * ( -2 * ( -1 + ( q )**( 2 ) ) * ( S2 )**( 2 ) + 4 * q * kappa * ( -1 * xi + ( kappa + q * kappa ) ) ) ) ) ) ")
-#
-#
-#     return np.stack([coeff3, coeff2, coeff1, coeff0])
-#
-
 
 def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
     """
@@ -2128,8 +2083,8 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
 
     return Sres
 
-
-def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
+# TODO: docstrings
+def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the total spin magnitude. The contraints considered depend on the inputs provided.
     - If q, chi1, and chi2 are provided, enforce S=S1+S2.
@@ -2181,8 +2136,10 @@ def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
         if (Smin>Smin_cond).all() and (Smax<Smax_cond).all():
             pass
         else:
-            warnings.warn("Input values may be incompatible [Slimits].", Warning)
-
+            if enforce:
+                raise ValueError("Input values are not compatible [Slimits].")
+            else:
+                warnings.warn("Input values are not compatible [Slimits].", Warning)
 
     else:
         raise TypeError("Provide one of the following: (q,chi1,chi2), (J,r,q), (J,r,q,chi1,chi2), (J,r,xi,q,chi1,chi2).")
@@ -4570,7 +4527,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
         #     else:
         #         return 1
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-6, rtol=1e-6)#,events=event)
+        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-8, rtol=1e-8)#,events=event)
 
         #TODO: let user pick rtol and atol
 
@@ -4674,6 +4631,9 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
             else:
                 raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,xi).")
 
+            # Enforce limits
+            kappainfmin,kappainfmax = kappainflimits(xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
+            assert kappa>kappainfmin and kappa<kappainfmin, "Unphysical initial conditions [inspiral_precav]."
 
         # Start from finite separations
         else:
@@ -4689,10 +4649,16 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
             # User provides kappa, xi, and maybe S.
             elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
-                pass
+                J = eval_J(kappa=kappa, r=r[0], q=q)
 
             else:
                 TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
+
+            # Enforce limits
+            Jmin,Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
+            assert J>Jmin and J<Jmax, "Unphysical initial conditions [inspiral_precav]."
+
+
 
         # TODO: check for violations of the inputs here.
         # TODO: introduce resonance tolerance and make sure your're not close  too close
@@ -6889,7 +6855,7 @@ if __name__ == '__main__':
     S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
 
     Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
-    J=Jmax-1e-6
+    J=Jmax+1e-8
     result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
     print(result['kappa'])
 
