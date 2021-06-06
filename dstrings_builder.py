@@ -53,6 +53,9 @@ def descr(varname,vardef=None):
     lookup['kappainf']=["float","Asymptotic value of the regularized momentum kappa"]
     lookup['t']=["float","Time"]
     lookup['m']=["float","Parameter of elliptic function(s)"]
+    lookup['phi']=["float","Amplitude of elliptic function(s)"]
+    lookup['n']=["float","Characheristic of elliptic function(s)"]
+
     lookup['Lvec']=["array","Cartesian vector of the orbital angular momentum"]
     lookup['S1vec']=["array","Cartesian vector of the primary spin"]
     lookup['S2vec']=["array","Cartesian vector of the secondary spin"]
@@ -120,6 +123,8 @@ def descr(varname,vardef=None):
     lookup['mathcalC0prime']=["float","Prefactor in the PhiL equation"]
     lookup['mathcalCplusprime']=["float","Prefactor in the PhiL equation"]
     lookup['mathcalCminusprime']=["float","Prefactor in the PhiL equation"]
+    lookup['mathcalT']=["float","Prefactor in the tau equation"]
+
     lookup['alpha']=['float', "Azimuthal angle spanned by L about J during an entire cycle"]
     lookup['phiL']=['float', "Azimuthal angle spanned by L about J"]
     lookup['OmegaL']=['float', "Precession frequency of L about J"]

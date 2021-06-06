@@ -4045,10 +4045,9 @@ def dSdt(S, J, r, xi, q, chi1, chi2):
     return dSsdt(S, J, r, xi, q, chi1, chi2) / (2*S)
 
 
-# TODO: use precomputedroots in here?
 def elliptic_parameter(Sminuss, Spluss, S3s):
     """
-    Parameter m entering elliptic functiosn for the evolution of S.
+    Parameter m entering elliptic functions for the evolution of S.
 
     Call
     ----
@@ -4077,9 +4076,29 @@ def elliptic_parameter(Sminuss, Spluss, S3s):
 
     return m
 
-#TODO: docstrings
-# TODO: use precomputedroots in here?
+
 def elliptic_amplitude(S, Sminuss, Spluss):
+    """
+    Amplitdue phi entering elliptic functions for the evolution of S.
+
+    Call
+    ----
+    phi = elliptic_amplitude(S,Sminuss,Spluss)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    Sminuss: float
+        Lowest physical root, if present, of the effective potential equation.
+    Spluss: float
+        Largest physical root, if present, of the effective potential equation.
+
+    Returns
+    -------
+    phi: float
+        Amplitude of elliptic function(s).
+    """
 
     S=np.atleast_1d(S)
     Sminuss=np.atleast_1d(Sminuss)
@@ -4089,8 +4108,33 @@ def elliptic_amplitude(S, Sminuss, Spluss):
 
     return phi
 
-#TODO: docstrings.
+
 def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
+    """
+    Characheristic m entering elliptic functions for the evolution of S.
+
+    Call
+    ----
+    n = elliptic_characheristic(Sminuss,Spluss,J,L,sign)
+
+    Parameters
+    ----------
+    Sminuss: float
+        Lowest physical root, if present, of the effective potential equation.
+    Spluss: float
+        Largest physical root, if present, of the effective potential equation.
+    J: float
+        Magnitude of the total angular momentum.
+    L: float
+        Magnitude of the Newtonian orbital angular momentum.
+    sign: integer
+        Sign, either +1 or -1.
+
+    Returns
+    -------
+    n: float
+        Characheristic of elliptic function(s).
+    """
 
     Sminuss = np.atleast_1d(Sminuss)
     Spluss = np.atleast_1d(Spluss)
@@ -4102,8 +4146,33 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
 
     return n
 
-# TODO: docstrings
+
 def time_normalization(Spluss, S3s, r, xi, q):
+    """
+    Numerical prefactors entering the precession period.
+
+    Call
+    ----
+    mathcalT = time_normalization(Spluss,S3s,r,xi,q)
+
+    Parameters
+    ----------
+    Spluss: float
+        Largest physical root, if present, of the effective potential equation.
+    S3s: float
+        Spurious root of the effective potential equation.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+
+    Returns
+    -------
+    mathcalT: float
+        Prefactor in the tau equation.
+    """
 
     Spluss=np.atleast_1d(Spluss)
     S3s=np.atleast_1d(S3s)
@@ -4112,6 +4181,7 @@ def time_normalization(Spluss, S3s, r, xi, q):
     mathcalT = 2/(mathcalA*(Spluss-S3s)**0.5)
 
     return mathcalT
+
 
 def eval_tau(J, r, xi, q, chi1, chi2, precomputedroots = None):
     """
@@ -4185,7 +4255,6 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
     S: float
         Magnitude of the total spin.
     """
-
 
     t=np.atleast_1d(t)
     Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
@@ -4550,7 +4619,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         #h0= 1e-3 if u[0]==0 else 0
-        
+
         ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-8, rtol=1e-8)#,events=event)
 
         #TODO: let user pick rtol and atol
@@ -4684,8 +4753,6 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
 
 
-        # TODO: check for violations of the inputs here.
-        # TODO: introduce resonance tolerance and make sure your're not close  too close
         # TODO: pass rtol and atol to integrator_precav
 
         # Integration. Return interpolant along the solution
