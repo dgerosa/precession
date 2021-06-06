@@ -38,4 +38,3 @@ setuptools.setup(
 #setuptools.setup(
 #    ext_modules=cythonize('modulename.pyx')
 #)
-    

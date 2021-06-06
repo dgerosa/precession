@@ -1,11 +1,9 @@
 """
-precession
+precession. TODO: write me here
 """
-
 
 import warnings
 import numpy as np
-#import numexpr
 import scipy.special
 import scipy.integrate
 from sympy import elliptic_pi
@@ -38,6 +36,7 @@ def roots_vec(p):
     A[..., 0, :] = -p[..., 1:]/p[..., None, 0]
 
     return np.linalg.eigvals(A)
+
 
 def norm_nested(x):
     """
@@ -1024,6 +1023,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     ) + -5 * ( S2 )**( 2 ) ) + ( q * ( -5 * ( S1 )**( 2 ) + ( S2 )**( 2 ) \
     ) + -1 * ( q )**( 2 ) * ( 7 * ( S1 )**( 2 ) + ( 7 * ( S2 )**( 2 ) + ( \
     xi )**( 2 ) ) ) ) ) ) ) ) )
+
     coeff5 = \
     -256 * ( q )**( 3 ) * ( ( 1 + q ) )**( 6 ) * u
 
@@ -1069,28 +1069,59 @@ def kapparesonances(u, xi, q, chi1, chi2):
     chi2=np.atleast_1d(chi2)
 
     kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
+
     def _compute(kapparoots, u, xi, q, chi1, chi2):
-        if u==0:
-            # At infinitely large separation
-            S1, S2 = spinmags(q, chi1, chi2)
-            kappainfmin = np.maximum( (xi - (q**-1-q)*S2)/(1+q) , (xi - (q**-1-q)*S1)/(1+q**-1) )
-            kappainfmax = np.minimum( (xi + (q**-1-q)*S2)/(1+q) , (xi + (q**-1-q)*S1)/(1+q**-1) )
-            kappares = np.array([kappainfmin,kappainfmax])
-        else:
-            # At finite separation
-            kapparoots = kapparoots[np.isfinite(kapparoots)]
-            Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
-            Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
-            kappares = kapparoots[np.logical_and(Sroots>Smin, Sroots<Smax)]
-            assert len(kappares)<=2, "I found more than two resonances, this should not be possible."
-            # If you didn't find enough solutions, append nans
-            kappares=np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
+        kapparoots = kapparoots[np.isfinite(kapparoots)]
+        Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
+        Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
+        kappares = kapparoots[np.logical_and(Sroots>Smin, Sroots<Smax)]
+        assert len(kappares)<=2, "I found more than two resonances, this should not be possible."
+        # If you didn't find enough solutions, append nans
+        kappares=np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
         return kappares
 
     kappamin, kappamax =np.array(list(map(_compute, kapparoots, u, xi, q, chi1, chi2))).T
 
     return np.stack([kappamin, kappamax])
 
+
+def kappainfresonances(xi, q, chi1, chi2):
+    """
+    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of xi. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
+
+    Call
+    ----
+    kappainfmin,kappainfmax = kappainfresonances(u,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    u: float
+        Compactified separation 1/(2L).
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    kappainfmin: float
+        Minimum value of the asymptotic angular momentum kappainf.
+    kappainfmax: float
+        Maximum value of the asymptotic angular momentum kappainf.
+    """
+
+    xi=np.atleast_1d(xi)
+    q=np.atleast_1d(q)
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    kappainfmin = np.maximum( (xi - (q**-1-q)*S2)/(1+q) , (xi - (q**-1-q)*S1)/(1+q**-1) )
+    kappainfmax = np.minimum( (xi + (q**-1-q)*S2)/(1+q) , (xi + (q**-1-q)*S1)/(1+q**-1) )
+
+    return kappainfmin, kappainfmax
 
 
 def Jresonances(r, xi, q, chi1, chi2):
@@ -1222,7 +1253,7 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
         kappainfmin, kappainfmax = Slimits_S1S2(q, chi1, chi2)
 
     elif xi is not None and q is not None and chi1 is not None and chi2 is not None:
-        kappainfmin, kappainfmax = kapparesonances(np.tile(0,xi.shape), xi, q, chi1, chi2)
+        kappainfmin, kappainfmax = kappainfresonances(xi, q, chi1, chi2)
         # Check precondition
         kappainfmin_cond, kappainfmax_cond = Slimits_S1S2(q, chi1, chi2)
 
@@ -3904,7 +3935,6 @@ def derS_prefactor(r, xi, q):
     return mathcalA
 
 
-# TODO: Here we use S2 for square...
 def dSsdtsquared(S, J, r, xi, q, chi1, chi2):
     """
     Squared first time derivative of the squared total spin, on the precession timescale.
@@ -4016,10 +4046,9 @@ def dSdt(S, J, r, xi, q, chi1, chi2):
     return dSsdt(S, J, r, xi, q, chi1, chi2) / (2*S)
 
 
-# TODO: use precomputedroots in here?
 def elliptic_parameter(Sminuss, Spluss, S3s):
     """
-    Parameter m entering elliptic functiosn for the evolution of S.
+    Parameter m entering elliptic functions for the evolution of S.
 
     Call
     ----
@@ -4048,9 +4077,29 @@ def elliptic_parameter(Sminuss, Spluss, S3s):
 
     return m
 
-#TODO: docstrings
-# TODO: use precomputedroots in here?
+
 def elliptic_amplitude(S, Sminuss, Spluss):
+    """
+    Amplitdue phi entering elliptic functions for the evolution of S.
+
+    Call
+    ----
+    phi = elliptic_amplitude(S,Sminuss,Spluss)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    Sminuss: float
+        Lowest physical root, if present, of the effective potential equation.
+    Spluss: float
+        Largest physical root, if present, of the effective potential equation.
+
+    Returns
+    -------
+    phi: float
+        Amplitude of elliptic function(s).
+    """
 
     S=np.atleast_1d(S)
     Sminuss=np.atleast_1d(Sminuss)
@@ -4060,8 +4109,33 @@ def elliptic_amplitude(S, Sminuss, Spluss):
 
     return phi
 
-#TODO: docstrings.
+
 def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
+    """
+    Characheristic m entering elliptic functions for the evolution of S.
+
+    Call
+    ----
+    n = elliptic_characheristic(Sminuss,Spluss,J,L,sign)
+
+    Parameters
+    ----------
+    Sminuss: float
+        Lowest physical root, if present, of the effective potential equation.
+    Spluss: float
+        Largest physical root, if present, of the effective potential equation.
+    J: float
+        Magnitude of the total angular momentum.
+    L: float
+        Magnitude of the Newtonian orbital angular momentum.
+    sign: integer
+        Sign, either +1 or -1.
+
+    Returns
+    -------
+    n: float
+        Characheristic of elliptic function(s).
+    """
 
     Sminuss = np.atleast_1d(Sminuss)
     Spluss = np.atleast_1d(Spluss)
@@ -4073,8 +4147,33 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
 
     return n
 
-# TODO: docstrings
+
 def time_normalization(Spluss, S3s, r, xi, q):
+    """
+    Numerical prefactors entering the precession period.
+
+    Call
+    ----
+    mathcalT = time_normalization(Spluss,S3s,r,xi,q)
+
+    Parameters
+    ----------
+    Spluss: float
+        Largest physical root, if present, of the effective potential equation.
+    S3s: float
+        Spurious root of the effective potential equation.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+
+    Returns
+    -------
+    mathcalT: float
+        Prefactor in the tau equation.
+    """
 
     Spluss=np.atleast_1d(Spluss)
     S3s=np.atleast_1d(S3s)
@@ -4084,14 +4183,14 @@ def time_normalization(Spluss, S3s, r, xi, q):
 
     return mathcalT
 
-# TODO: Should this be eval_tau
-def Speriod(J, r, xi, q, chi1, chi2, precomputedroots = None):
+
+def eval_tau(J, r, xi, q, chi1, chi2, precomputedroots = None):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
 
     Call
     ----
-    tau = Speriod(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    tau = eval_tau(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -4115,7 +4214,6 @@ def Speriod(J, r, xi, q, chi1, chi2, precomputedroots = None):
     tau: float
         Nutation period.
     """
-
 
     Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
     mathcalT = time_normalization(Spluss, S3s, r, xi, q)
@@ -4158,7 +4256,6 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
     S: float
         Magnitude of the total spin.
     """
-
 
     t=np.atleast_1d(t)
     Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
@@ -4215,7 +4312,7 @@ def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     m = elliptic_parameter(Sminuss, Spluss, S3s)
     mathcalT = time_normalization(Spluss, S3s, r, xi, q)
     phi = elliptic_amplitude(S, Sminuss, Spluss)
-    tau = Speriod(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    tau = eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
 
     return t
@@ -4258,7 +4355,7 @@ def Ssampling(J, r, xi, q, chi1, chi2, N=1):
     # Compute the S roots only once and pass them to both functions
     Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
 
-    tau = Speriod(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    tau = eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     # For each binary, generate N samples between 0 and tau.
     t = np.random.uniform(size=tau.size*N).reshape((tau.size, N)) * tau[:, None]
     # Note the special broadcasting rules of Soft, see Soft.__docs__
@@ -4522,22 +4619,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     def _compute(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
-        # TODO. This breaks down if r is very large but not infinite.
         #h0= 1e-3 if u[0]==0 else 0
-        # TODO: I disabled the intial timestep check when I switched to solve_ivp. This needs to be tested!
-
-        # As far as I understand by inspective the scipy code, the "vectorized" option is ignored if a jacobian is not provided. If you decide it's needed, a vectorized implementation of "rhs_precav" requires substituting that if statement with np.where
-
-        # def event(u,kappa,xi, q, chi1, chi2,terminal=True):
-        #     if u==0:
-        #         return 1
-        #     r= eval_r(u=u, q=q)
-        #     Jmin,Jmax = Jresonances(r, xi, q, chi1, chi2)
-        #     J = eval_J(kappa=kappa, r=r, q=q)
-        #     if J<Jmin or J>Jmax>J:
-        #         return -1
-        #     else:
-        #         return 1
 
         ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-8, rtol=1e-8)#,events=event)
 
@@ -4672,8 +4754,6 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
 
 
-        # TODO: check for violations of the inputs here.
-        # TODO: introduce resonance tolerance and make sure your're not close  too close
         # TODO: pass rtol and atol to integrator_precav
 
         # Integration. Return interpolant along the solution
@@ -6186,7 +6266,7 @@ if __name__ == '__main__':
 
     #Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
 
-    #tau = Speriod(J,r,xi,q,chi1,chi2)
+    #tau = eval_tau(J,r,xi,q,chi1,chi2)
     #print(tau)
 
         #print(tofS(Sminus,J,r,xi,q,chi1,chi2,sign=-1))
@@ -6477,21 +6557,21 @@ if __name__ == '__main__':
     # print(d)
 
     ##### INSPIRAL TESTING: precav, from infinite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # kappa = 0.50941012
-    # xi = 0.9141896967861489
-    # r=np.concatenate(([np.inf],np.logspace(2,1,100)))
-    #
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    kappa = 0.50941012
+    xi = 0.9141896967861489
+    r=np.concatenate(([np.inf],np.logspace(2,1,100)))
 
 
-    #d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
+
+    d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
     # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
     #
-    #print(d)
+    print(d)
     #
     #d=inspiral_precav(kappa=[kappa,kappa],xi=[xi,xi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #
@@ -6746,7 +6826,7 @@ if __name__ == '__main__':
 
     #print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
 
-    # tau = Speriod(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    # tau = eval_tau(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
     # Smin,Smax = Slimits_plusminus(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
     # t= np.linspace(0,tau,200)
     # S= Soft([t,t],J,r,xi,q,chi1,chi2)
@@ -6806,9 +6886,9 @@ if __name__ == '__main__':
     # print(omega2_aligned([r,r], [q,q], [chi1,chi1], [chi2,chi2], 'dd'))
 
     #
-    # print(Speriod([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
+    # print(eval_tau([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
     # pr = Ssroots([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
-    # print(Speriod([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
+    # print(eval_tau([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
     # sys.exit()
 
     # q=0.8
@@ -6860,16 +6940,16 @@ if __name__ == '__main__':
 
 
 
-    ### TEST SANITIZER #####
-    r = [10.0, np.inf]
-    theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
-
-    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
-
-    Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
-    J=Jmax+1e-8
-    result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
-    print(result['kappa'])
+    # ### TEST SANITIZER #####
+    # r = [10.0, np.inf]
+    # theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
+    #
+    # S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
+    #
+    # Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
+    # J=Jmax+1e-8
+    # result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
+    # print(result['kappa'])
 
     # while True:
     #     q=np.random.uniform(0.01,1)
