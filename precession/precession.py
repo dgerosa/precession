@@ -1219,10 +1219,10 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
     """
 
     if xi is None and q is not None and chi1 is not None and chi2 is not None:
-        kappainfmin, kappainfmin = Slimits_S1S2(q, chi1, chi2)
+        kappainfmin, kappainfmax = Slimits_S1S2(q, chi1, chi2)
 
     elif xi is not None and q is not None and chi1 is not None and chi2 is not None:
-        kappainfmin, kappainfmin = kapparesonances(np.tile(0,xi.shape), xi, q, chi1, chi2)
+        kappainfmin, kappainfmax = kapparesonances(np.tile(0,xi.shape), xi, q, chi1, chi2)
         # Check precondition
         kappainfmin_cond, kappainfmax_cond = Slimits_S1S2(q, chi1, chi2)
 
@@ -1237,7 +1237,7 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
     else:
         raise TypeError("Provide either (q,chi1,chi2) or (xi,q,chi1,chi2).")
 
-    return np.stack([kappainfmin, kappainfmin])
+    return np.stack([kappainfmin, kappainfmax])
 
 
 def xilimits_definition(q, chi1, chi2):
@@ -4645,7 +4645,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
             # Enforce limits
             kappainfmin,kappainfmax = kappainflimits(xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
-            assert kappa>kappainfmin and kappa<kappainfmin, "Unphysical initial conditions [inspiral_precav]."
+            assert kappa>kappainfmin and kappa<kappainfmax, "Unphysical initial conditions [inspiral_precav]."
 
         # Start from finite separations
         else:
