@@ -9,9 +9,15 @@ For each function docstrings, the developer needs to provide the intro blurb and
 
 
 
-import sys
-import precession
+import sys,os
 import pyperclip
+
+# Load package from path, not the pip installation (if any) 
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
+import precession
+#print(precession.__version__)
 
 fun = sys.argv[1]
 
