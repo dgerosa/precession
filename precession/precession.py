@@ -1067,6 +1067,8 @@ def kapparesonances(u, xi, q, chi1, chi2):
     chi1=np.atleast_1d(chi1)
     chi2=np.atleast_1d(chi2)
 
+    kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
+    
     def _compute(kapparoots, u, xi, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
         Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
