@@ -2,7 +2,6 @@
 precession. TODO: write me here
 """
 
-
 import warnings
 import numpy as np
 import scipy.special
@@ -37,6 +36,7 @@ def roots_vec(p):
     A[..., 0, :] = -p[..., 1:]/p[..., None, 0]
 
     return np.linalg.eigvals(A)
+
 
 def norm_nested(x):
     """
@@ -1023,6 +1023,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     ) + -5 * ( S2 )**( 2 ) ) + ( q * ( -5 * ( S1 )**( 2 ) + ( S2 )**( 2 ) \
     ) + -1 * ( q )**( 2 ) * ( 7 * ( S1 )**( 2 ) + ( 7 * ( S2 )**( 2 ) + ( \
     xi )**( 2 ) ) ) ) ) ) ) ) )
+
     coeff5 = \
     -256 * ( q )**( 3 ) * ( ( 1 + q ) )**( 6 ) * u
 
