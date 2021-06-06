@@ -4480,18 +4480,31 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
        theta1inf, theta2inf = asymptotic_to_angles(kappa, xi, q, chi1, chi2)
        Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
-        #This is equivalent to Ssav, but we avoid multiple conversions J <--> kappa and repated calculation of the S^2 roots.
-        coeffs= Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
-        sols = roots_vec(coeffs.T)
-        S3s, Sminuss, Spluss = np.squeeze(np.sort_complex(sols))
 
-        if np.iscomplex([Sminuss, Spluss]).any():
-            warnings.warn("Sanitizing RHS output [rhs_precav].", Warning)
+        coeffs= Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
+        coeffs= np.squeeze(coeffs)
+
+        # The first coefficient is tiny, 10^-100 small than the others. This is in practice a 2nd order polynomial
+        if np.abs(coeffs[0])< 10**-100 * np.abs(np.mean(coeffs[1:])):
+            warnings.warn("Sanitizing RHS output; solving quadratic. [rhs_precav].", Warning)
+            sols=np.roots(coeffs[1:])
+            Sminuss, Spluss = sols
             Ssav = np.mean(np.real([Sminuss, Spluss]))
+
         else:
-            S3s, Sminuss, Spluss = np.real([S3s, Sminuss, Spluss])
-            m = elliptic_parameter(Sminuss, Spluss, S3s)
-            Ssav = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
+            sols=np.roots(coeffs)
+            S3s, Sminuss, Spluss = np.squeeze(np.sort_complex(sols))
+
+            # Sminus and Splus are complex. This can happen if the binary is very close to a spin-orbit resonance
+            if np.iscomplex([Sminuss, Spluss]).any():
+                warnings.warn("Sanitizing RHS output; too close to resonance. [rhs_precav].", Warning)
+                Ssav = np.mean(np.real([Sminuss, Spluss]))
+
+            # Normal case
+            else:
+                S3s, Sminuss, Spluss = np.real([S3s, Sminuss, Spluss])
+                m = elliptic_parameter(Sminuss, Spluss, S3s)
+                Ssav = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
 
     return Ssav
 
@@ -4680,6 +4693,10 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
             else:
                 TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
+
+        # TODO: check for violations of the inputs here.
+        # TODO: introduce resonance tolerance and make sure your're not close  too close
+        # TODO: pass rtol and atol to integrator_precav
 
         # Integration. Return interpolant along the solution
         ODEsolution = integrator_precav(kappa, u[0], u[-1], xi, q, chi1, chi2)
@@ -6865,16 +6882,16 @@ if __name__ == '__main__':
 
 
 
-    #### TEST SANITIZER #####
-    # r = [10.0, np.inf]
-    # theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
-    #
-    # S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
-    #
-    # Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
-    # J=Jmax-1e-6
-    # result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
+    ### TEST SANITIZER #####
+    r = [10.0, np.inf]
+    theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
 
+    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
+
+    Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
+    J=Jmax-1e-6
+    result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
+    print(result['kappa'])
 
     # while True:
     #     q=np.random.uniform(0.01,1)
