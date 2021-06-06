@@ -5,7 +5,6 @@ precession
 
 import warnings
 import numpy as np
-#import numexpr
 import scipy.special
 import scipy.integrate
 from sympy import elliptic_pi
@@ -1068,29 +1067,58 @@ def kapparesonances(u, xi, q, chi1, chi2):
     chi1=np.atleast_1d(chi1)
     chi2=np.atleast_1d(chi2)
 
-    kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
     def _compute(kapparoots, u, xi, q, chi1, chi2):
-        if u==0:
-            # At infinitely large separation
-            S1, S2 = spinmags(q, chi1, chi2)
-            kappainfmin = np.maximum( (xi - (q**-1-q)*S2)/(1+q) , (xi - (q**-1-q)*S1)/(1+q**-1) )
-            kappainfmax = np.minimum( (xi + (q**-1-q)*S2)/(1+q) , (xi + (q**-1-q)*S1)/(1+q**-1) )
-            kappares = np.array([kappainfmin,kappainfmax])
-        else:
-            # At finite separation
-            kapparoots = kapparoots[np.isfinite(kapparoots)]
-            Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
-            Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
-            kappares = kapparoots[np.logical_and(Sroots>Smin, Sroots<Smax)]
-            assert len(kappares)<=2, "I found more than two resonances, this should not be possible."
-            # If you didn't find enough solutions, append nans
-            kappares=np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
+        kapparoots = kapparoots[np.isfinite(kapparoots)]
+        Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
+        Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
+        kappares = kapparoots[np.logical_and(Sroots>Smin, Sroots<Smax)]
+        assert len(kappares)<=2, "I found more than two resonances, this should not be possible."
+        # If you didn't find enough solutions, append nans
+        kappares=np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
         return kappares
 
     kappamin, kappamax =np.array(list(map(_compute, kapparoots, u, xi, q, chi1, chi2))).T
 
     return np.stack([kappamin, kappamax])
 
+
+def kappainfresonances(xi, q, chi1, chi2):
+    """
+    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of xi. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
+
+    Call
+    ----
+    kappainfmin,kappainfmax = kappainfresonances(u,xi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    u: float
+        Compactified separation 1/(2L).
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    kappainfmin: float
+        Minimum value of the asymptotic angular momentum kappainf.
+    kappainfmax: float
+        Maximum value of the asymptotic angular momentum kappainf.
+    """
+
+    xi=np.atleast_1d(xi)
+    q=np.atleast_1d(q)
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    kappainfmin = np.maximum( (xi - (q**-1-q)*S2)/(1+q) , (xi - (q**-1-q)*S1)/(1+q**-1) )
+    kappainfmax = np.minimum( (xi + (q**-1-q)*S2)/(1+q) , (xi + (q**-1-q)*S1)/(1+q**-1) )
+
+    return kappainfmin, kappainfmax
 
 
 def Jresonances(r, xi, q, chi1, chi2):
@@ -1222,7 +1250,7 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
         kappainfmin, kappainfmax = Slimits_S1S2(q, chi1, chi2)
 
     elif xi is not None and q is not None and chi1 is not None and chi2 is not None:
-        kappainfmin, kappainfmax = kapparesonances(np.tile(0,xi.shape), xi, q, chi1, chi2)
+        kappainfmin, kappainfmax = kappainfresonances(xi, q, chi1, chi2)
         # Check precondition
         kappainfmin_cond, kappainfmax_cond = Slimits_S1S2(q, chi1, chi2)
 
@@ -6477,21 +6505,21 @@ if __name__ == '__main__':
     # print(d)
 
     ##### INSPIRAL TESTING: precav, from infinite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # kappa = 0.50941012
-    # xi = 0.9141896967861489
-    # r=np.concatenate(([np.inf],np.logspace(2,1,100)))
-    #
+    q=0.5
+    chi1=1
+    chi2=1
+    theta1=0.4
+    theta2=0.45
+    kappa = 0.50941012
+    xi = 0.9141896967861489
+    r=np.concatenate(([np.inf],np.logspace(2,1,100)))
 
 
-    #d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
+
+    d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
     # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
     #
-    #print(d)
+    print(d)
     #
     #d=inspiral_precav(kappa=[kappa,kappa],xi=[xi,xi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #
@@ -6860,16 +6888,16 @@ if __name__ == '__main__':
 
 
 
-    ### TEST SANITIZER #####
-    r = [10.0, np.inf]
-    theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
-
-    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
-
-    Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
-    J=Jmax+1e-8
-    result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
-    print(result['kappa'])
+    # ### TEST SANITIZER #####
+    # r = [10.0, np.inf]
+    # theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
+    #
+    # S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
+    #
+    # Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
+    # J=Jmax+1e-8
+    # result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
+    # print(result['kappa'])
 
     # while True:
     #     q=np.random.uniform(0.01,1)
