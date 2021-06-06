@@ -1130,7 +1130,6 @@ def Jresonances(r, xi, q, chi1, chi2):
     return np.stack([Jmin, Jmax])
 
 
-#TODO: docstrings
 def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
@@ -1139,7 +1138,7 @@ def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
 
     Call
     ----
-    Jmin,Jmax = Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None)
+    Jmin,Jmax = Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
@@ -1153,6 +1152,8 @@ def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    enforce: boolean, optional (default: False)
+        If True raise errors, if False raise warnings.
 
     Returns
     -------
@@ -1184,8 +1185,6 @@ def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
     return np.stack([Jmin, Jmax])
 
 
-
-#TODO: docstrings
 def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
@@ -1194,7 +1193,7 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
 
     Call
     ----
-    Jmin,Jmax = Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None)
+    kappainfmin,kappainfmin = kappainflimits(r=None,xi=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
@@ -1208,13 +1207,15 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    enforce: boolean, optional (default: False)
+        If True raise errors, if False raise warnings.
 
     Returns
     -------
-    Jmin: float
-        Minimum value of the total angular momentum J.
-    Jmax: float
-        Maximum value of the total angular momentum J.
+    kappainfmin: float
+        Minimum value of the asymptotic angular momentum kappainf.
+    kappainfmin: float
+        Minimum value of the asymptotic angular momentum kappainf.
     """
 
     if xi is None and q is not None and chi1 is not None and chi2 is not None:
@@ -1236,7 +1237,7 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
     else:
         raise TypeError("Provide either (q,chi1,chi2) or (xi,q,chi1,chi2).")
 
-    return np.stack([Jmin, Jmax])
+    return np.stack([kappainfmin, kappainfmin])
 
 
 def xilimits_definition(q, chi1, chi2):
@@ -1634,6 +1635,7 @@ def xiresonances(J, r, q, chi1, chi2):
     ximin, ximax =np.array(list(map(_compute, Smin, Smax, J, r, xiroots, q, chi1, chi2))).T
     return np.stack([ximin, ximax])
 
+
 def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     """
     Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
@@ -1712,7 +1714,7 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 
     return np.stack([theta1atmin, theta2atmin, deltaphiatmin, theta1atmax, theta2atmax, deltaphiatmax])
 
-#TODO: docstrings
+
 def xilimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the projected effective spin. The contraints considered depend on the inputs provided.
@@ -1721,7 +1723,7 @@ def xilimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
 
     Call
     ----
-    ximin,ximax = xilimits(J=None,r=None,q=None,chi1=None,chi2=None)
+    ximin,ximax = xilimits(J=None,r=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
@@ -1735,6 +1737,8 @@ def xilimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    enforce: boolean, optional (default: False)
+        If True raise errors, if False raise warnings.
 
     Returns
     -------
@@ -2028,28 +2032,32 @@ def Slimits_plusminus(J, r, xi, q, chi1, chi2):
 
     return np.stack([Smin, Smax])
 
-#TODO regen docstrings
+
 def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None, chi2=None):
     """
     Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user. Provide either J or kappa and either r or u.
 
     Call
     ----
-    S = Satresonance(J,r,xi,q,chi1,chi2)
+    S = Satresonance(J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
-    J: float
+    J: float, optional (default: None)
         Magnitude of the total angular momentum.
-    r: float
+    kappa: float, optional (default: None)
+        Regularized angular momentum (J^2-L^2)/(2L).
+    r: float, optional (default: None)
         Binary separation.
-    xi: float
+    u: float, optional (default: None)
+        Compactified separation 1/(2L).
+    xi: float, optional (default: None)
         Effective spin.
-    q: float
+    q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
-    chi1: float
+    chi1: float, optional (default: None)
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
+    chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
 
     Returns
@@ -2057,6 +2065,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
     S: float
         Magnitude of the total spin.
     """
+
 
     if q is None or chi1 is None or chi2 is None:
         raise TypeError("Please provide q, chi1, and chi2.")
@@ -2083,7 +2092,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
 
     return Sres
 
-# TODO: docstrings
+
 def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the total spin magnitude. The contraints considered depend on the inputs provided.
@@ -2094,7 +2103,7 @@ def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False
 
     Call
     ----
-    Smin,Smax = Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None)
+    Smin,Smax = Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
@@ -2110,6 +2119,8 @@ def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    enforce: boolean, optional (default: False)
+        If True raise errors, if False raise warnings.
 
     Returns
     -------
@@ -2118,6 +2129,7 @@ def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False
     Smax: float
         Maximum value of the total spin S.
     """
+
 
     if J is None and r is None and xi is None and q is not None and chi1 is not None and chi2 is not None:
         Smin, Smax = Slimits_S1S2(q, chi1, chi2)
