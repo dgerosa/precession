@@ -1,5 +1,5 @@
 """
-precession
+precession. TODO: write me here
 """
 
 
@@ -1068,7 +1068,7 @@ def kapparesonances(u, xi, q, chi1, chi2):
     chi2=np.atleast_1d(chi2)
 
     kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
-    
+
     def _compute(kapparoots, u, xi, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
         Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
@@ -3934,7 +3934,6 @@ def derS_prefactor(r, xi, q):
     return mathcalA
 
 
-# TODO: Here we use S2 for square...
 def dSsdtsquared(S, J, r, xi, q, chi1, chi2):
     """
     Squared first time derivative of the squared total spin, on the precession timescale.
@@ -4114,14 +4113,13 @@ def time_normalization(Spluss, S3s, r, xi, q):
 
     return mathcalT
 
-# TODO: Should this be eval_tau
-def Speriod(J, r, xi, q, chi1, chi2, precomputedroots = None):
+def eval_tau(J, r, xi, q, chi1, chi2, precomputedroots = None):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
 
     Call
     ----
-    tau = Speriod(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    tau = eval_tau(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -4145,7 +4143,6 @@ def Speriod(J, r, xi, q, chi1, chi2, precomputedroots = None):
     tau: float
         Nutation period.
     """
-
 
     Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
     mathcalT = time_normalization(Spluss, S3s, r, xi, q)
@@ -4245,7 +4242,7 @@ def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     m = elliptic_parameter(Sminuss, Spluss, S3s)
     mathcalT = time_normalization(Spluss, S3s, r, xi, q)
     phi = elliptic_amplitude(S, Sminuss, Spluss)
-    tau = Speriod(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    tau = eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
 
     return t
@@ -4288,7 +4285,7 @@ def Ssampling(J, r, xi, q, chi1, chi2, N=1):
     # Compute the S roots only once and pass them to both functions
     Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
 
-    tau = Speriod(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    tau = eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     # For each binary, generate N samples between 0 and tau.
     t = np.random.uniform(size=tau.size*N).reshape((tau.size, N)) * tau[:, None]
     # Note the special broadcasting rules of Soft, see Soft.__docs__
@@ -4552,23 +4549,8 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     def _compute(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
-        # TODO. This breaks down if r is very large but not infinite.
         #h0= 1e-3 if u[0]==0 else 0
-        # TODO: I disabled the intial timestep check when I switched to solve_ivp. This needs to be tested!
-
-        # As far as I understand by inspective the scipy code, the "vectorized" option is ignored if a jacobian is not provided. If you decide it's needed, a vectorized implementation of "rhs_precav" requires substituting that if statement with np.where
-
-        # def event(u,kappa,xi, q, chi1, chi2,terminal=True):
-        #     if u==0:
-        #         return 1
-        #     r= eval_r(u=u, q=q)
-        #     Jmin,Jmax = Jresonances(r, xi, q, chi1, chi2)
-        #     J = eval_J(kappa=kappa, r=r, q=q)
-        #     if J<Jmin or J>Jmax>J:
-        #         return -1
-        #     else:
-        #         return 1
-
+        
         ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-8, rtol=1e-8)#,events=event)
 
         #TODO: let user pick rtol and atol
@@ -6216,7 +6198,7 @@ if __name__ == '__main__':
 
     #Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
 
-    #tau = Speriod(J,r,xi,q,chi1,chi2)
+    #tau = eval_tau(J,r,xi,q,chi1,chi2)
     #print(tau)
 
         #print(tofS(Sminus,J,r,xi,q,chi1,chi2,sign=-1))
@@ -6776,7 +6758,7 @@ if __name__ == '__main__':
 
     #print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
 
-    # tau = Speriod(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    # tau = eval_tau(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
     # Smin,Smax = Slimits_plusminus(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
     # t= np.linspace(0,tau,200)
     # S= Soft([t,t],J,r,xi,q,chi1,chi2)
@@ -6836,9 +6818,9 @@ if __name__ == '__main__':
     # print(omega2_aligned([r,r], [q,q], [chi1,chi1], [chi2,chi2], 'dd'))
 
     #
-    # print(Speriod([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
+    # print(eval_tau([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
     # pr = Ssroots([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
-    # print(Speriod([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
+    # print(eval_tau([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
     # sys.exit()
 
     # q=0.8
