@@ -6557,21 +6557,21 @@ if __name__ == '__main__':
     # print(d)
 
     ##### INSPIRAL TESTING: precav, from infinite #######
-    q=0.5
-    chi1=1
-    chi2=1
-    theta1=0.4
-    theta2=0.45
-    kappa = 0.50941012
-    xi = 0.9141896967861489
-    r=np.concatenate(([np.inf],np.logspace(2,1,100)))
-
-
-
-    d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
-    # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
+    # q=0.5
+    # chi1=1
+    # chi2=1
+    # theta1=0.4
+    # theta2=0.45
+    # kappa = 0.50941012
+    # xi = 0.9141896967861489
+    # r=np.concatenate(([np.inf],np.logspace(2,1,100)))
     #
-    print(d)
+    #
+    #
+    # d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
+    # # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
+    # #
+    # print(d)
     #
     #d=inspiral_precav(kappa=[kappa,kappa],xi=[xi,xi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #
@@ -6964,3 +6964,22 @@ if __name__ == '__main__':
     #     kres = kapparesonances(u,xi,q,chi1,chi2)
     #     J = eval_J(kappa=kres,r=r,q=q)
     #     print(Jres-J)
+
+
+    kappa=3.4
+    u=0.1
+    xi=0.8
+    q=0.96543
+    chi1=0.4567
+    chi2=0.979032
+    print(Scubic_coefficients(kappa, u, xi, q, chi1, chi2))
+    #print(kappadiscriminant_coefficients(u, xi, q, chi1, chi2))
+
+    r=34.432
+    J=1.4
+    S=0.3
+    varphi=0.45
+
+
+
+    #print(eval_xi(theta1=None,theta2=None,S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2))

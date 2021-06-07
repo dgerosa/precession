@@ -48,7 +48,7 @@ greekrule={"\[Alpha]"->"alpha","\[Beta]"->"beta","\[Gamma]"->"gamma","\[Delta]"-
 (*Everything else*)
 PythonForm[allOther_]:=StringReplace[ToString[allOther,FortranForm],greekrule];
 (*Copy results to clipboard*)
-CopyToClipboard[PythonForm[expression]];
+(*CopyToClipboard[PythonForm[expression]];*)
 PythonForm[expression]]
 End[]
 EndPackage[]
