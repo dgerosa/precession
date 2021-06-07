@@ -1371,12 +1371,12 @@ def anglesresonances(J = None, r = None, xi = None, q = None, chi1 = None, chi2 
         J = np.atleast_1d(J)
         S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, q)
-        deltaphiatmin=np.where(J>np.abs(L-S1-S2), 0, np.pi)
+        deltaphiatmin = np.where(J>np.abs(L-S1-S2), 0, np.pi)
 
         Satmax = Satresonance(J=J, r=r, xi=ximax, q=q, chi1=chi1, chi2=chi2)
         theta1atmax = eval_theta1(Satmax, J, r, ximax, q, chi1, chi2)
         theta2atmax = eval_theta2(Satmax, J, r, ximax, q, chi1, chi2)
-        deltaphiatmax=np.tile(np.pi, q.shape)
+        deltaphiatmax = np.tile(np.pi, q.shape)
 
     else:
         raise TypeError("Provide either (r,xi,q,chi1,chi2) or (J,r,q,chi1,chi2).")
