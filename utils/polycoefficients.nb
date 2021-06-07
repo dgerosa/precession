@@ -2,19 +2,20 @@ Notebook[{
 
 Cell[CellGroupData[{
 Cell["precession v2: polynomial coefficients", \
-"Title",ExpressionUUID->"f128f030-4bc6-45b0-9b44-41af70f3403d"],
+"Title",ExpressionUUID->"6383118c-d443-42eb-a95b-32b9581dcfd8"],
 
 Cell["Davide Gerosa", \
-"Subtitle",ExpressionUUID->"3cc57525-8cdf-4bcb-b38c-939151e9c131"],
+"Subtitle",ExpressionUUID->"0b2e0e77-f582-44f2-a573-e384163a73b0"],
 
 Cell[TextData[StyleBox["This is a notebook to derive some long polynomial \
 coefficients that describe the dynamics of spinning black-hole binaries at \
 2PN. In particular, we present \[LineSeparator]expressions for (i) the \
-evolution of the total spin on the precessional timescale, (ii) the \
-identification of the spin-orbit resonances in terms of the generalized \
-angular momentum \[Kappa], and (iii)  the identification of the spin-orbit \
-resonances in terms of the effective spin \[Xi].  ", "Subsection"]], \
-"Subtitle",ExpressionUUID->"803a8841-c96e-4923-a049-3204cbf8f401"],
+effective potentials, (ii) the evolution of the total spin on the \
+precessional timescale, (iii) the identification of the spin-orbit resonances \
+in terms of the generalized angular momentum \[Kappa], and (iv)  the \
+identification of the spin-orbit resonances in terms of the effective spin \
+\[Xi].  ", "Subsection"]], \
+"Subtitle",ExpressionUUID->"0e3d0172-8950-4d99-b055-7b5438182de5"],
 
 Cell[CellGroupData[{
 
@@ -23,7 +24,7 @@ Export expressions in a format that python and numpy are going to like. Use a \
 modified version of the packaged by Gustavo Wiederhecker  \
 https://github.com/gwiederhecker/ToPython, supplemented by a set of custom \
 transformation for the precession code. \
-\>", "Subsubsection",ExpressionUUID->"9492543b-a14c-4dce-9a67-eb806edc393b"],
+\>", "Subsubsection",ExpressionUUID->"ff845be3-3aca-4898-b479-dd93a6ae26d6"],
 
 Cell[BoxData[
  RowBox[{
@@ -261,7 +262,7 @@ Cell[BoxData[
          "]"}]}], ";", "\n", 
       RowBox[{"PythonForm", "[", "expression", "]"}]}]}], "]"}]}], 
   ";"}]], "Input",
- CellLabel->"In[1]:=",ExpressionUUID->"7f2c8181-f40d-47d6-a9eb-838a2df8c1e1"],
+ CellLabel->"In[1]:=",ExpressionUUID->"5c7b5ae4-9126-427d-a0b5-6924edb5ba15"],
 
 Cell[BoxData[
  RowBox[{
@@ -297,20 +298,18 @@ Cell[BoxData[
         RowBox[{"\"\<(9)\>\"", "->", "\"\<9\>\""}], ",", 
         RowBox[{"\"\<(10)\>\"", "->", "\"\<10\>\""}]}], "}"}]}], "]"}]}]}], 
   ";"}]], "Input",
- CellLabel->"In[2]:=",ExpressionUUID->"d7529ef7-9d21-43da-a43e-773609d29250"]
+ CellLabel->"In[2]:=",ExpressionUUID->"43a78cde-85e5-4b54-abbc-bf7cdbd03a6f"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell["(i) Cubic equation in S^2 ", \
-"Section",ExpressionUUID->"e7621dc9-6859-411e-8bc8-7fcdfdab8352"],
+Cell["(ii) Effective potentials", \
+"Section",ExpressionUUID->"f78820e6-597a-4d8d-8c92-cb09c1a72eab"],
 
 Cell[CellGroupData[{
 
-Cell["\<\
-Effective potentials; see Eqs. (13-14) of Gerosa et al. (2015), \
-arxiv:1506.03492. \
-\>", "Subsubsection",ExpressionUUID->"e1d6bd4d-08d3-4d11-9a7d-4008c6fab99e"],
+Cell["See Eqs. (13-14) of Gerosa et al. (2015), arxiv:1506.03492. ", \
+"Subsubsection",ExpressionUUID->"04cb541c-b1e2-46b6-aff2-7645e5e2c13e"],
 
 Cell[BoxData[{
  RowBox[{
@@ -384,7 +383,7 @@ Cell[BoxData[{
          RowBox[{"S1", "-", "S2"}], ")"}], "^", "2"}]}], ")"}], "^", 
      RowBox[{"(", 
       RowBox[{"1", "/", "2"}], ")"}]}]}]}], " ", ";"}]}], "Input",
- CellLabel->"In[3]:=",ExpressionUUID->"86c9162b-f09f-43cc-9ffd-7977a9cb2e6b"],
+ CellLabel->"In[3]:=",ExpressionUUID->"57e858d0-d213-4967-9ada-dbabc0d22af8"],
 
 Cell[CellGroupData[{
 
@@ -399,8 +398,8 @@ Cell[BoxData[{
         RowBox[{"Cos", "[", "varphi", "]"}], "t3"}]}], ")"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<xi\>\"", ",", "xiSvarphi"}], "]"}]}], "Input",
- CellLabel->"In[6]:=",ExpressionUUID->"7e3f5b5a-097c-4fe1-b65c-6e2ce4d6b531"],
+  RowBox[{"\"\<xi\>\"", ",", "%"}], "]"}]}], "Input",
+ CellLabel->"In[6]:=",ExpressionUUID->"4b489380-6c2d-443b-af85-ce19b1bd1588"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\nxi = 1/4 * \
 L**(-1) * q**(-1) * S**(-2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * (((1 + \
@@ -408,16 +407,47 @@ q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -1 * (1 + -1 * q**2) * \
 ((J**2 + -1 * ((L + -1 * S))**2))**(1/2) * ((-1 * J**2 + ((L + \
 S))**2))**(1/2) * ((S**2 + -1 * ((S1 + -1 * S2))**2))**(1/2) * ((-1 * S**2 + \
 ((S1 + S2))**2))**(1/2) * np.cos(varphi))\"\>"], "Output",
- CellLabel->"Out[7]=",ExpressionUUID->"ea29d338-9e82-4291-b7eb-5f925ebcf857"]
+ CellLabel->"Out[7]=",ExpressionUUID->"b6206b0b-3b0e-41ad-a46b-b0cc8970a206"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"cosvarphi", " ", "=", " ", 
+   RowBox[{"Simplify", "[", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "\[Xi]"}], " ", "/", "t1"}], " ", "+", " ", "t2"}], 
+      ")"}], "/", "t3"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<cosvarphi\>\"", ",", "%"}], "]"}]}], "Input",
+ CellLabel->"In[8]:=",ExpressionUUID->"a7295460-fc36-4e4f-b406-56568d16b805"],
+
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncosvarphi = \
+((1 + -1 * q**2))**(-1) * ((J**2 + -1 * ((L + -1 * S))**2))**(-1/2) * ((-1 * \
+J**2 + ((L + S))**2))**(-1/2) * ((S**2 + -1 * ((S1 + -1 * S2))**2))**(-1/2) * \
+((-1 * S**2 + ((S1 + S2))**2))**(-1/2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * \
+(((1 + q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -4 * L * q * \
+S**2 * xi)\"\>"], "Output",
+ CellLabel->"Out[9]=",ExpressionUUID->"cefac524-546d-4780-b13e-614f8c8c7875"]
+}, Open  ]]
 }, Open  ]]
 }, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(ii) Cubic equation in S^2 ", \
+"Section",ExpressionUUID->"99fa2989-4f42-49cb-a4c1-473d2e10142c"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
 Equation (\[Xi]_\[PlusMinus](S)-\[Xi])^2=0; substitute  \[Kappa] and u; \
 multiply by some constant factors for consistency with previous derivations.\
-\>", "Subsubsection",ExpressionUUID->"01677cc4-4de9-4c13-9d41-d16e8f014aa4"],
+\>", "Subsubsection",ExpressionUUID->"813d57bc-be9f-4ff5-8819-de50f7159eaa"],
 
 Cell[CellGroupData[{
 
@@ -432,7 +462,7 @@ Cell[BoxData[
        RowBox[{"(", 
         RowBox[{"\[Xi]", "/", "t1"}], ")"}], " ", "-", " ", "t2"}], ")"}], 
      "^", "2"}]}], " ", "]"}]}]], "Input",
- CellLabel->"In[8]:=",ExpressionUUID->"78baebac-5128-4c8c-99d7-1081f39a15c2"],
+ CellLabel->"In[10]:=",ExpressionUUID->"5406f93a-938d-4ea3-93c9-64f438e395ad"],
 
 Cell[BoxData[
  RowBox[{
@@ -495,7 +525,8 @@ Cell[BoxData[
            SuperscriptBox["S2", "2"]}], ")"}]}]}], ")"}]}], "-", 
      RowBox[{"4", " ", "L", " ", "q", " ", 
       SuperscriptBox["S", "2"], " ", "\[Xi]"}]}], ")"}], "2"]}]], "Output",
- CellLabel->"Out[8]=",ExpressionUUID->"9907ec5a-0e06-4ffc-832b-975e02318359"]
+ CellLabel->
+  "Out[10]=",ExpressionUUID->"b31bc47c-1e6a-49cd-a481-a7dd5af0885d"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -532,7 +563,7 @@ Cell[BoxData[
       RowBox[{"S", "->", 
        RowBox[{"Sqrt", "[", "Ss", "]"}]}], "}"}]}], "]"}]}], 
   "\[IndentingNewLine]"}]], "Input",
- CellLabel->"In[9]:=",ExpressionUUID->"8f2d8930-0bbb-41f2-b252-8f3911622a78"],
+ CellLabel->"In[11]:=",ExpressionUUID->"7ac4b074-aadd-494a-a795-663b5f29bd53"],
 
 Cell[BoxData[
  RowBox[{"-", 
@@ -588,14 +619,15 @@ Cell[BoxData[
           RowBox[{"Ss", " ", "u"}], "-", "\[Kappa]"}], ")"}]}], "+", 
        RowBox[{"2", " ", "q", " ", "Ss", " ", "\[Xi]"}]}], ")"}], "2"]}], 
    RowBox[{"4", " ", "Ss"}]]}]], "Output",
- CellLabel->"Out[9]=",ExpressionUUID->"316a831a-957b-49e0-9aea-b054065744c2"]
+ CellLabel->
+  "Out[11]=",ExpressionUUID->"f70f2b75-7557-4c62-9cff-847670f148f4"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Extract coefficients.", \
-"Subsubsection",ExpressionUUID->"8b07b8ac-0fbf-4656-8c34-849a3c399112"],
+"Subsubsection",ExpressionUUID->"4b15e786-6647-4d2b-be29-6fe842686c59"],
 
 Cell[CellGroupData[{
 
@@ -608,12 +640,12 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff3\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[10]:=",ExpressionUUID->"465955aa-d15a-495e-85f8-967c1d0f47fd"],
+ CellLabel->"In[12]:=",ExpressionUUID->"e27be02c-cb58-4e9a-9f52-e5b1d7573532"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = q * \
 ((1 + q))**2 * u**2\"\>"], "Output",
  CellLabel->
-  "Out[11]=",ExpressionUUID->"761c8158-a7ad-4460-bfb0-8c24f8ee4cfa"]
+  "Out[13]=",ExpressionUUID->"5d20aea5-8ca5-414f-bc57-148b261360f3"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -627,14 +659,14 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff2\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[12]:=",ExpressionUUID->"68632716-b0b3-4583-b1b5-89910bcf8643"],
+ CellLabel->"In[14]:=",ExpressionUUID->"2fb87423-9e2c-4b8f-a904-bf0ba5dacfbb"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = 1/4 \
 * ((1 + q))**2 * (1 + (4 * S2**2 * u**2 + (q**2 * (1 + 4 * S1**2 * u**2) + -2 \
 * q * (1 + 2 * u * ((S1**2 + S2**2) * u + (2 * kappa + -1 * xi))))))\"\>"], \
 "Output",
  CellLabel->
-  "Out[13]=",ExpressionUUID->"814ef230-3ec5-4cfe-9e35-79218c0bd22d"]
+  "Out[15]=",ExpressionUUID->"3d972502-40c2-4196-a68c-d39190050ecc"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -648,7 +680,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff1\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[14]:=",ExpressionUUID->"eba66036-8690-4de4-98cf-09ff6e9db448"],
+ CellLabel->"In[16]:=",ExpressionUUID->"dcbfe62d-6ad9-408d-a53d-cfd8f724b451"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = (q \
 * (kappa + (q * kappa + -1 * xi)) * (kappa + (q * kappa + -1 * q * xi)) + \
@@ -656,7 +688,7 @@ Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = (q \
 * q * u * xi) + -1/2 * (-1 + q**2) * S2**2 * ((1 + q) * (-1 + (q + -4 * u * \
 kappa)) + 2 * q * u * xi)))\"\>"], "Output",
  CellLabel->
-  "Out[15]=",ExpressionUUID->"e86b526e-c05d-4f1d-bd97-6804fb74a11e"]
+  "Out[17]=",ExpressionUUID->"bc488b55-e35e-4e47-bed6-17d2056fbe8b"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -670,21 +702,21 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff0\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[16]:=",ExpressionUUID->"7c17f9b3-2582-4b30-a3a5-a2d26faf2b78"],
+ CellLabel->"In[18]:=",ExpressionUUID->"7e762373-b504-4df2-b529-46cebd26f2a3"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff0 = 1/4 \
 * (-1 + q) * (1 + q) * ((1 + q) * ((-1 + q) * ((S1**2 + -1 * S2**2))**2 + 4 * \
 (q * S1**2 + -1 * S2**2) * kappa**2) + -4 * q * (S1 + -1 * S2) * (S1 + S2) * \
 kappa * xi)\"\>"], "Output",
  CellLabel->
-  "Out[17]=",ExpressionUUID->"2aee94ce-e8a9-41d8-b2c6-f5ba4c6e08aa"]
+  "Out[19]=",ExpressionUUID->"0e04852e-cb5d-43e4-a9b5-c99d94a9c50a"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Check reconstruction (this should be zero).", \
-"Subsubsection",ExpressionUUID->"32910c26-9a18-4125-ae41-a90c65af00fe"],
+"Subsubsection",ExpressionUUID->"8c6e55c8-3f43-41d8-a2ce-1a3781741053"],
 
 Cell[CellGroupData[{
 
@@ -697,26 +729,26 @@ Cell[BoxData[
     RowBox[{"Ss", "^", "2"}]}], "+", 
    RowBox[{"Scoeff1", "*", "Ss"}], " ", "+", " ", "Scoeff0", " ", "-", " ", 
    "effpot"}], "//", "FullSimplify"}]], "Input",
- CellLabel->"In[18]:=",ExpressionUUID->"2e24b2f1-e6a2-408c-a363-7be25e052522"],
+ CellLabel->"In[20]:=",ExpressionUUID->"708510a4-4e36-48ed-a7e5-c8b6390791c4"],
 
 Cell[BoxData["0"], "Output",
  CellLabel->
-  "Out[18]=",ExpressionUUID->"a7f134bc-cc2a-4197-9939-4973a7f126e5"]
+  "Out[20]=",ExpressionUUID->"bdd88a1d-3fd5-4554-ba3e-6e69d045a4b2"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell["(ii) Spin-orbit resonances in \[Kappa] ", \
-"Section",ExpressionUUID->"cfda2c47-b632-4d6d-92b4-d53e4acb4c0a"],
+Cell["(iii) Spin-orbit resonances in \[Kappa] ", \
+"Section",ExpressionUUID->"5d122305-161c-433b-90cd-b72270faa66f"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
 Compute discriminant of the cubic equation in S^2; multiply by some constant \
 factors for consistency with previous derivations.\
-\>", "Subsubsection",ExpressionUUID->"c851382c-e32c-4249-98b4-ba0b4f82e003"],
+\>", "Subsubsection",ExpressionUUID->"4e52729f-b449-4a33-82b3-deb1ac963888"],
 
 Cell[CellGroupData[{
 
@@ -735,7 +767,7 @@ Cell[BoxData[{
       RowBox[{
        RowBox[{"-", "1"}], "+", 
        SuperscriptBox["q", "2"]}], ")"}], "2"]]}]}]}], "Input",
- CellLabel->"In[19]:=",ExpressionUUID->"48a88c7d-a32d-4f8b-85ab-2458943de372"],
+ CellLabel->"In[21]:=",ExpressionUUID->"54d58a33-0f4b-459a-a5aa-145726cdcedf"],
 
 Cell[BoxData[
  RowBox[{
@@ -2315,7 +2347,7 @@ Cell[BoxData[
                  SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}]}], ")"}]}]}], 
          ")"}]}]}], ")"}]}]}], ")"}]}]], "Output",
  CellLabel->
-  "Out[20]=",ExpressionUUID->"7ddc46ff-91ed-4f34-994a-815a6d49775f"]
+  "Out[22]=",ExpressionUUID->"9ab96036-2089-4f04-ae7e-cb5a9043b7b1"]
 }, Open  ]]
 }, Open  ]],
 
@@ -2324,7 +2356,7 @@ Cell[CellGroupData[{
 Cell["\<\
 Extract coefficients. Sort terms in powers of u to improve numerical \
 stability.\
-\>", "Subsubsection",ExpressionUUID->"1db1bfdc-7d08-45d4-ba0b-f7dbf5614baf"],
+\>", "Subsubsection",ExpressionUUID->"46bedb19-5013-4603-9087-af18215161f9"],
 
 Cell[CellGroupData[{
 
@@ -2337,12 +2369,12 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff5\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[21]:=",ExpressionUUID->"00398501-a010-4b4c-890d-b071d4c07c14"],
+ CellLabel->"In[23]:=",ExpressionUUID->"6635d524-314b-4594-bb4e-07a3893bb4e2"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff5 = \
 -256 * q**3 * ((1 + q))**6 * u\"\>"], "Output",
  CellLabel->
-  "Out[22]=",ExpressionUUID->"2c928693-f4d1-4013-aaf6-e284a0b2fbbf"]
+  "Out[24]=",ExpressionUUID->"fc3609a0-03dc-4403-ba98-4201075a4f28"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2356,14 +2388,14 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff4\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[23]:=",ExpressionUUID->"e90dd0c6-599d-4430-9948-9f9ef987284f"],
+ CellLabel->"In[25]:=",ExpressionUUID->"6c8a0fd5-5bd9-4fbd-a0f6-303ca9a0b940"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff4 = 16 \
 * q**2 * ((1 + q))**4 * (((-1 + q**2))**2 + (-16 * ((1 + q))**2 * (q * (-5 + \
 3 * q) * S1**2 + (3 + -5 * q) * S2**2) * u**2 + (40 * q * ((1 + q))**2 * u * \
 xi + 16 * q**2 * u**2 * xi**2)))\"\>"], "Output",
  CellLabel->
-  "Out[24]=",ExpressionUUID->"2167efb4-f288-4d7b-b180-09c12d793d50"]
+  "Out[26]=",ExpressionUUID->"dbe59583-edd0-4969-a141-9da96dd9f29f"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2377,7 +2409,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff3\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[25]:=",ExpressionUUID->"4730e454-cab2-4f83-b336-41547bae487c"],
+ CellLabel->"In[27]:=",ExpressionUUID->"fb6278e0-4aa6-4add-9edc-7558be694823"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = -32 \
 * q * ((1 + q))**4 * (2 * q**6 * S1**2 * u * (-5 + 12 * S1**2 * u**2) + (2 * \
@@ -2393,7 +2425,7 @@ xi)))) + (q**5 * (xi + 2 * u * (S2**2 + S1**2 * (1 + -2 * u * (12 * (S1**2 + \
 (-8 * (5 * S2**4 * u**2 + (5 * S2**2 * u * xi + xi**2)) + 2 * S1**2 * (-5 + 4 \
 * u * (xi + u * (S2**2 + xi**2))))))))))))\"\>"], "Output",
  CellLabel->
-  "Out[26]=",ExpressionUUID->"f0658899-8937-4fef-b53d-b82f094b6579"]
+  "Out[28]=",ExpressionUUID->"6eaa72b8-a744-4d65-9188-8e94c737bdbd"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2407,7 +2439,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff2\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[27]:=",ExpressionUUID->"c98aabf9-ef1e-43a4-b8bd-a0d4d3805603"],
+ CellLabel->"In[29]:=",ExpressionUUID->"a33fd552-0d70-4f29-9d23-4d5ead8e51f9"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = -16 \
 * ((1 + q))**2 * (16 * (-1 + q) * q**3 * ((1 + q))**4 * (10 + (-8 + q) * q) * \
@@ -2436,7 +2468,7 @@ u**2 * xi**2 + 32 * q**3 * (-1 + q**2) * u**3 * xi**3))) + -1 * q**2 * xi**2 \
 * (1 + q * (8 * u * xi + q * (-2 + (16 * u * xi + ((q + 4 * u * \
 xi))**2))))))))))))\"\>"], "Output",
  CellLabel->
-  "Out[28]=",ExpressionUUID->"0d8af05a-81bf-40f5-bd59-20b9b425a066"]
+  "Out[30]=",ExpressionUUID->"628cc365-7dd4-4ab1-a9b9-3148eed73ef2"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2450,7 +2482,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff1\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[29]:=",ExpressionUUID->"9a93643e-0eb0-42dc-8f77-6ae2c82d2585"],
+ CellLabel->"In[31]:=",ExpressionUUID->"bccaacb5-cef1-4bf4-8bdf-9aff873c6e9b"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = -16 \
 * (1 + q) * (-16 * ((-1 + q))**2 * q**3 * ((1 + q))**5 * (-5 + 2 * q) * S1**8 \
@@ -2488,7 +2520,7 @@ q**2))**4 + (-2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * xi + \
 q**3 * (-1 + q**2) * u**3 * xi**3))) + q**2 * xi**2 * (1 + q * (8 * u * xi + \
 q * (-2 + (16 * u * xi + ((q + 4 * u * xi))**2))))))))))))\"\>"], "Output",
  CellLabel->
-  "Out[30]=",ExpressionUUID->"7fd726d8-90d1-4697-84a6-3cff673bde45"]
+  "Out[32]=",ExpressionUUID->"c2ad67be-a486-4d59-89c4-2eb91bb74fb3"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2502,7 +2534,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff0\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[31]:=",ExpressionUUID->"709c896a-3a70-4fc9-b922-53ff9c25d127"],
+ CellLabel->"In[33]:=",ExpressionUUID->"afa39167-df9e-4f8b-97a1-b3973d7c88cf"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff0 = -16 \
 * (16 * ((-1 + q))**3 * q**3 * ((1 + q))**6 * S1**10 * u**6 + (-1 * ((-1 + \
@@ -2550,14 +2582,14 @@ q**2 * ((1 + q))**3 * (11 + q * (-24 + 11 * q)) * u**2 * xi**2 + (16 * q**3 * \
 * xi + q * (-2 + (16 * u * xi + ((q + 4 * u * xi))**2))))))))))))\"\>"], \
 "Output",
  CellLabel->
-  "Out[32]=",ExpressionUUID->"fab3a080-c552-49f3-b334-ffd1500739b2"]
+  "Out[34]=",ExpressionUUID->"b7975855-d6d5-4f82-8e26-b38b8813e534"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Check reconstruction (this should be zero).", \
-"Subsubsection",ExpressionUUID->"7ea4fb9d-f5ca-4d22-9aab-2abf6b4a1eef"],
+"Subsubsection",ExpressionUUID->"cb67963a-71fe-4a0b-b1b0-1850cbc21af7"],
 
 Cell[CellGroupData[{
 
@@ -2574,26 +2606,26 @@ Cell[BoxData[
     RowBox[{"\[Kappa]", "^", "2"}]}], "+", 
    RowBox[{"kappacoeff1", "*", " ", "\[Kappa]"}], "+", "kappacoeff0", "-", 
    "discr"}], "//", "FullSimplify"}]], "Input",
- CellLabel->"In[33]:=",ExpressionUUID->"4941b746-95b0-4bfb-9922-bf9f6dadac08"],
+ CellLabel->"In[35]:=",ExpressionUUID->"19797581-62e6-4ecf-8096-38de6f668f90"],
 
 Cell[BoxData["0"], "Output",
  CellLabel->
-  "Out[33]=",ExpressionUUID->"5f5234ff-0fb5-4a52-b74c-d1a7dbb25f03"]
+  "Out[35]=",ExpressionUUID->"7a8a01f2-d42c-4953-ac3f-92a2e3c4f27d"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell["(iii) Spin-orbit resonances in xi ", \
-"Section",ExpressionUUID->"0b7223bc-c715-4f8e-bf33-838f7dec2ce8"],
+Cell["(iv) Spin-orbit resonances in xi ", \
+"Section",ExpressionUUID->"39461754-dd01-487a-8968-ecb677c37e64"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
 Extract coefficients. Sort terms in powers of u to improve numerical \
 stability.\
-\>", "Subsubsection",ExpressionUUID->"8155620a-6718-4c8f-8645-f5c4dd07a4a0"],
+\>", "Subsubsection",ExpressionUUID->"bee680af-bff5-498d-9132-317e1c83ca6c"],
 
 Cell[CellGroupData[{
 
@@ -2606,12 +2638,12 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff6\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[34]:=",ExpressionUUID->"9d70ea06-27f5-41b4-a41b-d4fe983949a6"],
+ CellLabel->"In[36]:=",ExpressionUUID->"b212d19e-ab9f-4918-835b-60082bd20834"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff6 = 256 \
 * q**6 * u**2\"\>"], "Output",
  CellLabel->
-  "Out[35]=",ExpressionUUID->"2e2d561c-a851-4b58-b06a-dca2ffc45ad8"]
+  "Out[37]=",ExpressionUUID->"ecb80434-8c91-426b-abb2-c8074ebd01ac"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2625,14 +2657,14 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff5\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[36]:=",ExpressionUUID->"f726bc69-7fe9-4256-bde9-127e1ce7f678"],
+ CellLabel->"In[38]:=",ExpressionUUID->"626114f4-6253-445b-b3a8-08ec7a2e27ed"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff5 = 128 \
 * q**5 * (1 + q) * u * (1 + (q + (8 * q * S1**2 * u**2 + (-4 * u * (S1**2 * u \
 + (-2 * S2**2 * u + kappa)) + -4 * q * u * (S2**2 * u + kappa)))))\"\>"], \
 "Output",
  CellLabel->
-  "Out[37]=",ExpressionUUID->"d4573903-d733-4596-ba1d-ecf57eb0e4ad"]
+  "Out[39]=",ExpressionUUID->"e1a6768a-4e4a-4cf1-8cd5-ad86525b9d86"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2646,7 +2678,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff4\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[38]:=",ExpressionUUID->"495da9d4-101d-49c2-a0dc-1b46eef5dacb"],
+ CellLabel->"In[40]:=",ExpressionUUID->"90854944-bdfb-4708-aca7-27e3c2bc02cc"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff4 = 16 \
 * q**4 * ((1 + q))**2 * (1 + (-32 * S1**2 * u**2 + (8 * u * (12 * S2**4 * \
@@ -2658,7 +2690,7 @@ kappa)))))) + q**2 * (1 + 8 * u * (-2 * kappa + u * (-4 * S2**2 + (12 * S1**4 \
 * u**2 + (2 * ((-1 * S2**2 * u + kappa))**2 + S1**2 * (1 + -12 * u * (S2**2 * \
 u + kappa)))))))))))\"\>"], "Output",
  CellLabel->
-  "Out[39]=",ExpressionUUID->"2d0c4616-bfe6-4a3b-b6c9-3fbe17760380"]
+  "Out[41]=",ExpressionUUID->"36fdf49a-4fff-4913-8823-93271f6f1ab9"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2672,7 +2704,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff3\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[40]:=",ExpressionUUID->"9375065a-5620-4322-b145-957bf7373534"],
+ CellLabel->"In[42]:=",ExpressionUUID->"fc4a5960-2871-46b5-a9c9-1d02bb7cfece"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = 32 \
 * q**3 * ((1 + q))**3 * (16 * (-1 + q) * q * (-1 + 2 * q) * S1**6 * u**5 + \
@@ -2691,7 +2723,7 @@ kappa * (5 + 12 * u * kappa)))) + (q**3 * (-3 + 16 * u**2 * (S2**4 * u**2 + \
 S2**4 * u**3 + (kappa * (19 + 4 * u * kappa) + -2 * S2**2 * u * (1 + 6 * u * \
 kappa))))))))))))))\"\>"], "Output",
  CellLabel->
-  "Out[41]=",ExpressionUUID->"465b3e7c-1aa7-45cc-8ae4-4672a40b1c84"]
+  "Out[43]=",ExpressionUUID->"a11579a0-b337-49fc-8f87-e05482fb7b5d"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2705,7 +2737,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff2\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[42]:=",ExpressionUUID->"eb8d39ef-e220-46e0-8c14-b999bc2c8c89"],
+ CellLabel->"In[44]:=",ExpressionUUID->"211990ed-b978-45a9-924d-8772f1806016"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = 16 \
 * q**2 * ((1 + q))**4 * (16 * ((-1 + q))**2 * q**2 * S1**8 * u**6 + (16 * \
@@ -2738,7 +2770,7 @@ kappa)))))) + (4 * q * (1 + u * (8 * S2**6 * u**5 + (4 * S2**4 * u**3 * (-11 \
 (11 + 8 * u * (kappa + -2 * S2**2 * u * (-2 + u * (S2**2 * u + \
 kappa))))))))))))))))))\"\>"], "Output",
  CellLabel->
-  "Out[43]=",ExpressionUUID->"ff32710d-0744-4ca4-8214-cea0a6fab6b1"]
+  "Out[45]=",ExpressionUUID->"5706f372-ddb9-40e6-bfe4-06fc4d1ed1fe"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2752,7 +2784,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff1\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[44]:=",ExpressionUUID->"7eb56112-22a3-4e91-8a4d-beeabff2bb6b"],
+ CellLabel->"In[46]:=",ExpressionUUID->"2eba811f-ffbb-4bbb-be79-5d1537fe699f"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = -32 \
 * q * ((1 + q))**2 * (4 * ((-1 + q))**2 * q**2 * ((1 + q))**3 * (-5 + 8 * q) \
@@ -2781,7 +2813,7 @@ q))**4 + (((-1 + q))**2 * (-3 + q * (49 + 16 * q)) * u * kappa + 4 * q * (30 \
 u**2 * (4 + q * (-3 * (11 + 4 * u * kappa) + q * (50 + q * (-53 + (32 * q + 8 \
 * (-7 + 4 * q) * u * kappa))))))))))))\"\>"], "Output",
  CellLabel->
-  "Out[45]=",ExpressionUUID->"3d6c1031-2191-4c57-80e3-595c3098e0b2"]
+  "Out[47]=",ExpressionUUID->"ab42ab19-6430-4588-8942-7ae8c99a3351"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2795,7 +2827,7 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff0\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[46]:=",ExpressionUUID->"cd7a1188-23c3-46a9-b4b2-379813f0f34b"],
+ CellLabel->"In[48]:=",ExpressionUUID->"613b4c03-56c5-4678-b304-453c97a3e00e"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff0 = -16 \
 * ((1 + q))**4 * (16 * ((-1 + q))**3 * q**3 * ((1 + q))**2 * S1**10 * u**6 + \
@@ -2831,14 +2863,14 @@ S1**8 * u**4 * (1 + (-48 * S2**2 * u**2 + 4 * q * (-5 + (4 * u * (S2**2 * u + \
 -5 * kappa) + q * (-2 + 8 * u * (S2**2 * u + kappa)))))))))))\"\>"], "Output",
  
  CellLabel->
-  "Out[47]=",ExpressionUUID->"b6c5473a-f6dd-451f-93e4-a9d40b40623f"]
+  "Out[49]=",ExpressionUUID->"d5a5d129-c5fb-4d31-bce4-1930ee8210a7"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Check reconstruction (this should be zero).", \
-"Subsubsection",ExpressionUUID->"ce19b8c5-6f70-425c-bba6-322a34a17cfc"],
+"Subsubsection",ExpressionUUID->"43b458a4-6227-4f26-9f34-7e0a6ff2b391"],
 
 Cell[CellGroupData[{
 
@@ -2857,11 +2889,11 @@ Cell[BoxData[
     RowBox[{"\[Xi]", "^", "2"}]}], " ", "+", " ", 
    RowBox[{"xicoeff1", "*", " ", "\[Xi]"}], "+", " ", "xicoeff0", " ", "-", 
    "discr"}], "//", "FullSimplify"}]], "Input",
- CellLabel->"In[48]:=",ExpressionUUID->"d95e825c-c206-4f06-8ed0-e34071bbe60e"],
+ CellLabel->"In[50]:=",ExpressionUUID->"308d850a-540d-4d01-b531-98d4b76d1690"],
 
 Cell[BoxData["0"], "Output",
  CellLabel->
-  "Out[48]=",ExpressionUUID->"18ff1260-f760-4afd-a2a4-7d9180dc777e"]
+  "Out[50]=",ExpressionUUID->"dadfab83-b52e-4d31-80b0-65608ae88521"]
 }, Open  ]]
 }, Open  ]],
 
@@ -2871,7 +2903,7 @@ Cell[TextData[{
  "Clean this notebook for inclusion in git repository. ",
  StyleBox["Credits: http://bhptoolkit.org/cleannb.html", "Subsection"],
  " "
-}], "Subsubsection",ExpressionUUID->"9bc2331b-48ed-4351-97b7-f9794daee1cd"],
+}], "Subsubsection",ExpressionUUID->"87fa3bab-509b-4280-a74c-ceee1761758a"],
 
 Cell[BoxData[
  RowBox[{
@@ -2914,14 +2946,14 @@ Cell[BoxData[
       RowBox[{"NotebookSave", "[", "nb", "]"}], ";", "\[IndentingNewLine]", 
       RowBox[{"NotebookClose", "[", "nb", "]"}], ";"}]}], "]"}]}], 
   ";"}]], "Input",
- CellLabel->"In[49]:=",ExpressionUUID->"0c75dd10-8a15-45e0-9a92-2975d60d10cf"],
+ CellLabel->"In[51]:=",ExpressionUUID->"46d5952a-a77e-4b57-94cf-66cdaa09eb61"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"CleanNotebook", "[", 
    RowBox[{"NotebookFileName", "[", "]"}], "]"}], ";"}]], "Input",
  CellLabel->
-  "In[50]:=",ExpressionUUID->"a2ab0607-6ac8-4b67-a02e-dc730441c5c7"]
+  "In[52]:=",ExpressionUUID->"f4f22b3d-6c75-4983-81a0-f24ee7b3fda9"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

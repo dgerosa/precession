@@ -637,10 +637,10 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
         Coefficient to the x^0 term in polynomial.
     """
 
-    u=np.atleast_1d(u)
+    u = np.atleast_1d(u)
     q = np.atleast_1d(q)
-    xi=np.atleast_1d(xi)
-    S1, S2= spinmags(q, chi1, chi2)
+    xi = np.atleast_1d(xi)
+    S1, S2 = spinmags(q, chi1, chi2)
 
     # Machine generated with polycoefficients.nb
     coeff5 = -256 * q**3 * ((1 + q))**6 * u
@@ -823,8 +823,8 @@ def kapparesonances(u, xi, q, chi1, chi2):
 
     # There are in principle five solutions, but only two are physical.
 
-    u=np.atleast_1d(u)
-    xi=np.atleast_1d(xi)
+    u = np.atleast_1d(u)
+    xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
@@ -875,7 +875,7 @@ def kappainfresonances(xi, q, chi1, chi2):
         Maximum value of the asymptotic angular momentum kappainf.
     """
 
-    xi=np.atleast_1d(xi)
+    xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
@@ -1463,7 +1463,7 @@ def Slimits_S1S2(q, chi1, chi2):
         Maximum value of the total spin S.
     """
 
-    S1, S2= spinmags(q, chi1, chi2)
+    S1, S2 = spinmags(q, chi1, chi2)
     Smin = np.abs(S1-S2)
     Smax = S1+S2
 
@@ -1575,8 +1575,8 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
     """
 
     kappa=np.atleast_1d(kappa)
-    u=np.atleast_1d(u)
-    xi=np.atleast_1d(xi)
+    u = np.atleast_1d(u)
+    xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
     S1, S2 = spinmags(q, chi1, chi2)
 
@@ -2073,22 +2073,19 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
 
     S=np.atleast_1d(S)
     J = np.atleast_1d(J)
-    xi=np.atleast_1d(xi)
+    xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
     cyclesign=np.atleast_1d(cyclesign)
 
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
 
-    cosvarphi = \
-    ( xi /(1/4 * ( L )**( -1 ) * ( q )**( -1 ) * ( S )**( -2 ) ) - ( ( ( J \
-    )**( 2 ) + ( -1 * ( L )**( 2 ) + -1 * ( S )**( 2 ) ) ) * ( ( ( 1 + q ) \
-    )**( 2 ) * ( S )**( 2 ) + ( -1 + ( q )**( 2 ) ) * ( ( S1 )**( 2 ) + -1 \
-    * ( S2 )**( 2 ) ) ) ) ) / (-1 * ( 1 + -1 * ( q )**( 2 ) ) * ( ( ( J    \
-    )**( 2 ) + -1 * ( ( L + -1 * S ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( J  \
-    )**( 2 ) + ( ( L + S ) )**( 2 ) ) )**( 1/2 ) * ( ( ( S )**( 2 ) + -1 * \
-    ( ( S1 + -1 * S2 ) )**( 2 ) ) )**( 1/2 ) * ( ( -1 * ( S )**( 2 ) + ( ( \
-    S1 + S2 ) )**( 2 ) ) )**( 1/2 ) )
+    # Machine generated with polycoefficients.nb
+    cosvarphi = ((1 + -1 * q**2))**(-1) * ((J**2 + -1 * ((L + -1 * \
+    S))**2))**(-1/2) * ((-1 * J**2 + ((L + S))**2))**(-1/2) * ((S**2 + -1 \
+    * ((S1 + -1 * S2))**2))**(-1/2) * ((-1 * S**2 + ((S1 + \
+    S2))**2))**(-1/2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * (((1 + q))**2 \
+    * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -4 * L * q * S**2 * xi)
 
     # If cosvarphi is very close but slighly outside [-1,1], assume either -1 or 1.
     cosvarphi= np.where(np.logical_and(np.abs(cosvarphi)>1, np.isclose(np.abs(cosvarphi), 1)), np.sign(cosvarphi), cosvarphi)
@@ -2721,7 +2718,7 @@ def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
     """
 
     kappainf=np.atleast_1d(kappainf)
-    xi=np.atleast_1d(xi)
+    xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
@@ -2794,7 +2791,7 @@ def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
     """
 
     kappainf=np.atleast_1d(kappainf)
-    xi=np.atleast_1d(xi)
+    xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
@@ -3551,7 +3548,7 @@ def derS_prefactor(r, xi, q):
     """
 
     r=np.atleast_1d(r)
-    xi=np.atleast_1d(xi)
+    xi = np.atleast_1d(xi)
 
     eta=eval_eta(q)
     mathcalA = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
@@ -4949,7 +4946,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         t = evaluations[9, :]
         #TODO: Should I renormalize here? The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
 
-        S1, S2= spinmags(q, chi1, chi2)
+        S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, np.tile(q, r.shape) )
         Lvec= (L*Lh.T).T
         S1vec= S1*S1h
@@ -6593,17 +6590,18 @@ if __name__ == '__main__':
     kappa=3.4
     u=0.1
     xi=0.8
-    q=0.96543
-    chi1=0.4567
+    q=0.4
+    chi1=0.9567
     chi2=0.979032
     #print(Scubic_coefficients(kappa, u, xi, q, chi1, chi2))
-    print(xidiscriminant_coefficients(u, xi, q, chi1, chi2))
+    #print(xidiscriminant_coefficients(u, xi, q, chi1, chi2))
 
     r=34.432
-    J=1.4
-    S=0.3
+    J=1.7
+    #print(Slimits(r=r,q=q,chi1=chi1,chi2=chi2,xi=xi,J=J))
+    S=0.55
     varphi=0.45
 
-
+    print(eval_varphi(S, J, r, xi, q, chi1, chi2))
 
     #print(eval_xi(theta1=None,theta2=None,S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2))
