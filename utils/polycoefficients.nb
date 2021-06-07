@@ -2,10 +2,10 @@ Notebook[{
 
 Cell[CellGroupData[{
 Cell["precession v2: polynomial coefficients", \
-"Title",ExpressionUUID->"df97b6ce-6f3c-4484-a8ac-f7def5a98a30"],
+"Title",ExpressionUUID->"f128f030-4bc6-45b0-9b44-41af70f3403d"],
 
 Cell["Davide Gerosa", \
-"Subtitle",ExpressionUUID->"e4f4e6e0-6210-4e03-aca4-03b35fe7b4c6"],
+"Subtitle",ExpressionUUID->"3cc57525-8cdf-4bcb-b38c-939151e9c131"],
 
 Cell[TextData[StyleBox["This is a notebook to derive some long polynomial \
 coefficients that describe the dynamics of spinning black-hole binaries at \
@@ -14,84 +14,303 @@ evolution of the total spin on the precessional timescale, (ii) the \
 identification of the spin-orbit resonances in terms of the generalized \
 angular momentum \[Kappa], and (iii)  the identification of the spin-orbit \
 resonances in terms of the effective spin \[Xi].  ", "Subsection"]], \
-"Subtitle",ExpressionUUID->"3c7119ff-8eca-45de-b8e1-bb0017a45407"],
+"Subtitle",ExpressionUUID->"803a8841-c96e-4923-a049-3204cbf8f401"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
-Package to export expressions in a format that python and numpy are going to \
-like. This packaged was written by Gustavo Wiederhecker, to which I made \
-minor edits; I \[LineSeparator]use my fork until the related pull request is \
-accepted. \
-\>", "Subsubsection",ExpressionUUID->"24e4e467-bf85-43a7-acb7-4e68685e9eed"],
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{
-   RowBox[{"SetDirectory", "[", 
-    RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}], 
-  "\[IndentingNewLine]", 
-  RowBox[{"(*", 
-   RowBox[{"URLDownload", "[", 
-    RowBox[{
-    "\"\<https://raw.githubusercontent.com/gwiederhecker/ToPython/master/\
-ToPython.wl\>\"", ",", "\"\<ToPython.wl\>\""}], "]"}], 
-   "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{"Needs", "[", "\"\<ToPython`\>\"", "]"}]}], "Input",
- CellLabel->"In[170]:=",ExpressionUUID->"411dc8e9-b9b7-46d8-9d11-bbd3bae0d8b7"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell["\<\
-Custom function to convert in a form that is ready for precession v2\
-\>", "Subsubsection",ExpressionUUID->"e7b01c7c-0fc8-4100-9555-ec4b826dae94"],
+Export expressions in a format that python and numpy are going to like. Use a \
+modified version of the packaged by Gustavo Wiederhecker  \
+https://github.com/gwiederhecker/ToPython, supplemented by a set of custom \
+transformation for the precession code. \
+\>", "Subsubsection",ExpressionUUID->"9492543b-a14c-4dce-9a67-eb806edc393b"],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"precessionform", "[", 
-   RowBox[{"x_", ",", "y_"}], "]"}], ":=", 
-  RowBox[{"x", "<>", "\"\< = \>\"", "<>", 
-   RowBox[{"StringReplace", "[", 
+  RowBox[{
+   RowBox[{"ToPython", "[", 
+    RowBox[{"x_", ",", 
+     RowBox[{"numpyprefix_", ":", "\"\<np\>\""}]}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
     RowBox[{
-     RowBox[{"ToPython", "[", 
-      RowBox[{"y", ",", 
-       RowBox[{"numpypre", "=", "\"\<np\>\""}]}], "]"}], ",", " ", 
      RowBox[{"{", 
       RowBox[{
-       RowBox[{"\"\<(q)\>\"", "\[Rule]", "\"\<q\>\""}], ",", 
-       RowBox[{"\"\<(L)\>\"", "\[Rule]", "\"\<L\>\""}], ",", 
-       RowBox[{"\"\<(S)\>\"", "\[Rule]", "\"\<S\>\""}], ",", 
-       RowBox[{"\"\<(J)\>\"", "\[Rule]", "\"\<J\>\""}], ",", 
-       RowBox[{"\"\<(S1)\>\"", "\[Rule]", "\"\<S1\>\""}], ",", 
-       RowBox[{"\"\<(S2)\>\"", "\[Rule]", "\"\<S2\>\""}], ",", 
-       RowBox[{"\"\<(u)\>\"", "->", "\"\<u\>\""}], ",", 
-       RowBox[{"\"\<(kappa)\>\"", "->", "\"\<kappa\>\""}], ",", 
-       RowBox[{"\"\<(xi)\>\"", "->", "\"\<xi\>\""}], ",", 
-       RowBox[{"\"\<(2)\>\"", "->", "\"\<2\>\""}], ",", 
-       RowBox[{"\"\<(3)\>\"", "->", "\"\<3\>\""}], ",", 
-       RowBox[{"\"\<(4)\>\"", "->", "\"\<4\>\""}], ",", 
-       RowBox[{"\"\<(5)\>\"", "->", "\"\<5\>\""}], ",", 
-       RowBox[{"\"\<(6)\>\"", "->", "\"\<6\>\""}], ",", 
-       RowBox[{"\"\<(7)\>\"", "->", "\"\<7\>\""}], ",", 
-       RowBox[{"\"\<(8)\>\"", "->", "\"\<8\>\""}], ",", 
-       RowBox[{"\"\<(9)\>\"", "->", "\"\<9\>\""}], ",", 
-       RowBox[{"\"\<(10)\>\"", "->", "\"\<10\>\""}]}], "}"}]}], 
-    "]"}]}]}]], "Input",
- CellLabel->"In[172]:=",ExpressionUUID->"b93aa900-6b2a-4037-9225-18b886369648"]
+       RowBox[{"expression", "=", "x"}], ",", "greekrule", ",", "PythonForm", 
+       ",", 
+       RowBox[{"numpypre", "=", "numpyprefix"}], ",", "lp", ",", "rp", ",", 
+       "a", ",", "b"}], "}"}], ",", "\n", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"By", " ", "Gustavo", " ", "Wiederhecker"}], ",", " ", 
+       RowBox[{"minor", " ", "edits", " ", "by", " ", "Davide", " ", 
+        RowBox[{"Gerosa", "."}]}]}], "*)"}], "\n", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"numpyprefix", "==", "\"\<\>\""}], ",", 
+        RowBox[{"sep", "=", "\"\<\>\""}], ",", 
+        RowBox[{"sep", "=", "\"\<.\>\""}]}], "]"}], ";", "\n", 
+      RowBox[{"lp", "=", "\"\<(\>\""}], ";", "\n", 
+      RowBox[{"rp", "=", "\"\<)\>\""}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", 
+        RowBox[{"Rational", "[", 
+         RowBox[{"a_", ",", "b_"}], "]"}], "]"}], ":=", 
+       RowBox[{
+        RowBox[{"PythonForm", "[", "a", "]"}], "<>", "\"\</\>\"", "<>", 
+        RowBox[{"PythonForm", "[", "b", "]"}]}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", 
+        RowBox[{"Complex", "[", 
+         RowBox[{"a_", ",", "b_"}], "]"}], "]"}], ":=", 
+       RowBox[{"\"\<complex\>\"", "<>", "lp", "<>", 
+        RowBox[{"PythonForm", "[", "a", "]"}], "<>", "\"\<,\>\"", "<>", 
+        RowBox[{"PythonForm", "[", "b", "]"}], "<>", "rp"}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", 
+        RowBox[{"Times", "[", 
+         RowBox[{"a_", ",", "b_"}], "]"}], "]"}], ":=", 
+       RowBox[{
+        RowBox[{"PythonForm", "[", "a", "]"}], "<>", "\"\< * \>\"", "<>", 
+        RowBox[{"PythonForm", "[", "b", "]"}]}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", 
+        RowBox[{"Plus", "[", 
+         RowBox[{"a_", ",", "b_"}], "]"}], "]"}], ":=", 
+       RowBox[{"lp", "<>", 
+        RowBox[{"PythonForm", "[", "a", "]"}], "<>", "\"\< + \>\"", "<>", 
+        RowBox[{"PythonForm", "[", "b", "]"}], "<>", "rp"}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", 
+        RowBox[{"h_", "[", "args__", "]"}], "]"}], ":=", 
+       RowBox[{"numpypre", "<>", "sep", "<>", 
+        RowBox[{"ToLowerCase", "[", 
+         RowBox[{"PythonForm", "[", "h", "]"}], "]"}], "<>", "lp", "<>", 
+        RowBox[{"PythonForm", "[", "args", "]"}], "<>", "rp"}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", 
+        RowBox[{"Power", "[", 
+         RowBox[{"a_", ",", "b_"}], "]"}], "]"}], ":=", 
+       RowBox[{"lp", "<>", 
+        RowBox[{"PythonForm", "[", "a", "]"}], "<>", "rp", "<>", "\"\<**\>\"",
+         "<>", "lp", "<>", 
+        RowBox[{"PythonForm", "[", "b", "]"}], "<>", "rp"}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "a_ListQ", "]"}], ":=", 
+       RowBox[{"numpypre", "<>", "sep", "<>", "\"\<array\>\"", "<>", 
+        RowBox[{"StringReplace", "[", 
+         RowBox[{
+          RowBox[{"ToString", "[", "a", "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"\"\<{\>\"", "->", " ", "\"\<[\>\""}], ",", 
+            RowBox[{"\"\<}\>\"", "->", " ", "\"\<]\>\""}]}], "}"}]}], 
+         "]"}]}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "Arg", "]"}], "=", 
+       RowBox[{"numpypre", "<>", "sep", "<>", "\"\<angle\>\""}]}], ";", "\n", 
+      
+      RowBox[{
+       RowBox[{"PythonForm", "[", "Csc", "]"}], ":=", 
+       RowBox[{
+       "\"\<1/\>\"", "<>", "numpypre", "<>", "sep", "<>", "\"\<sin\>\""}]}], 
+      ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "Sec", "]"}], ":=", 
+       RowBox[{
+       "\"\<1/\>\"", "<>", "numpypre", "<>", "sep", "<>", "\"\<cos\>\""}]}], 
+      ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "Cot", "]"}], ":=", 
+       RowBox[{
+       "\"\<1/\>\"", "<>", "numpypre", "<>", "sep", "<>", "\"\<tan\>\""}]}], 
+      ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "Csch", "]"}], ":=", 
+       RowBox[{
+       "\"\<1/\>\"", "<>", "numpypre", "<>", "sep", "<>", "\"\<sinh\>\""}]}], 
+      ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "Sech", "]"}], ":=", 
+       RowBox[{
+       "\"\<1/\>\"", "<>", "numpypre", "<>", "sep", "<>", "\"\<cosh\>\""}]}], 
+      ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "Coth", "]"}], ":=", 
+       RowBox[{
+       "\"\<1/\>\"", "<>", "numpypre", "<>", "sep", "<>", "\"\<tanh\>\""}]}], 
+      ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", 
+        RowBox[{"List", "[", "args__", "]"}], "]"}], ":=", 
+       RowBox[{
+       "numpypre", "<>", "sep", "<>", "\"\<array\>\"", "<>", "lp", "<>", 
+        "\"\<[\>\"", "<>", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"PythonForm", "[", 
+            RowBox[{
+             RowBox[{"{", "args", "}"}], "[", 
+             RowBox[{"[", "ii", "]"}], "]"}], "]"}], "<>", "\"\<,\>\""}], ",", 
+          RowBox[{"{", 
+           RowBox[{"ii", ",", "1", ",", 
+            RowBox[{"Length", "@", 
+             RowBox[{"{", "args", "}"}]}]}], "}"}]}], "]"}], "<>", 
+        "\"\<]\>\"", "<>", "rp"}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "\[Pi]", "]"}], "=", 
+       RowBox[{"numpypre", "<>", "sep", "<>", "\"\<pi\>\""}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "E", "]"}], "=", 
+       RowBox[{"numpypre", "<>", "sep", "<>", "\"\<e\>\""}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "r_Real", "]"}], ":=", 
+       RowBox[{"Block", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"a", "=", 
+           RowBox[{"MantissaExponent", "[", "r", "]"}]}], "}"}], ",", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"r", ">=", "0"}], ",", 
+           RowBox[{
+            RowBox[{"ToString", "[", 
+             RowBox[{"N", "[", 
+              RowBox[{
+               RowBox[{"a", "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", "6"}], "]"}], "]"}], 
+            "<>", "\"\<e\>\"", "<>", 
+            RowBox[{"ToString", "[", 
+             RowBox[{"a", "[", 
+              RowBox[{"[", "2", "]"}], "]"}], "]"}]}], ",", 
+           RowBox[{"\"\<(\>\"", "<>", 
+            RowBox[{"ToString", "[", 
+             RowBox[{"N", "[", 
+              RowBox[{
+               RowBox[{"a", "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", "6"}], "]"}], "]"}], 
+            "<>", "\"\<e\>\"", "<>", 
+            RowBox[{"ToString", "[", 
+             RowBox[{"a", "[", 
+              RowBox[{"[", "2", "]"}], "]"}], "]"}], "<>", "\"\<)\>\""}]}], 
+          "]"}]}], "]"}]}], ";", "\n", 
+      RowBox[{"greekrule", "=", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"\"\<\[Alpha]\>\"", "->", "\"\<alpha\>\""}], ",", 
+         RowBox[{"\"\<\[Beta]\>\"", "->", "\"\<beta\>\""}], ",", 
+         RowBox[{"\"\<\[Gamma]\>\"", "->", "\"\<gamma\>\""}], ",", 
+         RowBox[{"\"\<\[Delta]\>\"", "->", "\"\<delta\>\""}], ",", 
+         RowBox[{"\"\<\[CurlyEpsilon]\>\"", "->", "\"\<curlyepsilon\>\""}], 
+         ",", 
+         RowBox[{"\"\<\[Zeta]\>\"", "->", "\"\<zeta\>\""}], ",", 
+         RowBox[{"\"\<\[Eta]\>\"", "->", "\"\<eta\>\""}], ",", 
+         RowBox[{"\"\<\[Theta]\>\"", "->", "\"\<theta\>\""}], ",", 
+         RowBox[{"\"\<\[Iota]\>\"", "->", "\"\<iota\>\""}], ",", 
+         RowBox[{"\"\<\[Kappa]\>\"", "->", "\"\<kappa\>\""}], ",", 
+         RowBox[{"\"\<\[Lambda]\>\"", "->", "\"\<lambda\>\""}], ",", 
+         RowBox[{"\"\<\[Mu]\>\"", "->", "\"\<mu\>\""}], ",", 
+         RowBox[{"\"\<\[Nu]\>\"", "->", "\"\<nu\>\""}], ",", 
+         RowBox[{"\"\<\[Xi]\>\"", "->", "\"\<xi\>\""}], ",", 
+         RowBox[{"\"\<\[Omicron]\>\"", "->", "\"\<omicron\>\""}], ",", 
+         RowBox[{"\"\<\[Pi]\>\"", "->", "\"\<pi\>\""}], ",", 
+         RowBox[{"\"\<\[Rho]\>\"", "->", "\"\<rho\>\""}], ",", 
+         RowBox[{"\"\<\[FinalSigma]\>\"", "->", "\"\<finalsigma\>\""}], ",", 
+         RowBox[{"\"\<\[Sigma]\>\"", "->", "\"\<sigma\>\""}], ",", 
+         RowBox[{"\"\<\[Tau]\>\"", "->", "\"\<tau\>\""}], ",", 
+         RowBox[{"\"\<\[Upsilon]\>\"", "->", "\"\<upsilon\>\""}], ",", 
+         RowBox[{"\"\<\[CurlyPhi]\>\"", "->", "\"\<curlyphi\>\""}], ",", 
+         RowBox[{"\"\<\[Chi]\>\"", "->", "\"\<chi\>\""}], ",", 
+         RowBox[{"\"\<\[Psi]\>\"", "->", "\"\<psi\>\""}], ",", 
+         RowBox[{"\"\<\[Omega]\>\"", "->", "\"\<omega\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalAlpha]\>\"", "->", "\"\<Alpha\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalBeta]\>\"", "->", "\"\<Beta\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalGamma]\>\"", "->", "\"\<Gamma\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalDelta]\>\"", "->", "\"\<Delta\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalEpsilon]\>\"", "->", "\"\<CurlyEpsilon\>\""}], 
+         ",", 
+         RowBox[{"\"\<\[CapitalZeta]\>\"", "->", "\"\<Zeta\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalEta]\>\"", "->", "\"\<Eta\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalTheta]\>\"", "->", "\"\<Theta\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalIota]\>\"", "->", "\"\<Iota\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalKappa]\>\"", "->", "\"\<Kappa\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalLambda]\>\"", "->", "\"\<Lambda\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalMu]\>\"", "->", "\"\<Mu\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalNu]\>\"", "->", "\"\<Nu\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalXi]\>\"", "->", "\"\<Xi\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalOmicron]\>\"", "->", "\"\<Omicron\>\""}], ",", 
+         
+         RowBox[{"\"\<\[CapitalPi]\>\"", "->", "\"\<Pi\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalRho]\>\"", "->", "\"\<Rho\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalSigma]\>\"", "->", "\"\<Sigma\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalTau]\>\"", "->", "\"\<Tau\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalUpsilon]\>\"", "->", "\"\<Upsilon\>\""}], ",", 
+         
+         RowBox[{"\"\<\[CapitalPhi]\>\"", "->", "\"\<CurlyPhi\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalChi]\>\"", "->", "\"\<Chi\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalPsi]\>\"", "->", "\"\<Psi\>\""}], ",", 
+         RowBox[{"\"\<\[CapitalOmega]\>\"", "->", "\"\<Omega\>\""}]}], 
+        "}"}]}], ";", "\n", 
+      RowBox[{
+       RowBox[{"PythonForm", "[", "allOther_", "]"}], ":=", 
+       RowBox[{"StringReplace", "[", 
+        RowBox[{
+         RowBox[{"ToString", "[", 
+          RowBox[{"allOther", ",", "FortranForm"}], "]"}], ",", "greekrule"}],
+         "]"}]}], ";", "\n", 
+      RowBox[{"PythonForm", "[", "expression", "]"}]}]}], "]"}]}], 
+  ";"}]], "Input",
+ CellLabel->"In[1]:=",ExpressionUUID->"7f2c8181-f40d-47d6-a9eb-838a2df8c1e1"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"precessionform", "[", 
+    RowBox[{"label_", ",", "expression_"}], "]"}], ":=", 
+   RowBox[{"\"\<# Machine generated with \>\"", "<>", 
+    RowBox[{"Last", "@", 
+     RowBox[{"FileNameSplit", "@", 
+      RowBox[{"NotebookFileName", "[", "]"}]}]}], "<>", "\"\<\\n\>\"", "<>", 
+    " ", "label", "<>", "\"\< = \>\"", "<>", 
+    RowBox[{"StringReplace", "[", 
+     RowBox[{
+      RowBox[{"ToPython", "[", "expression", "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"\"\<(q)\>\"", "\[Rule]", "\"\<q\>\""}], ",", 
+        RowBox[{"\"\<(L)\>\"", "\[Rule]", "\"\<L\>\""}], ",", 
+        RowBox[{"\"\<(S)\>\"", "\[Rule]", "\"\<S\>\""}], ",", 
+        RowBox[{"\"\<(J)\>\"", "\[Rule]", "\"\<J\>\""}], ",", 
+        RowBox[{"\"\<(S1)\>\"", "\[Rule]", "\"\<S1\>\""}], ",", 
+        RowBox[{"\"\<(S2)\>\"", "\[Rule]", "\"\<S2\>\""}], ",", 
+        RowBox[{"\"\<(u)\>\"", "->", "\"\<u\>\""}], ",", 
+        RowBox[{"\"\<(kappa)\>\"", "->", "\"\<kappa\>\""}], ",", 
+        RowBox[{"\"\<(xi)\>\"", "->", "\"\<xi\>\""}], ",", 
+        RowBox[{"\"\<(2)\>\"", "->", "\"\<2\>\""}], ",", 
+        RowBox[{"\"\<(3)\>\"", "->", "\"\<3\>\""}], ",", 
+        RowBox[{"\"\<(4)\>\"", "->", "\"\<4\>\""}], ",", 
+        RowBox[{"\"\<(5)\>\"", "->", "\"\<5\>\""}], ",", 
+        RowBox[{"\"\<(6)\>\"", "->", "\"\<6\>\""}], ",", 
+        RowBox[{"\"\<(7)\>\"", "->", "\"\<7\>\""}], ",", 
+        RowBox[{"\"\<(8)\>\"", "->", "\"\<8\>\""}], ",", 
+        RowBox[{"\"\<(9)\>\"", "->", "\"\<9\>\""}], ",", 
+        RowBox[{"\"\<(10)\>\"", "->", "\"\<10\>\""}]}], "}"}]}], "]"}]}]}], 
+  ";"}]], "Input",
+ CellLabel->"In[2]:=",ExpressionUUID->"d7529ef7-9d21-43da-a43e-773609d29250"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["(i) Cubic equation in S^2 ", \
-"Section",ExpressionUUID->"c0e869be-ff54-446f-a2b6-df21502ac588"],
+"Section",ExpressionUUID->"e7621dc9-6859-411e-8bc8-7fcdfdab8352"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
 Effective potentials; see Eqs. (13-14) of Gerosa et al. (2015), \
 arxiv:1506.03492. \
-\>", "Subsubsection",ExpressionUUID->"c0c58bd8-8d16-4fd6-9c68-dd04e516faa5"],
+\>", "Subsubsection",ExpressionUUID->"e1d6bd4d-08d3-4d11-9a7d-4008c6fab99e"],
 
 Cell[BoxData[{
  RowBox[{
@@ -165,8 +384,7 @@ Cell[BoxData[{
          RowBox[{"S1", "-", "S2"}], ")"}], "^", "2"}]}], ")"}], "^", 
      RowBox[{"(", 
       RowBox[{"1", "/", "2"}], ")"}]}]}]}], " ", ";"}]}], "Input",
- CellLabel->
-  "In[173]:=",ExpressionUUID->"e4d2c0bc-b46c-46bd-83db-cdc908942fc7"],
+ CellLabel->"In[3]:=",ExpressionUUID->"86c9162b-f09f-43cc-9ffd-7977a9cb2e6b"],
 
 Cell[CellGroupData[{
 
@@ -181,18 +399,16 @@ Cell[BoxData[{
         RowBox[{"Cos", "[", "varphi", "]"}], "t3"}]}], ")"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<xi\>\"", ",", "xiSvarphi"}], 
-  "]"}], "\[IndentingNewLine]"}], "Input",
- CellLabel->
-  "In[176]:=",ExpressionUUID->"ad2238e9-6b82-40b1-963b-8c6c1e46b27b"],
+  RowBox[{"\"\<xi\>\"", ",", "xiSvarphi"}], "]"}]}], "Input",
+ CellLabel->"In[6]:=",ExpressionUUID->"7e3f5b5a-097c-4fe1-b65c-6e2ce4d6b531"],
 
-Cell[BoxData["\<\"xi = 1/4 * L**(-1) * q**(-1) * S**(-2) * ((J**2 + (-1 * \
-L**2 + -1 * S**2)) * (((1 + q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * \
-S2**2)) + -1 * (1 + -1 * q**2) * ((J**2 + -1 * ((L + -1 * S))**2))**(1/2) * \
-((-1 * J**2 + ((L + S))**2))**(1/2) * ((S**2 + -1 * ((S1 + -1 * \
-S2))**2))**(1/2) * ((-1 * S**2 + ((S1 + S2))**2))**(1/2) * \
-np.cos(varphi))\"\>"], "Output",
- CellLabel->"Out[177]=",ExpressionUUID->"aa9bd920-1e2d-4d91-b1a0-8937ce252a0b"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\nxi = 1/4 * \
+L**(-1) * q**(-1) * S**(-2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * (((1 + \
+q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -1 * (1 + -1 * q**2) * \
+((J**2 + -1 * ((L + -1 * S))**2))**(1/2) * ((-1 * J**2 + ((L + \
+S))**2))**(1/2) * ((S**2 + -1 * ((S1 + -1 * S2))**2))**(1/2) * ((-1 * S**2 + \
+((S1 + S2))**2))**(1/2) * np.cos(varphi))\"\>"], "Output",
+ CellLabel->"Out[7]=",ExpressionUUID->"ea29d338-9e82-4291-b7eb-5f925ebcf857"]
 }, Open  ]]
 }, Open  ]],
 
@@ -201,7 +417,7 @@ Cell[CellGroupData[{
 Cell["\<\
 Equation (\[Xi]_\[PlusMinus](S)-\[Xi])^2=0; substitute  \[Kappa] and u; \
 multiply by some constant factors for consistency with previous derivations.\
-\>", "Subsubsection",ExpressionUUID->"ee7dffd3-d7d3-4fcb-874a-e6ba74540778"],
+\>", "Subsubsection",ExpressionUUID->"01677cc4-4de9-4c13-9d41-d16e8f014aa4"],
 
 Cell[CellGroupData[{
 
@@ -216,8 +432,7 @@ Cell[BoxData[
        RowBox[{"(", 
         RowBox[{"\[Xi]", "/", "t1"}], ")"}], " ", "-", " ", "t2"}], ")"}], 
      "^", "2"}]}], " ", "]"}]}]], "Input",
- CellLabel->
-  "In[178]:=",ExpressionUUID->"4e672101-9b8f-4bf1-82b0-322e6c1b52b7"],
+ CellLabel->"In[8]:=",ExpressionUUID->"78baebac-5128-4c8c-99d7-1081f39a15c2"],
 
 Cell[BoxData[
  RowBox[{
@@ -280,7 +495,7 @@ Cell[BoxData[
            SuperscriptBox["S2", "2"]}], ")"}]}]}], ")"}]}], "-", 
      RowBox[{"4", " ", "L", " ", "q", " ", 
       SuperscriptBox["S", "2"], " ", "\[Xi]"}]}], ")"}], "2"]}]], "Output",
- CellLabel->"Out[178]=",ExpressionUUID->"f8eb9bfd-d33e-4598-b94f-6eb55a70fae7"]
+ CellLabel->"Out[8]=",ExpressionUUID->"9907ec5a-0e06-4ffc-832b-975e02318359"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -317,8 +532,7 @@ Cell[BoxData[
       RowBox[{"S", "->", 
        RowBox[{"Sqrt", "[", "Ss", "]"}]}], "}"}]}], "]"}]}], 
   "\[IndentingNewLine]"}]], "Input",
- CellLabel->
-  "In[179]:=",ExpressionUUID->"3c6202c4-bdd5-40f8-a5e6-9df48d2ca59e"],
+ CellLabel->"In[9]:=",ExpressionUUID->"8f2d8930-0bbb-41f2-b252-8f3911622a78"],
 
 Cell[BoxData[
  RowBox[{"-", 
@@ -374,14 +588,14 @@ Cell[BoxData[
           RowBox[{"Ss", " ", "u"}], "-", "\[Kappa]"}], ")"}]}], "+", 
        RowBox[{"2", " ", "q", " ", "Ss", " ", "\[Xi]"}]}], ")"}], "2"]}], 
    RowBox[{"4", " ", "Ss"}]]}]], "Output",
- CellLabel->"Out[179]=",ExpressionUUID->"45ec7efa-75dd-40d2-a227-5d7a76bf2994"]
+ CellLabel->"Out[9]=",ExpressionUUID->"316a831a-957b-49e0-9aea-b054065744c2"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Extract coefficients.", \
-"Subsubsection",ExpressionUUID->"13e1838a-cc7e-45e8-8ddf-4872cf4e4cfd"],
+"Subsubsection",ExpressionUUID->"8b07b8ac-0fbf-4656-8c34-849a3c399112"],
 
 Cell[CellGroupData[{
 
@@ -394,11 +608,12 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff3\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[180]:=",ExpressionUUID->"079f3ded-03a7-47c8-a9be-9cbcab1515df"],
+ CellLabel->"In[10]:=",ExpressionUUID->"465955aa-d15a-495e-85f8-967c1d0f47fd"],
 
-Cell[BoxData["\<\"coeff3 = q * ((1 + q))**2 * u**2\"\>"], "Output",
- CellLabel->"Out[181]=",ExpressionUUID->"79462131-75bb-480d-b1f0-4459195456de"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = q * \
+((1 + q))**2 * u**2\"\>"], "Output",
+ CellLabel->
+  "Out[11]=",ExpressionUUID->"761c8158-a7ad-4460-bfb0-8c24f8ee4cfa"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -412,13 +627,14 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff2\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[182]:=",ExpressionUUID->"68e66e7d-53fb-4980-917a-c0decd9bb1f3"],
+ CellLabel->"In[12]:=",ExpressionUUID->"68632716-b0b3-4583-b1b5-89910bcf8643"],
 
-Cell[BoxData["\<\"coeff2 = 1/4 * ((1 + q))**2 * (1 + (4 * S2**2 * u**2 + \
-(q**2 * (1 + 4 * S1**2 * u**2) + -2 * q * (1 + 2 * u * ((S1**2 + S2**2) * u + \
-(2 * kappa + -1 * xi))))))\"\>"], "Output",
- CellLabel->"Out[183]=",ExpressionUUID->"6c183766-dcda-4826-a4da-5a1cf0b8d718"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = 1/4 \
+* ((1 + q))**2 * (1 + (4 * S2**2 * u**2 + (q**2 * (1 + 4 * S1**2 * u**2) + -2 \
+* q * (1 + 2 * u * ((S1**2 + S2**2) * u + (2 * kappa + -1 * xi))))))\"\>"], \
+"Output",
+ CellLabel->
+  "Out[13]=",ExpressionUUID->"814ef230-3ec5-4cfe-9e35-79218c0bd22d"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -432,14 +648,15 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff1\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[184]:=",ExpressionUUID->"da2ca2c6-88f6-46d3-bdb0-29d6386c92a1"],
+ CellLabel->"In[14]:=",ExpressionUUID->"eba66036-8690-4de4-98cf-09ff6e9db448"],
 
-Cell[BoxData["\<\"coeff1 = (q * (kappa + (q * kappa + -1 * xi)) * (kappa + (q \
-* kappa + -1 * q * xi)) + (-1/2 * (-1 + q**2) * S1**2 * ((1 + q) * (-1 + (q + \
-4 * q * u * kappa)) + -2 * q * u * xi) + -1/2 * (-1 + q**2) * S2**2 * ((1 + \
-q) * (-1 + (q + -4 * u * kappa)) + 2 * q * u * xi)))\"\>"], "Output",
- CellLabel->"Out[185]=",ExpressionUUID->"111f5bde-90b7-4584-a656-5ca3b8e10a4b"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = (q \
+* (kappa + (q * kappa + -1 * xi)) * (kappa + (q * kappa + -1 * q * xi)) + \
+(-1/2 * (-1 + q**2) * S1**2 * ((1 + q) * (-1 + (q + 4 * q * u * kappa)) + -2 \
+* q * u * xi) + -1/2 * (-1 + q**2) * S2**2 * ((1 + q) * (-1 + (q + -4 * u * \
+kappa)) + 2 * q * u * xi)))\"\>"], "Output",
+ CellLabel->
+  "Out[15]=",ExpressionUUID->"e86b526e-c05d-4f1d-bd97-6804fb74a11e"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -451,25 +668,23 @@ Cell[BoxData[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"effpot", ",", "Ss", ",", "0"}], "]"}], " ", "//", 
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"\"\<coeff0 = \>\"", "<>", " ", 
-  RowBox[{"ToPython", "[", 
-   RowBox[{"%", ",", 
-    RowBox[{"numpypre", "=", "\"\<np\>\""}]}], "]"}]}]}], "Input",
- CellLabel->
-  "In[186]:=",ExpressionUUID->"21a01190-f31b-4719-8014-c348f8749abb"],
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff0\>\"", ",", "%"}], "]"}]}], "Input",
+ CellLabel->"In[16]:=",ExpressionUUID->"7c17f9b3-2582-4b30-a3a5-a2d26faf2b78"],
 
-Cell[BoxData["\<\"coeff0 = 1/4 * (-1 + q) * (1 + q) * ((1 + q) * ((-1 + q) * \
-(((S1)**(2) + -1 * (S2)**(2)))**(2) + 4 * (q * (S1)**(2) + -1 * (S2)**(2)) * \
-(kappa)**(2)) + -4 * q * (S1 + -1 * S2) * (S1 + S2) * kappa * xi)\"\>"], \
-"Output",
- CellLabel->"Out[187]=",ExpressionUUID->"31612049-fef6-400b-a7bb-83f81c7e3f44"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff0 = 1/4 \
+* (-1 + q) * (1 + q) * ((1 + q) * ((-1 + q) * ((S1**2 + -1 * S2**2))**2 + 4 * \
+(q * S1**2 + -1 * S2**2) * kappa**2) + -4 * q * (S1 + -1 * S2) * (S1 + S2) * \
+kappa * xi)\"\>"], "Output",
+ CellLabel->
+  "Out[17]=",ExpressionUUID->"2aee94ce-e8a9-41d8-b2c6-f5ba4c6e08aa"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Check reconstruction (this should be zero).", \
-"Subsubsection",ExpressionUUID->"32f94662-aa1e-4294-a7ff-d286f22ffde8"],
+"Subsubsection",ExpressionUUID->"32910c26-9a18-4125-ae41-a90c65af00fe"],
 
 Cell[CellGroupData[{
 
@@ -482,11 +697,11 @@ Cell[BoxData[
     RowBox[{"Ss", "^", "2"}]}], "+", 
    RowBox[{"Scoeff1", "*", "Ss"}], " ", "+", " ", "Scoeff0", " ", "-", " ", 
    "effpot"}], "//", "FullSimplify"}]], "Input",
- CellLabel->
-  "In[188]:=",ExpressionUUID->"4b017317-5de6-4ea9-bbb6-418dc7dbd5ec"],
+ CellLabel->"In[18]:=",ExpressionUUID->"2e24b2f1-e6a2-408c-a363-7be25e052522"],
 
 Cell[BoxData["0"], "Output",
- CellLabel->"Out[188]=",ExpressionUUID->"3d209d59-790f-45e9-a6fb-aa76187f4e22"]
+ CellLabel->
+  "Out[18]=",ExpressionUUID->"a7f134bc-cc2a-4197-9939-4973a7f126e5"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -494,14 +709,14 @@ Cell[BoxData["0"], "Output",
 Cell[CellGroupData[{
 
 Cell["(ii) Spin-orbit resonances in \[Kappa] ", \
-"Section",ExpressionUUID->"0e3686cf-3fec-4ac4-aa71-77d95cb051d3"],
+"Section",ExpressionUUID->"cfda2c47-b632-4d6d-92b4-d53e4acb4c0a"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
 Compute discriminant of the cubic equation in S^2; multiply by some constant \
 factors for consistency with previous derivations.\
-\>", "Subsubsection",ExpressionUUID->"793bf80c-c2ed-4af6-884d-fe0a570e8c56"],
+\>", "Subsubsection",ExpressionUUID->"c851382c-e32c-4249-98b4-ba0b4f82e003"],
 
 Cell[CellGroupData[{
 
@@ -520,8 +735,7 @@ Cell[BoxData[{
       RowBox[{
        RowBox[{"-", "1"}], "+", 
        SuperscriptBox["q", "2"]}], ")"}], "2"]]}]}]}], "Input",
- CellLabel->
-  "In[189]:=",ExpressionUUID->"0db8634f-557a-4032-b2e4-6cc75722cdee"],
+ CellLabel->"In[19]:=",ExpressionUUID->"48a88c7d-a32d-4f8b-85ab-2458943de372"],
 
 Cell[BoxData[
  RowBox[{
@@ -2100,7 +2314,8 @@ Cell[BoxData[
                  SuperscriptBox["u", "3"], " ", 
                  SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}]}], ")"}]}]}], 
          ")"}]}]}], ")"}]}]}], ")"}]}]], "Output",
- CellLabel->"Out[190]=",ExpressionUUID->"d1e003f3-39d2-4aa8-b335-9b3680aa8dbb"]
+ CellLabel->
+  "Out[20]=",ExpressionUUID->"7ddc46ff-91ed-4f34-994a-815a6d49775f"]
 }, Open  ]]
 }, Open  ]],
 
@@ -2109,7 +2324,7 @@ Cell[CellGroupData[{
 Cell["\<\
 Extract coefficients. Sort terms in powers of u to improve numerical \
 stability.\
-\>", "Subsubsection",ExpressionUUID->"b3a25883-2730-480f-80d0-4532fdef53cc"],
+\>", "Subsubsection",ExpressionUUID->"1db1bfdc-7d08-45d4-ba0b-f7dbf5614baf"],
 
 Cell[CellGroupData[{
 
@@ -2122,11 +2337,12 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff5\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[191]:=",ExpressionUUID->"1e6dcdbf-a1a8-4c06-8c99-7e9e5f8dfaed"],
+ CellLabel->"In[21]:=",ExpressionUUID->"00398501-a010-4b4c-890d-b071d4c07c14"],
 
-Cell[BoxData["\<\"coeff5 = -256 * q**3 * ((1 + q))**6 * u\"\>"], "Output",
- CellLabel->"Out[192]=",ExpressionUUID->"784b3d02-6c0f-4e97-bb22-a77489219f8c"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff5 = \
+-256 * q**3 * ((1 + q))**6 * u\"\>"], "Output",
+ CellLabel->
+  "Out[22]=",ExpressionUUID->"2c928693-f4d1-4013-aaf6-e284a0b2fbbf"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2140,14 +2356,14 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff4\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[193]:=",ExpressionUUID->"1755cb53-8a18-4227-b893-09bce1de93e6"],
+ CellLabel->"In[23]:=",ExpressionUUID->"e90dd0c6-599d-4430-9948-9f9ef987284f"],
 
-Cell[BoxData["\<\"coeff4 = 16 * q**2 * ((1 + q))**4 * (((-1 + q**2))**2 + \
-(-16 * ((1 + q))**2 * (q * (-5 + 3 * q) * S1**2 + (3 + -5 * q) * S2**2) * \
-u**2 + (40 * q * ((1 + q))**2 * u * xi + 16 * q**2 * u**2 * xi**2)))\"\>"], \
-"Output",
- CellLabel->"Out[194]=",ExpressionUUID->"c39006de-d487-41cc-911d-b6bb7fc2967d"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff4 = 16 \
+* q**2 * ((1 + q))**4 * (((-1 + q**2))**2 + (-16 * ((1 + q))**2 * (q * (-5 + \
+3 * q) * S1**2 + (3 + -5 * q) * S2**2) * u**2 + (40 * q * ((1 + q))**2 * u * \
+xi + 16 * q**2 * u**2 * xi**2)))\"\>"], "Output",
+ CellLabel->
+  "Out[24]=",ExpressionUUID->"2167efb4-f288-4d7b-b180-09c12d793d50"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2161,23 +2377,23 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff3\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[195]:=",ExpressionUUID->"d775cf2e-ece1-44d5-be79-ec6a616adeb5"],
+ CellLabel->"In[25]:=",ExpressionUUID->"4730e454-cab2-4f83-b336-41547bae487c"],
 
-Cell[BoxData["\<\"coeff3 = -32 * q * ((1 + q))**4 * (2 * q**6 * S1**2 * u * \
-(-5 + 12 * S1**2 * u**2) + (2 * S2**2 * u * (-5 + 12 * S2**2 * u**2) + (2 * \
-q**2 * u * (40 * S1**4 * u**2 + (-44 * S2**4 * u**2 + (8 * xi**2 + (S1**2 * \
-(-5 + (-8 * S2**2 * u**2 + 40 * u * xi)) + -2 * S2**2 * (-5 + 4 * u * xi * (1 \
-+ u * xi)))))) + (2 * q**3 * (32 * S1**4 * u**3 + (32 * S2**4 * u**3 + (xi * \
-(-1 + 8 * u * xi * (3 + u * xi)) + (2 * S2**2 * u * (-1 + u * xi * (17 + 8 * \
-u * xi)) + 2 * S1**2 * u * (-1 + (40 * S2**2 * u**2 + u * xi * (17 + 8 * u * \
-xi))))))) + (q * (xi + 2 * u * (S1**2 * (1 + -48 * S2**2 * u**2) + S2**2 * (1 \
-+ -2 * u * (12 * S2**2 * u + xi)))) + (q**5 * (xi + 2 * u * (S2**2 + S1**2 * \
-(1 + -2 * u * (12 * (S1**2 + 2 * S2**2) * u + xi)))) + -2 * q**4 * u * (5 * \
-S2**2 + (44 * S1**4 * u**2 + (-8 * (5 * S2**4 * u**2 + (5 * S2**2 * u * xi + \
-xi**2)) + 2 * S1**2 * (-5 + 4 * u * (xi + u * (S2**2 + \
-xi**2))))))))))))\"\>"], "Output",
- CellLabel->"Out[196]=",ExpressionUUID->"ff44e87d-f8b4-4f4a-9ada-987885b00609"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = -32 \
+* q * ((1 + q))**4 * (2 * q**6 * S1**2 * u * (-5 + 12 * S1**2 * u**2) + (2 * \
+S2**2 * u * (-5 + 12 * S2**2 * u**2) + (2 * q**2 * u * (40 * S1**4 * u**2 + \
+(-44 * S2**4 * u**2 + (8 * xi**2 + (S1**2 * (-5 + (-8 * S2**2 * u**2 + 40 * u \
+* xi)) + -2 * S2**2 * (-5 + 4 * u * xi * (1 + u * xi)))))) + (2 * q**3 * (32 \
+* S1**4 * u**3 + (32 * S2**4 * u**3 + (xi * (-1 + 8 * u * xi * (3 + u * xi)) \
++ (2 * S2**2 * u * (-1 + u * xi * (17 + 8 * u * xi)) + 2 * S1**2 * u * (-1 + \
+(40 * S2**2 * u**2 + u * xi * (17 + 8 * u * xi))))))) + (q * (xi + 2 * u * \
+(S1**2 * (1 + -48 * S2**2 * u**2) + S2**2 * (1 + -2 * u * (12 * S2**2 * u + \
+xi)))) + (q**5 * (xi + 2 * u * (S2**2 + S1**2 * (1 + -2 * u * (12 * (S1**2 + \
+2 * S2**2) * u + xi)))) + -2 * q**4 * u * (5 * S2**2 + (44 * S1**4 * u**2 + \
+(-8 * (5 * S2**4 * u**2 + (5 * S2**2 * u * xi + xi**2)) + 2 * S1**2 * (-5 + 4 \
+* u * (xi + u * (S2**2 + xi**2))))))))))))\"\>"], "Output",
+ CellLabel->
+  "Out[26]=",ExpressionUUID->"f0658899-8937-4fef-b53d-b82f094b6579"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2191,35 +2407,36 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff2\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[197]:=",ExpressionUUID->"a9037bba-8b36-4941-ba07-164b00121afe"],
+ CellLabel->"In[27]:=",ExpressionUUID->"c98aabf9-ef1e-43a4-b8bd-a0d4d3805603"],
 
-Cell[BoxData["\<\"coeff2 = -16 * ((1 + q))**2 * (16 * (-1 + q) * q**3 * ((1 + \
-q))**4 * (10 + (-8 + q) * q) * S1**6 * u**4 + (-16 * ((-1 + q))**3 * ((1 + \
-q))**4 * S2**6 * u**4 + (-1 * ((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 \
-* (-8 + (-20 + q) * q) + (8 * (-4 + q) * q * (1 + q) * u * xi + 16 * q**2 * \
-u**2 * xi**2)) + (-1 * q**2 * (((1 + q) * S2**2 * u + q * xi))**2 * ((-1 + q) \
-* ((1 + q))**2 * (-1 + (q + 48 * S2**2 * u**2)) + (8 * q * (1 + q) * (5 + q) \
-* u * xi + 16 * q**2 * u**2 * xi**2)) + (2 * q**2 * ((1 + q))**2 * S1**4 * \
-u**2 * ((-1 + q) * ((1 + q))**2 * ((-1 + q) * (-3 + (30 * q + 4 * q**2)) + \
--72 * (2 + (-2 + q) * q) * S2**2 * u**2) + (4 * q * (1 + q) * (-30 + q * (39 \
-+ q * (-19 + 4 * q))) * u * xi + -8 * q**2 * (6 + (-6 + q) * q) * u**2 * \
-xi**2)) + (-4 * q * (-1 * (1 + q) * S2**2 * u + -1 * q * xi) * (-1 * ((-1 + \
-q))**2 * ((1 + q))**3 * S2**2 * u * (-10 + (q + 24 * S2**2 * u**2)) + (-1 * \
-(-1 + q) * q * ((1 + q))**2 * (-1 + (q + 4 * (1 + 2 * q) * S2**2 * u**2)) * \
-xi + (-8 * q**2 * (1 + q) * u * (2 + (q + 2 * (-1 + q) * S2**2 * u**2)) * \
-xi**2 + -16 * q**3 * u**2 * xi**3))) + (q * (1 + q) * S1**2 * ((-1 + q) * ((1 \
-+ q))**3 * (((-1 + q))**3 * q + (4 * (-1 + q) * (15 + q * (-29 + 15 * q)) * \
-S2**2 * u**2 + 144 * (1 + 2 * (-1 + q) * q) * S2**4 * u**4)) + (2 * q * ((1 + \
-q))**2 * u * (((-1 + q))**2 * (-3 + q * (23 + 4 * q)) + 12 * (1 + q) * (1 + \
-q**2) * S2**2 * u**2) * xi + (8 * q**2 * (1 + q) * u**2 * (-12 + (-2 * q + \
-(-11 * q**2 + (q**3 + 4 * (3 + q * (-5 + 3 * q)) * S2**2 * u**2)))) * xi**2 + \
--32 * q**3 * (3 + (-1 + q) * q) * u**3 * xi**3))) + (S2**2 * (((-1 + \
-q**2))**4 + (2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * xi + (8 \
-* (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * xi**2 + 32 * q**3 * \
-(-1 + q**2) * u**3 * xi**3))) + -1 * q**2 * xi**2 * (1 + q * (8 * u * xi + q \
-* (-2 + (16 * u * xi + ((q + 4 * u * xi))**2))))))))))))\"\>"], "Output",
- CellLabel->"Out[198]=",ExpressionUUID->"b22c8a0a-9036-4fad-9c45-abf3be03ffed"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = -16 \
+* ((1 + q))**2 * (16 * (-1 + q) * q**3 * ((1 + q))**4 * (10 + (-8 + q) * q) * \
+S1**6 * u**4 + (-16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 + (-1 * \
+((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + (8 * \
+(-4 + q) * q * (1 + q) * u * xi + 16 * q**2 * u**2 * xi**2)) + (-1 * q**2 * \
+(((1 + q) * S2**2 * u + q * xi))**2 * ((-1 + q) * ((1 + q))**2 * (-1 + (q + \
+48 * S2**2 * u**2)) + (8 * q * (1 + q) * (5 + q) * u * xi + 16 * q**2 * u**2 \
+* xi**2)) + (2 * q**2 * ((1 + q))**2 * S1**4 * u**2 * ((-1 + q) * ((1 + \
+q))**2 * ((-1 + q) * (-3 + (30 * q + 4 * q**2)) + -72 * (2 + (-2 + q) * q) * \
+S2**2 * u**2) + (4 * q * (1 + q) * (-30 + q * (39 + q * (-19 + 4 * q))) * u * \
+xi + -8 * q**2 * (6 + (-6 + q) * q) * u**2 * xi**2)) + (-4 * q * (-1 * (1 + \
+q) * S2**2 * u + -1 * q * xi) * (-1 * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * \
+u * (-10 + (q + 24 * S2**2 * u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 * (-1 \
++ (q + 4 * (1 + 2 * q) * S2**2 * u**2)) * xi + (-8 * q**2 * (1 + q) * u * (2 \
++ (q + 2 * (-1 + q) * S2**2 * u**2)) * xi**2 + -16 * q**3 * u**2 * xi**3))) + \
+(q * (1 + q) * S1**2 * ((-1 + q) * ((1 + q))**3 * (((-1 + q))**3 * q + (4 * \
+(-1 + q) * (15 + q * (-29 + 15 * q)) * S2**2 * u**2 + 144 * (1 + 2 * (-1 + q) \
+* q) * S2**4 * u**4)) + (2 * q * ((1 + q))**2 * u * (((-1 + q))**2 * (-3 + q \
+* (23 + 4 * q)) + 12 * (1 + q) * (1 + q**2) * S2**2 * u**2) * xi + (8 * q**2 \
+* (1 + q) * u**2 * (-12 + (-2 * q + (-11 * q**2 + (q**3 + 4 * (3 + q * (-5 + \
+3 * q)) * S2**2 * u**2)))) * xi**2 + -32 * q**3 * (3 + (-1 + q) * q) * u**3 * \
+xi**3))) + (S2**2 * (((-1 + q**2))**4 + (2 * ((-1 + q))**2 * q * ((1 + q))**3 \
+* (4 + 5 * q) * u * xi + (8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * \
+u**2 * xi**2 + 32 * q**3 * (-1 + q**2) * u**3 * xi**3))) + -1 * q**2 * xi**2 \
+* (1 + q * (8 * u * xi + q * (-2 + (16 * u * xi + ((q + 4 * u * \
+xi))**2))))))))))))\"\>"], "Output",
+ CellLabel->
+  "Out[28]=",ExpressionUUID->"0d8af05a-81bf-40f5-bd59-20b9b425a066"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2233,33 +2450,33 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff1\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[199]:=",ExpressionUUID->"afb466df-c96a-4af2-8f3a-1b5b31346992"],
+ CellLabel->"In[29]:=",ExpressionUUID->"9a93643e-0eb0-42dc-8f77-6ae2c82d2585"],
 
-Cell[BoxData["\<\"coeff1 = -16 * (1 + q) * (-16 * ((-1 + q))**2 * q**3 * ((1 \
-+ q))**5 * (-5 + 2 * q) * S1**8 * u**5 + (-4 * (-1 + q) * q**2 * ((1 + q))**3 \
-* S1**6 * u**3 * ((-1 + q) * ((1 + q))**2 * (-1 + (15 * q + (4 * q**2 + 8 * \
-(6 + (-1 + q) * q) * S2**2 * u**2))) + (2 * q * (1 + q) * (20 + q * (-29 + 12 \
-* q)) * u * xi + -8 * (-2 + q) * q**2 * u**2 * xi**2)) + (-2 * q * (((1 + q) \
-* S2**2 * u + q * xi))**2 * (-1 * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * u * \
-(-10 + (q + 24 * S2**2 * u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 * (-1 + \
-(q + 4 * (1 + 2 * q) * S2**2 * u**2)) * xi + (-8 * q**2 * (1 + q) * u * (2 + \
-(q + 2 * (-1 + q) * S2**2 * u**2)) * xi**2 + -16 * q**3 * u**2 * xi**3))) + \
-(-2 * q * ((1 + q))**2 * S1**4 * u * (((-1 + q))**2 * ((1 + q))**3 * (((-1 + \
-q))**2 * q + (2 * (15 + q * (-55 + 2 * q * (9 + 2 * q))) * S2**2 * u**2 + -72 \
-* (1 + q**2) * S2**4 * u**4)) + ((-1 + q) * q * ((1 + q))**2 * u * (3 + (-52 \
-* q + (33 * q**2 + (16 * q**3 + 4 * (-3 + 2 * q**2 * (-7 + 4 * q)) * S2**2 * \
-u**2)))) * xi + (-8 * q**2 * (1 + q) * u**2 * (6 + (-16 * q + (18 * q**2 + \
-(-5 * q**3 + 2 * (-1 + q) * (3 + (-1 + q) * q) * S2**2 * u**2)))) * xi**2 + \
--16 * q**3 * (3 + q * (-5 + 3 * q)) * u**3 * xi**3))) + (S1**2 * (-32 * ((-1 \
-+ q))**2 * ((1 + q))**5 * (1 + q * (-1 + 6 * q)) * S2**6 * u**5 + (-4 * (-1 + \
-q) * ((1 + q))**3 * S2**4 * u**3 * ((-1 + q) * ((1 + q))**2 * (4 + q * (18 + \
-5 * q * (-11 + 3 * q))) + (2 * q * (1 + q) * (-8 + (14 * q + 3 * q**3)) * u * \
-xi + 8 * q**2 * (1 + q * (-1 + 3 * q)) * u**2 * xi**2)) + (2 * ((1 + q))**3 * \
-S2**2 * u * (-1 * ((-1 + q))**4 * ((1 + q))**2 * (1 + (-12 + q) * q) + (-2 * \
-q * ((-1 + q**2))**2 * (4 + q * (-7 + 4 * q)) * u * xi + (-8 * q**2 * (1 + q \
-* (-8 + q * (20 + (-8 + q) * q))) * u**2 * xi**2 + 16 * (-2 + q) * q**3 * (-1 \
-+ 2 * q) * u**3 * xi**3))) + 2 * q**2 * xi * (-1 * ((-1 + q**2))**4 + (-1 * \
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = -16 \
+* (1 + q) * (-16 * ((-1 + q))**2 * q**3 * ((1 + q))**5 * (-5 + 2 * q) * S1**8 \
+* u**5 + (-4 * (-1 + q) * q**2 * ((1 + q))**3 * S1**6 * u**3 * ((-1 + q) * \
+((1 + q))**2 * (-1 + (15 * q + (4 * q**2 + 8 * (6 + (-1 + q) * q) * S2**2 * \
+u**2))) + (2 * q * (1 + q) * (20 + q * (-29 + 12 * q)) * u * xi + -8 * (-2 + \
+q) * q**2 * u**2 * xi**2)) + (-2 * q * (((1 + q) * S2**2 * u + q * xi))**2 * \
+(-1 * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * u * (-10 + (q + 24 * S2**2 * \
+u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 * (-1 + (q + 4 * (1 + 2 * q) * \
+S2**2 * u**2)) * xi + (-8 * q**2 * (1 + q) * u * (2 + (q + 2 * (-1 + q) * \
+S2**2 * u**2)) * xi**2 + -16 * q**3 * u**2 * xi**3))) + (-2 * q * ((1 + \
+q))**2 * S1**4 * u * (((-1 + q))**2 * ((1 + q))**3 * (((-1 + q))**2 * q + (2 \
+* (15 + q * (-55 + 2 * q * (9 + 2 * q))) * S2**2 * u**2 + -72 * (1 + q**2) * \
+S2**4 * u**4)) + ((-1 + q) * q * ((1 + q))**2 * u * (3 + (-52 * q + (33 * \
+q**2 + (16 * q**3 + 4 * (-3 + 2 * q**2 * (-7 + 4 * q)) * S2**2 * u**2)))) * \
+xi + (-8 * q**2 * (1 + q) * u**2 * (6 + (-16 * q + (18 * q**2 + (-5 * q**3 + \
+2 * (-1 + q) * (3 + (-1 + q) * q) * S2**2 * u**2)))) * xi**2 + -16 * q**3 * \
+(3 + q * (-5 + 3 * q)) * u**3 * xi**3))) + (S1**2 * (-32 * ((-1 + q))**2 * \
+((1 + q))**5 * (1 + q * (-1 + 6 * q)) * S2**6 * u**5 + (-4 * (-1 + q) * ((1 + \
+q))**3 * S2**4 * u**3 * ((-1 + q) * ((1 + q))**2 * (4 + q * (18 + 5 * q * \
+(-11 + 3 * q))) + (2 * q * (1 + q) * (-8 + (14 * q + 3 * q**3)) * u * xi + 8 \
+* q**2 * (1 + q * (-1 + 3 * q)) * u**2 * xi**2)) + (2 * ((1 + q))**3 * S2**2 \
+* u * (-1 * ((-1 + q))**4 * ((1 + q))**2 * (1 + (-12 + q) * q) + (-2 * q * \
+((-1 + q**2))**2 * (4 + q * (-7 + 4 * q)) * u * xi + (-8 * q**2 * (1 + q * \
+(-8 + q * (20 + (-8 + q) * q))) * u**2 * xi**2 + 16 * (-2 + q) * q**3 * (-1 + \
+2 * q) * u**3 * xi**3))) + 2 * q**2 * xi * (-1 * ((-1 + q**2))**4 + (-1 * \
 ((-1 + q))**2 * ((1 + q))**3 * (-1 + q * (18 + 7 * q)) * u * xi + (4 * q * \
 ((1 + q))**2 * (2 + q * (-5 + 19 * q)) * u**2 * xi**2 + 16 * q**2 * (1 + q**2 \
 * (2 + 3 * q)) * u**3 * xi**3)))))) + -2 * (-1 * (1 + q) * S2**2 * u + -1 * q \
@@ -2270,7 +2487,8 @@ q**2))**4 + (-2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * xi + \
 (-8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * xi**2 + -32 * \
 q**3 * (-1 + q**2) * u**3 * xi**3))) + q**2 * xi**2 * (1 + q * (8 * u * xi + \
 q * (-2 + (16 * u * xi + ((q + 4 * u * xi))**2))))))))))))\"\>"], "Output",
- CellLabel->"Out[200]=",ExpressionUUID->"9f07bf51-84d8-40f8-9a40-aee95d89814a"]
+ CellLabel->
+  "Out[30]=",ExpressionUUID->"7fd726d8-90d1-4697-84a6-3cff673bde45"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2284,61 +2502,62 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff0\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[201]:=",ExpressionUUID->"a7715d25-d1f4-4b7d-ac62-d6c669d78b4e"],
+ CellLabel->"In[31]:=",ExpressionUUID->"709c896a-3a70-4fc9-b922-53ff9c25d127"],
 
-Cell[BoxData["\<\"coeff0 = -16 * (16 * ((-1 + q))**3 * q**3 * ((1 + q))**6 * \
-S1**10 * u**6 + (-1 * ((-1 + q))**2 * q**2 * ((1 + q))**4 * S1**8 * u**4 * \
-(((1 + q))**2 * (1 + (-20 * q + (-8 * q**2 + 16 * (-3 + (q + 2 * q**2)) * \
-S2**2 * u**2))) + (-8 * q * (1 + q) * (-5 + 8 * q) * u * xi + 16 * q**2 * \
-u**2 * xi**2)) + ((-1 + q) * q * ((1 + q))**3 * S1**6 * u**2 * (q * ((-1 + \
-q**2))**3 + (-4 * (-1 + q) * ((1 + q))**3 * (-5 + q * (27 + q * (-3 + 8 * \
-q))) * S2**2 * u**2 + (16 * ((-1 + q))**2 * ((1 + q))**3 * (3 + q * (6 + q)) \
-* S2**4 * u**4 + (-2 * (-1 + q) * q * ((1 + q))**2 * u * (1 + (-25 * q + (-12 \
-* q**2 + 4 * (-1 + (q + 12 * q**2)) * S2**2 * u**2))) * xi + (8 * q**2 * (1 + \
-q) * u**2 * (4 + (-18 * q + (11 * q**2 + 4 * (-1 + q**2) * S2**2 * u**2))) * \
-xi**2 + 32 * (1 + -2 * q) * q**3 * u**3 * xi**3))))) + (((1 + q))**2 * S1**4 \
-* u * (-16 * ((-1 + q))**3 * ((1 + q))**4 * (1 + 3 * q * (2 + q)) * S2**6 * \
-u**5 + (2 * S2**4 * u**3 * (((-1 + q))**2 * ((1 + q))**4 * (4 + q * (6 + q * \
-(61 + (6 * q + 4 * q**2)))) + (4 * ((-1 + q))**2 * q * ((1 + q))**4 * (4 + (q \
-+ 4 * q**2)) * u * xi + -8 * q**2 * ((-1 + q**2))**2 * (1 + q * (4 + q)) * \
-u**2 * xi**2)) + (xi * (2 * ((-1 + q))**4 * q**2 * ((1 + q))**3 + (((q + -1 * \
-q**3))**2 * (-1 + q * (40 + 23 * q)) * u * xi + (8 * q**3 * (1 + q) * (-1 + q \
-* (14 + 5 * (-4 + q) * q)) * u**2 * xi**2 + -16 * q**4 * (1 + 6 * (-1 + q) * \
-q) * u**3 * xi**3))) + (-1 + q) * (1 + q) * S2**2 * u * (-1 * ((-1 + \
-q**2))**3 * (-1 + 2 * q * (12 + 5 * q)) + (-2 * (-1 + q) * q * ((1 + q))**2 * \
-(-4 + q * (29 + q * (-21 + 32 * q))) * u * xi + (-8 * q**2 * (1 + q) * (1 + 2 \
-* (-2 + q) * q * (1 + 4 * q)) * u**2 * xi**2 + 32 * q**3 * (1 + q * (-1 + 3 * \
-q)) * u**3 * xi**3)))))) + ((1 + q) * S1**2 * (16 * ((-1 + q))**3 * ((1 + \
-q))**5 * (2 + 3 * q) * S2**8 * u**6 + (q**2 * xi**2 * (((-1 + q))**4 * ((1 + \
-q))**3 + (2 * q * (5 + 3 * q) * ((-1 + q**2))**2 * u * xi + (-8 * q**2 * (1 + \
-q) * (-4 + q * (7 + q)) * u**2 * xi**2 + 32 * (1 + -2 * q) * q**3 * u**3 * \
-xi**3))) + ((-1 + q) * ((1 + q))**2 * S2**4 * u**2 * ((-10 + (-24 + q) * q) * \
-((-1 + q**2))**3 + (2 * (-1 + q) * q * ((1 + q))**2 * (-32 + q * (21 + q * \
-(-29 + 4 * q))) * u * xi + (8 * q**2 * (1 + q) * (8 + q * (-14 + (-4 + q) * \
-q)) * u**2 * xi**2 + -32 * q**3 * (3 + (-1 + q) * q) * u**3 * xi**3))) + \
-(S2**2 * (-1 * ((-1 + q))**6 * ((1 + q))**5 + (-10 * ((-1 + q))**4 * q * ((1 \
-+ q))**5 * u * xi + (-2 * ((-1 + q))**2 * q**2 * ((1 + q))**3 * (11 + q * \
-(-24 + 11 * q)) * u**2 * xi**2 + (16 * q**3 * ((1 + q))**3 * (2 + q * (-3 + 2 \
-* q)) * u**3 * xi**3 + 32 * q**4 * (1 + q) * (3 + q * (-5 + 3 * q)) * u**4 * \
-xi**4)))) + 4 * ((-1 + q))**2 * ((1 + q))**4 * S2**6 * u**4 * (-8 + q * (-5 + \
-(-24 * q + (-22 * q**2 + (5 * q**3 + (2 * (-4 + q) * (3 + q) * u * xi + 8 * q \
-* u**2 * xi**2)))))))))) + -1 * (((1 + q) * S2**2 * u + q * xi))**2 * (16 * \
-((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 + (((-1 + q**2))**2 * S2**4 * \
-u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + (8 * (-4 + q) * q * (1 + q) * u \
-* xi + 16 * q**2 * u**2 * xi**2)) + (S2**2 * (-1 * ((-1 + q**2))**4 + (-2 * \
-((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * xi + (-8 * (-1 + q) * \
-q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * xi**2 + -32 * q**3 * (-1 + q**2) \
-* u**3 * xi**3))) + q**2 * xi**2 * (1 + q * (8 * u * xi + q * (-2 + (16 * u * \
-xi + ((q + 4 * u * xi))**2))))))))))))\"\>"], "Output",
- CellLabel->"Out[202]=",ExpressionUUID->"5f0b6b14-9f8b-4c98-93e9-f13b729cee1c"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff0 = -16 \
+* (16 * ((-1 + q))**3 * q**3 * ((1 + q))**6 * S1**10 * u**6 + (-1 * ((-1 + \
+q))**2 * q**2 * ((1 + q))**4 * S1**8 * u**4 * (((1 + q))**2 * (1 + (-20 * q + \
+(-8 * q**2 + 16 * (-3 + (q + 2 * q**2)) * S2**2 * u**2))) + (-8 * q * (1 + q) \
+* (-5 + 8 * q) * u * xi + 16 * q**2 * u**2 * xi**2)) + ((-1 + q) * q * ((1 + \
+q))**3 * S1**6 * u**2 * (q * ((-1 + q**2))**3 + (-4 * (-1 + q) * ((1 + q))**3 \
+* (-5 + q * (27 + q * (-3 + 8 * q))) * S2**2 * u**2 + (16 * ((-1 + q))**2 * \
+((1 + q))**3 * (3 + q * (6 + q)) * S2**4 * u**4 + (-2 * (-1 + q) * q * ((1 + \
+q))**2 * u * (1 + (-25 * q + (-12 * q**2 + 4 * (-1 + (q + 12 * q**2)) * S2**2 \
+* u**2))) * xi + (8 * q**2 * (1 + q) * u**2 * (4 + (-18 * q + (11 * q**2 + 4 \
+* (-1 + q**2) * S2**2 * u**2))) * xi**2 + 32 * (1 + -2 * q) * q**3 * u**3 * \
+xi**3))))) + (((1 + q))**2 * S1**4 * u * (-16 * ((-1 + q))**3 * ((1 + q))**4 \
+* (1 + 3 * q * (2 + q)) * S2**6 * u**5 + (2 * S2**4 * u**3 * (((-1 + q))**2 * \
+((1 + q))**4 * (4 + q * (6 + q * (61 + (6 * q + 4 * q**2)))) + (4 * ((-1 + \
+q))**2 * q * ((1 + q))**4 * (4 + (q + 4 * q**2)) * u * xi + -8 * q**2 * ((-1 \
++ q**2))**2 * (1 + q * (4 + q)) * u**2 * xi**2)) + (xi * (2 * ((-1 + q))**4 * \
+q**2 * ((1 + q))**3 + (((q + -1 * q**3))**2 * (-1 + q * (40 + 23 * q)) * u * \
+xi + (8 * q**3 * (1 + q) * (-1 + q * (14 + 5 * (-4 + q) * q)) * u**2 * xi**2 \
++ -16 * q**4 * (1 + 6 * (-1 + q) * q) * u**3 * xi**3))) + (-1 + q) * (1 + q) \
+* S2**2 * u * (-1 * ((-1 + q**2))**3 * (-1 + 2 * q * (12 + 5 * q)) + (-2 * \
+(-1 + q) * q * ((1 + q))**2 * (-4 + q * (29 + q * (-21 + 32 * q))) * u * xi + \
+(-8 * q**2 * (1 + q) * (1 + 2 * (-2 + q) * q * (1 + 4 * q)) * u**2 * xi**2 + \
+32 * q**3 * (1 + q * (-1 + 3 * q)) * u**3 * xi**3)))))) + ((1 + q) * S1**2 * \
+(16 * ((-1 + q))**3 * ((1 + q))**5 * (2 + 3 * q) * S2**8 * u**6 + (q**2 * \
+xi**2 * (((-1 + q))**4 * ((1 + q))**3 + (2 * q * (5 + 3 * q) * ((-1 + \
+q**2))**2 * u * xi + (-8 * q**2 * (1 + q) * (-4 + q * (7 + q)) * u**2 * xi**2 \
++ 32 * (1 + -2 * q) * q**3 * u**3 * xi**3))) + ((-1 + q) * ((1 + q))**2 * \
+S2**4 * u**2 * ((-10 + (-24 + q) * q) * ((-1 + q**2))**3 + (2 * (-1 + q) * q \
+* ((1 + q))**2 * (-32 + q * (21 + q * (-29 + 4 * q))) * u * xi + (8 * q**2 * \
+(1 + q) * (8 + q * (-14 + (-4 + q) * q)) * u**2 * xi**2 + -32 * q**3 * (3 + \
+(-1 + q) * q) * u**3 * xi**3))) + (S2**2 * (-1 * ((-1 + q))**6 * ((1 + q))**5 \
++ (-10 * ((-1 + q))**4 * q * ((1 + q))**5 * u * xi + (-2 * ((-1 + q))**2 * \
+q**2 * ((1 + q))**3 * (11 + q * (-24 + 11 * q)) * u**2 * xi**2 + (16 * q**3 * \
+((1 + q))**3 * (2 + q * (-3 + 2 * q)) * u**3 * xi**3 + 32 * q**4 * (1 + q) * \
+(3 + q * (-5 + 3 * q)) * u**4 * xi**4)))) + 4 * ((-1 + q))**2 * ((1 + q))**4 \
+* S2**6 * u**4 * (-8 + q * (-5 + (-24 * q + (-22 * q**2 + (5 * q**3 + (2 * \
+(-4 + q) * (3 + q) * u * xi + 8 * q * u**2 * xi**2)))))))))) + -1 * (((1 + q) \
+* S2**2 * u + q * xi))**2 * (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 \
++ (((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + \
+(8 * (-4 + q) * q * (1 + q) * u * xi + 16 * q**2 * u**2 * xi**2)) + (S2**2 * \
+(-1 * ((-1 + q**2))**4 + (-2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) \
+* u * xi + (-8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * xi**2 \
++ -32 * q**3 * (-1 + q**2) * u**3 * xi**3))) + q**2 * xi**2 * (1 + q * (8 * u \
+* xi + q * (-2 + (16 * u * xi + ((q + 4 * u * xi))**2))))))))))))\"\>"], \
+"Output",
+ CellLabel->
+  "Out[32]=",ExpressionUUID->"fab3a080-c552-49f3-b334-ffd1500739b2"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Check reconstruction (this should be zero).", \
-"Subsubsection",ExpressionUUID->"e844d0b4-5781-4bc6-ba98-7334e6a0b589"],
+"Subsubsection",ExpressionUUID->"7ea4fb9d-f5ca-4d22-9aab-2abf6b4a1eef"],
 
 Cell[CellGroupData[{
 
@@ -2355,11 +2574,11 @@ Cell[BoxData[
     RowBox[{"\[Kappa]", "^", "2"}]}], "+", 
    RowBox[{"kappacoeff1", "*", " ", "\[Kappa]"}], "+", "kappacoeff0", "-", 
    "discr"}], "//", "FullSimplify"}]], "Input",
- CellLabel->
-  "In[203]:=",ExpressionUUID->"092f68e7-4b8f-4bd1-a3c3-fb5f257b20a9"],
+ CellLabel->"In[33]:=",ExpressionUUID->"4941b746-95b0-4bfb-9922-bf9f6dadac08"],
 
 Cell[BoxData["0"], "Output",
- CellLabel->"Out[203]=",ExpressionUUID->"5c96b776-0da0-45d0-8416-ecf3dde400ea"]
+ CellLabel->
+  "Out[33]=",ExpressionUUID->"5f5234ff-0fb5-4a52-b74c-d1a7dbb25f03"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -2367,14 +2586,14 @@ Cell[BoxData["0"], "Output",
 Cell[CellGroupData[{
 
 Cell["(iii) Spin-orbit resonances in xi ", \
-"Section",ExpressionUUID->"d1275de9-c0f2-4c68-9e9b-6b549b44d512"],
+"Section",ExpressionUUID->"0b7223bc-c715-4f8e-bf33-838f7dec2ce8"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
 Extract coefficients. Sort terms in powers of u to improve numerical \
 stability.\
-\>", "Subsubsection",ExpressionUUID->"04e18a09-ed76-4e7d-a612-75639f6d8292"],
+\>", "Subsubsection",ExpressionUUID->"8155620a-6718-4c8f-8645-f5c4dd07a4a0"],
 
 Cell[CellGroupData[{
 
@@ -2387,11 +2606,12 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff6\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[204]:=",ExpressionUUID->"e1706b26-bf8a-49bc-8376-e5809624ac96"],
+ CellLabel->"In[34]:=",ExpressionUUID->"9d70ea06-27f5-41b4-a41b-d4fe983949a6"],
 
-Cell[BoxData["\<\"coeff6 = 256 * q**6 * u**2\"\>"], "Output",
- CellLabel->"Out[205]=",ExpressionUUID->"9f854d16-0c77-455d-b7b9-4e5c37cb6d06"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff6 = 256 \
+* q**6 * u**2\"\>"], "Output",
+ CellLabel->
+  "Out[35]=",ExpressionUUID->"2e2d561c-a851-4b58-b06a-dca2ffc45ad8"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2405,13 +2625,14 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff5\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[206]:=",ExpressionUUID->"1dce127f-f170-41f1-b034-e10f136317e4"],
+ CellLabel->"In[36]:=",ExpressionUUID->"f726bc69-7fe9-4256-bde9-127e1ce7f678"],
 
-Cell[BoxData["\<\"coeff5 = 128 * q**5 * (1 + q) * u * (1 + (q + (8 * q * \
-S1**2 * u**2 + (-4 * u * (S1**2 * u + (-2 * S2**2 * u + kappa)) + -4 * q * u \
-* (S2**2 * u + kappa)))))\"\>"], "Output",
- CellLabel->"Out[207]=",ExpressionUUID->"e36c2eea-5233-4a0f-af47-ae172fa11349"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff5 = 128 \
+* q**5 * (1 + q) * u * (1 + (q + (8 * q * S1**2 * u**2 + (-4 * u * (S1**2 * u \
++ (-2 * S2**2 * u + kappa)) + -4 * q * u * (S2**2 * u + kappa)))))\"\>"], \
+"Output",
+ CellLabel->
+  "Out[37]=",ExpressionUUID->"d4573903-d733-4596-ba1d-ecf57eb0e4ad"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2425,18 +2646,19 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff4\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[208]:=",ExpressionUUID->"347b33e8-c702-4982-98af-6c9a8950811a"],
+ CellLabel->"In[38]:=",ExpressionUUID->"495da9d4-101d-49c2-a0dc-1b46eef5dacb"],
 
-Cell[BoxData["\<\"coeff4 = 16 * q**4 * ((1 + q))**2 * (1 + (-32 * S1**2 * \
-u**2 + (8 * u * (12 * S2**4 * u**3 + (-2 * kappa + (2 * u * ((-1 * S1**2 * u \
-+ kappa))**2 + S2**2 * u * (1 + -12 * u * (S1**2 * u + kappa))))) + (q * (-2 \
-+ (-96 * S1**4 * u**4 + (8 * S1**2 * u**2 * (7 + 4 * u * (5 * S2**2 * u + \
-kappa)) + 8 * u * (-12 * S2**4 * u**3 + (2 * kappa * (-3 + 4 * u * kappa) + \
-S2**2 * u * (7 + 4 * u * kappa)))))) + q**2 * (1 + 8 * u * (-2 * kappa + u * \
-(-4 * S2**2 + (12 * S1**4 * u**2 + (2 * ((-1 * S2**2 * u + kappa))**2 + S1**2 \
-* (1 + -12 * u * (S2**2 * u + kappa)))))))))))\"\>"], "Output",
- CellLabel->"Out[209]=",ExpressionUUID->"0962cb2d-234f-4f05-b4b9-b4c8b76fa2a9"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff4 = 16 \
+* q**4 * ((1 + q))**2 * (1 + (-32 * S1**2 * u**2 + (8 * u * (12 * S2**4 * \
+u**3 + (-2 * kappa + (2 * u * ((-1 * S1**2 * u + kappa))**2 + S2**2 * u * (1 \
++ -12 * u * (S1**2 * u + kappa))))) + (q * (-2 + (-96 * S1**4 * u**4 + (8 * \
+S1**2 * u**2 * (7 + 4 * u * (5 * S2**2 * u + kappa)) + 8 * u * (-12 * S2**4 * \
+u**3 + (2 * kappa * (-3 + 4 * u * kappa) + S2**2 * u * (7 + 4 * u * \
+kappa)))))) + q**2 * (1 + 8 * u * (-2 * kappa + u * (-4 * S2**2 + (12 * S1**4 \
+* u**2 + (2 * ((-1 * S2**2 * u + kappa))**2 + S1**2 * (1 + -12 * u * (S2**2 * \
+u + kappa)))))))))))\"\>"], "Output",
+ CellLabel->
+  "Out[39]=",ExpressionUUID->"2d0c4616-bfe6-4a3b-b6c9-3fbe17760380"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2450,25 +2672,26 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff3\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[210]:=",ExpressionUUID->"5c40291b-e180-4bd5-86ea-11bdda4a8b10"],
+ CellLabel->"In[40]:=",ExpressionUUID->"9375065a-5620-4322-b145-957bf7373534"],
 
-Cell[BoxData["\<\"coeff3 = 32 * q**3 * ((1 + q))**3 * (16 * (-1 + q) * q * \
-(-1 + 2 * q) * S1**6 * u**5 + (16 * (-2 + q) * (-1 + q) * S2**6 * u**5 + (4 * \
-S2**4 * u**3 * (-5 + (20 * q + (-14 * q**2 + (q**3 + -4 * (3 + q * (-5 + 3 * \
-q)) * u * kappa)))) + ((1 + q) * kappa * (-1 * ((-1 + q))**2 + (4 * (1 + q * \
-(8 + q)) * u * kappa + -16 * q * u**2 * kappa**2)) + (S2**2 * u * (-1 * ((-1 \
-+ q))**2 * (3 + 5 * q) + (-4 * q * (19 + q * (-5 + 2 * q)) * u * kappa + 16 * \
-(1 + q * (-1 + 3 * q)) * u**2 * kappa**2)) + (-4 * S1**4 * u**3 * (-1 + (-4 * \
-S2**2 * u**2 + q * (14 + (5 * (-4 + q) * q + (8 * S2**2 * u**2 + (4 * q * (-4 \
-+ 3 * q) * S2**2 * u**2 + 4 * (3 + q * (-5 + 3 * q)) * u * kappa)))))) + \
-S1**2 * u * (-5 + (-8 * u * (6 * S2**4 * u**3 + (kappa + 2 * S2**2 * u * (1 + \
-2 * u * kappa))) + (q * (7 + (64 * S2**4 * u**4 + (8 * S2**2 * u**2 * (1 + 6 \
-* u * kappa) + 4 * u * kappa * (5 + 12 * u * kappa)))) + (q**3 * (-3 + 16 * \
-u**2 * (S2**4 * u**2 + (kappa**2 + -1 * S2**2 * (1 + 2 * u * kappa)))) + q**2 \
-* (1 + -4 * u * (8 * S2**4 * u**3 + (kappa * (19 + 4 * u * kappa) + -2 * \
-S2**2 * u * (1 + 6 * u * kappa))))))))))))))\"\>"], "Output",
- CellLabel->"Out[211]=",ExpressionUUID->"f4f460dc-d7c1-4504-ba90-e1f065142e07"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = 32 \
+* q**3 * ((1 + q))**3 * (16 * (-1 + q) * q * (-1 + 2 * q) * S1**6 * u**5 + \
+(16 * (-2 + q) * (-1 + q) * S2**6 * u**5 + (4 * S2**4 * u**3 * (-5 + (20 * q \
++ (-14 * q**2 + (q**3 + -4 * (3 + q * (-5 + 3 * q)) * u * kappa)))) + ((1 + \
+q) * kappa * (-1 * ((-1 + q))**2 + (4 * (1 + q * (8 + q)) * u * kappa + -16 * \
+q * u**2 * kappa**2)) + (S2**2 * u * (-1 * ((-1 + q))**2 * (3 + 5 * q) + (-4 \
+* q * (19 + q * (-5 + 2 * q)) * u * kappa + 16 * (1 + q * (-1 + 3 * q)) * \
+u**2 * kappa**2)) + (-4 * S1**4 * u**3 * (-1 + (-4 * S2**2 * u**2 + q * (14 + \
+(5 * (-4 + q) * q + (8 * S2**2 * u**2 + (4 * q * (-4 + 3 * q) * S2**2 * u**2 \
++ 4 * (3 + q * (-5 + 3 * q)) * u * kappa)))))) + S1**2 * u * (-5 + (-8 * u * \
+(6 * S2**4 * u**3 + (kappa + 2 * S2**2 * u * (1 + 2 * u * kappa))) + (q * (7 \
++ (64 * S2**4 * u**4 + (8 * S2**2 * u**2 * (1 + 6 * u * kappa) + 4 * u * \
+kappa * (5 + 12 * u * kappa)))) + (q**3 * (-3 + 16 * u**2 * (S2**4 * u**2 + \
+(kappa**2 + -1 * S2**2 * (1 + 2 * u * kappa)))) + q**2 * (1 + -4 * u * (8 * \
+S2**4 * u**3 + (kappa * (19 + 4 * u * kappa) + -2 * S2**2 * u * (1 + 6 * u * \
+kappa))))))))))))))\"\>"], "Output",
+ CellLabel->
+  "Out[41]=",ExpressionUUID->"465b3e7c-1aa7-45cc-8ae4-4672a40b1c84"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2482,39 +2705,40 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff2\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[212]:=",ExpressionUUID->"a2c8caad-ffc6-4a30-ae69-48d20614cac0"],
+ CellLabel->"In[42]:=",ExpressionUUID->"eb8d39ef-e220-46e0-8c14-b999bc2c8c89"],
 
-Cell[BoxData["\<\"coeff2 = 16 * q**2 * ((1 + q))**4 * (16 * ((-1 + q))**2 * \
-q**2 * S1**8 * u**6 + (16 * ((-1 + q))**2 * S2**8 * u**6 + (kappa**2 * (((-1 \
-+ q))**2 * (1 + q * (4 + q)) + (-32 * q * (1 + q * (3 + q)) * u * kappa + 16 \
-* q**2 * u**2 * kappa**2)) + (S2**4 * u**2 * (((-1 + q))**2 * (-23 + (-40 + \
-q) * q) + (16 * (5 + -2 * q * (9 + q * (-8 + 3 * q))) * u * kappa + 16 * (1 + \
-6 * (-1 + q) * q) * u**2 * kappa**2)) + (S2**2 * (-1 * ((-1 + q))**4 + (-2 * \
-((-1 + q))**2 * (-7 + (-18 + q) * q) * u * kappa + (8 * (-1 + q * (11 + 2 * q \
-* (1 + 6 * q))) * u**2 * kappa**2 + 32 * (1 + -2 * q) * q * u**3 * \
-kappa**3))) + (8 * (-1 + q) * S2**6 * u**4 * (11 + (4 * u * kappa + 2 * q * \
-(-9 + (2 * q + -4 * u * kappa)))) + (-8 * (-1 + q) * q * S1**6 * u**4 * (4 + \
-(-4 * S2**2 * u**2 + q * (-18 + (-8 * u * kappa + q * (11 + 4 * u * (S2**2 * \
-u + kappa)))))) + (S1**4 * u**2 * (((1 + -4 * S2**2 * u**2))**2 + (q**4 * \
-(-23 + 16 * u * (S2**4 * u**3 + (-2 * S2**2 * u * (-2 + u * kappa) + kappa * \
-(5 + u * kappa)))) + (2 * q**3 * (3 + 8 * u * (2 * S2**4 * u**3 + (-6 * kappa \
-* (3 + u * kappa) + S2**2 * u * (-11 + 4 * u * kappa)))) + (q**2 * (58 + -16 \
-* u * (6 * S2**4 * u**3 + (-2 * kappa * (8 + 3 * u * kappa) + S2**2 * u * (-5 \
-+ 8 * u * kappa)))) + q * (-42 + 8 * u * (-12 * kappa + S2**2 * u * (5 + 4 * \
-u * (S2**2 * u + 3 * kappa)))))))) + S1**2 * (-1 + (4 * q**3 * (1 + (-8 * \
-S2**6 * u**6 + (2 * S2**4 * u**4 * (5 + 12 * u * kappa) + (-1 * S2**2 * u**2 \
-* (23 + 8 * u * kappa * (4 + 3 * u * kappa)) + 2 * u * kappa * (1 + u * kappa \
-* (11 + 4 * u * kappa)))))) + (q**4 * (-1 + 2 * u * (-4 * S2**4 * u**3 + \
-(kappa * (7 + -4 * u * kappa) + S2**2 * u * (11 + 8 * u * kappa)))) + (2 * \
-q**2 * (-3 + 2 * u * (8 * S2**6 * u**5 + (4 * S2**4 * u**3 * (5 + -8 * u * \
-kappa) + (kappa * (-15 + 4 * u * kappa * (1 + -4 * u * kappa)) + 5 * S2**2 * \
-u * (7 + 8 * u * kappa * (2 + u * kappa)))))) + (4 * q * (1 + u * (8 * S2**6 \
-* u**5 + (4 * S2**4 * u**3 * (-11 + 4 * u * kappa) + (2 * kappa * (5 + 12 * u \
-* kappa) + -1 * S2**2 * u * (23 + 8 * u * kappa * (4 + 3 * u * kappa)))))) + \
-2 * u * (-1 * kappa + S2**2 * u * (11 + 8 * u * (kappa + -2 * S2**2 * u * (-2 \
-+ u * (S2**2 * u + kappa))))))))))))))))))\"\>"], "Output",
- CellLabel->"Out[213]=",ExpressionUUID->"10c72996-2828-4d2a-bc6b-a7a91fe2de7b"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = 16 \
+* q**2 * ((1 + q))**4 * (16 * ((-1 + q))**2 * q**2 * S1**8 * u**6 + (16 * \
+((-1 + q))**2 * S2**8 * u**6 + (kappa**2 * (((-1 + q))**2 * (1 + q * (4 + q)) \
++ (-32 * q * (1 + q * (3 + q)) * u * kappa + 16 * q**2 * u**2 * kappa**2)) + \
+(S2**4 * u**2 * (((-1 + q))**2 * (-23 + (-40 + q) * q) + (16 * (5 + -2 * q * \
+(9 + q * (-8 + 3 * q))) * u * kappa + 16 * (1 + 6 * (-1 + q) * q) * u**2 * \
+kappa**2)) + (S2**2 * (-1 * ((-1 + q))**4 + (-2 * ((-1 + q))**2 * (-7 + (-18 \
++ q) * q) * u * kappa + (8 * (-1 + q * (11 + 2 * q * (1 + 6 * q))) * u**2 * \
+kappa**2 + 32 * (1 + -2 * q) * q * u**3 * kappa**3))) + (8 * (-1 + q) * S2**6 \
+* u**4 * (11 + (4 * u * kappa + 2 * q * (-9 + (2 * q + -4 * u * kappa)))) + \
+(-8 * (-1 + q) * q * S1**6 * u**4 * (4 + (-4 * S2**2 * u**2 + q * (-18 + (-8 \
+* u * kappa + q * (11 + 4 * u * (S2**2 * u + kappa)))))) + (S1**4 * u**2 * \
+(((1 + -4 * S2**2 * u**2))**2 + (q**4 * (-23 + 16 * u * (S2**4 * u**3 + (-2 * \
+S2**2 * u * (-2 + u * kappa) + kappa * (5 + u * kappa)))) + (2 * q**3 * (3 + \
+8 * u * (2 * S2**4 * u**3 + (-6 * kappa * (3 + u * kappa) + S2**2 * u * (-11 \
++ 4 * u * kappa)))) + (q**2 * (58 + -16 * u * (6 * S2**4 * u**3 + (-2 * kappa \
+* (8 + 3 * u * kappa) + S2**2 * u * (-5 + 8 * u * kappa)))) + q * (-42 + 8 * \
+u * (-12 * kappa + S2**2 * u * (5 + 4 * u * (S2**2 * u + 3 * kappa)))))))) + \
+S1**2 * (-1 + (4 * q**3 * (1 + (-8 * S2**6 * u**6 + (2 * S2**4 * u**4 * (5 + \
+12 * u * kappa) + (-1 * S2**2 * u**2 * (23 + 8 * u * kappa * (4 + 3 * u * \
+kappa)) + 2 * u * kappa * (1 + u * kappa * (11 + 4 * u * kappa)))))) + (q**4 \
+* (-1 + 2 * u * (-4 * S2**4 * u**3 + (kappa * (7 + -4 * u * kappa) + S2**2 * \
+u * (11 + 8 * u * kappa)))) + (2 * q**2 * (-3 + 2 * u * (8 * S2**6 * u**5 + \
+(4 * S2**4 * u**3 * (5 + -8 * u * kappa) + (kappa * (-15 + 4 * u * kappa * (1 \
++ -4 * u * kappa)) + 5 * S2**2 * u * (7 + 8 * u * kappa * (2 + u * \
+kappa)))))) + (4 * q * (1 + u * (8 * S2**6 * u**5 + (4 * S2**4 * u**3 * (-11 \
++ 4 * u * kappa) + (2 * kappa * (5 + 12 * u * kappa) + -1 * S2**2 * u * (23 + \
+8 * u * kappa * (4 + 3 * u * kappa)))))) + 2 * u * (-1 * kappa + S2**2 * u * \
+(11 + 8 * u * (kappa + -2 * S2**2 * u * (-2 + u * (S2**2 * u + \
+kappa))))))))))))))))))\"\>"], "Output",
+ CellLabel->
+  "Out[43]=",ExpressionUUID->"ff32710d-0744-4ca4-8214-cea0a6fab6b1"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2528,36 +2752,36 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff1\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[214]:=",ExpressionUUID->"4a2582bf-7a0f-4e32-aa35-3f9661df29db"],
+ CellLabel->"In[44]:=",ExpressionUUID->"7eb56112-22a3-4e91-8a4d-beeabff2bb6b"],
 
-Cell[BoxData["\<\"coeff1 = -32 * q * ((1 + q))**2 * (4 * ((-1 + q))**2 * q**2 \
-* ((1 + q))**3 * (-5 + 8 * q) * S1**8 * u**5 + (-1 * (-1 + q) * q * ((1 + \
-q))**3 * S1**6 * u**3 * (-1 + (26 * q + (-13 * q**2 + (-12 * q**3 + (4 * (-1 \
-+ q) * (1 + 3 * q) * (-1 + 4 * q) * S2**2 * u**2 + 4 * q * (20 + q * (-29 + \
-12 * q)) * u * kappa))))) + ((-1 * (1 + q) * S2**2 * u + (kappa + q * kappa)) \
-* (16 * ((-1 + q))**3 * ((1 + q))**2 * S2**6 * u**4 + (q**2 * ((1 + q))**2 * \
-kappa**2 * (((-1 + q))**2 + -16 * q * u * kappa) + (-1 * (-1 + q) * ((1 + \
-q))**2 * S2**2 * (((-1 + q))**3 + (2 * (-10 + q) * (-1 + q) * q * u * kappa + \
--48 * q**2 * u**2 * kappa**2)) + ((-1 + q**2))**2 * S2**4 * u**2 * (-8 + q * \
-(-20 + (q + -48 * u * kappa)))))) + (-1 * (1 + q) * ((-1 * (1 + q) * S2**2 * \
-u + (kappa + q * kappa)))**2 * (4 * (-4 + q) * ((-1 + q))**2 * S2**4 * u**3 + \
-(q * kappa * (-1 * ((-1 + q))**2 + 4 * q * (5 + q) * u * kappa) + -1 * (-1 + \
-q) * S2**2 * u * (-4 + q * (-1 + (4 * u * kappa + q * (5 + 8 * u * \
-kappa)))))) + (((1 + q))**3 * S1**2 * (4 * (-4 + q) * ((-1 + q))**2 * (3 + q) \
-* S2**6 * u**5 + ((1 + q) * S2**2 * u * (-5 * ((-1 + q))**4 + (-2 * ((-1 + \
-q))**2 * (4 + q * (-7 + 4 * q)) * u * kappa + 12 * q * (1 + q**2) * u**2 * \
-kappa**2)) + (q * kappa * (-1 * ((-1 + q))**4 + (((-1 + q))**2 * (-3 + q * \
-(23 + 4 * q)) * u * kappa + -4 * q * (-20 + q * (3 + q)) * u**2 * kappa**2)) \
-+ (-1 + q) * S2**4 * u**3 * (32 * (1 + u * kappa) + q * (-53 + (-56 * u * \
-kappa + q * (50 + q * (-33 + (4 * q + -12 * u * kappa))))))))) + -1 * ((1 + \
-q))**2 * S1**4 * u * (-4 * ((-1 + q**2))**2 * (4 + (q + 4 * q**2)) * S2**4 * \
-u**4 + (q * (1 + q) * (-1 * ((-1 + q))**4 + (((-1 + q))**2 * (-3 + q * (49 + \
-16 * q)) * u * kappa + 4 * q * (30 + q * (-39 + (19 + -4 * q) * q)) * u**2 * \
-kappa**2)) + (-1 + q**2) * S2**2 * u**2 * (4 + q * (-3 * (11 + 4 * u * kappa) \
-+ q * (50 + q * (-53 + (32 * q + 8 * (-7 + 4 * q) * u * \
-kappa))))))))))))\"\>"], "Output",
- CellLabel->"Out[215]=",ExpressionUUID->"dd7336df-9e04-4832-82d6-f0c67e112cac"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = -32 \
+* q * ((1 + q))**2 * (4 * ((-1 + q))**2 * q**2 * ((1 + q))**3 * (-5 + 8 * q) \
+* S1**8 * u**5 + (-1 * (-1 + q) * q * ((1 + q))**3 * S1**6 * u**3 * (-1 + (26 \
+* q + (-13 * q**2 + (-12 * q**3 + (4 * (-1 + q) * (1 + 3 * q) * (-1 + 4 * q) \
+* S2**2 * u**2 + 4 * q * (20 + q * (-29 + 12 * q)) * u * kappa))))) + ((-1 * \
+(1 + q) * S2**2 * u + (kappa + q * kappa)) * (16 * ((-1 + q))**3 * ((1 + \
+q))**2 * S2**6 * u**4 + (q**2 * ((1 + q))**2 * kappa**2 * (((-1 + q))**2 + \
+-16 * q * u * kappa) + (-1 * (-1 + q) * ((1 + q))**2 * S2**2 * (((-1 + q))**3 \
++ (2 * (-10 + q) * (-1 + q) * q * u * kappa + -48 * q**2 * u**2 * kappa**2)) \
++ ((-1 + q**2))**2 * S2**4 * u**2 * (-8 + q * (-20 + (q + -48 * u * \
+kappa)))))) + (-1 * (1 + q) * ((-1 * (1 + q) * S2**2 * u + (kappa + q * \
+kappa)))**2 * (4 * (-4 + q) * ((-1 + q))**2 * S2**4 * u**3 + (q * kappa * (-1 \
+* ((-1 + q))**2 + 4 * q * (5 + q) * u * kappa) + -1 * (-1 + q) * S2**2 * u * \
+(-4 + q * (-1 + (4 * u * kappa + q * (5 + 8 * u * kappa)))))) + (((1 + q))**3 \
+* S1**2 * (4 * (-4 + q) * ((-1 + q))**2 * (3 + q) * S2**6 * u**5 + ((1 + q) * \
+S2**2 * u * (-5 * ((-1 + q))**4 + (-2 * ((-1 + q))**2 * (4 + q * (-7 + 4 * \
+q)) * u * kappa + 12 * q * (1 + q**2) * u**2 * kappa**2)) + (q * kappa * (-1 \
+* ((-1 + q))**4 + (((-1 + q))**2 * (-3 + q * (23 + 4 * q)) * u * kappa + -4 * \
+q * (-20 + q * (3 + q)) * u**2 * kappa**2)) + (-1 + q) * S2**4 * u**3 * (32 * \
+(1 + u * kappa) + q * (-53 + (-56 * u * kappa + q * (50 + q * (-33 + (4 * q + \
+-12 * u * kappa))))))))) + -1 * ((1 + q))**2 * S1**4 * u * (-4 * ((-1 + \
+q**2))**2 * (4 + (q + 4 * q**2)) * S2**4 * u**4 + (q * (1 + q) * (-1 * ((-1 + \
+q))**4 + (((-1 + q))**2 * (-3 + q * (49 + 16 * q)) * u * kappa + 4 * q * (30 \
++ q * (-39 + (19 + -4 * q) * q)) * u**2 * kappa**2)) + (-1 + q**2) * S2**2 * \
+u**2 * (4 + q * (-3 * (11 + 4 * u * kappa) + q * (50 + q * (-53 + (32 * q + 8 \
+* (-7 + 4 * q) * u * kappa))))))))))))\"\>"], "Output",
+ CellLabel->
+  "Out[45]=",ExpressionUUID->"3d6c1031-2191-4c57-80e3-595c3098e0b2"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -2571,49 +2795,50 @@ Cell[BoxData[{
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<coeff0\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->
-  "In[216]:=",ExpressionUUID->"d76be14e-c5a4-4c1a-84ea-aa00328c26fc"],
+ CellLabel->"In[46]:=",ExpressionUUID->"cd7a1188-23c3-46a9-b4b2-379813f0f34b"],
 
-Cell[BoxData["\<\"coeff0 = -16 * ((1 + q))**4 * (16 * ((-1 + q))**3 * q**3 * \
-((1 + q))**2 * S1**10 * u**6 + ((-1 + q) * q * ((1 + q))**2 * S1**6 * u**2 * \
-((-1 + q) * (((-1 + q))**2 * q + (-4 * (-5 + q * (27 + q * (-3 + 8 * q))) * \
-S2**2 * u**2 + 16 * (-1 + q) * (3 + q * (6 + q)) * S2**4 * u**4)) + (-4 * (-1 \
-+ q) * q * u * (-1 + (15 * q + (4 * q**2 + 8 * (6 + (-1 + q) * q) * S2**2 * \
-u**2))) * kappa + 16 * q**2 * (10 + (-8 + q) * q) * u**2 * kappa**2)) + (-1 * \
-S1**4 * u * (16 * ((-1 + q))**3 * ((1 + q))**2 * (1 + 3 * q * (2 + q)) * \
-S2**6 * u**5 + (-2 * ((-1 + q**2))**2 * S2**4 * u**3 * (4 + (q * (6 + q * (61 \
-+ (6 * q + 4 * q**2))) + 72 * (q + q**3) * u * kappa)) + (2 * kappa * (((-1 + \
-q))**4 * q**2 * ((1 + q))**2 + (-1 * (-3 + (30 * q + 4 * q**2)) * ((q + -1 * \
-q**3))**2 * u * kappa + -8 * q**3 * ((1 + q))**2 * (10 + 3 * (-4 + q) * q) * \
-u**2 * kappa**2)) + (-1 + q) * ((1 + q))**2 * S2**2 * u * (((-1 + q))**3 * \
-(-1 + 2 * q * (12 + 5 * q)) + (4 * (-1 + q) * q * (15 + q * (-55 + 2 * q * (9 \
-+ 2 * q))) * u * kappa + 144 * q**2 * (2 + (-2 + q) * q) * u**2 * \
-kappa**2))))) + (((1 + q))**2 * S1**2 * (16 * ((-1 + q))**3 * (2 + 3 * q) * \
-S2**8 * u**6 + (4 * ((-1 + q))**2 * S2**6 * u**4 * (-8 + (3 * q + (-27 * q**2 \
-+ (5 * q**3 + 8 * (-1 + (q + -6 * q**2)) * u * kappa)))) + (q**2 * kappa**2 * \
-(((-1 + q))**4 + (-4 * ((-1 + q))**2 * (-1 + 5 * q) * u * kappa + 16 * q * \
-(-5 + 3 * q) * u**2 * kappa**2)) + ((-1 + q) * S2**4 * u**2 * (((-1 + q))**3 \
-* (-10 + (-24 + q) * q) + (-4 * (-1 + q) * (4 + q * (18 + 5 * q * (-11 + 3 * \
-q))) * u * kappa + 144 * q * (1 + 2 * (-1 + q) * q) * u**2 * kappa**2)) + \
-S2**2 * (-1 * ((-1 + q))**6 + (-2 * ((-1 + q))**4 * (1 + (-12 + q) * q) * u * \
-kappa + (4 * ((-1 + q))**2 * q * (15 + q * (-29 + 15 * q)) * u**2 * kappa**2 \
-+ -32 * q**2 * (6 + q * (-11 + 6 * q)) * u**3 * kappa**3))))))) + (-1 * ((-1 \
-* S2**2 * u + kappa))**2 * (16 * ((-1 + q))**3 * ((1 + q))**2 * S2**6 * u**4 \
-+ (q**2 * ((1 + q))**2 * kappa**2 * (((-1 + q))**2 + -16 * q * u * kappa) + \
-(-1 * (-1 + q) * ((1 + q))**2 * S2**2 * (((-1 + q))**3 + (2 * (-10 + q) * (-1 \
-+ q) * q * u * kappa + -48 * q**2 * u**2 * kappa**2)) + ((-1 + q**2))**2 * \
-S2**4 * u**2 * (-8 + q * (-20 + (q + -48 * u * kappa)))))) + -1 * ((q + -1 * \
-q**3))**2 * S1**8 * u**4 * (1 + (-48 * S2**2 * u**2 + 4 * q * (-5 + (4 * u * \
-(S2**2 * u + -5 * kappa) + q * (-2 + 8 * u * (S2**2 * u + \
-kappa)))))))))))\"\>"], "Output",
- CellLabel->"Out[217]=",ExpressionUUID->"c4c8566d-83e6-4b35-9175-f49e9b1bc255"]
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff0 = -16 \
+* ((1 + q))**4 * (16 * ((-1 + q))**3 * q**3 * ((1 + q))**2 * S1**10 * u**6 + \
+((-1 + q) * q * ((1 + q))**2 * S1**6 * u**2 * ((-1 + q) * (((-1 + q))**2 * q \
++ (-4 * (-5 + q * (27 + q * (-3 + 8 * q))) * S2**2 * u**2 + 16 * (-1 + q) * \
+(3 + q * (6 + q)) * S2**4 * u**4)) + (-4 * (-1 + q) * q * u * (-1 + (15 * q + \
+(4 * q**2 + 8 * (6 + (-1 + q) * q) * S2**2 * u**2))) * kappa + 16 * q**2 * \
+(10 + (-8 + q) * q) * u**2 * kappa**2)) + (-1 * S1**4 * u * (16 * ((-1 + \
+q))**3 * ((1 + q))**2 * (1 + 3 * q * (2 + q)) * S2**6 * u**5 + (-2 * ((-1 + \
+q**2))**2 * S2**4 * u**3 * (4 + (q * (6 + q * (61 + (6 * q + 4 * q**2))) + 72 \
+* (q + q**3) * u * kappa)) + (2 * kappa * (((-1 + q))**4 * q**2 * ((1 + \
+q))**2 + (-1 * (-3 + (30 * q + 4 * q**2)) * ((q + -1 * q**3))**2 * u * kappa \
++ -8 * q**3 * ((1 + q))**2 * (10 + 3 * (-4 + q) * q) * u**2 * kappa**2)) + \
+(-1 + q) * ((1 + q))**2 * S2**2 * u * (((-1 + q))**3 * (-1 + 2 * q * (12 + 5 \
+* q)) + (4 * (-1 + q) * q * (15 + q * (-55 + 2 * q * (9 + 2 * q))) * u * \
+kappa + 144 * q**2 * (2 + (-2 + q) * q) * u**2 * kappa**2))))) + (((1 + \
+q))**2 * S1**2 * (16 * ((-1 + q))**3 * (2 + 3 * q) * S2**8 * u**6 + (4 * ((-1 \
++ q))**2 * S2**6 * u**4 * (-8 + (3 * q + (-27 * q**2 + (5 * q**3 + 8 * (-1 + \
+(q + -6 * q**2)) * u * kappa)))) + (q**2 * kappa**2 * (((-1 + q))**4 + (-4 * \
+((-1 + q))**2 * (-1 + 5 * q) * u * kappa + 16 * q * (-5 + 3 * q) * u**2 * \
+kappa**2)) + ((-1 + q) * S2**4 * u**2 * (((-1 + q))**3 * (-10 + (-24 + q) * \
+q) + (-4 * (-1 + q) * (4 + q * (18 + 5 * q * (-11 + 3 * q))) * u * kappa + \
+144 * q * (1 + 2 * (-1 + q) * q) * u**2 * kappa**2)) + S2**2 * (-1 * ((-1 + \
+q))**6 + (-2 * ((-1 + q))**4 * (1 + (-12 + q) * q) * u * kappa + (4 * ((-1 + \
+q))**2 * q * (15 + q * (-29 + 15 * q)) * u**2 * kappa**2 + -32 * q**2 * (6 + \
+q * (-11 + 6 * q)) * u**3 * kappa**3))))))) + (-1 * ((-1 * S2**2 * u + \
+kappa))**2 * (16 * ((-1 + q))**3 * ((1 + q))**2 * S2**6 * u**4 + (q**2 * ((1 \
++ q))**2 * kappa**2 * (((-1 + q))**2 + -16 * q * u * kappa) + (-1 * (-1 + q) \
+* ((1 + q))**2 * S2**2 * (((-1 + q))**3 + (2 * (-10 + q) * (-1 + q) * q * u * \
+kappa + -48 * q**2 * u**2 * kappa**2)) + ((-1 + q**2))**2 * S2**4 * u**2 * \
+(-8 + q * (-20 + (q + -48 * u * kappa)))))) + -1 * ((q + -1 * q**3))**2 * \
+S1**8 * u**4 * (1 + (-48 * S2**2 * u**2 + 4 * q * (-5 + (4 * u * (S2**2 * u + \
+-5 * kappa) + q * (-2 + 8 * u * (S2**2 * u + kappa)))))))))))\"\>"], "Output",
+ 
+ CellLabel->
+  "Out[47]=",ExpressionUUID->"b6c5473a-f6dd-451f-93e4-a9d40b40623f"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Check reconstruction (this should be zero).", \
-"Subsubsection",ExpressionUUID->"c2737fd2-18b5-4558-8143-b5f1e1df2ffe"],
+"Subsubsection",ExpressionUUID->"ce19b8c5-6f70-425c-bba6-322a34a17cfc"],
 
 Cell[CellGroupData[{
 
@@ -2632,11 +2857,11 @@ Cell[BoxData[
     RowBox[{"\[Xi]", "^", "2"}]}], " ", "+", " ", 
    RowBox[{"xicoeff1", "*", " ", "\[Xi]"}], "+", " ", "xicoeff0", " ", "-", 
    "discr"}], "//", "FullSimplify"}]], "Input",
- CellLabel->
-  "In[218]:=",ExpressionUUID->"0341a26f-d499-4ae4-90d0-0087e93cdbf6"],
+ CellLabel->"In[48]:=",ExpressionUUID->"d95e825c-c206-4f06-8ed0-e34071bbe60e"],
 
 Cell[BoxData["0"], "Output",
- CellLabel->"Out[218]=",ExpressionUUID->"96e0fbd8-4c6f-4148-a59e-fb07be4b50e2"]
+ CellLabel->
+  "Out[48]=",ExpressionUUID->"18ff1260-f760-4afd-a2a4-7d9180dc777e"]
 }, Open  ]]
 }, Open  ]],
 
@@ -2646,7 +2871,7 @@ Cell[TextData[{
  "Clean this notebook for inclusion in git repository. ",
  StyleBox["Credits: http://bhptoolkit.org/cleannb.html", "Subsection"],
  " "
-}], "Subsubsection",ExpressionUUID->"e56a6f41-c8fe-47cc-bedd-a416fce017cb"],
+}], "Subsubsection",ExpressionUUID->"9bc2331b-48ed-4351-97b7-f9794daee1cd"],
 
 Cell[BoxData[
  RowBox[{
@@ -2689,14 +2914,14 @@ Cell[BoxData[
       RowBox[{"NotebookSave", "[", "nb", "]"}], ";", "\[IndentingNewLine]", 
       RowBox[{"NotebookClose", "[", "nb", "]"}], ";"}]}], "]"}]}], 
   ";"}]], "Input",
- CellLabel->
-  "In[219]:=",ExpressionUUID->"57b4396a-76f6-4214-ba68-ae042ddc2572"],
+ CellLabel->"In[49]:=",ExpressionUUID->"0c75dd10-8a15-45e0-9a92-2975d60d10cf"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"CleanNotebook", "[", 
    RowBox[{"NotebookFileName", "[", "]"}], "]"}], ";"}]], "Input",
- CellLabel->"In[220]:=",ExpressionUUID->"ee26a3e4-87d9-41fd-93be-d159f37bcf65"]
+ CellLabel->
+  "In[50]:=",ExpressionUUID->"a2ab0607-6ac8-4b67-a02e-dc730441c5c7"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
