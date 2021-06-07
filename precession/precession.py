@@ -638,7 +638,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     """
 
     u=np.atleast_1d(u)
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
     xi=np.atleast_1d(xi)
     S1, S2= spinmags(q, chi1, chi2)
 
@@ -825,9 +825,9 @@ def kapparesonances(u, xi, q, chi1, chi2):
 
     u=np.atleast_1d(u)
     xi=np.atleast_1d(xi)
-    q=np.atleast_1d(q)
-    chi1=np.atleast_1d(chi1)
-    chi2=np.atleast_1d(chi2)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
 
     kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
 
@@ -876,7 +876,7 @@ def kappainfresonances(xi, q, chi1, chi2):
     """
 
     xi=np.atleast_1d(xi)
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
     kappainfmin = np.maximum( (xi - (q**-1-q)*S2)/(1+q) , (xi - (q**-1-q)*S1)/(1+q**-1) )
@@ -1057,7 +1057,7 @@ def xilimits_definition(q, chi1, chi2):
         Maximum value of the effective spin xi.
     """
 
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
     S1, S2 = spinmags(q, chi1, chi2)
     xilim = (1+q)*S1 + (1+1/q)*S2
 
@@ -1103,10 +1103,10 @@ def xidiscriminant_coefficients(kappa, u, q, chi1, chi2):
         Coefficient to the x^0 term in polynomial.
     """
 
-    kappa=np.atleast_1d(kappa)
-    u=np.atleast_1d(u)
-    q=np.atleast_1d(q)
-    S1, S2= spinmags(q, chi1, chi2)
+    kappa = np.atleast_1d(kappa)
+    u = np.atleast_1d(u)
+    q = np.atleast_1d(q)
+    S1, S2 = spinmags(q, chi1, chi2)
 
     # Machine generated with polycoefficients.nb
     coeff6 = 256 * q**6 * u**2
@@ -1280,32 +1280,32 @@ def xiresonances(J, r, q, chi1, chi2):
     """
 
     #Altough there are 6 solutions in general, we know that only two can lie between Smin and Smax.
-    J=np.atleast_1d(J)
-    r=np.atleast_1d(r)
-    q=np.atleast_1d(q)
-    chi1=np.atleast_1d(chi1)
-    chi2=np.atleast_1d(chi2)
+    J = np.atleast_1d(J)
+    r = np.atleast_1d(r)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
 
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
 
     Smin, Smax = Slimits_LJS1S2(J, r, q, chi1, chi2)
-    xiroots= wraproots(xidiscriminant_coefficients, kappa, u, q, chi1, chi2)
+    xiroots = wraproots(xidiscriminant_coefficients, kappa, u, q, chi1, chi2)
 
     def _compute(Smin, Smax, J, r, xiroots, q, chi1, chi2):
         xiroots = xiroots[np.isfinite(xiroots)]
-        Sroots = Satresonance(J=np.tile(J, xiroots.shape), r=np.tile(r, xiroots.shape), xi=xiroots, q=np.tile(q, xiroots.shape), chi1=np.tile(chi1, xiroots.shape), chi2=np.tile(chi2, xiroots.shape))
+        Sroots = Satresonance(J = np.tile(J, xiroots.shape), r = np.tile(r, xiroots.shape), xi = xiroots, q = np.tile(q, xiroots.shape), chi1 = np.tile(chi1, xiroots.shape), chi2 = np.tile(chi2, xiroots.shape))
         xires = xiroots[np.logical_and(Sroots>Smin, Sroots<Smax)]
         assert len(xires)<=2, "I found more than two resonances, this should not be possible."
         # If you didn't find enough solutions, append nans
-        xires=np.concatenate([xires, np.repeat(np.nan, 2-len(xires))])
+        xires = np.concatenate([xires, np.repeat(np.nan, 2-len(xires))])
         return xires
 
-    ximin, ximax =np.array(list(map(_compute, Smin, Smax, J, r, xiroots, q, chi1, chi2))).T
+    ximin, ximax = np.array(list(map(_compute, Smin, Smax, J, r, xiroots, q, chi1, chi2))).T
     return np.stack([ximin, ximax])
 
 
-def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
+def anglesresonances(J = None, r = None, xi = None, q = None, chi1 = None, chi2 = None):
     """
     Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
 
@@ -1344,7 +1344,7 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
         Value of the angle deltaphi at the resonance that maximizes either J or xi, depending on the input.
     """
 
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
 
     if J is None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
 
@@ -1352,12 +1352,12 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
         Satmin = Satresonance(J=Jmin, r=r, xi=xi, q=q, chi1=chi1, chi2=chi2)
         theta1atmin = eval_theta1(Satmin, Jmin, r, xi, q, chi1, chi2)
         theta2atmin = eval_theta2(Satmin, Jmin, r, xi, q, chi1, chi2)
-        deltaphiatmin=np.tile(np.pi, q.shape)
+        deltaphiatmin = np.tile(np.pi, q.shape)
 
         Satmax = Satresonance(J=Jmax, r=r, xi=xi, q=q, chi1=chi1, chi2=chi2)
         theta1atmax = eval_theta1(Satmax, Jmax, r, xi, q, chi1, chi2)
         theta2atmax = eval_theta2(Satmax, Jmax, r, xi, q, chi1, chi2)
-        deltaphiatmax=np.tile(0, q.shape)
+        deltaphiatmax = np.tile(0, q.shape)
 
 
     elif J is not None and r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
@@ -1368,7 +1368,7 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
         theta1atmin = eval_theta1(Satmin, J, r, ximin, q, chi1, chi2)
         theta2atmin = eval_theta2(Satmin, J, r, ximin, q, chi1, chi2)
         # See Fig 5 in arxiv:1506.03492
-        J=np.atleast_1d(J)
+        J = np.atleast_1d(J)
         S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, q)
         deltaphiatmin=np.where(J>np.abs(L-S1-S2), 0, np.pi)
@@ -1577,7 +1577,7 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
     kappa=np.atleast_1d(kappa)
     u=np.atleast_1d(u)
     xi=np.atleast_1d(xi)
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
     S1, S2 = spinmags(q, chi1, chi2)
 
     # Machine generated with polycoefficients.nb
@@ -1938,7 +1938,7 @@ def eval_xi(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=Non
 
         theta1=np.atleast_1d(theta1)
         theta2=np.atleast_1d(theta2)
-        q=np.atleast_1d(q)
+        q = np.atleast_1d(q)
         S1, S2 = spinmags(q, chi1, chi2)
         xi=(1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
 
@@ -1946,8 +1946,8 @@ def eval_xi(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=Non
 
         S=np.atleast_1d(S)
         varphi=np.atleast_1d(varphi)
-        J=np.atleast_1d(J)
-        q=np.atleast_1d(q)
+        J = np.atleast_1d(J)
+        q = np.atleast_1d(q)
         S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, q)
 
@@ -1994,7 +1994,7 @@ def effectivepotential_plus(S, J, r, q, chi1, chi2):
         Effective spin.
     """
 
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
     varphi = np.tile(np.pi, q.shape)
     xi = eval_xi(S=S, varphi=varphi, J=J, r=r, q=q, chi1=chi1, chi2=chi2)
 
@@ -2030,7 +2030,7 @@ def effectivepotential_minus(S, J, r, q, chi1, chi2):
         Effective spin.
     """
 
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
     varphi = np.tile(0, q.shape)
     xi = eval_xi(S=S, varphi=varphi, J=J, r=r, q=q, chi1=chi1, chi2=chi2)
 
@@ -2072,9 +2072,9 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
 
 
     S=np.atleast_1d(S)
-    J=np.atleast_1d(J)
+    J = np.atleast_1d(J)
     xi=np.atleast_1d(xi)
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
     cyclesign=np.atleast_1d(cyclesign)
 
     L = eval_L(r, q)
@@ -2129,8 +2129,8 @@ def eval_costheta1(S, J, r, xi, q, chi1, chi2):
     """
 
     S=np.atleast_1d(S)
-    J=np.atleast_1d(J)
-    q=np.atleast_1d(q)
+    J = np.atleast_1d(J)
+    q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
@@ -2209,8 +2209,8 @@ def eval_costheta2(S, J, r, xi, q, chi1, chi2):
     """
 
     S=np.atleast_1d(S)
-    J=np.atleast_1d(J)
-    q=np.atleast_1d(q)
+    J = np.atleast_1d(J)
+    q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
@@ -2367,7 +2367,7 @@ def eval_cosdeltaphi(S, J, r, xi, q, chi1, chi2):
         Cosine of the angle between the projections of the two spins onto the orbital plane.
     """
 
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
     costheta1=eval_costheta1(S, J, r, xi, q, chi1, chi2)
@@ -2450,7 +2450,7 @@ def eval_costhetaL(S, J, r, q, chi1, chi2):
     """
 
     S=np.atleast_1d(S)
-    J=np.atleast_1d(J)
+    J = np.atleast_1d(J)
 
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
@@ -2533,7 +2533,7 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
         theta1=np.atleast_1d(theta1)
         theta2=np.atleast_1d(theta2)
         deltaphi=np.atleast_1d(deltaphi)
-        q=np.atleast_1d(q)
+        q = np.atleast_1d(q)
 
         S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, q)
@@ -2619,7 +2619,7 @@ def eval_kappa(J, r, q):
         Regularized angular momentum (J^2-L^2)/(2L).
     """
 
-    J=np.atleast_1d(J)
+    J = np.atleast_1d(J)
 
     L = eval_L(r, q)
     kappa = (J**2 - L**2) / (2*L)
@@ -2722,7 +2722,7 @@ def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
 
     kappainf=np.atleast_1d(kappainf)
     xi=np.atleast_1d(xi)
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
     costheta1inf = (-xi + kappainf*(1+1/q)) / (S1*(1/q-q))
@@ -2795,7 +2795,7 @@ def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
 
     kappainf=np.atleast_1d(kappainf)
     xi=np.atleast_1d(xi)
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
     costheta2inf = (xi - kappainf*(1+q)) / (S2*(1/q-q))
@@ -3260,7 +3260,7 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
 
 
     S=np.atleast_1d(S)
-    J=np.atleast_1d(J)
+    J = np.atleast_1d(J)
 
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
@@ -4550,9 +4550,9 @@ def rupdown(q, chi1, chi2):
         Inner orbital separation in the up-down instability.
     """
 
-    q=np.atleast_1d(q)
-    chi1=np.atleast_1d(chi1)
-    chi2=np.atleast_1d(chi2)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
 
     rudp = (chi1**0.5+(q*chi2)**0.5)**4/(1-q)**2
     rudm = (chi1**0.5-(q*chi2)**0.5)**4/(1-q)**2
@@ -4587,7 +4587,7 @@ def omegasq_aligned(r, q, chi1, chi2, which):
         Squared frequency.
     """
 
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
 
     # These are all the valid input flags
     uulabels=np.array(['uu', 'up-up', 'upup', '++'])
@@ -4637,9 +4637,9 @@ def widenutation(q, chi1, chi2):
         Orbital separation where wide nutations becomes possible.
     """
 
-    q=np.atleast_1d(q)
-    chi1=np.atleast_1d(chi1)
-    chi2=np.atleast_1d(chi2)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
 
     rwide = ((q*chi2 - chi1) / (1-q))**2
 
@@ -5177,9 +5177,9 @@ def frequency_prefactor(J, r, xi, q, chi1, chi2):
         Prefactor in the OmegaL equation.
     """
 
-    J=np.atleast_1d(J)
+    J = np.atleast_1d(J)
     xi =np.atleast_1d(xi)
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
     eta = eval_eta(q)
@@ -5226,7 +5226,7 @@ def azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None):
         Prefactor in the PhiL equation.
     """
 
-    J=np.atleast_1d(J)
+    J = np.atleast_1d(J)
     L = eval_L(r, q)
 
     Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
@@ -5273,7 +5273,7 @@ def eval_OmegaL(S, J, r, xi, q, chi1, chi2):
     """
 
     S=np.atleast_1d(S)
-    J=np.atleast_1d(J)
+    J = np.atleast_1d(J)
     L = eval_L(r, q)
 
     mathcalC0, mathcalCplus, mathcalCminus =  frequency_prefactor(J, r, xi, q, chi1, chi2)
@@ -5405,7 +5405,7 @@ def chip_terms(theta1, theta2, q, chi1, chi2):
 
     theta1=np.atleast_1d(theta1)
     theta2=np.atleast_1d(theta2)
-    q=np.atleast_1d(q)
+    q = np.atleast_1d(q)
 
     chipterm1 = chi1*np.sin(theta1)
     omegatilde = q*(4*q+3)/(4+3*q)
@@ -5677,8 +5677,8 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_ms
     theta1=np.atleast_1d(theta1)
     theta2=np.atleast_1d(theta2)
     f=np.atleast_1d(f)
-    chi1=np.atleast_1d(chi1)
-    chi2=np.atleast_1d(chi2)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
     M_msun=np.atleast_1d(M_msun)
 
     # Convert GW frequency in hz to orbital velocity in natural units.
@@ -5738,8 +5738,8 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     theta1=np.atleast_1d(theta1)
     theta2=np.atleast_1d(theta2)
     r=np.atleast_1d(r)
-    chi1=np.atleast_1d(chi1)
-    chi2=np.atleast_1d(chi2)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
     M_msun=np.atleast_1d(M_msun)
 
     m1, m2 = masses(q)
