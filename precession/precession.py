@@ -151,7 +151,7 @@ def wraproots(coefficientfunction, *args, **kwargs):
         Roots of the polynomial.
     """
 
-    coeffs= coefficientfunction(*args, **kwargs)
+    coeffs = coefficientfunction(*args, **kwargs)
     sols = np.sort_complex(roots_vec(coeffs.T))
     sols = np.real(np.where(np.isreal(sols), sols, np.nan))
 
@@ -239,15 +239,14 @@ def ismonotonic(vec, which):
         Result
     """
 
-
-    if which=='<':
-        return np.all(vec[:-1]<vec[1:])
-    elif which=='<=':
-        return np.all(vec[:-1]<=vec[1:])
-    elif which=='>':
-        return np.all(vec[:-1]>vec[1:])
-    elif which=='>=':
-        return np.all(vec[:-1]>=vec[1:])
+    if which == '<':
+        return np.all(vec[:-1] < vec[1:])
+    elif which == '<=':
+        return np.all(vec[:-1] <= vec[1:])
+    elif which == '>':
+        return np.all(vec[:-1] > vec[1:])
+    elif which == '>=':
+        return np.all(vec[:-1] >= vec[1:])
     else:
         raise ValueError("`which` needs to be one of the following: `>`, `>=`, `<`, `<=`.")
 
@@ -325,7 +324,6 @@ def masses(q):
         Mass of the secondary (lighter) black hole.
     """
 
-
     m1 = eval_m1(q)
     m2 = eval_m2(q)
 
@@ -355,8 +353,8 @@ def eval_q(m1, m2):
 
     m1 = np.atleast_1d(m1)
     m2 = np.atleast_1d(m2)
-    q = m2 / m1
-    assert (q<1).all(), "The convention used in this code is q=m2/m1<1."
+    q = m2/m1
+    assert (q < 1).all(), "The convention used in this code is q=m2/m1<1."
 
     return q
 
@@ -518,7 +516,7 @@ def eval_v(r):
     """
 
     r = np.atleast_1d(r)
-    v= 1/r**0.5
+    v = 1/r**0.5
 
     return v
 
@@ -555,7 +553,7 @@ def eval_r(L=None, u=None, q=None):
     elif L is None and u is not None and q is not None:
 
         u = np.atleast_1d(u)
-        r= (2*eval_m1(q)*eval_m2(q)*u)**(-2)
+        r = (2*eval_m1(q)*eval_m2(q)*u)**(-2)
 
     else:
         raise TypeError("Provide either (L,q) or (u,q).")
@@ -787,9 +785,7 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
     xi**2 * (1 + q * (8 * u * xi + q * (-2 + (16 * u * xi + ((q + 4 * u * \
     xi))**2))))))))))))
 
-
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
-
 
 
 def kapparesonances(u, xi, q, chi1, chi2):
@@ -821,8 +817,6 @@ def kapparesonances(u, xi, q, chi1, chi2):
         Maximum value of the regularized angular momentum kappa.
     """
 
-    # There are in principle five solutions, but only two are physical.
-
     u = np.atleast_1d(u)
     xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
@@ -831,17 +825,18 @@ def kapparesonances(u, xi, q, chi1, chi2):
 
     kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
 
+    # There are in principle five solutions, but only two are physical.
     def _compute(kapparoots, u, xi, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
         Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
         Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
-        kappares = kapparoots[np.logical_and(Sroots>Smin, Sroots<Smax)]
-        assert len(kappares)<=2, "I found more than two resonances, this should not be possible."
+        kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
+        assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
         # If you didn't find enough solutions, append nans
-        kappares=np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
+        kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
         return kappares
 
-    kappamin, kappamax =np.array(list(map(_compute, kapparoots, u, xi, q, chi1, chi2))).T
+    kappamin, kappamax = np.array(list(map(_compute, kapparoots, u, xi, q, chi1, chi2))).T
 
     return np.stack([kappamin, kappamax])
 
@@ -963,7 +958,7 @@ def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
         # Check precondition
         Jmin_cond, Jmax_cond = Jlimits_LS1S2(r, q, chi1, chi2)
 
-        if (Jmin>Jmin_cond).all() and (Jmax<Jmax_cond).all():
+        if (Jmin > Jmin_cond).all() and (Jmax < Jmax_cond).all():
             pass
         else:
             if enforce:
@@ -1018,7 +1013,7 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
         # Check precondition
         kappainfmin_cond, kappainfmax_cond = Slimits_S1S2(q, chi1, chi2)
 
-        if (kappainfmin>kappainfmin_cond).all() and (kappainfmax<kappainfmax_cond).all():
+        if (kappainfmin > kappainfmin_cond).all() and (kappainfmax < kappainfmax_cond).all():
             pass
         else:
             if enforce:
@@ -1295,8 +1290,8 @@ def xiresonances(J, r, q, chi1, chi2):
     def _compute(Smin, Smax, J, r, xiroots, q, chi1, chi2):
         xiroots = xiroots[np.isfinite(xiroots)]
         Sroots = Satresonance(J = np.tile(J, xiroots.shape), r = np.tile(r, xiroots.shape), xi = xiroots, q = np.tile(q, xiroots.shape), chi1 = np.tile(chi1, xiroots.shape), chi2 = np.tile(chi2, xiroots.shape))
-        xires = xiroots[np.logical_and(Sroots>Smin, Sroots<Smax)]
-        assert len(xires)<=2, "I found more than two resonances, this should not be possible."
+        xires = xiroots[np.logical_and(Sroots > Smin, Sroots < Smax)]
+        assert len(xires) <= 2, "I found more than two resonances, this should not be possible."
         # If you didn't find enough solutions, append nans
         xires = np.concatenate([xires, np.repeat(np.nan, 2-len(xires))])
         return xires
@@ -1305,7 +1300,7 @@ def xiresonances(J, r, q, chi1, chi2):
     return np.stack([ximin, ximax])
 
 
-def anglesresonances(J = None, r = None, xi = None, q = None, chi1 = None, chi2 = None):
+def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     """
     Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
 
@@ -1359,7 +1354,6 @@ def anglesresonances(J = None, r = None, xi = None, q = None, chi1 = None, chi2 
         theta2atmax = eval_theta2(Satmax, Jmax, r, xi, q, chi1, chi2)
         deltaphiatmax = np.tile(0, q.shape)
 
-
     elif J is not None and r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
 
         ximin, ximax = xiresonances(J, r, q, chi1, chi2)
@@ -1371,7 +1365,7 @@ def anglesresonances(J = None, r = None, xi = None, q = None, chi1 = None, chi2 
         J = np.atleast_1d(J)
         S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, q)
-        deltaphiatmin = np.where(J>np.abs(L-S1-S2), 0, np.pi)
+        deltaphiatmin = np.where(J > np.abs(L-S1-S2), 0, np.pi)
 
         Satmax = Satresonance(J=J, r=r, xi=ximax, q=q, chi1=chi1, chi2=chi2)
         theta1atmax = eval_theta1(Satmax, J, r, ximax, q, chi1, chi2)
@@ -1424,7 +1418,7 @@ def xilimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
         ximin, ximax = xiresonances(J, r, q, chi1, chi2)
         # Check precondition
         ximin_cond, ximax_cond = xilimits_definition(q, chi1, chi2)
-        if (ximin>ximin_cond).all() and (ximax<ximax_cond).all():
+        if (ximin > ximin_cond).all() and (ximax < ximax_cond).all():
             pass
         else:
             if enforce:
@@ -1495,7 +1489,7 @@ def Slimits_LJ(J, r, q):
         Maximum value of the total spin S.
     """
 
-    L= eval_L(r, q)
+    L = eval_L(r, q)
     Smin = np.abs(J-L)
     Smax = J+L
 
@@ -1574,7 +1568,7 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
         Coefficient to the x^0 term in polynomial.
     """
 
-    kappa=np.atleast_1d(kappa)
+    kappa = np.atleast_1d(kappa)
     u = np.atleast_1d(u)
     xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
@@ -1600,7 +1594,6 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
     (S1 + -1 * S2) * (S1 + S2) * kappa * xi)
 
     return np.stack([coeff3, coeff2, coeff1, coeff0])
-
 
 
 def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
@@ -1637,7 +1630,6 @@ def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
     S3s: float
         Spurious root of the effective potential equation.
     """
-
 
     if precomputedroots is None:
 
@@ -1682,10 +1674,10 @@ def Slimits_plusminus(J, r, xi, q, chi1, chi2):
         Maximum value of the total spin S.
     """
 
-    Sminuss, Spluss, _= Ssroots(J, r, xi, q, chi1, chi2)
+    Sminuss, Spluss, _ = Ssroots(J, r, xi, q, chi1, chi2)
     with np.errstate(invalid='ignore'):
-        Smin=Sminuss**0.5
-        Smax=Spluss**0.5
+        Smin = Sminuss**0.5
+        Smax = Spluss**0.5
 
     return np.stack([Smin, Smax])
 
@@ -1723,7 +1715,6 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
         Magnitude of the total spin.
     """
 
-
     if q is None or chi1 is None or chi2 is None:
         raise TypeError("Please provide q, chi1, and chi2.")
 
@@ -1736,7 +1727,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
         pass # I don't need J
     elif J is not None and kappa is None:
         if r is None and u is not None:
-            r= eval_r(u=u, q=q)
+            r = eval_r(u=u, q=q)
         kappa = eval_kappa(J, r, q)
     else:
         raise TypeError("Please provide either J or kappa.")
@@ -1787,7 +1778,6 @@ def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False
         Maximum value of the total spin S.
     """
 
-
     if J is None and r is None and xi is None and q is not None and chi1 is not None and chi2 is not None:
         Smin, Smax = Slimits_S1S2(q, chi1, chi2)
 
@@ -1802,7 +1792,7 @@ def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False
         Smin, Smax = Slimits_plusminus(J, r, xi, q, chi1, chi2)
         # Check precondition
         Smin_cond, Smax_cond = Slimits_LJS1S2(J, r, q, chi1, chi2)
-        if (Smin>Smin_cond).all() and (Smax<Smax_cond).all():
+        if (Smin > Smin_cond).all() and (Smax < Smax_cond).all():
             pass
         else:
             if enforce:
@@ -1865,7 +1855,7 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 
     def _limits_check(testvalue, interval):
         """Check if a value is within a given interval"""
-        return np.logical_and(testvalue>=interval[0], testvalue<=interval[1])
+        return np.logical_and(testvalue >= interval[0], testvalue <= interval[1])
 
     Slim = Slimits(J, r, xi, q, chi1, chi2)
     Sbool = _limits_check(S, Slim)
@@ -1936,16 +1926,16 @@ def eval_xi(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=Non
 
     if theta1 is not None and theta2 is not None and S is None and varphi is None and J is None and r is None and q is not None and chi1 is not None and chi2 is not None:
 
-        theta1=np.atleast_1d(theta1)
-        theta2=np.atleast_1d(theta2)
+        theta1 = np.atleast_1d(theta1)
+        theta2 = np.atleast_1d(theta2)
         q = np.atleast_1d(q)
         S1, S2 = spinmags(q, chi1, chi2)
-        xi=(1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
+        xi = (1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
 
     elif theta1 is None and theta2 is None and S is not None and varphi is not None and J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
-        S=np.atleast_1d(S)
-        varphi=np.atleast_1d(varphi)
+        S = np.atleast_1d(S)
+        varphi = np.atleast_1d(varphi)
         J = np.atleast_1d(J)
         q = np.atleast_1d(q)
         S1, S2 = spinmags(q, chi1, chi2)
@@ -2070,12 +2060,11 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
         Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
     """
 
-
-    S=np.atleast_1d(S)
+    S = np.atleast_1d(S)
     J = np.atleast_1d(J)
     xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
-    cyclesign=np.atleast_1d(cyclesign)
+    cyclesign = np.atleast_1d(cyclesign)
 
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
@@ -2088,7 +2077,7 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
     * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -4 * L * q * S**2 * xi)
 
     # If cosvarphi is very close but slighly outside [-1,1], assume either -1 or 1.
-    cosvarphi= np.where(np.logical_and(np.abs(cosvarphi)>1, np.isclose(np.abs(cosvarphi), 1)), np.sign(cosvarphi), cosvarphi)
+    cosvarphi = np.where(np.logical_and(np.abs(cosvarphi) > 1, np.isclose(np.abs(cosvarphi), 1)), np.sign(cosvarphi), cosvarphi)
     varphi = - np.arccos(cosvarphi) * np.sign(cyclesign)
 
     return varphi
@@ -2125,14 +2114,14 @@ def eval_costheta1(S, J, r, xi, q, chi1, chi2):
         Cosine of the angle between orbital angular momentum and primary spin.
     """
 
-    S=np.atleast_1d(S)
+    S = np.atleast_1d(S)
     J = np.atleast_1d(J)
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
 
-    costheta1= ( ((J**2-L**2-S**2)/L) - (2*q*xi)/(1+q) )/(2*(1-q)*S1)
+    costheta1 = ( ((J**2-L**2-S**2)/L) - (2*q*xi)/(1+q) )/(2*(1-q)*S1)
 
     return costheta1
 
@@ -2168,7 +2157,7 @@ def eval_theta1(S, J, r, xi, q, chi1, chi2):
         Angle between orbital angular momentum and primary spin.
     """
 
-    costheta1=eval_costheta1(S, J, r, xi, q, chi1, chi2)
+    costheta1 = eval_costheta1(S, J, r, xi, q, chi1, chi2)
     theta1 = np.arccos(costheta1)
 
     return theta1
@@ -2205,14 +2194,14 @@ def eval_costheta2(S, J, r, xi, q, chi1, chi2):
         Cosine of the angle between orbital angular momentum and secondary spin.
     """
 
-    S=np.atleast_1d(S)
+    S = np.atleast_1d(S)
     J = np.atleast_1d(J)
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
 
-    costheta2= ( ((J**2-L**2-S**2)*(-q/L)) + (2*q*xi)/(1+q) )/(2*(1-q)*S2)
+    costheta2 = ( ((J**2-L**2-S**2)*(-q/L)) + (2*q*xi)/(1+q) )/(2*(1-q)*S2)
 
     return costheta2
 
@@ -2248,7 +2237,7 @@ def eval_theta2(S, J, r, xi, q, chi1, chi2):
         Angle between orbital angular momentum and secondary spin.
     """
 
-    costheta2=eval_costheta2(S, J, r, xi, q, chi1, chi2)
+    costheta2 = eval_costheta2(S, J, r, xi, q, chi1, chi2)
     theta2 = np.arccos(costheta2)
 
     return theta2
@@ -2285,16 +2274,15 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi
         Cosine of the angle between the two spins.
     """
 
-
     if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and q is None and chi1 is None and chi2 is None:
 
         costheta12 = np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2)
 
     elif theta1 is None and theta2 is None and deltaphi is None and S is not None and q is not None and chi1 is not None and chi2 is not None:
 
-        S=np.atleast_1d(S)
+        S = np.atleast_1d(S)
         S1, S2 = spinmags(q, chi1, chi2)
-        costheta12=(S**2-S1**2-S2**2)/(2*S1*S2)
+        costheta12 = (S**2-S1**2-S2**2)/(2*S1*S2)
 
     else:
         raise TypeError("Provide either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).")
@@ -2327,7 +2315,7 @@ def eval_theta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=N
         Angle between the two spins.
     """
 
-    costheta12=eval_costheta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi, S=S, q=q, chi1=chi1, chi2=chi2)
+    costheta12 = eval_costheta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi, S=S, q=q, chi1=chi1, chi2=chi2)
     theta12 = np.arccos(costheta12)
 
     return theta12
@@ -2367,11 +2355,11 @@ def eval_cosdeltaphi(S, J, r, xi, q, chi1, chi2):
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
-    costheta1=eval_costheta1(S, J, r, xi, q, chi1, chi2)
-    costheta2=eval_costheta2(S, J, r, xi, q, chi1, chi2)
-    costheta12=eval_costheta12(S=S, q=q, chi1=chi1, chi2=chi2)
+    costheta1 = eval_costheta1(S, J, r, xi, q, chi1, chi2)
+    costheta2 = eval_costheta2(S, J, r, xi, q, chi1, chi2)
+    costheta12 = eval_costheta12(S=S, q=q, chi1=chi1, chi2=chi2)
 
-    cosdeltaphi= (costheta12 - costheta1*costheta2)/((1-costheta1**2)*(1-costheta2**2))**0.5
+    cosdeltaphi = (costheta12 - costheta1*costheta2)/((1-costheta1**2)*(1-costheta2**2))**0.5
 
     return cosdeltaphi
 
@@ -2409,9 +2397,8 @@ def eval_deltaphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
         Angle between the projections of the two spins onto the orbital plane.
     """
 
-
     cyclesign = np.atleast_1d(cyclesign)
-    cosdeltaphi=eval_cosdeltaphi(S, J, r, xi, q, chi1, chi2)
+    cosdeltaphi = eval_cosdeltaphi(S, J, r, xi, q, chi1, chi2)
     deltaphi = -np.sign(cyclesign)*np.arccos(cosdeltaphi)
 
     return deltaphi
@@ -2446,12 +2433,12 @@ def eval_costhetaL(S, J, r, q, chi1, chi2):
         Cosine of the angle betwen orbital angular momentum and total angular momentum.
     """
 
-    S=np.atleast_1d(S)
+    S = np.atleast_1d(S)
     J = np.atleast_1d(J)
 
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
-    costhetaL=(J**2+L**2-S**2)/(2*J*L)
+    costhetaL = (J**2+L**2-S**2)/(2*J*L)
 
     return costhetaL
 
@@ -2485,11 +2472,10 @@ def eval_thetaL(S, J, r, q, chi1, chi2):
         Angle betwen orbital angular momentum and total angular momentum.
     """
 
-    costhetaL=eval_costhetaL(S, J, r, q, chi1, chi2)
-    thetaL=np.arccos(costhetaL)
+    costhetaL = eval_costhetaL(S, J, r, q, chi1, chi2)
+    thetaL = np.arccos(costhetaL)
 
     return thetaL
-
 
 
 def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, chi1=None, chi2=None):
@@ -2527,20 +2513,20 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
 
     if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
-        theta1=np.atleast_1d(theta1)
-        theta2=np.atleast_1d(theta2)
-        deltaphi=np.atleast_1d(deltaphi)
+        theta1 = np.atleast_1d(theta1)
+        theta2 = np.atleast_1d(theta2)
+        deltaphi = np.atleast_1d(deltaphi)
         q = np.atleast_1d(q)
 
         S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, q)
-        S=eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
+        S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
 
-        J=(L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
+        J = (L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
 
     elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and r is not None and q is not None and chi1 is None and chi2 is None:
 
-        kappa=np.atleast_1d(kappa)
+        kappa = np.atleast_1d(kappa)
 
         L = eval_L(r, q)
 
@@ -2581,13 +2567,13 @@ def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
         Magnitude of the total spin.
     """
 
-    theta1=np.atleast_1d(theta1)
-    theta2=np.atleast_1d(theta2)
-    deltaphi=np.atleast_1d(deltaphi)
+    theta1 = np.atleast_1d(theta1)
+    theta2 = np.atleast_1d(theta2)
+    deltaphi = np.atleast_1d(deltaphi)
 
     S1, S2 = spinmags(q, chi1, chi2)
 
-    S=(S1**2+S2**2+2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
+    S = (S1**2 + S2**2 + 2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
 
     return S
 
@@ -2652,7 +2638,6 @@ def eval_u(r, q):
     return u
 
 
-
 def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital-separation limit of the regularized momentum kappa.
@@ -2680,8 +2665,8 @@ def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
         Asymptotic value of the regularized momentum kappa.
     """
 
-    theta1inf=np.atleast_1d(theta1inf)
-    theta2inf=np.atleast_1d(theta2inf)
+    theta1inf = np.atleast_1d(theta1inf)
+    theta2inf = np.atleast_1d(theta2inf)
 
     S1, S2 = spinmags(q, chi1, chi2)
     kappainf = S1*np.cos(theta1inf) + S2*np.cos(theta2inf)
@@ -2717,7 +2702,7 @@ def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
         Cosine of the asymptotic angle between orbital angular momentum and primary spin.
     """
 
-    kappainf=np.atleast_1d(kappainf)
+    kappainf = np.atleast_1d(kappainf)
     xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
 
@@ -2755,7 +2740,6 @@ def eval_theta1inf(kappainf, xi, q, chi1, chi2):
         Asymptotic value of the angle between orbital angular momentum and primary spin.
     """
 
-
     costheta1inf = eval_costheta1inf(kappainf, xi, q, chi1, chi2)
     theta1inf = np.arccos(costheta1inf)
 
@@ -2790,7 +2774,7 @@ def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
         Asymptotic value of the angle between orbital angular momentum and primary spin.
     """
 
-    kappainf=np.atleast_1d(kappainf)
+    kappainf = np.atleast_1d(kappainf)
     xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
 
@@ -2867,19 +2851,18 @@ def morphology(J, r, xi, q, chi1, chi2, simpler=False):
 
     Smin, Smax = Slimits_plusminus(J, r, xi, q, chi1, chi2)
     # Pairs of booleans based on the values of deltaphi at S- and S+
-    status = np.transpose([eval_cosdeltaphi(Smin, J, r, xi, q, chi1, chi2)>0, eval_cosdeltaphi(Smax, J, r, xi, q, chi1, chi2)>0])
+    status = np.transpose([eval_cosdeltaphi(Smin, J, r, xi, q, chi1, chi2) > 0, eval_cosdeltaphi(Smax, J, r, xi, q, chi1, chi2) > 0])
     # Map to labels
     dictlabel = {(False, False):"Lpi", (True, True):"L0", (False, True):"C-", (True, False):"C+"}
     # Subsitute pairs with labels
     morphs = np.zeros(Smin.shape)
     for k, v in dictlabel.items():
-        morphs=np.where((status == k).all(axis=1), v, morphs)
+        morphs = np.where((status == k).all(axis=1), v, morphs)
     # Simplifies output, only one circulating morphology
     if simpler:
         morphs = np.where( np.logical_or(morphs == 'C+', morphs == 'C-'), 'C', morphs)
 
     return morphs
-
 
 
 def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None):
@@ -2976,9 +2959,9 @@ def conserved_to_angles(S, J, r, xi, q, chi1, chi2, cyclesign=+1):
         Angle between the projections of the two spins onto the orbital plane.
     """
 
-    theta1=eval_theta1(S, J, r, xi, q, chi1, chi2)
-    theta2=eval_theta2(S, J, r, xi, q, chi1, chi2)
-    deltaphi=eval_deltaphi(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
+    theta1 = eval_theta1(S, J, r, xi, q, chi1, chi2)
+    theta2 = eval_theta2(S, J, r, xi, q, chi1, chi2)
+    deltaphi = eval_deltaphi(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
 
     return np.stack([theta1, theta2, deltaphi])
 
@@ -3026,10 +3009,9 @@ def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=
         Sign (either +1 or -1) to cover the two halves of a precesion cycle.
     """
 
-
-    S=eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
-    J=eval_J(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
-    xi=eval_xi(theta1=theta1, theta2=theta2, q=q, chi1=chi1, chi2=chi2)
+    S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
+    J = eval_J(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
+    xi = eval_xi(theta1=theta1, theta2=theta2, q=q, chi1=chi1, chi2=chi2)
 
     if full_output:
         cyclesign = eval_cyclesign(deltaphi=deltaphi)
@@ -3070,7 +3052,7 @@ def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     """
 
     kappainf = eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
-    xi=eval_xi(theta1=theta1inf, theta2=theta2inf, q=q, chi1=chi1, chi2=chi2)
+    xi = eval_xi(theta1=theta1inf, theta2=theta2inf, q=q, chi1=chi1, chi2=chi2)
 
     return np.stack([kappainf, xi])
 
@@ -3146,7 +3128,6 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False):
     cyclesign: integer
         Sign (either +1 or -1) to cover the two halves of a precesion cycle.
     """
-
 
     Lvec = np.atleast_2d(Lvec)
     S1vec = np.atleast_2d(S1vec)
@@ -3255,8 +3236,7 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
         Cartesian vector of the secondary spin.
     """
 
-
-    S=np.atleast_1d(S)
+    S = np.atleast_1d(S)
     J = np.atleast_1d(J)
 
     L = eval_L(r, q)
@@ -3470,7 +3450,7 @@ def conserved_to_inertial(S, J, r, xi, q, chi1, chi2, cyclesign=1):
     """
 
     Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
-    phiL= eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
+    phiL = eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
 
     Lvec = rotate_zaxis(Lvec, phiL)
     S1vec = rotate_zaxis(S1vec, phiL)
@@ -3514,10 +3494,9 @@ def angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2):
         Cartesian vector of the secondary spin.
     """
 
-
-    deltaphi=np.atleast_1d(deltaphi)
+    deltaphi = np.atleast_1d(deltaphi)
     S, J, xi, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
-    Lvec, S1vec, S2vec= conserved_to_inertial(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
+    Lvec, S1vec, S2vec = conserved_to_inertial(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
 
     return np.stack([Lvec, S1vec, S2vec])
 
@@ -3547,10 +3526,10 @@ def derS_prefactor(r, xi, q):
         Prefactor in the dSdt equation.
     """
 
-    r=np.atleast_1d(r)
+    r = np.atleast_1d(r)
     xi = np.atleast_1d(xi)
 
-    eta=eval_eta(q)
+    eta = eval_eta(q)
     mathcalA = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
 
     return mathcalA
@@ -3628,7 +3607,7 @@ def dSsdt(S, J, r, xi, q, chi1, chi2, cyclesign=1):
         Time derivative of the squared total spin.
     """
 
-    cyclesign =np.atleast_1d(cyclesign)
+    cyclesign = np.atleast_1d(cyclesign)
 
     return cyclesign*dSsdtsquared(S, J, r, xi, q, chi1, chi2)**0.5
 
@@ -3690,9 +3669,9 @@ def elliptic_parameter(Sminuss, Spluss, S3s):
         Parameter of elliptic function(s).
     """
 
-    Sminuss=np.atleast_1d(Sminuss)
-    Spluss=np.atleast_1d(Spluss)
-    S3s=np.atleast_1d(S3s)
+    Sminuss = np.atleast_1d(Sminuss)
+    Spluss = np.atleast_1d(Spluss)
+    S3s = np.atleast_1d(S3s)
 
     m = (Spluss-Sminuss)/(Spluss-S3s)
 
@@ -3722,9 +3701,9 @@ def elliptic_amplitude(S, Sminuss, Spluss):
         Amplitude of elliptic function(s).
     """
 
-    S=np.atleast_1d(S)
-    Sminuss=np.atleast_1d(Sminuss)
-    Spluss=np.atleast_1d(Spluss)
+    S = np.atleast_1d(S)
+    Sminuss = np.atleast_1d(Sminuss)
+    Spluss = np.atleast_1d(Spluss)
 
     phi = np.arccos( ( (S**2 - Sminuss) / (Spluss - Sminuss) )**0.5 )
 
@@ -3764,7 +3743,7 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
     L = np.atleast_1d(L)
 
     #Note: sign here is not cyclesign!
-    n = (Spluss - Sminuss)/(Spluss- (J +np.sign(sign)*L)**2)
+    n = (Spluss - Sminuss)/(Spluss - (J + np.sign(sign)*L)**2)
 
     return n
 
@@ -3796,16 +3775,16 @@ def time_normalization(Spluss, S3s, r, xi, q):
         Prefactor in the tau equation.
     """
 
-    Spluss=np.atleast_1d(Spluss)
-    S3s=np.atleast_1d(S3s)
+    Spluss = np.atleast_1d(Spluss)
+    S3s = np.atleast_1d(S3s)
 
-    mathcalA= derS_prefactor(r, xi, q)
+    mathcalA = derS_prefactor(r, xi, q)
     mathcalT = 2/(mathcalA*(Spluss-S3s)**0.5)
 
     return mathcalT
 
 
-def eval_tau(J, r, xi, q, chi1, chi2, precomputedroots = None):
+def eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=None):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
 
@@ -3878,14 +3857,14 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
         Magnitude of the total spin.
     """
 
-    t=np.atleast_1d(t)
+    t = np.atleast_1d(t)
     Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
     mathcalT = time_normalization(Spluss, S3s, r, xi, q)
     m = elliptic_parameter(Sminuss, Spluss, S3s)
 
     sn, _, dn, _ = scipy.special.ellipj(t.T/mathcalT, m)
-    Ssq = Sminuss + (Spluss-Sminuss)*((Sminuss-S3s)/(Spluss-S3s)) *(sn/dn)**2
-    S=Ssq.T**0.5
+    Ssq = Sminuss + (Spluss-Sminuss)*((Sminuss-S3s)/(Spluss-S3s)) * (sn/dn)**2
+    S = Ssq.T**0.5
 
     return S
 
@@ -3925,8 +3904,7 @@ def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
         Time.
     """
 
-
-    S=np.atleast_1d(S)
+    S = np.atleast_1d(S)
 
     Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
 
@@ -3937,6 +3915,7 @@ def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
 
     return t
+
 
 def Ssampling(J, r, xi, q, chi1, chi2, N=1):
     """
@@ -4007,12 +3986,12 @@ def Ssav_mfactor(m):
         Coefficient.
     """
 
-    m=np.atleast_1d(m)
+    m = np.atleast_1d(m)
     # The limit of the Ssav coefficient as m->0 is finite and equal to 1/2.
     # This is implementation is numerically stable up to m~1e-10.
     # For m=1e-7, the analytic m=0 limit is returned with a precision of 1e-9, which is enough.
-    m=np.maximum(1e-7, m)
-    coeff = (1- scipy.special.ellipe(m)/scipy.special.ellipk(m))/m
+    m = np.maximum(1e-7, m)
+    coeff = (1-scipy.special.ellipe(m)/scipy.special.ellipk(m))/m
 
     return coeff
 
@@ -4162,24 +4141,24 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
         Right-hand side.
     """
 
-    if u==0:
+    if u == 0:
        # In this case use analytic result
        theta1inf, theta2inf = asymptotic_to_angles(kappa, xi, q, chi1, chi2)
        Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
 
-        coeffs= Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
-        coeffs= np.squeeze(coeffs)
+        coeffs = Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
+        coeffs = np.squeeze(coeffs)
 
         # The first coefficient is tiny, 10^-100 small than the others. This is in practice a 2nd order polynomial
-        if np.abs(coeffs[0])< 10**-100 * np.abs(np.mean(coeffs[1:])):
+        if np.abs(coeffs[0]) < 10**-100 * np.abs(np.mean(coeffs[1:])):
             warnings.warn("Sanitizing RHS output; solving quadratic. [rhs_precav].", Warning)
-            sols=np.roots(coeffs[1:])
+            sols = np.roots(coeffs[1:])
             Sminuss, Spluss = sols
             Ssav = np.mean(np.real([Sminuss, Spluss]))
 
         else:
-            sols=np.roots(coeffs)
+            sols = np.roots(coeffs)
             S3s, Sminuss, Spluss = np.squeeze(np.sort_complex(sols))
 
             # Sminus and Splus are complex. This can happen if the binary is very close to a spin-orbit resonance
@@ -4227,13 +4206,12 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
         Regularized angular momentum (J^2-L^2)/(2L).
     """
 
-
     kappainitial = np.atleast_1d(kappainitial)
     uinitial = np.atleast_1d(uinitial)
     ufinal = np.atleast_1d(ufinal)
 
     xi = np.atleast_1d(xi)
-    q= np.atleast_1d(q)
+    q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
@@ -4303,19 +4281,17 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         Set of outputs.
     """
 
-
     # Substitute None inputs with arrays of Nones
     inputs = [theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
         else:
-            if k == 6 or k ==7: # Either u or r
-                inputs[k]= np.atleast_2d(inputs[k])
+            if k == 6 or k == 7: # Either u or r
+                inputs[k] = np.atleast_2d(inputs[k])
             else: #Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
     theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2 = inputs
-
 
     def _compute(theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2):
 
@@ -4331,10 +4307,10 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         else:
             raise TypeError("Please provide either r or u. Use np.inf for infinity.")
 
-        assert np.sum(u==0)<=1 and np.sum(u[1:-1]==0)==0, "There can only be one r=np.inf location, either at the beginning or at the end."
+        assert np.sum(u == 0) <= 1 and np.sum(u[1:-1] == 0) == 0, "There can only be one r=np.inf location, either at the beginning or at the end."
 
         # Start from r=infinity
-        if u[0]==0:
+        if u[0] == 0:
 
             if theta1 is not None and theta2 is not None and S is None and J is None and kappa is None and xi is None:
                 kappa, xi = angles_to_asymptotic(theta1, theta2, q, chi1, chi2)
@@ -4348,7 +4324,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
             # Enforce limits
             kappainfmin,kappainfmax = kappainflimits(xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
-            assert kappa>kappainfmin and kappa<kappainfmax, "Unphysical initial conditions [inspiral_precav]."
+            assert kappa > kappainfmin and kappa < kappainfmax, "Unphysical initial conditions [inspiral_precav]."
 
         # Start from finite separations
         else:
@@ -4371,9 +4347,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
             # Enforce limits
             Jmin,Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
-            assert J>Jmin and J<Jmax, "Unphysical initial conditions [inspiral_precav]."
-
-
+            assert J > Jmin and J < Jmax, "Unphysical initial conditions [inspiral_precav]."
 
         # TODO: pass rtol and atol to integrator_precav
 
@@ -4381,11 +4355,11 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         ODEsolution = integrator_precav(kappa, u[0], u[-1], xi, q, chi1, chi2)
 
         # Evaluate the interpolant at the requested values of u
-        kappa=np.squeeze(ODEsolution.item().sol(u))
+        kappa = np.squeeze(ODEsolution.item().sol(u))
 
         # Select finite separations
-        rok = r[u!=0]
-        kappaok = kappa[u!=0]
+        rok = r[u != 0]
+        kappaok = kappa[u != 0]
 
         # Resample S and assign random sign to deltaphi
         J = eval_J(kappa=kappaok, r=rok, q=np.tile(q, rok.shape))
@@ -4396,14 +4370,14 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         deltaphi = deltaphi * np.random.choice([-1, 1], deltaphi.shape)
 
         # Integrating from infinite separation.
-        if u[0]==0:
+        if u[0] == 0:
             J = np.concatenate(([np.inf], J))
             S = np.concatenate(([np.nan], S))
             theta1 = np.concatenate((np.atleast_1d(theta1inf), theta1))
             theta2 = np.concatenate((np.atleast_1d(theta2inf), theta2))
             deltaphi = np.concatenate(([np.nan], deltaphi))
         # Integrating backwards to infinity
-        elif u[-1]==0:
+        elif u[-1] == 0:
             J = np.concatenate((J, [np.inf]))
             S = np.concatenate((S, [np.nan]))
             theta1inf, theta2inf = asymptotic_to_angles(kappa[-1], xi, q, chi1, chi2)
@@ -4429,12 +4403,12 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     wantoutputs = np.in1d(alloutputs, requested_outputs)
 
     # Store into a dictionary
-    outcome={}
+    outcome = {}
 
     for k, v in zip(alloutputs[wantoutputs], allresults[wantoutputs]):
         outcome[k] = np.squeeze(np.stack(v))
 
-        if k == 'xi' or k == 'q' or k =='chi1' or k =='chi2': # Constants of motion
+        if k == 'xi' or k == 'q' or k == 'chi1' or k == 'chi2': # Constants of motion
             outcome[k] = np.atleast_1d(outcome[k])
         else:
             outcome[k] = np.atleast_2d(outcome[k])
@@ -4496,7 +4470,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
         # Compute the numerator explicitely
         def _integrand(S, Sminuss, Spluss, S3s, *sargs):
             # This is proportional to dSdt
-            dSdt_prop = (-(S**2-Spluss) * (S**2-Sminuss) * (S**2-S3s))**0.5 /S
+            dSdt_prop = (-(S**2-Spluss) * (S**2-Sminuss) * (S**2-S3s))**0.5 / S
             return func(S, *sargs) / dSdt_prop
 
         def _compute(Sminuss, Spluss, S3s, *sargs):
@@ -4516,10 +4490,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
 
     return func_av
 
-
-
 #TODO Add updown endpoint.
-
 #TODO Add limits of the resonances at small separations from the endpoint paper
 
 def rupdown(q, chi1, chi2):
@@ -4587,10 +4558,10 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     q = np.atleast_1d(q)
 
     # These are all the valid input flags
-    uulabels=np.array(['uu', 'up-up', 'upup', '++'])
-    udlabels=np.array(['ud', 'up-down', 'updown', '+-'])
-    dulabels=np.array(['du', 'down-up', 'downup', '-+'])
-    ddlabels=np.array(['dd', 'down-down', 'downdown', '--'])
+    uulabels = np.array(['uu', 'up-up', 'upup', '++'])
+    udlabels = np.array(['ud', 'up-down', 'updown', '+-'])
+    dulabels = np.array(['du', 'down-up', 'downup', '-+'])
+    ddlabels = np.array(['dd', 'down-down', 'downdown', '--'])
 
     assert np.isin(which, np.concatenate([uulabels, udlabels, dulabels, ddlabels])).all(), "Set `which` flag to either uu, ud, du, or dd."
 
@@ -4698,45 +4669,45 @@ def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
     ct12 = np.dot(S1h, S2h)
 
     # Spin precession for S1
-    Omega1= eta*v**5*(2+3*q/2)*Lh  \
+    Omega1 = eta*v**5*(2+3*q/2)*Lh  \
             + v**6*(S2*S2h-3*S2*ct2*Lh-3*q*S1*ct1*Lh)/2
     dS1hdt = np.cross(Omega1, S1h)
 
     # Spin precession for S2
-    Omega2= eta*v**5*(2+3/(2*q))*Lh  \
+    Omega2 = eta*v**5*(2+3/(2*q))*Lh  \
             + v**6*(S1*S1h-3*S1*ct1*Lh-3*S2*ct2*Lh/q)/2
     dS2hdt = np.cross(Omega2, S2h)
 
     # Conservation of angular momentum
-    dLhdt= -v*(S1*dS1hdt+S2*dS2hdt)/eta
+    dLhdt = -v*(S1*dS1hdt+S2*dS2hdt)/eta
 
     # Radiation reaction
     if quadrupole_formula: # Use to switch off higher-order terms
-        dvdt= (32*eta*v**9/5)
+        dvdt = (32*eta*v**9/5)
     else:
-        dvdt= (32*eta*v**9/5)* ( 1                                  \
-            - v**2* (743+924*eta)/336                               \
-            + v**3* (4*np.pi                                        \
+        dvdt = (32*eta*v**9/5) * ( 1                                  \
+            - v**2 * (743+924*eta)/336                               \
+            + v**3 * (4*np.pi                                        \
                      - chi1*ct1*(113*m1**2/12 + 25*eta/4 )   \
                      - chi2*ct2*(113*m2**2/12 + 25*eta/4 ))  \
-            + v**4* (34103/18144 + 13661*eta/2016 + 59*eta**2/18    \
-                     + eta*chi1*chi2* (721*ct1*ct2 - 247*ct12) /48  \
+            + v**4 * (34103/18144 + 13661*eta/2016 + 59*eta**2/18    \
+                     + eta*chi1*chi2 * (721*ct1*ct2 - 247*ct12)/48  \
                      + ((m1*chi1)**2 * (719*ct1**2-233))/96       \
                      + ((m2*chi2)**2 * (719*ct2**2-233))/96)      \
-            - v**5* np.pi*(4159+15876*eta)/672                      \
-            + v**6* (16447322263/139708800 + 16*np.pi**2/3          \
-                     -1712*(0.5772156649+np.log(4*v))/105           \
-                     +(451*np.pi**2/48 - 56198689/217728)*eta       \
-                     +541*eta**2/896 - 5605*eta**3/2592)            \
-            + v**7* np.pi*( -4415/4032 + 358675*eta/6048            \
+            - v**5 * np.pi*(4159+15876*eta)/672                      \
+            + v**6 * (16447322263/139708800 + 16*np.pi**2/3          \
+                     - 1712*(0.5772156649+np.log(4*v))/105           \
+                     + (451*np.pi**2/48 - 56198689/217728)*eta       \
+                     + 541*eta**2/896 - 5605*eta**3/2592)            \
+            + v**7 * np.pi*( -4415/4032 + 358675*eta/6048            \
                      + 91495*eta**2/1512)                           \
             )
 
     # Integrate in v, not in time
-    dtdv=1./dvdt
-    dLhdv=dLhdt*dtdv
-    dS1hdv=dS1hdt*dtdv
-    dS2hdv=dS2hdt*dtdv
+    dtdv = 1./dvdt
+    dLhdv = dLhdt*dtdv
+    dS1hdv = dS1hdt*dtdv
+    dS2hdv = dS2hdt*dtdv
 
     # Pack outputs
     return np.concatenate([dLhdv, dS1hdv, dS2hdv, [dtdv]])
@@ -4779,12 +4750,12 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
         Solution of the ODE. Key method is .sol(t).
     """
 
-    Lhinitial=np.atleast_2d(Lhinitial)
-    S1hinitial=np.atleast_2d(S1hinitial)
-    S2hinitial=np.atleast_2d(S2hinitial)
-    vinitial= np.atleast_1d(vinitial)
-    vfinal=np.atleast_1d(vfinal)
-    q= np.atleast_1d(q)
+    Lhinitial = np.atleast_2d(Lhinitial)
+    S1hinitial = np.atleast_2d(S1hinitial)
+    S2hinitial = np.atleast_2d(S2hinitial)
+    vinitial = np.atleast_1d(vinitial)
+    vfinal = np.atleast_1d(vfinal)
+    q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
@@ -4799,11 +4770,11 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
         ic = np.concatenate([Lhinitial, S1hinitial, S2hinitial, [0]])
 
         # Compute these quantities here instead of inside the RHS for speed
-        m1=eval_m1(q).item()
-        m2=eval_m2(q).item()
-        S1= eval_S1(q, chi1).item()
-        S2= eval_S2(q, chi2).item()
-        eta=eval_eta(q).item()
+        m1 = eval_m1(q).item()
+        m2 = eval_m2(q).item()
+        S1 = eval_S1(q, chi1).item()
+        S2 = eval_S2(q, chi2).item()
+        eta = eval_eta(q).item()
 
         # Integration
         #t0=time.time()
@@ -4883,12 +4854,11 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
         else:
-            if k == 4 or k == 5 or k== 6 or k ==9 or k==10: # Lh, S1h, S2h, u, or r
-                inputs[k]= np.atleast_2d(inputs[k])
+            if k == 4 or k == 5 or k == 6 or k == 9 or k == 10: # Lh, S1h, S2h, u, or r
+                inputs[k] = np.atleast_2d(inputs[k])
             else: #Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
     theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, xi, q, chi1, chi2 = inputs
-
 
     def _compute(theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, xi, q, chi1, chi2):
 
@@ -4903,7 +4873,6 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
             r = eval_r(u=u, q=np.tile(q, u.shape)  )
         else:
             raise TypeError("Please provide either r or u.")
-
 
         # User provides Lh, S1h, and S2h
         if Lh is not None and S1h is not None and S2h is not None and theta1 is None and theta2 is None and deltaphi is None and S is None and J is None and kappa is None and xi is None:
@@ -4932,7 +4901,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         S1h = S1h/np.linalg.norm(S1h)
         S2h = S2h/np.linalg.norm(S2h)
 
-        v=eval_v(r)
+        v = eval_v(r)
 
         # Integration
         ODEsolution = integrator_orbav(Lh, S1h, S2h, v[0], v[-1], q, chi1, chi2, quadrupole_formula=quadrupole_formula)
@@ -4948,9 +4917,9 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
 
         S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, np.tile(q, r.shape) )
-        Lvec= (L*Lh.T).T
-        S1vec= S1*S1h
-        S2vec= S2*S2h
+        Lvec = (L*Lh.T).T
+        S1vec = S1*S1h
+        S2vec = S2*S2h
 
         theta1, theta2, deltaphi = vectors_to_angles(Lvec, S1vec, S2vec)
         S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec, q)
@@ -4972,11 +4941,11 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
     wantoutputs = np.in1d(alloutputs, requested_outputs)
 
     # Store into a dictionary
-    outcome={}
+    outcome = {}
     for k, v in zip(alloutputs[wantoutputs], allresults[wantoutputs]):
         outcome[k] = np.squeeze(np.stack(v))
 
-        if k == 'q' or k =='chi1' or k =='chi2': # Constants of motion
+        if k == 'q' or k == 'chi1' or k == 'chi2': # Constants of motion
             outcome[k] = np.atleast_1d(outcome[k])
         else:
             outcome[k] = np.atleast_2d(outcome[k])
@@ -5036,7 +5005,6 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         Set of outputs.
     """
 
-
     # Outputs available in both orbit-averaged and precession-averaged evolutions
     alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'xi', 'q', 'chi1', 'chi2'])
     if requested_outputs is None:
@@ -5050,8 +5018,8 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
         else:
-            if k == 6 or k ==8: # Either u or r
-                inputs[k]= np.atleast_2d(inputs[k])
+            if k == 6 or k == 8: # Either u or r
+                inputs[k] = np.atleast_2d(inputs[k])
             else: #Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
     theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, xi, q, chi1, chi2 = inputs
@@ -5066,13 +5034,10 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         backwards = ismonotonic(r, "<=")
 
         assert np.logical_or(forwards, backwards), "r must be monotonic"
+        assert rswitch > np.min(r) and rswitch < np.max(r), "The switching condition must to be within the range spanned by r or u."
 
-
-        assert rswitch>np.min(r) and rswitch<np.max(r), "The switching condition must to be within the range spanned by r or u."
-
-
-        rlarge = r[r>=rswitch]
-        rsmall = r[r<rswitch]
+        rlarge = r[r >= rswitch]
+        rsmall = r[r < rswitch]
 
         # Integrating forwards: precession average first, then orbit average
         if forwards:
@@ -5087,7 +5052,6 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
             rfirst = np.append(rsmall, rswitch)
             inspiral_second = inspiral_precav
             rsecond = np.append(rswitch, rlarge)
-
 
         # First chunk of the evolution
         evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, S=S, J=J, kappa=kappa, r=rfirst, xi=xi, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs)
@@ -5114,7 +5078,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         return evolution_full
 
     allresults = list(map(_compute, theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, xi, q, chi1, chi2))
-    evolution_full={}
+    evolution_full = {}
     for k in allresults[0].keys():
         evolution_full[k] = np.concatenate(list(evolution_full[k] for evolution_full in allresults))
 
@@ -5138,7 +5102,6 @@ def inspiral(*args, which=None, **kwargs):
 
     else:
         raise ValueError("`which` needs to be `precav`, `orbav` or `hybrid`.")
-
 
 
 def frequency_prefactor(J, r, xi, q, chi1, chi2):
@@ -5175,7 +5138,7 @@ def frequency_prefactor(J, r, xi, q, chi1, chi2):
     """
 
     J = np.atleast_1d(J)
-    xi =np.atleast_1d(xi)
+    xi  = np.atleast_1d(xi)
     q = np.atleast_1d(q)
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
@@ -5269,13 +5232,13 @@ def eval_OmegaL(S, J, r, xi, q, chi1, chi2):
         Precession frequency of L about J.
     """
 
-    S=np.atleast_1d(S)
+    S = np.atleast_1d(S)
     J = np.atleast_1d(J)
     L = eval_L(r, q)
 
     mathcalC0, mathcalCplus, mathcalCminus =  frequency_prefactor(J, r, xi, q, chi1, chi2)
 
-    OmegaL = mathcalC0* (1+ mathcalCplus/((J+L)**2 -S**2) + mathcalCminus/((J-L)**2 -S**2) )
+    OmegaL = mathcalC0 * (1 + mathcalCplus/((J+L)**2 - S**2) + mathcalCminus/((J-L)**2 - S**2) )
 
     return OmegaL
 
@@ -5366,7 +5329,7 @@ def eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
     mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
-    phiL = alpha/2 -np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi, m) + mathcalCplusprime*ellippi(nplus, phi, m)  + mathcalCminusprime*ellippi(nminus, phi, m))
+    phiL = alpha/2 - np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi, m) + mathcalCplusprime*ellippi(nplus, phi, m)  + mathcalCminusprime*ellippi(nminus, phi, m))
 
     return phiL
 
@@ -5400,8 +5363,8 @@ def chip_terms(theta1, theta2, q, chi1, chi2):
         Term in effective precessing spin chip.
     """
 
-    theta1=np.atleast_1d(theta1)
-    theta2=np.atleast_1d(theta2)
+    theta1 = np.atleast_1d(theta1)
+    theta2 = np.atleast_1d(theta2)
     q = np.atleast_1d(q)
 
     chipterm1 = chi1*np.sin(theta1)
@@ -5438,9 +5401,8 @@ def eval_chip_heuristic(theta1, theta2, q, chi1, chi2):
         Effective precessing spin chip.
     """
 
-
     term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
-    chip= np.maximum(term1, term2)
+    chip = np.maximum(term1, term2)
     return chip
 
 def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
@@ -5565,7 +5527,7 @@ def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, 
         raise TypeError("Please provide either (theta1,theta2,deltaphi) or (J,xi).")
 
     def _integrand(S, J, r, xi, q, chi1, chi2):
-        theta1, theta2, deltaphi=conserved_to_angles(S, J, r, xi, q, chi1, chi2)
+        theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
         chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
         return chip_integrand
 
@@ -5619,16 +5581,16 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, xi=None, 
         Effective precessing spin chip.
     """
 
-    if which =='heuristic':
+    if which == 'heuristic':
         chip = eval_chip_heuristic(theta1, theta2, q, chi1, chi2)
 
-    elif which =='generalized':
+    elif which == 'generalized':
         chip = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
 
-    elif which =='asymptotic':
+    elif which == 'asymptotic':
         chip = eval_chip_asymptotic(theta1, theta2, q, chi1, chi2)
 
-    elif which =='averaged':
+    elif which == 'averaged':
         chip = eval_chip_averaged(theta1=theta1, theta2=theta2, deltaphi=deltaphi, J=J, r=r, xi=xi, q=q, chi1=chi1, chi2=chi2, method='quadrature', Nsamples=1e4)
 
     else:
@@ -5671,18 +5633,18 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_ms
         Binary separation.
     """
 
-    theta1=np.atleast_1d(theta1)
-    theta2=np.atleast_1d(theta2)
-    f=np.atleast_1d(f)
+    theta1 = np.atleast_1d(theta1)
+    theta2 = np.atleast_1d(theta2)
+    f = np.atleast_1d(f)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
-    M_msun=np.atleast_1d(M_msun)
+    M_msun = np.atleast_1d(M_msun)
 
     # Convert GW frequency in hz to orbital velocity in natural units.
     # Prefactor is Msun*G/c^3/s with values of the constants as given by Mathematica:
     # https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
     # Factor of pi and not 2pi because of f is the GW frequency while omega is the orbital angular velocity
-    omega = 4.93e-6* M_msun * np.pi * f
+    omega = 4.93e-6 * M_msun * np.pi * f
 
     m1, m2 = masses(q)
     eta = eval_eta(q)
@@ -5692,8 +5654,8 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_ms
     # Eq. 4.13, Kidder 1995. gr-qc/9506022
     r = omega**(-2/3)*(1 \
             - (1/3)*(3-eta)*omega**(2/3)  \
-            - (1/3)* ( chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))*omega \
-            + ( eta*(19/4 + eta/9) -eta*chi1*chi2/2 * (ct12 - 3*ct1*ct2 ))*omega**(4/3)\
+            - (1/3)*( chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))*omega \
+            + ( eta*(19/4 + eta/9) - eta*chi1*chi2/2 * (ct12 - 3*ct1*ct2 ))*omega**(4/3)\
             )
     return r
 
@@ -5732,12 +5694,12 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
         Binary separation.
     """
 
-    theta1=np.atleast_1d(theta1)
-    theta2=np.atleast_1d(theta2)
-    r=np.atleast_1d(r)
+    theta1 = np.atleast_1d(theta1)
+    theta2 = np.atleast_1d(theta2)
+    r = np.atleast_1d(r)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
-    M_msun=np.atleast_1d(M_msun)
+    M_msun = np.atleast_1d(M_msun)
 
     m1, m2 = masses(q)
     eta = eval_eta(q)
@@ -5755,7 +5717,7 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     # Prefactor is Msun*G/c^3/s with values of the constants as given by Mathematica:
     # https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
     # Factor of pi and not 2pi because of f is the GW frequency while omega is the orbital angular velocity
-    f = np.sqrt(omegasquared) / (4.93e-6* M_msun * np.pi)
+    f = np.sqrt(omegasquared) / (4.93e-6 * M_msun * np.pi)
 
     return f
 
