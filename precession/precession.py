@@ -251,7 +251,7 @@ def ismonotonic(vec, which):
         raise ValueError("`which` needs to be one of the following: `>`, `>=`, `<`, `<=`.")
 
 
-#### Definitions ####
+# Definitions
 
 def eval_m1(q):
     """
@@ -561,7 +561,7 @@ def eval_r(L=None, u=None, q=None):
     return r
 
 
-#### Limits ####
+# Limits
 
 def Jlimits_LS1S2(r, q, chi1, chi2):
     """
@@ -1887,7 +1887,7 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     return check
 
 
-#### Evaluations and conversions ####
+# Evaluations and conversions
 
 def eval_xi(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
     """
@@ -3502,7 +3502,7 @@ def angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2):
     return np.stack([Lvec, S1vec, S2vec])
 
 
-#### Precessional timescale dynamics ####
+# Precessional timescale dynamics
 
 def derS_prefactor(r, xi, q):
     """
@@ -4111,7 +4111,7 @@ def Ssavinf(theta1inf, theta2inf, q, chi1, chi2):
     return Ssavinf
 
 
-#### Precession-averaged evolution ####
+# Precession-averaged evolution
 
 def rhs_precav(u, kappa, xi, q, chi1, chi2):
     """
@@ -4616,7 +4616,7 @@ def widenutation(q, chi1, chi2):
 
 # TODO: write function with values of J and xi where wide nutation happens
 
-#### Orbit averaged things ####
+# Orbit averaged things
 
 # TODO: replace quadrupole_formula flag with parameter to select a given PN order. Update docstrings when you do it
 def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula=False):
