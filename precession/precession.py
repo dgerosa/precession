@@ -6530,15 +6530,15 @@ if __name__ == '__main__':
 
 
     # ### TEST SANITIZER #####
-    r = [10.0, np.inf]
-    theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
-
-    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
-
-    Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
-    J=Jmax-1e-20
-    result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
-    print(result['kappa'])
+    # r = [10.0, np.inf]
+    # theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
+    #
+    # S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
+    #
+    # Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
+    # J=Jmax-1e-20
+    # result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
+    # print(result['kappa'])
 
     # while True:
     #     q=np.random.uniform(0.01,1)
@@ -6590,8 +6590,8 @@ if __name__ == '__main__':
 
     #print(eval_xi(theta1=None,theta2=None,S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2))
 
-
-    if precomputedroots is None:
-        Smin, Smax =....
-    else:
-        Smin, Smax = (precomputedroots[:-1])**0.5
+    #
+    # if precomputedroots is None:
+    #     Smin, Smax =....
+    # else:
+    #     Smin, Smax = (precomputedroots[:-1])**0.5
