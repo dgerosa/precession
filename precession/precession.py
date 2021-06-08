@@ -1640,6 +1640,8 @@ def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
         return np.stack([Sminuss, Spluss, S3s])
 
     else:
+        precomputedroots=np.array(precomputedroots)
+        assert precomputedroots.shape[0] == 3, "Shape of precomputedroots must be (3,N), i.e. Sminuss, Spluss, S3s. [Ssroots]"
         return precomputedroots
 
 
@@ -4418,7 +4420,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
     return outcome
 
-
+# TODO: Add an exmple to the docstrings
 def precession_average(J, r, xi, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4):
     """
     Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported.
@@ -5537,7 +5539,7 @@ def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, 
         chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
         return chip_integrand
 
-    chip = precession_average(J, r, xi, q, chi1, chi2, _integrand, J, r, xi, q, chi1, chi2, method=method, Nsamples=1e4)
+    chip = precession_average(J, r, xi, q, chi1, chi2, _integrand, J, r, xi, q, chi1, chi2, method=method, Nsamples=Nsamples)
 
     return chip
 
@@ -6567,7 +6569,23 @@ if __name__ == '__main__':
     #print(Slimits(r=r,q=q,chi1=chi1,chi2=chi2,xi=xi,J=J))
     S=0.55
     varphi=0.45
+    t0=time.time()
 
-    print(eval_varphi(S, J, r, xi, q, chi1, chi2))
+    Sminuss,Spluss,S3s = Ssroots(J,r,xi,q,chi1,chi2)
+    # for i in range(10000):
+    eval_tau(J, r, xi, q, chi1, chi2,precomputedroots=[Sminuss,Spluss,S3s])
+
+    Sminuss,Spluss,S3s = Ssroots([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
+    # for i in range(10000):
+    print(Sminuss,Spluss,S3s)
+
+    print(eval_tau([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=[Sminuss,Spluss,S3s]))
+
+    #print(time.time()-t0)
+
+    #t0=time.time()
+    #for i in range(10000):
+    #    eval_tau(J, r, xi, q, chi1, chi2)
+    #print(time.time()-t0)
 
     #print(eval_xi(theta1=None,theta2=None,S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2))
