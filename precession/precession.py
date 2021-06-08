@@ -6530,15 +6530,15 @@ if __name__ == '__main__':
 
 
     # ### TEST SANITIZER #####
-    # r = [10.0, np.inf]
-    # theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
-    #
-    # S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
-    #
-    # Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
-    # J=Jmax+1e-8
-    # result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
-    # print(result['kappa'])
+    r = [10.0, np.inf]
+    theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
+
+    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
+
+    Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
+    J=Jmax-1e-20
+    result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
+    print(result['kappa'])
 
     # while True:
     #     q=np.random.uniform(0.01,1)
@@ -6555,31 +6555,31 @@ if __name__ == '__main__':
     #     print(Jres-J)
 
 
-    kappa=3.4
-    u=0.1
-    xi=0.8
-    q=0.4
-    chi1=0.9567
-    chi2=0.979032
-    #print(Scubic_coefficients(kappa, u, xi, q, chi1, chi2))
-    #print(xidiscriminant_coefficients(u, xi, q, chi1, chi2))
-
-    r=34.432
-    J=1.7
-    #print(Slimits(r=r,q=q,chi1=chi1,chi2=chi2,xi=xi,J=J))
-    S=0.55
-    varphi=0.45
-    t0=time.time()
-
-    Sminuss,Spluss,S3s = Ssroots(J,r,xi,q,chi1,chi2)
-    # for i in range(10000):
-    eval_tau(J, r, xi, q, chi1, chi2,precomputedroots=[Sminuss,Spluss,S3s])
-
-    Sminuss,Spluss,S3s = Ssroots([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
-    # for i in range(10000):
-    print(Sminuss,Spluss,S3s)
-
-    print(eval_tau([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=[Sminuss,Spluss,S3s]))
+    # kappa=3.4
+    # u=0.1
+    # xi=0.8
+    # q=0.4
+    # chi1=0.9567
+    # chi2=0.979032
+    # #print(Scubic_coefficients(kappa, u, xi, q, chi1, chi2))
+    # #print(xidiscriminant_coefficients(u, xi, q, chi1, chi2))
+    #
+    # r=34.432
+    # J=1.7
+    # #print(Slimits(r=r,q=q,chi1=chi1,chi2=chi2,xi=xi,J=J))
+    # S=0.55
+    # varphi=0.45
+    # t0=time.time()
+    #
+    # Sminuss,Spluss,S3s = Ssroots(J,r,xi,q,chi1,chi2)
+    # # for i in range(10000):
+    # eval_tau(J, r, xi, q, chi1, chi2,precomputedroots=[Sminuss,Spluss,S3s])
+    #
+    # Sminuss,Spluss,S3s = Ssroots([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
+    # # for i in range(10000):
+    # print(Sminuss,Spluss,S3s)
+    #
+    # print(eval_tau([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=[Sminuss,Spluss,S3s]))
 
     #print(time.time()-t0)
 
@@ -6589,3 +6589,9 @@ if __name__ == '__main__':
     #print(time.time()-t0)
 
     #print(eval_xi(theta1=None,theta2=None,S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+
+
+    if precomputedroots is None:
+        Smin, Smax =....
+    else:
+        Smin, Smax = (precomputedroots[:-1])**0.5
