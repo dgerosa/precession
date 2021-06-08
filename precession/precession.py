@@ -874,8 +874,8 @@ def kappainfresonances(xi, q, chi1, chi2):
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
-    kappainfmin = np.maximum( (xi - (q**-1-q)*S2)/(1+q) , (xi - (q**-1-q)*S1)/(1+q**-1) )
-    kappainfmax = np.minimum( (xi + (q**-1-q)*S2)/(1+q) , (xi + (q**-1-q)*S1)/(1+q**-1) )
+    kappainfmin = np.maximum((xi - (q**-1-q)*S2)/(1+q) , (xi - (q**-1-q)*S1)/(1+q**-1))
+    kappainfmax = np.minimum((xi + (q**-1-q)*S2)/(1+q) , (xi + (q**-1-q)*S1)/(1+q**-1))
 
     return kappainfmin, kappainfmax
 
@@ -2121,7 +2121,7 @@ def eval_costheta1(S, J, r, xi, q, chi1, chi2):
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
 
-    costheta1 = ( ((J**2-L**2-S**2)/L) - (2*q*xi)/(1+q) )/(2*(1-q)*S1)
+    costheta1 = (((J**2-L**2-S**2)/L) - (2*q*xi)/(1+q))/(2*(1-q)*S1)
 
     return costheta1
 
@@ -2201,7 +2201,7 @@ def eval_costheta2(S, J, r, xi, q, chi1, chi2):
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
 
-    costheta2 = ( ((J**2-L**2-S**2)*(-q/L)) + (2*q*xi)/(1+q) )/(2*(1-q)*S2)
+    costheta2 = (((J**2-L**2-S**2)*(-q/L)) + (2*q*xi)/(1+q))/(2*(1-q)*S2)
 
     return costheta2
 
@@ -2530,7 +2530,7 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
 
         L = eval_L(r, q)
 
-        J = ( 2*L*kappa + L**2 )**0.5
+        J = (2*L*kappa + L**2)**0.5
 
     else:
         raise TypeError("Provide either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (kappa,r,q,chi1,chi2).")
@@ -2860,7 +2860,7 @@ def morphology(J, r, xi, q, chi1, chi2, simpler=False):
         morphs = np.where((status == k).all(axis=1), v, morphs)
     # Simplifies output, only one circulating morphology
     if simpler:
-        morphs = np.where( np.logical_or(morphs == 'C+', morphs == 'C-'), 'C', morphs)
+        morphs = np.where(np.logical_or(morphs == 'C+', morphs == 'C-'), 'C', morphs)
 
     return morphs
 
@@ -3705,7 +3705,7 @@ def elliptic_amplitude(S, Sminuss, Spluss):
     Sminuss = np.atleast_1d(Sminuss)
     Spluss = np.atleast_1d(Spluss)
 
-    phi = np.arccos( ( (S**2 - Sminuss) / (Spluss - Sminuss) )**0.5 )
+    phi = np.arccos(((S**2 - Sminuss) / (Spluss - Sminuss))**0.5)
 
     return phi
 
@@ -4303,7 +4303,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
             u = eval_u(r, np.tile(q, r.shape))
         elif r is None and u is not None:
             assert np.logical_or(ismonotonic(u, '<='), ismonotonic(u, '>=')), 'u must be monotonic'
-            r = eval_r(u=u, q=np.tile(q, u.shape) )
+            r = eval_r(u=u, q=np.tile(q, u.shape))
         else:
             raise TypeError("Please provide either r or u. Use np.inf for infinity.")
 
@@ -4366,7 +4366,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         S = Ssampling(J, rok, np.tile(xi, rok.shape), np.tile(q, rok.shape),
         np.tile(chi1, rok.shape), np.tile(chi2, rok.shape), N=1)
         theta1, theta2, deltaphi = conserved_to_angles(S, J, rok, xi, np.tile(q, rok.shape),
-        np.tile(chi1, rok.shape), np.tile(chi2, rok.shape) )
+        np.tile(chi1, rok.shape), np.tile(chi2, rok.shape))
         deltaphi = deltaphi * np.random.choice([-1, 1], deltaphi.shape)
 
         # Integrating from infinite separation.
@@ -4573,10 +4573,10 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
     # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1
-    omegasq = ( 3 * q**5 / ( 2 * ( 1 + q )**11 * L**7 ) )**2 * ( L - ( q *     \
-        alpha1 * S1 + alpha2 * S2 ) / ( 1 + q ) )**2 * ( L**2 * ( 1 - q )**2 - \
-        2 * L * ( q * alpha1 * S1 - alpha2 * S2 ) * ( 1 - q ) + ( q * alpha1 * \
-        S1 + alpha2 * S2 )**2 )
+    omegasq = (3 * q**5 / (2 * (1 + q)**11 * L**7))**2 * (L - (q *     \
+        alpha1 * S1 + alpha2 * S2) / (1 + q))**2 * (L**2 * (1 - q)**2 - \
+        2 * L * (q * alpha1 * S1 - alpha2 * S2) * (1 - q) + (q * alpha1 * \
+        S1 + alpha2 * S2)**2)
 
     return omegasq
 
@@ -4685,11 +4685,11 @@ def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
     if quadrupole_formula: # Use to switch off higher-order terms
         dvdt = (32*eta*v**9/5)
     else:
-        dvdt = (32*eta*v**9/5) * ( 1                                  \
+        dvdt = (32*eta*v**9/5) * (1                                  \
             - v**2 * (743+924*eta)/336                               \
             + v**3 * (4*np.pi                                        \
-                     - chi1*ct1*(113*m1**2/12 + 25*eta/4 )   \
-                     - chi2*ct2*(113*m2**2/12 + 25*eta/4 ))  \
+                     - chi1*ct1*(113*m1**2/12 + 25*eta/4)   \
+                     - chi2*ct2*(113*m2**2/12 + 25*eta/4))  \
             + v**4 * (34103/18144 + 13661*eta/2016 + 59*eta**2/18    \
                      + eta*chi1*chi2 * (721*ct1*ct2 - 247*ct12)/48  \
                      + ((m1*chi1)**2 * (719*ct1**2-233))/96       \
@@ -4699,9 +4699,8 @@ def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
                      - 1712*(0.5772156649+np.log(4*v))/105           \
                      + (451*np.pi**2/48 - 56198689/217728)*eta       \
                      + 541*eta**2/896 - 5605*eta**3/2592)            \
-            + v**7 * np.pi*( -4415/4032 + 358675*eta/6048            \
-                     + 91495*eta**2/1512)                           \
-            )
+            + v**7 * np.pi*(-4415/4032 + 358675*eta/6048            \
+                     + 91495*eta**2/1512))
 
     # Integrate in v, not in time
     dtdv = 1./dvdt
@@ -4867,10 +4866,10 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
 
         if r is not None and u is None:
             assert np.logical_or(ismonotonic(r, '<='), ismonotonic(r, '>=')), 'r must be monotonic'
-            u = eval_u(r, np.tile(q, r.shape) )
+            u = eval_u(r, np.tile(q, r.shape))
         elif r is None and u is not None:
             assert np.logical_or(ismonotonic(u, '<='), ismonotonic(u, '>=')), 'u must be monotonic'
-            r = eval_r(u=u, q=np.tile(q, u.shape)  )
+            r = eval_r(u=u, q=np.tile(q, u.shape))
         else:
             raise TypeError("Please provide either r or u.")
 
@@ -4916,7 +4915,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         #TODO: Should I renormalize here? The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
 
         S1, S2 = spinmags(q, chi1, chi2)
-        L = eval_L(r, np.tile(q, r.shape) )
+        L = eval_L(r, np.tile(q, r.shape))
         Lvec = (L*Lh.T).T
         S1vec = S1*S1h
         S2vec = S2*S2h
@@ -5028,7 +5027,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
         if r is None and rswitch is None and u is not None and uswitch is not None:
             r = eval_r(u=u, q=np.tile(q, u.shape))
-            rswitch = eval_r(u=uswitch, q=np.tile(q, uswitch.shape)  )
+            rswitch = eval_r(u=uswitch, q=np.tile(q, uswitch.shape))
 
         forwards = ismonotonic(r, ">=")
         backwards = ismonotonic(r, "<=")
@@ -5145,8 +5144,8 @@ def frequency_prefactor(J, r, xi, q, chi1, chi2):
     eta = eval_eta(q)
 
     mathcalC0 = (J/2)*(eta/L)**6
-    mathcalCplus = 3/2 * (L*(1+q)**2 - q*xi)/(J*q*(1+q)**2) * ( (1+q)*( (1+q)*(J+L)**2 - (1-q)*(S1**2-S2**2) ) + 2*q*xi*(L+J) )
-    mathcalCminus = - 3/2 * (L*(1+q)**2 - q*xi)/(J*q*(1+q)**2) * ( (1+q)*( (1+q)*(J-L)**2 - (1-q)*(S1**2-S2**2) ) + 2*q*xi*(L-J) )
+    mathcalCplus = 3/2 * (L*(1+q)**2 - q*xi)/(J*q*(1+q)**2) * ((1+q)*((1+q)*(J+L)**2 - (1-q)*(S1**2-S2**2)) + 2*q*xi*(L+J))
+    mathcalCminus = - 3/2 * (L*(1+q)**2 - q*xi)/(J*q*(1+q)**2) * ((1+q)*((1+q)*(J-L)**2 - (1-q)*(S1**2-S2**2)) + 2*q*xi*(L-J))
 
     return np.stack([mathcalC0, mathcalCplus, mathcalCminus])
 
@@ -5195,8 +5194,8 @@ def azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None):
     mathcalT = time_normalization(Spluss, S3s, r, xi, q)
 
     mathcalC0prime = mathcalT*mathcalC0
-    mathcalCplusprime = -mathcalT*mathcalC0*mathcalCplus/( Spluss - (J+L)**2 )
-    mathcalCminusprime = -mathcalT*mathcalC0*mathcalCminus/( Spluss - (J-L)**2 )
+    mathcalCplusprime = -mathcalT*mathcalC0*mathcalCplus/(Spluss - (J+L)**2)
+    mathcalCminusprime = -mathcalT*mathcalC0*mathcalCminus/(Spluss - (J-L)**2)
 
     return np.stack([mathcalC0prime, mathcalCplusprime, mathcalCminusprime])
 
@@ -5238,7 +5237,7 @@ def eval_OmegaL(S, J, r, xi, q, chi1, chi2):
 
     mathcalC0, mathcalCplus, mathcalCminus =  frequency_prefactor(J, r, xi, q, chi1, chi2)
 
-    OmegaL = mathcalC0 * (1 + mathcalCplus/((J+L)**2 - S**2) + mathcalCminus/((J-L)**2 - S**2) )
+    OmegaL = mathcalC0 * (1 + mathcalCplus/((J+L)**2 - S**2) + mathcalCminus/((J-L)**2 - S**2))
 
     return OmegaL
 
@@ -5654,9 +5653,8 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_ms
     # Eq. 4.13, Kidder 1995. gr-qc/9506022
     r = omega**(-2/3)*(1 \
             - (1/3)*(3-eta)*omega**(2/3)  \
-            - (1/3)*( chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))*omega \
-            + ( eta*(19/4 + eta/9) - eta*chi1*chi2/2 * (ct12 - 3*ct1*ct2 ))*omega**(4/3)\
-            )
+            - (1/3)*(chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))*omega \
+            + (eta*(19/4 + eta/9) - eta*chi1*chi2/2 * (ct12 - 3*ct1*ct2))*omega**(4/3))
     return r
 
 
@@ -5709,9 +5707,8 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
 
     omegasquared = (1/r**3)*(1 \
         - (3-eta)/r \
-        - ( chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta) )/r**(3/2) \
-        + ( 6 + 41/4*eta + eta**2 - 3/2*eta*chi1*chi2*(ct12-3*ct1*ct2) )/r**(2)\
-        )
+        - (chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))/r**(3/2) \
+        + (6 + 41/4*eta + eta**2 - 3/2*eta*chi1*chi2*(ct12-3*ct1*ct2))/r**(2))
 
     # Convert orbital velocity in natural units to GW frequency in Hz.
     # Prefactor is Msun*G/c^3/s with values of the constants as given by Mathematica:
@@ -5933,9 +5930,9 @@ if __name__ == '__main__':
     #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
     #print("on many", Jresonances(r,xi,q,chi1,chi2))
 
-    #print("on one", xiresonances(J[0],r[0],q[0],chi1[0],chi2[0]) )
+    #print("on one", xiresonances(J[0],r[0],q[0],chi1[0],chi2[0]))
 
-    #print("on many", xiresonances(J,r,q,chi1,chi2) )
+    #print("on many", xiresonances(J,r,q,chi1,chi2))
 
     #print(anglesresonances(J=J[0],r=r[0],xi=None,q=q[0],chi1=chi1[0],chi2=chi2[0]))
 
@@ -6229,7 +6226,7 @@ if __name__ == '__main__':
     # #t0=time.time()
     # #Lh,S1h,S2h = integrator_orbav(Lh0,S1h0,S2h0,r[0],r[-1],q,chi1,chi2,rsteps=r, tracktime=False)
     #
-    # print( integrator_orbav([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r[0],r[0]],[r[-1],r[-1]],[q,q],[chi1,chi1],[chi2,chi2],rsteps=[r,r], tracktime=False) )
+    # print( integrator_orbav([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r[0],r[0]],[r[-1],r[-1]],[q,q],[chi1,chi1],[chi2,chi2],rsteps=[r,r], tracktime=False))
     #
     #
     # print(Lh)
@@ -6295,7 +6292,7 @@ if __name__ == '__main__':
     #
 
 
-    # print( dSdtprefactor(r,xi,q) )
+    # print( dSdtprefactor(r,xi,q))
     # kappa=eval_kappa(J,r,q)
     # u=eval_u(r,q)
     # print(Ssroots_NEW(kappa,u,xi,q,chi1,chi2))
