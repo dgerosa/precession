@@ -1274,7 +1274,7 @@ def xiresonances(J, r, q, chi1, chi2):
         Maximum value of the effective spin xi.
     """
 
-    #Altough there are 6 solutions in general, we know that only two can lie between Smin and Smax.
+    # Altough there are 6 solutions in general, we know that only two can lie between Smin and Smax.
     J = np.atleast_1d(J)
     r = np.atleast_1d(r)
     q = np.atleast_1d(q)
@@ -3743,7 +3743,7 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
     J = np.atleast_1d(J)
     L = np.atleast_1d(L)
 
-    #Note: sign here is not cyclesign!
+    # Note: sign here is not cyclesign!
     n = (Spluss - Sminuss)/(Spluss - (J + np.sign(sign)*L)**2)
 
     return n
@@ -4219,11 +4219,11 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     def _compute(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
-        #h0= 1e-3 if u[0]==0 else 0
+        # h0= 1e-3 if u[0]==0 else 0
 
         ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-8, rtol=1e-8)#,events=event)
 
-        #TODO: let user pick rtol and atol
+        # TODO: let user pick rtol and atol
 
         # Return ODE object. The key methods is .sol --callable, sol(t).
         return ODEsolution
@@ -4390,7 +4390,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
         return theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2
 
-    #This array has to match the outputs of _compute (in the right order!)
+    # This array has to match the outputs of _compute (in the right order!)
     alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'xi', 'q', 'chi1', 'chi2'])
 
     # Here I force dtype=object because the outputs have different shapes
@@ -4491,8 +4491,8 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadratur
 
     return func_av
 
-#TODO Add updown endpoint.
-#TODO Add limits of the resonances at small separations from the endpoint paper
+# TODO Add updown endpoint.
+# TODO Add limits of the resonances at small separations from the endpoint paper
 
 def rupdown(q, chi1, chi2):
     """
@@ -4566,9 +4566,9 @@ def omegasq_aligned(r, q, chi1, chi2, which):
 
     assert np.isin(which, np.concatenate([uulabels, udlabels, dulabels, ddlabels])).all(), "Set `which` flag to either uu, ud, du, or dd."
 
-    #+1 if primary is co-aligned, -1 if primary is counter-aligned
+    # +1 if primary is co-aligned, -1 if primary is counter-aligned
     alpha1 = np.where(np.isin(which, np.concatenate([uulabels, udlabels])), 1, -1)
-    #+1 if secondary is co-aligned, -1 if secondary is counter-aligned
+    # +1 if secondary is co-aligned, -1 if secondary is counter-aligned
     alpha2 = np.where(np.isin(which, np.concatenate([uulabels, dulabels])), 1, -1)
 
     L = eval_L(r, q)
@@ -4775,9 +4775,9 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
         eta = eval_eta(q).item()
 
         # Integration
-        #t0=time.time()
-        #res =scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, tracktime, quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0, rtol=1e-12, atol=1e-12)
-        #print(time.time()-t0)
+        # t0=time.time()
+        # res =scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, tracktime, quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0, rtol=1e-12, atol=1e-12)
+        # print(time.time()-t0)
 
         ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method='RK45', t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula))
 
@@ -4882,13 +4882,13 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
 
         # User provides J, xi, and S.
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is not None and kappa is None and xi is not None:
-            #TODO: how do I set cyclesign here?
+            # TODO: how do I set cyclesign here?
             Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
 
         # User provides kappa, xi, and S.
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is None and kappa is not None and xi is not None:
             J = eval_J(kappa=kappa, r=r[0], q=q)
-            #TODO: how do I set cyclesign here?
+            # TODO: how do I set cyclesign here?
             Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
 
         else:
@@ -4911,7 +4911,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         S1h = evaluations[3:6, :].T
         S2h = evaluations[6:9, :].T
         t = evaluations[9, :]
-        #TODO: Should I renormalize here? The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
+        # TODO: Should I renormalize here? The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
 
         S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, np.tile(q, r.shape))
@@ -4925,7 +4925,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
 
         return t, theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, xi, q, chi1, chi2
 
-    #This array has to match the outputs of _compute (in the right order!)
+    # This array has to match the outputs of _compute (in the right order!)
     alloutputs = np.array(['t', 'theta1', 'theta2', 'deltaphi', 'S', 'Lh', 'S1h', 'S2h', 'J', 'kappa', 'r', 'u', 'xi', 'q', 'chi1', 'chi2'])
 
     # Here I force dtype=object because the outputs have different shapes
