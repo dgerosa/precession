@@ -1289,7 +1289,7 @@ def xiresonances(J, r, q, chi1, chi2):
 
     def _compute(Smin, Smax, J, r, xiroots, q, chi1, chi2):
         xiroots = xiroots[np.isfinite(xiroots)]
-        Sroots = Satresonance(J = np.tile(J, xiroots.shape), r = np.tile(r, xiroots.shape), xi = xiroots, q = np.tile(q, xiroots.shape), chi1 = np.tile(chi1, xiroots.shape), chi2 = np.tile(chi2, xiroots.shape))
+        Sroots = Satresonance(J=np.tile(J, xiroots.shape), r=np.tile(r, xiroots.shape), xi=xiroots, q=np.tile(q, xiroots.shape), chi1=np.tile(chi1, xiroots.shape), chi2=np.tile(chi2, xiroots.shape))
         xires = xiroots[np.logical_and(Sroots > Smin, Sroots < Smax)]
         assert len(xires) <= 2, "I found more than two resonances, this should not be possible."
         # If you didn't find enough solutions, append nans
@@ -1300,7 +1300,7 @@ def xiresonances(J, r, q, chi1, chi2):
     return np.stack([ximin, ximax])
 
 
-def anglesresonances(J=None, r = None, xi=None, q=None, chi1=None, chi2=None):
+def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     """
     Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
 
@@ -3309,7 +3309,7 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
 
     S, J, xi, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
-    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign = cyclesign)
+    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
 
     return np.stack([Lvec, S1vec, S2vec])
 
@@ -4417,7 +4417,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     return outcome
 
 
-def precession_average(J, r, xi, q, chi1, chi2, func, *args, method = 'quadrature', Nsamples = 1e4):
+def precession_average(J, r, xi, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4):
     """
     Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported.
 
@@ -5534,7 +5534,7 @@ def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, 
     return chip
 
 
-def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None, which ="averaged", method='quadrature', Nsamples=1e4):
+def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None, which="averaged", method='quadrature', Nsamples=1e4):
     """
     Compute the effective precessing spin chip, see arxiv:2011.11948. The keyword `which` one of the following definitions:
     - `heuristic`, as in Schmidt et al 2015. Required inputs: theta1,theta2,q,chi1,chi2
