@@ -1107,7 +1107,7 @@ def xidiscriminant_coefficients(kappa, u, q, chi1, chi2):
     coeff6 = 256 * q**6 * u**2
 
     # Machine generated with polycoefficients.nb
-    coeff5 = 128 * q**5 * (1 + q) * u * (1 + (q + (8 * q * S1**2 * u**2 + )
+    coeff5 = 128 * q**5 * (1 + q) * u * (1 + (q + (8 * q * S1**2 * u**2 +
     (-4 * u * (S1**2 * u + (-2 * S2**2 * u + kappa)) + -4 * q * u *
     (S2**2 * u + kappa)))))
 
@@ -1300,7 +1300,7 @@ def xiresonances(J, r, q, chi1, chi2):
     return np.stack([ximin, ximax])
 
 
-def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
+def anglesresonances(J=None, r = None, xi=None, q=None, chi1=None, chi2=None):
     """
     Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
 
@@ -2290,6 +2290,7 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi
     return costheta12
 
 
+# TODO docstrings
 def eval_theta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None):
     """
     Angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
