@@ -874,8 +874,8 @@ def kappainfresonances(xi, q, chi1, chi2):
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
-    kappainfmin = np.maximum((xi - (q**-1-q)*S2)/(1+q) , (xi - (q**-1-q)*S1)/(1+q**-1))
-    kappainfmax = np.minimum((xi + (q**-1-q)*S2)/(1+q) , (xi + (q**-1-q)*S1)/(1+q**-1))
+    kappainfmin = np.maximum((xi - (q**-1-q)*S2)/(1+q), (xi - (q**-1-q)*S1)/(1+q**-1))
+    kappainfmax = np.minimum((xi + (q**-1-q)*S2)/(1+q), (xi + (q**-1-q)*S1)/(1+q**-1))
 
     return kappainfmin, kappainfmax
 
@@ -910,7 +910,7 @@ def Jresonances(r, xi, q, chi1, chi2):
     """
 
     u = eval_u(r, q)
-    kappamin,kappamax = kapparesonances(u, xi, q, chi1, chi2)
+    kappamin, kappamax = kapparesonances(u, xi, q, chi1, chi2)
     Jmin = eval_J(kappa=kappamin, r=r, q=q)
     Jmax = eval_J(kappa=kappamax, r=r, q=q)
 
@@ -1584,7 +1584,7 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
 
     # Machine generated with polycoefficients.nb
     coeff1 = (q * (kappa + (q * kappa + -1 * xi)) * (kappa + (q * kappa +
-    -1 * q * xi)) + (-1/2 * (-1 + q**2) * S1**2 * ((1 + q) * (-1 + (q + 4 \
+    -1 * q * xi)) + (-1/2 * (-1 + q**2) * S1**2 * ((1 + q) * (-1 + (q + 4
     * q * u * kappa)) + -2 * q * u * xi) + -1/2 * (-1 + q**2) * S2**2 *
     ((1 + q) * (-1 + (q + -4 * u * kappa)) + 2 * q * u * xi)))
 
@@ -1724,7 +1724,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
         u = eval_u(r=r, q=q)
 
     if J is None and kappa is not None:
-        pass # I don't need J
+        pass  # I don't need J
     elif J is not None and kappa is None:
         if r is None and u is not None:
             r = eval_r(u=u, q=q)
@@ -1733,7 +1733,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
         raise TypeError("Please provide either J or kappa.")
 
     coeffs = Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
-    with np.errstate(invalid='ignore'): # nan is ok here
+    with np.errstate(invalid='ignore'):  # nan is ok here
         # This is with a simple for loop
         # Sres = np.array([np.mean(np.real(np.sort_complex(np.roots(x))[1:]))**0.5 for x in coeffs.T])
         Sres = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:, 1:])**0.5, axis=1)
@@ -2854,7 +2854,7 @@ def morphology(J, r, xi, q, chi1, chi2, simpler=False):
     # Pairs of booleans based on the values of deltaphi at S- and S+
     status = np.transpose([eval_cosdeltaphi(Smin, J, r, xi, q, chi1, chi2) > 0, eval_cosdeltaphi(Smax, J, r, xi, q, chi1, chi2) > 0])
     # Map to labels
-    dictlabel = {(False, False):"Lpi", (True, True):"L0", (False, True):"C-", (True, False):"C+"}
+    dictlabel = {(False, False): "Lpi", (True, True): "L0", (False, True): "C-", (True, False): "C+"}
     # Subsitute pairs with labels
     morphs = np.zeros(Smin.shape)
     for k, v in dictlabel.items():
@@ -3370,7 +3370,7 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     return np.stack([Lvec, S1vec, S2vec])
 
 
-def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2,cyclesign=1):
+def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
     """
     Convert the conserved quantities (S,J,xi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
 
@@ -3611,6 +3611,7 @@ def dSsdt(S, J, r, xi, q, chi1, chi2, cyclesign=1):
     cyclesign = np.atleast_1d(cyclesign)
 
     return cyclesign*dSsdtsquared(S, J, r, xi, q, chi1, chi2)**0.5
+
 
 # Change name to this function, otherwise is identical to the returned variable.
 def dSdt(S, J, r, xi, q, chi1, chi2):
@@ -4033,6 +4034,7 @@ def Ssav(J, r, xi, q, chi1, chi2):
 
     return Ssq
 
+
 def Ssrootsinf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital separation limit of the roots of the cubic equation in S^2.
@@ -4143,9 +4145,9 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
     """
 
     if u == 0:
-       # In this case use analytic result
-       theta1inf, theta2inf = asymptotic_to_angles(kappa, xi, q, chi1, chi2)
-       Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
+        # In this case use analytic result
+        theta1inf, theta2inf = asymptotic_to_angles(kappa, xi, q, chi1, chi2)
+        Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
 
         coeffs = Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
@@ -4221,7 +4223,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # h0= 1e-3 if u[0]==0 else 0
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-8, rtol=1e-8)#,events=event)
+        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-8, rtol=1e-8)  # ,events=event)
 
         # TODO: let user pick rtol and atol
 
@@ -4288,9 +4290,9 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
         else:
-            if k == 6 or k == 7: # Either u or r
+            if k == 6 or k == 7:  # Either u or r
                 inputs[k] = np.atleast_2d(inputs[k])
-            else: #Any of the others
+            else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
     theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2 = inputs
 
@@ -4324,7 +4326,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
                 raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,xi).")
 
             # Enforce limits
-            kappainfmin,kappainfmax = kappainflimits(xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
+            kappainfmin, kappainfmax = kappainflimits(xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
             assert kappa > kappainfmin and kappa < kappainfmax, "Unphysical initial conditions [inspiral_precav]."
 
         # Start from finite separations
@@ -4347,7 +4349,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
                 TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
 
             # Enforce limits
-            Jmin,Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
+            Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
             assert J > Jmin and J < Jmax, "Unphysical initial conditions [inspiral_precav]."
 
         # TODO: pass rtol and atol to integrator_precav
@@ -4409,7 +4411,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     for k, v in zip(alloutputs[wantoutputs], allresults[wantoutputs]):
         outcome[k] = np.squeeze(np.stack(v))
 
-        if k == 'xi' or k == 'q' or k == 'chi1' or k == 'chi2': # Constants of motion
+        if k == 'xi' or k == 'q' or k == 'chi1' or k == 'chi2':  # Constants of motion
             outcome[k] = np.atleast_1d(outcome[k])
         else:
             outcome[k] = np.atleast_2d(outcome[k])
@@ -4493,6 +4495,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method='quadrature'
 
 # TODO Add updown endpoint.
 # TODO Add limits of the resonances at small separations from the endpoint paper
+
 
 def rupdown(q, chi1, chi2):
     """
@@ -4619,6 +4622,8 @@ def widenutation(q, chi1, chi2):
 # Orbit averaged things
 
 # TODO: replace quadrupole_formula flag with parameter to select a given PN order. Update docstrings when you do it
+
+
 def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula=False):
     """
     Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unite vectors, v is the orbital velocity, and t is time. This is an internal function used by the ODE integrator and is not array-compatible.
@@ -4681,7 +4686,7 @@ def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
     dLhdt = -v*(S1*dS1hdt+S2*dS2hdt)/eta
 
     # Radiation reaction
-    if quadrupole_formula: # Use to switch off higher-order terms
+    if quadrupole_formula:  # Use to switch off higher-order terms
         dvdt = (32*eta*v**9/5)
     else:
         dvdt = (32*eta*v**9/5) * (1
@@ -4784,9 +4789,10 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
         # Return ODE object. The key methods is .sol --callable, sol(t).
         return ODEsolution
 
-    ODEsolution  = np.array(list(map(_compute, Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi1, chi2)))
+    ODEsolution = np.array(list(map(_compute, Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi1, chi2)))
 
     return ODEsolution
+
 
 # TODO: update docstrings when you fix the quadrupole_formula flag
 def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h=None, S2h=None, J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None, chi2=None, quadrupole_formula=False, requested_outputs=None):
@@ -4852,9 +4858,9 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
         else:
-            if k == 4 or k == 5 or k == 6 or k == 9 or k == 10: # Lh, S1h, S2h, u, or r
+            if k == 4 or k == 5 or k == 6 or k == 9 or k == 10:  # Lh, S1h, S2h, u, or r
                 inputs[k] = np.atleast_2d(inputs[k])
-            else: #Any of the others
+            else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
     theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, xi, q, chi1, chi2 = inputs
 
@@ -4943,7 +4949,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
     for k, v in zip(alloutputs[wantoutputs], allresults[wantoutputs]):
         outcome[k] = np.squeeze(np.stack(v))
 
-        if k == 'q' or k == 'chi1' or k == 'chi2': # Constants of motion
+        if k == 'q' or k == 'chi1' or k == 'chi2':  # Constants of motion
             outcome[k] = np.atleast_1d(outcome[k])
         else:
             outcome[k] = np.atleast_2d(outcome[k])
@@ -5016,9 +5022,9 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
         else:
-            if k == 6 or k == 8: # Either u or r
+            if k == 6 or k == 8:  # Either u or r
                 inputs[k] = np.atleast_2d(inputs[k])
-            else: #Any of the others
+            else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
     theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, xi, q, chi1, chi2 = inputs
 
@@ -5136,7 +5142,7 @@ def frequency_prefactor(J, r, xi, q, chi1, chi2):
     """
 
     J = np.atleast_1d(J)
-    xi  = np.atleast_1d(xi)
+    xi = np.atleast_1d(xi)
     q = np.atleast_1d(q)
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
@@ -5149,7 +5155,7 @@ def frequency_prefactor(J, r, xi, q, chi1, chi2):
     return np.stack([mathcalC0, mathcalCplus, mathcalCminus])
 
 
-def azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None):
+def azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=None):
     """
     Numerical prefactors entering the precession frequency.
 
@@ -5234,7 +5240,7 @@ def eval_OmegaL(S, J, r, xi, q, chi1, chi2):
     J = np.atleast_1d(J)
     L = eval_L(r, q)
 
-    mathcalC0, mathcalCplus, mathcalCminus =  frequency_prefactor(J, r, xi, q, chi1, chi2)
+    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor(J, r, xi, q, chi1, chi2)
 
     OmegaL = mathcalC0 * (1 + mathcalCplus/((J+L)**2 - S**2) + mathcalCminus/((J-L)**2 - S**2))
 
@@ -5279,9 +5285,10 @@ def eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=None):
     nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
     mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
-    alpha = 2*(mathcalC0prime*scipy.special.ellipk(m) + mathcalCplusprime*ellippi(nplus, np.pi/2, m)  + mathcalCminusprime*ellippi(nminus, np.pi/2, m))
+    alpha = 2*(mathcalC0prime*scipy.special.ellipk(m) + mathcalCplusprime*ellippi(nplus, np.pi/2, m) + mathcalCminusprime*ellippi(nminus, np.pi/2, m))
 
     return alpha
+
 
 def eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     """
@@ -5327,7 +5334,7 @@ def eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
     mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
-    phiL = alpha/2 - np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi, m) + mathcalCplusprime*ellippi(nplus, phi, m)  + mathcalCminusprime*ellippi(nminus, phi, m))
+    phiL = alpha/2 - np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi, m) + mathcalCplusprime*ellippi(nplus, phi, m) + mathcalCminusprime*ellippi(nminus, phi, m))
 
     return phiL
 
@@ -5402,6 +5409,7 @@ def eval_chip_heuristic(theta1, theta2, q, chi1, chi2):
     term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
     chip = np.maximum(term1, term2)
     return chip
+
 
 def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
     """
@@ -5529,7 +5537,7 @@ def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, 
         chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
         return chip_integrand
 
-    chip = precession_average(J, r, xi, q, chi1, chi2, _integrand , J, r, xi, q, chi1, chi2, method=method, Nsamples=1e4)
+    chip = precession_average(J, r, xi, q, chi1, chi2, _integrand, J, r, xi, q, chi1, chi2, method=method, Nsamples=1e4)
 
     return chip
 
