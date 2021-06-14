@@ -44,10 +44,12 @@ class genericTest:
         for arg in self.args_to_repeat:
             _args[arg] = np.repeat(_args[arg], multiple)
 
-        _output_to_compare = np.repeat(self.output_to_compare, multiple)
+        _output_to_compare = np.repeat(np.atleast_2d(self.output_to_compare),
+                                       multiple, axis=0)
 
         #assert np.allclose(self.func(**_args), _output_to_compare)
-        return np.allclose(self.func(**_args), _output_to_compare)
+        #return np.allclose(self.func(**_args), _output_to_compare)
+        return _args, _output_to_compare
 
 
 #
