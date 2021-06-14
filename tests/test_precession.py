@@ -108,7 +108,7 @@ def both(testfunction, multiple=3):
         _output = np.tile(output, multiple)
 
         # Test on a single entry
-        checksingle = np.allclose(codefunction(**input), output)
+        checksingle = np.allclose(codefunction(**input), np.array(output))
         assert checksingle
 
         # Test on multiple entries
