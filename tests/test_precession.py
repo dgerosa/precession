@@ -19,6 +19,7 @@ class genericTest:
         The function to test. It should output a single value.
     args : dict
         A dictionary of arguments for func. THe keys are the argument names.
+        Must be ordered as in the definition of func.
     output_to_compare :
         The value to compare the output to.
     args_to_repeat : list of str (optional)
