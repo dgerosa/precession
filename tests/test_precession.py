@@ -71,29 +71,37 @@ def both(testfunction,multiple=3):
 
     @wraps(testfunction)
     def wrapper():
-        inputs,outputs = np.array(testfunction(),dtype=object).T
+        input, output = testfunction()
 
-        for input,output in zip(np.atleast_1d(inputs),np.atleast_1d(outputs)):
-            # Extract the codefunction
-            codefunction = eval("precession."+testfunction.__name__.split("test_")[1:][0])
-            # Make sure output is ready for reshaping
-            output = np.array(output)
-            # Inflate the inputs
-            _input = input.copy()
-            for arg in _input:
-                _input[arg] = np.repeat(_input[arg], multiple)
-            # Inflate the outputs
-            _output = np.reshape( np.repeat(output, multiple, axis=0), (output.shape[0],multiple) )
+        # Extract the codefunction
+        cfs = testfunction.__name__.split("_")
+        assert cfs[0]=='test'
+        if cfs[1].isdigit():
+            codefunction ="_".join(cfs[2:])
+        else:
+            codefunction ="_".join(cfs[1:])
 
-            # Test on a single entry
-            checksingle = np.allclose(codefunction(**input), output)
+        codefunction = eval("precession."+codefunction)
 
-            # Test on multiple entries
-            checkmultiple = np.allclose(codefunction(**_input), _output)
 
-            # Actual test for pytest
-            assert checksingle
-            assert checkmultiple
+        # Make sure output is ready for reshaping
+        output = np.array(output)
+        # Inflate the inputs
+        _input = input.copy()
+        for arg in _input:
+            _input[arg] = np.repeat(_input[arg], multiple)
+        # Inflate the outputs
+        _output = np.reshape( np.repeat(output, multiple, axis=0), (output.shape[0],multiple) )
+
+        # Test on a single entry
+        checksingle = np.allclose(codefunction(**input), output)
+
+        # Test on multiple entries
+        checkmultiple = np.allclose(codefunction(**_input), _output)
+
+        # Actual test for pytest
+        assert checksingle
+        assert checkmultiple
 
     return wrapper
 
@@ -132,15 +140,19 @@ def test_spinmags():
 
 @both
 def test_eval_L():
-    return {"q":0.8, "r":10}, [0.7808093]
+    return {"r":10, "q":0.8}, [0.7808093]
 
 @both
 def test_eval_v():
-    #return {"r":10}, [0.31622777]
-    return [{"r":10}, [0.31622777]], [{"r":10},[0.31622777]]
+    return {"r":10}, [0.31622777]
 
-test_eval_v()
+@both
+def test_1_eval_r():
+    return {"L":0.7808093 ,"q":0.8}, [10]
 
+@both
+def test_2_eval_r():
+    return {"u":0.64036123 ,"q":0.8}, [10]
 ### There needs to be tests for all these functions, multiple ones for some functions.
 # eval_L(r, q)
 # eval_v(r)

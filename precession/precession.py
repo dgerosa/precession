@@ -6604,4 +6604,4 @@ if __name__ == '__main__':
     #     Smin, Smax = (precomputedroots[:-1])**0.5
 
 
-    print(eval_v(r=10))
+    print(eval_u(q=0.8,r=10))
