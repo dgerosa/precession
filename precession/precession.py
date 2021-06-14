@@ -6604,4 +6604,4 @@ if __name__ == '__main__':
     #     Smin, Smax = (precomputedroots[:-1])**0.5
 
 
-    print(spinmags(q=0.8,chi1=1,chi2=1))
+    print(eval_v(r=10))
