@@ -598,19 +598,19 @@ def Jlimits_LS1S2(r, q, chi1, chi2):
     return np.stack([Jmin, Jmax])
 
 
-def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
+def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     """
     Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.
 
     Call
     ----
-    coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = kappadiscriminant_coefficients(u,xi,q,chi1,chi2)
+    coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = kappadiscriminant_coefficients(u,chieff,q,chi1,chi2)
 
     Parameters
     ----------
     u: float
         Compactified separation 1/(2L).
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -637,170 +637,177 @@ def kappadiscriminant_coefficients(u, xi, q, chi1, chi2):
 
     u = np.atleast_1d(u)
     q = np.atleast_1d(q)
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d()
     S1, S2 = spinmags(q, chi1, chi2)
 
     # Machine generated with polycoefficients.nb
     coeff5 = -256 * q**3 * ((1 + q))**6 * u
 
     # Machine generated with polycoefficients.nb
-    coeff4 = 16 * q**2 * ((1 + q))**4 * (((-1 + q**2))**2 + (-16 * ((1 +
-    q))**2 * (q * (-5 + 3 * q) * S1**2 + (3 + -5 * q) * S2**2) * u**2 +
-    (40 * q * ((1 + q))**2 * u * xi + 16 * q**2 * u**2 * xi**2)))
+    coeff4 = 16 * q**2 * ((1 + q))**4 * (((-1 + q**2))**2 + (-16 * ((1 + \
+    q))**2 * (q * (-5 + 3 * q) * S1**2 + (3 + -5 * q) * S2**2) * u**2 + \
+    (40 * q * ((1 + q))**2 * u * chieff + 16 * q**2 * u**2 * chieff**2)))
 
     # Machine generated with polycoefficients.nb
-    coeff3 = -32 * q * ((1 + q))**4 * (2 * q**6 * S1**2 * u * (-5 + 12 *
-    S1**2 * u**2) + (2 * S2**2 * u * (-5 + 12 * S2**2 * u**2) + (2 * q**2
-    * u * (40 * S1**4 * u**2 + (-44 * S2**4 * u**2 + (8 * xi**2 + (S1**2
-    * (-5 + (-8 * S2**2 * u**2 + 40 * u * xi)) + -2 * S2**2 * (-5 + 4 * u
-    * xi * (1 + u * xi)))))) + (2 * q**3 * (32 * S1**4 * u**3 + (32 *
-    S2**4 * u**3 + (xi * (-1 + 8 * u * xi * (3 + u * xi)) + (2 * S2**2 *
-    u * (-1 + u * xi * (17 + 8 * u * xi)) + 2 * S1**2 * u * (-1 + (40 *
-    S2**2 * u**2 + u * xi * (17 + 8 * u * xi))))))) + (q * (xi + 2 * u *
-    (S1**2 * (1 + -48 * S2**2 * u**2) + S2**2 * (1 + -2 * u * (12 * S2**2
-    * u + xi)))) + (q**5 * (xi + 2 * u * (S2**2 + S1**2 * (1 + -2 * u *
-    (12 * (S1**2 + 2 * S2**2) * u + xi)))) + -2 * q**4 * u * (5 * S2**2 +
-    (44 * S1**4 * u**2 + (-8 * (5 * S2**4 * u**2 + (5 * S2**2 * u * xi +
-    xi**2)) + 2 * S1**2 * (-5 + 4 * u * (xi + u * (S2**2 +
-    xi**2))))))))))))
+    coeff3 = -32 * q * ((1 + q))**4 * (2 * q**6 * S1**2 * u * (-5 + 12 * \
+    S1**2 * u**2) + (2 * S2**2 * u * (-5 + 12 * S2**2 * u**2) + (2 * q**2 \
+    * u * (40 * S1**4 * u**2 + (-44 * S2**4 * u**2 + (8 * chieff**2 + \
+    (S1**2 * (-5 + (-8 * S2**2 * u**2 + 40 * u * chieff)) + -2 * S2**2 * \
+    (-5 + 4 * u * chieff * (1 + u * chieff)))))) + (2 * q**3 * (32 * \
+    S1**4 * u**3 + (32 * S2**4 * u**3 + (chieff * (-1 + 8 * u * chieff * \
+    (3 + u * chieff)) + (2 * S2**2 * u * (-1 + u * chieff * (17 + 8 * u * \
+    chieff)) + 2 * S1**2 * u * (-1 + (40 * S2**2 * u**2 + u * chieff * \
+    (17 + 8 * u * chieff))))))) + (q * (chieff + 2 * u * (S1**2 * (1 + \
+    -48 * S2**2 * u**2) + S2**2 * (1 + -2 * u * (12 * S2**2 * u + \
+    chieff)))) + (q**5 * (chieff + 2 * u * (S2**2 + S1**2 * (1 + -2 * u * \
+    (12 * (S1**2 + 2 * S2**2) * u + chieff)))) + -2 * q**4 * u * (5 * \
+    S2**2 + (44 * S1**4 * u**2 + (-8 * (5 * S2**4 * u**2 + (5 * S2**2 * u \
+    * chieff + chieff**2)) + 2 * S1**2 * (-5 + 4 * u * (chieff + u * \
+    (S2**2 + chieff**2))))))))))))
 
     # Machine generated with polycoefficients.nb
-    coeff2 = -16 * ((1 + q))**2 * (16 * (-1 + q) * q**3 * ((1 + q))**4 *
-    (10 + (-8 + q) * q) * S1**6 * u**4 + (-16 * ((-1 + q))**3 * ((1 +
-    q))**4 * S2**6 * u**4 + (-1 * ((-1 + q**2))**2 * S2**4 * u**2 * (((1
-    + q))**2 * (-8 + (-20 + q) * q) + (8 * (-4 + q) * q * (1 + q) * u *
-    xi + 16 * q**2 * u**2 * xi**2)) + (-1 * q**2 * (((1 + q) * S2**2 * u
-    + q * xi))**2 * ((-1 + q) * ((1 + q))**2 * (-1 + (q + 48 * S2**2 *
-    u**2)) + (8 * q * (1 + q) * (5 + q) * u * xi + 16 * q**2 * u**2 *
-    xi**2)) + (2 * q**2 * ((1 + q))**2 * S1**4 * u**2 * ((-1 + q) * ((1 +
-    q))**2 * ((-1 + q) * (-3 + (30 * q + 4 * q**2)) + -72 * (2 + (-2 + q)
-    * q) * S2**2 * u**2) + (4 * q * (1 + q) * (-30 + q * (39 + q * (-19 +
-    4 * q))) * u * xi + -8 * q**2 * (6 + (-6 + q) * q) * u**2 * xi**2)) +
-    (-4 * q * (-1 * (1 + q) * S2**2 * u + -1 * q * xi) * (-1 * ((-1 +
-    q))**2 * ((1 + q))**3 * S2**2 * u * (-10 + (q + 24 * S2**2 * u**2)) +
-    (-1 * (-1 + q) * q * ((1 + q))**2 * (-1 + (q + 4 * (1 + 2 * q) *
-    S2**2 * u**2)) * xi + (-8 * q**2 * (1 + q) * u * (2 + (q + 2 * (-1 +
-    q) * S2**2 * u**2)) * xi**2 + -16 * q**3 * u**2 * xi**3))) + (q * (1
-    + q) * S1**2 * ((-1 + q) * ((1 + q))**3 * (((-1 + q))**3 * q + (4 *
-    (-1 + q) * (15 + q * (-29 + 15 * q)) * S2**2 * u**2 + 144 * (1 + 2 *
-    (-1 + q) * q) * S2**4 * u**4)) + (2 * q * ((1 + q))**2 * u * (((-1 +
-    q))**2 * (-3 + q * (23 + 4 * q)) + 12 * (1 + q) * (1 + q**2) * S2**2
-    * u**2) * xi + (8 * q**2 * (1 + q) * u**2 * (-12 + (-2 * q + (-11 *
-    q**2 + (q**3 + 4 * (3 + q * (-5 + 3 * q)) * S2**2 * u**2)))) * xi**2
-    + -32 * q**3 * (3 + (-1 + q) * q) * u**3 * xi**3))) + (S2**2 * (((-1
-    + q**2))**4 + (2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u
-    * xi + (8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 *
-    xi**2 + 32 * q**3 * (-1 + q**2) * u**3 * xi**3))) + -1 * q**2 * xi**2
-    * (1 + q * (8 * u * xi + q * (-2 + (16 * u * xi + ((q + 4 * u *
-    xi))**2))))))))))))
+    coeff2 = -16 * ((1 + q))**2 * (16 * (-1 + q) * q**3 * ((1 + q))**4 * \
+    (10 + (-8 + q) * q) * S1**6 * u**4 + (-16 * ((-1 + q))**3 * ((1 + \
+    q))**4 * S2**6 * u**4 + (-1 * ((-1 + q**2))**2 * S2**4 * u**2 * (((1 \
+    + q))**2 * (-8 + (-20 + q) * q) + (8 * (-4 + q) * q * (1 + q) * u * \
+    chieff + 16 * q**2 * u**2 * chieff**2)) + (-1 * q**2 * (((1 + q) * \
+    S2**2 * u + q * chieff))**2 * ((-1 + q) * ((1 + q))**2 * (-1 + (q + \
+    48 * S2**2 * u**2)) + (8 * q * (1 + q) * (5 + q) * u * chieff + 16 * \
+    q**2 * u**2 * chieff**2)) + (2 * q**2 * ((1 + q))**2 * S1**4 * u**2 * \
+    ((-1 + q) * ((1 + q))**2 * ((-1 + q) * (-3 + (30 * q + 4 * q**2)) + \
+    -72 * (2 + (-2 + q) * q) * S2**2 * u**2) + (4 * q * (1 + q) * (-30 + \
+    q * (39 + q * (-19 + 4 * q))) * u * chieff + -8 * q**2 * (6 + (-6 + \
+    q) * q) * u**2 * chieff**2)) + (-4 * q * (-1 * (1 + q) * S2**2 * u + \
+    -1 * q * chieff) * (-1 * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * u * \
+    (-10 + (q + 24 * S2**2 * u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 * \
+    (-1 + (q + 4 * (1 + 2 * q) * S2**2 * u**2)) * chieff + (-8 * q**2 * \
+    (1 + q) * u * (2 + (q + 2 * (-1 + q) * S2**2 * u**2)) * chieff**2 + \
+    -16 * q**3 * u**2 * chieff**3))) + (q * (1 + q) * S1**2 * ((-1 + q) * \
+    ((1 + q))**3 * (((-1 + q))**3 * q + (4 * (-1 + q) * (15 + q * (-29 + \
+    15 * q)) * S2**2 * u**2 + 144 * (1 + 2 * (-1 + q) * q) * S2**4 * \
+    u**4)) + (2 * q * ((1 + q))**2 * u * (((-1 + q))**2 * (-3 + q * (23 + \
+    4 * q)) + 12 * (1 + q) * (1 + q**2) * S2**2 * u**2) * chieff + (8 * \
+    q**2 * (1 + q) * u**2 * (-12 + (-2 * q + (-11 * q**2 + (q**3 + 4 * (3 \
+    + q * (-5 + 3 * q)) * S2**2 * u**2)))) * chieff**2 + -32 * q**3 * (3 \
+    + (-1 + q) * q) * u**3 * chieff**3))) + (S2**2 * (((-1 + q**2))**4 + \
+    (2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * chieff + (8 \
+    * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * chieff**2 + \
+    32 * q**3 * (-1 + q**2) * u**3 * chieff**3))) + -1 * q**2 * chieff**2 \
+    * (1 + q * (8 * u * chieff + q * (-2 + (16 * u * chieff + ((q + 4 * u \
+    * chieff))**2))))))))))))
 
     # Machine generated with polycoefficients.nb
-    coeff1 = -16 * (1 + q) * (-16 * ((-1 + q))**2 * q**3 * ((1 + q))**5 *
-    (-5 + 2 * q) * S1**8 * u**5 + (-4 * (-1 + q) * q**2 * ((1 + q))**3 *
-    S1**6 * u**3 * ((-1 + q) * ((1 + q))**2 * (-1 + (15 * q + (4 * q**2 +
-    8 * (6 + (-1 + q) * q) * S2**2 * u**2))) + (2 * q * (1 + q) * (20 + q
-    * (-29 + 12 * q)) * u * xi + -8 * (-2 + q) * q**2 * u**2 * xi**2)) +
-    (-2 * q * (((1 + q) * S2**2 * u + q * xi))**2 * (-1 * ((-1 + q))**2 *
-    ((1 + q))**3 * S2**2 * u * (-10 + (q + 24 * S2**2 * u**2)) + (-1 *
-    (-1 + q) * q * ((1 + q))**2 * (-1 + (q + 4 * (1 + 2 * q) * S2**2 *
-    u**2)) * xi + (-8 * q**2 * (1 + q) * u * (2 + (q + 2 * (-1 + q) *
-    S2**2 * u**2)) * xi**2 + -16 * q**3 * u**2 * xi**3))) + (-2 * q * ((1
-    + q))**2 * S1**4 * u * (((-1 + q))**2 * ((1 + q))**3 * (((-1 + q))**2
-    * q + (2 * (15 + q * (-55 + 2 * q * (9 + 2 * q))) * S2**2 * u**2 +
-    -72 * (1 + q**2) * S2**4 * u**4)) + ((-1 + q) * q * ((1 + q))**2 * u
-    * (3 + (-52 * q + (33 * q**2 + (16 * q**3 + 4 * (-3 + 2 * q**2 * (-7
-    + 4 * q)) * S2**2 * u**2)))) * xi + (-8 * q**2 * (1 + q) * u**2 * (6
-    + (-16 * q + (18 * q**2 + (-5 * q**3 + 2 * (-1 + q) * (3 + (-1 + q) *
-    q) * S2**2 * u**2)))) * xi**2 + -16 * q**3 * (3 + q * (-5 + 3 * q)) *
-    u**3 * xi**3))) + (S1**2 * (-32 * ((-1 + q))**2 * ((1 + q))**5 * (1 +
-    q * (-1 + 6 * q)) * S2**6 * u**5 + (-4 * (-1 + q) * ((1 + q))**3 *
-    S2**4 * u**3 * ((-1 + q) * ((1 + q))**2 * (4 + q * (18 + 5 * q * (-11
-    + 3 * q))) + (2 * q * (1 + q) * (-8 + (14 * q + 3 * q**3)) * u * xi +
-    8 * q**2 * (1 + q * (-1 + 3 * q)) * u**2 * xi**2)) + (2 * ((1 +
-    q))**3 * S2**2 * u * (-1 * ((-1 + q))**4 * ((1 + q))**2 * (1 + (-12 +
-    q) * q) + (-2 * q * ((-1 + q**2))**2 * (4 + q * (-7 + 4 * q)) * u *
-    xi + (-8 * q**2 * (1 + q * (-8 + q * (20 + (-8 + q) * q))) * u**2 *
-    xi**2 + 16 * (-2 + q) * q**3 * (-1 + 2 * q) * u**3 * xi**3))) + 2 *
-    q**2 * xi * (-1 * ((-1 + q**2))**4 + (-1 * ((-1 + q))**2 * ((1 +
-    q))**3 * (-1 + q * (18 + 7 * q)) * u * xi + (4 * q * ((1 + q))**2 *
-    (2 + q * (-5 + 19 * q)) * u**2 * xi**2 + 16 * q**2 * (1 + q**2 * (2 +
-    3 * q)) * u**3 * xi**3)))))) + -2 * (-1 * (1 + q) * S2**2 * u + -1 *
-    q * xi) * (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 + (((-1 +
-    q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + (8
-    * (-4 + q) * q * (1 + q) * u * xi + 16 * q**2 * u**2 * xi**2)) +
-    (S2**2 * (-1 * ((-1 + q**2))**4 + (-2 * ((-1 + q))**2 * q * ((1 +
-    q))**3 * (4 + 5 * q) * u * xi + (-8 * (-1 + q) * q**2 * ((1 + q))**2
-    * (-1 + 4 * q) * u**2 * xi**2 + -32 * q**3 * (-1 + q**2) * u**3 *
-    xi**3))) + q**2 * xi**2 * (1 + q * (8 * u * xi + q * (-2 + (16 * u *
-    xi + ((q + 4 * u * xi))**2))))))))))))
+    coeff1 = -16 * (1 + q) * (-16 * ((-1 + q))**2 * q**3 * ((1 + q))**5 * \
+    (-5 + 2 * q) * S1**8 * u**5 + (-4 * (-1 + q) * q**2 * ((1 + q))**3 * \
+    S1**6 * u**3 * ((-1 + q) * ((1 + q))**2 * (-1 + (15 * q + (4 * q**2 + \
+    8 * (6 + (-1 + q) * q) * S2**2 * u**2))) + (2 * q * (1 + q) * (20 + q \
+    * (-29 + 12 * q)) * u * chieff + -8 * (-2 + q) * q**2 * u**2 * \
+    chieff**2)) + (-2 * q * (((1 + q) * S2**2 * u + q * chieff))**2 * (-1 \
+    * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * u * (-10 + (q + 24 * S2**2 * \
+    u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 * (-1 + (q + 4 * (1 + 2 * \
+    q) * S2**2 * u**2)) * chieff + (-8 * q**2 * (1 + q) * u * (2 + (q + 2 \
+    * (-1 + q) * S2**2 * u**2)) * chieff**2 + -16 * q**3 * u**2 * \
+    chieff**3))) + (-2 * q * ((1 + q))**2 * S1**4 * u * (((-1 + q))**2 * \
+    ((1 + q))**3 * (((-1 + q))**2 * q + (2 * (15 + q * (-55 + 2 * q * (9 \
+    + 2 * q))) * S2**2 * u**2 + -72 * (1 + q**2) * S2**4 * u**4)) + ((-1 \
+    + q) * q * ((1 + q))**2 * u * (3 + (-52 * q + (33 * q**2 + (16 * q**3 \
+    + 4 * (-3 + 2 * q**2 * (-7 + 4 * q)) * S2**2 * u**2)))) * chieff + \
+    (-8 * q**2 * (1 + q) * u**2 * (6 + (-16 * q + (18 * q**2 + (-5 * q**3 \
+    + 2 * (-1 + q) * (3 + (-1 + q) * q) * S2**2 * u**2)))) * chieff**2 + \
+    -16 * q**3 * (3 + q * (-5 + 3 * q)) * u**3 * chieff**3))) + (S1**2 * \
+    (-32 * ((-1 + q))**2 * ((1 + q))**5 * (1 + q * (-1 + 6 * q)) * S2**6 \
+    * u**5 + (-4 * (-1 + q) * ((1 + q))**3 * S2**4 * u**3 * ((-1 + q) * \
+    ((1 + q))**2 * (4 + q * (18 + 5 * q * (-11 + 3 * q))) + (2 * q * (1 + \
+    q) * (-8 + (14 * q + 3 * q**3)) * u * chieff + 8 * q**2 * (1 + q * \
+    (-1 + 3 * q)) * u**2 * chieff**2)) + (2 * ((1 + q))**3 * S2**2 * u * \
+    (-1 * ((-1 + q))**4 * ((1 + q))**2 * (1 + (-12 + q) * q) + (-2 * q * \
+    ((-1 + q**2))**2 * (4 + q * (-7 + 4 * q)) * u * chieff + (-8 * q**2 * \
+    (1 + q * (-8 + q * (20 + (-8 + q) * q))) * u**2 * chieff**2 + 16 * \
+    (-2 + q) * q**3 * (-1 + 2 * q) * u**3 * chieff**3))) + 2 * q**2 * \
+    chieff * (-1 * ((-1 + q**2))**4 + (-1 * ((-1 + q))**2 * ((1 + q))**3 \
+    * (-1 + q * (18 + 7 * q)) * u * chieff + (4 * q * ((1 + q))**2 * (2 + \
+    q * (-5 + 19 * q)) * u**2 * chieff**2 + 16 * q**2 * (1 + q**2 * (2 + \
+    3 * q)) * u**3 * chieff**3)))))) + -2 * (-1 * (1 + q) * S2**2 * u + \
+    -1 * q * chieff) * (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 \
+    + (((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) \
+    * q) + (8 * (-4 + q) * q * (1 + q) * u * chieff + 16 * q**2 * u**2 * \
+    chieff**2)) + (S2**2 * (-1 * ((-1 + q**2))**4 + (-2 * ((-1 + q))**2 * \
+    q * ((1 + q))**3 * (4 + 5 * q) * u * chieff + (-8 * (-1 + q) * q**2 * \
+    ((1 + q))**2 * (-1 + 4 * q) * u**2 * chieff**2 + -32 * q**3 * (-1 + \
+    q**2) * u**3 * chieff**3))) + q**2 * chieff**2 * (1 + q * (8 * u * \
+    chieff + q * (-2 + (16 * u * chieff + ((q + 4 * u * \
+    chieff))**2))))))))))))
 
     # Machine generated with polycoefficients.nb
-    coeff0 = -16 * (16 * ((-1 + q))**3 * q**3 * ((1 + q))**6 * S1**10 *
-    u**6 + (-1 * ((-1 + q))**2 * q**2 * ((1 + q))**4 * S1**8 * u**4 *
-    (((1 + q))**2 * (1 + (-20 * q + (-8 * q**2 + 16 * (-3 + (q + 2 *
-    q**2)) * S2**2 * u**2))) + (-8 * q * (1 + q) * (-5 + 8 * q) * u * xi
-    + 16 * q**2 * u**2 * xi**2)) + ((-1 + q) * q * ((1 + q))**3 * S1**6 *
-    u**2 * (q * ((-1 + q**2))**3 + (-4 * (-1 + q) * ((1 + q))**3 * (-5 +
-    q * (27 + q * (-3 + 8 * q))) * S2**2 * u**2 + (16 * ((-1 + q))**2 *
-    ((1 + q))**3 * (3 + q * (6 + q)) * S2**4 * u**4 + (-2 * (-1 + q) * q
-    * ((1 + q))**2 * u * (1 + (-25 * q + (-12 * q**2 + 4 * (-1 + (q + 12
-    * q**2)) * S2**2 * u**2))) * xi + (8 * q**2 * (1 + q) * u**2 * (4 +
-    (-18 * q + (11 * q**2 + 4 * (-1 + q**2) * S2**2 * u**2))) * xi**2 +
-    32 * (1 + -2 * q) * q**3 * u**3 * xi**3))))) + (((1 + q))**2 * S1**4
-    * u * (-16 * ((-1 + q))**3 * ((1 + q))**4 * (1 + 3 * q * (2 + q)) *
-    S2**6 * u**5 + (2 * S2**4 * u**3 * (((-1 + q))**2 * ((1 + q))**4 * (4
-    + q * (6 + q * (61 + (6 * q + 4 * q**2)))) + (4 * ((-1 + q))**2 * q *
-    ((1 + q))**4 * (4 + (q + 4 * q**2)) * u * xi + -8 * q**2 * ((-1 +
-    q**2))**2 * (1 + q * (4 + q)) * u**2 * xi**2)) + (xi * (2 * ((-1 +
-    q))**4 * q**2 * ((1 + q))**3 + (((q + -1 * q**3))**2 * (-1 + q * (40
-    + 23 * q)) * u * xi + (8 * q**3 * (1 + q) * (-1 + q * (14 + 5 * (-4 +
-    q) * q)) * u**2 * xi**2 + -16 * q**4 * (1 + 6 * (-1 + q) * q) * u**3
-    * xi**3))) + (-1 + q) * (1 + q) * S2**2 * u * (-1 * ((-1 + q**2))**3
-    * (-1 + 2 * q * (12 + 5 * q)) + (-2 * (-1 + q) * q * ((1 + q))**2 *
-    (-4 + q * (29 + q * (-21 + 32 * q))) * u * xi + (-8 * q**2 * (1 + q)
-    * (1 + 2 * (-2 + q) * q * (1 + 4 * q)) * u**2 * xi**2 + 32 * q**3 *
-    (1 + q * (-1 + 3 * q)) * u**3 * xi**3)))))) + ((1 + q) * S1**2 * (16
-    * ((-1 + q))**3 * ((1 + q))**5 * (2 + 3 * q) * S2**8 * u**6 + (q**2 *
-    xi**2 * (((-1 + q))**4 * ((1 + q))**3 + (2 * q * (5 + 3 * q) * ((-1 +
-    q**2))**2 * u * xi + (-8 * q**2 * (1 + q) * (-4 + q * (7 + q)) * u**2
-    * xi**2 + 32 * (1 + -2 * q) * q**3 * u**3 * xi**3))) + ((-1 + q) *
-    ((1 + q))**2 * S2**4 * u**2 * ((-10 + (-24 + q) * q) * ((-1 +
-    q**2))**3 + (2 * (-1 + q) * q * ((1 + q))**2 * (-32 + q * (21 + q *
-    (-29 + 4 * q))) * u * xi + (8 * q**2 * (1 + q) * (8 + q * (-14 + (-4
-    + q) * q)) * u**2 * xi**2 + -32 * q**3 * (3 + (-1 + q) * q) * u**3 *
-    xi**3))) + (S2**2 * (-1 * ((-1 + q))**6 * ((1 + q))**5 + (-10 * ((-1
-    + q))**4 * q * ((1 + q))**5 * u * xi + (-2 * ((-1 + q))**2 * q**2 *
-    ((1 + q))**3 * (11 + q * (-24 + 11 * q)) * u**2 * xi**2 + (16 * q**3
-    * ((1 + q))**3 * (2 + q * (-3 + 2 * q)) * u**3 * xi**3 + 32 * q**4 *
-    (1 + q) * (3 + q * (-5 + 3 * q)) * u**4 * xi**4)))) + 4 * ((-1 +
-    q))**2 * ((1 + q))**4 * S2**6 * u**4 * (-8 + q * (-5 + (-24 * q +
-    (-22 * q**2 + (5 * q**3 + (2 * (-4 + q) * (3 + q) * u * xi + 8 * q *
-    u**2 * xi**2)))))))))) + -1 * (((1 + q) * S2**2 * u + q * xi))**2 *
-    (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 + (((-1 + q**2))**2
-    * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + (8 * (-4 + q)
-    * q * (1 + q) * u * xi + 16 * q**2 * u**2 * xi**2)) + (S2**2 * (-1 *
-    ((-1 + q**2))**4 + (-2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 *
-    q) * u * xi + (-8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) *
-    u**2 * xi**2 + -32 * q**3 * (-1 + q**2) * u**3 * xi**3))) + q**2 *
-    xi**2 * (1 + q * (8 * u * xi + q * (-2 + (16 * u * xi + ((q + 4 * u *
-    xi))**2))))))))))))
+    coeff0 = -16 * (16 * ((-1 + q))**3 * q**3 * ((1 + q))**6 * S1**10 * \
+    u**6 + (-1 * ((-1 + q))**2 * q**2 * ((1 + q))**4 * S1**8 * u**4 * \
+    (((1 + q))**2 * (1 + (-20 * q + (-8 * q**2 + 16 * (-3 + (q + 2 * \
+    q**2)) * S2**2 * u**2))) + (-8 * q * (1 + q) * (-5 + 8 * q) * u * \
+    chieff + 16 * q**2 * u**2 * chieff**2)) + ((-1 + q) * q * ((1 + \
+    q))**3 * S1**6 * u**2 * (q * ((-1 + q**2))**3 + (-4 * (-1 + q) * ((1 \
+    + q))**3 * (-5 + q * (27 + q * (-3 + 8 * q))) * S2**2 * u**2 + (16 * \
+    ((-1 + q))**2 * ((1 + q))**3 * (3 + q * (6 + q)) * S2**4 * u**4 + (-2 \
+    * (-1 + q) * q * ((1 + q))**2 * u * (1 + (-25 * q + (-12 * q**2 + 4 * \
+    (-1 + (q + 12 * q**2)) * S2**2 * u**2))) * chieff + (8 * q**2 * (1 + \
+    q) * u**2 * (4 + (-18 * q + (11 * q**2 + 4 * (-1 + q**2) * S2**2 * \
+    u**2))) * chieff**2 + 32 * (1 + -2 * q) * q**3 * u**3 * \
+    chieff**3))))) + (((1 + q))**2 * S1**4 * u * (-16 * ((-1 + q))**3 * \
+    ((1 + q))**4 * (1 + 3 * q * (2 + q)) * S2**6 * u**5 + (2 * S2**4 * \
+    u**3 * (((-1 + q))**2 * ((1 + q))**4 * (4 + q * (6 + q * (61 + (6 * q \
+    + 4 * q**2)))) + (4 * ((-1 + q))**2 * q * ((1 + q))**4 * (4 + (q + 4 \
+    * q**2)) * u * chieff + -8 * q**2 * ((-1 + q**2))**2 * (1 + q * (4 + \
+    q)) * u**2 * chieff**2)) + (chieff * (2 * ((-1 + q))**4 * q**2 * ((1 \
+    + q))**3 + (((q + -1 * q**3))**2 * (-1 + q * (40 + 23 * q)) * u * \
+    chieff + (8 * q**3 * (1 + q) * (-1 + q * (14 + 5 * (-4 + q) * q)) * \
+    u**2 * chieff**2 + -16 * q**4 * (1 + 6 * (-1 + q) * q) * u**3 * \
+    chieff**3))) + (-1 + q) * (1 + q) * S2**2 * u * (-1 * ((-1 + \
+    q**2))**3 * (-1 + 2 * q * (12 + 5 * q)) + (-2 * (-1 + q) * q * ((1 + \
+    q))**2 * (-4 + q * (29 + q * (-21 + 32 * q))) * u * chieff + (-8 * \
+    q**2 * (1 + q) * (1 + 2 * (-2 + q) * q * (1 + 4 * q)) * u**2 * \
+    chieff**2 + 32 * q**3 * (1 + q * (-1 + 3 * q)) * u**3 * \
+    chieff**3)))))) + ((1 + q) * S1**2 * (16 * ((-1 + q))**3 * ((1 + \
+    q))**5 * (2 + 3 * q) * S2**8 * u**6 + (q**2 * chieff**2 * (((-1 + \
+    q))**4 * ((1 + q))**3 + (2 * q * (5 + 3 * q) * ((-1 + q**2))**2 * u * \
+    chieff + (-8 * q**2 * (1 + q) * (-4 + q * (7 + q)) * u**2 * chieff**2 \
+    + 32 * (1 + -2 * q) * q**3 * u**3 * chieff**3))) + ((-1 + q) * ((1 + \
+    q))**2 * S2**4 * u**2 * ((-10 + (-24 + q) * q) * ((-1 + q**2))**3 + \
+    (2 * (-1 + q) * q * ((1 + q))**2 * (-32 + q * (21 + q * (-29 + 4 * \
+    q))) * u * chieff + (8 * q**2 * (1 + q) * (8 + q * (-14 + (-4 + q) * \
+    q)) * u**2 * chieff**2 + -32 * q**3 * (3 + (-1 + q) * q) * u**3 * \
+    chieff**3))) + (S2**2 * (-1 * ((-1 + q))**6 * ((1 + q))**5 + (-10 * \
+    ((-1 + q))**4 * q * ((1 + q))**5 * u * chieff + (-2 * ((-1 + q))**2 * \
+    q**2 * ((1 + q))**3 * (11 + q * (-24 + 11 * q)) * u**2 * chieff**2 + \
+    (16 * q**3 * ((1 + q))**3 * (2 + q * (-3 + 2 * q)) * u**3 * chieff**3 \
+    + 32 * q**4 * (1 + q) * (3 + q * (-5 + 3 * q)) * u**4 * chieff**4)))) \
+    + 4 * ((-1 + q))**2 * ((1 + q))**4 * S2**6 * u**4 * (-8 + q * (-5 + \
+    (-24 * q + (-22 * q**2 + (5 * q**3 + (2 * (-4 + q) * (3 + q) * u * \
+    chieff + 8 * q * u**2 * chieff**2)))))))))) + -1 * (((1 + q) * S2**2 \
+    * u + q * chieff))**2 * (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * \
+    u**4 + (((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 \
+    + q) * q) + (8 * (-4 + q) * q * (1 + q) * u * chieff + 16 * q**2 * \
+    u**2 * chieff**2)) + (S2**2 * (-1 * ((-1 + q**2))**4 + (-2 * ((-1 + \
+    q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * chieff + (-8 * (-1 + q) \
+    * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * chieff**2 + -32 * q**3 \
+    * (-1 + q**2) * u**3 * chieff**3))) + q**2 * chieff**2 * (1 + q * (8 \
+    * u * chieff + q * (-2 + (16 * u * chieff + ((q + 4 * u * \
+    chieff))**2))))))))))))
 
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
-def kapparesonances(u, xi, q, chi1, chi2):
+def kapparesonances(u, chieff, q, chi1, chi2):
     """
-    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of xi. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
+    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
 
     Call
     ----
-    kappamin,kappamax = kapparesonances(u,xi,q,chi1,chi2)
+    kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)
 
     Parameters
     ----------
     u: float
         Compactified separation 1/(2L).
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -818,17 +825,17 @@ def kapparesonances(u, xi, q, chi1, chi2):
     """
 
     u = np.atleast_1d(u)
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    kapparoots = wraproots(kappadiscriminant_coefficients, u, xi, q, chi1, chi2)
+    kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
 
     # There are in principle five solutions, but only two are physical.
-    def _compute(kapparoots, u, xi, q, chi1, chi2):
+    def _compute(kapparoots, u, chieff, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
-        Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), xi=np.tile(xi, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
+        Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), chieff=np.tile(chieff, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
         Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
         kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
         assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
@@ -836,24 +843,22 @@ def kapparesonances(u, xi, q, chi1, chi2):
         kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
         return kappares
 
-    kappamin, kappamax = np.array(list(map(_compute, kapparoots, u, xi, q, chi1, chi2))).T
+    kappamin, kappamax = np.array(list(map(_compute, kapparoots, u, chieff, q, chi1, chi2))).T
 
     return np.stack([kappamin, kappamax])
 
 
-def kappainfresonances(xi, q, chi1, chi2):
+def kappainfresonances(chieff, q, chi1, chi2):
     """
-    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of xi. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
+    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
 
     Call
     ----
-    kappainfmin,kappainfmax = kappainfresonances(u,xi,q,chi1,chi2)
+    kappainfmin,kappainfmax = kappainfresonances(chieff,q,chi1,chi2)
 
     Parameters
     ----------
-    u: float
-        Compactified separation 1/(2L).
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -870,29 +875,29 @@ def kappainfresonances(xi, q, chi1, chi2):
         Maximum value of the asymptotic angular momentum kappainf.
     """
 
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
-    kappainfmin = np.maximum((xi - (q**-1-q)*S2)/(1+q), (xi - (q**-1-q)*S1)/(1+q**-1))
-    kappainfmax = np.minimum((xi + (q**-1-q)*S2)/(1+q), (xi + (q**-1-q)*S1)/(1+q**-1))
+    kappainfmin = np.maximum((chieff - (q**-1-q)*S2)/(1+q), (chieff - (q**-1-q)*S1)/(1+q**-1))
+    kappainfmax = np.minimum((chieff + (q**-1-q)*S2)/(1+q), (chieff + (q**-1-q)*S1)/(1+q**-1))
 
     return kappainfmin, kappainfmax
 
 
-def Jresonances(r, xi, q, chi1, chi2):
+def Jresonances(r, chieff, q, chi1, chi2):
     """
-    Total angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes J for a given value of xi. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
+    Total angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes J for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
 
     Call
     ----
-    Jmin,Jmax = Jresonances(r,xi,q,chi1,chi2)
+    Jmin,Jmax = Jresonances(r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -910,28 +915,28 @@ def Jresonances(r, xi, q, chi1, chi2):
     """
 
     u = eval_u(r, q)
-    kappamin, kappamax = kapparesonances(u, xi, q, chi1, chi2)
+    kappamin, kappamax = kapparesonances(u, chieff, q, chi1, chi2)
     Jmin = eval_J(kappa=kappamin, r=r, q=q)
     Jmax = eval_J(kappa=kappamax, r=r, q=q)
 
     return np.stack([Jmin, Jmax])
 
 
-def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
+def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
     - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
-    - If r, xi, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
 
     Call
     ----
-    Jmin,Jmax = Jlimits(r=None,xi=None,q=None,chi1=None,chi2=None,enforce=False)
+    Jmin,Jmax = Jlimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
     r: float, optional (default: None)
         Binary separation.
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -950,11 +955,11 @@ def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
         Maximum value of the total angular momentum J.
     """
 
-    if r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
+    if r is not None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
         Jmin, Jmax = Jlimits_LS1S2(r, q, chi1, chi2)
 
-    elif r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
-        Jmin, Jmax = Jresonances(r, xi, q, chi1, chi2)
+    elif r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
+        Jmin, Jmax = Jresonances(r, chieff, q, chi1, chi2)
         # Check precondition
         Jmin_cond, Jmax_cond = Jlimits_LS1S2(r, q, chi1, chi2)
 
@@ -967,26 +972,26 @@ def Jlimits(r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
                 warnings.warn("Input values are not compatible [Jlimits].", Warning)
 
     else:
-        raise TypeError("Provide either (r,q,chi1,chi2) or (r,xi,q,chi1,chi2).")
+        raise TypeError("Provide either (r,q,chi1,chi2) or (r,chieff,q,chi1,chi2).")
 
     return np.stack([Jmin, Jmax])
 
 
-def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
+def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
     - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
-    - If r, xi, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
 
     Call
     ----
-    kappainfmin,kappainfmin = kappainflimits(r=None,xi=None,q=None,chi1=None,chi2=None,enforce=False)
+    kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
     r: float, optional (default: None)
         Binary separation.
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -1005,11 +1010,11 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
         Minimum value of the asymptotic angular momentum kappainf.
     """
 
-    if xi is None and q is not None and chi1 is not None and chi2 is not None:
+    if chieff is None and q is not None and chi1 is not None and chi2 is not None:
         kappainfmin, kappainfmax = Slimits_S1S2(q, chi1, chi2)
 
-    elif xi is not None and q is not None and chi1 is not None and chi2 is not None:
-        kappainfmin, kappainfmax = kappainfresonances(xi, q, chi1, chi2)
+    elif chieff is not None and q is not None and chi1 is not None and chi2 is not None:
+        kappainfmin, kappainfmax = kappainfresonances(chieff, q, chi1, chi2)
         # Check precondition
         kappainfmin_cond, kappainfmax_cond = Slimits_S1S2(q, chi1, chi2)
 
@@ -1022,18 +1027,18 @@ def kappainflimits(xi=None, q=None, chi1=None, chi2=None, enforce=False):
                 warnings.warn("Input values are not compatible [kappainflimits].", Warning)
 
     else:
-        raise TypeError("Provide either (q,chi1,chi2) or (xi,q,chi1,chi2).")
+        raise TypeError("Provide either (q,chi1,chi2) or (chieff,q,chi1,chi2).")
 
     return np.stack([kappainfmin, kappainfmax])
 
 
-def xilimits_definition(q, chi1, chi2):
+def chiefflimits_definition(q, chi1, chi2):
     """
-    Limits on the effective spin based only on the definition xi = (1+q)S1.L + (1+1/q)S2.L.
+    Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.
 
     Call
     ----
-    ximin,ximax = xilimits_definition(q,chi1,chi2)
+    chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)
 
     Parameters
     ----------
@@ -1046,26 +1051,26 @@ def xilimits_definition(q, chi1, chi2):
 
     Returns
     -------
-    ximin: float
-        Minimum value of the effective spin xi.
-    ximax: float
-        Maximum value of the effective spin xi.
+    chieffmin: float
+        Minimum value of the effective spin chieff.
+    chieffmax: float
+        Maximum value of the effective spin chieff.
     """
 
     q = np.atleast_1d(q)
     S1, S2 = spinmags(q, chi1, chi2)
-    xilim = (1+q)*S1 + (1+1/q)*S2
+    chiefflim = (1+q)*S1 + (1+1/q)*S2
 
-    return np.stack([-xilim, xilim])
+    return np.stack([-chiefflim, chiefflim])
 
 
-def xidiscriminant_coefficients(kappa, u, q, chi1, chi2):
+def chieffdiscriminant_coefficients(kappa, u, q, chi1, chi2):
     """
-    Coefficients of the sixth-degree equation in xi that defines the spin-orbit resonances.
+    Coefficients of the sixth-degree equation in chieff that defines the spin-orbit resonances.
 
     Call
     ----
-    coeff6,coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = xidiscriminant_coefficients(kappa,u,q,chi1,chi2)
+    coeff6,coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = chieffdiscriminant_coefficients(kappa,u,q,chi1,chi2)
 
     Parameters
     ----------
@@ -1107,151 +1112,151 @@ def xidiscriminant_coefficients(kappa, u, q, chi1, chi2):
     coeff6 = 256 * q**6 * u**2
 
     # Machine generated with polycoefficients.nb
-    coeff5 = 128 * q**5 * (1 + q) * u * (1 + (q + (8 * q * S1**2 * u**2 +
-    (-4 * u * (S1**2 * u + (-2 * S2**2 * u + kappa)) + -4 * q * u *
+    coeff5 = 128 * q**5 * (1 + q) * u * (1 + (q + (8 * q * S1**2 * u**2 + \
+    (-4 * u * (S1**2 * u + (-2 * S2**2 * u + kappa)) + -4 * q * u * \
     (S2**2 * u + kappa)))))
 
     # Machine generated with polycoefficients.nb
-    coeff4 = 16 * q**4 * ((1 + q))**2 * (1 + (-32 * S1**2 * u**2 + (8 * u
-    * (12 * S2**4 * u**3 + (-2 * kappa + (2 * u * ((-1 * S1**2 * u +
-    kappa))**2 + S2**2 * u * (1 + -12 * u * (S1**2 * u + kappa))))) + (q
-    * (-2 + (-96 * S1**4 * u**4 + (8 * S1**2 * u**2 * (7 + 4 * u * (5 *
-    S2**2 * u + kappa)) + 8 * u * (-12 * S2**4 * u**3 + (2 * kappa * (-3
-    + 4 * u * kappa) + S2**2 * u * (7 + 4 * u * kappa)))))) + q**2 * (1 +
-    8 * u * (-2 * kappa + u * (-4 * S2**2 + (12 * S1**4 * u**2 + (2 *
-    ((-1 * S2**2 * u + kappa))**2 + S1**2 * (1 + -12 * u * (S2**2 * u +
+    coeff4 = 16 * q**4 * ((1 + q))**2 * (1 + (-32 * S1**2 * u**2 + (8 * u \
+    * (12 * S2**4 * u**3 + (-2 * kappa + (2 * u * ((-1 * S1**2 * u + \
+    kappa))**2 + S2**2 * u * (1 + -12 * u * (S1**2 * u + kappa))))) + (q \
+    * (-2 + (-96 * S1**4 * u**4 + (8 * S1**2 * u**2 * (7 + 4 * u * (5 * \
+    S2**2 * u + kappa)) + 8 * u * (-12 * S2**4 * u**3 + (2 * kappa * (-3 \
+    + 4 * u * kappa) + S2**2 * u * (7 + 4 * u * kappa)))))) + q**2 * (1 + \
+    8 * u * (-2 * kappa + u * (-4 * S2**2 + (12 * S1**4 * u**2 + (2 * \
+    ((-1 * S2**2 * u + kappa))**2 + S1**2 * (1 + -12 * u * (S2**2 * u + \
     kappa)))))))))))
 
     # Machine generated with polycoefficients.nb
-    coeff3 = 32 * q**3 * ((1 + q))**3 * (16 * (-1 + q) * q * (-1 + 2 * q)
-    * S1**6 * u**5 + (16 * (-2 + q) * (-1 + q) * S2**6 * u**5 + (4 *
-    S2**4 * u**3 * (-5 + (20 * q + (-14 * q**2 + (q**3 + -4 * (3 + q *
-    (-5 + 3 * q)) * u * kappa)))) + ((1 + q) * kappa * (-1 * ((-1 +
-    q))**2 + (4 * (1 + q * (8 + q)) * u * kappa + -16 * q * u**2 *
-    kappa**2)) + (S2**2 * u * (-1 * ((-1 + q))**2 * (3 + 5 * q) + (-4 * q
-    * (19 + q * (-5 + 2 * q)) * u * kappa + 16 * (1 + q * (-1 + 3 * q)) *
-    u**2 * kappa**2)) + (-4 * S1**4 * u**3 * (-1 + (-4 * S2**2 * u**2 + q
-    * (14 + (5 * (-4 + q) * q + (8 * S2**2 * u**2 + (4 * q * (-4 + 3 * q)
-    * S2**2 * u**2 + 4 * (3 + q * (-5 + 3 * q)) * u * kappa)))))) + S1**2
-    * u * (-5 + (-8 * u * (6 * S2**4 * u**3 + (kappa + 2 * S2**2 * u * (1
-    + 2 * u * kappa))) + (q * (7 + (64 * S2**4 * u**4 + (8 * S2**2 * u**2
-    * (1 + 6 * u * kappa) + 4 * u * kappa * (5 + 12 * u * kappa)))) +
-    (q**3 * (-3 + 16 * u**2 * (S2**4 * u**2 + (kappa**2 + -1 * S2**2 * (1
-    + 2 * u * kappa)))) + q**2 * (1 + -4 * u * (8 * S2**4 * u**3 + (kappa
-    * (19 + 4 * u * kappa) + -2 * S2**2 * u * (1 + 6 * u *
+    coeff3 = 32 * q**3 * ((1 + q))**3 * (16 * (-1 + q) * q * (-1 + 2 * q) \
+    * S1**6 * u**5 + (16 * (-2 + q) * (-1 + q) * S2**6 * u**5 + (4 * \
+    S2**4 * u**3 * (-5 + (20 * q + (-14 * q**2 + (q**3 + -4 * (3 + q * \
+    (-5 + 3 * q)) * u * kappa)))) + ((1 + q) * kappa * (-1 * ((-1 + \
+    q))**2 + (4 * (1 + q * (8 + q)) * u * kappa + -16 * q * u**2 * \
+    kappa**2)) + (S2**2 * u * (-1 * ((-1 + q))**2 * (3 + 5 * q) + (-4 * q \
+    * (19 + q * (-5 + 2 * q)) * u * kappa + 16 * (1 + q * (-1 + 3 * q)) * \
+    u**2 * kappa**2)) + (-4 * S1**4 * u**3 * (-1 + (-4 * S2**2 * u**2 + q \
+    * (14 + (5 * (-4 + q) * q + (8 * S2**2 * u**2 + (4 * q * (-4 + 3 * q) \
+    * S2**2 * u**2 + 4 * (3 + q * (-5 + 3 * q)) * u * kappa)))))) + S1**2 \
+    * u * (-5 + (-8 * u * (6 * S2**4 * u**3 + (kappa + 2 * S2**2 * u * (1 \
+    + 2 * u * kappa))) + (q * (7 + (64 * S2**4 * u**4 + (8 * S2**2 * u**2 \
+    * (1 + 6 * u * kappa) + 4 * u * kappa * (5 + 12 * u * kappa)))) + \
+    (q**3 * (-3 + 16 * u**2 * (S2**4 * u**2 + (kappa**2 + -1 * S2**2 * (1 \
+    + 2 * u * kappa)))) + q**2 * (1 + -4 * u * (8 * S2**4 * u**3 + (kappa \
+    * (19 + 4 * u * kappa) + -2 * S2**2 * u * (1 + 6 * u * \
     kappa))))))))))))))
 
     # Machine generated with polycoefficients.nb
-    coeff2 = 16 * q**2 * ((1 + q))**4 * (16 * ((-1 + q))**2 * q**2 *
-    S1**8 * u**6 + (16 * ((-1 + q))**2 * S2**8 * u**6 + (kappa**2 * (((-1
-    + q))**2 * (1 + q * (4 + q)) + (-32 * q * (1 + q * (3 + q)) * u *
-    kappa + 16 * q**2 * u**2 * kappa**2)) + (S2**4 * u**2 * (((-1 +
-    q))**2 * (-23 + (-40 + q) * q) + (16 * (5 + -2 * q * (9 + q * (-8 + 3
-    * q))) * u * kappa + 16 * (1 + 6 * (-1 + q) * q) * u**2 * kappa**2))
-    + (S2**2 * (-1 * ((-1 + q))**4 + (-2 * ((-1 + q))**2 * (-7 + (-18 +
-    q) * q) * u * kappa + (8 * (-1 + q * (11 + 2 * q * (1 + 6 * q))) *
-    u**2 * kappa**2 + 32 * (1 + -2 * q) * q * u**3 * kappa**3))) + (8 *
-    (-1 + q) * S2**6 * u**4 * (11 + (4 * u * kappa + 2 * q * (-9 + (2 * q
-    + -4 * u * kappa)))) + (-8 * (-1 + q) * q * S1**6 * u**4 * (4 + (-4 *
-    S2**2 * u**2 + q * (-18 + (-8 * u * kappa + q * (11 + 4 * u * (S2**2
-    * u + kappa)))))) + (S1**4 * u**2 * (((1 + -4 * S2**2 * u**2))**2 +
-    (q**4 * (-23 + 16 * u * (S2**4 * u**3 + (-2 * S2**2 * u * (-2 + u *
-    kappa) + kappa * (5 + u * kappa)))) + (2 * q**3 * (3 + 8 * u * (2 *
-    S2**4 * u**3 + (-6 * kappa * (3 + u * kappa) + S2**2 * u * (-11 + 4 *
-    u * kappa)))) + (q**2 * (58 + -16 * u * (6 * S2**4 * u**3 + (-2 *
-    kappa * (8 + 3 * u * kappa) + S2**2 * u * (-5 + 8 * u * kappa)))) + q
-    * (-42 + 8 * u * (-12 * kappa + S2**2 * u * (5 + 4 * u * (S2**2 * u +
-    3 * kappa)))))))) + S1**2 * (-1 + (4 * q**3 * (1 + (-8 * S2**6 * u**6
-    + (2 * S2**4 * u**4 * (5 + 12 * u * kappa) + (-1 * S2**2 * u**2 * (23
-    + 8 * u * kappa * (4 + 3 * u * kappa)) + 2 * u * kappa * (1 + u *
-    kappa * (11 + 4 * u * kappa)))))) + (q**4 * (-1 + 2 * u * (-4 * S2**4
-    * u**3 + (kappa * (7 + -4 * u * kappa) + S2**2 * u * (11 + 8 * u *
-    kappa)))) + (2 * q**2 * (-3 + 2 * u * (8 * S2**6 * u**5 + (4 * S2**4
-    * u**3 * (5 + -8 * u * kappa) + (kappa * (-15 + 4 * u * kappa * (1 +
-    -4 * u * kappa)) + 5 * S2**2 * u * (7 + 8 * u * kappa * (2 + u *
-    kappa)))))) + (4 * q * (1 + u * (8 * S2**6 * u**5 + (4 * S2**4 * u**3
-    * (-11 + 4 * u * kappa) + (2 * kappa * (5 + 12 * u * kappa) + -1 *
-    S2**2 * u * (23 + 8 * u * kappa * (4 + 3 * u * kappa)))))) + 2 * u *
-    (-1 * kappa + S2**2 * u * (11 + 8 * u * (kappa + -2 * S2**2 * u * (-2
+    coeff2 = 16 * q**2 * ((1 + q))**4 * (16 * ((-1 + q))**2 * q**2 * \
+    S1**8 * u**6 + (16 * ((-1 + q))**2 * S2**8 * u**6 + (kappa**2 * (((-1 \
+    + q))**2 * (1 + q * (4 + q)) + (-32 * q * (1 + q * (3 + q)) * u * \
+    kappa + 16 * q**2 * u**2 * kappa**2)) + (S2**4 * u**2 * (((-1 + \
+    q))**2 * (-23 + (-40 + q) * q) + (16 * (5 + -2 * q * (9 + q * (-8 + 3 \
+    * q))) * u * kappa + 16 * (1 + 6 * (-1 + q) * q) * u**2 * kappa**2)) \
+    + (S2**2 * (-1 * ((-1 + q))**4 + (-2 * ((-1 + q))**2 * (-7 + (-18 + \
+    q) * q) * u * kappa + (8 * (-1 + q * (11 + 2 * q * (1 + 6 * q))) * \
+    u**2 * kappa**2 + 32 * (1 + -2 * q) * q * u**3 * kappa**3))) + (8 * \
+    (-1 + q) * S2**6 * u**4 * (11 + (4 * u * kappa + 2 * q * (-9 + (2 * q \
+    + -4 * u * kappa)))) + (-8 * (-1 + q) * q * S1**6 * u**4 * (4 + (-4 * \
+    S2**2 * u**2 + q * (-18 + (-8 * u * kappa + q * (11 + 4 * u * (S2**2 \
+    * u + kappa)))))) + (S1**4 * u**2 * (((1 + -4 * S2**2 * u**2))**2 + \
+    (q**4 * (-23 + 16 * u * (S2**4 * u**3 + (-2 * S2**2 * u * (-2 + u * \
+    kappa) + kappa * (5 + u * kappa)))) + (2 * q**3 * (3 + 8 * u * (2 * \
+    S2**4 * u**3 + (-6 * kappa * (3 + u * kappa) + S2**2 * u * (-11 + 4 * \
+    u * kappa)))) + (q**2 * (58 + -16 * u * (6 * S2**4 * u**3 + (-2 * \
+    kappa * (8 + 3 * u * kappa) + S2**2 * u * (-5 + 8 * u * kappa)))) + q \
+    * (-42 + 8 * u * (-12 * kappa + S2**2 * u * (5 + 4 * u * (S2**2 * u + \
+    3 * kappa)))))))) + S1**2 * (-1 + (4 * q**3 * (1 + (-8 * S2**6 * u**6 \
+    + (2 * S2**4 * u**4 * (5 + 12 * u * kappa) + (-1 * S2**2 * u**2 * (23 \
+    + 8 * u * kappa * (4 + 3 * u * kappa)) + 2 * u * kappa * (1 + u * \
+    kappa * (11 + 4 * u * kappa)))))) + (q**4 * (-1 + 2 * u * (-4 * S2**4 \
+    * u**3 + (kappa * (7 + -4 * u * kappa) + S2**2 * u * (11 + 8 * u * \
+    kappa)))) + (2 * q**2 * (-3 + 2 * u * (8 * S2**6 * u**5 + (4 * S2**4 \
+    * u**3 * (5 + -8 * u * kappa) + (kappa * (-15 + 4 * u * kappa * (1 + \
+    -4 * u * kappa)) + 5 * S2**2 * u * (7 + 8 * u * kappa * (2 + u * \
+    kappa)))))) + (4 * q * (1 + u * (8 * S2**6 * u**5 + (4 * S2**4 * u**3 \
+    * (-11 + 4 * u * kappa) + (2 * kappa * (5 + 12 * u * kappa) + -1 * \
+    S2**2 * u * (23 + 8 * u * kappa * (4 + 3 * u * kappa)))))) + 2 * u * \
+    (-1 * kappa + S2**2 * u * (11 + 8 * u * (kappa + -2 * S2**2 * u * (-2 \
     + u * (S2**2 * u + kappa))))))))))))))))))
 
     # Machine generated with polycoefficients.nb
-    coeff1 = -32 * q * ((1 + q))**2 * (4 * ((-1 + q))**2 * q**2 * ((1 +
-    q))**3 * (-5 + 8 * q) * S1**8 * u**5 + (-1 * (-1 + q) * q * ((1 +
-    q))**3 * S1**6 * u**3 * (-1 + (26 * q + (-13 * q**2 + (-12 * q**3 +
-    (4 * (-1 + q) * (1 + 3 * q) * (-1 + 4 * q) * S2**2 * u**2 + 4 * q *
-    (20 + q * (-29 + 12 * q)) * u * kappa))))) + ((-1 * (1 + q) * S2**2 *
-    u + (kappa + q * kappa)) * (16 * ((-1 + q))**3 * ((1 + q))**2 * S2**6
-    * u**4 + (q**2 * ((1 + q))**2 * kappa**2 * (((-1 + q))**2 + -16 * q *
-    u * kappa) + (-1 * (-1 + q) * ((1 + q))**2 * S2**2 * (((-1 + q))**3 +
-    (2 * (-10 + q) * (-1 + q) * q * u * kappa + -48 * q**2 * u**2 *
-    kappa**2)) + ((-1 + q**2))**2 * S2**4 * u**2 * (-8 + q * (-20 + (q +
-    -48 * u * kappa)))))) + (-1 * (1 + q) * ((-1 * (1 + q) * S2**2 * u +
-    (kappa + q * kappa)))**2 * (4 * (-4 + q) * ((-1 + q))**2 * S2**4 *
-    u**3 + (q * kappa * (-1 * ((-1 + q))**2 + 4 * q * (5 + q) * u *
-    kappa) + -1 * (-1 + q) * S2**2 * u * (-4 + q * (-1 + (4 * u * kappa +
-    q * (5 + 8 * u * kappa)))))) + (((1 + q))**3 * S1**2 * (4 * (-4 + q)
-    * ((-1 + q))**2 * (3 + q) * S2**6 * u**5 + ((1 + q) * S2**2 * u * (-5
-    * ((-1 + q))**4 + (-2 * ((-1 + q))**2 * (4 + q * (-7 + 4 * q)) * u *
-    kappa + 12 * q * (1 + q**2) * u**2 * kappa**2)) + (q * kappa * (-1 *
-    ((-1 + q))**4 + (((-1 + q))**2 * (-3 + q * (23 + 4 * q)) * u * kappa
-    + -4 * q * (-20 + q * (3 + q)) * u**2 * kappa**2)) + (-1 + q) * S2**4
-    * u**3 * (32 * (1 + u * kappa) + q * (-53 + (-56 * u * kappa + q *
-    (50 + q * (-33 + (4 * q + -12 * u * kappa))))))))) + -1 * ((1 +
-    q))**2 * S1**4 * u * (-4 * ((-1 + q**2))**2 * (4 + (q + 4 * q**2)) *
-    S2**4 * u**4 + (q * (1 + q) * (-1 * ((-1 + q))**4 + (((-1 + q))**2 *
-    (-3 + q * (49 + 16 * q)) * u * kappa + 4 * q * (30 + q * (-39 + (19 +
-    -4 * q) * q)) * u**2 * kappa**2)) + (-1 + q**2) * S2**2 * u**2 * (4 +
-    q * (-3 * (11 + 4 * u * kappa) + q * (50 + q * (-53 + (32 * q + 8 *
+    coeff1 = -32 * q * ((1 + q))**2 * (4 * ((-1 + q))**2 * q**2 * ((1 + \
+    q))**3 * (-5 + 8 * q) * S1**8 * u**5 + (-1 * (-1 + q) * q * ((1 + \
+    q))**3 * S1**6 * u**3 * (-1 + (26 * q + (-13 * q**2 + (-12 * q**3 + \
+    (4 * (-1 + q) * (1 + 3 * q) * (-1 + 4 * q) * S2**2 * u**2 + 4 * q * \
+    (20 + q * (-29 + 12 * q)) * u * kappa))))) + ((-1 * (1 + q) * S2**2 * \
+    u + (kappa + q * kappa)) * (16 * ((-1 + q))**3 * ((1 + q))**2 * S2**6 \
+    * u**4 + (q**2 * ((1 + q))**2 * kappa**2 * (((-1 + q))**2 + -16 * q * \
+    u * kappa) + (-1 * (-1 + q) * ((1 + q))**2 * S2**2 * (((-1 + q))**3 + \
+    (2 * (-10 + q) * (-1 + q) * q * u * kappa + -48 * q**2 * u**2 * \
+    kappa**2)) + ((-1 + q**2))**2 * S2**4 * u**2 * (-8 + q * (-20 + (q + \
+    -48 * u * kappa)))))) + (-1 * (1 + q) * ((-1 * (1 + q) * S2**2 * u + \
+    (kappa + q * kappa)))**2 * (4 * (-4 + q) * ((-1 + q))**2 * S2**4 * \
+    u**3 + (q * kappa * (-1 * ((-1 + q))**2 + 4 * q * (5 + q) * u * \
+    kappa) + -1 * (-1 + q) * S2**2 * u * (-4 + q * (-1 + (4 * u * kappa + \
+    q * (5 + 8 * u * kappa)))))) + (((1 + q))**3 * S1**2 * (4 * (-4 + q) \
+    * ((-1 + q))**2 * (3 + q) * S2**6 * u**5 + ((1 + q) * S2**2 * u * (-5 \
+    * ((-1 + q))**4 + (-2 * ((-1 + q))**2 * (4 + q * (-7 + 4 * q)) * u * \
+    kappa + 12 * q * (1 + q**2) * u**2 * kappa**2)) + (q * kappa * (-1 * \
+    ((-1 + q))**4 + (((-1 + q))**2 * (-3 + q * (23 + 4 * q)) * u * kappa \
+    + -4 * q * (-20 + q * (3 + q)) * u**2 * kappa**2)) + (-1 + q) * S2**4 \
+    * u**3 * (32 * (1 + u * kappa) + q * (-53 + (-56 * u * kappa + q * \
+    (50 + q * (-33 + (4 * q + -12 * u * kappa))))))))) + -1 * ((1 + \
+    q))**2 * S1**4 * u * (-4 * ((-1 + q**2))**2 * (4 + (q + 4 * q**2)) * \
+    S2**4 * u**4 + (q * (1 + q) * (-1 * ((-1 + q))**4 + (((-1 + q))**2 * \
+    (-3 + q * (49 + 16 * q)) * u * kappa + 4 * q * (30 + q * (-39 + (19 + \
+    -4 * q) * q)) * u**2 * kappa**2)) + (-1 + q**2) * S2**2 * u**2 * (4 + \
+    q * (-3 * (11 + 4 * u * kappa) + q * (50 + q * (-53 + (32 * q + 8 * \
     (-7 + 4 * q) * u * kappa))))))))))))
 
     # Machine generated with polycoefficients.nb
-    coeff0 = -16 * ((1 + q))**4 * (16 * ((-1 + q))**3 * q**3 * ((1 +
-    q))**2 * S1**10 * u**6 + ((-1 + q) * q * ((1 + q))**2 * S1**6 * u**2
-    * ((-1 + q) * (((-1 + q))**2 * q + (-4 * (-5 + q * (27 + q * (-3 + 8
-    * q))) * S2**2 * u**2 + 16 * (-1 + q) * (3 + q * (6 + q)) * S2**4 *
-    u**4)) + (-4 * (-1 + q) * q * u * (-1 + (15 * q + (4 * q**2 + 8 * (6
-    + (-1 + q) * q) * S2**2 * u**2))) * kappa + 16 * q**2 * (10 + (-8 +
-    q) * q) * u**2 * kappa**2)) + (-1 * S1**4 * u * (16 * ((-1 + q))**3 *
-    ((1 + q))**2 * (1 + 3 * q * (2 + q)) * S2**6 * u**5 + (-2 * ((-1 +
-    q**2))**2 * S2**4 * u**3 * (4 + (q * (6 + q * (61 + (6 * q + 4 *
-    q**2))) + 72 * (q + q**3) * u * kappa)) + (2 * kappa * (((-1 + q))**4
-    * q**2 * ((1 + q))**2 + (-1 * (-3 + (30 * q + 4 * q**2)) * ((q + -1 *
-    q**3))**2 * u * kappa + -8 * q**3 * ((1 + q))**2 * (10 + 3 * (-4 + q)
-    * q) * u**2 * kappa**2)) + (-1 + q) * ((1 + q))**2 * S2**2 * u *
-    (((-1 + q))**3 * (-1 + 2 * q * (12 + 5 * q)) + (4 * (-1 + q) * q *
-    (15 + q * (-55 + 2 * q * (9 + 2 * q))) * u * kappa + 144 * q**2 * (2
-    + (-2 + q) * q) * u**2 * kappa**2))))) + (((1 + q))**2 * S1**2 * (16
-    * ((-1 + q))**3 * (2 + 3 * q) * S2**8 * u**6 + (4 * ((-1 + q))**2 *
-    S2**6 * u**4 * (-8 + (3 * q + (-27 * q**2 + (5 * q**3 + 8 * (-1 + (q
-    + -6 * q**2)) * u * kappa)))) + (q**2 * kappa**2 * (((-1 + q))**4 +
-    (-4 * ((-1 + q))**2 * (-1 + 5 * q) * u * kappa + 16 * q * (-5 + 3 *
-    q) * u**2 * kappa**2)) + ((-1 + q) * S2**4 * u**2 * (((-1 + q))**3 *
-    (-10 + (-24 + q) * q) + (-4 * (-1 + q) * (4 + q * (18 + 5 * q * (-11
-    + 3 * q))) * u * kappa + 144 * q * (1 + 2 * (-1 + q) * q) * u**2 *
-    kappa**2)) + S2**2 * (-1 * ((-1 + q))**6 + (-2 * ((-1 + q))**4 * (1 +
-    (-12 + q) * q) * u * kappa + (4 * ((-1 + q))**2 * q * (15 + q * (-29
-    + 15 * q)) * u**2 * kappa**2 + -32 * q**2 * (6 + q * (-11 + 6 * q)) *
-    u**3 * kappa**3))))))) + (-1 * ((-1 * S2**2 * u + kappa))**2 * (16 *
-    ((-1 + q))**3 * ((1 + q))**2 * S2**6 * u**4 + (q**2 * ((1 + q))**2 *
-    kappa**2 * (((-1 + q))**2 + -16 * q * u * kappa) + (-1 * (-1 + q) *
-    ((1 + q))**2 * S2**2 * (((-1 + q))**3 + (2 * (-10 + q) * (-1 + q) * q
-    * u * kappa + -48 * q**2 * u**2 * kappa**2)) + ((-1 + q**2))**2 *
-    S2**4 * u**2 * (-8 + q * (-20 + (q + -48 * u * kappa)))))) + -1 * ((q
-    + -1 * q**3))**2 * S1**8 * u**4 * (1 + (-48 * S2**2 * u**2 + 4 * q *
-    (-5 + (4 * u * (S2**2 * u + -5 * kappa) + q * (-2 + 8 * u * (S2**2 *
+    coeff0 = -16 * ((1 + q))**4 * (16 * ((-1 + q))**3 * q**3 * ((1 + \
+    q))**2 * S1**10 * u**6 + ((-1 + q) * q * ((1 + q))**2 * S1**6 * u**2 \
+    * ((-1 + q) * (((-1 + q))**2 * q + (-4 * (-5 + q * (27 + q * (-3 + 8 \
+    * q))) * S2**2 * u**2 + 16 * (-1 + q) * (3 + q * (6 + q)) * S2**4 * \
+    u**4)) + (-4 * (-1 + q) * q * u * (-1 + (15 * q + (4 * q**2 + 8 * (6 \
+    + (-1 + q) * q) * S2**2 * u**2))) * kappa + 16 * q**2 * (10 + (-8 + \
+    q) * q) * u**2 * kappa**2)) + (-1 * S1**4 * u * (16 * ((-1 + q))**3 * \
+    ((1 + q))**2 * (1 + 3 * q * (2 + q)) * S2**6 * u**5 + (-2 * ((-1 + \
+    q**2))**2 * S2**4 * u**3 * (4 + (q * (6 + q * (61 + (6 * q + 4 * \
+    q**2))) + 72 * (q + q**3) * u * kappa)) + (2 * kappa * (((-1 + q))**4 \
+    * q**2 * ((1 + q))**2 + (-1 * (-3 + (30 * q + 4 * q**2)) * ((q + -1 * \
+    q**3))**2 * u * kappa + -8 * q**3 * ((1 + q))**2 * (10 + 3 * (-4 + q) \
+    * q) * u**2 * kappa**2)) + (-1 + q) * ((1 + q))**2 * S2**2 * u * \
+    (((-1 + q))**3 * (-1 + 2 * q * (12 + 5 * q)) + (4 * (-1 + q) * q * \
+    (15 + q * (-55 + 2 * q * (9 + 2 * q))) * u * kappa + 144 * q**2 * (2 \
+    + (-2 + q) * q) * u**2 * kappa**2))))) + (((1 + q))**2 * S1**2 * (16 \
+    * ((-1 + q))**3 * (2 + 3 * q) * S2**8 * u**6 + (4 * ((-1 + q))**2 * \
+    S2**6 * u**4 * (-8 + (3 * q + (-27 * q**2 + (5 * q**3 + 8 * (-1 + (q \
+    + -6 * q**2)) * u * kappa)))) + (q**2 * kappa**2 * (((-1 + q))**4 + \
+    (-4 * ((-1 + q))**2 * (-1 + 5 * q) * u * kappa + 16 * q * (-5 + 3 * \
+    q) * u**2 * kappa**2)) + ((-1 + q) * S2**4 * u**2 * (((-1 + q))**3 * \
+    (-10 + (-24 + q) * q) + (-4 * (-1 + q) * (4 + q * (18 + 5 * q * (-11 \
+    + 3 * q))) * u * kappa + 144 * q * (1 + 2 * (-1 + q) * q) * u**2 * \
+    kappa**2)) + S2**2 * (-1 * ((-1 + q))**6 + (-2 * ((-1 + q))**4 * (1 + \
+    (-12 + q) * q) * u * kappa + (4 * ((-1 + q))**2 * q * (15 + q * (-29 \
+    + 15 * q)) * u**2 * kappa**2 + -32 * q**2 * (6 + q * (-11 + 6 * q)) * \
+    u**3 * kappa**3))))))) + (-1 * ((-1 * S2**2 * u + kappa))**2 * (16 * \
+    ((-1 + q))**3 * ((1 + q))**2 * S2**6 * u**4 + (q**2 * ((1 + q))**2 * \
+    kappa**2 * (((-1 + q))**2 + -16 * q * u * kappa) + (-1 * (-1 + q) * \
+    ((1 + q))**2 * S2**2 * (((-1 + q))**3 + (2 * (-10 + q) * (-1 + q) * q \
+    * u * kappa + -48 * q**2 * u**2 * kappa**2)) + ((-1 + q**2))**2 * \
+    S2**4 * u**2 * (-8 + q * (-20 + (q + -48 * u * kappa)))))) + -1 * ((q \
+    + -1 * q**3))**2 * S1**8 * u**4 * (1 + (-48 * S2**2 * u**2 + 4 * q * \
+    (-5 + (4 * u * (S2**2 * u + -5 * kappa) + q * (-2 + 8 * u * (S2**2 * \
     u + kappa)))))))))))
 
     return np.stack([coeff6, coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
-def xiresonances(J, r, q, chi1, chi2):
+def chieffresonances(J, r, q, chi1, chi2):
     """
-    Effective spin of the two spin-orbit resonances. The resonances minimizes and maximizes xi for a given value of J. The minimum corresponds to either deltaphi=0 or deltaphi=pi, the maximum always corresponds to deltaphi=pi.
+    Effective spin of the two spin-orbit resonances. The resonances minimizes and maximizes chieff for a given value of J. The minimum corresponds to either deltaphi=0 or deltaphi=pi, the maximum always corresponds to deltaphi=pi.
 
     Call
     ----
-    ximin,ximax = xiresonances(J,r,q,chi1,chi2)
+    chieffmin,chieffmax = chieffresonances(J,r,q,chi1,chi2)
 
     Parameters
     ----------
@@ -1268,10 +1273,10 @@ def xiresonances(J, r, q, chi1, chi2):
 
     Returns
     -------
-    ximin: float
-        Minimum value of the effective spin xi.
-    ximax: float
-        Maximum value of the effective spin xi.
+    chieffmin: float
+        Minimum value of the effective spin chieff.
+    chieffmax: float
+        Maximum value of the effective spin chieff.
     """
 
     # Altough there are 6 solutions in general, we know that only two can lie between Smin and Smax.
@@ -1285,28 +1290,28 @@ def xiresonances(J, r, q, chi1, chi2):
     u = eval_u(r, q)
 
     Smin, Smax = Slimits_LJS1S2(J, r, q, chi1, chi2)
-    xiroots = wraproots(xidiscriminant_coefficients, kappa, u, q, chi1, chi2)
+    chieffroots = wraproots(chieffdiscriminant_coefficients, kappa, u, q, chi1, chi2)
 
-    def _compute(Smin, Smax, J, r, xiroots, q, chi1, chi2):
-        xiroots = xiroots[np.isfinite(xiroots)]
-        Sroots = Satresonance(J=np.tile(J, xiroots.shape), r=np.tile(r, xiroots.shape), xi=xiroots, q=np.tile(q, xiroots.shape), chi1=np.tile(chi1, xiroots.shape), chi2=np.tile(chi2, xiroots.shape))
-        xires = xiroots[np.logical_and(Sroots > Smin, Sroots < Smax)]
-        assert len(xires) <= 2, "I found more than two resonances, this should not be possible."
+    def _compute(Smin, Smax, J, r, chieffroots, q, chi1, chi2):
+        chieffroots = chieffroots[np.isfinite(chieffroots)]
+        Sroots = Satresonance(J=np.tile(J, chieffroots.shape), r=np.tile(r, chieffroots.shape), chieff=chieffroots, q=np.tile(q, chieffroots.shape), chi1=np.tile(chi1, chieffroots.shape), chi2=np.tile(chi2, chieffroots.shape))
+        chieffres = chieffroots[np.logical_and(Sroots > Smin, Sroots < Smax)]
+        assert len(chieffres) <= 2, "I found more than two resonances, this should not be possible."
         # If you didn't find enough solutions, append nans
-        xires = np.concatenate([xires, np.repeat(np.nan, 2-len(xires))])
-        return xires
+        chieffres = np.concatenate([chieffres, np.repeat(np.nan, 2-len(chieffres))])
+        return chieffres
 
-    ximin, ximax = np.array(list(map(_compute, Smin, Smax, J, r, xiroots, q, chi1, chi2))).T
-    return np.stack([ximin, ximax])
+    chieffmin, chieffmax = np.array(list(map(_compute, Smin, Smax, J, r, chieffroots, q, chi1, chi2))).T
+    return np.stack([chieffmin, chieffmax])
 
 
-def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
+def anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
     """
-    Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or xi, not both.
+    Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or chieff, not both.
 
     Call
     ----
-    theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = anglesresonances(J=None,r=None,xi=None,q=None,chi1=None,chi2=None)
+    theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = anglesresonances(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
@@ -1314,7 +1319,7 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
         Magnitude of the total angular momentum.
     r: float, optional (default: None)
         Binary separation.
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -1326,67 +1331,67 @@ def anglesresonances(J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     Returns
     -------
     theta1atmin: float
-        Value of the angle theta1 at the resonance that minimizes either J or xi, depending on the input.
+        Value of the angle theta1 at the resonance that minimizes either J or chieff, depending on the input.
     theta2atmin: float
-        Value of the angle theta2 at the resonance that minimizes either J or xi, depending on the input.
+        Value of the angle theta2 at the resonance that minimizes either J or chieff, depending on the input.
     deltaphiatmin: float
-        Value of the angle deltaphi at the resonance that minimizes either J or xi, depending on the input.
+        Value of the angle deltaphi at the resonance that minimizes either J or chieff, depending on the input.
     theta1atmax: float
-        Value of the angle theta1 at the resonance that maximizes either J or xi, depending on the input.
+        Value of the angle theta1 at the resonance that maximizes either J or chieff, depending on the input.
     theta2atmax: float
-        Value of the angle theta2 at the resonance that maximizes either J or xi, depending on the input.
+        Value of the angle theta2 at the resonance that maximizes either J or chieff, depending on the input.
     deltaphiatmax: float
-        Value of the angle deltaphi at the resonance that maximizes either J or xi, depending on the input.
+        Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input.
     """
 
     q = np.atleast_1d(q)
 
-    if J is None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
+    if J is None and r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
 
-        Jmin, Jmax = Jresonances(r, xi, q, chi1, chi2)
-        Satmin = Satresonance(J=Jmin, r=r, xi=xi, q=q, chi1=chi1, chi2=chi2)
-        theta1atmin = eval_theta1(Satmin, Jmin, r, xi, q, chi1, chi2)
-        theta2atmin = eval_theta2(Satmin, Jmin, r, xi, q, chi1, chi2)
+        Jmin, Jmax = Jresonances(r, chieff, q, chi1, chi2)
+        Satmin = Satresonance(J=Jmin, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+        theta1atmin = eval_theta1(Satmin, Jmin, r, chieff, q, chi1, chi2)
+        theta2atmin = eval_theta2(Satmin, Jmin, r, chieff, q, chi1, chi2)
         deltaphiatmin = np.tile(np.pi, q.shape)
 
-        Satmax = Satresonance(J=Jmax, r=r, xi=xi, q=q, chi1=chi1, chi2=chi2)
-        theta1atmax = eval_theta1(Satmax, Jmax, r, xi, q, chi1, chi2)
-        theta2atmax = eval_theta2(Satmax, Jmax, r, xi, q, chi1, chi2)
+        Satmax = Satresonance(J=Jmax, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+        theta1atmax = eval_theta1(Satmax, Jmax, r, chieff, q, chi1, chi2)
+        theta2atmax = eval_theta2(Satmax, Jmax, r, chieff, q, chi1, chi2)
         deltaphiatmax = np.tile(0, q.shape)
 
-    elif J is not None and r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
+    elif J is not None and r is not None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
 
-        ximin, ximax = xiresonances(J, r, q, chi1, chi2)
+        chieffmin, chieffmax = chieffresonances(J, r, q, chi1, chi2)
 
-        Satmin = Satresonance(J=J, r=r, xi=ximin, q=q, chi1=chi1, chi2=chi2)
-        theta1atmin = eval_theta1(Satmin, J, r, ximin, q, chi1, chi2)
-        theta2atmin = eval_theta2(Satmin, J, r, ximin, q, chi1, chi2)
+        Satmin = Satresonance(J=J, r=r, chieff=chieffmin, q=q, chi1=chi1, chi2=chi2)
+        theta1atmin = eval_theta1(Satmin, J, r, chieffmin, q, chi1, chi2)
+        theta2atmin = eval_theta2(Satmin, J, r, chieffmin, q, chi1, chi2)
         # See Fig 5 in arxiv:1506.03492
         J = np.atleast_1d(J)
         S1, S2 = spinmags(q, chi1, chi2)
         L = eval_L(r, q)
         deltaphiatmin = np.where(J > np.abs(L-S1-S2), 0, np.pi)
 
-        Satmax = Satresonance(J=J, r=r, xi=ximax, q=q, chi1=chi1, chi2=chi2)
-        theta1atmax = eval_theta1(Satmax, J, r, ximax, q, chi1, chi2)
-        theta2atmax = eval_theta2(Satmax, J, r, ximax, q, chi1, chi2)
+        Satmax = Satresonance(J=J, r=r, chieff=chieffmax, q=q, chi1=chi1, chi2=chi2)
+        theta1atmax = eval_theta1(Satmax, J, r, chieffmax, q, chi1, chi2)
+        theta2atmax = eval_theta2(Satmax, J, r, chieffmax, q, chi1, chi2)
         deltaphiatmax = np.tile(np.pi, q.shape)
 
     else:
-        raise TypeError("Provide either (r,xi,q,chi1,chi2) or (J,r,q,chi1,chi2).")
+        raise TypeError("Provide either (r,chieff,q,chi1,chi2) or (J,r,q,chi1,chi2).")
 
     return np.stack([theta1atmin, theta2atmin, deltaphiatmin, theta1atmax, theta2atmax, deltaphiatmax])
 
 
-def xilimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
+def chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the projected effective spin. The contraints considered depend on the inputs provided.
-    - If q, chi1, and chi2 are provided, enforce xi = (1+q)S1.L + (1+1/q)S2.L.
+    - If q, chi1, and chi2 are provided, enforce chieff = (1+q)S1.L + (1+1/q)S2.L.
     - If J, r, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
 
     Call
     ----
-    ximin,ximax = xilimits(J=None,r=None,q=None,chi1=None,chi2=None,enforce=False)
+    chieffmin,chieffmax = chiefflimits(J=None,r=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
@@ -1405,31 +1410,31 @@ def xilimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
 
     Returns
     -------
-    ximin: float
-        Minimum value of the effective spin xi.
-    ximax: float
-        Maximum value of the effective spin xi.
+    chieffmin: float
+        Minimum value of the effective spin chieff.
+    chieffmax: float
+        Maximum value of the effective spin chieff.
     """
 
     if J is None and r is None and q is not None and chi1 is not None and chi2 is not None:
-        ximin, ximax = xilimits_definition(q, chi1, chi2)
+        chieffmin, chieffmax = chiefflimits_definition(q, chi1, chi2)
 
     elif J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
-        ximin, ximax = xiresonances(J, r, q, chi1, chi2)
+        chieffmin, chieffmax = chieffresonances(J, r, q, chi1, chi2)
         # Check precondition
-        ximin_cond, ximax_cond = xilimits_definition(q, chi1, chi2)
-        if (ximin > ximin_cond).all() and (ximax < ximax_cond).all():
+        chieffmin_cond, chieffmax_cond = chiefflimits_definition(q, chi1, chi2)
+        if (chieffmin > chieffmin_cond).all() and (chieffmax < chieffmax_cond).all():
             pass
         else:
             if enforce:
-                raise ValueError("Input values are not compatible [xilimits].")
+                raise ValueError("Input values are not compatible [chiefflimits].")
             else:
-                warnings.warn("Input values are not compatible [xilimits].", Warning)
+                warnings.warn("Input values are not compatible [chiefflimits].", Warning)
 
     else:
         raise TypeError("Provide either (q,chi1,chi2) or (J,r,q,chi1,chi2).")
 
-    return np.stack([ximin, ximax])
+    return np.stack([chieffmin, chieffmax])
 
 
 def Slimits_S1S2(q, chi1, chi2):
@@ -1533,13 +1538,13 @@ def Slimits_LJS1S2(J, r, q, chi1, chi2):
     return np.stack([Smin, Smax])
 
 
-def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
+def Scubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     """
     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
 
     Call
     ----
-    coeff3,coeff2,coeff1,coeff0 = Scubic_coefficients(kappa,u,xi,q,chi1,chi2)
+    coeff3,coeff2,coeff1,coeff0 = Scubic_coefficients(kappa,u,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -1547,7 +1552,7 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
         Regularized angular momentum (J^2-L^2)/(2L).
     u: float
         Compactified separation 1/(2L).
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -1570,39 +1575,40 @@ def Scubic_coefficients(kappa, u, xi, q, chi1, chi2):
 
     kappa = np.atleast_1d(kappa)
     u = np.atleast_1d(u)
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
     S1, S2 = spinmags(q, chi1, chi2)
 
     # Machine generated with polycoefficients.nb
-    coeff3 = q * ((1 + q))**2 * u**2
+    coeff3 = q * ((1 + q))**2 * u**2"
 
     # Machine generated with polycoefficients.nb
-    coeff2 = 1/4 * ((1 + q))**2 * (1 + (4 * S2**2 * u**2 + (q**2 * (1 + 4
-    * S1**2 * u**2) + -2 * q * (1 + 2 * u * ((S1**2 + S2**2) * u + (2 *
-    kappa + -1 * xi))))))
+    coeff2 = 1/4 * ((1 + q))**2 * (1 + (4 * S2**2 * u**2 + (q**2 * (1 + 4 \
+    * S1**2 * u**2) + -2 * q * (1 + 2 * u * ((S1**2 + S2**2) * u + (2 * \
+    kappa + -1 * chieff))))))
 
     # Machine generated with polycoefficients.nb
-    coeff1 = (q * (kappa + (q * kappa + -1 * xi)) * (kappa + (q * kappa +
-    -1 * q * xi)) + (-1/2 * (-1 + q**2) * S1**2 * ((1 + q) * (-1 + (q + 4
-    * q * u * kappa)) + -2 * q * u * xi) + -1/2 * (-1 + q**2) * S2**2 *
-    ((1 + q) * (-1 + (q + -4 * u * kappa)) + 2 * q * u * xi)))
+    coeff1 = (q * (kappa + (q * kappa + -1 * chieff)) * (kappa + (q * \
+    kappa + -1 * q * chieff)) + (-1/2 * (-1 + q**2) * S1**2 * ((1 + q) * \
+    (-1 + (q + 4 * q * u * kappa)) + -2 * q * u * chieff) + -1/2 * (-1 + \
+    q**2) * S2**2 * ((1 + q) * (-1 + (q + -4 * u * kappa)) + 2 * q * u * \
+    chieff)))
 
     # Machine generated with polycoefficients.nb
-    coeff0 = 1/4 * (-1 + q) * (1 + q) * ((1 + q) * ((-1 + q) * ((S1**2 +
-    -1 * S2**2))**2 + 4 * (q * S1**2 + -1 * S2**2) * kappa**2) + -4 * q *
-    (S1 + -1 * S2) * (S1 + S2) * kappa * xi)
+    coeff0 = 1/4 * (-1 + q) * (1 + q) * ((1 + q) * ((-1 + q) * ((S1**2 + \
+    -1 * S2**2))**2 + 4 * (q * S1**2 + -1 * S2**2) * kappa**2) + -4 * q * \
+    (S1 + -1 * S2) * (S1 + S2) * kappa * chieff)
 
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
-def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
+def Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
 
     Call
     ----
-    Sminuss,Spluss,S3s = Ssroots(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    Sminuss,Spluss,S3s = Ssroots(J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -1610,7 +1616,7 @@ def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -1635,7 +1641,7 @@ def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
 
         kappa = eval_kappa(J, r, q)
         u = eval_u(r, q)
-        S3s, Sminuss, Spluss = wraproots(Scubic_coefficients, kappa, u, xi, q, chi1, chi2).T
+        S3s, Sminuss, Spluss = wraproots(Scubic_coefficients, kappa, u, chieff, q, chi1, chi2).T
 
         return np.stack([Sminuss, Spluss, S3s])
 
@@ -1645,13 +1651,13 @@ def Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=None):
         return precomputedroots
 
 
-def Slimits_plusminus(J, r, xi, q, chi1, chi2):
+def Slimits_plusminus(J, r, chieff, q, chi1, chi2):
     """
-    Limits on the total spin magnitude compatible with both J and xi.
+    Limits on the total spin magnitude compatible with both J and chieff.
 
     Call
     ----
-    Smin,Smax = Slimits_plusminus(J,r,xi,q,chi1,chi2)
+    Smin,Smax = Slimits_plusminus(J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -1659,7 +1665,7 @@ def Slimits_plusminus(J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -1676,7 +1682,7 @@ def Slimits_plusminus(J, r, xi, q, chi1, chi2):
         Maximum value of the total spin S.
     """
 
-    Sminuss, Spluss, _ = Ssroots(J, r, xi, q, chi1, chi2)
+    Sminuss, Spluss, _ = Ssroots(J, r, chieff, q, chi1, chi2)
     with np.errstate(invalid='ignore'):
         Smin = Sminuss**0.5
         Smax = Spluss**0.5
@@ -1684,13 +1690,13 @@ def Slimits_plusminus(J, r, xi, q, chi1, chi2):
     return np.stack([Smin, Smax])
 
 
-def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None, chi2=None):
+def Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None):
     """
     Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user. Provide either J or kappa and either r or u.
 
     Call
     ----
-    S = Satresonance(J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None)
+    S = Satresonance(J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
@@ -1702,7 +1708,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
         Binary separation.
     u: float, optional (default: None)
         Compactified separation 1/(2L).
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -1734,7 +1740,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
     else:
         raise TypeError("Please provide either J or kappa.")
 
-    coeffs = Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
+    coeffs = Scubic_coefficients(kappa, u, chieff, q, chi1, chi2)
     with np.errstate(invalid='ignore'):  # nan is ok here
         # This is with a simple for loop
         # Sres = np.array([np.mean(np.real(np.sort_complex(np.roots(x))[1:]))**0.5 for x in coeffs.T])
@@ -1743,17 +1749,17 @@ def Satresonance(J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None,
     return Sres
 
 
-def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False):
+def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the total spin magnitude. The contraints considered depend on the inputs provided.
     - If q, chi1, and chi2 are provided, enforce S=S1+S2.
     - If J, r, and q are provided, enforce S=J-L.
     - If J, r, q, chi1, and chi2 are provided, enforce S=S1+S2 and S=J-L.
-    - If J, r, xi, q, chi1, and chi2 are provided, compute solve the cubic equation of the effective potentials (Sminus and Splus).
+    - If J, r, chieff, q, chi1, and chi2 are provided, compute solve the cubic equation of the effective potentials (Sminus and Splus).
 
     Call
     ----
-    Smin,Smax = Slimits(J=None,r=None,xi=None,q=None,chi1=None,chi2=None,enforce=False)
+    Smin,Smax = Slimits(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
@@ -1761,7 +1767,7 @@ def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False
         Magnitude of the total angular momentum.
     r: float, optional (default: None)
         Binary separation.
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -1780,18 +1786,18 @@ def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False
         Maximum value of the total spin S.
     """
 
-    if J is None and r is None and xi is None and q is not None and chi1 is not None and chi2 is not None:
+    if J is None and r is None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
         Smin, Smax = Slimits_S1S2(q, chi1, chi2)
 
-    elif J is not None and r is not None and xi is None and q is not None and chi1 is None and chi2 is None:
+    elif J is not None and r is not None and chieff is None and q is not None and chi1 is None and chi2 is None:
         Smin, Smax = Slimits_LJ(J, r, q)
 
-    elif J is not None and r is not None and xi is None and q is not None and chi1 is not None and chi2 is not None:
+    elif J is not None and r is not None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
         Smin, Smax = Slimits_LJS1S2(J, r, q, chi1, chi2)
 
-    elif J is not None and r is not None and xi is not None and q is not None and chi1 is not None and chi2 is not None:
+    elif J is not None and r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
         # Compute limits
-        Smin, Smax = Slimits_plusminus(J, r, xi, q, chi1, chi2)
+        Smin, Smax = Slimits_plusminus(J, r, chieff, q, chi1, chi2)
         # Check precondition
         Smin_cond, Smax_cond = Slimits_LJS1S2(J, r, q, chi1, chi2)
         if (Smin > Smin_cond).all() and (Smax < Smax_cond).all():
@@ -1803,16 +1809,16 @@ def Slimits(J=None, r=None, xi=None, q=None, chi1=None, chi2=None, enforce=False
                 warnings.warn("Input values are not compatible [Slimits].", Warning)
 
     else:
-        raise TypeError("Provide one of the following: (q,chi1,chi2), (J,r,q), (J,r,q,chi1,chi2), (J,r,xi,q,chi1,chi2).")
+        raise TypeError("Provide one of the following: (q,chi1,chi2), (J,r,q), (J,r,q,chi1,chi2), (J,r,chieff,q,chi1,chi2).")
 
     return np.stack([Smin, Smax])
 
 
-# TODO: Check inter-compatibility of Slimits, Jlimits, xilimits
+# TODO: Check inter-compatibility of Slimits, Jlimits, chiefflimits
 # TODO: check docstrings
 # Tags for each limit check that fails?
-# Davide: Does this function uses only Jlimits and xilimits or also Slimits? Move later?
-def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
+# Davide: Does this function uses only Jlimits and chiefflimits or also Slimits? Move later?
+def limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
     """
     Check if the inputs are consistent with the geometrical constraints.
 
@@ -1824,7 +1830,7 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
         Magnitude of the total angular momentum.
     r: float, optional
         Binary separation.
-    xi: float, optional
+    chieff: float, optional
         Effective spin
     q: float
         Mass ratio: 0 <= q <= 1.
@@ -1841,34 +1847,34 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
     # q, ch1, chi2
     # 0, 1
 
-    # J: r, xi, q, chi1, chi2
+    # J: r, chieff, q, chi1, chi2
     # r, q, chi1, chi2 -> Jlimits_LS1S2
-    # r, xi, q, chi1, chi2 -> Jresonances
+    # r, chieff, q, chi1, chi2 -> Jresonances
 
-    # xi: J, r, q, chi1, chi2
-    # q, chi1, chi2 -> xilimits_definition
-    # J, r, q, chi1, chi2 -> xiresonances
+    # chieff: J, r, q, chi1, chi2
+    # q, chi1, chi2 -> chiefflimits_definition
+    # J, r, q, chi1, chi2 -> chieffresonances
 
-    # S: J, r, xi, q, chi1, chi2
+    # S: J, r, chieff, q, chi1, chi2
     # q, chi1, chi2 -> Slimits_S1S2
     # J, r, q -> Slimits_LJ
     # J, r, q, chi1, chi2 -> Slimits_LJS1S2
-    # J, r, xi, q, chi1, chi2 -> Slimits_plusminus
+    # J, r, chieff, q, chi1, chi2 -> Slimits_plusminus
 
     def _limits_check(testvalue, interval):
         """Check if a value is within a given interval"""
         return np.logical_and(testvalue >= interval[0], testvalue <= interval[1])
 
-    Slim = Slimits(J, r, xi, q, chi1, chi2)
+    Slim = Slimits(J, r, chieff, q, chi1, chi2)
     Sbool = _limits_check(S, Slim)
 
-    Jlim = Jlimits(r, xi, q, chi1, chi2)
+    Jlim = Jlimits(r, chieff, q, chi1, chi2)
     Jbool = _limits_check(J, Jlim)
 
-    xilim = xilimits(J, r, q, chi1, chi2)
-    xibool = _limits_check(xi, xilim)
+    chiefflim = chiefflimits(J, r, q, chi1, chi2)
+    chieffbool = _limits_check(chieff, chiefflim)
 
-    check = all((Sbool, Jbool, xibool))
+    check = all((Sbool, Jbool, chieffbool))
 
     if r is not None:
         rbool = _limits_check(r, [10.0, np.inf])
@@ -1891,13 +1897,13 @@ def limits_check(S=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None):
 
 # Evaluations and conversions
 
-def eval_xi(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
+def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
     """
     Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
 
     Call
     ----
-    xi = eval_xi(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
+    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
 
     Parameters
     ----------
@@ -1922,7 +1928,7 @@ def eval_xi(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=Non
 
     Returns
     -------
-    xi: float
+    chieff: float
         Effective spin.
     """
 
@@ -1932,7 +1938,7 @@ def eval_xi(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=Non
         theta2 = np.atleast_1d(theta2)
         q = np.atleast_1d(q)
         S1, S2 = spinmags(q, chi1, chi2)
-        xi = (1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
+        chieff = (1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
 
     elif theta1 is None and theta2 is None and S is not None and varphi is not None and J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
@@ -1944,17 +1950,17 @@ def eval_xi(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=Non
         L = eval_L(r, q)
 
         # Machine generated with polycoefficients.nb
-        xi = 1/4 * L**(-1) * q**(-1) * S**(-2) * ((J**2 + (-1 * L**2 + -1 *
-        S**2)) * (((1 + q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) +
-        -1 * (1 + -1 * q**2) * ((J**2 + -1 * ((L + -1 * S))**2))**(1/2) *
-        ((-1 * J**2 + ((L + S))**2))**(1/2) * ((S**2 + -1 * ((S1 + -1 *
-        S2))**2))**(1/2) * ((-1 * S**2 + ((S1 + S2))**2))**(1/2) *
+        chieff = 1/4 * L**(-1) * q**(-1) * S**(-2) * ((J**2 + (-1 * L**2 + -1 \
+        * S**2)) * (((1 + q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) \
+        + -1 * (1 + -1 * q**2) * ((J**2 + -1 * ((L + -1 * S))**2))**(1/2) * \
+        ((-1 * J**2 + ((L + S))**2))**(1/2) * ((S**2 + -1 * ((S1 + -1 * \
+        S2))**2))**(1/2) * ((-1 * S**2 + ((S1 + S2))**2))**(1/2) * \
         np.cos(varphi))
 
     else:
         raise TypeError("Provide either (theta1,theta2,J,r,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).")
 
-    return xi
+    return chieff
 
 
 def effectivepotential_plus(S, J, r, q, chi1, chi2):
@@ -1963,7 +1969,7 @@ def effectivepotential_plus(S, J, r, q, chi1, chi2):
 
     Call
     ----
-    xi = effectivepotential_plus(S,J,r,q,chi1,chi2)
+    chieff = effectivepotential_plus(S,J,r,q,chi1,chi2)
 
     Parameters
     ----------
@@ -1982,15 +1988,15 @@ def effectivepotential_plus(S, J, r, q, chi1, chi2):
 
     Returns
     -------
-    xi: float
+    chieff: float
         Effective spin.
     """
 
     q = np.atleast_1d(q)
     varphi = np.tile(np.pi, q.shape)
-    xi = eval_xi(S=S, varphi=varphi, J=J, r=r, q=q, chi1=chi1, chi2=chi2)
+    chieff = eval_chieff(S=S, varphi=varphi, J=J, r=r, q=q, chi1=chi1, chi2=chi2)
 
-    return xi
+    return chieff
 
 
 def effectivepotential_minus(S, J, r, q, chi1, chi2):
@@ -1999,7 +2005,7 @@ def effectivepotential_minus(S, J, r, q, chi1, chi2):
 
     Call
     ----
-    xi = effectivepotential_minus(S,J,r,q,chi1,chi2)
+    chieff = effectivepotential_minus(S,J,r,q,chi1,chi2)
 
     Parameters
     ----------
@@ -2018,24 +2024,24 @@ def effectivepotential_minus(S, J, r, q, chi1, chi2):
 
     Returns
     -------
-    xi: float
+    chieff: float
         Effective spin.
     """
 
     q = np.atleast_1d(q)
     varphi = np.tile(0, q.shape)
-    xi = eval_xi(S=S, varphi=varphi, J=J, r=r, q=q, chi1=chi1, chi2=chi2)
+    chieff = eval_chieff(S=S, varphi=varphi, J=J, r=r, q=q, chi1=chi1, chi2=chi2)
 
-    return xi
+    return chieff
 
 
-def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
+def eval_varphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
     """
     Evaluate the nutation parameter varphi.
 
     Call
     ----
-    varphi = eval_varphi(S,J,r,xi,q,chi1,chi2,cyclesign=-1)
+    varphi = eval_varphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
 
     Parameters
     ----------
@@ -2045,7 +2051,7 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2064,7 +2070,7 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
 
     S = np.atleast_1d(S)
     J = np.atleast_1d(J)
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
     cyclesign = np.atleast_1d(cyclesign)
 
@@ -2072,11 +2078,12 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
     S1, S2 = spinmags(q, chi1, chi2)
 
     # Machine generated with polycoefficients.nb
-    cosvarphi = ((1 + -1 * q**2))**(-1) * ((J**2 + -1 * ((L + -1 *
-    S))**2))**(-1/2) * ((-1 * J**2 + ((L + S))**2))**(-1/2) * ((S**2 + -1
-    * ((S1 + -1 * S2))**2))**(-1/2) * ((-1 * S**2 + ((S1 +
-    S2))**2))**(-1/2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * (((1 + q))**2
-    * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -4 * L * q * S**2 * xi)
+    cosvarphi = ((1 + -1 * q**2))**(-1) * ((J**2 + -1 * ((L + -1 * \
+    S))**2))**(-1/2) * ((-1 * J**2 + ((L + S))**2))**(-1/2) * ((S**2 + -1 \
+    * ((S1 + -1 * S2))**2))**(-1/2) * ((-1 * S**2 + ((S1 + \
+    S2))**2))**(-1/2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * (((1 + q))**2 \
+    * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -4 * L * q * S**2 * \
+    chieff)
 
     # If cosvarphi is very close but slighly outside [-1,1], assume either -1 or 1.
     cosvarphi = np.where(np.logical_and(np.abs(cosvarphi) > 1, np.isclose(np.abs(cosvarphi), 1)), np.sign(cosvarphi), cosvarphi)
@@ -2085,13 +2092,13 @@ def eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
     return varphi
 
 
-def eval_costheta1(S, J, r, xi, q, chi1, chi2):
+def eval_costheta1(S, J, r, chieff, q, chi1, chi2):
     """
     Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
     Call
     ----
-    costheta1 = eval_costheta1(S,J,r,xi,q,chi1,chi2)
+    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -2101,7 +2108,7 @@ def eval_costheta1(S, J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2123,18 +2130,18 @@ def eval_costheta1(S, J, r, xi, q, chi1, chi2):
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
 
-    costheta1 = (((J**2-L**2-S**2)/L) - (2*q*xi)/(1+q))/(2*(1-q)*S1)
+    costheta1 = (((J**2-L**2-S**2)/L) - (2*q*chieff)/(1+q))/(2*(1-q)*S1)
 
     return costheta1
 
 
-def eval_theta1(S, J, r, xi, q, chi1, chi2):
+def eval_theta1(S, J, r, chieff, q, chi1, chi2):
     """
     Angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
     Call
     ----
-    theta1 = eval_theta1(S,J,r,xi,q,chi1,chi2)
+    theta1 = eval_theta1(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -2144,7 +2151,7 @@ def eval_theta1(S, J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2159,19 +2166,19 @@ def eval_theta1(S, J, r, xi, q, chi1, chi2):
         Angle between orbital angular momentum and primary spin.
     """
 
-    costheta1 = eval_costheta1(S, J, r, xi, q, chi1, chi2)
+    costheta1 = eval_costheta1(S, J, r, chieff, q, chi1, chi2)
     theta1 = np.arccos(costheta1)
 
     return theta1
 
 
-def eval_costheta2(S, J, r, xi, q, chi1, chi2):
+def eval_costheta2(S, J, r, chieff, q, chi1, chi2):
     """
     Cosine of the angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
 
     Call
     ----
-    costheta2 = eval_costheta2(S,J,r,xi,q,chi1,chi2)
+    costheta2 = eval_costheta2(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -2181,7 +2188,7 @@ def eval_costheta2(S, J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2203,18 +2210,18 @@ def eval_costheta2(S, J, r, xi, q, chi1, chi2):
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
 
-    costheta2 = (((J**2-L**2-S**2)*(-q/L)) + (2*q*xi)/(1+q))/(2*(1-q)*S2)
+    costheta2 = (((J**2-L**2-S**2)*(-q/L)) + (2*q*chieff)/(1+q))/(2*(1-q)*S2)
 
     return costheta2
 
 
-def eval_theta2(S, J, r, xi, q, chi1, chi2):
+def eval_theta2(S, J, r, chieff, q, chi1, chi2):
     """
     Angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
 
     Call
     ----
-    theta2 = eval_theta2(S,J,r,xi,q,chi1,chi2)
+    theta2 = eval_theta2(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -2224,7 +2231,7 @@ def eval_theta2(S, J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2239,7 +2246,7 @@ def eval_theta2(S, J, r, xi, q, chi1, chi2):
         Angle between orbital angular momentum and secondary spin.
     """
 
-    costheta2 = eval_costheta2(S, J, r, xi, q, chi1, chi2)
+    costheta2 = eval_costheta2(S, J, r, chieff, q, chi1, chi2)
     theta2 = np.arccos(costheta2)
 
     return theta2
@@ -2324,13 +2331,13 @@ def eval_theta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=N
     return theta12
 
 
-def eval_cosdeltaphi(S, J, r, xi, q, chi1, chi2):
+def eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2):
     """
     Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
 
     Call
     ----
-    cosdeltaphi = eval_cosdeltaphi(S,J,r,xi,q,chi1,chi2)
+    cosdeltaphi = eval_cosdeltaphi(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -2340,7 +2347,7 @@ def eval_cosdeltaphi(S, J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2358,8 +2365,8 @@ def eval_cosdeltaphi(S, J, r, xi, q, chi1, chi2):
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
-    costheta1 = eval_costheta1(S, J, r, xi, q, chi1, chi2)
-    costheta2 = eval_costheta2(S, J, r, xi, q, chi1, chi2)
+    costheta1 = eval_costheta1(S, J, r, chieff, q, chi1, chi2)
+    costheta2 = eval_costheta2(S, J, r, chieff, q, chi1, chi2)
     costheta12 = eval_costheta12(S=S, q=q, chi1=chi1, chi2=chi2)
 
     cosdeltaphi = (costheta12 - costheta1*costheta2)/((1-costheta1**2)*(1-costheta2**2))**0.5
@@ -2367,13 +2374,13 @@ def eval_cosdeltaphi(S, J, r, xi, q, chi1, chi2):
     return cosdeltaphi
 
 
-def eval_deltaphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
+def eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
     """
     Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].
 
     Call
     ----
-    deltaphi = eval_deltaphi(S,J,r,xi,q,chi1,chi2,cyclesign=-1)
+    deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
 
     Parameters
     ----------
@@ -2383,7 +2390,7 @@ def eval_deltaphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2401,7 +2408,7 @@ def eval_deltaphi(S, J, r, xi, q, chi1, chi2, cyclesign=-1):
     """
 
     cyclesign = np.atleast_1d(cyclesign)
-    cosdeltaphi = eval_cosdeltaphi(S, J, r, xi, q, chi1, chi2)
+    cosdeltaphi = eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2)
     deltaphi = -np.sign(cyclesign)*np.arccos(cosdeltaphi)
 
     return deltaphi
@@ -2677,20 +2684,20 @@ def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
     return kappainf
 
 
-def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
+def eval_costheta1inf(kappainf, chieff, q, chi1, chi2):
     """
     Infinite orbital separation limit of the cosine of the angle between the
     orbital angular momentum and the primary spin.
 
     Call
     ----
-    costheta1inf = eval_costheta1inf(kappainf,xi,q,chi1,chi2)
+    costheta1inf = eval_costheta1inf(kappainf,chieff,q,chi1,chi2)
 
     Parameters
     ----------
     kappainf: float
         Asymptotic value of the regularized momentum kappa.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2706,29 +2713,29 @@ def eval_costheta1inf(kappainf, xi, q, chi1, chi2):
     """
 
     kappainf = np.atleast_1d(kappainf)
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
-    costheta1inf = (-xi + kappainf*(1+1/q)) / (S1*(1/q-q))
+    costheta1inf = (-chieff + kappainf*(1+1/q)) / (S1*(1/q-q))
 
     return costheta1inf
 
 
-def eval_theta1inf(kappainf, xi, q, chi1, chi2):
+def eval_theta1inf(kappainf, chieff, q, chi1, chi2):
     """
     Infinite orbital separation limit of the angle between the orbital angular
     momentum and the primary spin.
 
     Call
     ----
-    theta1inf = eval_theta1inf(kappainf,xi,q,chi1,chi2)
+    theta1inf = eval_theta1inf(kappainf,chieff,q,chi1,chi2)
 
     Parameters
     ----------
     kappainf: float
         Asymptotic value of the regularized momentum kappa.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2743,26 +2750,26 @@ def eval_theta1inf(kappainf, xi, q, chi1, chi2):
         Asymptotic value of the angle between orbital angular momentum and primary spin.
     """
 
-    costheta1inf = eval_costheta1inf(kappainf, xi, q, chi1, chi2)
+    costheta1inf = eval_costheta1inf(kappainf, chieff, q, chi1, chi2)
     theta1inf = np.arccos(costheta1inf)
 
     return theta1inf
 
 
-def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
+def eval_costheta2inf(kappainf, chieff, q, chi1, chi2):
     """
     Infinite orbital separation limit of the cosine of the angle between the
     orbital angular momentum and the secondary spin.
 
     Call
     ----
-    theta1inf = eval_costheta2inf(kappainf,xi,q,chi1,chi2)
+    theta1inf = eval_costheta2inf(kappainf,chieff,q,chi1,chi2)
 
     Parameters
     ----------
     kappainf: float
         Asymptotic value of the regularized momentum kappa.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2778,29 +2785,29 @@ def eval_costheta2inf(kappainf, xi, q, chi1, chi2):
     """
 
     kappainf = np.atleast_1d(kappainf)
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
-    costheta2inf = (xi - kappainf*(1+q)) / (S2*(1/q-q))
+    costheta2inf = (chieff - kappainf*(1+q)) / (S2*(1/q-q))
 
     return costheta2inf
 
 
-def eval_theta2inf(kappainf, xi, q, chi1, chi2):
+def eval_theta2inf(kappainf, chieff, q, chi1, chi2):
     """
     Infinite orbital separation limit of the angle between the orbital angular
     momentum and the secondary spin.
 
     Call
     ----
-    theta2inf = eval_theta2inf(kappainf,xi,q,chi1,chi2)
+    theta2inf = eval_theta2inf(kappainf,chieff,q,chi1,chi2)
 
     Parameters
     ----------
     kappainf: float
         Asymptotic value of the regularized momentum kappa.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2815,19 +2822,19 @@ def eval_theta2inf(kappainf, xi, q, chi1, chi2):
         Asymptotic value of the angle between orbital angular momentum and secondary spin.
     """
 
-    costheta2inf = eval_costheta2inf(kappainf, xi, q, chi1, chi2)
+    costheta2inf = eval_costheta2inf(kappainf, chieff, q, chi1, chi2)
     theta2inf = np.arccos(costheta2inf)
 
     return theta2inf
 
 
-def morphology(J, r, xi, q, chi1, chi2, simpler=False):
+def morphology(J, r, chieff, q, chi1, chi2, simpler=False):
     """
     Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
 
     Call
     ----
-    morph = morphology(J,r,xi,q,chi1,chi2,simpler = False)
+    morph = morphology(J,r,chieff,q,chi1,chi2,simpler = False)
 
     Parameters
     ----------
@@ -2835,7 +2842,7 @@ def morphology(J, r, xi, q, chi1, chi2, simpler=False):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2852,9 +2859,9 @@ def morphology(J, r, xi, q, chi1, chi2, simpler=False):
         Spin morphology.
     """
 
-    Smin, Smax = Slimits_plusminus(J, r, xi, q, chi1, chi2)
+    Smin, Smax = Slimits_plusminus(J, r, chieff, q, chi1, chi2)
     # Pairs of booleans based on the values of deltaphi at S- and S+
-    status = np.transpose([eval_cosdeltaphi(Smin, J, r, xi, q, chi1, chi2) > 0, eval_cosdeltaphi(Smax, J, r, xi, q, chi1, chi2) > 0])
+    status = np.transpose([eval_cosdeltaphi(Smin, J, r, chieff, q, chi1, chi2) > 0, eval_cosdeltaphi(Smax, J, r, chieff, q, chi1, chi2) > 0])
     # Map to labels
     dictlabel = {(False, False): "Lpi", (True, True): "L0", (False, True): "C-", (True, False): "C+"}
     # Subsitute pairs with labels
@@ -2925,13 +2932,13 @@ def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None,
     return cyclesign
 
 
-def conserved_to_angles(S, J, r, xi, q, chi1, chi2, cyclesign=+1):
+def conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=+1):
     """
-    Convert conserved quantities (S,J,xi) into angles (theta1,theta2,deltaphi).
+    Convert conserved quantities (S,J,chieff) into angles (theta1,theta2,deltaphi).
 
     Call
     ----
-    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,xi,q,chi1,chi2,cyclesign=+1)
+    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,chieff,q,chi1,chi2,cyclesign=+1)
 
     Parameters
     ----------
@@ -2941,7 +2948,7 @@ def conserved_to_angles(S, J, r, xi, q, chi1, chi2, cyclesign=+1):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -2962,21 +2969,21 @@ def conserved_to_angles(S, J, r, xi, q, chi1, chi2, cyclesign=+1):
         Angle between the projections of the two spins onto the orbital plane.
     """
 
-    theta1 = eval_theta1(S, J, r, xi, q, chi1, chi2)
-    theta2 = eval_theta2(S, J, r, xi, q, chi1, chi2)
-    deltaphi = eval_deltaphi(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
+    theta1 = eval_theta1(S, J, r, chieff, q, chi1, chi2)
+    theta2 = eval_theta2(S, J, r, chieff, q, chi1, chi2)
+    deltaphi = eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
 
     return np.stack([theta1, theta2, deltaphi])
 
 
 def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False):
     """
-    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,xi).
+    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,chieff).
 
     Call
     ----
-    S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False)
-    S,J,xi,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
+    S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False)
+    S,J,chieff,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
 
     Parameters
     ----------
@@ -3003,7 +3010,7 @@ def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=
         Magnitude of the total spin.
     J: float
         Magnitude of the total angular momentum.
-    xi: float
+    chieff: float
         Effective spin.
 
     Other parameters
@@ -3014,24 +3021,24 @@ def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=
 
     S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
     J = eval_J(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
-    xi = eval_xi(theta1=theta1, theta2=theta2, q=q, chi1=chi1, chi2=chi2)
+    chieff = eval_chieff(theta1=theta1, theta2=theta2, q=q, chi1=chi1, chi2=chi2)
 
     if full_output:
         cyclesign = eval_cyclesign(deltaphi=deltaphi)
 
-        return np.stack([S, J, xi, cyclesign])
+        return np.stack([S, J, chieff, cyclesign])
 
     else:
-        return np.stack([S, J, xi])
+        return np.stack([S, J, chieff])
 
 
 def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     """
-    Convert asymptotic angles (theta1, theta2) into regularized momentum and effective spin (kappa, xi).
+    Convert asymptotic angles (theta1, theta2) into regularized momentum and effective spin (kappa, chieff).
 
     Call
     ----
-    kappainf,xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
+    kappainf,chieff = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
 
     Parameters
     ----------
@@ -3050,29 +3057,29 @@ def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     -------
     kappainf: float
         Asymptotic value of the regularized momentum kappa.
-    xi: float
+    chieff: float
         Effective spin.
     """
 
     kappainf = eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
-    xi = eval_xi(theta1=theta1inf, theta2=theta2inf, q=q, chi1=chi1, chi2=chi2)
+    chieff = eval_chieff(theta1=theta1inf, theta2=theta2inf, q=q, chi1=chi1, chi2=chi2)
 
-    return np.stack([kappainf, xi])
+    return np.stack([kappainf, chieff])
 
 
-def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
+def asymptotic_to_angles(kappainf, chieff, q, chi1, chi2):
     """
-    Convert regularized momentum and effective spin (kappa, xi) into asymptotic angles (theta1, theta2).
+    Convert regularized momentum and effective spin (kappa, chieff) into asymptotic angles (theta1, theta2).
 
     Call
     ----
-    theta1inf,theta2inf = asymptotic_to_angles(kappainf,xi,q,chi1,chi2)
+    theta1inf,theta2inf = asymptotic_to_angles(kappainf,chieff,q,chi1,chi2)
 
     Parameters
     ----------
     kappainf: float
         Asymptotic value of the regularized momentum kappa.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3089,20 +3096,20 @@ def asymptotic_to_angles(kappainf, xi, q, chi1, chi2):
         Asymptotic value of the angle between orbital angular momentum and secondary spin.
     """
 
-    theta1inf = eval_theta1inf(kappainf, xi, q, chi1, chi2)
-    theta2inf = eval_theta2inf(kappainf, xi, q, chi1, chi2)
+    theta1inf = eval_theta1inf(kappainf, chieff, q, chi1, chi2)
+    theta2inf = eval_theta2inf(kappainf, chieff, q, chi1, chi2)
 
     return np.stack([theta1inf, theta2inf])
 
 
 def vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False):
     """
-    Convert cartesian vectors (L,S1,S2) into conserved quantities (S,J,xi).
+    Convert cartesian vectors (L,S1,S2) into conserved quantities (S,J,chieff).
 
     Call
     ----
-    S,J,xi = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=False)
-    S,J,xi,cyclesign = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=True)
+    S,J,chieff = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=False)
+    S,J,chieff,cyclesign = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=True)
 
     Parameters
     ----------
@@ -3123,7 +3130,7 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False):
         Magnitude of the total spin.
     J: float
         Magnitude of the total angular momentum.
-    xi: float
+    chieff: float
         Effective spin.
 
     Other parameters
@@ -3141,15 +3148,15 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False):
     L = norm_nested(Lvec)
     m1, m2 = masses(q)
 
-    xi = dot_nested(S1vec, Lvec)/(m1*L) + dot_nested(S2vec, Lvec)/(m2*L)
+    chieff = dot_nested(S1vec, Lvec)/(m1*L) + dot_nested(S2vec, Lvec)/(m2*L)
 
     if full_output:
         cyclesign = eval_cyclesign(Lvec=Lvec, S1vec=S1vec, S2vec=S2vec)
 
-        return np.stack([S, J, xi, cyclesign])
+        return np.stack([S, J, chieff, cyclesign])
 
     else:
-        return np.stack([S, J, xi])
+        return np.stack([S, J, chieff])
 
 # TODO: write function to get theta12 from theta1, theta2 and deltaphi
 
@@ -3203,14 +3210,14 @@ def vectors_to_angles(Lvec, S1vec, S2vec):
     return np.stack([theta1, theta2, deltaphi])
 
 
-def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
+def conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
     """
-    Convert the conserved quantities (S,J,xi) to angular momentum vectors (L,S1,S2) in the frame
+    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in the frame
     aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
 
     Call
     ----
-    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
+    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -3220,7 +3227,7 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3244,7 +3251,7 @@ def conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
 
     L = eval_L(r, q)
     S1, S2 = spinmags(q, chi1, chi2)
-    varphi = eval_varphi(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
+    varphi = eval_varphi(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
     thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
 
     Lx = L * np.sin(thetaL)
@@ -3310,8 +3317,8 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
         Cartesian vector of the secondary spin.
     """
 
-    S, J, xi, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
-    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
+    S, J, chieff, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
+    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
 
     return np.stack([Lvec, S1vec, S2vec])
 
@@ -3372,13 +3379,13 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     return np.stack([Lvec, S1vec, S2vec])
 
 
-def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
+def conserved_to_Lframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
     """
-    Convert the conserved quantities (S,J,xi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
+    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
 
     Call
     ----
-    Lvec,S1vec,S2vec = conserved_to_Lframe(S,J,r,xi,q,chi1,chi2,cyclesign=1)
+    Lvec,S1vec,S2vec = conserved_to_Lframe(S,J,r,chieff,q,chi1,chi2,cyclesign=1)
 
     Parameters
     ----------
@@ -3388,7 +3395,7 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3409,19 +3416,19 @@ def conserved_to_Lframe(S, J, r, xi, q, chi1, chi2, cyclesign=1):
         Cartesian vector of the secondary spin.
     """
 
-    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
+    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
     Lvec, S1vec, S2vec = angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
 
     return np.stack([Lvec, S1vec, S2vec])
 
 
-def conserved_to_inertial(S, J, r, xi, q, chi1, chi2, cyclesign=1):
+def conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
     """
-    Convert the conserved quantities (S,J,xi) to angular momentum vectors (L,S1,S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
+    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
 
     Call
     ----
-    Lvec,S1vec,S2vec = conserved_to_inertial(S,J,r,xi,q,chi1,chi2,cyclesign=1)
+    Lvec,S1vec,S2vec = conserved_to_inertial(S,J,r,chieff,q,chi1,chi2,cyclesign=1)
 
     Parameters
     ----------
@@ -3431,7 +3438,7 @@ def conserved_to_inertial(S, J, r, xi, q, chi1, chi2, cyclesign=1):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3452,8 +3459,8 @@ def conserved_to_inertial(S, J, r, xi, q, chi1, chi2, cyclesign=1):
         Cartesian vector of the secondary spin.
     """
 
-    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
-    phiL = eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
+    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+    phiL = eval_phiL(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
 
     Lvec = rotate_zaxis(Lvec, phiL)
     S1vec = rotate_zaxis(S1vec, phiL)
@@ -3498,27 +3505,27 @@ def angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
 
     deltaphi = np.atleast_1d(deltaphi)
-    S, J, xi, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
-    Lvec, S1vec, S2vec = conserved_to_inertial(S, J, r, xi, q, chi1, chi2, cyclesign=cyclesign)
+    S, J, chieff, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
+    Lvec, S1vec, S2vec = conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
 
     return np.stack([Lvec, S1vec, S2vec])
 
 
 # Precessional timescale dynamics
 
-def derS_prefactor(r, xi, q):
+def derS_prefactor(r, chieff, q):
     """
     Numerical prefactor to the S derivative.
 
     Call
     ----
-    mathcalA = derS_prefactor(r,xi,q)
+    mathcalA = derS_prefactor(r,chieff,q)
 
     Parameters
     ----------
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3530,21 +3537,21 @@ def derS_prefactor(r, xi, q):
     """
 
     r = np.atleast_1d(r)
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d(chieff)
 
     eta = eval_eta(q)
-    mathcalA = (3/2)*(1/(r**3*eta**0.5))*(1-(xi/r**0.5))
+    mathcalA = (3/2)*(1/(r**3*eta**0.5))*(1-(chieff/r**0.5))
 
     return mathcalA
 
 
-def dSsdtsquared(S, J, r, xi, q, chi1, chi2):
+def dSsdtsquared(S, J, r, chieff, q, chi1, chi2):
     """
     Squared first time derivative of the squared total spin, on the precession timescale.
 
     Call
     ----
-    dSsdts = dSsdtsquared(S,J,r,xi,q,chi1,chi2)
+    dSsdts = dSsdtsquared(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -3554,7 +3561,7 @@ def dSsdtsquared(S, J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3569,21 +3576,21 @@ def dSsdtsquared(S, J, r, xi, q, chi1, chi2):
         Squared first derivative of the squared total spin.
     """
 
-    mathcalA = derS_prefactor(r, xi, q)
-    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
+    mathcalA = derS_prefactor(r, chieff, q)
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
     dSsdts = - mathcalA**2 * (S**2-Spluss) * (S**2-Sminuss) * (S**2-S3s)
 
     return dSsdts
 
 
 # Change name to this function, otherwise is identical to the returned variable.
-def dSsdt(S, J, r, xi, q, chi1, chi2, cyclesign=1):
+def dSsdt(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
     """
     Time derivative of the squared total spin, on the precession timescale.
 
     Call
     ----
-    dSsdt = dSsdt(S,J,r,xi,q,chi1,chi2,cyclesign=1)
+    dSsdt = dSsdt(S,J,r,chieff,q,chi1,chi2,cyclesign=1)
 
     Parameters
     ----------
@@ -3593,7 +3600,7 @@ def dSsdt(S, J, r, xi, q, chi1, chi2, cyclesign=1):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3612,17 +3619,17 @@ def dSsdt(S, J, r, xi, q, chi1, chi2, cyclesign=1):
 
     cyclesign = np.atleast_1d(cyclesign)
 
-    return cyclesign*dSsdtsquared(S, J, r, xi, q, chi1, chi2)**0.5
+    return cyclesign*dSsdtsquared(S, J, r, chieff, q, chi1, chi2)**0.5
 
 
 # Change name to this function, otherwise is identical to the returned variable.
-def dSdt(S, J, r, xi, q, chi1, chi2):
+def dSdt(S, J, r, chieff, q, chi1, chi2):
     """
     Time derivative of the total spin, on the precession timescale.
 
     Call
     ----
-    dSdt = dSdt(S,J,r,xi,q,chi1,chi2)
+    dSdt = dSdt(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -3632,7 +3639,7 @@ def dSdt(S, J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3647,7 +3654,7 @@ def dSdt(S, J, r, xi, q, chi1, chi2):
         Time derivative of the total spin.
     """
 
-    return dSsdt(S, J, r, xi, q, chi1, chi2) / (2*S)
+    return dSsdt(S, J, r, chieff, q, chi1, chi2) / (2*S)
 
 
 def elliptic_parameter(Sminuss, Spluss, S3s):
@@ -3752,13 +3759,13 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
     return n
 
 
-def time_normalization(Spluss, S3s, r, xi, q):
+def time_normalization(Spluss, S3s, r, chieff, q):
     """
     Numerical prefactors entering the precession period.
 
     Call
     ----
-    mathcalT = time_normalization(Spluss,S3s,r,xi,q)
+    mathcalT = time_normalization(Spluss,S3s,r,chieff,q)
 
     Parameters
     ----------
@@ -3768,7 +3775,7 @@ def time_normalization(Spluss, S3s, r, xi, q):
         Spurious root of the effective potential equation.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3782,19 +3789,19 @@ def time_normalization(Spluss, S3s, r, xi, q):
     Spluss = np.atleast_1d(Spluss)
     S3s = np.atleast_1d(S3s)
 
-    mathcalA = derS_prefactor(r, xi, q)
+    mathcalA = derS_prefactor(r, chieff, q)
     mathcalT = 2/(mathcalA*(Spluss-S3s)**0.5)
 
     return mathcalT
 
 
-def eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=None):
+def eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
 
     Call
     ----
-    tau = eval_tau(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    tau = eval_tau(J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -3802,7 +3809,7 @@ def eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=None):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3819,22 +3826,22 @@ def eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=None):
         Nutation period.
     """
 
-    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
-    mathcalT = time_normalization(Spluss, S3s, r, xi, q)
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
     m = elliptic_parameter(Sminuss, Spluss, S3s)
     tau = 2*mathcalT*scipy.special.ellipk(m)
 
     return tau
 
 
-def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
+def Soft(t, J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
     The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
 
     Call
     ----
-    S = Soft(t,J,r,xi,q,chi1,chi2,precomputedroots=None)
+    S = Soft(t,J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -3844,7 +3851,7 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3862,8 +3869,8 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
     """
 
     t = np.atleast_1d(t)
-    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
-    mathcalT = time_normalization(Spluss, S3s, r, xi, q)
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
     m = elliptic_parameter(Sminuss, Spluss, S3s)
 
     sn, _, dn, _ = scipy.special.ellipj(t.T/mathcalT, m)
@@ -3873,13 +3880,13 @@ def Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=None):
     return S
 
 
-def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
+def tofS(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     """
     Time t as a function of S (without radiation reaction). Only covers half of a precession cycle, assuming t=0 at S=S- and t=tau/2 at S=S+. Set sign=-1 to cover the second half, i.e. from t=tau/2 at S=S+ to t=tau at S=S-.
 
     Call
     ----
-    t = tofS(S,J,r,xi,q,chi1,chi2,cyclesign=1,precomputedroots=None)
+    t = tofS(S,J,r,chieff,q,chi1,chi2,cyclesign=1,precomputedroots=None)
 
     Parameters
     ----------
@@ -3889,7 +3896,7 @@ def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3910,28 +3917,28 @@ def tofS(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
 
     S = np.atleast_1d(S)
 
-    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
     m = elliptic_parameter(Sminuss, Spluss, S3s)
-    mathcalT = time_normalization(Spluss, S3s, r, xi, q)
+    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
     phi = elliptic_amplitude(S, Sminuss, Spluss)
-    tau = eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    tau = eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
 
     return t
 
 
-def Ssampling(J, r, xi, q, chi1, chi2, N=1):
+def Ssampling(J, r, chieff, q, chi1, chi2, N=1):
     """
     Sample N values of S at fixed separation accoring to its PN-weighted distribution function.
-    Can only be used to sample the *same* number of configuration for each binary. If the inputs J,r,xi,q,chi1, and chi2 have shape (M,) the output will have shape
+    Can only be used to sample the *same* number of configuration for each binary. If the inputs J,r,chieff,q,chi1, and chi2 have shape (M,) the output will have shape
     - (M,N) if M>1 and N>1;
     - (M,) if N=1;
     - (N,) if M=1.
 
     Call
     ----
-    S = Ssampling(J,r,xi,q,chi1,chi2,N = 1)
+    S = Ssampling(J,r,chieff,q,chi1,chi2,N = 1)
 
     Parameters
     ----------
@@ -3939,7 +3946,7 @@ def Ssampling(J, r, xi, q, chi1, chi2, N=1):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -3957,14 +3964,14 @@ def Ssampling(J, r, xi, q, chi1, chi2, N=1):
     """
 
     # Compute the S roots only once and pass them to both functions
-    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
 
-    tau = eval_tau(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    tau = eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     # For each binary, generate N samples between 0 and tau.
     t = np.random.uniform(size=tau.size*N).reshape((tau.size, N)) * tau[:, None]
     # Note the special broadcasting rules of Soft, see Soft.__docs__
     # S has shape (M, N).
-    S = Soft(t, J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    S = Soft(t, J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
     # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
     # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
@@ -4001,13 +4008,13 @@ def Ssav_mfactor(m):
 
 
 # TODO: change name to this function
-def Ssav(J, r, xi, q, chi1, chi2):
+def Ssav(J, r, chieff, q, chi1, chi2):
     """
     Analytic precession averaged expression for the squared total spin.
 
     Call
     ----
-    Ssq = Ssav(J,r,xi,q,chi1,chi2)
+    Ssq = Ssav(J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -4015,7 +4022,7 @@ def Ssav(J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -4030,7 +4037,7 @@ def Ssav(J, r, xi, q, chi1, chi2):
         Squared magnitude of the total spin.
     """
 
-    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
     m = elliptic_parameter(Sminuss, Spluss, S3s)
     Ssq = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
 
@@ -4117,13 +4124,13 @@ def Ssavinf(theta1inf, theta2inf, q, chi1, chi2):
 
 # Precession-averaged evolution
 
-def rhs_precav(u, kappa, xi, q, chi1, chi2):
+def rhs_precav(u, kappa, chieff, q, chi1, chi2):
     """
     Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
 
     Call
     ----
-    RHS = rhs_precav(kappa,u,xi,q,chi1,chi2)
+    RHS = rhs_precav(kappa,u,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -4131,7 +4138,7 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
         Regularized angular momentum (J^2-L^2)/(2L).
     u: float
         Compactified separation 1/(2L).
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -4148,11 +4155,11 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
 
     if u == 0:
         # In this case use analytic result
-        theta1inf, theta2inf = asymptotic_to_angles(kappa, xi, q, chi1, chi2)
+        theta1inf, theta2inf = asymptotic_to_angles(kappa, chieff, q, chi1, chi2)
         Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
 
-        coeffs = Scubic_coefficients(kappa, u, xi, q, chi1, chi2)
+        coeffs = Scubic_coefficients(kappa, u, chieff, q, chi1, chi2)
         coeffs = np.squeeze(coeffs)
 
         # The first coefficient is tiny, 10^-100 small than the others. This is in practice a 2nd order polynomial
@@ -4180,13 +4187,13 @@ def rhs_precav(u, kappa, xi, q, chi1, chi2):
     return Ssav
 
 
-def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
+def integrator_precav(kappainitial, uinitial, ufinal, chieff, q, chi1, chi2):
     """
     Integration of ODE dkappa/du describing precession-averaged inspirals.
 
     Call
     ----
-    kappa = integrator_precav(kappainitial,uinitial,ufinal,xi,q,chi1,chi2)
+    kappa = integrator_precav(kappainitial,uinitial,ufinal,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -4196,7 +4203,7 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
         Initial value of the compactified separation 1/(2L).
     ufinal: float
         Final value of the compactified separation 1/(2L).
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -4215,41 +4222,41 @@ def integrator_precav(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
     uinitial = np.atleast_1d(uinitial)
     ufinal = np.atleast_1d(ufinal)
 
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    def _compute(kappainitial, uinitial, ufinal, xi, q, chi1, chi2):
+    def _compute(kappainitial, uinitial, ufinal, chieff, q, chi1, chi2):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # h0= 1e-3 if u[0]==0 else 0
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(xi, q, chi1, chi2), atol=1e-8, rtol=1e-8)  # ,events=event)
+        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(chieff, q, chi1, chi2), atol=1e-8, rtol=1e-8)  # ,events=event)
 
         # TODO: let user pick rtol and atol
 
         # Return ODE object. The key methods is .sol --callable, sol(t).
         return ODEsolution
 
-    ODEsolution = np.array(list(map(_compute, kappainitial, uinitial, ufinal, xi, q, chi1, chi2)))
+    ODEsolution = np.array(list(map(_compute, kappainitial, uinitial, ufinal, chieff, q, chi1, chi2)))
 
     return ODEsolution
 
 
 # TODO: return Sminus and Splus along the solution. Right now these are computed inside Ssampling but not stored
-def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None, chi2=None, requested_outputs=None):
+def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. In addition, integration can be done between finite separations, forwards from infinite to finite separation, or backwards from finite to infinite separation. For infinity, use r=np.inf or u=0.
     The initial conditions must be specified in terms of one an only one of the following:
     - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
-    - J, xi (only if integrating from finite separations because J otherwise diverges).
-    - kappa, xi.
-    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'xi', 'q', 'chi1', 'chi2'].
+    - J, chieff (only if integrating from finite separations because J otherwise diverges).
+    - kappa, chieff.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'].
 
     Call
     ----
-    outputs = inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs=None)
+    outputs = inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)
 
     Parameters
     ----------
@@ -4269,7 +4276,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         Binary separation.
     u: float, optional (default: None)
         Compactified separation 1/(2L).
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -4287,7 +4294,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     """
 
     # Substitute None inputs with arrays of Nones
-    inputs = [theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2]
+    inputs = [theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
@@ -4296,9 +4303,9 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
                 inputs[k] = np.atleast_2d(inputs[k])
             else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
-    theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2 = inputs
+    theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2 = inputs
 
-    def _compute(theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2):
+    def _compute(theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2):
 
         if q is None or chi1 is None or chi2 is None:
             raise TypeError("Please provide q, chi1, and chi2.")
@@ -4317,47 +4324,47 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         # Start from r=infinity
         if u[0] == 0:
 
-            if theta1 is not None and theta2 is not None and S is None and J is None and kappa is None and xi is None:
-                kappa, xi = angles_to_asymptotic(theta1, theta2, q, chi1, chi2)
+            if theta1 is not None and theta2 is not None and S is None and J is None and kappa is None and chieff is None:
+                kappa, chieff = angles_to_asymptotic(theta1, theta2, q, chi1, chi2)
                 theta1inf, theta2inf = theta1, theta2
 
-            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
-                theta1inf, theta2inf = asymptotic_to_angles(kappa, xi, q, chi1, chi2)
+            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and chieff is not None:
+                theta1inf, theta2inf = asymptotic_to_angles(kappa, chieff, q, chi1, chi2)
 
             else:
-                raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,xi).")
+                raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,chieff).")
 
             # Enforce limits
-            kappainfmin, kappainfmax = kappainflimits(xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
+            kappainfmin, kappainfmax = kappainflimits(chieff=chieff, q=q, chi1=chi1, chi2=chi2, enforce=True)
             assert kappa > kappainfmin and kappa < kappainfmax, "Unphysical initial conditions [inspiral_precav]."
 
         # Start from finite separations
         else:
 
             # User provides theta1,theta2, and deltaphi.
-            if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
-                S, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
+            if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and chieff is None:
+                S, J, chieff = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
                 kappa = eval_kappa(J, r[0], q)
 
-            # User provides J, xi, and maybe S.
-            elif theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and xi is not None:
+            # User provides J, chieff, and maybe S.
+            elif theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and chieff is not None:
                 kappa = eval_kappa(J, r[0], q)
 
-            # User provides kappa, xi, and maybe S.
-            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and xi is not None:
+            # User provides kappa, chieff, and maybe S.
+            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and chieff is not None:
                 J = eval_J(kappa=kappa, r=r[0], q=q)
 
             else:
-                TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,xi), (S,J,xi), (kappa,xi), (S,kappa,xi).")
+                TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,chieff), (S,J,chieff), (kappa,chieff), (S,kappa,chieff).")
 
             # Enforce limits
-            Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2, enforce=True)
+            Jmin, Jmax = Jlimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2, enforce=True)
             assert J > Jmin and J < Jmax, "Unphysical initial conditions [inspiral_precav]."
 
         # TODO: pass rtol and atol to integrator_precav
 
         # Integration. Return interpolant along the solution
-        ODEsolution = integrator_precav(kappa, u[0], u[-1], xi, q, chi1, chi2)
+        ODEsolution = integrator_precav(kappa, u[0], u[-1], chieff, q, chi1, chi2)
 
         # Evaluate the interpolant at the requested values of u
         kappa = np.squeeze(ODEsolution.item().sol(u))
@@ -4368,9 +4375,9 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
         # Resample S and assign random sign to deltaphi
         J = eval_J(kappa=kappaok, r=rok, q=np.tile(q, rok.shape))
-        S = Ssampling(J, rok, np.tile(xi, rok.shape), np.tile(q, rok.shape),
+        S = Ssampling(J, rok, np.tile(chieff, rok.shape), np.tile(q, rok.shape),
         np.tile(chi1, rok.shape), np.tile(chi2, rok.shape), N=1)
-        theta1, theta2, deltaphi = conserved_to_angles(S, J, rok, xi, np.tile(q, rok.shape),
+        theta1, theta2, deltaphi = conserved_to_angles(S, J, rok, chieff, np.tile(q, rok.shape),
         np.tile(chi1, rok.shape), np.tile(chi2, rok.shape))
         deltaphi = deltaphi * np.random.choice([-1, 1], deltaphi.shape)
 
@@ -4385,20 +4392,20 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         elif u[-1] == 0:
             J = np.concatenate((J, [np.inf]))
             S = np.concatenate((S, [np.nan]))
-            theta1inf, theta2inf = asymptotic_to_angles(kappa[-1], xi, q, chi1, chi2)
+            theta1inf, theta2inf = asymptotic_to_angles(kappa[-1], chieff, q, chi1, chi2)
             theta1 = np.concatenate((theta1, theta1inf))
             theta2 = np.concatenate((theta2, theta2inf))
             deltaphi = np.concatenate((deltaphi, [np.nan]))
         else:
             pass
 
-        return theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2
+        return theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2
 
     # This array has to match the outputs of _compute (in the right order!)
-    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'xi', 'q', 'chi1', 'chi2'])
+    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'])
 
     # Here I force dtype=object because the outputs have different shapes
-    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, S, J, kappa, r, u, xi, q, chi1, chi2)), dtype=object).T
+    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2)), dtype=object).T
 
     # Handle the outputs.
     # If in doubt, return everything
@@ -4413,7 +4420,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     for k, v in zip(alloutputs[wantoutputs], allresults[wantoutputs]):
         outcome[k] = np.squeeze(np.stack(v))
 
-        if k == 'xi' or k == 'q' or k == 'chi1' or k == 'chi2':  # Constants of motion
+        if k == 'chieff' or k == 'q' or k == 'chi1' or k == 'chi2':  # Constants of motion
             outcome[k] = np.atleast_1d(outcome[k])
         else:
             outcome[k] = np.atleast_2d(outcome[k])
@@ -4421,7 +4428,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     return outcome
 
 # TODO: Add an exmple to the docstrings
-def precession_average(J, r, xi, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4):
+def precession_average(J, r, chieff, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4):
     """
     Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported.
 
@@ -4431,7 +4438,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method='quadrature'
 
     Call
     ----
-    func_av = precession_average(J,r,xi,q,chi1,chi2,func,*args,method='quadrature',Nsamples=1e4)
+    func_av = precession_average(J,r,chieff,q,chi1,chi2,func,*args,method='quadrature',Nsamples=1e4)
 
     Parameters
     ----------
@@ -4439,7 +4446,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method='quadrature'
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -4464,7 +4471,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method='quadrature'
 
     if method == 'quadrature':
 
-        Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2)
+        Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
         m = elliptic_parameter(Sminuss, Spluss, S3s)
         # This is proportional to tau, takes care of the denominator
         tau_prop = scipy.special.ellipk(m) / ((Spluss-S3s)**0.5)
@@ -4485,7 +4492,7 @@ def precession_average(J, r, xi, q, chi1, chi2, func, *args, method='quadrature'
 
     elif method == 'montecarlo':
 
-        S = np.transpose(Ssampling(J, r, xi, q, chi1, chi2, N=int(Nsamples)))
+        S = np.transpose(Ssampling(J, r, chieff, q, chi1, chi2, N=int(Nsamples)))
         evals = np.transpose(func(S, *args))
         func_av = np.sum(evals, axis=-1)/Nsamples
         func_av = np.atleast_1d(func_av)
@@ -4619,7 +4626,7 @@ def widenutation(q, chi1, chi2):
 
     return rwide
 
-# TODO: write function with values of J and xi where wide nutation happens
+# TODO: write function with values of J and chieff where wide nutation happens
 
 # Orbit averaged things
 
@@ -4797,19 +4804,19 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
 
 
 # TODO: update docstrings when you fix the quadrupole_formula flag
-def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h=None, S2h=None, J=None, kappa=None, r=None, u=None, xi=None, q=None, chi1=None, chi2=None, quadrupole_formula=False, requested_outputs=None):
+def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h=None, S2h=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, quadrupole_formula=False, requested_outputs=None):
     """
     Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. Orbit-averaged integration can only be done between finite separations.
     The initial conditions must be specified in terms of one an only one of the following:
     - Lh, S1h, and S2h
     - theta1,theta2, and deltaphi.
-    - J, xi, and S.
-    - kappa, xi, and S.
-    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['t', 'theta1', 'theta2', 'deltaphi', 'S', 'Lh', 'S1h', 'S2h', 'J', 'kappa', 'r', 'u', 'xi', 'q', 'chi1', 'chi2']
+    - J, chieff, and S.
+    - kappa, chieff, and S.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['t', 'theta1', 'theta2', 'deltaphi', 'S', 'Lh', 'S1h', 'S2h', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2']
 
     Call
     ----
-    outputs = inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None,J=None,kappa=None,r=None,u=None,xi=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None)
+    outputs = inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None)
 
     Parameters
     ----------
@@ -4835,7 +4842,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         Binary separation.
     u: float, optional (default: None)
         Compactified separation 1/(2L).
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -4855,7 +4862,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
     """
 
     # Substitute None inputs with arrays of Nones
-    inputs = [theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, xi, q, chi1, chi2]
+    inputs = [theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
@@ -4864,9 +4871,9 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
                 inputs[k] = np.atleast_2d(inputs[k])
             else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
-    theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, xi, q, chi1, chi2 = inputs
+    theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2 = inputs
 
-    def _compute(theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, xi, q, chi1, chi2):
+    def _compute(theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2):
 
         if q is None or chi1 is None or chi2 is None:
             raise TypeError("Please provide q, chi1, and chi2.")
@@ -4881,26 +4888,26 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
             raise TypeError("Please provide either r or u.")
 
         # User provides Lh, S1h, and S2h
-        if Lh is not None and S1h is not None and S2h is not None and theta1 is None and theta2 is None and deltaphi is None and S is None and J is None and kappa is None and xi is None:
+        if Lh is not None and S1h is not None and S2h is not None and theta1 is None and theta2 is None and deltaphi is None and S is None and J is None and kappa is None and chieff is None:
             pass
 
         # User provides theta1, theta2, and deltaphi.
-        elif Lh is None and S1h is None and S2h is None and theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and xi is None:
+        elif Lh is None and S1h is None and S2h is None and theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and chieff is None:
             Lh, S1h, S2h = angles_to_Jframe(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
 
-        # User provides J, xi, and S.
-        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is not None and kappa is None and xi is not None:
+        # User provides J, chieff, and S.
+        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is not None and kappa is None and chieff is not None:
             # TODO: how do I set cyclesign here?
-            Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
+            Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], chieff, q, chi1, chi2)
 
-        # User provides kappa, xi, and S.
-        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is None and kappa is not None and xi is not None:
+        # User provides kappa, chieff, and S.
+        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is None and kappa is not None and chieff is not None:
             J = eval_J(kappa=kappa, r=r[0], q=q)
             # TODO: how do I set cyclesign here?
-            Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
+            Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], chieff, q, chi1, chi2)
 
         else:
-            TypeError("Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (S,J,xi), (S,kappa,xi).")
+            TypeError("Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (S,J,chieff), (S,kappa,chieff).")
 
         # Make sure vectors are normalized
         Lh = Lh/np.linalg.norm(Lh)
@@ -4928,16 +4935,16 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         S2vec = S2*S2h
 
         theta1, theta2, deltaphi = vectors_to_angles(Lvec, S1vec, S2vec)
-        S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec, q)
+        S, J, chieff = vectors_to_conserved(Lvec, S1vec, S2vec, q)
         kappa = eval_kappa(J, r, q)
 
-        return t, theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, xi, q, chi1, chi2
+        return t, theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2
 
     # This array has to match the outputs of _compute (in the right order!)
-    alloutputs = np.array(['t', 'theta1', 'theta2', 'deltaphi', 'S', 'Lh', 'S1h', 'S2h', 'J', 'kappa', 'r', 'u', 'xi', 'q', 'chi1', 'chi2'])
+    alloutputs = np.array(['t', 'theta1', 'theta2', 'deltaphi', 'S', 'Lh', 'S1h', 'S2h', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'])
 
     # Here I force dtype=object because the outputs have different shapes
-    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, xi, q, chi1, chi2)), dtype=object).T
+    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2)), dtype=object).T
 
     # Handle the outputs.
     # Return all
@@ -4959,18 +4966,18 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
     return outcome
 
 
-def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kappa=None, r=None, rswitch=None, u=None, uswitch=None, xi=None, q=None, chi1=None, chi2=None, requested_outputs=None):
+def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kappa=None, r=None, rswitch=None, u=None, uswitch=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None):
     """
     Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. If integrating forwards in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backwards in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.
     The initial conditions must be specified in terms of one an only one of the following:
     - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
-    - J, xi (only if integrating from finite separations because J otherwise diverges).
-    - kappa, xi.
-    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'xi', 'q', 'chi1', 'chi2'].
+    - J, chieff (only if integrating from finite separations because J otherwise diverges).
+    - kappa, chieff.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'].
 
     Call
     ----
-    outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,xi=None,q=None,chi1=None,chi2=None,requested_outputs=None)
+    outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)
 
     Parameters
     ----------
@@ -4994,7 +5001,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         Compactified separation 1/(2L).
     uswitch: float, optional (default: None)
         Matching compactified separation between the precession- and orbit-averaged chunks.
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -5012,14 +5019,14 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     """
 
     # Outputs available in both orbit-averaged and precession-averaged evolutions
-    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'xi', 'q', 'chi1', 'chi2'])
+    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'])
     if requested_outputs is None:
         requested_outputs = alloutputs
         # Return only those requested (in1d return boolean array)
     wantoutputs = np.intersect1d(alloutputs, requested_outputs)
 
     # Substitute None inputs with arrays of Nones
-    inputs = [theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, xi, q, chi1, chi2]
+    inputs = [theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
@@ -5028,9 +5035,9 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
                 inputs[k] = np.atleast_2d(inputs[k])
             else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
-    theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, xi, q, chi1, chi2 = inputs
+    theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2 = inputs
 
-    def _compute(theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, xi, q, chi1, chi2):
+    def _compute(theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2):
 
         if r is None and rswitch is None and u is not None and uswitch is not None:
             r = eval_r(u=u, q=np.tile(q, u.shape))
@@ -5060,7 +5067,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
             rsecond = np.append(rswitch, rlarge)
 
         # First chunk of the evolution
-        evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, S=S, J=J, kappa=kappa, r=rfirst, xi=xi, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs)
+        evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, S=S, J=J, kappa=kappa, r=rfirst, chieff=chieff, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs)
 
         # Second chunk of the evolution
         evolution_second = inspiral_second(theta1=evolution_first['theta1'][-1], theta2=evolution_first['theta2'][-1], deltaphi=evolution_first['deltaphi'][-1], r=rsecond, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs)
@@ -5072,7 +5079,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
             if k in ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u']:
                 evolution_full[k] = np.atleast_2d(np.append(evolution_first[k][:, :-1], evolution_second[k][:, 1:]))
             # Quantities that vary only on the orbit-averaged evolution
-            if k in ['xi']:
+            if k in ['chieff']:
                 if forwards:
                     evolution_full[k] = np.atleast_2d(np.append(np.tile(evolution_first[k][:], rfirst[:-1].shape), evolution_second[k][:, 1:]))
                 elif backwards:
@@ -5083,7 +5090,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
         return evolution_full
 
-    allresults = list(map(_compute, theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, xi, q, chi1, chi2))
+    allresults = list(map(_compute, theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2))
     evolution_full = {}
     for k in allresults[0].keys():
         evolution_full[k] = np.concatenate(list(evolution_full[k] for evolution_full in allresults))
@@ -5110,13 +5117,13 @@ def inspiral(*args, which=None, **kwargs):
         raise ValueError("`which` needs to be `precav`, `orbav` or `hybrid`.")
 
 
-def frequency_prefactor(J, r, xi, q, chi1, chi2):
+def frequency_prefactor(J, r, chieff, q, chi1, chi2):
     """
     Numerical prefactors entering the precession frequency.
 
     Call
     ----
-    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor(J,r,xi,q,chi1,chi2)
+    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor(J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -5124,7 +5131,7 @@ def frequency_prefactor(J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -5144,26 +5151,26 @@ def frequency_prefactor(J, r, xi, q, chi1, chi2):
     """
 
     J = np.atleast_1d(J)
-    xi = np.atleast_1d(xi)
+    chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
     S1, S2 = spinmags(q, chi1, chi2)
     L = eval_L(r, q)
     eta = eval_eta(q)
 
     mathcalC0 = (J/2)*(eta/L)**6
-    mathcalCplus = 3/2 * (L*(1+q)**2 - q*xi)/(J*q*(1+q)**2) * ((1+q)*((1+q)*(J+L)**2 - (1-q)*(S1**2-S2**2)) + 2*q*xi*(L+J))
-    mathcalCminus = - 3/2 * (L*(1+q)**2 - q*xi)/(J*q*(1+q)**2) * ((1+q)*((1+q)*(J-L)**2 - (1-q)*(S1**2-S2**2)) + 2*q*xi*(L-J))
+    mathcalCplus = 3/2 * (L*(1+q)**2 - q*chieff)/(J*q*(1+q)**2) * ((1+q)*((1+q)*(J+L)**2 - (1-q)*(S1**2-S2**2)) + 2*q*chieff*(L+J))
+    mathcalCminus = - 3/2 * (L*(1+q)**2 - q*chieff)/(J*q*(1+q)**2) * ((1+q)*((1+q)*(J-L)**2 - (1-q)*(S1**2-S2**2)) + 2*q*chieff*(L-J))
 
     return np.stack([mathcalC0, mathcalCplus, mathcalCminus])
 
 
-def azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=None):
+def azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Numerical prefactors entering the precession frequency.
 
     Call
     ----
-    mathcalC0prime,mathcalCplusprime,mathcalCminusprime = azimuthalangle_prefactor(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    mathcalC0prime,mathcalCplusprime,mathcalCminusprime = azimuthalangle_prefactor(J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -5171,7 +5178,7 @@ def azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=None):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -5195,10 +5202,10 @@ def azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=None):
     J = np.atleast_1d(J)
     L = eval_L(r, q)
 
-    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
-    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor(J, r, xi, q, chi1, chi2)
-    mathcalT = time_normalization(Spluss, S3s, r, xi, q)
+    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor(J, r, chieff, q, chi1, chi2)
+    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
 
     mathcalC0prime = mathcalT*mathcalC0
     mathcalCplusprime = -mathcalT*mathcalC0*mathcalCplus/(Spluss - (J+L)**2)
@@ -5207,13 +5214,13 @@ def azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=None):
     return np.stack([mathcalC0prime, mathcalCplusprime, mathcalCminusprime])
 
 
-def eval_OmegaL(S, J, r, xi, q, chi1, chi2):
+def eval_OmegaL(S, J, r, chieff, q, chi1, chi2):
     """
     Compute the precession frequency OmegaL along the precession cycle.
 
     Call
     ----
-    OmegaL = eval_OmegaL(S,J,r,xi,q,chi1,chi2)
+    OmegaL = eval_OmegaL(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -5223,7 +5230,7 @@ def eval_OmegaL(S, J, r, xi, q, chi1, chi2):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -5242,20 +5249,20 @@ def eval_OmegaL(S, J, r, xi, q, chi1, chi2):
     J = np.atleast_1d(J)
     L = eval_L(r, q)
 
-    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor(J, r, xi, q, chi1, chi2)
+    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor(J, r, chieff, q, chi1, chi2)
 
     OmegaL = mathcalC0 * (1 + mathcalCplus/((J+L)**2 - S**2) + mathcalCminus/((J-L)**2 - S**2))
 
     return OmegaL
 
 
-def eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=None):
+def eval_alpha(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Compute the azimuthal angle spanned by L about J during an entire nutation cycle.
 
     Call
     ----
-    alpha = eval_alpha(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    alpha = eval_alpha(J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -5263,7 +5270,7 @@ def eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=None):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -5281,24 +5288,24 @@ def eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=None):
     """
 
     L = eval_L(r, q)
-    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     m = elliptic_parameter(Sminuss, Spluss, S3s)
     nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
     nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
-    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
     alpha = 2*(mathcalC0prime*scipy.special.ellipk(m) + mathcalCplusprime*ellippi(nplus, np.pi/2, m) + mathcalCminusprime*ellippi(nminus, np.pi/2, m))
 
     return alpha
 
 
-def eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
+def eval_phiL(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     """
     Compute the azimuthal angle spanned by L about J. This is the integral of the frequency OmegaL.
 
     Call
     ----
-    phiL = eval_phiL(S,J,r,xi,q,chi1,chi2,cyclesign=1,precomputedroots=None)
+    phiL = eval_phiL(S,J,r,chieff,q,chi1,chi2,cyclesign=1,precomputedroots=None)
 
     Parameters
     ----------
@@ -5308,7 +5315,7 @@ def eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
         Magnitude of the total angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -5328,13 +5335,13 @@ def eval_phiL(S, J, r, xi, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     """
 
     L = eval_L(r, q)
-    Sminuss, Spluss, S3s = Ssroots(J, r, xi, q, chi1, chi2, precomputedroots=precomputedroots)
-    alpha = eval_alpha(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    alpha = eval_alpha(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     m = elliptic_parameter(Sminuss, Spluss, S3s)
     phi = elliptic_amplitude(S, Sminuss, Spluss)
     nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
     nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
-    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, xi, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
     phiL = alpha/2 - np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi, m) + mathcalCplusprime*ellippi(nplus, phi, m) + mathcalCminusprime*ellippi(nminus, phi, m))
 
@@ -5479,16 +5486,16 @@ def eval_chip_asymptotic(theta1, theta2, q, chi1, chi2):
     return chip
 
 
-def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None, method='quadrature', Nsamples=1e4):
+def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, method='quadrature', Nsamples=1e4):
     """
     Averaged definition of the effective precessing spin chip, see arxiv:2011.11948. This definition consistently averages over all variations on the precession timescale. Valid inputs are one of the following (but not both)
     - theta1, theta2, deltaphi
-    - J, xi
+    - J, chieff
     The parameters r, q, chi1, and chi2 should always be provided. The keywords arguments method and Nsamples are passed directly to `precession_average`.
 
     Call
     ----
-    chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4)
+    chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4)
 
     Parameters
     ----------
@@ -5502,7 +5509,7 @@ def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, 
         Magnitude of the total angular momentum.
     r: float, optional (default: None)
         Binary separation.
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -5524,37 +5531,37 @@ def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, 
     if r is None or q is None or chi1 is None or chi2 is None:
         raise TypeError("Please provide r, q, chi1, and chi2.")
 
-    if theta1 is not None and theta2 is not None and deltaphi is not None and J is None and xi is None:
+    if theta1 is not None and theta2 is not None and deltaphi is not None and J is None and chieff is None:
         # cyclesign doesn't matter here. Outout S is not needed
-        _, J, xi = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
+        _, J, chieff = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
 
-    elif theta1 is None and theta2 is None and deltaphi is None and J is not None and xi is not None:
+    elif theta1 is None and theta2 is None and deltaphi is None and J is not None and chieff is not None:
         pass
 
     else:
-        raise TypeError("Please provide either (theta1,theta2,deltaphi) or (J,xi).")
+        raise TypeError("Please provide either (theta1,theta2,deltaphi) or (J,chieff).")
 
-    def _integrand(S, J, r, xi, q, chi1, chi2):
-        theta1, theta2, deltaphi = conserved_to_angles(S, J, r, xi, q, chi1, chi2)
+    def _integrand(S, J, r, chieff, q, chi1, chi2):
+        theta1, theta2, deltaphi = conserved_to_angles(S, J, r, chieff, q, chi1, chi2)
         chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
         return chip_integrand
 
-    chip = precession_average(J, r, xi, q, chi1, chi2, _integrand, J, r, xi, q, chi1, chi2, method=method, Nsamples=Nsamples)
+    chip = precession_average(J, r, chieff, q, chi1, chi2, _integrand, J, r, chieff, q, chi1, chi2, method=method, Nsamples=Nsamples)
 
     return chip
 
 
-def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, xi=None, q=None, chi1=None, chi2=None, which="averaged", method='quadrature', Nsamples=1e4):
+def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", method='quadrature', Nsamples=1e4):
     """
     Compute the effective precessing spin chip, see arxiv:2011.11948. The keyword `which` one of the following definitions:
     - `heuristic`, as in Schmidt et al 2015. Required inputs: theta1,theta2,q,chi1,chi2
     - `generalized`, retail all precession-timescale variations. Required inputs: theta1,theta2,deltaphi,q,chi1,chi2
     - `asymptotic`, large-separation limit. Required inputs: theta1,theta2,q,chi1,chi2
-    - `averaged` (default), averages over all precession-timescale variations. Required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (J,r,xi,q,chi1,chi2). The additional keywords `methods` and `Nsamples` are passed to `precession_average`.
+    - `averaged` (default), averages over all precession-timescale variations. Required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (J,r,chieff,q,chi1,chi2). The additional keywords `methods` and `Nsamples` are passed to `precession_average`.
 
     Call
     ----
-    chip = eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,xi=None,q=None,chi1=None,chi2=None,which="averaged",method='quadrature',Nsamples=1e4)
+    chip = eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,which="averaged",method='quadrature',Nsamples=1e4)
 
     Parameters
     ----------
@@ -5568,7 +5575,7 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, xi=None, 
         Magnitude of the total angular momentum.
     r: float, optional (default: None)
         Binary separation.
-    xi: float, optional (default: None)
+    chieff: float, optional (default: None)
         Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
@@ -5599,7 +5606,7 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, xi=None, 
         chip = eval_chip_asymptotic(theta1, theta2, q, chi1, chi2)
 
     elif which == 'averaged':
-        chip = eval_chip_averaged(theta1=theta1, theta2=theta2, deltaphi=deltaphi, J=J, r=r, xi=xi, q=q, chi1=chi1, chi2=chi2, method='quadrature', Nsamples=1e4)
+        chip = eval_chip_averaged(theta1=theta1, theta2=theta2, deltaphi=deltaphi, J=J, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2, method='quadrature', Nsamples=1e4)
 
     else:
         raise ValueError("`which` needs to be one of the following: `heuristic`, `generalized`, `asymptotic`, `averaged`.")
@@ -5770,7 +5777,7 @@ if __name__ == '__main__':
 
     #
     # r=[10,10][0]
-    # xi=[0.35,0.35][0]
+    # chieff=[0.35,0.35][0]
     # q=[0.8,0.8][0]
     # chi1=[1,1][0]
     # chi2=[1,1][0]
@@ -5783,10 +5790,10 @@ if __name__ == '__main__':
 
 
 
-    # Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
+    # Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,chieff,q,chi1,chi2)
     # print(Lvec,S1vec,S2vec)
     #
-    # phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
+    # phiL= eval_phiL(S,J,r,chieff,q,chi1,chi2)
     # print(phiL)
     #
     # def rotation_zaxis(angle):
@@ -5801,7 +5808,7 @@ if __name__ == '__main__':
     # print('more')
 
     # r=[10,10]
-    # xi=[0.35,0.35]
+    # chieff=[0.35,0.35]
     # q=[0.8,0.8]
     # chi1=[1,1]
     # chi2=[1,1]
@@ -5812,9 +5819,9 @@ if __name__ == '__main__':
     # S=[0.3,0.3]
     # t=[0,100]
 
-    # Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,xi,q,chi1,chi2)
+    # Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,chieff,q,chi1,chi2)
     # print(Lvec)
-    # phiL= eval_phiL(S,J,r,xi,q,chi1,chi2)
+    # phiL= eval_phiL(S,J,r,chieff,q,chi1,chi2)
     # print(phiL)
     #
     # def rotate_zaxis(vec,angle):
@@ -5832,46 +5839,46 @@ if __name__ == '__main__':
     # S2vec = rotate_zaxis(S2vec,phiL)
     # print(Lvec)
     # r=10
-    # xi=0.35
+    # chieff=0.35
     # q=0.8
     # chi1=0.6
     # chi2=0.3
     # #J=0.2
     #
-    # #Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
+    # #Sminus,Splus=Slimits(J,r,chieff,q,chi1,chi2)
     # S =np.linspace(0,1,1000)
     # r=np.tile(r,S.shape)
-    # xi=np.tile(xi,S.shape)
+    # chieff=np.tile(chieff,S.shape)
     # q=np.tile(q,S.shape)
     # chi1=np.tile(chi1,S.shape)
     # chi2=np.tile(chi2,S.shape)
     #J=np.tile(J,S.shape)
     #
     #
-    # Lvec, S1vec,S2vec = conserved_to_inertial(S,J,r,xi,q,chi1,chi2)
+    # Lvec, S1vec,S2vec = conserved_to_inertial(S,J,r,chieff,q,chi1,chi2)
 
 
     #print(rotation_zaxis(phiL))
 
-    #Sminus,Splus=Slimits(J,r,xi,q,chi1,chi2)
+    #Sminus,Splus=Slimits(J,r,chieff,q,chi1,chi2)
 
-    #tau = eval_tau(J,r,xi,q,chi1,chi2)
+    #tau = eval_tau(J,r,chieff,q,chi1,chi2)
     #print(tau)
 
-        #print(tofS(Sminus,J,r,xi,q,chi1,chi2,sign=-1))
+        #print(tofS(Sminus,J,r,chieff,q,chi1,chi2,sign=-1))
 
-    # print(eval_alpha(J,r,xi,q,chi1,chi2))
-    # print(2*eval_phiL(Splus,J,r,xi,q,chi1,chi2,sign=1))
+    # print(eval_alpha(J,r,chieff,q,chi1,chi2))
+    # print(2*eval_phiL(Splus,J,r,chieff,q,chi1,chi2,sign=1))
 
     #t= np.linspace(0,np.squeeze(tau),100)
-    #S = Soft(t,np.tile(J,t.shape),np.tile(r,t.shape),np.tile(xi,t.shape),np.tile(q,t.shape),np.tile(chi1,t.shape),np.tile(chi2,t.shape))
+    #S = Soft(t,np.tile(J,t.shape),np.tile(r,t.shape),np.tile(chieff,t.shape),np.tile(q,t.shape),np.tile(chi1,t.shape),np.tile(chi2,t.shape))
     #print(t)
     #print(S)
 
     # S = np.linspace(np.squeeze(Sminus),np.squeeze(Splus),100)
-    # t = tofS(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(xi,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape),sign = np.tile(1,S.shape))
+    # t = tofS(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(chieff,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape),sign = np.tile(1,S.shape))
     #
-    # phiL = eval_phiL(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(xi,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape))
+    # phiL = eval_phiL(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(chieff,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape))
     #
     #
     # print(S)
@@ -5881,16 +5888,16 @@ if __name__ == '__main__':
 
     #print(omegasq_aligned(r, q, chi1, chi2, ['uu','ud']))
 
-    #print("on many", Jresonances(r,xi,q,chi1,chi2))
+    #print("on many", Jresonances(r,chieff,q,chi1,chi2))
 
-    # print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
+    # print("on one", Jresonances(r[0],chieff[0],q[0],chi1[0],chi2[0]))
     # u=eval_u(r=r,q=q)
-    # kres = kapparesonances(u,xi,q,chi1,chi2)
+    # kres = kapparesonances(u,chieff,q,chi1,chi2)
     # J = eval_J(kappa=kres,r=r,q=r)
     # print("on one", J)
 
 
-    #print(Satresonance(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #print(Satresonance(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
     #sys.exit()
     #
     #
@@ -5901,24 +5908,24 @@ if __name__ == '__main__':
     #
     # print(Ssav_mfactor([0,1e-,0.2]))
 
-    #print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
-    #print(morphology(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],simpler=True))
+    #print(morphology(J,r,chieff,q,chi1,chi2,simpler=False))
+    #print(morphology(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0],simpler=True))
 
-    # print(Soft(t[0],J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
-    # print(Soft(t[1],J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
-    # print(Soft(t[1],J[1],r[1],xi[1],q[1],chi1[1],chi2[1]))
+    # print(Soft(t[0],J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
+    # print(Soft(t[1],J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
+    # print(Soft(t[1],J[1],r[1],chieff[1],q[1],chi1[1],chi2[1]))
     #
-    # print(Soft(t,J,r,xi,q,chi1,chi2))
+    # print(Soft(t,J,r,chieff,q,chi1,chi2))
     #
-    # print(Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    # print(Soft(t,J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
     #
     #
-    # print(Soft([[1,100,1,100],[500,600,500,600]],J,r,xi,q,chi1,chi2))
+    # print(Soft([[1,100,1,100],[500,600,500,600]],J,r,chieff,q,chi1,chi2))
 
-    #print(Ssampling(J,r,xi,q,chi1,chi2,N=10).shape)
-    #print(Ssampling(J,r,xi,q,chi1,chi2,N=1).shape)
-    #print(Ssampling(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],N=1).shape)
-    #print(Ssampling(J[0],r[0],xi[0],q[0],chi1[0],chi2[0],N=10).shape)
+    #print(Ssampling(J,r,chieff,q,chi1,chi2,N=10).shape)
+    #print(Ssampling(J,r,chieff,q,chi1,chi2,N=1).shape)
+    #print(Ssampling(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0],N=1).shape)
+    #print(Ssampling(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0],N=10).shape)
 
 
 
@@ -5926,41 +5933,41 @@ if __name__ == '__main__':
     #S1vec = [[13,20,30],[1,21,3]]
     #S2vec = [[12,23,33],[1,23,3]]
 
-    #v1,v2,v3 = conserved_to_Jframe(S[1], J[1], r[1], xi[1], q[1], chi1[1], chi2[1])
+    #v1,v2,v3 = conserved_to_Jframe(S[1], J[1], r[1], chieff[1], q[1], chi1[1], chi2[1])
     #print(v1)
 
-    #v1,v2,v3 = conserved_to_Jframe(S, J, r, xi, q, chi1, chi2)
+    #v1,v2,v3 = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2)
     #print(v1)
 
 
-    #print(kappadiscriminant_coefficients(u,xi,q,chi1,chi2))
+    #print(kappadiscriminant_coefficients(u,chieff,q,chi1,chi2))
     #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
-    #print("on one", Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
-    #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
-    #print("on many", Jresonances(r,xi,q,chi1,chi2))
+    #print("on one", Jresonances(r[0],chieff[0],q[0],chi1[0],chi2[0]))
+    #print(Jresonances(r[1],chieff[1],q[1],chi1[1],chi2[1]))
+    #print("on many", Jresonances(r,chieff,q,chi1,chi2))
 
-    #print("on one", xiresonances(J[0],r[0],q[0],chi1[0],chi2[0]))
+    #print("on one", chieffresonances(J[0],r[0],q[0],chi1[0],chi2[0]))
 
-    #print("on many", xiresonances(J,r,q,chi1,chi2))
+    #print("on many", chieffresonances(J,r,q,chi1,chi2))
 
-    #print(anglesresonances(J=J[0],r=r[0],xi=None,q=q[0],chi1=chi1[0],chi2=chi2[0]))
+    #print(anglesresonances(J=J[0],r=r[0],chieff=None,q=q[0],chi1=chi1[0],chi2=chi2[0]))
 
-    #print(anglesresonances(J=J,r=r,xi=None,q=q,chi1=chi1,chi2=chi2))
-    #print(Slimits(J,r,xi,q,chi1,chi2))
-    #print(Slimits(J[0],r[0],xi[0],q[0],chi1[0],[chi2[0]]))
+    #print(anglesresonances(J=J,r=r,chieff=None,q=q,chi1=chi1,chi2=chi2))
+    #print(Slimits(J,r,chieff,q,chi1,chi2))
+    #print(Slimits(J[0],r[0],chieff[0],q[0],chi1[0],[chi2[0]]))
 
-    #print(xilimits(J=J, r=r,q=q,chi1=chi1,chi2=chi2))
-    #print(eval_xi(theta1=theta1,theta2=theta2,S=[1,1],varphi=[1,1],J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+    #print(chiefflimits(J=J, r=r,q=q,chi1=chi1,chi2=chi2))
+    #print(eval_chieff(theta1=theta1,theta2=theta2,S=[1,1],varphi=[1,1],J=J,r=r,q=q,chi1=chi1,chi2=chi2))
     #print(effectivepotential_minus(S[0],J[0],r[0],q[0],chi1[0],chi2[0]))
 
     #print(effectivepotential_minus(S,J,r,q,chi1,chi2))
-    #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
+    #print(Slimits_plusminus(J,r,chieff,q,chi1,chi2))
     #t0=time.time()
-    #print(Jofr(ic=1.8, r=np.linspace(100,10,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8))
+    #print(Jofr(ic=1.8, r=np.linspace(100,10,100), chieff=-0.5, q=0.4, chi1=0.9, chi2=0.8))
     #print(time.time()-t0)
 
     # t0=time.time()
-    #print(repr(Jofr(ic=203.7430728810311, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
+    #print(repr(Jofr(ic=203.7430728810311, r=np.logspace(6,1,100), chieff=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
     # print(time.time()-t0)
 
 
@@ -5970,34 +5977,34 @@ if __name__ == '__main__':
     # q=0.5
     # chi1=0.6
     # chi2=0.7
-    # kappainf, xi = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
+    # kappainf, chieff = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
     # r = np.concatenate(([np.inf],np.logspace(10,1,100)))
-    # print(repr(Jofr(kappainf, r, xi, q, chi1, chi2)))
+    # print(repr(Jofr(kappainf, r, chieff, q, chi1, chi2)))
 
 
     # r=1e2
-    # xi=-0.5
+    # chieff=-0.5
     # q=0.4
     # chi1=0.9
     # chi2=0.8
     #
-    # Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # Jmin,Jmax = Jlimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     # J0=(Jmin+Jmax)/2
     # #print(J)
     # #print(Jmin,Jmax)
     # r = np.logspace(np.log10(r),1,100)
-    # J=Jofr(J0, r, xi, q, chi1, chi2)
+    # J=Jofr(J0, r, chieff, q, chi1, chi2)
     # print(J)
     #
-    # J=Jofr([J0,J0], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2])
+    # J=Jofr([J0,J0], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2])
     #
     # print(J)
 
 
 
-    #S = Ssampling(J,r,xi,q,chi1,chi2,N=1)
+    #S = Ssampling(J,r,chieff,q,chi1,chi2,N=1)
 
-    #S = Ssampling([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],N=[10,10])
+    #S = Ssampling([J,J],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2],N=[10,10])
 
     #print(repr(S))
 
@@ -6010,7 +6017,7 @@ if __name__ == '__main__':
     # deltaphi=0.46
     # S = 0.5538768649231461
     # J = 2.740273008918153
-    # xi = 0.9141896967861489
+    # chieff = 0.9141896967861489
     # kappa = 0.5784355256550922
     # r=np.logspace(3,1,500)
     # rswitch =1000
@@ -6027,7 +6034,7 @@ if __name__ == '__main__':
     # #
     # #
     # #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #print(d['xi'])
+    # #print(d['chieff'])
     # import cProfile
     # #cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
     # #
@@ -6043,13 +6050,13 @@ if __name__ == '__main__':
     #
     # print(d['r'])
     #
-    # print(Ssav(J, r[0], xi, q, chi1, chi2))
+    # print(Ssav(J, r[0], chieff, q, chi1, chi2))
     #
     #
-    #print(precession_average(J, r[0], xi, q, chi1, chi2, lambda x:x**2,method='montecarlo'))
+    #print(precession_average(J, r[0], chieff, q, chi1, chi2, lambda x:x**2,method='montecarlo'))
     #
     #
-    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='montecarlo'))
+    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='montecarlo'))
     #
     #
 
@@ -6058,33 +6065,33 @@ if __name__ == '__main__':
     #
     # x=np.array([1,2])
     # y=np.array([1,2])
-    # print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0],y[0], method='quadrature'))
-    # print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0],y[0], method='montecarlo'))
+    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func,x[0],y[0], method='quadrature'))
+    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func,x[0],y[0], method='montecarlo'))
     #
-    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='quadrature'))
-    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='montecarlo'))
+    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='quadrature'))
+    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='montecarlo'))
     # #
     #
     # def func(S,x):
     #     return x+S**2
     #
     # x=np.array([1,2])
-    # print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0], method='quadrature'))
-    # print(precession_average(J, r[0], xi, q, chi1, chi2, func,x[0], method='montecarlo'))
+    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func,x[0], method='quadrature'))
+    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func,x[0], method='montecarlo'))
     #
-    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='quadrature'))
-    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='montecarlo'))
+    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='quadrature'))
+    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='montecarlo'))
     #
     #
     # def func(S):
     #     return S**2
     #
-    # print(precession_average(J, r[0], xi, q, chi1, chi2, func, method='quadrature'))
-    # print(precession_average(J, r[0], xi, q, chi1, chi2, func, method='montecarlo'))
+    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func, method='quadrature'))
+    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func, method='montecarlo'))
     #
-    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature'))
+    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature'))
     #
-    # print(precession_average([J,J], [r[0],r[0]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], func, method='montecarlo'))
+    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='montecarlo'))
 
     #
 
@@ -6119,10 +6126,10 @@ if __name__ == '__main__':
     # print(d)
     #
     #d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #print(d['xi'])
+    #print(d['chieff'])
 
     #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
-    #print(d['xi'])
+    #print(d['chieff'])
 
 
 
@@ -6138,10 +6145,10 @@ if __name__ == '__main__':
     #
     # # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['r','theta1'])
     # #
-    # # #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # # #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # # #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # # #d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    # # #d=inspiral_precav(S=S,J=J,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
+    # # #d=inspiral_precav(J=J,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
+    # # #d=inspiral_precav(S=S,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
+    # # #d=inspiral_precav(kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
     # #
     # print(d)
 
@@ -6152,17 +6159,17 @@ if __name__ == '__main__':
     # theta1=0.4
     # theta2=0.45
     # kappa = 0.50941012
-    # xi = 0.9141896967861489
+    # chieff = 0.9141896967861489
     # r=np.concatenate(([np.inf],np.logspace(2,1,100)))
     #
     #
     #
     # d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
-    # # d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
+    # # d=inspiral_precav(kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
     # #
     # print(d)
     #
-    #d=inspiral_precav(kappa=[kappa,kappa],xi=[xi,xi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
+    #d=inspiral_precav(kappa=[kappa,kappa],chieff=[chieff,chieff],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #
     #print(d)
     # ###### INSPIRAL TESTING to infinite #######
@@ -6174,7 +6181,7 @@ if __name__ == '__main__':
     # deltaphi=0.46
     # S = 0.5538768649231461
     # J = 1.2314871608018418
-    # xi = 0.9141896967861489
+    # chieff = 0.9141896967861489
     # kappa=0.7276876186801603
     #
     # #kappa = 0.5784355256550922
@@ -6182,10 +6189,10 @@ if __name__ == '__main__':
     # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
     # print(d)
     # sys.exit()
-    #d=inspiral_precav(S=S,J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(J=J,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(S=S,kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(kappa=kappa,xi=xi,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(S=S,J=J,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(J=J,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(S=S,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
+    #d=inspiral_precav(kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
 
     #print(d)
     #
@@ -6198,34 +6205,34 @@ if __name__ == '__main__':
     # deltaphi=0.46
     # S = 0.5538768649231461
     # J = 2.740273008918153
-    # xi = 0.9141896967861489
+    # chieff = 0.9141896967861489
     # kappa0 = 0.5784355256550922
     # r=np.logspace(2,1,3)
     # u=eval_u(r,q)
-    # #print(integrator_precav(kappa0, u[0],u[-1], xi, q, chi1, chi2))
-    # sols = integrator_precav([kappa0,kappa0], [u[0],u[0]], [u[-1],u[-1]], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2])
+    # #print(integrator_precav(kappa0, u[0],u[-1], chieff, q, chi1, chi2))
+    # sols = integrator_precav([kappa0,kappa0], [u[0],u[0]], [u[-1],u[-1]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2])
     # print(sols)
     #print(sols[0])
 
-    #ode_integrator_precav(kappa0, uinitial, ufinal, xi, q, chi1, chi2)
+    #ode_integrator_precav(kappa0, uinitial, ufinal, chieff, q, chi1, chi2)
     #
-    # xi=-0.5
+    # chieff=-0.5
     # q=0.4
     # chi1=0.9
     # chi2=0.8
     # r=np.logspace(2,1,100)
-    # Jmin,Jmax = Jlimits(r=r[0],xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # Jmin,Jmax = Jlimits(r=r[0],chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     # J=(Jmin+Jmax)/2
-    # Smin,Smax= Slimits(J=J,r=r[0],xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # Smin,Smax= Slimits(J=J,r=r[0],chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     # S=(Smin+Smax)/2
-    # Svec, S1vec, S2vec, Jvec, Lvec = conserved_to_Jframe(S, J, r[0], xi, q, chi1, chi2)
+    # Svec, S1vec, S2vec, Jvec, Lvec = conserved_to_Jframe(S, J, r[0], chieff, q, chi1, chi2)
     # S1h0=S1vec/eval_S1(q,chi1)
     # S2h0=S2vec/eval_S2(q,chi2)
     # Lh0=Lvec/eval_L(r[0],q)
     #
     # print(J,S)
 
-    # xi=-0.5
+    # chieff=-0.5
     # q=0.4
     # chi1=0.9
     # chi2=0.8
@@ -6248,7 +6255,7 @@ if __name__ == '__main__':
     # #print(Lh)
 
     # ### ORBAV TESTING ####
-    # xi=-0.5
+    # chieff=-0.5
     # q=0.4
     # chi1=0.9
     # chi2=0.8
@@ -6264,14 +6271,14 @@ if __name__ == '__main__':
     # print(d)
     # print(" ")
     #
-    # S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2)
-    # d= inspiral_orbav(S=S,J=J,xi=xi,r=r,q=q,chi1=chi1,chi2=chi2)
+    # S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2)
+    # d= inspiral_orbav(S=S,J=J,chieff=chieff,r=r,q=q,chi1=chi1,chi2=chi2)
     # print(d)
     # print(" ")
     #
     #
     # kappa=eval_kappa(J,r[0],q)
-    # d= inspiral_orbav(S=S,kappa=kappa,xi=xi,r=r,q=q,chi1=chi1,chi2=chi2)
+    # d= inspiral_orbav(S=S,kappa=kappa,chieff=chieff,r=r,q=q,chi1=chi1,chi2=chi2)
     # print(d)
     # print(" ")
     #
@@ -6287,55 +6294,55 @@ if __name__ == '__main__':
 
     # J=6.1
     # print("LS",Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
-    # print(Ssroots(J,r,xi,q,chi1,chi2))
+    # print(Ssroots(J,r,chieff,q,chi1,chi2))
     #
     # J=6.6
     # print(Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
-    # print(Ssroots(J,r,xi,q,chi1,chi2))
+    # print(Ssroots(J,r,chieff,q,chi1,chi2))
     #
-    # # print(repr(Jofr(ic=(Jmin+Jmax)/2, r=np.logspace(6,1,100), xi=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
+    # # print(repr(Jofr(ic=(Jmin+Jmax)/2, r=np.logspace(6,1,100), chieff=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
     # for J in [5.99355616 ,6.0354517,6.20850742,6.57743474,6.94028614]:
-    #     ssol = Slimits_plusminus(J,r,xi,q,chi1,chi2,coincident=True)[0]**2
+    #     ssol = Slimits_plusminus(J,r,chieff,q,chi1,chi2,coincident=True)[0]**2
     #     smin,smax = Slimits_LJS1S2(J,r,q,chi1,chi2)**2
     #     print(ssol>smin,ssol<smax)
     #
 
 
-    # print( dSdtprefactor(r,xi,q))
+    # print( dSdtprefactor(r,chieff,q))
     # kappa=eval_kappa(J,r,q)
     # u=eval_u(r,q)
-    # print(Ssroots_NEW(kappa,u,xi,q,chi1,chi2))
+    # print(Ssroots_NEW(kappa,u,chieff,q,chi1,chi2))
 
 
-    #print(Jresonances(r[0],xi[0],q[0],chi1[0],chi2[0]))
-    #print(Jresonances(r[1],xi[1],q[1],chi1[1],chi2[1]))
-    #  print(Jresonances(r,xi,q,chi1,chi2))
-    #print(Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2))
+    #print(Jresonances(r[0],chieff[0],q[0],chi1[0],chi2[0]))
+    #print(Jresonances(r[1],chieff[1],q[1],chi1[1],chi2[1]))
+    #  print(Jresonances(r,chieff,q,chi1,chi2))
+    #print(Jlimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2))
     #print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
 
 
     #
     # r=1e14
-    # xi=-0.5
+    # chieff=-0.5
     # q=0.4
     # chi1=0.9
     # chi2=0.8
     #
     #
-    # Jmin,Jmax = Jlimits(r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # Jmin,Jmax = Jlimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     # print(Jmin,Jmax)
     #
-    # print(Satresonance([Jmin,Jmax],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
+    # print(Satresonance([Jmin,Jmax],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2]))
     #
     #
-    # print(xiresonances((Jmin+Jmax)/2,r,q,chi1,chi2))
-    #print(xiresonances(J[1],r[1],q[1],chi1[1],chi2[1]))
-    #print(xiresonances(J,r,q,chi1,chi2))
+    # print(chieffresonances((Jmin+Jmax)/2,r,q,chi1,chi2))
+    #print(chieffresonances(J[1],r[1],q[1],chi1[1],chi2[1]))
+    #print(chieffresonances(J,r,q,chi1,chi2))
 
     #
     # t0=time.time()
-    # [Ssroots(J[0],r[0],xi[0],q[0],chi1[0],chi2[0]) for i in range(100)]
-    # #print(Slimits_plusminus(J,r,xi,q,chi1,chi2))
+    # [Ssroots(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]) for i in range(100)]
+    # #print(Slimits_plusminus(J,r,chieff,q,chi1,chi2))
     # print(time.time()-t0)
     #
     # @np.vectorize
@@ -6353,25 +6360,25 @@ if __name__ == '__main__':
     # [ell(0.5) for i in range(100)]
     # print(time.time()-t0)
 
-    #print(xilimits(q=q,chi1=chi1,chi2=chi2))
+    #print(chiefflimits(q=q,chi1=chi1,chi2=chi2))
 
-    #print(xilimits(J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+    #print(chiefflimits(J=J,r=r,q=q,chi1=chi1,chi2=chi2))
     #S=[0.4,0.6668]
 
     #print(effectivepotential_plus(S,J,r,q,chi1,chi2))
     #print(effectivepotential_minus(S,J,r,q,chi1,chi2))
 
-    #print(Slimits_cycle(J,r,xi,q,chi1,chi2))
+    #print(Slimits_cycle(J,r,chieff,q,chi1,chi2))
 
 
     #M,m1,m2,S1,S2=pre.get_fixed(q[0],chi1[0],chi2[0])
-    #print(pre.J_allowed(xi[0],q[0],S1[0],S2[0],r[0]))
+    #print(pre.J_allowed(chieff[0],q[0],S1[0],S2[0],r[0]))
 
-    #print(Jresonances(r,xi,q,chi1,chi2))
+    #print(Jresonances(r,chieff,q,chi1,chi2))
 
 
     #print(Jlimits(r,q,chi1,chi2))
-    #print(Ssroots(J,r,xi,q,chi1,chi2))
+    #print(Ssroots(J,r,chieff,q,chi1,chi2))
 
 
 
@@ -6382,52 +6389,52 @@ if __name__ == '__main__':
     # chi2=0.9
     # r=30
     # J=1.48
-    # xi=0.25
+    # chieff=0.25
     # S = 0.3
-    # #print("stillworks",Ssroots(J,r,xi,q,chi1,chi2)**0.5)
+    # #print("stillworks",Ssroots(J,r,chieff,q,chi1,chi2)**0.5)
     #
-    # #print(eval_deltaphi(S,J,r,xi,q,chi1,chi2, sign=1))
+    # #print(eval_deltaphi(S,J,r,chieff,q,chi1,chi2, sign=1))
     #
-    # #print(eval_deltaphi([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], sign=[1,1]))
-    # #print(eval_deltaphi([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2], sign=1))
+    # #print(eval_deltaphi([S,S], [J,J], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], sign=[1,1]))
+    # #print(eval_deltaphi([S,S], [J,J], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], sign=1))
     #
-    # print(morphology(J,r,xi,q,chi1,chi2,simpler=False))
+    # print(morphology(J,r,chieff,q,chi1,chi2,simpler=False))
     #
     #
-    # #print(morphology(J,r,xi,q,chi1,chi2))
-    # print(morphology([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
+    # #print(morphology(J,r,chieff,q,chi1,chi2))
+    # print(morphology([J,J],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2]))
 
 
 
-    #print(spinorbitresonances(J=0.0001,r=10,xi=None,q=0.32,chi1=1,chi2=1))
-    #print(spinorbitresonances(J=[0.0001,0.0001],r=[10,10],xi=None,q=[0.32,0.32],chi1=[1,1],chi2=[1,1]))
+    #print(spinorbitresonances(J=0.0001,r=10,chieff=None,q=0.32,chi1=1,chi2=1))
+    #print(spinorbitresonances(J=[0.0001,0.0001],r=[10,10],chieff=None,q=[0.32,0.32],chi1=[1,1],chi2=[1,1]))
 
-    #print(xilimits(J=0.05,r=10,q=0.32,chi1=1,chi2=1))
+    #print(chiefflimits(J=0.05,r=10,q=0.32,chi1=1,chi2=1))
 
     # theta1=[0.567,1]
     # theta2=[1,1]
     # deltaphi=[1,2]
-    #S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
-    #print(S,J,xi)
-    #theta1,theta2,deltaphi=conserved_to_angles(S,J,r,xi,q,chi1,chi2)
+    #S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
+    #print(S,J,chieff)
+    #theta1,theta2,deltaphi=conserved_to_angles(S,J,r,chieff,q,chi1,chi2)
     #print(theta1,theta2,deltaphi)
-    #print(eval_costheta1(0.4,J[0],r[0],xi[0],q[0],chi1[0],chi2[0]))
+    #print(eval_costheta1(0.4,J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
 
     #print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
 
-    # tau = eval_tau(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
-    # Smin,Smax = Slimits_plusminus(J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    # tau = eval_tau(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0])
+    # Smin,Smax = Slimits_plusminus(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0])
     # t= np.linspace(0,tau,200)
-    # S= Soft([t,t],J,r,xi,q,chi1,chi2)
+    # S= Soft([t,t],J,r,chieff,q,chi1,chi2)
     #
     # #print(t)
     # print(np.shape([t,t]))
     # print(np.shape(S))
-    # #S= Soft(t,J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    # #S= Soft(t,J[0],r[0],chieff[0],q[0],chi1[0],chi2[0])
 
     #print(S[1:5])
 
-    #S= Soft(t[4],J[0],r[0],xi[0],q[0],chi1[0],chi2[0])
+    #S= Soft(t[4],J[0],r[0],chieff[0],q[0],chi1[0],chi2[0])
 
     #print(S)
 
@@ -6449,15 +6456,15 @@ if __name__ == '__main__':
     # S2vec = S2*S2h
     # Lvec = L*Lh
     #
-    # S, J, xi = vectors_to_conserved(Lvec, S1vec, S2vec, q)
-    # theta1,theta2,deltaphi = conserved_to_angles(S,J,r,xi,q,chi1,chi2,sign=+1)
+    # S, J, chieff = vectors_to_conserved(Lvec, S1vec, S2vec, q)
+    # theta1,theta2,deltaphi = conserved_to_angles(S,J,r,chieff,q,chi1,chi2,sign=+1)
     # #print(theta1,theta2,deltaphi)
     # #print(vectors_to_conserved([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec], [q,q+0.1]))
     # #print(' ')
     # #print(vectors_to_angles(S1vec, S2vec, Lvec))
     # #print(vectors_to_angles([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec]))
-    # # print(conserved_to_Jframe(S, J, r, xi, q, chi1, chi2))
-    # # print(conserved_to_Jframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
+    # # print(conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2))
+    # # print(conserved_to_Jframe([S,S], [J,J], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2]))
     # #
     # # print(angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
     # #print(angles_to_Jframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
@@ -6465,7 +6472,7 @@ if __name__ == '__main__':
     # #print(angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
     # print(angles_to_Lframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
     #
-    # print(conserved_to_Lframe([S,S], [J,J], [r,r], [xi,xi], [q,q], [chi1,chi1], [chi2,chi2]))
+    # print(conserved_to_Lframe([S,S], [J,J], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2]))
 
     # r=10
     # q=0.5
@@ -6475,9 +6482,9 @@ if __name__ == '__main__':
     # print(omega2_aligned([r,r], [q,q], [chi1,chi1], [chi2,chi2], 'dd'))
 
     #
-    # print(eval_tau([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2]))
-    # pr = Ssroots([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
-    # print(eval_tau([J,J],[r[0],r[0]],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
+    # print(eval_tau([J,J],[r[0],r[0]],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2]))
+    # pr = Ssroots([J,J],[r[0],r[0]],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2])
+    # print(eval_tau([J,J],[r[0],r[0]],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
     # sys.exit()
 
     # q=0.8
@@ -6504,15 +6511,15 @@ if __name__ == '__main__':
     #
     # J= insp['J'][0,1:]
     # r= insp['r'][0,1:]
-    # xi = np.tile(insp['xi'],r.shape)
+    # chieff = np.tile(insp['chieff'],r.shape)
     # q = np.tile(q,r.shape)
     # chi1 = np.tile(chi1,r.shape)
     # chi2 = np.tile(chi2,r.shape)
     #
-    # Sminus, Splus = Slimits(J=J,r=r,xi=xi,q=q,chi1=chi1,chi2=chi2)
+    # Sminus, Splus = Slimits(J=J,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     #
-    # omegaminus= eval_omegaL(Sminus,J,r,xi,q,chi1,chi2)
-    # omegaplus= eval_omegaL(Splus,J,r,xi,q,chi1,chi2)
+    # omegaminus= eval_omegaL(Sminus,J,r,chieff,q,chi1,chi2)
+    # omegaplus= eval_omegaL(Splus,J,r,chieff,q,chi1,chi2)
     #
     #
     # print(omegaminus)
@@ -6525,7 +6532,7 @@ if __name__ == '__main__':
 
     #print(Scubic_coefficients(0.4, 0.456, 1.3, 0.2, 0.8, 0.9))
     #print(Slimits_plusminus(2.34, 100, 0, 0.6, 1, 1))
-    #print(xiresonances(2.34, 100, 0.6, 1, 1))
+    #print(chieffresonances(2.34, 100, 0.6, 1, 1))
 
 
 
@@ -6533,62 +6540,62 @@ if __name__ == '__main__':
     # r = [10.0, np.inf]
     # theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
     #
-    # S,J,xi = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
+    # S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
     #
-    # Jmin, Jmax = Jlimits(r=r[0], xi=xi, q=q, chi1=chi1, chi2=chi2)
+    # Jmin, Jmax = Jlimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2)
     # J=Jmax-1e-20
-    # result = inspiral_precav(J=J,xi=xi, r=r, q=q, chi1=chi1, chi2=chi2)
+    # result = inspiral_precav(J=J,chieff=chieff, r=r, q=q, chi1=chi1, chi2=chi2)
     # print(result['kappa'])
 
     # while True:
     #     q=np.random.uniform(0.01,1)
     #     chi1=np.random.uniform(0.01,1)
     #     chi2=np.random.uniform(0.01,1)
-    #     ximin,ximax = xilimits_definition(q,chi1,chi2)
-    #     xi=np.random.uniform(ximin,ximax)
+    #     chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)
+    #     chieff=np.random.uniform(chieffmin,chieffmax)
     #     r=10
     #
-    #     Jres = Jresonances(r,xi,q,chi1,chi2)
+    #     Jres = Jresonances(r,chieff,q,chi1,chi2)
     #     u=eval_u(r=r,q=q)
-    #     kres = kapparesonances(u,xi,q,chi1,chi2)
+    #     kres = kapparesonances(u,chieff,q,chi1,chi2)
     #     J = eval_J(kappa=kres,r=r,q=q)
     #     print(Jres-J)
 
 
     # kappa=3.4
     # u=0.1
-    # xi=0.8
+    # chieff=0.8
     # q=0.4
     # chi1=0.9567
     # chi2=0.979032
-    # #print(Scubic_coefficients(kappa, u, xi, q, chi1, chi2))
-    # #print(xidiscriminant_coefficients(u, xi, q, chi1, chi2))
+    # #print(Scubic_coefficients(kappa, u, chieff, q, chi1, chi2))
+    # #print(chieffdiscriminant_coefficients(u, chieff, q, chi1, chi2))
     #
     # r=34.432
     # J=1.7
-    # #print(Slimits(r=r,q=q,chi1=chi1,chi2=chi2,xi=xi,J=J))
+    # #print(Slimits(r=r,q=q,chi1=chi1,chi2=chi2,chieff=chieff,J=J))
     # S=0.55
     # varphi=0.45
     # t0=time.time()
     #
-    # Sminuss,Spluss,S3s = Ssroots(J,r,xi,q,chi1,chi2)
+    # Sminuss,Spluss,S3s = Ssroots(J,r,chieff,q,chi1,chi2)
     # # for i in range(10000):
-    # eval_tau(J, r, xi, q, chi1, chi2,precomputedroots=[Sminuss,Spluss,S3s])
+    # eval_tau(J, r, chieff, q, chi1, chi2,precomputedroots=[Sminuss,Spluss,S3s])
     #
-    # Sminuss,Spluss,S3s = Ssroots([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2])
+    # Sminuss,Spluss,S3s = Ssroots([J,J],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2])
     # # for i in range(10000):
     # print(Sminuss,Spluss,S3s)
     #
-    # print(eval_tau([J,J],[r,r],[xi,xi],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=[Sminuss,Spluss,S3s]))
+    # print(eval_tau([J,J],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=[Sminuss,Spluss,S3s]))
 
     #print(time.time()-t0)
 
     #t0=time.time()
     #for i in range(10000):
-    #    eval_tau(J, r, xi, q, chi1, chi2)
+    #    eval_tau(J, r, chieff, q, chi1, chi2)
     #print(time.time()-t0)
 
-    #print(eval_xi(theta1=None,theta2=None,S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2))
+    #print(eval_chieff(theta1=None,theta2=None,S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2))
 
     #
     # if precomputedroots is None:
