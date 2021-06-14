@@ -119,15 +119,15 @@ def test_eval_eta():
 
 @both
 def test_eval_S1():
-    return {"q":0.8, "chi1":1}, [0.30864198]}
+    return {"q":0.8, "chi1":1}, [0.30864198]
 
 @both
 def test_eval_S2():
-    return {"q":0.8, "chi2":1}, [0.19753086]}
+    return {"q":0.8, "chi2":1}, [0.19753086]
 
 @both
 def test_spinmags():
-    return {"q":0.8, "chi1":1, "chi2":1}, [[0.30864198],[0.19753086]]}
+    return {"q":0.8, "chi1":1, "chi2":1}, [[0.30864198],[0.19753086]]
 
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
