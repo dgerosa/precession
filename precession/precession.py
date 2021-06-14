@@ -1580,7 +1580,7 @@ def Scubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     S1, S2 = spinmags(q, chi1, chi2)
 
     # Machine generated with polycoefficients.nb
-    coeff3 = q * ((1 + q))**2 * u**2"
+    coeff3 = q * ((1 + q))**2 * u**2
 
     # Machine generated with polycoefficients.nb
     coeff2 = 1/4 * ((1 + q))**2 * (1 + (4 * S2**2 * u**2 + (q**2 * (1 + 4
@@ -2082,7 +2082,7 @@ def eval_varphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
     S))**2))**(-1/2) * ((-1 * J**2 + ((L + S))**2))**(-1/2) * ((S**2 + -1
     * ((S1 + -1 * S2))**2))**(-1/2) * ((-1 * S**2 + ((S1 +
     S2))**2))**(-1/2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * (((1 + q))**2
-    * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -4 * L * q * S**2 * 
+    * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -4 * L * q * S**2 *
     chieff)
 
     # If cosvarphi is very close but slighly outside [-1,1], assume either -1 or 1.
