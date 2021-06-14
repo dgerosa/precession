@@ -1,24 +1,31 @@
+
+import sys, os
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + '/../')
+
+
 import pytest
 import numpy as np
-import precession as pre
+import precession
+
+#
+# def test_silly():
+#     """
+#     Test the test procedure.
+#     """
+#
+#     assert True
 
 
-def test_silly():
-    """
-    Test the test procedure.
-    """
 
-    assert True
-
-
-class genericTest:
+class generictest:
     """
     Parameters
     ----------
     func : function
         The function to test. It should output a single value.
     args : dict
-        A dictionary of arguments for func. THe keys are the argument names.
+        A dictionary of arguments for func. The keys are the argument names.
         Must be ordered as in the definition of func.
     output_to_compare :
         The value to compare the output to.
@@ -26,10 +33,11 @@ class genericTest:
         Which arguments of func to repeat to get vector output.
     """
 
-    def __init__(self, func, args, output_to_compare, args_to_repeat='all'):
+    def __init__(self, func, args, output_to_compare, args_to_repeat='all', multiple=2):
 
         self.func = func
         self.args = args
+        self.multiple = multiple
         self.output_to_compare = output_to_compare
         if args_to_repeat == 'all':
             self.args_to_repeat = list(self.args.keys())
@@ -38,23 +46,32 @@ class genericTest:
 
     def test_single(self):
 
-        #assert np.allclose(self.func(**self.args), self.output_to_compare)
         return np.allclose(self.func(**self.args), self.output_to_compare)
 
-    def test_multiple(self, multiple=2):
+    def test_multiple(self):
 
         _args = self.args.copy()
         for arg in self.args_to_repeat:
-            _args[arg] = np.repeat(_args[arg], multiple)
+            _args[arg] = np.repeat(_args[arg], self.multiple)
 
         _output_to_compare = np.squeeze(
                                 np.repeat(
                                     np.atleast_2d(self.output_to_compare),
-                                                  multiple, axis=0))
+                                                  self.multiple, axis=0))
 
         #assert np.allclose(self.func(**_args), _output_to_compare)
         #return np.allclose(self.func(**_args), _output_to_compare)
-        return self.func(**_args), _output_to_compare
+        return np.allclose(self.func(**_args), _output_to_compare)
+
+    def __call__(self):
+        print
+        return self.test_single() and self.test_multiple()
+
+
+def test_mass1():
+    assert generictest(precession.eval_m1,{"q":0.8},[0.55555556])()
+
+
 
 
 #

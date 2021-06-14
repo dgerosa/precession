@@ -6602,3 +6602,6 @@ if __name__ == '__main__':
     #     Smin, Smax =....
     # else:
     #     Smin, Smax = (precomputedroots[:-1])**0.5
+
+
+    print(eval_m2(q=0.8))
