@@ -188,9 +188,17 @@ def test_Jresonances():
     # See Fig 5 in arxiv:1506.03492
     return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
 
+@both
+def test_1_Jlimits():
+    # Should be like test_Jlimits_LS1S2
+    return {"r":10 ,"q":0.8, "chi1":1, "chi2":1}, [[0.27463646],[1.28698214]]
+
+@both
+def test_2_Jlimits():
+    # Should be like test_Jresonances
+    return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False)
 # kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False)
 # chiefflimits_definition(q, chi1, chi2)
 # chieffdiscriminant_coefficients(kappa, u, q, chi1, chi2)
