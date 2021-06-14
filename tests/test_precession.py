@@ -71,6 +71,11 @@ class generictest:
 def test_mass1():
     assert generictest(precession.eval_m1,{"q":0.8},[0.55555556])()
 
+def test_mass2():
+    assert generictest(precession.eval_m2,{"q":0.8},[0.44444444])()
+
+
+
 
 
 
