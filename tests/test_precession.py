@@ -37,14 +37,13 @@ class generictest:
         self.func = func
         self.args = args
         self.multiple = multiple
-        self.output_to_compare = output_to_compare
+        self.output_to_compare = np.array(output_to_compare)
         if args_to_repeat == 'all':
             self.args_to_repeat = list(self.args.keys())
         elif args_to_repeat is None:
             self.args_to_repeat = []
 
     def test_single(self):
-
         return np.allclose(self.func(**self.args), self.output_to_compare)
 
     def test_multiple(self):
@@ -53,17 +52,15 @@ class generictest:
         for arg in self.args_to_repeat:
             _args[arg] = np.repeat(_args[arg], self.multiple)
 
-        _output_to_compare = np.squeeze(
+        _output_to_compare = np.reshape(
                                 np.repeat(
-                                    np.atleast_2d(self.output_to_compare),
-                                                  self.multiple, axis=0))
+                                    np.atleast_2d(self.output_to_compare), self.multiple, axis=0),
+                                    (self.output_to_compare.shape[0],self.multiple))
 
-        #assert np.allclose(self.func(**_args), _output_to_compare)
-        #return np.allclose(self.func(**_args), _output_to_compare)
         return np.allclose(self.func(**_args), _output_to_compare)
 
     def __call__(self):
-        print
+
         return self.test_single() and self.test_multiple()
 
 
@@ -73,8 +70,8 @@ def test_mass1():
 def test_mass2():
     assert generictest(precession.eval_m2,{"q":0.8},[0.44444444])()
 
-
-
+def test_masses():
+    assert generictest(precession.masses,{"q":0.8},[[0.55555556],[0.44444444]])()
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
 # DONE eval_m1(q)
