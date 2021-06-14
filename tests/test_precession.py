@@ -71,28 +71,28 @@ def both(testfunction,multiple=3):
 
     @wraps(testfunction)
     def wrapper():
-        input, output = testfunction()
+        for input, output  in zip(testfunction()):
 
-        # Extract the codefunction
-        codefunction = eval("precession."+testfunction.__name__.split("test_")[1:][0])
-        # Make sure output is ready for reshaping
-        output = np.array(output)
-        # Inflate the inputs
-        _input = input.copy()
-        for arg in _input:
-            _input[arg] = np.repeat(_input[arg], multiple)
-        # Inflate the outputs
-        _output = np.reshape( np.repeat(output, multiple, axis=0), (output.shape[0],multiple) )
+            # Extract the codefunction
+            codefunction = eval("precession."+testfunction.__name__.split("test_")[1:][0])
+            # Make sure output is ready for reshaping
+            output = np.array(output)
+            # Inflate the inputs
+            _input = input.copy()
+            for arg in _input:
+                _input[arg] = np.repeat(_input[arg], multiple)
+            # Inflate the outputs
+            _output = np.reshape( np.repeat(output, multiple, axis=0), (output.shape[0],multiple) )
 
-        # Test on a single entry
-        checksingle = np.allclose(codefunction(**input), output)
+            # Test on a single entry
+            checksingle = np.allclose(codefunction(**input), output)
 
-        # Test on multiple entries
-        checkmultiple = np.allclose(codefunction(**_input), _output)
+            # Test on multiple entries
+            checkmultiple = np.allclose(codefunction(**_input), _output)
 
-        # Actual test for pytest
-        assert checksingle
-        assert checkmultiple
+            # Actual test for pytest
+            assert checksingle
+            assert checkmultiple
 
     return wrapper
 
