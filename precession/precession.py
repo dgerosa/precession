@@ -637,7 +637,7 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
 
     u = np.atleast_1d(u)
     q = np.atleast_1d(q)
-    chieff = np.atleast_1d()
+    chieff = np.atleast_1d(chieff)
     S1, S2 = spinmags(q, chi1, chi2)
 
     # Machine generated with polycoefficients.nb
@@ -6604,4 +6604,5 @@ if __name__ == '__main__':
     #     Smin, Smax = (precomputedroots[:-1])**0.5
 
 
-    print(eval_u(q=0.8,r=10))
+    print(kappadiscriminant_coefficients(0.45, 0.56, 0.2, 0.5, 0.6))
+    #print(eval_u(q=0.8,r=10))
