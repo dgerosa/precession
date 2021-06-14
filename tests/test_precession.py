@@ -9,6 +9,46 @@ def test_silly():
     """
 
     assert True
+
+
+class genericTest:
+    """
+    Parameters
+    ----------
+    func : function
+        The function to test. It should output a single value.
+    args : dict
+        A dictionary of arguments for func. THe keys are the argument names.
+    output_to_compare :
+        The value to compare the output to.
+    args_to_repeat : list of str (optional)
+        Which arguments of func to repeat to get vector output.
+    """
+
+    def __init__(self, func, args, output_to_compare, args_to_repeat=[]):
+
+        self.func = func
+        self.args = args
+        self.output_to_compare = output_to_compare
+        self.args_to_repeat = args_to_repeat
+
+    def test_single(self):
+
+        #assert np.allclose(self.func(**self.args), self.output_to_compare)
+        return np.allclose(self.func(**self.args), self.output_to_compare)
+
+    def test_multiple(self, multiple=2):
+
+        _args = self.args.copy()
+        for arg in self.args_to_repeat:
+            _args[arg] = np.repeat(_args[arg], multiple)
+
+        _output_to_compare = np.repeat(self.output_to_compare, multiple)
+
+        #assert np.allclose(self.func(**_args), _output_to_compare)
+        return np.allclose(self.func(**_args), _output_to_compare)
+
+
 #
 #
 # def assert_scalar(testval, func, *args):
