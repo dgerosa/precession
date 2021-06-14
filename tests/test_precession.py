@@ -9,7 +9,7 @@ import precession
 from functools import wraps
 
 #
-# def test_silly():
+# def thatsilly():
 #     """
 #     Test the test procedure.
 #     """
@@ -70,8 +70,8 @@ def both(testfunction,multiple=3):
     """
 
     @wraps(testfunction)
-    def wrapper(*args, **kwargs):
-        input, output = testfunction(*args, **kwargs)
+    def wrapper():
+        input, output = testfunction()
 
         # Extract the codefunction
         codefunction = eval("precession."+testfunction.__name__.split("test_")[1:][0])
@@ -131,14 +131,6 @@ def test_spinmags():
 
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# DONE eval_m1(q)
-# DONE eval_m2(q)
-# masses(q)
-# eval_q(m1, m2)
-# eval_eta(q)
-# eval_S1(q, chi1)
-# eval_S2(q, chi2)
-# spinmags(q, chi1, chi2)
 # eval_L(r, q)
 # eval_v(r)
 # eval_r(L=None, u=None, q=None)
