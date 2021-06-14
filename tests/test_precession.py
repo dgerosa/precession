@@ -91,7 +91,8 @@ def both(testfunction,multiple=3):
         checkmultiple = np.allclose(codefunction(**_input), _output)
 
         # Actual test for pytest
-        assert checksingle and checkmultiple
+        assert checksingle
+        assert checkmultiple
 
     return wrapper
 
@@ -107,6 +108,14 @@ def test_eval_m2():
 @both
 def test_masses():
     return {"q":0.8}, [[0.55555556],[0.44444444]]
+
+@both
+def test_eval_q():
+    return {"m1":36, "m2":29}, [0.80555556]
+
+@both
+def test_eval_eta():
+    return {"q":1}, [0.25]
 
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
