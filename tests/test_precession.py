@@ -71,8 +71,9 @@ def both(testfunction,multiple=3):
 
     @wraps(testfunction)
     def wrapper():
-        for input, output  in zip(testfunction()):
+        inputs,outputs = np.array(testfunction(),dtype=object).T
 
+        for input,output in zip(np.atleast_1d(inputs),np.atleast_1d(outputs)):
             # Extract the codefunction
             codefunction = eval("precession."+testfunction.__name__.split("test_")[1:][0])
             # Make sure output is ready for reshaping
@@ -135,8 +136,10 @@ def test_eval_L():
 
 @both
 def test_eval_v():
-    return {"r":10}, [0.31622777]
+    #return {"r":10}, [0.31622777]
+    return [{"r":10}, [0.31622777]], [{"r":10},[0.31622777]]
 
+test_eval_v()
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
 # eval_L(r, q)
