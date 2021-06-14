@@ -26,12 +26,15 @@ class genericTest:
         Which arguments of func to repeat to get vector output.
     """
 
-    def __init__(self, func, args, output_to_compare, args_to_repeat=[]):
+    def __init__(self, func, args, output_to_compare, args_to_repeat='all'):
 
         self.func = func
         self.args = args
         self.output_to_compare = output_to_compare
-        self.args_to_repeat = args_to_repeat
+        if args_to_repeat == 'all':
+            self.args_to_repeat = list(self.args.keys())
+        elif args_to_repeat is None:
+            self.args_to_repeat = []
 
     def test_single(self):
 
@@ -44,12 +47,14 @@ class genericTest:
         for arg in self.args_to_repeat:
             _args[arg] = np.repeat(_args[arg], multiple)
 
-        _output_to_compare = np.repeat(np.atleast_2d(self.output_to_compare),
-                                       multiple, axis=0)
+        _output_to_compare = np.squeeze(
+                                np.repeat(
+                                    np.atleast_2d(self.output_to_compare),
+                                                  multiple, axis=0))
 
         #assert np.allclose(self.func(**_args), _output_to_compare)
         #return np.allclose(self.func(**_args), _output_to_compare)
-        return _args, _output_to_compare
+        return self.func(**_args), _output_to_compare
 
 
 #
