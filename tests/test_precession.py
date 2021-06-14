@@ -147,20 +147,36 @@ def test_eval_v():
 
 @both
 def test_1_eval_r():
-    return {"L":0.7808093 ,"q":0.8}, [10]
+    return {"L":1 ,"q":0.8}, [16.4025]
 
 @both
 def test_2_eval_r():
-    return {"u":0.64036123 ,"q":0.8}, [10]
+    return {"u":0.5 ,"q":0.8}, [16.4025]
+
+@both
+def test_Jlimits_LS1S2():
+    # See Fig 5 in arxiv:1506.03492
+    return {"r":10 ,"q":0.8, "chi1":1, "chi2":1}, [[0.27463646],[1.28698214]]
+
+@both
+def test_kappadiscriminant_coefficients():
+    return {"u":0.5 ,"chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[-2.22902511e+03],[ 3.19940568e+03],[-1.79577102e+03],[ 4.89088064e+02],[-6.38228469e+01],[ 3.11722082e+00]]
+
+@both
+def test_kapparesonances():
+    return {"u":0.5 ,"chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[0.28276221],[0.38587938]]
+
+@both
+def test_kappainfresonances():
+    return {"chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[0.22839506],[0.28395062]]
+
+@both
+def test_Jresonances():
+    # See Fig 5 in arxiv:1506.03492
+    return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
+
+
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# eval_L(r, q)
-# eval_v(r)
-# eval_r(L=None, u=None, q=None)
-# Jlimits_LS1S2(r, q, chi1, chi2)
-# kappadiscriminant_coefficients(u, chieff, q, chi1, chi2)
-# kapparesonances(u, chieff, q, chi1, chi2)
-# kappainfresonances(chieff, q, chi1, chi2)
-# Jresonances(r, chieff, q, chi1, chi2)
 # Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False)
 # kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False)
 # chiefflimits_definition(q, chi1, chi2)
