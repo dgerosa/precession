@@ -882,7 +882,7 @@ def kappainfresonances(chieff, q, chi1, chi2):
     kappainfmin = np.maximum((chieff - (q**-1-q)*S2)/(1+q), (chieff - (q**-1-q)*S1)/(1+q**-1))
     kappainfmax = np.minimum((chieff + (q**-1-q)*S2)/(1+q), (chieff + (q**-1-q)*S1)/(1+q**-1))
 
-    return kappainfmin, kappainfmax
+    return np.stack([kappainfmin, kappainfmax])
 
 
 def Jresonances(r, chieff, q, chi1, chi2):
@@ -6604,5 +6604,5 @@ if __name__ == '__main__':
     #     Smin, Smax = (precomputedroots[:-1])**0.5
 
 
-    print(kappadiscriminant_coefficients(0.45, 0.56, 0.2, 0.5, 0.6))
-    #print(eval_u(q=0.8,r=10))
+    #print(kappadiscriminant_coefficients(0.45, 0.56, 0.2, 0.5, 0.6))
+    print(Jresonances(10,0.5, 0.8, 1,1))
