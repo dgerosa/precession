@@ -83,7 +83,6 @@ def both(testfunction,multiple=3):
 
         codefunction = eval("precession."+codefunction)
 
-
         # Make sure output is ready for reshaping
         output = np.array(output)
         # Inflate the inputs
