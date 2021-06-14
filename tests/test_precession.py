@@ -64,42 +64,55 @@ from functools import wraps
 #         return self.test_single() and self.test_multiple()
 
 
-def both(testfunction,multiple=3):
+def both(testfunction, multiple=3):
     """
     testfunction is the function that performes the test and it's called "test_codefunction" where codefunction is a function of the precession code.
     """
 
     @wraps(testfunction)
     def wrapper():
-        input, output = testfunction()
+
+        #input, output = testfunction
+        testargs = testfunction()
+        if len(testargs) == 2:
+            input, output = testargs
+            input_repeat = list(input.keys())
+        elif len(testargs) == 3:
+            input, output, input_repeat = testargs
+            if input_repeat is None:
+                input_repeat = []
+            elif input_repeat == 'all':
+                input_repeat = list(input.keys())
+            elif type(input_repeat) is str:
+                input_repeat = [input_repeat]
 
         # Extract the codefunction
         cfs = testfunction.__name__.split("_")
-        assert cfs[0]=='test'
+        assert cfs[0] == 'test'
         if cfs[1].isdigit():
-            codefunction ="_".join(cfs[2:])
+            codefunction = "_".join(cfs[2:])
         else:
-            codefunction ="_".join(cfs[1:])
+            codefunction = "_".join(cfs[1:])
 
         codefunction = eval("precession."+codefunction)
 
-        # Make sure output is ready for reshaping
-        output = np.array(output)
         # Inflate the inputs
         _input = input.copy()
-        for arg in _input:
+        for arg in input_repeat:
             _input[arg] = np.repeat(_input[arg], multiple)
+
+        # Make sure output is ready for reshaping
+        #output = np.array(output)
         # Inflate the outputs
-        _output = np.reshape( np.repeat(output, multiple, axis=0), (output.shape[0],multiple) )
+        #_output = np.reshape( np.repeat(output, multiple, axis=0), (output.shape[0],multiple) )
+        _output = np.tile(output, multiple)
 
         # Test on a single entry
         checksingle = np.allclose(codefunction(**input), output)
+        assert checksingle
 
         # Test on multiple entries
         checkmultiple = np.allclose(codefunction(**_input), _output)
-
-        # Actual test for pytest
-        assert checksingle
         assert checkmultiple
 
     return wrapper
