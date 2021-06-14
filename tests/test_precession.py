@@ -1,7 +1,6 @@
 
 import sys, os
-myPath = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, myPath + '/../')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
 
 import pytest
@@ -77,153 +76,115 @@ def test_mass2():
 
 
 
-
-
-#
-#
-# def assert_scalar(testval, func, *args):
-#     """
-#     Assert that the output of an array is a scalar with correct check value.
-#
-#     Parameters
-#     ----------
-#     testval, float:
-#         The check value for the function being tested.
-#
-#     func, function:
-#         The function to be tested.
-#
-#     *args:
-#         The parameters passed to func.
-#     """
-#
-#     output = func(*args)
-#     # Test scalar input returns scalar output
-#     check_scalar = isinstance(output, float)
-#     assert check_scalar, 'Scalar input does not return scalar output'
-#     # Test function returns correct scalar value
-#     check_val = testval == output
-#     assert check_val, 'Scalar input returns incorret output value'
-#
-#
-# def assert_vector(testvals, func, *args, shape=None):
-#     """
-#     Assert that the output of an array is a vector with correct check values.
-#
-#     Parameters
-#     ----------
-#     testvals, array:
-#         The check values for the function being tested.
-#
-#     func, function:
-#         The function to be tested.
-#
-#     *args:
-#         The parameters passed to func.
-#     """
-#
-#     output = func(*args)
-#     # Test vector input returns vector output
-#     check_vector = isinstance(output, np.ndarray)
-#     assert check_vector, 'Vector input does not return vector output'
-#     if shape is not None:
-#         check_shape = output.shape == shape
-#         assert check_shape, 'Vector input returns incorrect output shape'
-#     # Test function returns correct vector values
-#     check_vals = (testvals == output).all()
-#     assert check_vals, 'Vector input returns incorrect output values'
-#
-#
-# def test_mass1():
-#     """
-#     Test computation of primary mass.
-#     """
-#
-#     # Test scalar input
-#     q = 1.0
-#     m1 = 0.5
-#     assert_scalar(m1, pre.mass1, q)
-#     # Test vector input
-#     q = [1.0, 0.0]
-#     m1 = [0.5, 1.0]
-#     assert_vector(m1, pre.mass1, q)
-#
-#
-# def test_mass2():
-#     """
-#     Test computation of secondary mass.
-#     """
-#
-#     # Test scalar input
-#     q = 1.0
-#     m2 = 0.5
-#     assert_scalar(m2, pre.mass2, q)
-#     # Test vector input
-#     q = [1.0, 0.0]
-#     m2 = [0.5, 0.0]
-#     assert_vector(m2, pre.mass2, q)
-#
-#
-# def test_symmetricmassratio():
-#     """
-#     Test computation of symmetric mass ratio.
-#     """
-#
-#     # Test scalar input
-#     q = 1.0
-#     eta = 0.25
-#     assert_scalar(eta, pre.symmetricmassratio, q)
-#     # Test vector input
-#     q = [1.0, 0.0]
-#     eta = [0.25, 0.0]
-#     assert_vector(eta, pre.symmetricmassratio, q)
-#
-#
-# def test_spin1():
-#     """
-#     Test computation of primary dimensionless spin.
-#     """
-#
-#     # Test scalar input
-#     q = 1.0
-#     chi1 = 1.0
-#     S1 = 0.25
-#     assert_scalar(S1, pre.spin1, q, chi1)
-#     # Test vector input
-#     #q = [1.0, 0.0]
-#     #chi1 = [1.0, 0.0]
-#     #q, chi1 = np.meshgrid(q, chi1)
-#     #q = q.flatten()
-#     #chi1 = chi1.flatten()
-#     q = [1.0, 1.0, 0.0, 0.0]
-#     chi1 = [1.0, 0.0, 1.0, 0.0]
-#     S1 = [0.25, 0.0, 1.0, 0.0]
-#     assert_vector(S1, pre.spin1, q, chi1)
-#
-#
-# def test_spin2():
-#     """
-#     Test computation of secondary dimensionless spin.
-#     """
-#
-#     # Test scalar input
-#     q = 1.0
-#     chi2 = 1.0
-#     S2 = 0.25
-#     assert_scalar(S2, pre.spin2, q, chi2)
-#     # Test vector input
-#     q = [1.0, 1.0, 0.0, 0.0]
-#     chi2 = [1.0, 0.0, 1.0, 0.0]
-#     S2 = [0.25, 0.0, 0.0, 0.0]
-#     assert_vector(S2, pre.spin2, q, chi2)
-#
-#
-# def test_spinmags():
-#     """
-#     Test computation of dimensionless spins.
-#     """
-#
-#     # Test scalar input
-#     q = 1.0
-#     chi1 = 1.0
-#     chi2 = 1.0
+### There needs to be tests for all these functions, multiple ones for some functions.
+# DONE eval_m1(q)
+# DONE eval_m2(q)
+# masses(q)
+# eval_q(m1, m2)
+# eval_eta(q)
+# eval_S1(q, chi1)
+# eval_S2(q, chi2)
+# spinmags(q, chi1, chi2)
+# eval_L(r, q)
+# eval_v(r)
+# eval_r(L=None, u=None, q=None)
+# Jlimits_LS1S2(r, q, chi1, chi2)
+# kappadiscriminant_coefficients(u, chieff, q, chi1, chi2)
+# kapparesonances(u, chieff, q, chi1, chi2)
+# kappainfresonances(chieff, q, chi1, chi2)
+# Jresonances(r, chieff, q, chi1, chi2)
+# Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False)
+# kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False)
+# chiefflimits_definition(q, chi1, chi2)
+# chieffdiscriminant_coefficients(kappa, u, q, chi1, chi2)
+# chieffresonances(J, r, q, chi1, chi2)
+# anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None)
+# chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False)
+# Slimits_S1S2(q, chi1, chi2)
+# Slimits_LJ(J, r, q)
+# Slimits_LJS1S2(J, r, q, chi1, chi2)
+# Scubic_coefficients(kappa, u, chieff, q, chi1, chi2)
+# Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=None)
+# Slimits_plusminus(J, r, chieff, q, chi1, chi2)
+# Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None)
+# Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False)
+# limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None)
+# eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None)
+# effectivepotential_plus(S, J, r, q, chi1, chi2)
+# effectivepotential_minus(S, J, r, q, chi1, chi2)
+# eval_varphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1)
+# eval_costheta1(S, J, r, chieff, q, chi1, chi2)
+# eval_theta1(S, J, r, chieff, q, chi1, chi2)
+# eval_costheta2(S, J, r, chieff, q, chi1, chi2)
+# eval_theta2(S, J, r, chieff, q, chi1, chi2)
+# eval_costheta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None)
+# eval_theta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None)
+# eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2)
+# eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1)
+# eval_costhetaL(S, J, r, q, chi1, chi2)
+# eval_thetaL(S, J, r, q, chi1, chi2)
+# eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, chi1=None, chi2=None)
+# eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
+# eval_kappa(J, r, q)
+# eval_u(r, q)
+# eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
+# eval_costheta1inf(kappainf, chieff, q, chi1, chi2)
+# eval_theta1inf(kappainf, chieff, q, chi1, chi2)
+# eval_costheta2inf(kappainf, chieff, q, chi1, chi2)
+# eval_theta2inf(kappainf, chieff, q, chi1, chi2)
+# morphology(J, r, chieff, q, chi1, chi2, simpler=False)
+# eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None)
+# conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=+1)
+# angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False)
+# angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2)
+# asymptotic_to_angles(kappainf, chieff, q, chi1, chi2)
+# vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False)
+# vectors_to_angles(Lvec, S1vec, S2vec)
+# conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1)
+# angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
+# angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
+# conserved_to_Lframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1)
+# conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=1)
+# angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2)
+# derS_prefactor(r, chieff, q)
+# dSsdtsquared(S, J, r, chieff, q, chi1, chi2)
+# dSsdt(S, J, r, chieff, q, chi1, chi2, cyclesign=1)
+# dSdt(S, J, r, chieff, q, chi1, chi2)
+# elliptic_parameter(Sminuss, Spluss, S3s)
+# elliptic_amplitude(S, Sminuss, Spluss)
+# elliptic_characheristic(Sminuss, Spluss, J, L, sign)
+# time_normalization(Spluss, S3s, r, chieff, q)
+# eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=None)
+# Soft(t, J, r, chieff, q, chi1, chi2, precomputedroots=None)
+# tofS(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None)
+# Ssampling(J, r, chieff, q, chi1, chi2, N=1)
+# Ssav_mfactor(m)
+# Ssav(J, r, chieff, q, chi1, chi2)
+# Ssrootsinf(theta1inf, theta2inf, q, chi1, chi2)
+# Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
+# rhs_precav(u, kappa, chieff, q, chi1, chi2)
+# integrator_precav(kappainitial, uinitial, ufinal, chieff, q, chi1, chi2)
+# inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None)
+# precession_average(J, r, chieff, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4)
+# rupdown(q, chi1, chi2)
+# omegasq_aligned(r, q, chi1, chi2, which)
+# widenutation(q, chi1, chi2)
+# rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula=False)
+# integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi1, chi2, quadrupole_formula=False)
+# inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h=None, S2h=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, quadrupole_formula=False, requested_outputs=None)
+# inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kappa=None, r=None, rswitch=None, u=None, uswitch=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None)
+# inspiral(*args, which=None, **kwargs)
+# frequency_prefactor(J, r, chieff, q, chi1, chi2)
+# azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=None)
+# eval_OmegaL(S, J, r, chieff, q, chi1, chi2)
+# eval_alpha(J, r, chieff, q, chi1, chi2, precomputedroots=None)
+# eval_phiL(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None)
+# chip_terms(theta1, theta2, q, chi1, chi2)
+# eval_chip_heuristic(theta1, theta2, q, chi1, chi2)
+# eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
+# eval_chip_asymptotic(theta1, theta2, q, chi1, chi2)
+# eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, method='quadrature', Nsamples=1e4)
+# _integrand(S, J, r, chieff, q, chi1, chi2)
+# eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", method='quadrature', Nsamples=1e4)
+# gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun)
+# pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_msun)
