@@ -105,8 +105,9 @@ def both(testfunction, multiple=5):
 
         # Random seed for functions which use resampling
         np.random.seed(42)
-
         returns = codefunction(**input)
+
+        np.random.seed(42)
         _returns = codefunction(**_input)
 
         # If codefunction returns a dictionary, convert it to a list
