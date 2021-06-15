@@ -64,7 +64,7 @@ from functools import wraps
 #         return self.test_single() and self.test_multiple()
 
 
-def both(testfunction, multiple=3):
+def both(testfunction, multiple=5):
     """
     testfunction is the function that performes the test and it's called "test_codefunction" where codefunction is a function of the precession code.
     """
@@ -99,21 +99,53 @@ def both(testfunction, multiple=3):
         # Inflate the inputs
         _input = input.copy()
         for arg in input_repeat:
-            _input[arg] = np.repeat(_input[arg], multiple)
+            #_input[arg] = np.repeat(_input[arg], multiple, axis=-1)
+            #_input[arg] = np.squeeze(np.tile(_input[arg], multiple).reshape(multiple, np.size(input[arg])))
+            _input[arg] = np.squeeze(np.repeat([_input[arg]], multiple, axis=0))
+
+        returns = codefunction(**input)
+        _returns = codefunction(**_input)
+
+        # If codefunction returns a dictionary, convert it to a list
+        if type(output) is dict:
+            assert (type(returns) is dict) and (type(_returns) is dict)
+
+            # This bit can change depending on whether output has same keys as returns
+            # and if so, whether same ordering can be assumed or not
+            # E.g., for key in keys can be replaced with np.array(list(returns.values))
+            #assert sorted(output.keys()) == sorted(returns.keys())
+            #returns = list(returns.values())
+            #_returns = list(_returns.values())
+            #output = list(output.values())
+            # Make sure returns are same order as output
+            keys = sorted(output.keys())
+            returns = [returns[key] for key in keys]
+            _returns = [_returns[key] for key in keys]
+            output = [np.array(output[key]) for key in keys]
 
         # Make sure output is ready for reshaping
         #output = np.array(output)
         # Inflate the outputs
         #_output = np.reshape( np.repeat(output, multiple, axis=0), (output.shape[0],multiple) )
-        _output = np.tile(output, multiple)
+        #_output = np.tile(output, multiple)
+
+        # arrays in output dictionary can have different shapes
+        _output = []
+        for par in output:
+            _output.append(np.squeeze(np.repeat([par], multiple, axis=0)))
 
         # Test on a single entry
-        checksingle = np.allclose(codefunction(**input), np.array(output))
-        assert checksingle
-
+        #checksingle = np.allclose(returns, output)
         # Test on multiple entries
-        checkmultiple = np.allclose(codefunction(**_input), _output)
-        assert checkmultiple
+        #checkmultiple = np.allclose(_returns, _output)
+
+        # Actual test for pytest
+        #assert checksingle
+        #assert checkmultiple
+
+        for which in [[returns, output], [_returns, _output]]:
+            for r, o in zip(*which):
+                assert np.allclose(r, o)
 
     return wrapper
 
@@ -197,6 +229,64 @@ def test_1_Jlimits():
 def test_2_Jlimits():
     # Should be like test_Jresonances
     return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
+
+# For precav the precession-timescale parameters are not testable due to resampling
+# You can just get rid of those parameters from the output dictionary and the decorator handles it
+@both
+def test_inspiral_precav():
+    input = {'theta1': np.pi/3,
+             'theta2': np.pi/4,
+             'deltaphi': np.pi/5,
+             'r': [100, 10],
+             'q': 0.9,
+             'chi1': 0.9,
+             'chi2': 0.9}
+    output = {#'theta1': np.array([[1.06093077, 0.48512929]]),
+              #'theta2': np.array([[0.76645558, 1.28725517]]),
+              #'deltaphi': np.array([[ 0.56240114, -0.8766089 ]]),
+              #'S': np.array([[0.43577611, 0.3958433 ]]),
+              'J': np.array([[2.781612  , 1.10229372]]),
+              'kappa': np.array([[0.30523421, 0.3764109 ]]),
+              'r': np.array([[100,  10]]),
+              'u': np.array([[0.20055556, 0.63421235]]),
+              'chieff': np.array([0.53829289]),
+              'q': np.array([0.9]),
+              'chi1': np.array([0.9]),
+              'chi2': np.array([0.9])}
+    input_repeat = ['theta1', 'theta2', 'deltaphi', 'r', 'q', 'chi1', 'chi2']
+    return input, output
+
+
+@both
+def test_inspiral_orbav():
+    input = {'theta1': np.pi/3,
+             'theta2': np.pi/4,
+             'deltaphi': np.pi/5,
+             'r': [100, 10],
+             'q': 0.9,
+             'chi1': 0.9,
+             'chi2': 0.9}
+    output = {'t': ([[      0.        , 8033766.36903445]]),
+ 'theta1': ([[1.04719755, 0.3598033 ]]),
+ 'theta2': ([[0.78539816, 1.3560499 ]]),
+ 'deltaphi': ([[0.62831853, 0.44602418]]),
+ 'S': ([[0.43406977, 0.39482006]]),
+ 'Lh': ([[ 0.12291091,  0.        ,  0.99241771],
+        [ 0.04774722, -0.24924823,  0.96749448]]),
+ 'S1h': ([[-0.7717029 ,  0.21260216,  0.5993955 ],
+        [ 0.10108719,  0.10443983,  0.99329492]]),
+ 'S2h': ([[-0.56469899, -0.2624718 ,  0.78244719],
+        [-0.26706902,  0.85727799,  0.45588938]]),
+ 'J': ([[2.781612  , 1.10248973]]),
+ 'kappa': ([[0.30523421, 0.37668498]]),
+ 'r': ([[100,  10]]),
+ 'u': ([[0.20055556, 0.63421235]]),
+ 'chieff': ([[0.53829289, 0.53655487]]),
+ 'q': ([0.9]),
+ 'chi1': ([0.9]),
+ 'chi2': ([0.9])}
+    return input, output
+
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
 # kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False)
