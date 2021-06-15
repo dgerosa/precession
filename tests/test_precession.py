@@ -103,6 +103,9 @@ def both(testfunction, multiple=5):
             #_input[arg] = np.squeeze(np.tile(_input[arg], multiple).reshape(multiple, np.size(input[arg])))
             _input[arg] = np.squeeze(np.repeat([_input[arg]], multiple, axis=0))
 
+        # Random seed for functions which use resampling
+        np.random.seed(42)
+
         returns = codefunction(**input)
         _returns = codefunction(**_input)
 
