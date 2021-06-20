@@ -925,8 +925,9 @@ def Jresonances(r, chieff, q, chi1, chi2):
 def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
-    - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
+    - If r, q, chi1, and chi2 are provided, the limits are given by J=L+S1+S2.
     - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    The boolean flag enforce allows raising an error in case the inputs are not compatible.
 
     Call
     ----
@@ -979,9 +980,10 @@ def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
 
 def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
-    Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
-    - If r, q, chi1, and chi2 are provided, enforce J=L+S1+S2.
+    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
+    - If r, q, chi1, and chi2 are provided, the limits are given by kappa=S1+S2.
     - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    The boolean flag enforce allows raising an error in case the inputs are not compatible.
 
     Call
     ----
@@ -1011,7 +1013,8 @@ def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
 
     if chieff is None and q is not None and chi1 is not None and chi2 is not None:
-        kappainfmin, kappainfmax = Slimits_S1S2(q, chi1, chi2)
+        kappainflim = Slimits_S1S2(q, chi1, chi2)[1]
+        kappainfmin, kappainfmax = -kappainflim, kappainflim
 
     elif chieff is not None and q is not None and chi1 is not None and chi2 is not None:
         kappainfmin, kappainfmax = kappainfresonances(chieff, q, chi1, chi2)
@@ -1388,6 +1391,7 @@ def chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
     Limits on the projected effective spin. The contraints considered depend on the inputs provided.
     - If q, chi1, and chi2 are provided, enforce chieff = (1+q)S1.L + (1+1/q)S2.L.
     - If J, r, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    The boolean flag enforce allows raising an error in case the inputs are not compatible.
 
     Call
     ----
@@ -1753,9 +1757,10 @@ def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=F
     """
     Limits on the total spin magnitude. The contraints considered depend on the inputs provided.
     - If q, chi1, and chi2 are provided, enforce S=S1+S2.
-    - If J, r, and q are provided, enforce S=J-L.
-    - If J, r, q, chi1, and chi2 are provided, enforce S=S1+S2 and S=J-L.
+    - If J, r, and q are provided, the limits are given by S=J-L.
+    - If J, r, q, chi1, and chi2 are provided, the limits are given by S=S1+S2 and S=J-L.
     - If J, r, chieff, q, chi1, and chi2 are provided, compute solve the cubic equation of the effective potentials (Sminus and Splus).
+    The boolean flag enforce allows raising an error in case the inputs are not compatible.
 
     Call
     ----
@@ -6605,4 +6610,20 @@ if __name__ == '__main__':
 
 
     #print(kappadiscriminant_coefficients(0.45, 0.56, 0.2, 0.5, 0.6))
-    print(Jresonances(10,0.5, 0.8, 1,1))
+    #print(Jresonances(10,0.5, 0.8, 1,1))
+    #print(kappainflimits(chieff=0.5, q=0.8, chi1=1, chi2=1))
+
+    #print(kappainflimits(q=0.8, chi1=1, chi2=1))
+    #print(Jlimits_LS1S2(r=16.4,q=0.8,chi1=1,chi2=1))
+    #print(eval_kappa(1.50609663, 16.4, 0.8), eval_u(16.4, 0.8))
+
+    #print(chieffdiscriminant_coefficients(0,0.5,0.8,1,1))
+
+    #print(chieffresonances(1, 10, 0.8, 1, 1))
+
+
+    print(anglesresonances(J=1,r=10,q=0.8,chi1=1,chi2=1))
+
+    print(anglesresonances(J=0.25,r=10,q=0.2,chi1=1,chi2=1))
+
+    print(anglesresonances(r=10,chieff=0.5,q=0.8,chi1=1,chi2=1))

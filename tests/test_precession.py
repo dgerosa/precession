@@ -234,70 +234,50 @@ def test_2_Jlimits():
     # Should be like test_Jresonances
     return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
 
-# For precav the precession-timescale parameters are not testable due to resampling
-# You can just get rid of those parameters from the output dictionary and the decorator handles it
 @both
-def test_inspiral_precav():
-    input = {'theta1': np.pi/3,
-             'theta2': np.pi/4,
-             'deltaphi': np.pi/5,
-             'r': [100, 10],
-             'q': 0.9,
-             'chi1': 0.9,
-             'chi2': 0.9}
-    output = {#'theta1': np.array([[1.06093077, 0.48512929]]),
-              #'theta2': np.array([[0.76645558, 1.28725517]]),
-              #'deltaphi': np.array([[ 0.56240114, -0.8766089 ]]),
-              #'S': np.array([[0.43577611, 0.3958433 ]]),
-              'J': np.array([[2.781612  , 1.10229372]]),
-              'kappa': np.array([[0.30523421, 0.3764109 ]]),
-              'r': np.array([[100,  10]]),
-              'u': np.array([[0.20055556, 0.63421235]]),
-              'chieff': np.array([0.53829289]),
-              'q': np.array([0.9]),
-              'chi1': np.array([0.9]),
-              'chi2': np.array([0.9])}
-    input_repeat = ['theta1', 'theta2', 'deltaphi', 'r', 'q', 'chi1', 'chi2']
-    return input, output
-
+def test_1_kappainflimits():
+    return {"q":0.8, "chi1":1, "chi2":1}, [[-0.50617284],[ 0.50617284]]
 
 @both
-def test_inspiral_orbav():
-    input = {'theta1': np.pi/3,
-             'theta2': np.pi/4,
-             'deltaphi': np.pi/5,
-             'r': [100, 10],
-             'q': 0.9,
-             'chi1': 0.9,
-             'chi2': 0.9}
-    output = {'t': ([[      0.        , 8033766.36903445]]),
- 'theta1': ([[1.04719755, 0.3598033 ]]),
- 'theta2': ([[0.78539816, 1.3560499 ]]),
- 'deltaphi': ([[0.62831853, 0.44602418]]),
- 'S': ([[0.43406977, 0.39482006]]),
- 'Lh': ([[ 0.12291091,  0.        ,  0.99241771],
-        [ 0.04774722, -0.24924823,  0.96749448]]),
- 'S1h': ([[-0.7717029 ,  0.21260216,  0.5993955 ],
-        [ 0.10108719,  0.10443983,  0.99329492]]),
- 'S2h': ([[-0.56469899, -0.2624718 ,  0.78244719],
-        [-0.26706902,  0.85727799,  0.45588938]]),
- 'J': ([[2.781612  , 1.10248973]]),
- 'kappa': ([[0.30523421, 0.37668498]]),
- 'r': ([[100,  10]]),
- 'u': ([[0.20055556, 0.63421235]]),
- 'chieff': ([[0.53829289, 0.53655487]]),
- 'q': ([0.9]),
- 'chi1': ([0.9]),
- 'chi2': ([0.9])}
-    return input, output
+def test_2_kappainflimits():
+    return {"chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[0.22839506],[0.28395062]]
+
+@both
+def test_chiefflimits_definition():
+    return {"q":0.8, "chi1":1, "chi2":1}, [[-1],[1]]
+
+@both
+def test_chiefflimits_definition():
+    return {"q":0.8, "chi1":1, "chi2":1}, [[-1],[1]]
+
+@both
+def test_chieffdiscriminant_coefficients():
+    return {"kappa":0, "u":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.67772160e+01], [7.18727648e+01], [1.65274010e+01], [-2.22873533e+00], [-5.73039852e-01], [-9.48560958e-03], [2.68503758e-03]]
+
+@both
+def test_chieffresonances():
+    # See Fig 4 in arxiv:1506.03492
+    return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[0.16035695],[0.43413573]]
+
+@both
+def test_1_anglesresonances():
+    # See Fig 5 in arxiv:1506.03492
+    return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[1.2517679], [1.60205348], [0], [1.39849931], [0.7036308], [np.pi]]
+
+@both
+def test_2_anglesresonances():
+    # See Fig 5 in arxiv:1506.03492
+    return {"J":0.25, "r":10, "q":0.2, "chi1":1, "chi2":1}, [[3.0860461], [1.41114207], [np.pi], [2.9563055], [0.05030985], [np.pi]]
+
+@both
+def test_3_anglesresonances():
+    # See Fig 5 in arxiv:1506.03492
+    return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.27123854], [0.71342048], [np.pi], [0.90362362], [1.21157995], [0]]
+
+
 
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False)
-# chiefflimits_definition(q, chi1, chi2)
-# chieffdiscriminant_coefficients(kappa, u, q, chi1, chi2)
-# chieffresonances(J, r, q, chi1, chi2)
-# anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None)
 # chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False)
 # Slimits_S1S2(q, chi1, chi2)
 # Slimits_LJ(J, r, q)
@@ -387,3 +367,63 @@ def test_inspiral_orbav():
 # eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", method='quadrature', Nsamples=1e4)
 # gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun)
 # pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_msun)
+
+
+
+#
+# # For precav the precession-timescale parameters are not testable due to resampling
+# # You can just get rid of those parameters from the output dictionary and the decorator handles it
+# @both
+# def test_inspiral_precav():
+#     input = {'theta1': np.pi/3,
+#              'theta2': np.pi/4,
+#              'deltaphi': np.pi/5,
+#              'r': [100, 10],
+#              'q': 0.9,
+#              'chi1': 0.9,
+#              'chi2': 0.9}
+#     output = {#'theta1': np.array([[1.06093077, 0.48512929]]),
+#               #'theta2': np.array([[0.76645558, 1.28725517]]),
+#               #'deltaphi': np.array([[ 0.56240114, -0.8766089 ]]),
+#               #'S': np.array([[0.43577611, 0.3958433 ]]),
+#               'J': np.array([[2.781612  , 1.10229372]]),
+#               'kappa': np.array([[0.30523421, 0.3764109 ]]),
+#               'r': np.array([[100,  10]]),
+#               'u': np.array([[0.20055556, 0.63421235]]),
+#               'chieff': np.array([0.53829289]),
+#               'q': np.array([0.9]),
+#               'chi1': np.array([0.9]),
+#               'chi2': np.array([0.9])}
+#     input_repeat = ['theta1', 'theta2', 'deltaphi', 'r', 'q', 'chi1', 'chi2']
+#     return input, output
+#
+#
+# @both
+# def test_inspiral_orbav():
+#     input = {'theta1': np.pi/3,
+#              'theta2': np.pi/4,
+#              'deltaphi': np.pi/5,
+#              'r': [100, 10],
+#              'q': 0.9,
+#              'chi1': 0.9,
+#              'chi2': 0.9}
+#     output = {'t': ([[      0.        , 8033766.36903445]]),
+#  'theta1': ([[1.04719755, 0.3598033 ]]),
+#  'theta2': ([[0.78539816, 1.3560499 ]]),
+#  'deltaphi': ([[0.62831853, 0.44602418]]),
+#  'S': ([[0.43406977, 0.39482006]]),
+#  'Lh': ([[ 0.12291091,  0.        ,  0.99241771],
+#         [ 0.04774722, -0.24924823,  0.96749448]]),
+#  'S1h': ([[-0.7717029 ,  0.21260216,  0.5993955 ],
+#         [ 0.10108719,  0.10443983,  0.99329492]]),
+#  'S2h': ([[-0.56469899, -0.2624718 ,  0.78244719],
+#         [-0.26706902,  0.85727799,  0.45588938]]),
+#  'J': ([[2.781612  , 1.10248973]]),
+#  'kappa': ([[0.30523421, 0.37668498]]),
+#  'r': ([[100,  10]]),
+#  'u': ([[0.20055556, 0.63421235]]),
+#  'chieff': ([[0.53829289, 0.53655487]]),
+#  'q': ([0.9]),
+#  'chi1': ([0.9]),
+#  'chi2': ([0.9])}
+#     return input, output
