@@ -274,18 +274,70 @@ def test_3_anglesresonances():
     # See Fig 5 in arxiv:1506.03492
     return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.27123854], [0.71342048], [np.pi], [0.90362362], [1.21157995], [0]]
 
+@both
+def test_1_chiefflimits():
+    # Should be like test_chiefflimits_definition
+    return {"q":0.8, "chi1":1, "chi2":1}, [[-1],[1]]
 
+@both
+def test_2_chiefflimits():
+    # Should be like test_chieffresonances
+    return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[0.16035695],[0.43413573]]
 
+@both
+def test_Slimits_S1S2():
+    return {"q":0.8, "chi1":1, "chi2":1}, [[0.11111111],[0.50617284]]
+
+@both
+def test_Slimits_LJ():
+    return {"J":1, "r":10, "q":0.8}, [[0.2191907], [1.7808093]]
+
+@both
+def test_Slimits_LJS1S2():
+    # See Fig 4 in arxiv:1506.03492
+    return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[0.2191907], [0.50617284]]
+
+@both
+def test_Scubic_coefficients():
+    return {"kappa":0, "u":0.5, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[6.48000000e-01], [6.74375309e-01], [1.47249383e-01], [1.02484377e-04]]
+
+@both
+def test_1_Ssroots():
+    return {"J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [[0.08748025], [0.19301536], [0.01050669]]
+
+#TODO: the following test fails because of some array inflating in @both
+# This works fine:
+#    precomputedroots=Ssroots(J=1,r=10,chieff=0.3,q=0.8,chi1=1,chi2=1)
+#    print(Ssroots(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,precomputedroots=precomputedroots))
+
+# @both
+# def test_2_Ssroots():
+#     precomputedroots=precession.Ssroots(J=1,r=10,chieff=0.3,q=0.8,chi1=1,chi2=1)
+#     return {"J":None, "r":None, "chieff":None, "q":None, "chi1":None, "chi2":None, "precomputedroots":precomputedroots}, [[0.08748025], [0.19301536], [0.01050669]]
+
+@both
+def test_Slimits_plusminus():
+    # See Fig 4 in arxiv:1506.03492
+    return {"J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [[0.2957706], [0.43933514]]
+
+@both
+def test_1_Satresonance():
+    # See Fig 4 in arxiv:1506.03492. precession_v1, resonant_finder with more=True
+    return {"J":1, "r":10, "chieff":0.43413573, "q":0.8, "chi1":1, "chi2":1}, [0.26925273]
+
+@both
+def test_2_Satresonance():
+    return {"J":1, "u":0.64036123, "chieff":0.43413573, "q":0.8, "chi1":1, "chi2":1}, [0.26925273]
+
+@both
+def test_3_Satresonance():
+    return {"kappa":0.24995658, "r":10, "chieff":0.43413573, "q":0.8, "chi1":1, "chi2":1}, [0.26925273]
+
+@both
+def test_4_Satresonance():
+    return {"kappa":0.24995658, "u":0.64036123, "chieff":0.43413573, "q":0.8, "chi1":1, "chi2":1}, [0.26925273]
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False)
-# Slimits_S1S2(q, chi1, chi2)
-# Slimits_LJ(J, r, q)
-# Slimits_LJS1S2(J, r, q, chi1, chi2)
-# Scubic_coefficients(kappa, u, chieff, q, chi1, chi2)
-# Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=None)
-# Slimits_plusminus(J, r, chieff, q, chi1, chi2)
-# Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None)
 # Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False)
 # limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None)
 # eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None)

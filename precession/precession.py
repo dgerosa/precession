@@ -6622,8 +6622,26 @@ if __name__ == '__main__':
     #print(chieffresonances(1, 10, 0.8, 1, 1))
 
 
-    print(anglesresonances(J=1,r=10,q=0.8,chi1=1,chi2=1))
+    #print(anglesresonances(J=1,r=10,q=0.8,chi1=1,chi2=1))
 
-    print(anglesresonances(J=0.25,r=10,q=0.2,chi1=1,chi2=1))
+    #print(anglesresonances(J=0.25,r=10,q=0.2,chi1=1,chi2=1))
 
-    print(anglesresonances(r=10,chieff=0.5,q=0.8,chi1=1,chi2=1))
+    #print(anglesresonances(r=10,chieff=0.5,q=0.8,chi1=1,chi2=1))
+
+
+    #print(Scubic_coefficients(kappa=0, u=0.5, chieff=0.5, q=0.8, chi1=1, chi2=1))
+    #print(Ssroots(J=1, r=10, chieff=0.3, q=0.8, chi1=1, chi2=1, precomputedroots=None))
+
+    #print(Slimits_plusminus(J=1, r=10, chieff=0.3, q=0.8, chi1=1, chi2=1))
+
+
+    #precomputedroots=Ssroots(J=1,r=10,chieff=0.3,q=0.8,chi1=1,chi2=1)
+    #print(Ssroots(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,precomputedroots=precomputedroots))
+
+
+
+    #def test_2_Jlimits():
+    # Should be like test_Jresonances
+    #return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
+    print(eval_u(10,0.8))
+    print(Satresonance(J=1, kappa=None, r=10, u=None, chieff=0.43413573, q=0.8, chi1=1, chi2=1))
