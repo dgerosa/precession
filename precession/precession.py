@@ -1606,6 +1606,7 @@ def Scubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
+# TODO: precomputedroots is not implemented consistently. Check that all functions that can use it have the option to do it
 def Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
@@ -1655,13 +1656,13 @@ def Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=None):
         return precomputedroots
 
 
-def Slimits_plusminus(J, r, chieff, q, chi1, chi2):
+def Slimits_plusminus(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Limits on the total spin magnitude compatible with both J and chieff.
 
     Call
     ----
-    Smin,Smax = Slimits_plusminus(J,r,chieff,q,chi1,chi2)
+    Smin,Smax = Slimits_plusminus(J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -1677,6 +1678,8 @@ def Slimits_plusminus(J, r, chieff, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
 
     Returns
     -------
@@ -1686,7 +1689,7 @@ def Slimits_plusminus(J, r, chieff, q, chi1, chi2):
         Maximum value of the total spin S.
     """
 
-    Sminuss, Spluss, _ = Ssroots(J, r, chieff, q, chi1, chi2)
+    Sminuss, Spluss, _ = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     with np.errstate(invalid='ignore'):
         Smin = Sminuss**0.5
         Smax = Spluss**0.5
@@ -1753,10 +1756,10 @@ def Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=N
     return Sres
 
 
-def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
+def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False, precomputedroots=None):
     """
     Limits on the total spin magnitude. The contraints considered depend on the inputs provided.
-    - If q, chi1, and chi2 are provided, enforce S=S1+S2.
+    - If q, chi1, and chi2 are provided, the limits are given by S=S1+S2.
     - If J, r, and q are provided, the limits are given by S=J-L.
     - If J, r, q, chi1, and chi2 are provided, the limits are given by S=S1+S2 and S=J-L.
     - If J, r, chieff, q, chi1, and chi2 are provided, compute solve the cubic equation of the effective potentials (Sminus and Splus).
@@ -1764,7 +1767,7 @@ def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=F
 
     Call
     ----
-    Smin,Smax = Slimits(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
+    Smin,Smax = Slimits(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False,precomputedroots=None)
 
     Parameters
     ----------
@@ -1782,6 +1785,8 @@ def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=F
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     enforce: boolean, optional (default: False)
         If True raise errors, if False raise warnings.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
 
     Returns
     -------
@@ -1802,7 +1807,7 @@ def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=F
 
     elif J is not None and r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
         # Compute limits
-        Smin, Smax = Slimits_plusminus(J, r, chieff, q, chi1, chi2)
+        Smin, Smax = Slimits_plusminus(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
         # Check precondition
         Smin_cond, Smax_cond = Slimits_LJS1S2(J, r, q, chi1, chi2)
         if (Smin > Smin_cond).all() and (Smax < Smax_cond).all():
@@ -2833,7 +2838,8 @@ def eval_theta2inf(kappainf, chieff, q, chi1, chi2):
     return theta2inf
 
 
-def morphology(J, r, chieff, q, chi1, chi2, simpler=False):
+#TODO regen docstrings
+def morphology(J, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None):
     """
     Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
 
@@ -2864,7 +2870,7 @@ def morphology(J, r, chieff, q, chi1, chi2, simpler=False):
         Spin morphology.
     """
 
-    Smin, Smax = Slimits_plusminus(J, r, chieff, q, chi1, chi2)
+    Smin, Smax = Slimits_plusminus(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     # Pairs of booleans based on the values of deltaphi at S- and S+
     status = np.transpose([eval_cosdeltaphi(Smin, J, r, chieff, q, chi1, chi2) > 0, eval_cosdeltaphi(Smax, J, r, chieff, q, chi1, chi2) > 0])
     # Map to labels
@@ -6637,7 +6643,6 @@ if __name__ == '__main__':
 
     #precomputedroots=Ssroots(J=1,r=10,chieff=0.3,q=0.8,chi1=1,chi2=1)
     #print(Ssroots(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,precomputedroots=precomputedroots))
-
 
 
     #def test_2_Jlimits():

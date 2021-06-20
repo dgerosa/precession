@@ -337,9 +337,32 @@ def test_3_Satresonance():
 def test_4_Satresonance():
     return {"kappa":0.24995658, "u":0.64036123, "chieff":0.43413573, "q":0.8, "chi1":1, "chi2":1}, [0.26925273]
 
-### There needs to be tests for all these functions, multiple ones for some functions.
-# Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False)
+
+@both
+def test_1_Slimits():
+    # Should be like test_Slimits_S1S2
+    return {"q":0.8, "chi1":1, "chi2":1}, [[0.11111111],[0.50617284]]
+
+@both
+def test_2_Slimits():
+    # Should be like test_Slimits_LJ
+    return {"J":1, "r":10, "q":0.8}, [[0.2191907], [1.7808093]]
+
+@both
+def test_3_Slimits():
+    # Should be like test_Slimits_LJS1S2
+    return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[0.2191907], [0.50617284]]
+
+@both
+def test_4_Slimits():
+    # Should be like test_Slimits_plusminus
+    return {"J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [[0.2957706], [0.43933514]]
+
+# TODO
 # limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None)
+
+
+### There needs to be tests for all these functions, multiple ones for some functions.
 # eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None)
 # effectivepotential_plus(S, J, r, q, chi1, chi2)
 # effectivepotential_minus(S, J, r, q, chi1, chi2)
