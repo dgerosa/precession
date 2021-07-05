@@ -358,34 +358,124 @@ def test_4_Slimits():
     # Should be like test_Slimits_plusminus
     return {"J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [[0.2957706], [0.43933514]]
 
+@both
+def test_1_eval_chieff():
+    return {"theta1":np.pi/8, "theta2":np.pi/4, "q":0.6, "chi1":1, "chi2":1}, [0.84258975]
+
+@both
+def test_2_eval_chieff():
+    # See Fig 2 in arxiv:1506.03492.
+    return {"S":0.4, "varphi":np.pi/4, "J":2.34, "r":100, "q":0.6, "chi1":1, "chi2":1}, [-0.16650103]
+
+@both
+def test_effectivepotential_plus():
+    # See Fig 5 in arxiv:1506.03492.
+    return {"S":0.4, "J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [0.34933852]
+
+@both
+def test_effectivepotential_minus():
+    # See Fig 5 in arxiv:1506.03492.
+    return {"S":0.4, "J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [0.22470033]
+
+@both
+def test_eval_varphi():
+    # See Fig 2 in arxiv:1506.03492.
+    return {"S":0.4, "J":2.34, "r":100, "chieff":-0.05, "q":0.6, "chi1":1, "chi2":1, "cyclesign":-1}, [1.66785314]
+
+@both
+def test_eval_costheta1():
+    return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [0.22948025]
+
+@both
+def test_eval_theta1():
+    return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [1.33925268]
+
+@both
+def test_eval_costheta2():
+    return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [0.38814969]
+
+@both
+def test_eval_theta2():
+    return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [1.1721733]
+
+@both
+def test_1_eval_costheta12():
+    return {"S":0.4, "q":0.8, "chi1":1, "chi2":1}, [0.21095]
+
+@both
+def test_2_eval_costheta12():
+    return {"theta1":1.33925268, "theta2":1.1721733, "deltaphi":1.43450291}, [0.21095]
+
+@both
+def test_1_eval_theta12():
+    return {"S":0.4, "q":0.8, "chi1":1, "chi2":1}, [1.3582496]
+
+@both
+def test_2_eval_theta12():
+    return {"theta1":1.33925268, "theta2":1.1721733, "deltaphi":1.43450291}, [1.3582496]
+
+@both
+def test_eval_cosdeltaphi():
+    return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [0.13587184]
+
+@both
+def test_eval_deltaphi():
+    return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1, "cyclesign":-1}, [1.43450291]
+
+@both
+def test_eval_costhetaL():
+    return {"S":0.4, "J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [0.92830808]
+
+@both
+def test_eval_thetaL():
+    return {"S":0.4, "J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [0.38096012]
+
+@both
+def test_1_eval_J():
+    return {"theta1":np.pi/8, "theta2":np.pi/4, "deltaphi":np.pi/3, "r":100, "q":0.6, "chi1":1, "chi2":1}, [2.81246294]
+
+@both
+def test_2_eval_J():
+    return {"kappa":0.24995658, "r":10, "q":0.8}, [1.]
+
+@both
+def test_eval_S():
+    return {"theta1":np.pi/8, "theta2":np.pi/4, "deltaphi":np.pi/3, "q":0.6, "chi1":1, "chi2":1}, [0.50891976]
+
+@both
+def test_eval_kappa():
+    return {"J":1, "r":10, "q":0.8}, [0.24995658]
+
+@both
+def test_eval_u():
+    return {"r":16.4025 ,"q":0.8}, [0.5]
+
+@both
+def test_eval_kappainf():
+    return {"theta1inf":np.pi/8 , "theta2inf":np.pi/4, "q":0.6, "chi1":1, "chi2":1}, [0.46032733]
+
+@both
+def test_eval_costheta1inf():
+    return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.cos(np.pi/8)]
+
+@both
+def test_eval_theta1inf():
+    return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.pi/8]
+
+@both
+def test_eval_costheta2inf():
+    return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.cos(np.pi/4)]
+
+@both
+def test_eval_theta2inf():
+    return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.pi/4]
+
+
 # TODO
 # limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None)
 
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None)
-# effectivepotential_plus(S, J, r, q, chi1, chi2)
-# effectivepotential_minus(S, J, r, q, chi1, chi2)
-# eval_varphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1)
-# eval_costheta1(S, J, r, chieff, q, chi1, chi2)
-# eval_theta1(S, J, r, chieff, q, chi1, chi2)
-# eval_costheta2(S, J, r, chieff, q, chi1, chi2)
-# eval_theta2(S, J, r, chieff, q, chi1, chi2)
-# eval_costheta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None)
-# eval_theta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None)
-# eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2)
-# eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1)
-# eval_costhetaL(S, J, r, q, chi1, chi2)
-# eval_thetaL(S, J, r, q, chi1, chi2)
-# eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, chi1=None, chi2=None)
-# eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
-# eval_kappa(J, r, q)
-# eval_u(r, q)
-# eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
-# eval_costheta1inf(kappainf, chieff, q, chi1, chi2)
-# eval_theta1inf(kappainf, chieff, q, chi1, chi2)
-# eval_costheta2inf(kappainf, chieff, q, chi1, chi2)
-# eval_theta2inf(kappainf, chieff, q, chi1, chi2)
 # morphology(J, r, chieff, q, chi1, chi2, simpler=False)
 # eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None)
 # conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=+1)

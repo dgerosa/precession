@@ -1968,7 +1968,7 @@ def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q
         np.cos(varphi))
 
     else:
-        raise TypeError("Provide either (theta1,theta2,J,r,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).")
+        raise TypeError("Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).")
 
     return chieff
 
@@ -2295,6 +2295,9 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi
 
     if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and q is None and chi1 is None and chi2 is None:
 
+        theta1=np.atleast_1d(theta1)
+        theta2=np.atleast_1d(theta2)
+        deltaphi=np.atleast_1d(deltaphi)
         costheta12 = np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2)
 
     elif theta1 is None and theta2 is None and deltaphi is None and S is not None and q is not None and chi1 is not None and chi2 is not None:
@@ -2386,7 +2389,7 @@ def eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2):
 
 def eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
     """
-    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting sign=-1 returns the other half of the  precession cycle [-pi,0].
+    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=1 returns the other half of the  precession cycle [-pi,0].
 
     Call
     ----
@@ -2549,7 +2552,6 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
         kappa = np.atleast_1d(kappa)
 
         L = eval_L(r, q)
-
         J = (2*L*kappa + L**2)**0.5
 
     else:
@@ -6648,5 +6650,57 @@ if __name__ == '__main__':
     #def test_2_Jlimits():
     # Should be like test_Jresonances
     #return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
-    print(eval_u(10,0.8))
-    print(Satresonance(J=1, kappa=None, r=10, u=None, chieff=0.43413573, q=0.8, chi1=1, chi2=1))
+    #print(eval_u(10,0.8))
+    #print(Satresonance(J=1, kappa=None, r=10, u=None, chieff=0.43413573, q=0.8, chi1=1, chi2=1))
+
+
+    # q=0.6
+    # chi1=1
+    # chi2=1
+    # r=100
+    # xi=-0.05
+    # S=0.4
+    # J=2.34
+    # chieff=-0.05
+    # # theta1=np.pi/8
+    # # theta2=np.pi/4
+    # # varphi=np.pi/4
+    # # print(eval_chieff(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2))
+    # # print(eval_chieff(S=S,varphi=varphi,J=J,r=r,q=q, chi1=chi1,chi2=chi2))
+    #
+    # #print(effectivepotential_plus(S=0.4, J=1, r=10, q=0.8, chi1=1, chi2=1))
+    # #print(effectivepotential_minus(S=0.4, J=1, r=10, q=0.8, chi1=1, chi2=1))
+    # print(eval_varphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1))
+
+    # q=0.6
+    # chi1=1
+    # chi2=1
+    # #J=1
+    # #S=0.4
+    # #chieff=0.3
+    # r=100
+    # theta1=np.pi/8
+    # theta2=np.pi/4
+    # deltaphi=np.pi/3
+    # print(
+    # #eval_costheta1(S, J, r, chieff, q, chi1, chi2),
+    # #eval_theta1(S, J, r, chieff, q, chi1, chi2),
+    # #eval_costheta2(S, J, r, chieff, q, chi1, chi2),
+    # #eval_theta2(S, J, r, chieff, q, chi1, chi2),
+    # #eval_costheta12(theta1=1, theta2=2, deltaphi=1),
+    # #eval_theta12(S=S, q=q, chi1=chi1, chi2=chi2),
+    # #eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2),
+    # #eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1)
+    # #eval_costhetaL(S, J, r, q, chi1, chi2),
+    # #eval_thetaL(S, J, r, q, chi1, chi2)
+    # eval_S(theta1=theta1, theta2=theta2, deltaphi=deltaphi, q=q, chi1=chi1, chi2=chi2)
+    # )
+
+    #print(eval_kappa(1, 10, 0.8))
+    #print(eval_J(kappa=0.24995658, r=10, q=0.8))
+
+    print(eval_kappainf(np.pi/8, np.pi/4, 0.6, 1, 1))
+
+#def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
+#    """
+#    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
