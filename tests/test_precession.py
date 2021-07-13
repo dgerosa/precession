@@ -470,14 +470,37 @@ def test_eval_costheta2inf():
 def test_eval_theta2inf():
     return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.pi/4]
 
+# TODO These two don't work because the simpler flag is repeated by yhe both decorator...
+# @both
+# def test_1_morphology():
+#     return {"J":1 , "r":10, "chieff":0.35, "q":0.8, "chi1":1, "chi2":1, "simpler":True}, ["C"]
+#
+# @both
+# def test_1_morphology():
+#     return {"J":1 , "r":10, "chieff":0.35, "q":0.8, "chi1":1, "chi2":1, "simpler":False}, ["C-"]
+
+@both
+def test_1_eval_cyclesign():
+    return {"dSdt":1}, [1]
+
+@both
+def test_2_eval_cyclesign():
+    return {"deltaphi":1}, [-1]
+
+@both
+def test_3_eval_cyclesign():
+    return {"varphi":1}, [-1]
+
+@both
+def test_4_eval_cyclesign():
+    return {"Lvec":[1,2,3],"S1vec":[3,2,1],"S2vec":[1,1,0]}, [-1]
 
 # TODO
 # limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None)
+# morphology(J, r, chieff, q, chi1, chi2, simpler=False)
 
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# morphology(J, r, chieff, q, chi1, chi2, simpler=False)
-# eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None)
 # conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=+1)
 # angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False)
 # angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2)

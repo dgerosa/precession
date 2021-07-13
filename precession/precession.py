@@ -1016,10 +1016,14 @@ def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
         kappainflim = Slimits_S1S2(q, chi1, chi2)[1]
         kappainfmin, kappainfmax = -kappainflim, kappainflim
 
+        print(kappainflim)
+
+
     elif chieff is not None and q is not None and chi1 is not None and chi2 is not None:
         kappainfmin, kappainfmax = kappainfresonances(chieff, q, chi1, chi2)
         # Check precondition
-        kappainfmin_cond, kappainfmax_cond = Slimits_S1S2(q, chi1, chi2)
+        kappainflim = Slimits_S1S2(q, chi1, chi2)[1]
+        kappainfmin_cond, kappainfmax_cond = -kappainflim, kappainflim
 
         if (kappainfmin > kappainfmin_cond).all() and (kappainfmax < kappainfmax_cond).all():
             pass
@@ -3180,7 +3184,7 @@ def vectors_to_angles(Lvec, S1vec, S2vec):
 
     Call
     ----
-    theta1,theta2,deltaphi = eval_cyclesign(Lvec,S1vec,S2vec,q)
+    theta1,theta2,deltaphi = vectors_to_angles(Lvec,S1vec,S2vec)
 
     Parameters
     ----------
@@ -3190,8 +3194,6 @@ def vectors_to_angles(Lvec, S1vec, S2vec):
         Cartesian vector of the primary spin.
     S2vec: array
         Cartesian vector of the secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
 
     Returns
     -------
@@ -6699,8 +6701,24 @@ if __name__ == '__main__':
     #print(eval_kappa(1, 10, 0.8))
     #print(eval_J(kappa=0.24995658, r=10, q=0.8))
 
-    print(eval_kappainf(np.pi/8, np.pi/4, 0.6, 1, 1))
-
+    #print(eval_kappainf(np.pi/8, np.pi/4, 0.6, 1, 1))
+    #print(morphology([1,1], [10,10], [0.35,0.35], [0.8,0.8], [1,1], [1,1], simpler=True))
 #def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
 #    """
 #    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
+
+
+    #print(eval_cyclesign(Lvec=[1,2,3],S1vec=[3,2,1],S2vec=[1,1,0]))
+
+    n=10
+    theta1inf = np.arccos(np.random.uniform(-1, 1, n))
+    theta2inf = np.arccos(np.random.uniform(-1, 1, n))
+    chi1 = np.random.uniform(0, 1, n)
+    chi2 = np.random.uniform(0, 1, n)
+    q = np.random.uniform(0.01, 0.99, n)
+    r = [np.inf, 10.]
+    r = np.repeat([r], n, axis=0)
+    #print(chi1)
+
+    result = inspiral_precav(theta1=theta1inf, theta2=theta2inf, r=r, q=q, chi1=chi1, chi2=chi2)
+    print(result)
