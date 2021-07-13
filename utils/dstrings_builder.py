@@ -12,7 +12,7 @@ For each function docstrings, the developer needs to provide the intro blurb and
 import sys,os
 import pyperclip
 
-# Load package from path, not the pip installation (if any) 
+# Load package from path, not the pip installation (if any)
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
@@ -35,7 +35,7 @@ def descr(varname,vardef=None):
     lookup['L']=["float","Magnitude of the Newtonian orbital angular momentum"]
     lookup['S1']=["float","Magnitude of the primary spin"]
     lookup['S2']=["float","Magnitude of the secondary spin"]
-    lookup['xi']=["float","Effective spin"]
+    lookup['chieff']=["float","Effective spin"]
     lookup['J']=["float","Magnitude of the total angular momentum"]
     lookup['S']=["float","Magnitude of the total spin"]
     lookup['Ssq']=["float","Squared magnitude of the total spin"]
@@ -76,8 +76,8 @@ def descr(varname,vardef=None):
     lookup['kappamax']=["float","Maximum value of the regularized angular momentum kappa"]
     lookup['kappainfmin']=["float","Minimum value of the asymptotic angular momentum kappainf"]
     lookup['kappainfmax']=["float","Maximum value of the asymptotic angular momentum kappainf"]
-    lookup['ximin']=["float","Minimum value of the effective spin xi"]
-    lookup['ximax']=["float","Maximum value of the effective spin xi"]
+    lookup['chieffmin']=["float","Minimum value of the effective spin chieff"]
+    lookup['chieffmax']=["float","Maximum value of the effective spin chieff"]
     lookup['Smin']=["float","Minimum value of the total spin S"]
     lookup['Smax']=["float","Maximum value of the total spin S"]
     lookup['coeff6']=["float","Coefficient to the x^6 term in polynomial"]
@@ -143,12 +143,12 @@ def descr(varname,vardef=None):
     lookup['uswitch']=["float","Matching compactified separation between the precession- and orbit-averaged chunks"]
     lookup['M_msun']=["float","Total mass of the binary in solar masses"]
     lookup['f']=["float","Gravitational-wave frequency in Hz"]
-    lookup['theta1atmin']=["float","Value of the angle theta1 at the resonance that minimizes either J or xi, depending on the input"]
-    lookup['theta1atmax']=["float","Value of the angle theta1 at the resonance that maximizes either J or xi, depending on the input"]
-    lookup['theta2atmin']=["float","Value of the angle theta2 at the resonance that minimizes either J or xi, depending on the input"]
-    lookup['theta2atmax']=["float","Value of the angle theta2 at the resonance that maximizes either J or xi, depending on the input"]
-    lookup['deltaphiatmin']=["float","Value of the angle deltaphi at the resonance that minimizes either J or xi, depending on the input"]
-    lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes either J or xi, depending on the input"]
+    lookup['theta1atmin']=["float","Value of the angle theta1 at the resonance that minimizes either J or chieff, depending on the input"]
+    lookup['theta1atmax']=["float","Value of the angle theta1 at the resonance that maximizes either J or chieff, depending on the input"]
+    lookup['theta2atmin']=["float","Value of the angle theta2 at the resonance that minimizes either J or chieff, depending on the input"]
+    lookup['theta2atmax']=["float","Value of the angle theta2 at the resonance that maximizes either J or chieff, depending on the input"]
+    lookup['deltaphiatmin']=["float","Value of the angle deltaphi at the resonance that minimizes either J or chieff, depending on the input"]
+    lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input"]
     lookup['precomputedroots']=["array","Pre-computed output of Ssroots for computational efficiency"]
 
 

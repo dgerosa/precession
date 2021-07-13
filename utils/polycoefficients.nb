@@ -2,10 +2,10 @@ Notebook[{
 
 Cell[CellGroupData[{
 Cell["precession v2: polynomial coefficients", \
-"Title",ExpressionUUID->"6383118c-d443-42eb-a95b-32b9581dcfd8"],
+"Title",ExpressionUUID->"b17277b1-6a23-4651-9cf2-c29cf465a2b1"],
 
 Cell["Davide Gerosa", \
-"Subtitle",ExpressionUUID->"0b2e0e77-f582-44f2-a573-e384163a73b0"],
+"Subtitle",ExpressionUUID->"fa2e1eb5-cc4d-4c5c-9f6a-00bfcc0e9fb9"],
 
 Cell[TextData[StyleBox["This is a notebook to derive some long polynomial \
 coefficients that describe the dynamics of spinning black-hole binaries at \
@@ -15,7 +15,7 @@ precessional timescale, (iii) the identification of the spin-orbit resonances \
 in terms of the generalized angular momentum \[Kappa], and (iv)  the \
 identification of the spin-orbit resonances in terms of the effective spin \
 \[Xi].  ", "Subsection"]], \
-"Subtitle",ExpressionUUID->"0e3d0172-8950-4d99-b055-7b5438182de5"],
+"Subtitle",ExpressionUUID->"ea4b9c66-a8ae-4a61-bb29-819185e6ee0d"],
 
 Cell[CellGroupData[{
 
@@ -24,7 +24,7 @@ Export expressions in a format that python and numpy are going to like. Use a \
 modified version of the packaged by Gustavo Wiederhecker  \
 https://github.com/gwiederhecker/ToPython, supplemented by a set of custom \
 transformation for the precession code. \
-\>", "Subsubsection",ExpressionUUID->"ff845be3-3aca-4898-b479-dd93a6ae26d6"],
+\>", "Subsubsection",ExpressionUUID->"e9b046e6-a73b-4267-9087-44473ef83e97"],
 
 Cell[BoxData[
  RowBox[{
@@ -262,7 +262,7 @@ Cell[BoxData[
          "]"}]}], ";", "\n", 
       RowBox[{"PythonForm", "[", "expression", "]"}]}]}], "]"}]}], 
   ";"}]], "Input",
- CellLabel->"In[1]:=",ExpressionUUID->"5c7b5ae4-9126-427d-a0b5-6924edb5ba15"],
+ CellLabel->"In[1]:=",ExpressionUUID->"e8b63d30-4618-4520-872e-9b912512205d"],
 
 Cell[BoxData[
  RowBox[{
@@ -287,7 +287,7 @@ Cell[BoxData[
         RowBox[{"\"\<(S2)\>\"", "\[Rule]", "\"\<S2\>\""}], ",", 
         RowBox[{"\"\<(u)\>\"", "->", "\"\<u\>\""}], ",", 
         RowBox[{"\"\<(kappa)\>\"", "->", "\"\<kappa\>\""}], ",", 
-        RowBox[{"\"\<(xi)\>\"", "->", "\"\<xi\>\""}], ",", 
+        RowBox[{"\"\<(chieff)\>\"", "->", "\"\<chieff\>\""}], ",", 
         RowBox[{"\"\<(2)\>\"", "->", "\"\<2\>\""}], ",", 
         RowBox[{"\"\<(3)\>\"", "->", "\"\<3\>\""}], ",", 
         RowBox[{"\"\<(4)\>\"", "->", "\"\<4\>\""}], ",", 
@@ -298,18 +298,18 @@ Cell[BoxData[
         RowBox[{"\"\<(9)\>\"", "->", "\"\<9\>\""}], ",", 
         RowBox[{"\"\<(10)\>\"", "->", "\"\<10\>\""}]}], "}"}]}], "]"}]}]}], 
   ";"}]], "Input",
- CellLabel->"In[2]:=",ExpressionUUID->"43a78cde-85e5-4b54-abbc-bf7cdbd03a6f"]
+ CellLabel->"In[2]:=",ExpressionUUID->"7221c56f-5388-4b56-b37e-44404e96ae6a"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["(ii) Effective potentials", \
-"Section",ExpressionUUID->"f78820e6-597a-4d8d-8c92-cb09c1a72eab"],
+"Section",ExpressionUUID->"9ea1069a-567c-496d-a00c-043641530aeb"],
 
 Cell[CellGroupData[{
 
 Cell["See Eqs. (13-14) of Gerosa et al. (2015), arxiv:1506.03492. ", \
-"Subsubsection",ExpressionUUID->"04cb541c-b1e2-46b6-aff2-7645e5e2c13e"],
+"Subsubsection",ExpressionUUID->"cb0712bc-3f9d-472f-8ab4-fbab1f86da2d"],
 
 Cell[BoxData[{
  RowBox[{
@@ -383,13 +383,13 @@ Cell[BoxData[{
          RowBox[{"S1", "-", "S2"}], ")"}], "^", "2"}]}], ")"}], "^", 
      RowBox[{"(", 
       RowBox[{"1", "/", "2"}], ")"}]}]}]}], " ", ";"}]}], "Input",
- CellLabel->"In[3]:=",ExpressionUUID->"57e858d0-d213-4967-9ada-dbabc0d22af8"],
+ CellLabel->"In[3]:=",ExpressionUUID->"13f83d6d-0148-41f6-a6f1-a7ab2698307f"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[{
  RowBox[{
-  RowBox[{"xiSvarphi", " ", "=", " ", 
+  RowBox[{"chieffSvarphi", " ", "=", " ", 
    RowBox[{"Simplify", "[", 
     RowBox[{"t1", 
      RowBox[{"(", 
@@ -398,16 +398,16 @@ Cell[BoxData[{
         RowBox[{"Cos", "[", "varphi", "]"}], "t3"}]}], ")"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<xi\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[6]:=",ExpressionUUID->"4b489380-6c2d-443b-af85-ce19b1bd1588"],
+  RowBox[{"\"\<chieff\>\"", ",", "%"}], "]"}]}], "Input",
+ CellLabel->"In[6]:=",ExpressionUUID->"164930b9-ad35-43f1-9d3e-9553868af547"],
 
-Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\nxi = 1/4 * \
-L**(-1) * q**(-1) * S**(-2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * (((1 + \
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\nchieff = 1/4 \
+* L**(-1) * q**(-1) * S**(-2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * (((1 + \
 q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -1 * (1 + -1 * q**2) * \
 ((J**2 + -1 * ((L + -1 * S))**2))**(1/2) * ((-1 * J**2 + ((L + \
 S))**2))**(1/2) * ((S**2 + -1 * ((S1 + -1 * S2))**2))**(1/2) * ((-1 * S**2 + \
 ((S1 + S2))**2))**(1/2) * np.cos(varphi))\"\>"], "Output",
- CellLabel->"Out[7]=",ExpressionUUID->"b6206b0b-3b0e-41ad-a46b-b0cc8970a206"]
+ CellLabel->"Out[7]=",ExpressionUUID->"aabe7b07-a641-4d1e-8452-d2df72124f12"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -420,19 +420,19 @@ Cell[BoxData[{
      RowBox[{"(", 
       RowBox[{
        RowBox[{
-        RowBox[{"-", "\[Xi]"}], " ", "/", "t1"}], " ", "+", " ", "t2"}], 
+        RowBox[{"-", "\[Chi]eff"}], " ", "/", "t1"}], " ", "+", " ", "t2"}], 
       ")"}], "/", "t3"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
   RowBox[{"\"\<cosvarphi\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[8]:=",ExpressionUUID->"a7295460-fc36-4e4f-b406-56568d16b805"],
+ CellLabel->"In[8]:=",ExpressionUUID->"3d0dbe10-1ec2-4509-a715-d109144c95e7"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncosvarphi = \
 ((1 + -1 * q**2))**(-1) * ((J**2 + -1 * ((L + -1 * S))**2))**(-1/2) * ((-1 * \
 J**2 + ((L + S))**2))**(-1/2) * ((S**2 + -1 * ((S1 + -1 * S2))**2))**(-1/2) * \
 ((-1 * S**2 + ((S1 + S2))**2))**(-1/2) * ((J**2 + (-1 * L**2 + -1 * S**2)) * \
 (((1 + q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2)) + -4 * L * q * \
-S**2 * xi)\"\>"], "Output",
- CellLabel->"Out[9]=",ExpressionUUID->"cefac524-546d-4780-b13e-614f8c8c7875"]
+S**2 * chieff)\"\>"], "Output",
+ CellLabel->"Out[9]=",ExpressionUUID->"aaf56f98-7fdb-4ba4-8ac8-85e112f28c09"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -440,14 +440,15 @@ S**2 * xi)\"\>"], "Output",
 Cell[CellGroupData[{
 
 Cell["(ii) Cubic equation in S^2 ", \
-"Section",ExpressionUUID->"99fa2989-4f42-49cb-a4c1-473d2e10142c"],
+"Section",ExpressionUUID->"c428d816-58d8-4f72-94f0-631b1810e67d"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
-Equation (\[Xi]_\[PlusMinus](S)-\[Xi])^2=0; substitute  \[Kappa] and u; \
-multiply by some constant factors for consistency with previous derivations.\
-\>", "Subsubsection",ExpressionUUID->"813d57bc-be9f-4ff5-8819-de50f7159eaa"],
+Equation (\[Chi]eff_\[PlusMinus](S)-\[Chi]eff)^2=0; substitute  \[Kappa] and \
+u; multiply by some constant factors for consistency with previous \
+derivations.\
+\>", "Subsubsection",ExpressionUUID->"7f6271e4-a4a4-4685-80bc-79c743d75db5"],
 
 Cell[CellGroupData[{
 
@@ -460,9 +461,9 @@ Cell[BoxData[
      RowBox[{"(", 
       RowBox[{
        RowBox[{"(", 
-        RowBox[{"\[Xi]", "/", "t1"}], ")"}], " ", "-", " ", "t2"}], ")"}], 
-     "^", "2"}]}], " ", "]"}]}]], "Input",
- CellLabel->"In[10]:=",ExpressionUUID->"5406f93a-938d-4ea3-93c9-64f438e395ad"],
+        RowBox[{"\[Chi]eff", "/", "t1"}], ")"}], " ", "-", " ", "t2"}], ")"}],
+      "^", "2"}]}], " ", "]"}]}]], "Input",
+ CellLabel->"In[10]:=",ExpressionUUID->"5a56251c-59df-4c96-83df-5acc7bc83e1e"],
 
 Cell[BoxData[
  RowBox[{
@@ -524,9 +525,9 @@ Cell[BoxData[
            SuperscriptBox["S1", "2"], "-", 
            SuperscriptBox["S2", "2"]}], ")"}]}]}], ")"}]}], "-", 
      RowBox[{"4", " ", "L", " ", "q", " ", 
-      SuperscriptBox["S", "2"], " ", "\[Xi]"}]}], ")"}], "2"]}]], "Output",
+      SuperscriptBox["S", "2"], " ", "\[Chi]eff"}]}], ")"}], "2"]}]], "Output",
  CellLabel->
-  "Out[10]=",ExpressionUUID->"b31bc47c-1e6a-49cd-a481-a7dd5af0885d"]
+  "Out[10]=",ExpressionUUID->"496860fa-4de8-4d0f-8e20-e6da83a92581"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -563,7 +564,7 @@ Cell[BoxData[
       RowBox[{"S", "->", 
        RowBox[{"Sqrt", "[", "Ss", "]"}]}], "}"}]}], "]"}]}], 
   "\[IndentingNewLine]"}]], "Input",
- CellLabel->"In[11]:=",ExpressionUUID->"7ac4b074-aadd-494a-a795-663b5f29bd53"],
+ CellLabel->"In[11]:=",ExpressionUUID->"1c1271b4-9189-4541-9cd3-36880a4ac5e4"],
 
 Cell[BoxData[
  RowBox[{"-", 
@@ -617,19 +618,18 @@ Cell[BoxData[
         RowBox[{"(", 
          RowBox[{
           RowBox[{"Ss", " ", "u"}], "-", "\[Kappa]"}], ")"}]}], "+", 
-       RowBox[{"2", " ", "q", " ", "Ss", " ", "\[Xi]"}]}], ")"}], "2"]}], 
+       RowBox[{"2", " ", "q", " ", "Ss", " ", "\[Chi]eff"}]}], ")"}], "2"]}], 
+   
    RowBox[{"4", " ", "Ss"}]]}]], "Output",
  CellLabel->
-  "Out[11]=",ExpressionUUID->"f70f2b75-7557-4c62-9cff-847670f148f4"]
+  "Out[11]=",ExpressionUUID->"3f9d8798-0af0-40d3-9e1d-cd54377c03c8"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Extract coefficients.", \
-"Subsubsection",ExpressionUUID->"4b15e786-6647-4d2b-be29-6fe842686c59"],
-
-Cell[CellGroupData[{
+"Subsubsection",ExpressionUUID->"4276579a-71fe-42c3-ad58-3dfe56f7f5e4"],
 
 Cell[BoxData[{
  RowBox[{
@@ -638,85 +638,70 @@ Cell[BoxData[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"effpot", ",", "Ss", ",", "3"}], "]"}], " ", "//", 
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff3\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[12]:=",ExpressionUUID->"e27be02c-cb58-4e9a-9f52-e5b1d7573532"],
-
-Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = q * \
-((1 + q))**2 * u**2\"\>"], "Output",
- CellLabel->
-  "Out[13]=",ExpressionUUID->"5d20aea5-8ca5-414f-bc57-148b261360f3"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{
   RowBox[{"Scoeff2", " ", "=", " ", 
    RowBox[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"effpot", ",", "Ss", ",", "2"}], "]"}], " ", "//", 
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff2\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[14]:=",ExpressionUUID->"2fb87423-9e2c-4b8f-a904-bf0ba5dacfbb"],
-
-Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = 1/4 \
-* ((1 + q))**2 * (1 + (4 * S2**2 * u**2 + (q**2 * (1 + 4 * S1**2 * u**2) + -2 \
-* q * (1 + 2 * u * ((S1**2 + S2**2) * u + (2 * kappa + -1 * xi))))))\"\>"], \
-"Output",
- CellLabel->
-  "Out[15]=",ExpressionUUID->"3d972502-40c2-4196-a68c-d39190050ecc"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{
   RowBox[{"Scoeff1", " ", "=", " ", 
    RowBox[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"effpot", ",", "Ss", ",", "1"}], "]"}], " ", "//", 
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff1\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[16]:=",ExpressionUUID->"dcbfe62d-6ad9-408d-a53d-cfd8f724b451"],
-
-Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = (q \
-* (kappa + (q * kappa + -1 * xi)) * (kappa + (q * kappa + -1 * q * xi)) + \
-(-1/2 * (-1 + q**2) * S1**2 * ((1 + q) * (-1 + (q + 4 * q * u * kappa)) + -2 \
-* q * u * xi) + -1/2 * (-1 + q**2) * S2**2 * ((1 + q) * (-1 + (q + -4 * u * \
-kappa)) + 2 * q * u * xi)))\"\>"], "Output",
- CellLabel->
-  "Out[17]=",ExpressionUUID->"bc488b55-e35e-4e47-bed6-17d2056fbe8b"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{
   RowBox[{"Scoeff0", " ", "=", " ", 
    RowBox[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"effpot", ",", "Ss", ",", "0"}], "]"}], " ", "//", 
-    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
+    "FullSimplify"}]}], ";"}]}], "Input",
+ CellLabel->"In[12]:=",ExpressionUUID->"8ac77240-fe06-4968-a1da-c65c68491d26"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
  RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff0\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[18]:=",ExpressionUUID->"7e762373-b504-4df2-b529-46cebd26f2a3"],
+  RowBox[{"\"\<coeff3\>\"", ",", "Scoeff3"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff2\>\"", ",", "Scoeff2"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff1\>\"", ",", "Scoeff1"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff0\>\"", ",", "Scoeff0"}], 
+  "]"}], "\[IndentingNewLine]"}], "Input",
+ CellLabel->"In[16]:=",ExpressionUUID->"a17f8b4b-762c-4159-b2b0-60d21d4e4a13"],
+
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = q * \
+((1 + q))**2 * u**2\"\>"], "Output",
+ CellLabel->"Out[16]=",ExpressionUUID->"86257a5a-16e8-458e-a794-bdd921538602"],
+
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = 1/4 \
+* ((1 + q))**2 * (1 + (4 * S2**2 * u**2 + (q**2 * (1 + 4 * S1**2 * u**2) + -2 \
+* q * (1 + 2 * u * ((S1**2 + S2**2) * u + (2 * kappa + -1 * \
+chieff))))))\"\>"], "Output",
+ CellLabel->"Out[17]=",ExpressionUUID->"3bd061ae-16d0-47fb-b977-6488295d50d5"],
+
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = (q \
+* (kappa + (q * kappa + -1 * chieff)) * (kappa + (q * kappa + -1 * q * \
+chieff)) + (-1/2 * (-1 + q**2) * S1**2 * ((1 + q) * (-1 + (q + 4 * q * u * \
+kappa)) + -2 * q * u * chieff) + -1/2 * (-1 + q**2) * S2**2 * ((1 + q) * (-1 \
++ (q + -4 * u * kappa)) + 2 * q * u * chieff)))\"\>"], "Output",
+ CellLabel->"Out[18]=",ExpressionUUID->"f44b4535-88d4-4744-9334-5c46cd9a572c"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff0 = 1/4 \
 * (-1 + q) * (1 + q) * ((1 + q) * ((-1 + q) * ((S1**2 + -1 * S2**2))**2 + 4 * \
 (q * S1**2 + -1 * S2**2) * kappa**2) + -4 * q * (S1 + -1 * S2) * (S1 + S2) * \
-kappa * xi)\"\>"], "Output",
+kappa * chieff)\"\>"], "Output",
  CellLabel->
-  "Out[19]=",ExpressionUUID->"0e04852e-cb5d-43e4-a9b5-c99d94a9c50a"]
+  "Out[19]=",ExpressionUUID->"138094be-ec4a-4874-8410-62c0b71f03c1"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Check reconstruction (this should be zero).", \
-"Subsubsection",ExpressionUUID->"8c6e55c8-3f43-41d8-a2ce-1a3781741053"],
+"Subsubsection",ExpressionUUID->"9b37a31c-25c0-4c09-9d5f-d5487b6f57e7"],
 
 Cell[CellGroupData[{
 
@@ -729,11 +714,11 @@ Cell[BoxData[
     RowBox[{"Ss", "^", "2"}]}], "+", 
    RowBox[{"Scoeff1", "*", "Ss"}], " ", "+", " ", "Scoeff0", " ", "-", " ", 
    "effpot"}], "//", "FullSimplify"}]], "Input",
- CellLabel->"In[20]:=",ExpressionUUID->"708510a4-4e36-48ed-a7e5-c8b6390791c4"],
+ CellLabel->"In[20]:=",ExpressionUUID->"97ea8369-9b1e-4160-ab27-d845611c5cb7"],
 
 Cell[BoxData["0"], "Output",
  CellLabel->
-  "Out[20]=",ExpressionUUID->"bdd88a1d-3fd5-4554-ba3e-6e69d045a4b2"]
+  "Out[20]=",ExpressionUUID->"1e74510e-19f5-4c7b-86fa-5aa0fbe61617"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -741,14 +726,14 @@ Cell[BoxData["0"], "Output",
 Cell[CellGroupData[{
 
 Cell["(iii) Spin-orbit resonances in \[Kappa] ", \
-"Section",ExpressionUUID->"5d122305-161c-433b-90cd-b72270faa66f"],
+"Section",ExpressionUUID->"21fde227-400c-4d44-8f3c-83d485ec3535"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
 Compute discriminant of the cubic equation in S^2; multiply by some constant \
 factors for consistency with previous derivations.\
-\>", "Subsubsection",ExpressionUUID->"4e52729f-b449-4a33-82b3-deb1ac963888"],
+\>", "Subsubsection",ExpressionUUID->"73fec41a-2ea5-4707-9e55-53addfd45485"],
 
 Cell[CellGroupData[{
 
@@ -767,7 +752,7 @@ Cell[BoxData[{
       RowBox[{
        RowBox[{"-", "1"}], "+", 
        SuperscriptBox["q", "2"]}], ")"}], "2"]]}]}]}], "Input",
- CellLabel->"In[21]:=",ExpressionUUID->"54d58a33-0f4b-459a-a5aa-145726cdcedf"],
+ CellLabel->"In[21]:=",ExpressionUUID->"b8d52978-1a94-4ed4-9d8c-53de73459199"],
 
 Cell[BoxData[
  RowBox[{
@@ -817,7 +802,7 @@ Cell[BoxData[
            SuperscriptBox["S2", "2"], " ", 
            SuperscriptBox["u", "2"]}], "+", 
           RowBox[{"40", " ", "u", " ", "\[Kappa]"}], "-", 
-          RowBox[{"20", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+          RowBox[{"20", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
        RowBox[{
         SuperscriptBox["q", "2"], " ", 
         RowBox[{"(", 
@@ -828,12 +813,12 @@ Cell[BoxData[
            SuperscriptBox["u", "2"]}], "+", 
           RowBox[{"16", " ", 
            SuperscriptBox["u", "2"], " ", 
-           SuperscriptBox["\[Xi]", "2"]}], "-", 
+           SuperscriptBox["\[Chi]eff", "2"]}], "-", 
           RowBox[{"8", " ", "u", " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{"16", " ", "\[Kappa]"}], "+", 
-             RowBox[{"3", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}], "+", 
+             RowBox[{"3", " ", "\[Chi]eff"}]}], ")"}]}]}], ")"}]}], "+", 
        RowBox[{"4", " ", 
         SuperscriptBox["q", "3"], " ", 
         RowBox[{"(", 
@@ -845,8 +830,8 @@ Cell[BoxData[
           RowBox[{"4", " ", "u", " ", 
            RowBox[{"(", 
             RowBox[{"\[Kappa]", "+", 
-             RowBox[{"4", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}]}], ")"}]}], 
-    "+", 
+             RowBox[{"4", " ", "\[Chi]eff"}]}], ")"}]}]}], ")"}]}]}], ")"}]}],
+     "+", 
     RowBox[{
      RowBox[{"(", 
       RowBox[{
@@ -892,14 +877,15 @@ Cell[BoxData[
            SuperscriptBox["S2", "4"], " ", 
            SuperscriptBox["u", "4"]}], "-", 
           RowBox[{"4", " ", "u", " ", "\[Kappa]"}], "+", 
-          RowBox[{"2", " ", "u", " ", "\[Xi]"}], "+", 
+          RowBox[{"2", " ", "u", " ", "\[Chi]eff"}], "+", 
           RowBox[{"4", " ", 
            SuperscriptBox["S2", "2"], " ", 
            SuperscriptBox["u", "2"], " ", 
            RowBox[{"(", 
             RowBox[{"17", "+", 
              RowBox[{"48", " ", "u", " ", "\[Kappa]"}], "-", 
-             RowBox[{"2", " ", "u", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}], "+", 
+             RowBox[{"2", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}]}], ")"}]}], 
+       "+", 
        RowBox[{"4", " ", 
         SuperscriptBox["q", "2"], " ", "u", " ", 
         RowBox[{"(", 
@@ -912,12 +898,12 @@ Cell[BoxData[
           RowBox[{"\[Kappa]", " ", 
            RowBox[{"(", 
             RowBox[{"13", "-", 
-             RowBox[{"40", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
-          RowBox[{"4", " ", "\[Xi]", " ", 
+             RowBox[{"40", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
+          RowBox[{"4", " ", "\[Chi]eff", " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{"-", "3"}], "+", 
-             RowBox[{"2", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+             RowBox[{"2", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["S2", "2"], " ", "u", " ", 
            RowBox[{"(", 
@@ -925,7 +911,7 @@ Cell[BoxData[
              RowBox[{"88", " ", "u", " ", "\[Kappa]"}], "-", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
        RowBox[{
         SuperscriptBox["q", "3"], " ", 
         RowBox[{"(", 
@@ -937,24 +923,24 @@ Cell[BoxData[
            RowBox[{"(", 
             RowBox[{
              RowBox[{"34", " ", "\[Kappa]"}], "-", 
-             RowBox[{"19", " ", "\[Xi]"}]}], ")"}]}], "+", 
+             RowBox[{"19", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
           RowBox[{"32", " ", 
            SuperscriptBox["u", "3"], " ", 
-           SuperscriptBox["\[Xi]", "2"], " ", 
+           SuperscriptBox["\[Chi]eff", "2"], " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{
-              RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Xi]"}], ")"}]}], 
-          "+", 
+              RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Chi]eff"}], 
+            ")"}]}], "+", 
           RowBox[{"8", " ", 
            SuperscriptBox["u", "2"], " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{"44", " ", 
               SuperscriptBox["\[Kappa]", "2"]}], "-", 
-             RowBox[{"11", " ", "\[Kappa]", " ", "\[Xi]"}], "-", 
+             RowBox[{"11", " ", "\[Kappa]", " ", "\[Chi]eff"}], "-", 
              RowBox[{"14", " ", 
-              SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "-", 
+              SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "-", 
           RowBox[{"16", " ", 
            SuperscriptBox["S2", "2"], " ", 
            SuperscriptBox["u", "2"], " ", 
@@ -962,10 +948,10 @@ Cell[BoxData[
             RowBox[{
              RowBox[{"-", "3"}], "+", 
              RowBox[{"2", " ", "u", " ", "\[Kappa]"}], "-", 
-             RowBox[{"7", " ", "u", " ", "\[Xi]"}], "+", 
+             RowBox[{"7", " ", "u", " ", "\[Chi]eff"}], "+", 
              RowBox[{"2", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
        RowBox[{
         SuperscriptBox["q", "5"], " ", 
         RowBox[{"(", 
@@ -976,13 +962,13 @@ Cell[BoxData[
            SuperscriptBox["u", "4"]}], "+", 
           RowBox[{"32", " ", 
            SuperscriptBox["u", "3"], " ", "\[Kappa]", " ", 
-           SuperscriptBox["\[Xi]", "2"]}], "+", 
+           SuperscriptBox["\[Chi]eff", "2"]}], "+", 
           RowBox[{"u", " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{
               RowBox[{"-", "116"}], " ", "\[Kappa]"}], "+", 
-             RowBox[{"74", " ", "\[Xi]"}]}], ")"}]}], "+", 
+             RowBox[{"74", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["u", "2"], " ", 
            RowBox[{"(", 
@@ -990,9 +976,9 @@ Cell[BoxData[
              RowBox[{
               RowBox[{"-", "176"}], " ", 
               SuperscriptBox["\[Kappa]", "2"]}], "+", 
-             RowBox[{"40", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+             RowBox[{"40", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
              RowBox[{"88", " ", 
-              SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
           RowBox[{"4", " ", 
            SuperscriptBox["S2", "2"], " ", 
            SuperscriptBox["u", "2"], " ", 
@@ -1000,10 +986,10 @@ Cell[BoxData[
             RowBox[{
              RowBox[{"-", "21"}], "-", 
              RowBox[{"32", " ", "u", " ", "\[Kappa]"}], "-", 
-             RowBox[{"26", " ", "u", " ", "\[Xi]"}], "+", 
+             RowBox[{"26", " ", "u", " ", "\[Chi]eff"}], "+", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "-", 
+              SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], "-", 
        RowBox[{"4", " ", 
         SuperscriptBox["q", "4"], " ", "u", " ", 
         RowBox[{"(", 
@@ -1018,26 +1004,26 @@ Cell[BoxData[
            RowBox[{"(", 
             RowBox[{"33", "+", 
              RowBox[{"80", " ", "u", " ", "\[Kappa]"}], "-", 
-             RowBox[{"24", " ", "u", " ", "\[Xi]"}], "-", 
+             RowBox[{"24", " ", "u", " ", "\[Chi]eff"}], "-", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
           RowBox[{"2", " ", "\[Kappa]", " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{"-", "5"}], "-", 
-             RowBox[{"26", " ", "u", " ", "\[Xi]"}], "+", 
+             RowBox[{"26", " ", "u", " ", "\[Chi]eff"}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
-          RowBox[{"2", " ", "\[Xi]", " ", 
+              SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
+          RowBox[{"2", " ", "\[Chi]eff", " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{"-", "3"}], "+", 
-             RowBox[{"7", " ", "u", " ", "\[Xi]"}], "+", 
+             RowBox[{"7", " ", "u", " ", "\[Chi]eff"}], "+", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
        RowBox[{"4", " ", 
         SuperscriptBox["q", "6"], " ", "u", " ", 
         RowBox[{"(", 
@@ -1047,11 +1033,11 @@ Cell[BoxData[
            SuperscriptBox["u", "3"]}], "-", 
           RowBox[{"20", " ", "u", " ", 
            SuperscriptBox["\[Kappa]", "2"]}], "+", 
-          RowBox[{"6", " ", "\[Xi]"}], "-", 
+          RowBox[{"6", " ", "\[Chi]eff"}], "-", 
           RowBox[{"\[Kappa]", " ", 
            RowBox[{"(", 
             RowBox[{"23", "+", 
-             RowBox[{"24", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "-", 
+             RowBox[{"24", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "-", 
           RowBox[{
            SuperscriptBox["S2", "2"], " ", "u", " ", 
            RowBox[{"(", 
@@ -1059,7 +1045,7 @@ Cell[BoxData[
              RowBox[{"8", " ", "u", " ", 
               RowBox[{"(", 
                RowBox[{"\[Kappa]", "+", 
-                RowBox[{"3", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}]}], 
+                RowBox[{"3", " ", "\[Chi]eff"}]}], ")"}]}]}], ")"}]}]}], 
          ")"}]}]}], ")"}]}], "-", 
     RowBox[{
      SuperscriptBox[
@@ -1073,7 +1059,7 @@ Cell[BoxData[
            SuperscriptBox["S2", "2"], " ", "u"}], ")"}]}], "+", "\[Kappa]", 
         "+", 
         RowBox[{"q", " ", "\[Kappa]"}], "-", 
-        RowBox[{"q", " ", "\[Xi]"}]}], ")"}], "2"], " ", 
+        RowBox[{"q", " ", "\[Chi]eff"}]}], ")"}], "2"], " ", 
      RowBox[{"(", 
       RowBox[{
        RowBox[{"16", " ", 
@@ -1091,7 +1077,8 @@ Cell[BoxData[
         SuperscriptBox[
          RowBox[{"(", 
           RowBox[{"\[Kappa]", "+", 
-           RowBox[{"q", " ", "\[Kappa]"}], "-", "\[Xi]"}], ")"}], "2"], " ", 
+           RowBox[{"q", " ", "\[Kappa]"}], "-", "\[Chi]eff"}], ")"}], "2"], 
+        " ", 
         RowBox[{"(", 
          RowBox[{"1", "+", 
           SuperscriptBox["q", "4"], "+", 
@@ -1099,15 +1086,15 @@ Cell[BoxData[
            RowBox[{"(", 
             RowBox[{
              RowBox[{
-              RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Xi]"}], ")"}]}], 
-          "+", 
+              RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Chi]eff"}], 
+            ")"}]}], "+", 
           RowBox[{"8", " ", 
            SuperscriptBox["q", "3"], " ", "u", " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{
-              RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Xi]"}], ")"}]}], 
-          "+", 
+              RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Chi]eff"}], 
+            ")"}]}], "+", 
           RowBox[{"2", " ", 
            SuperscriptBox["q", "2"], " ", 
            RowBox[{"(", 
@@ -1115,12 +1102,12 @@ Cell[BoxData[
              RowBox[{"-", "1"}], "+", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}], "+", 
              RowBox[{"8", " ", "u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
-                 RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Xi]"}], 
+                 RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Chi]eff"}], 
                ")"}]}]}], ")"}]}]}], ")"}]}], "+", 
        RowBox[{
         SuperscriptBox[
@@ -1139,12 +1126,12 @@ Cell[BoxData[
            RowBox[{"(", 
             RowBox[{"9", "+", 
              RowBox[{"24", " ", "u", " ", "\[Kappa]"}], "-", 
-             RowBox[{"4", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "-", 
+             RowBox[{"4", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "-", 
           RowBox[{"4", " ", "q", " ", 
            RowBox[{"(", 
             RowBox[{"9", "+", 
              RowBox[{"12", " ", "u", " ", "\[Kappa]"}], "+", 
-             RowBox[{"8", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+             RowBox[{"8", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["q", "2"], " ", 
            RowBox[{"(", 
@@ -1152,12 +1139,12 @@ Cell[BoxData[
              RowBox[{"-", "47"}], "+", 
              RowBox[{"16", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}], "-", 
+              SuperscriptBox["\[Chi]eff", "2"]}], "-", 
              RowBox[{"24", " ", "u", " ", 
               RowBox[{"(", 
                RowBox[{
-                RowBox[{"4", " ", "\[Kappa]"}], "+", "\[Xi]"}], ")"}]}]}], 
-            ")"}]}]}], ")"}]}], "-", 
+                RowBox[{"4", " ", "\[Kappa]"}], "+", "\[Chi]eff"}], ")"}]}]}],
+             ")"}]}]}], ")"}]}], "-", 
        RowBox[{
         RowBox[{"(", 
          RowBox[{
@@ -1176,19 +1163,19 @@ Cell[BoxData[
            RowBox[{"(", 
             RowBox[{
              RowBox[{"5", " ", "\[Kappa]"}], "-", 
-             RowBox[{"2", " ", "\[Xi]"}]}], ")"}]}], "-", 
+             RowBox[{"2", " ", "\[Chi]eff"}]}], ")"}]}], "-", 
           RowBox[{"2", " ", 
            SuperscriptBox["q", "5"], " ", "u", " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{"24", " ", "u", " ", 
               SuperscriptBox["\[Kappa]", "2"]}], "-", 
-             RowBox[{"5", " ", "\[Xi]"}], "+", 
+             RowBox[{"5", " ", "\[Chi]eff"}], "+", 
              RowBox[{"\[Kappa]", " ", 
               RowBox[{"(", 
                RowBox[{"8", "-", 
-                RowBox[{"8", " ", "u", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}], 
-          "+", 
+                RowBox[{"8", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}]}], 
+            ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["q", "4"], " ", 
            RowBox[{"(", 
@@ -1196,22 +1183,23 @@ Cell[BoxData[
              RowBox[{"-", "3"}], "+", 
              RowBox[{"32", " ", 
               SuperscriptBox["u", "3"], " ", "\[Kappa]", " ", 
-              SuperscriptBox["\[Xi]", "2"]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "40"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"18", " ", "\[Xi]"}]}], ")"}]}], "-", 
+                RowBox[{"18", " ", "\[Chi]eff"}]}], ")"}]}], "-", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"18", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "-", 
-                RowBox[{"5", " ", "\[Kappa]", " ", "\[Xi]"}], "-", 
+                RowBox[{"5", " ", "\[Kappa]", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"4", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
           RowBox[{
            SuperscriptBox["q", "2"], " ", 
            RowBox[{"(", 
@@ -1220,15 +1208,15 @@ Cell[BoxData[
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"19", " ", "\[Kappa]"}], "-", 
-                RowBox[{"9", " ", "\[Xi]"}]}], ")"}]}], "-", 
+                RowBox[{"9", " ", "\[Chi]eff"}]}], ")"}]}], "-", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"6", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "-", 
-                RowBox[{"\[Kappa]", " ", "\[Xi]"}], "+", 
-                SuperscriptBox["\[Xi]", "2"]}], ")"}]}]}], ")"}]}], "+", 
+                RowBox[{"\[Kappa]", " ", "\[Chi]eff"}], "+", 
+                SuperscriptBox["\[Chi]eff", "2"]}], ")"}]}]}], ")"}]}], "+", 
           RowBox[{"2", " ", 
            SuperscriptBox["q", "3"], " ", "u", " ", 
            RowBox[{"(", 
@@ -1240,18 +1228,18 @@ Cell[BoxData[
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "1"}], "+", 
-                RowBox[{"8", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"8", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"8", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
-             RowBox[{"\[Xi]", " ", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
+             RowBox[{"\[Chi]eff", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "1"}], "+", 
-                RowBox[{"12", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"12", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"16", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}]}], 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}]}], 
          ")"}]}]}], ")"}]}], "+", 
     RowBox[{
      RowBox[{"(", 
@@ -1296,11 +1284,11 @@ Cell[BoxData[
             RowBox[{
              RowBox[{"-", "22"}], "-", 
              RowBox[{"48", " ", "u", " ", "\[Kappa]"}], "+", 
-             RowBox[{"2", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "-", 
+             RowBox[{"2", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "-", 
           RowBox[{"q", " ", 
            RowBox[{"(", 
             RowBox[{"5", "+", 
-             RowBox[{"24", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+             RowBox[{"24", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["q", "2"], " ", 
            RowBox[{"(", 
@@ -1308,12 +1296,12 @@ Cell[BoxData[
              RowBox[{"-", "24"}], "+", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}], "-", 
+              SuperscriptBox["\[Chi]eff", "2"]}], "-", 
              RowBox[{"2", " ", "u", " ", 
               RowBox[{"(", 
                RowBox[{
-                RowBox[{"20", " ", "\[Kappa]"}], "+", "\[Xi]"}], ")"}]}]}], 
-            ")"}]}]}], ")"}]}], "+", 
+                RowBox[{"20", " ", "\[Kappa]"}], "+", "\[Chi]eff"}], 
+               ")"}]}]}], ")"}]}]}], ")"}]}], "+", 
        RowBox[{
         RowBox[{"(", 
          RowBox[{
@@ -1335,7 +1323,7 @@ Cell[BoxData[
            RowBox[{"(", 
             RowBox[{"6", "+", 
              RowBox[{"15", " ", "u", " ", "\[Kappa]"}], "-", 
-             RowBox[{"2", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+             RowBox[{"2", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
           RowBox[{"8", " ", "q", " ", 
            RowBox[{"(", 
             RowBox[{"3", "+", 
@@ -1344,39 +1332,40 @@ Cell[BoxData[
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"9", " ", "\[Kappa]"}], "+", 
-                RowBox[{"4", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"4", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"13", " ", "\[Kappa]"}], "+", 
-                RowBox[{"8", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}], "+", 
+                RowBox[{"8", " ", "\[Chi]eff"}]}], ")"}]}]}], ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["q", "4"], " ", 
            RowBox[{"(", 
             RowBox[{"33", "+", 
              RowBox[{"32", " ", 
               SuperscriptBox["u", "3"], " ", 
-              SuperscriptBox["\[Xi]", "2"], " ", 
+              SuperscriptBox["\[Chi]eff", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
-                 RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Xi]"}], 
+                 RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Chi]eff"}], 
                ")"}]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "40"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"28", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"28", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"18", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "-", 
-                RowBox[{"17", " ", "\[Kappa]", " ", "\[Xi]"}], "-", 
+                RowBox[{"17", " ", "\[Kappa]", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"18", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
           RowBox[{
            SuperscriptBox["q", "6"], " ", 
            RowBox[{"(", 
@@ -1385,16 +1374,16 @@ Cell[BoxData[
              RowBox[{"50", " ", "u", " ", 
               RowBox[{"(", 
                RowBox[{
-                RowBox[{"2", " ", "\[Kappa]"}], "-", "\[Xi]"}], ")"}]}], "+", 
-             
+                RowBox[{"2", " ", "\[Kappa]"}], "-", "\[Chi]eff"}], ")"}]}], 
+             "+", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"36", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "-", 
-                RowBox[{"3", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
-                SuperscriptBox["\[Xi]", "2"]}], ")"}]}]}], ")"}]}], "-", 
+                RowBox[{"3", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
+                SuperscriptBox["\[Chi]eff", "2"]}], ")"}]}]}], ")"}]}], "-", 
           RowBox[{"8", " ", 
            SuperscriptBox["q", "5"], " ", 
            RowBox[{"(", 
@@ -1402,17 +1391,17 @@ Cell[BoxData[
              RowBox[{"-", "9"}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "3"], " ", 
-              SuperscriptBox["\[Xi]", "2"], " ", 
+              SuperscriptBox["\[Chi]eff", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
-                RowBox[{"3", " ", "\[Kappa]"}], "+", "\[Xi]"}], ")"}]}], "+", 
-             
+                RowBox[{"3", " ", "\[Kappa]"}], "+", "\[Chi]eff"}], ")"}]}], 
+             "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "46"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"3", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"3", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
@@ -1420,30 +1409,32 @@ Cell[BoxData[
                 RowBox[{
                  RowBox[{"-", "72"}], " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"6", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"6", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"3", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "-", 
           RowBox[{"4", " ", 
            SuperscriptBox["q", "3"], " ", 
            RowBox[{"(", 
             RowBox[{"18", "+", 
              RowBox[{"24", " ", 
               SuperscriptBox["u", "3"], " ", 
-              SuperscriptBox["\[Xi]", "3"]}], "+", 
+              SuperscriptBox["\[Chi]eff", "3"]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"103", " ", "\[Kappa]"}], "+", 
-                RowBox[{"12", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"12", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"9", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"10", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"10", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"3", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
           RowBox[{
            SuperscriptBox["q", "2"], " ", 
            RowBox[{"(", 
@@ -1451,22 +1442,22 @@ Cell[BoxData[
              RowBox[{"-", "31"}], "-", 
              RowBox[{"32", " ", 
               SuperscriptBox["u", "3"], " ", "\[Kappa]", " ", 
-              SuperscriptBox["\[Xi]", "2"]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "76"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"22", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"22", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"16", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"9", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"4", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}]}], 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}]}], 
          ")"}]}], "-", 
        RowBox[{
         RowBox[{"(", 
@@ -1487,13 +1478,13 @@ Cell[BoxData[
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"12", " ", "\[Kappa]"}], "-", 
-                RowBox[{"5", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"5", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"2", " ", 
               SuperscriptBox["u", "2"], " ", "\[Kappa]", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"15", " ", "\[Kappa]"}], "-", 
-                RowBox[{"4", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}], "-", 
+                RowBox[{"4", " ", "\[Chi]eff"}]}], ")"}]}]}], ")"}]}], "-", 
           RowBox[{"2", " ", 
            SuperscriptBox["q", "9"], " ", 
            RowBox[{"(", 
@@ -1502,13 +1493,13 @@ Cell[BoxData[
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"12", " ", "\[Kappa]"}], "-", 
-                RowBox[{"5", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"5", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"2", " ", 
               SuperscriptBox["u", "2"], " ", "\[Kappa]", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"15", " ", "\[Kappa]"}], "-", 
-                RowBox[{"4", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}], "+", 
+                RowBox[{"4", " ", "\[Chi]eff"}]}], ")"}]}]}], ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["q", "2"], " ", 
            RowBox[{"(", 
@@ -1521,9 +1512,9 @@ Cell[BoxData[
                RowBox[{
                 RowBox[{"24", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "-", 
-                RowBox[{"3", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"3", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"2", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
@@ -1531,9 +1522,10 @@ Cell[BoxData[
                 RowBox[{
                  RowBox[{"-", "4"}], " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"4", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"4", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"22", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
           RowBox[{
            SuperscriptBox["q", "8"], " ", 
            RowBox[{"(", 
@@ -1546,9 +1538,9 @@ Cell[BoxData[
                RowBox[{
                 RowBox[{"24", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "-", 
-                RowBox[{"3", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"3", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"2", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
@@ -1556,9 +1548,10 @@ Cell[BoxData[
                 RowBox[{
                  RowBox[{"-", "4"}], " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"4", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"4", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"22", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
           RowBox[{"4", " ", 
            SuperscriptBox["q", "5"], " ", 
            RowBox[{"(", 
@@ -1569,17 +1562,17 @@ Cell[BoxData[
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "36"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"15", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"15", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "4"], " ", 
-              SuperscriptBox["\[Xi]", "2"], " ", 
+              SuperscriptBox["\[Chi]eff", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"4", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"6", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"6", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"5", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
@@ -1587,9 +1580,9 @@ Cell[BoxData[
                 RowBox[{
                  RowBox[{"-", "86"}], " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"20", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"20", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"24", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "-", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "3"], " ", 
               RowBox[{"(", 
@@ -1597,10 +1590,10 @@ Cell[BoxData[
                 RowBox[{"18", " ", 
                  SuperscriptBox["\[Kappa]", "3"]}], "+", 
                 RowBox[{"6", " ", 
-                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Xi]"}], "-", 
+                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Chi]eff"}], "-", 
                 RowBox[{"12", " ", "\[Kappa]", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "-", 
-                SuperscriptBox["\[Xi]", "3"]}], ")"}]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "-", 
+                SuperscriptBox["\[Chi]eff", "3"]}], ")"}]}]}], ")"}]}], "-", 
           RowBox[{"8", " ", 
            SuperscriptBox["q", "3"], " ", 
            RowBox[{"(", 
@@ -1608,17 +1601,17 @@ Cell[BoxData[
              RowBox[{"-", "1"}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "4"], " ", "\[Kappa]", " ", 
-              SuperscriptBox["\[Xi]", "2"], " ", 
+              SuperscriptBox["\[Chi]eff", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"3", " ", "\[Kappa]"}], "+", 
-                RowBox[{"2", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"2", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "12"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"5", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"5", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
@@ -1626,9 +1619,9 @@ Cell[BoxData[
                 RowBox[{
                  RowBox[{"-", "29"}], " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"7", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"7", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"6", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "3"], " ", 
               RowBox[{"(", 
@@ -1637,10 +1630,10 @@ Cell[BoxData[
                  RowBox[{"-", "13"}], " ", 
                  SuperscriptBox["\[Kappa]", "3"]}], "+", 
                 RowBox[{"3", " ", 
-                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Xi]"}], "+", 
+                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Chi]eff"}], "+", 
                 RowBox[{"3", " ", "\[Kappa]", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
-                SuperscriptBox["\[Xi]", "3"]}], ")"}]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
+                SuperscriptBox["\[Chi]eff", "3"]}], ")"}]}]}], ")"}]}], "-", 
           RowBox[{"8", " ", 
            SuperscriptBox["q", "7"], " ", 
            RowBox[{"(", 
@@ -1648,17 +1641,17 @@ Cell[BoxData[
              RowBox[{"-", "1"}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "4"], " ", "\[Kappa]", " ", 
-              SuperscriptBox["\[Xi]", "2"], " ", 
+              SuperscriptBox["\[Chi]eff", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"3", " ", "\[Kappa]"}], "+", 
-                RowBox[{"2", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"2", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "12"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"5", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"5", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
@@ -1666,9 +1659,9 @@ Cell[BoxData[
                 RowBox[{
                  RowBox[{"-", "29"}], " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"7", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"7", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"6", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "3"], " ", 
               RowBox[{"(", 
@@ -1677,10 +1670,10 @@ Cell[BoxData[
                  RowBox[{"-", "13"}], " ", 
                  SuperscriptBox["\[Kappa]", "3"]}], "+", 
                 RowBox[{"3", " ", 
-                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Xi]"}], "+", 
+                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Chi]eff"}], "+", 
                 RowBox[{"3", " ", "\[Kappa]", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
-                SuperscriptBox["\[Xi]", "3"]}], ")"}]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
+                SuperscriptBox["\[Chi]eff", "3"]}], ")"}]}]}], ")"}]}], "-", 
           RowBox[{"2", " ", 
            SuperscriptBox["q", "4"], " ", 
            RowBox[{"(", 
@@ -1689,13 +1682,13 @@ Cell[BoxData[
              RowBox[{"2", " ", "u", " ", "\[Kappa]"}], "+", 
              RowBox[{"16", " ", 
               SuperscriptBox["u", "4"], " ", 
-              SuperscriptBox["\[Xi]", "2"], " ", 
+              SuperscriptBox["\[Chi]eff", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 SuperscriptBox["\[Kappa]", "2"], "-", 
-                RowBox[{"\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"3", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
@@ -1703,9 +1696,9 @@ Cell[BoxData[
                 RowBox[{
                  RowBox[{"-", "2"}], " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"2", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"2", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"11", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "3"], " ", 
               RowBox[{"(", 
@@ -1713,11 +1706,12 @@ Cell[BoxData[
                 RowBox[{"8", " ", 
                  SuperscriptBox["\[Kappa]", "3"]}], "+", 
                 RowBox[{"21", " ", 
-                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Xi]"}], "-", 
+                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Chi]eff"}], "-", 
                 RowBox[{"10", " ", "\[Kappa]", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
                 RowBox[{"2", " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}]}], ")"}]}], 
+          "-", 
           RowBox[{"2", " ", 
            SuperscriptBox["q", "6"], " ", 
            RowBox[{"(", 
@@ -1726,13 +1720,13 @@ Cell[BoxData[
              RowBox[{"2", " ", "u", " ", "\[Kappa]"}], "+", 
              RowBox[{"16", " ", 
               SuperscriptBox["u", "4"], " ", 
-              SuperscriptBox["\[Xi]", "2"], " ", 
+              SuperscriptBox["\[Chi]eff", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 SuperscriptBox["\[Kappa]", "2"], "-", 
-                RowBox[{"\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"3", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
@@ -1740,9 +1734,9 @@ Cell[BoxData[
                 RowBox[{
                  RowBox[{"-", "2"}], " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"2", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"2", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"11", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "3"], " ", 
               RowBox[{"(", 
@@ -1750,17 +1744,17 @@ Cell[BoxData[
                 RowBox[{"8", " ", 
                  SuperscriptBox["\[Kappa]", "3"]}], "+", 
                 RowBox[{"21", " ", 
-                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Xi]"}], "-", 
+                 SuperscriptBox["\[Kappa]", "2"], " ", "\[Chi]eff"}], "-", 
                 RowBox[{"10", " ", "\[Kappa]", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
                 RowBox[{"2", " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}]}], ")"}]}]}], 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}]}], ")"}]}]}], 
          ")"}]}], "+", 
        RowBox[{
         SuperscriptBox["q", "2"], " ", 
         RowBox[{"(", 
          RowBox[{"\[Kappa]", "+", 
-          RowBox[{"q", " ", "\[Kappa]"}], "-", "\[Xi]"}], ")"}], " ", 
+          RowBox[{"q", " ", "\[Kappa]"}], "-", "\[Chi]eff"}], ")"}], " ", 
         RowBox[{"(", 
          RowBox[{
           RowBox[{"16", " ", "q", " ", 
@@ -1786,143 +1780,145 @@ Cell[BoxData[
              RowBox[{"q", " ", 
               RowBox[{"(", 
                RowBox[{"5", "-", 
-                RowBox[{"20", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"20", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "4"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "1"}], "+", 
-                RowBox[{"2", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"2", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"2", " ", 
               SuperscriptBox["q", "3"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "5"}], "-", 
-                RowBox[{"2", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"2", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"4", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "-", 
              RowBox[{"2", " ", 
               SuperscriptBox["q", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "1"}], "+", 
-                RowBox[{"13", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"13", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"8", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
           RowBox[{
            RowBox[{"(", 
             RowBox[{"1", "+", "q"}], ")"}], " ", "\[Kappa]", " ", 
            RowBox[{"(", 
             RowBox[{"1", "+", 
              SuperscriptBox["q", "7"], "-", 
-             RowBox[{"2", " ", "u", " ", "\[Xi]"}], "+", 
+             RowBox[{"2", " ", "u", " ", "\[Chi]eff"}], "+", 
              RowBox[{
               SuperscriptBox["q", "6"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "1"}], "+", 
-                RowBox[{"8", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"8", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "3"], " ", 
               RowBox[{"(", 
                RowBox[{"3", "-", 
-                RowBox[{"52", " ", "u", " ", "\[Xi]"}], "-", 
+                RowBox[{"52", " ", "u", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"88", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{"q", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "1"}], "+", 
-                RowBox[{"26", " ", "u", " ", "\[Xi]"}], "-", 
+                RowBox[{"26", " ", "u", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"16", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "5"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "3"}], "+", 
-                RowBox[{"26", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"26", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"8", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "-", 
              RowBox[{
               SuperscriptBox["q", "2"], " ", 
               RowBox[{"(", 
                RowBox[{"3", "-", 
-                RowBox[{"12", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"12", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"8", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
                 RowBox[{"32", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}], "-", 
              RowBox[{
               SuperscriptBox["q", "4"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "3"}], "+", 
-                RowBox[{"18", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"18", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"88", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
                 RowBox[{"32", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}]}], ")"}]}], "+", 
-          RowBox[{"\[Xi]", " ", 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
+          RowBox[{"\[Chi]eff", " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{"-", "1"}], "+", "q", "-", 
              SuperscriptBox["q", "7"], "-", 
-             RowBox[{"10", " ", "q", " ", "u", " ", "\[Xi]"}], "+", 
+             RowBox[{"10", " ", "q", " ", "u", " ", "\[Chi]eff"}], "+", 
              RowBox[{
               SuperscriptBox["q", "6"], " ", 
               RowBox[{"(", 
                RowBox[{"1", "-", 
-                RowBox[{"6", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"6", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "2"], " ", 
               RowBox[{"(", 
                RowBox[{"3", "-", 
-                RowBox[{"6", " ", "u", " ", "\[Xi]"}], "-", 
+                RowBox[{"6", " ", "u", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"32", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "5"], " ", 
               RowBox[{"(", 
                RowBox[{"3", "-", 
-                RowBox[{"10", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"10", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"8", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "3"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "3"}], "+", 
-                RowBox[{"20", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"20", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"24", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "-", 
                 RowBox[{"32", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "4"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "3"}], "+", 
-                RowBox[{"12", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"12", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"64", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
                 RowBox[{"64", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}]}], ")"}]}]}], 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}]}], ")"}]}]}], 
          ")"}]}]}], ")"}]}], "-", 
     RowBox[{
      SuperscriptBox[
@@ -1962,50 +1958,50 @@ Cell[BoxData[
            RowBox[{"(", 
             RowBox[{"7", "+", 
              RowBox[{"36", " ", "u", " ", "\[Kappa]"}], "+", 
-             RowBox[{"8", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+             RowBox[{"8", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
           RowBox[{"2", " ", 
            SuperscriptBox["q", "5"], " ", 
            RowBox[{"(", 
             RowBox[{"7", "+", 
              RowBox[{"36", " ", "u", " ", "\[Kappa]"}], "+", 
-             RowBox[{"8", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+             RowBox[{"8", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["q", "2"], " ", 
            RowBox[{"(", 
             RowBox[{"77", "-", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}], "+", 
              RowBox[{"36", " ", "u", " ", 
               RowBox[{"(", 
                RowBox[{
-                RowBox[{"4", " ", "\[Kappa]"}], "+", "\[Xi]"}], ")"}]}]}], 
-            ")"}]}], "+", 
+                RowBox[{"4", " ", "\[Kappa]"}], "+", "\[Chi]eff"}], ")"}]}]}],
+             ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["q", "4"], " ", 
            RowBox[{"(", 
             RowBox[{"77", "-", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}], "+", 
              RowBox[{"36", " ", "u", " ", 
               RowBox[{"(", 
                RowBox[{
-                RowBox[{"4", " ", "\[Kappa]"}], "+", "\[Xi]"}], ")"}]}]}], 
-            ")"}]}], "+", 
+                RowBox[{"4", " ", "\[Kappa]"}], "+", "\[Chi]eff"}], ")"}]}]}],
+             ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["q", "3"], " ", 
            RowBox[{"(", 
             RowBox[{"134", "-", 
              RowBox[{"32", " ", 
               SuperscriptBox["u", "2"], " ", 
-              SuperscriptBox["\[Xi]", "2"]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}], "+", 
              RowBox[{"8", " ", "u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"18", " ", "\[Kappa]"}], "+", 
-                RowBox[{"5", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}]}], ")"}]}], 
-       "+", 
+                RowBox[{"5", " ", "\[Chi]eff"}]}], ")"}]}]}], ")"}]}]}], 
+         ")"}]}], "+", 
        RowBox[{
         RowBox[{"(", 
          RowBox[{
@@ -2023,7 +2019,7 @@ Cell[BoxData[
            RowBox[{"(", 
             RowBox[{"6", "+", 
              RowBox[{"15", " ", "u", " ", "\[Kappa]"}], "-", 
-             RowBox[{"2", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+             RowBox[{"2", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
           RowBox[{"8", " ", 
            SuperscriptBox["q", "7"], " ", 
            RowBox[{"(", 
@@ -2033,39 +2029,40 @@ Cell[BoxData[
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"9", " ", "\[Kappa]"}], "+", 
-                RowBox[{"4", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"4", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"13", " ", "\[Kappa]"}], "+", 
-                RowBox[{"8", " ", "\[Xi]"}]}], ")"}]}]}], ")"}]}], "+", 
+                RowBox[{"8", " ", "\[Chi]eff"}]}], ")"}]}]}], ")"}]}], "+", 
           RowBox[{
            SuperscriptBox["q", "4"], " ", 
            RowBox[{"(", 
             RowBox[{"33", "+", 
              RowBox[{"32", " ", 
               SuperscriptBox["u", "3"], " ", 
-              SuperscriptBox["\[Xi]", "2"], " ", 
+              SuperscriptBox["\[Chi]eff", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
-                 RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Xi]"}], 
+                 RowBox[{"-", "2"}], " ", "\[Kappa]"}], "+", "\[Chi]eff"}], 
                ")"}]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "40"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"28", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"28", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"18", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "-", 
-                RowBox[{"17", " ", "\[Kappa]", " ", "\[Xi]"}], "-", 
+                RowBox[{"17", " ", "\[Kappa]", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"18", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
           RowBox[{
            SuperscriptBox["q", "2"], " ", 
            RowBox[{"(", 
@@ -2074,16 +2071,16 @@ Cell[BoxData[
              RowBox[{"50", " ", "u", " ", 
               RowBox[{"(", 
                RowBox[{
-                RowBox[{"2", " ", "\[Kappa]"}], "-", "\[Xi]"}], ")"}]}], "+", 
-             
+                RowBox[{"2", " ", "\[Kappa]"}], "-", "\[Chi]eff"}], ")"}]}], 
+             "+", 
              RowBox[{"8", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"36", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "-", 
-                RowBox[{"3", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
-                SuperscriptBox["\[Xi]", "2"]}], ")"}]}]}], ")"}]}], "-", 
+                RowBox[{"3", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
+                SuperscriptBox["\[Chi]eff", "2"]}], ")"}]}]}], ")"}]}], "-", 
           RowBox[{"8", " ", 
            SuperscriptBox["q", "3"], " ", 
            RowBox[{"(", 
@@ -2091,17 +2088,17 @@ Cell[BoxData[
              RowBox[{"-", "9"}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "3"], " ", 
-              SuperscriptBox["\[Xi]", "2"], " ", 
+              SuperscriptBox["\[Chi]eff", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
-                RowBox[{"3", " ", "\[Kappa]"}], "+", "\[Xi]"}], ")"}]}], "+", 
-             
+                RowBox[{"3", " ", "\[Kappa]"}], "+", "\[Chi]eff"}], ")"}]}], 
+             "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "46"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"3", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"3", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
@@ -2109,30 +2106,32 @@ Cell[BoxData[
                 RowBox[{
                  RowBox[{"-", "72"}], " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"6", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"6", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"3", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "-", 
           RowBox[{"4", " ", 
            SuperscriptBox["q", "5"], " ", 
            RowBox[{"(", 
             RowBox[{"18", "+", 
              RowBox[{"24", " ", 
               SuperscriptBox["u", "3"], " ", 
-              SuperscriptBox["\[Xi]", "3"]}], "+", 
+              SuperscriptBox["\[Chi]eff", "3"]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"103", " ", "\[Kappa]"}], "+", 
-                RowBox[{"12", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"12", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"4", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"9", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"10", " ", "\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"10", " ", "\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"3", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
           RowBox[{
            SuperscriptBox["q", "6"], " ", 
            RowBox[{"(", 
@@ -2140,22 +2139,22 @@ Cell[BoxData[
              RowBox[{"-", "31"}], "-", 
              RowBox[{"32", " ", 
               SuperscriptBox["u", "3"], " ", "\[Kappa]", " ", 
-              SuperscriptBox["\[Xi]", "2"]}], "+", 
+              SuperscriptBox["\[Chi]eff", "2"]}], "+", 
              RowBox[{"u", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{
                  RowBox[{"-", "76"}], " ", "\[Kappa]"}], "+", 
-                RowBox[{"22", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"22", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"16", " ", 
               SuperscriptBox["u", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"9", " ", 
                  SuperscriptBox["\[Kappa]", "2"]}], "+", 
-                RowBox[{"\[Kappa]", " ", "\[Xi]"}], "+", 
+                RowBox[{"\[Kappa]", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"4", " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}]}], 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}]}], 
          ")"}]}], "+", 
        RowBox[{
         SuperscriptBox["q", "2"], " ", 
@@ -2187,167 +2186,169 @@ Cell[BoxData[
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "1"}], "+", 
-                RowBox[{"4", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"4", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"2", " ", 
               SuperscriptBox["q", "5"], " ", 
               RowBox[{"(", 
                RowBox[{"15", "+", 
-                RowBox[{"8", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"8", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "2"], " ", 
               RowBox[{"(", 
                RowBox[{"10", "+", 
-                RowBox[{"36", " ", "u", " ", "\[Xi]"}], "-", 
+                RowBox[{"36", " ", "u", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"48", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "-", 
              RowBox[{
               SuperscriptBox["q", "4"], " ", 
               RowBox[{"(", 
                RowBox[{"11", "+", 
-                RowBox[{"60", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"60", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"8", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "3"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "60"}], "+", 
-                RowBox[{"80", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"80", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"48", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
           RowBox[{"2", " ", 
            RowBox[{"(", 
             RowBox[{"1", "+", "q"}], ")"}], " ", "\[Kappa]", " ", 
            RowBox[{"(", 
             RowBox[{"1", "+", 
              SuperscriptBox["q", "7"], "-", 
-             RowBox[{"3", " ", "u", " ", "\[Xi]"}], "+", 
+             RowBox[{"3", " ", "u", " ", "\[Chi]eff"}], "+", 
              RowBox[{
               SuperscriptBox["q", "6"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "1"}], "+", 
-                RowBox[{"16", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"16", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{"q", " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "1"}], "+", 
-                RowBox[{"49", " ", "u", " ", "\[Xi]"}], "-", 
+                RowBox[{"49", " ", "u", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"48", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "5"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "3"}], "+", 
-                RowBox[{"49", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"49", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"40", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "2"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "3"}], "+", 
-                RowBox[{"22", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"22", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"80", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "-", 
                 RowBox[{"48", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}], "-", 
              RowBox[{
               SuperscriptBox["q", "4"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "3"}], "+", 
-                RowBox[{"35", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"35", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"104", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
                 RowBox[{"48", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "3"], " ", 
               RowBox[{"(", 
                RowBox[{"3", "-", 
-                RowBox[{"98", " ", "u", " ", "\[Xi]"}], "-", 
+                RowBox[{"98", " ", "u", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"16", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
                 RowBox[{"80", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}]}], ")"}]}], "+", 
-          RowBox[{"\[Xi]", " ", 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}]}], ")"}]}], 
+          "+", 
+          RowBox[{"\[Chi]eff", " ", 
            RowBox[{"(", 
             RowBox[{
              RowBox[{"-", "2"}], "-", 
              RowBox[{"2", " ", 
               SuperscriptBox["q", "7"]}], "+", 
-             RowBox[{"u", " ", "\[Xi]"}], "+", 
+             RowBox[{"u", " ", "\[Chi]eff"}], "+", 
              RowBox[{
               SuperscriptBox["q", "6"], " ", 
               RowBox[{"(", 
                RowBox[{"2", "-", 
-                RowBox[{"23", " ", "u", " ", "\[Xi]"}]}], ")"}]}], "+", 
+                RowBox[{"23", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "5"], " ", 
               RowBox[{"(", 
                RowBox[{"6", "-", 
-                RowBox[{"40", " ", "u", " ", "\[Xi]"}], "-", 
+                RowBox[{"40", " ", "u", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"40", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{"q", " ", 
               RowBox[{"(", 
                RowBox[{"2", "-", 
-                RowBox[{"40", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"40", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"8", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "3"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "6"}], "+", 
-                RowBox[{"80", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"80", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"48", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "-", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "-", 
                 RowBox[{"96", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "2"], " ", 
               RowBox[{"(", 
                RowBox[{"6", "-", 
-                RowBox[{"25", " ", "u", " ", "\[Xi]"}], "-", 
+                RowBox[{"25", " ", "u", " ", "\[Chi]eff"}], "-", 
                 RowBox[{"104", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
                 RowBox[{"16", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}], "+", 
              RowBox[{
               SuperscriptBox["q", "4"], " ", 
               RowBox[{"(", 
                RowBox[{
                 RowBox[{"-", "6"}], "+", 
-                RowBox[{"47", " ", "u", " ", "\[Xi]"}], "+", 
+                RowBox[{"47", " ", "u", " ", "\[Chi]eff"}], "+", 
                 RowBox[{"120", " ", 
                  SuperscriptBox["u", "2"], " ", 
-                 SuperscriptBox["\[Xi]", "2"]}], "+", 
+                 SuperscriptBox["\[Chi]eff", "2"]}], "+", 
                 RowBox[{"96", " ", 
                  SuperscriptBox["u", "3"], " ", 
-                 SuperscriptBox["\[Xi]", "3"]}]}], ")"}]}]}], ")"}]}]}], 
+                 SuperscriptBox["\[Chi]eff", "3"]}]}], ")"}]}]}], ")"}]}]}], 
          ")"}]}]}], ")"}]}]}], ")"}]}]], "Output",
  CellLabel->
-  "Out[22]=",ExpressionUUID->"9ab96036-2089-4f04-ae7e-cb5a9043b7b1"]
+  "Out[22]=",ExpressionUUID->"75c360b3-3251-4434-8c86-9902fdd0ea93"]
 }, Open  ]]
 }, Open  ]],
 
@@ -2356,9 +2357,7 @@ Cell[CellGroupData[{
 Cell["\<\
 Extract coefficients. Sort terms in powers of u to improve numerical \
 stability.\
-\>", "Subsubsection",ExpressionUUID->"46bedb19-5013-4603-9087-af18215161f9"],
-
-Cell[CellGroupData[{
+\>", "Subsubsection",ExpressionUUID->"945e8db9-eec2-4f56-9834-17adb2a783da"],
 
 Cell[BoxData[{
  RowBox[{
@@ -2367,229 +2366,210 @@ Cell[BoxData[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"discr", ",", "\[Kappa]", ",", "5"}], "]"}], " ", "//", 
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff5\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[23]:=",ExpressionUUID->"6635d524-314b-4594-bb4e-07a3893bb4e2"],
-
-Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff5 = \
--256 * q**3 * ((1 + q))**6 * u\"\>"], "Output",
- CellLabel->
-  "Out[24]=",ExpressionUUID->"fc3609a0-03dc-4403-ba98-4201075a4f28"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{
   RowBox[{"kappacoeff4", " ", "=", " ", 
    RowBox[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"discr", ",", "\[Kappa]", ",", "4"}], "]"}], " ", "//", 
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff4\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[25]:=",ExpressionUUID->"6c8a0fd5-5bd9-4fbd-a0f6-303ca9a0b940"],
-
-Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff4 = 16 \
-* q**2 * ((1 + q))**4 * (((-1 + q**2))**2 + (-16 * ((1 + q))**2 * (q * (-5 + \
-3 * q) * S1**2 + (3 + -5 * q) * S2**2) * u**2 + (40 * q * ((1 + q))**2 * u * \
-xi + 16 * q**2 * u**2 * xi**2)))\"\>"], "Output",
- CellLabel->
-  "Out[26]=",ExpressionUUID->"dbe59583-edd0-4969-a141-9da96dd9f29f"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{
   RowBox[{"kappacoeff3", " ", "=", " ", 
    RowBox[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"discr", ",", "\[Kappa]", ",", "3"}], "]"}], " ", "//", 
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff3\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[27]:=",ExpressionUUID->"fb6278e0-4aa6-4add-9edc-7558be694823"],
-
-Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = -32 \
-* q * ((1 + q))**4 * (2 * q**6 * S1**2 * u * (-5 + 12 * S1**2 * u**2) + (2 * \
-S2**2 * u * (-5 + 12 * S2**2 * u**2) + (2 * q**2 * u * (40 * S1**4 * u**2 + \
-(-44 * S2**4 * u**2 + (8 * xi**2 + (S1**2 * (-5 + (-8 * S2**2 * u**2 + 40 * u \
-* xi)) + -2 * S2**2 * (-5 + 4 * u * xi * (1 + u * xi)))))) + (2 * q**3 * (32 \
-* S1**4 * u**3 + (32 * S2**4 * u**3 + (xi * (-1 + 8 * u * xi * (3 + u * xi)) \
-+ (2 * S2**2 * u * (-1 + u * xi * (17 + 8 * u * xi)) + 2 * S1**2 * u * (-1 + \
-(40 * S2**2 * u**2 + u * xi * (17 + 8 * u * xi))))))) + (q * (xi + 2 * u * \
-(S1**2 * (1 + -48 * S2**2 * u**2) + S2**2 * (1 + -2 * u * (12 * S2**2 * u + \
-xi)))) + (q**5 * (xi + 2 * u * (S2**2 + S1**2 * (1 + -2 * u * (12 * (S1**2 + \
-2 * S2**2) * u + xi)))) + -2 * q**4 * u * (5 * S2**2 + (44 * S1**4 * u**2 + \
-(-8 * (5 * S2**4 * u**2 + (5 * S2**2 * u * xi + xi**2)) + 2 * S1**2 * (-5 + 4 \
-* u * (xi + u * (S2**2 + xi**2))))))))))))\"\>"], "Output",
- CellLabel->
-  "Out[28]=",ExpressionUUID->"6eaa72b8-a744-4d65-9188-8e94c737bdbd"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{
   RowBox[{"kappacoeff2", " ", "=", " ", 
    RowBox[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"discr", ",", "\[Kappa]", ",", "2"}], "]"}], " ", "//", 
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff2\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[29]:=",ExpressionUUID->"a33fd552-0d70-4f29-9d23-4d5ead8e51f9"],
-
-Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = -16 \
-* ((1 + q))**2 * (16 * (-1 + q) * q**3 * ((1 + q))**4 * (10 + (-8 + q) * q) * \
-S1**6 * u**4 + (-16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 + (-1 * \
-((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + (8 * \
-(-4 + q) * q * (1 + q) * u * xi + 16 * q**2 * u**2 * xi**2)) + (-1 * q**2 * \
-(((1 + q) * S2**2 * u + q * xi))**2 * ((-1 + q) * ((1 + q))**2 * (-1 + (q + \
-48 * S2**2 * u**2)) + (8 * q * (1 + q) * (5 + q) * u * xi + 16 * q**2 * u**2 \
-* xi**2)) + (2 * q**2 * ((1 + q))**2 * S1**4 * u**2 * ((-1 + q) * ((1 + \
-q))**2 * ((-1 + q) * (-3 + (30 * q + 4 * q**2)) + -72 * (2 + (-2 + q) * q) * \
-S2**2 * u**2) + (4 * q * (1 + q) * (-30 + q * (39 + q * (-19 + 4 * q))) * u * \
-xi + -8 * q**2 * (6 + (-6 + q) * q) * u**2 * xi**2)) + (-4 * q * (-1 * (1 + \
-q) * S2**2 * u + -1 * q * xi) * (-1 * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * \
-u * (-10 + (q + 24 * S2**2 * u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 * (-1 \
-+ (q + 4 * (1 + 2 * q) * S2**2 * u**2)) * xi + (-8 * q**2 * (1 + q) * u * (2 \
-+ (q + 2 * (-1 + q) * S2**2 * u**2)) * xi**2 + -16 * q**3 * u**2 * xi**3))) + \
-(q * (1 + q) * S1**2 * ((-1 + q) * ((1 + q))**3 * (((-1 + q))**3 * q + (4 * \
-(-1 + q) * (15 + q * (-29 + 15 * q)) * S2**2 * u**2 + 144 * (1 + 2 * (-1 + q) \
-* q) * S2**4 * u**4)) + (2 * q * ((1 + q))**2 * u * (((-1 + q))**2 * (-3 + q \
-* (23 + 4 * q)) + 12 * (1 + q) * (1 + q**2) * S2**2 * u**2) * xi + (8 * q**2 \
-* (1 + q) * u**2 * (-12 + (-2 * q + (-11 * q**2 + (q**3 + 4 * (3 + q * (-5 + \
-3 * q)) * S2**2 * u**2)))) * xi**2 + -32 * q**3 * (3 + (-1 + q) * q) * u**3 * \
-xi**3))) + (S2**2 * (((-1 + q**2))**4 + (2 * ((-1 + q))**2 * q * ((1 + q))**3 \
-* (4 + 5 * q) * u * xi + (8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * \
-u**2 * xi**2 + 32 * q**3 * (-1 + q**2) * u**3 * xi**3))) + -1 * q**2 * xi**2 \
-* (1 + q * (8 * u * xi + q * (-2 + (16 * u * xi + ((q + 4 * u * \
-xi))**2))))))))))))\"\>"], "Output",
- CellLabel->
-  "Out[30]=",ExpressionUUID->"628cc365-7dd4-4ab1-a9b9-3148eed73ef2"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{
   RowBox[{"kappacoeff1", " ", "=", " ", 
    RowBox[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"discr", ",", "\[Kappa]", ",", "1"}], "]"}], " ", "//", 
     "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff1\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[31]:=",ExpressionUUID->"bccaacb5-cef1-4bf4-8bdf-9aff873c6e9b"],
-
-Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = -16 \
-* (1 + q) * (-16 * ((-1 + q))**2 * q**3 * ((1 + q))**5 * (-5 + 2 * q) * S1**8 \
-* u**5 + (-4 * (-1 + q) * q**2 * ((1 + q))**3 * S1**6 * u**3 * ((-1 + q) * \
-((1 + q))**2 * (-1 + (15 * q + (4 * q**2 + 8 * (6 + (-1 + q) * q) * S2**2 * \
-u**2))) + (2 * q * (1 + q) * (20 + q * (-29 + 12 * q)) * u * xi + -8 * (-2 + \
-q) * q**2 * u**2 * xi**2)) + (-2 * q * (((1 + q) * S2**2 * u + q * xi))**2 * \
-(-1 * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * u * (-10 + (q + 24 * S2**2 * \
-u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 * (-1 + (q + 4 * (1 + 2 * q) * \
-S2**2 * u**2)) * xi + (-8 * q**2 * (1 + q) * u * (2 + (q + 2 * (-1 + q) * \
-S2**2 * u**2)) * xi**2 + -16 * q**3 * u**2 * xi**3))) + (-2 * q * ((1 + \
-q))**2 * S1**4 * u * (((-1 + q))**2 * ((1 + q))**3 * (((-1 + q))**2 * q + (2 \
-* (15 + q * (-55 + 2 * q * (9 + 2 * q))) * S2**2 * u**2 + -72 * (1 + q**2) * \
-S2**4 * u**4)) + ((-1 + q) * q * ((1 + q))**2 * u * (3 + (-52 * q + (33 * \
-q**2 + (16 * q**3 + 4 * (-3 + 2 * q**2 * (-7 + 4 * q)) * S2**2 * u**2)))) * \
-xi + (-8 * q**2 * (1 + q) * u**2 * (6 + (-16 * q + (18 * q**2 + (-5 * q**3 + \
-2 * (-1 + q) * (3 + (-1 + q) * q) * S2**2 * u**2)))) * xi**2 + -16 * q**3 * \
-(3 + q * (-5 + 3 * q)) * u**3 * xi**3))) + (S1**2 * (-32 * ((-1 + q))**2 * \
-((1 + q))**5 * (1 + q * (-1 + 6 * q)) * S2**6 * u**5 + (-4 * (-1 + q) * ((1 + \
-q))**3 * S2**4 * u**3 * ((-1 + q) * ((1 + q))**2 * (4 + q * (18 + 5 * q * \
-(-11 + 3 * q))) + (2 * q * (1 + q) * (-8 + (14 * q + 3 * q**3)) * u * xi + 8 \
-* q**2 * (1 + q * (-1 + 3 * q)) * u**2 * xi**2)) + (2 * ((1 + q))**3 * S2**2 \
-* u * (-1 * ((-1 + q))**4 * ((1 + q))**2 * (1 + (-12 + q) * q) + (-2 * q * \
-((-1 + q**2))**2 * (4 + q * (-7 + 4 * q)) * u * xi + (-8 * q**2 * (1 + q * \
-(-8 + q * (20 + (-8 + q) * q))) * u**2 * xi**2 + 16 * (-2 + q) * q**3 * (-1 + \
-2 * q) * u**3 * xi**3))) + 2 * q**2 * xi * (-1 * ((-1 + q**2))**4 + (-1 * \
-((-1 + q))**2 * ((1 + q))**3 * (-1 + q * (18 + 7 * q)) * u * xi + (4 * q * \
-((1 + q))**2 * (2 + q * (-5 + 19 * q)) * u**2 * xi**2 + 16 * q**2 * (1 + q**2 \
-* (2 + 3 * q)) * u**3 * xi**3)))))) + -2 * (-1 * (1 + q) * S2**2 * u + -1 * q \
-* xi) * (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 + (((-1 + q**2))**2 \
-* S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + (8 * (-4 + q) * q * \
-(1 + q) * u * xi + 16 * q**2 * u**2 * xi**2)) + (S2**2 * (-1 * ((-1 + \
-q**2))**4 + (-2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * xi + \
-(-8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * xi**2 + -32 * \
-q**3 * (-1 + q**2) * u**3 * xi**3))) + q**2 * xi**2 * (1 + q * (8 * u * xi + \
-q * (-2 + (16 * u * xi + ((q + 4 * u * xi))**2))))))))))))\"\>"], "Output",
- CellLabel->
-  "Out[32]=",ExpressionUUID->"c2ad67be-a486-4d59-89c4-2eb91bb74fb3"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{
   RowBox[{"kappacoeff0", " ", "=", " ", 
    RowBox[{
     RowBox[{"Coefficient", "[", 
      RowBox[{"discr", ",", "\[Kappa]", ",", "0"}], "]"}], " ", "//", 
-    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
+    "FullSimplify"}]}], ";"}]}], "Input",
+ CellLabel->"In[23]:=",ExpressionUUID->"d937cd7c-de7f-49e6-81bf-15c7bec6bcf9"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
  RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff0\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[33]:=",ExpressionUUID->"afa39167-df9e-4f8b-97a1-b3973d7c88cf"],
+  RowBox[{"\"\<coeff5\>\"", ",", "kappacoeff5"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff4\>\"", ",", "kappacoeff4"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff3\>\"", ",", "kappacoeff3"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff2\>\"", ",", "kappacoeff2"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff1\>\"", ",", "kappacoeff1"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff0\>\"", ",", "kappacoeff0"}], "]"}]}], "Input",
+ CellLabel->"In[29]:=",ExpressionUUID->"e6f06354-e446-48cf-a6f9-351139c005fe"],
+
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff5 = \
+-256 * q**3 * ((1 + q))**6 * u\"\>"], "Output",
+ CellLabel->"Out[29]=",ExpressionUUID->"764a6a4d-fc3c-4629-90b2-9d5b17cbdd1f"],
+
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff4 = 16 \
+* q**2 * ((1 + q))**4 * (((-1 + q**2))**2 + (-16 * ((1 + q))**2 * (q * (-5 + \
+3 * q) * S1**2 + (3 + -5 * q) * S2**2) * u**2 + (40 * q * ((1 + q))**2 * u * \
+chieff + 16 * q**2 * u**2 * chieff**2)))\"\>"], "Output",
+ CellLabel->"Out[30]=",ExpressionUUID->"265de85c-aada-4c8a-98e9-1733a9a3a162"],
+
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = -32 \
+* q * ((1 + q))**4 * (2 * q**6 * S1**2 * u * (-5 + 12 * S1**2 * u**2) + (2 * \
+S2**2 * u * (-5 + 12 * S2**2 * u**2) + (2 * q**2 * u * (40 * S1**4 * u**2 + \
+(-44 * S2**4 * u**2 + (8 * chieff**2 + (S1**2 * (-5 + (-8 * S2**2 * u**2 + 40 \
+* u * chieff)) + -2 * S2**2 * (-5 + 4 * u * chieff * (1 + u * chieff)))))) + \
+(2 * q**3 * (32 * S1**4 * u**3 + (32 * S2**4 * u**3 + (chieff * (-1 + 8 * u * \
+chieff * (3 + u * chieff)) + (2 * S2**2 * u * (-1 + u * chieff * (17 + 8 * u \
+* chieff)) + 2 * S1**2 * u * (-1 + (40 * S2**2 * u**2 + u * chieff * (17 + 8 \
+* u * chieff))))))) + (q * (chieff + 2 * u * (S1**2 * (1 + -48 * S2**2 * \
+u**2) + S2**2 * (1 + -2 * u * (12 * S2**2 * u + chieff)))) + (q**5 * (chieff \
++ 2 * u * (S2**2 + S1**2 * (1 + -2 * u * (12 * (S1**2 + 2 * S2**2) * u + \
+chieff)))) + -2 * q**4 * u * (5 * S2**2 + (44 * S1**4 * u**2 + (-8 * (5 * \
+S2**4 * u**2 + (5 * S2**2 * u * chieff + chieff**2)) + 2 * S1**2 * (-5 + 4 * \
+u * (chieff + u * (S2**2 + chieff**2))))))))))))\"\>"], "Output",
+ CellLabel->"Out[31]=",ExpressionUUID->"21099d83-b515-4abf-89dd-5e99f29635eb"],
+
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = -16 \
+* ((1 + q))**2 * (16 * (-1 + q) * q**3 * ((1 + q))**4 * (10 + (-8 + q) * q) * \
+S1**6 * u**4 + (-16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 + (-1 * \
+((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + (8 * \
+(-4 + q) * q * (1 + q) * u * chieff + 16 * q**2 * u**2 * chieff**2)) + (-1 * \
+q**2 * (((1 + q) * S2**2 * u + q * chieff))**2 * ((-1 + q) * ((1 + q))**2 * \
+(-1 + (q + 48 * S2**2 * u**2)) + (8 * q * (1 + q) * (5 + q) * u * chieff + 16 \
+* q**2 * u**2 * chieff**2)) + (2 * q**2 * ((1 + q))**2 * S1**4 * u**2 * ((-1 \
++ q) * ((1 + q))**2 * ((-1 + q) * (-3 + (30 * q + 4 * q**2)) + -72 * (2 + (-2 \
++ q) * q) * S2**2 * u**2) + (4 * q * (1 + q) * (-30 + q * (39 + q * (-19 + 4 \
+* q))) * u * chieff + -8 * q**2 * (6 + (-6 + q) * q) * u**2 * chieff**2)) + \
+(-4 * q * (-1 * (1 + q) * S2**2 * u + -1 * q * chieff) * (-1 * ((-1 + q))**2 \
+* ((1 + q))**3 * S2**2 * u * (-10 + (q + 24 * S2**2 * u**2)) + (-1 * (-1 + q) \
+* q * ((1 + q))**2 * (-1 + (q + 4 * (1 + 2 * q) * S2**2 * u**2)) * chieff + \
+(-8 * q**2 * (1 + q) * u * (2 + (q + 2 * (-1 + q) * S2**2 * u**2)) * \
+chieff**2 + -16 * q**3 * u**2 * chieff**3))) + (q * (1 + q) * S1**2 * ((-1 + \
+q) * ((1 + q))**3 * (((-1 + q))**3 * q + (4 * (-1 + q) * (15 + q * (-29 + 15 \
+* q)) * S2**2 * u**2 + 144 * (1 + 2 * (-1 + q) * q) * S2**4 * u**4)) + (2 * q \
+* ((1 + q))**2 * u * (((-1 + q))**2 * (-3 + q * (23 + 4 * q)) + 12 * (1 + q) \
+* (1 + q**2) * S2**2 * u**2) * chieff + (8 * q**2 * (1 + q) * u**2 * (-12 + \
+(-2 * q + (-11 * q**2 + (q**3 + 4 * (3 + q * (-5 + 3 * q)) * S2**2 * u**2)))) \
+* chieff**2 + -32 * q**3 * (3 + (-1 + q) * q) * u**3 * chieff**3))) + (S2**2 \
+* (((-1 + q**2))**4 + (2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u \
+* chieff + (8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * \
+chieff**2 + 32 * q**3 * (-1 + q**2) * u**3 * chieff**3))) + -1 * q**2 * \
+chieff**2 * (1 + q * (8 * u * chieff + q * (-2 + (16 * u * chieff + ((q + 4 * \
+u * chieff))**2))))))))))))\"\>"], "Output",
+ CellLabel->"Out[32]=",ExpressionUUID->"01a8586d-affa-4ad9-b561-6d4f2ac2a6eb"],
+
+Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = -16 \
+* (1 + q) * (-16 * ((-1 + q))**2 * q**3 * ((1 + q))**5 * (-5 + 2 * q) * S1**8 \
+* u**5 + (-4 * (-1 + q) * q**2 * ((1 + q))**3 * S1**6 * u**3 * ((-1 + q) * \
+((1 + q))**2 * (-1 + (15 * q + (4 * q**2 + 8 * (6 + (-1 + q) * q) * S2**2 * \
+u**2))) + (2 * q * (1 + q) * (20 + q * (-29 + 12 * q)) * u * chieff + -8 * \
+(-2 + q) * q**2 * u**2 * chieff**2)) + (-2 * q * (((1 + q) * S2**2 * u + q * \
+chieff))**2 * (-1 * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * u * (-10 + (q + 24 \
+* S2**2 * u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 * (-1 + (q + 4 * (1 + 2 \
+* q) * S2**2 * u**2)) * chieff + (-8 * q**2 * (1 + q) * u * (2 + (q + 2 * (-1 \
++ q) * S2**2 * u**2)) * chieff**2 + -16 * q**3 * u**2 * chieff**3))) + (-2 * \
+q * ((1 + q))**2 * S1**4 * u * (((-1 + q))**2 * ((1 + q))**3 * (((-1 + q))**2 \
+* q + (2 * (15 + q * (-55 + 2 * q * (9 + 2 * q))) * S2**2 * u**2 + -72 * (1 + \
+q**2) * S2**4 * u**4)) + ((-1 + q) * q * ((1 + q))**2 * u * (3 + (-52 * q + \
+(33 * q**2 + (16 * q**3 + 4 * (-3 + 2 * q**2 * (-7 + 4 * q)) * S2**2 * \
+u**2)))) * chieff + (-8 * q**2 * (1 + q) * u**2 * (6 + (-16 * q + (18 * q**2 \
++ (-5 * q**3 + 2 * (-1 + q) * (3 + (-1 + q) * q) * S2**2 * u**2)))) * \
+chieff**2 + -16 * q**3 * (3 + q * (-5 + 3 * q)) * u**3 * chieff**3))) + \
+(S1**2 * (-32 * ((-1 + q))**2 * ((1 + q))**5 * (1 + q * (-1 + 6 * q)) * S2**6 \
+* u**5 + (-4 * (-1 + q) * ((1 + q))**3 * S2**4 * u**3 * ((-1 + q) * ((1 + \
+q))**2 * (4 + q * (18 + 5 * q * (-11 + 3 * q))) + (2 * q * (1 + q) * (-8 + \
+(14 * q + 3 * q**3)) * u * chieff + 8 * q**2 * (1 + q * (-1 + 3 * q)) * u**2 \
+* chieff**2)) + (2 * ((1 + q))**3 * S2**2 * u * (-1 * ((-1 + q))**4 * ((1 + \
+q))**2 * (1 + (-12 + q) * q) + (-2 * q * ((-1 + q**2))**2 * (4 + q * (-7 + 4 \
+* q)) * u * chieff + (-8 * q**2 * (1 + q * (-8 + q * (20 + (-8 + q) * q))) * \
+u**2 * chieff**2 + 16 * (-2 + q) * q**3 * (-1 + 2 * q) * u**3 * chieff**3))) \
++ 2 * q**2 * chieff * (-1 * ((-1 + q**2))**4 + (-1 * ((-1 + q))**2 * ((1 + \
+q))**3 * (-1 + q * (18 + 7 * q)) * u * chieff + (4 * q * ((1 + q))**2 * (2 + \
+q * (-5 + 19 * q)) * u**2 * chieff**2 + 16 * q**2 * (1 + q**2 * (2 + 3 * q)) \
+* u**3 * chieff**3)))))) + -2 * (-1 * (1 + q) * S2**2 * u + -1 * q * chieff) \
+* (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 + (((-1 + q**2))**2 * \
+S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + (8 * (-4 + q) * q * (1 \
++ q) * u * chieff + 16 * q**2 * u**2 * chieff**2)) + (S2**2 * (-1 * ((-1 + \
+q**2))**4 + (-2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * chieff \
++ (-8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * chieff**2 + \
+-32 * q**3 * (-1 + q**2) * u**3 * chieff**3))) + q**2 * chieff**2 * (1 + q * \
+(8 * u * chieff + q * (-2 + (16 * u * chieff + ((q + 4 * u * \
+chieff))**2))))))))))))\"\>"], "Output",
+ CellLabel->"Out[33]=",ExpressionUUID->"aeb2a49d-1a2d-467f-a3c7-d270162f116c"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff0 = -16 \
 * (16 * ((-1 + q))**3 * q**3 * ((1 + q))**6 * S1**10 * u**6 + (-1 * ((-1 + \
 q))**2 * q**2 * ((1 + q))**4 * S1**8 * u**4 * (((1 + q))**2 * (1 + (-20 * q + \
 (-8 * q**2 + 16 * (-3 + (q + 2 * q**2)) * S2**2 * u**2))) + (-8 * q * (1 + q) \
-* (-5 + 8 * q) * u * xi + 16 * q**2 * u**2 * xi**2)) + ((-1 + q) * q * ((1 + \
-q))**3 * S1**6 * u**2 * (q * ((-1 + q**2))**3 + (-4 * (-1 + q) * ((1 + q))**3 \
-* (-5 + q * (27 + q * (-3 + 8 * q))) * S2**2 * u**2 + (16 * ((-1 + q))**2 * \
-((1 + q))**3 * (3 + q * (6 + q)) * S2**4 * u**4 + (-2 * (-1 + q) * q * ((1 + \
-q))**2 * u * (1 + (-25 * q + (-12 * q**2 + 4 * (-1 + (q + 12 * q**2)) * S2**2 \
-* u**2))) * xi + (8 * q**2 * (1 + q) * u**2 * (4 + (-18 * q + (11 * q**2 + 4 \
-* (-1 + q**2) * S2**2 * u**2))) * xi**2 + 32 * (1 + -2 * q) * q**3 * u**3 * \
-xi**3))))) + (((1 + q))**2 * S1**4 * u * (-16 * ((-1 + q))**3 * ((1 + q))**4 \
-* (1 + 3 * q * (2 + q)) * S2**6 * u**5 + (2 * S2**4 * u**3 * (((-1 + q))**2 * \
-((1 + q))**4 * (4 + q * (6 + q * (61 + (6 * q + 4 * q**2)))) + (4 * ((-1 + \
-q))**2 * q * ((1 + q))**4 * (4 + (q + 4 * q**2)) * u * xi + -8 * q**2 * ((-1 \
-+ q**2))**2 * (1 + q * (4 + q)) * u**2 * xi**2)) + (xi * (2 * ((-1 + q))**4 * \
-q**2 * ((1 + q))**3 + (((q + -1 * q**3))**2 * (-1 + q * (40 + 23 * q)) * u * \
-xi + (8 * q**3 * (1 + q) * (-1 + q * (14 + 5 * (-4 + q) * q)) * u**2 * xi**2 \
-+ -16 * q**4 * (1 + 6 * (-1 + q) * q) * u**3 * xi**3))) + (-1 + q) * (1 + q) \
-* S2**2 * u * (-1 * ((-1 + q**2))**3 * (-1 + 2 * q * (12 + 5 * q)) + (-2 * \
-(-1 + q) * q * ((1 + q))**2 * (-4 + q * (29 + q * (-21 + 32 * q))) * u * xi + \
-(-8 * q**2 * (1 + q) * (1 + 2 * (-2 + q) * q * (1 + 4 * q)) * u**2 * xi**2 + \
-32 * q**3 * (1 + q * (-1 + 3 * q)) * u**3 * xi**3)))))) + ((1 + q) * S1**2 * \
-(16 * ((-1 + q))**3 * ((1 + q))**5 * (2 + 3 * q) * S2**8 * u**6 + (q**2 * \
-xi**2 * (((-1 + q))**4 * ((1 + q))**3 + (2 * q * (5 + 3 * q) * ((-1 + \
-q**2))**2 * u * xi + (-8 * q**2 * (1 + q) * (-4 + q * (7 + q)) * u**2 * xi**2 \
-+ 32 * (1 + -2 * q) * q**3 * u**3 * xi**3))) + ((-1 + q) * ((1 + q))**2 * \
+* (-5 + 8 * q) * u * chieff + 16 * q**2 * u**2 * chieff**2)) + ((-1 + q) * q \
+* ((1 + q))**3 * S1**6 * u**2 * (q * ((-1 + q**2))**3 + (-4 * (-1 + q) * ((1 \
++ q))**3 * (-5 + q * (27 + q * (-3 + 8 * q))) * S2**2 * u**2 + (16 * ((-1 + \
+q))**2 * ((1 + q))**3 * (3 + q * (6 + q)) * S2**4 * u**4 + (-2 * (-1 + q) * q \
+* ((1 + q))**2 * u * (1 + (-25 * q + (-12 * q**2 + 4 * (-1 + (q + 12 * q**2)) \
+* S2**2 * u**2))) * chieff + (8 * q**2 * (1 + q) * u**2 * (4 + (-18 * q + (11 \
+* q**2 + 4 * (-1 + q**2) * S2**2 * u**2))) * chieff**2 + 32 * (1 + -2 * q) * \
+q**3 * u**3 * chieff**3))))) + (((1 + q))**2 * S1**4 * u * (-16 * ((-1 + \
+q))**3 * ((1 + q))**4 * (1 + 3 * q * (2 + q)) * S2**6 * u**5 + (2 * S2**4 * \
+u**3 * (((-1 + q))**2 * ((1 + q))**4 * (4 + q * (6 + q * (61 + (6 * q + 4 * \
+q**2)))) + (4 * ((-1 + q))**2 * q * ((1 + q))**4 * (4 + (q + 4 * q**2)) * u * \
+chieff + -8 * q**2 * ((-1 + q**2))**2 * (1 + q * (4 + q)) * u**2 * \
+chieff**2)) + (chieff * (2 * ((-1 + q))**4 * q**2 * ((1 + q))**3 + (((q + -1 \
+* q**3))**2 * (-1 + q * (40 + 23 * q)) * u * chieff + (8 * q**3 * (1 + q) * \
+(-1 + q * (14 + 5 * (-4 + q) * q)) * u**2 * chieff**2 + -16 * q**4 * (1 + 6 * \
+(-1 + q) * q) * u**3 * chieff**3))) + (-1 + q) * (1 + q) * S2**2 * u * (-1 * \
+((-1 + q**2))**3 * (-1 + 2 * q * (12 + 5 * q)) + (-2 * (-1 + q) * q * ((1 + \
+q))**2 * (-4 + q * (29 + q * (-21 + 32 * q))) * u * chieff + (-8 * q**2 * (1 \
++ q) * (1 + 2 * (-2 + q) * q * (1 + 4 * q)) * u**2 * chieff**2 + 32 * q**3 * \
+(1 + q * (-1 + 3 * q)) * u**3 * chieff**3)))))) + ((1 + q) * S1**2 * (16 * \
+((-1 + q))**3 * ((1 + q))**5 * (2 + 3 * q) * S2**8 * u**6 + (q**2 * chieff**2 \
+* (((-1 + q))**4 * ((1 + q))**3 + (2 * q * (5 + 3 * q) * ((-1 + q**2))**2 * u \
+* chieff + (-8 * q**2 * (1 + q) * (-4 + q * (7 + q)) * u**2 * chieff**2 + 32 \
+* (1 + -2 * q) * q**3 * u**3 * chieff**3))) + ((-1 + q) * ((1 + q))**2 * \
 S2**4 * u**2 * ((-10 + (-24 + q) * q) * ((-1 + q**2))**3 + (2 * (-1 + q) * q \
-* ((1 + q))**2 * (-32 + q * (21 + q * (-29 + 4 * q))) * u * xi + (8 * q**2 * \
-(1 + q) * (8 + q * (-14 + (-4 + q) * q)) * u**2 * xi**2 + -32 * q**3 * (3 + \
-(-1 + q) * q) * u**3 * xi**3))) + (S2**2 * (-1 * ((-1 + q))**6 * ((1 + q))**5 \
-+ (-10 * ((-1 + q))**4 * q * ((1 + q))**5 * u * xi + (-2 * ((-1 + q))**2 * \
-q**2 * ((1 + q))**3 * (11 + q * (-24 + 11 * q)) * u**2 * xi**2 + (16 * q**3 * \
-((1 + q))**3 * (2 + q * (-3 + 2 * q)) * u**3 * xi**3 + 32 * q**4 * (1 + q) * \
-(3 + q * (-5 + 3 * q)) * u**4 * xi**4)))) + 4 * ((-1 + q))**2 * ((1 + q))**4 \
-* S2**6 * u**4 * (-8 + q * (-5 + (-24 * q + (-22 * q**2 + (5 * q**3 + (2 * \
-(-4 + q) * (3 + q) * u * xi + 8 * q * u**2 * xi**2)))))))))) + -1 * (((1 + q) \
-* S2**2 * u + q * xi))**2 * (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 \
-+ (((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + \
-(8 * (-4 + q) * q * (1 + q) * u * xi + 16 * q**2 * u**2 * xi**2)) + (S2**2 * \
-(-1 * ((-1 + q**2))**4 + (-2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) \
-* u * xi + (-8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * xi**2 \
-+ -32 * q**3 * (-1 + q**2) * u**3 * xi**3))) + q**2 * xi**2 * (1 + q * (8 * u \
-* xi + q * (-2 + (16 * u * xi + ((q + 4 * u * xi))**2))))))))))))\"\>"], \
-"Output",
+* ((1 + q))**2 * (-32 + q * (21 + q * (-29 + 4 * q))) * u * chieff + (8 * \
+q**2 * (1 + q) * (8 + q * (-14 + (-4 + q) * q)) * u**2 * chieff**2 + -32 * \
+q**3 * (3 + (-1 + q) * q) * u**3 * chieff**3))) + (S2**2 * (-1 * ((-1 + \
+q))**6 * ((1 + q))**5 + (-10 * ((-1 + q))**4 * q * ((1 + q))**5 * u * chieff \
++ (-2 * ((-1 + q))**2 * q**2 * ((1 + q))**3 * (11 + q * (-24 + 11 * q)) * \
+u**2 * chieff**2 + (16 * q**3 * ((1 + q))**3 * (2 + q * (-3 + 2 * q)) * u**3 \
+* chieff**3 + 32 * q**4 * (1 + q) * (3 + q * (-5 + 3 * q)) * u**4 * \
+chieff**4)))) + 4 * ((-1 + q))**2 * ((1 + q))**4 * S2**6 * u**4 * (-8 + q * \
+(-5 + (-24 * q + (-22 * q**2 + (5 * q**3 + (2 * (-4 + q) * (3 + q) * u * \
+chieff + 8 * q * u**2 * chieff**2)))))))))) + -1 * (((1 + q) * S2**2 * u + q \
+* chieff))**2 * (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4 + (((-1 + \
+q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q) * q) + (8 * (-4 + \
+q) * q * (1 + q) * u * chieff + 16 * q**2 * u**2 * chieff**2)) + (S2**2 * (-1 \
+* ((-1 + q**2))**4 + (-2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u \
+* chieff + (-8 * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * \
+chieff**2 + -32 * q**3 * (-1 + q**2) * u**3 * chieff**3))) + q**2 * chieff**2 \
+* (1 + q * (8 * u * chieff + q * (-2 + (16 * u * chieff + ((q + 4 * u * \
+chieff))**2))))))))))))\"\>"], "Output",
  CellLabel->
-  "Out[34]=",ExpressionUUID->"b7975855-d6d5-4f82-8e26-b38b8813e534"]
+  "Out[34]=",ExpressionUUID->"116b8b8a-f0ca-456b-b1dc-e0ed254c9495"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Check reconstruction (this should be zero).", \
-"Subsubsection",ExpressionUUID->"cb67963a-71fe-4a0b-b1b0-1850cbc21af7"],
+"Subsubsection",ExpressionUUID->"ba0a2d07-9cac-4ed3-8741-54361a95c2b7"],
 
 Cell[CellGroupData[{
 
@@ -2606,11 +2586,11 @@ Cell[BoxData[
     RowBox[{"\[Kappa]", "^", "2"}]}], "+", 
    RowBox[{"kappacoeff1", "*", " ", "\[Kappa]"}], "+", "kappacoeff0", "-", 
    "discr"}], "//", "FullSimplify"}]], "Input",
- CellLabel->"In[35]:=",ExpressionUUID->"19797581-62e6-4ecf-8096-38de6f668f90"],
+ CellLabel->"In[35]:=",ExpressionUUID->"15f321bd-5fda-4b2a-ab8b-565753dd3d19"],
 
 Cell[BoxData["0"], "Output",
  CellLabel->
-  "Out[35]=",ExpressionUUID->"7a8a01f2-d42c-4953-ac3f-92a2e3c4f27d"]
+  "Out[35]=",ExpressionUUID->"59d7fcee-d2c1-41a0-a140-f27d7163d414"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -2618,67 +2598,94 @@ Cell[BoxData["0"], "Output",
 Cell[CellGroupData[{
 
 Cell["(iv) Spin-orbit resonances in xi ", \
-"Section",ExpressionUUID->"39461754-dd01-487a-8968-ecb677c37e64"],
+"Section",ExpressionUUID->"239d809c-3fa6-4a88-9042-038f22fe16f3"],
 
 Cell[CellGroupData[{
 
 Cell["\<\
 Extract coefficients. Sort terms in powers of u to improve numerical \
 stability.\
-\>", "Subsubsection",ExpressionUUID->"bee680af-bff5-498d-9132-317e1c83ca6c"],
+\>", "Subsubsection",ExpressionUUID->"58c0bcac-b836-48dd-989a-10f05becb9c7"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"chieffcoeff6", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Coefficient", "[", 
+     RowBox[{"discr", ",", "\[Chi]eff", ",", "6"}], "]"}], " ", "//", 
+    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"chieffcoeff5", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Coefficient", "[", 
+     RowBox[{"discr", ",", "\[Chi]eff", ",", "5"}], "]"}], " ", "//", 
+    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"chieffcoeff4", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Coefficient", "[", 
+     RowBox[{"discr", ",", "\[Chi]eff", ",", "4"}], "]"}], " ", "//", 
+    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"chieffcoeff3", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Coefficient", "[", 
+     RowBox[{"discr", ",", "\[Chi]eff", ",", "3"}], "]"}], " ", "//", 
+    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"chieffcoeff2", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Coefficient", "[", 
+     RowBox[{"discr", ",", "\[Chi]eff", ",", "2"}], "]"}], " ", "//", 
+    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"chieffcoeff1", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Coefficient", "[", 
+     RowBox[{"discr", ",", "\[Chi]eff", ",", "1"}], "]"}], " ", "//", 
+    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"chieffcoeff0", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Coefficient", "[", 
+     RowBox[{"discr", ",", "\[Chi]eff", ",", "0"}], "]"}], " ", "//", 
+    "FullSimplify"}]}], ";"}]}], "Input",
+ CellLabel->"In[36]:=",ExpressionUUID->"80cb3e5c-2215-4edc-81f6-cea6571d6124"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[{
- RowBox[{
-  RowBox[{"xicoeff6", " ", "=", " ", 
-   RowBox[{
-    RowBox[{"Coefficient", "[", 
-     RowBox[{"discr", ",", "\[Xi]", ",", "6"}], "]"}], " ", "//", 
-    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff6\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[36]:=",ExpressionUUID->"b212d19e-ab9f-4918-835b-60082bd20834"],
+  RowBox[{"\"\<coeff6\>\"", ",", "chieffcoeff6"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff5\>\"", ",", "chieffcoeff5"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff4\>\"", ",", "chieffcoeff4"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff3\>\"", ",", "chieffcoeff3"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff2\>\"", ",", "chieffcoeff2"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff1\>\"", ",", "chieffcoeff1"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<coeff0\>\"", ",", "chieffcoeff0"}], "]"}]}], "Input",
+ CellLabel->"In[43]:=",ExpressionUUID->"7c8b37e2-c2e7-4d99-af37-652b106ca9cc"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff6 = 256 \
 * q**6 * u**2\"\>"], "Output",
- CellLabel->
-  "Out[37]=",ExpressionUUID->"ecb80434-8c91-426b-abb2-c8074ebd01ac"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"xicoeff5", " ", "=", " ", 
-   RowBox[{
-    RowBox[{"Coefficient", "[", 
-     RowBox[{"discr", ",", "\[Xi]", ",", "5"}], "]"}], " ", "//", 
-    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff5\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[38]:=",ExpressionUUID->"626114f4-6253-445b-b3a8-08ec7a2e27ed"],
+ CellLabel->"Out[43]=",ExpressionUUID->"71122e2c-ce02-44e3-854b-18d9d2bb39ec"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff5 = 128 \
 * q**5 * (1 + q) * u * (1 + (q + (8 * q * S1**2 * u**2 + (-4 * u * (S1**2 * u \
 + (-2 * S2**2 * u + kappa)) + -4 * q * u * (S2**2 * u + kappa)))))\"\>"], \
 "Output",
- CellLabel->
-  "Out[39]=",ExpressionUUID->"e1a6768a-4e4a-4cf1-8cd5-ad86525b9d86"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"xicoeff4", " ", "=", " ", 
-   RowBox[{
-    RowBox[{"Coefficient", "[", 
-     RowBox[{"discr", ",", "\[Xi]", ",", "4"}], "]"}], " ", "//", 
-    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff4\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[40]:=",ExpressionUUID->"90854944-bdfb-4708-aca7-27e3c2bc02cc"],
+ CellLabel->"Out[44]=",ExpressionUUID->"d99c1c5a-6fb1-460e-82b8-f0f970ab31e8"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff4 = 16 \
 * q**4 * ((1 + q))**2 * (1 + (-32 * S1**2 * u**2 + (8 * u * (12 * S2**4 * \
@@ -2689,22 +2696,7 @@ u**3 + (2 * kappa * (-3 + 4 * u * kappa) + S2**2 * u * (7 + 4 * u * \
 kappa)))))) + q**2 * (1 + 8 * u * (-2 * kappa + u * (-4 * S2**2 + (12 * S1**4 \
 * u**2 + (2 * ((-1 * S2**2 * u + kappa))**2 + S1**2 * (1 + -12 * u * (S2**2 * \
 u + kappa)))))))))))\"\>"], "Output",
- CellLabel->
-  "Out[41]=",ExpressionUUID->"36fdf49a-4fff-4913-8823-93271f6f1ab9"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"xicoeff3", " ", "=", " ", 
-   RowBox[{
-    RowBox[{"Coefficient", "[", 
-     RowBox[{"discr", ",", "\[Xi]", ",", "3"}], "]"}], " ", "//", 
-    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff3\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[42]:=",ExpressionUUID->"fc4a5960-2871-46b5-a9c9-1d02bb7cfece"],
+ CellLabel->"Out[45]=",ExpressionUUID->"216b731b-5f97-46ca-8738-df264f865677"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff3 = 32 \
 * q**3 * ((1 + q))**3 * (16 * (-1 + q) * q * (-1 + 2 * q) * S1**6 * u**5 + \
@@ -2722,22 +2714,7 @@ kappa * (5 + 12 * u * kappa)))) + (q**3 * (-3 + 16 * u**2 * (S2**4 * u**2 + \
 (kappa**2 + -1 * S2**2 * (1 + 2 * u * kappa)))) + q**2 * (1 + -4 * u * (8 * \
 S2**4 * u**3 + (kappa * (19 + 4 * u * kappa) + -2 * S2**2 * u * (1 + 6 * u * \
 kappa))))))))))))))\"\>"], "Output",
- CellLabel->
-  "Out[43]=",ExpressionUUID->"a11579a0-b337-49fc-8f87-e05482fb7b5d"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"xicoeff2", " ", "=", " ", 
-   RowBox[{
-    RowBox[{"Coefficient", "[", 
-     RowBox[{"discr", ",", "\[Xi]", ",", "2"}], "]"}], " ", "//", 
-    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff2\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[44]:=",ExpressionUUID->"211990ed-b978-45a9-924d-8772f1806016"],
+ CellLabel->"Out[46]=",ExpressionUUID->"10da347d-5748-4ffd-babe-7a00f606153b"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff2 = 16 \
 * q**2 * ((1 + q))**4 * (16 * ((-1 + q))**2 * q**2 * S1**8 * u**6 + (16 * \
@@ -2769,22 +2746,7 @@ kappa)))))) + (4 * q * (1 + u * (8 * S2**6 * u**5 + (4 * S2**4 * u**3 * (-11 \
 8 * u * kappa * (4 + 3 * u * kappa)))))) + 2 * u * (-1 * kappa + S2**2 * u * \
 (11 + 8 * u * (kappa + -2 * S2**2 * u * (-2 + u * (S2**2 * u + \
 kappa))))))))))))))))))\"\>"], "Output",
- CellLabel->
-  "Out[45]=",ExpressionUUID->"5706f372-ddb9-40e6-bfe4-06fc4d1ed1fe"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"xicoeff1", " ", "=", " ", 
-   RowBox[{
-    RowBox[{"Coefficient", "[", 
-     RowBox[{"discr", ",", "\[Xi]", ",", "1"}], "]"}], " ", "//", 
-    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff1\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[46]:=",ExpressionUUID->"2eba811f-ffbb-4bbb-be79-5d1537fe699f"],
+ CellLabel->"Out[47]=",ExpressionUUID->"826540d3-79ab-4e53-a498-eecab0c8a8d2"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff1 = -32 \
 * q * ((1 + q))**2 * (4 * ((-1 + q))**2 * q**2 * ((1 + q))**3 * (-5 + 8 * q) \
@@ -2812,22 +2774,7 @@ q))**4 + (((-1 + q))**2 * (-3 + q * (49 + 16 * q)) * u * kappa + 4 * q * (30 \
 + q * (-39 + (19 + -4 * q) * q)) * u**2 * kappa**2)) + (-1 + q**2) * S2**2 * \
 u**2 * (4 + q * (-3 * (11 + 4 * u * kappa) + q * (50 + q * (-53 + (32 * q + 8 \
 * (-7 + 4 * q) * u * kappa))))))))))))\"\>"], "Output",
- CellLabel->
-  "Out[47]=",ExpressionUUID->"ab42ab19-6430-4588-8942-7ae8c99a3351"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{"xicoeff0", " ", "=", " ", 
-   RowBox[{
-    RowBox[{"Coefficient", "[", 
-     RowBox[{"discr", ",", "\[Xi]", ",", "0"}], "]"}], " ", "//", 
-    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"precessionform", "[", 
-  RowBox[{"\"\<coeff0\>\"", ",", "%"}], "]"}]}], "Input",
- CellLabel->"In[48]:=",ExpressionUUID->"613b4c03-56c5-4678-b304-453c97a3e00e"],
+ CellLabel->"Out[48]=",ExpressionUUID->"48fa6989-7ac9-41f0-aeb0-698f8ebd6a80"],
 
 Cell[BoxData["\<\"# Machine generated with polycoefficients.nb\\ncoeff0 = -16 \
 * ((1 + q))**4 * (16 * ((-1 + q))**3 * q**3 * ((1 + q))**2 * S1**10 * u**6 + \
@@ -2863,37 +2810,37 @@ S1**8 * u**4 * (1 + (-48 * S2**2 * u**2 + 4 * q * (-5 + (4 * u * (S2**2 * u + \
 -5 * kappa) + q * (-2 + 8 * u * (S2**2 * u + kappa)))))))))))\"\>"], "Output",
  
  CellLabel->
-  "Out[49]=",ExpressionUUID->"d5a5d129-c5fb-4d31-bce4-1930ee8210a7"]
+  "Out[49]=",ExpressionUUID->"445582fd-ffaf-4121-baf6-d6eb8ce3957d"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell["Check reconstruction (this should be zero).", \
-"Subsubsection",ExpressionUUID->"43b458a4-6227-4f26-9f34-7e0a6ff2b391"],
+"Subsubsection",ExpressionUUID->"730e5d62-f9f9-4bdb-909d-ab3b019a6fcb"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{
   RowBox[{
-   RowBox[{"xicoeff6", "*", " ", 
-    RowBox[{"\[Xi]", "^", "6"}]}], "+", 
-   RowBox[{"xicoeff5", "*", " ", 
-    RowBox[{"\[Xi]", "^", "5"}]}], "+", " ", 
-   RowBox[{"xicoeff4", "*", " ", 
-    RowBox[{"\[Xi]", "^", "4"}]}], "+", 
-   RowBox[{"xicoeff3", "*", " ", 
-    RowBox[{"\[Xi]", "^", "3"}]}], " ", "+", " ", 
-   RowBox[{"xicoeff2", "*", " ", 
-    RowBox[{"\[Xi]", "^", "2"}]}], " ", "+", " ", 
-   RowBox[{"xicoeff1", "*", " ", "\[Xi]"}], "+", " ", "xicoeff0", " ", "-", 
-   "discr"}], "//", "FullSimplify"}]], "Input",
- CellLabel->"In[50]:=",ExpressionUUID->"308d850a-540d-4d01-b531-98d4b76d1690"],
+   RowBox[{"chieffcoeff6", "*", " ", 
+    RowBox[{"\[Chi]eff", "^", "6"}]}], "+", 
+   RowBox[{"chieffcoeff5", "*", " ", 
+    RowBox[{"\[Chi]eff", "^", "5"}]}], "+", " ", 
+   RowBox[{"chieffcoeff4", "*", " ", 
+    RowBox[{"\[Chi]eff", "^", "4"}]}], "+", 
+   RowBox[{"chieffcoeff3", "*", " ", 
+    RowBox[{"\[Chi]eff", "^", "3"}]}], " ", "+", " ", 
+   RowBox[{"chieffcoeff2", "*", " ", 
+    RowBox[{"\[Chi]eff", "^", "2"}]}], " ", "+", " ", 
+   RowBox[{"chieffcoeff1", "*", " ", "\[Chi]eff"}], "+", " ", "chieffcoeff0", 
+   " ", "-", "discr"}], "//", "FullSimplify"}]], "Input",
+ CellLabel->"In[50]:=",ExpressionUUID->"4c8bead5-8bb5-498b-b9b7-01a806f7554c"],
 
 Cell[BoxData["0"], "Output",
  CellLabel->
-  "Out[50]=",ExpressionUUID->"dadfab83-b52e-4d31-80b0-65608ae88521"]
+  "Out[50]=",ExpressionUUID->"30c21050-3f49-43d6-b246-5edfac25bd79"]
 }, Open  ]]
 }, Open  ]],
 
@@ -2903,7 +2850,7 @@ Cell[TextData[{
  "Clean this notebook for inclusion in git repository. ",
  StyleBox["Credits: http://bhptoolkit.org/cleannb.html", "Subsection"],
  " "
-}], "Subsubsection",ExpressionUUID->"87fa3bab-509b-4280-a74c-ceee1761758a"],
+}], "Subsubsection",ExpressionUUID->"0f9a2f89-064e-4c66-b44c-a5312e6cc816"],
 
 Cell[BoxData[
  RowBox[{
@@ -2946,14 +2893,14 @@ Cell[BoxData[
       RowBox[{"NotebookSave", "[", "nb", "]"}], ";", "\[IndentingNewLine]", 
       RowBox[{"NotebookClose", "[", "nb", "]"}], ";"}]}], "]"}]}], 
   ";"}]], "Input",
- CellLabel->"In[51]:=",ExpressionUUID->"46d5952a-a77e-4b57-94cf-66cdaa09eb61"],
+ CellLabel->"In[51]:=",ExpressionUUID->"a65d8011-2328-474d-b18f-1dc628a3de02"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"CleanNotebook", "[", 
    RowBox[{"NotebookFileName", "[", "]"}], "]"}], ";"}]], "Input",
  CellLabel->
-  "In[52]:=",ExpressionUUID->"f4f22b3d-6c75-4983-81a0-f24ee7b3fda9"]
+  "In[52]:=",ExpressionUUID->"f1fa2388-b407-4764-aaca-9fa38fe73b16"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
