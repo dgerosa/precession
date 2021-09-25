@@ -987,7 +987,7 @@ def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
 
     Call
     ----
-    kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
+        kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
