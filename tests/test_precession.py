@@ -498,9 +498,13 @@ def test_1_angles_to_conserved():
 def test_2_angles_to_conserved():
     return{"theta1":1.33925268, "theta2":1.1721733, "deltaphi":1.43450291, "r":10, "q":0.8, "chi1":1, "chi2":1,"full_output":True},[[0.4],[1],[0.3],[-1]]
 
+@both()
+def test_angles_to_asymptotic():
+    return {"theta1inf":np.pi/8 , "theta2inf":np.pi/4, "q":0.6, "chi1":1, "chi2":1}, [0.46032733,0.84258975]
 
-
-
+@both()
+def test_asymptotic_to_angles():
+    return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.pi/8,np.pi/4]
 
 
 # TODO
@@ -509,7 +513,6 @@ def test_2_angles_to_conserved():
 
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2)
 # asymptotic_to_angles(kappainf, chieff, q, chi1, chi2)
 # vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False)
 # vectors_to_angles(Lvec, S1vec, S2vec)
