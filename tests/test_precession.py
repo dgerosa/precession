@@ -500,11 +500,24 @@ def test_2_angles_to_conserved():
 
 @both()
 def test_angles_to_asymptotic():
-    return {"theta1inf":np.pi/8 , "theta2inf":np.pi/4, "q":0.6, "chi1":1, "chi2":1}, [0.46032733,0.84258975]
+    return {"theta1inf":np.pi/8 , "theta2inf":np.pi/4, "q":0.6, "chi1":1, "chi2":1}, [[0.46032733],[0.84258975]]
 
 @both()
 def test_asymptotic_to_angles():
-    return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.pi/8,np.pi/4]
+    return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [[np.pi/8],[np.pi/4]]
+
+@both(ignore=['full_output'])
+def test_1_vectors_to_conserved():
+    return {"Lvec":[ 0.14922458,  0.24902684,  0.72483158], "S1vec": [ 0.01318246, -0.26149364,  0.16342328], "S2vec":[-0.16240703,  0.0124668 ,  0.11174514], "q":0.8, "full_output":False}, [[0.4],[1],[0.3]]
+
+@both(ignore=['full_output'])
+def test_2_vectors_to_conserved():
+    return {"Lvec":[ 0.14922458,  0.24902684,  0.72483158], "S1vec": [ 0.01318246, -0.26149364,  0.16342328], "S2vec":[-0.16240703,  0.0124668 ,  0.11174514], "q":0.8, "full_output":True}, [[0.4],[1],[0.3],[1]]
+
+@both()
+def test_vectors_to_angles():
+    return {"Lvec":[ 0.14922458,  0.24902684,  0.72483158], "S1vec": [ 0.01318246, -0.26149364,  0.16342328], "S2vec":[-0.16240703,  0.0124668 ,  0.11174514]}, [[1.33925268], [1.1721733], [-1.43450291]]
+
 
 
 # TODO
@@ -513,9 +526,6 @@ def test_asymptotic_to_angles():
 
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# asymptotic_to_angles(kappainf, chieff, q, chi1, chi2)
-# vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False)
-# vectors_to_angles(Lvec, S1vec, S2vec)
 # conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1)
 # angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
 # angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
