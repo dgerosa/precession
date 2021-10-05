@@ -62,10 +62,12 @@ f_vals = precession2.gwfrequency_to_pnseparation(
     theta1_vals, theta2_vals, deltaphi_vals, r_vals, q, chi1, chi2, M,
     )
 
+# Orbital frequency you want the spins at
+omega0_choice = 0.03 # just an example for the remnant surrogate
+omega0_vals = 4.93e-6 * np.pi * M * f_vals
+
 # You could interpolate the spin evolutions to get them at omega0
 # Here I just take the closest
-omega0_choice = 0.03 # just an example
-omega0_vals = 4.93e-6 * np.pi * M * f_vals
 idx = np.argmin(np.abs(omega0_vals - omega0_choice))
 omega0 = omega0_vals[idx]
 theta10 = theta1_vals[idx]
@@ -88,8 +90,11 @@ def angles_to_vectors(
     
     return [chiAx, chiAy, chiAz], [chiBx, chiBy, chiBz]
 
+# Resample orbital phase since it was averaged in the spin evolution
+# For each posterior sample you need to evaluate the surrogate for many orbphi
 orbphi = np.random.random() * 2 * np.pi
 
+# Spin vectors in frame required by remnant surrogate model
 chiA, chiB = angles_to_vectors(
     orbphi, theta10, theta20, deltaphi0, q, chi1, chi2,
     )
@@ -98,6 +103,7 @@ chiA, chiB = angles_to_vectors(
 fitname = 'NRSur7dq4Remnant'
 fit = surfinBH.LoadFits(fitname)
 
+# Remnant properties and their fit errors
 mf, chif, vf, mf_err, chif_err, vf_err = fit.all(
     1/q, chiA, chiB, omega0=omega0, omega_switch_IG=omega0,
     )
