@@ -5945,15 +5945,19 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
 
 
 
-        print(eta)
-        print(1+np.arange(kfit.shape[0])[:,np.newaxis])
+        print(eta[:,np.newaxis])
+        print(1+np.arange(kfit.shape[0]))
 
-        print(eta**(1+np.arange(kfit.shape[0])[:,np.newaxis]))
+        etatoi = eta[:,np.newaxis]**(1+np.arange(kfit.shape[0]))
 
-        print(kfit)
+        print([eta**i for i in 1+np.arange(kfit.shape[0])] )
+        print(etatoi)
+        print(kfit, kfit[:,0])
+        #print(kfit * eta[:,np.newaxis]**(1+np.arange(kfit.shape[0]))   )
 
 
-        print(kfit * eta**(1+np.arange(kfit.shape[0])[:,np.newaxis]) )
+        #sumell = reduce(lambda x,y: x+y, [kfit[(i,j)] * eta**(1.+i) * aeff**j for i in range(0,nM+1) for j in range(0,nJ+1)])
+
 
 
         # Eq 13
