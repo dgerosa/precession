@@ -5812,7 +5812,6 @@ def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
-
     eta = eval_eta(q)
 
     Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, 1, q, chi1, chi2)
@@ -5842,7 +5841,7 @@ def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
     return Mfin
 
 
-def finalspin(theta1,theta2,deltaphi,q,S1,S2,which='HBR16_34corr'):
+def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
 
     '''
     Estimate the final mass of the BH renmant following a BH merger. We
@@ -5871,99 +5870,58 @@ def finalspin(theta1,theta2,deltaphi,q,S1,S2,which='HBR16_34corr'):
     - `chifin`: dimensionless spin of the BH remnant
     '''
 
-    chi1=S1/(M/(1.+q))**2   # Dimensionless spin
-    chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
-    eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+    eta = eval_eta(q)
 
-    if which == 'BR09': # This was the default in precession v1
+    if which == 'BR09': # Barausse Rezzolla 2009. This was the default in precession v1
 
-        # Spins here are defined in a frame with L along z and S1 in xz
-        hatL=np.array([0,0,1])
-        hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
-        hatS2 = np.array([np.sin(theta2)*np.cos(deltaphi),np.sin(theta2)*np.sin(deltaphi),np.cos(theta2)])
-        #Useful spin combinations.
-        Delta= (q*chi2*hatS2-chi1*hatS1)/(1.+q)
-        Delta_par=np.dot(Delta,hatL)
-        Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
-        chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
-        chit_par=np.dot(chit,hatL)
-        chit_perp=np.linalg.norm(np.cross(chit,hatL))
+        Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, 1, q, chi1, chi2)
+        hatL = normalize_nested(Lvec)
+        hatS1 = normalize_nested(S1vec)
+        hatS2 = normalize_nested(S2vec)
 
-        #Final spin. Barausse Rezzolla 2009
+        #More spin parameters.
+        chit = scalar_nested(1/(1+q)**2, (scalar_nested(chi2*q**2,hatS2)+scalar_nested(chi1,hatS1)) )
+        chit_par = dot_nested(chit,hatL)
+
+        #Final spin.
         t0=-2.8904
         t2=-3.51712
         t3=2.5763
         s4=-0.1229
         s5=0.4537
-        smalll = 2.*pow(3.,1./2.) + t2*eta+t3*pow(eta,2.) + s4*np.dot(chit,chit)*pow(1.+q,4.)*pow(1+q*q,-2.) + (s5*eta+t0+2.)*chit_par*pow(1.+q,2)*pow(1.+q*q,-1)
-        chifin=np.linalg.norm( chit+hatL*smalll*q/pow(1.+q,2.) )
+        smalll = 2*3**(1/2) + t2*eta+t3*eta**2 + s4 * dot_nested(chit,chit)*(1+q)**4 / (1+q**2)**2 + (s5*eta+t0+2)*chit_par*(1+q)**2 / (1+q**2)
+        chifin=norm_nested( chit + hatL*smalll*q/(1+q)**2 )
 
     elif which in ['HBR16_12', 'HBR16_12corr', 'HBR16_33', 'HBR16_33corr', 'HBR16_34', 'HBR16_34corr']:
 
         kfit = {}
 
         if 'HBR16_12' in which:
-            nM=1
-            nJ=2
-            #kfit[(0,0)] = -3.82
-            kfit[(0,1)] = -1.2019
-            kfit[(0,2)] = -1.20764
-            kfit[(1,0)] = 3.79245
-            kfit[(1,1)] = 1.18385
-            kfit[(1,2)] = 4.90494
+            kfit = np.array( [[np.nan, -1.2019, -1.20764] ,
+                              [3.79245, 1.18385, 4.90494] ]  )
             xifit = 0.41616
 
         if 'HBR16_33' in which:
-            nM=3
-            nJ=3
-            #kfit[(0,0)] = -5.9
-            kfit[(0,1)] = 2.87025
-            kfit[(0,2)] = -1.53315
-            kfit[(0,3)] = -3.78893
-            kfit[(1,0)] = 32.9127
-            kfit[(1,1)] = -62.9901
-            kfit[(1,2)] = 10.0068
-            kfit[(1,3)] = 56.1926
-            kfit[(2,0)] = -136.832
-            kfit[(2,1)] = 329.32
-            kfit[(2,2)] = -13.2034
-            kfit[(2,3)] = -252.27
-            kfit[(3,0)] = 210.075
-            kfit[(3,1)] = -545.35
-            kfit[(3,2)] = -3.97509
-            kfit[(3,3)] = 368.405
+            kfit = np.array( [[np.nan, 2.87025, -1.53315, -3.78893] ,
+                              [32.9127, -62.9901, 10.0068, 56.1926],
+                              [-136.832, 329.32, -13.2034, -252.27],
+                              [210.075, -545.35, -3.97509, 368.405]]  )
             xifit = 0.463926
 
         if 'HBR16_34' in which:
-            nM=3
-            nJ=4
-            #kfit[(0,0)] = -5.97723
-            kfit[(0,1)] = 3.39221
-            kfit[(0,2)] = 4.48865
-            kfit[(0,3)] = -5.77101
-            kfit[(0,4)] = -13.0459
-            kfit[(1,0)] = 35.1278
-            kfit[(1,1)] = -72.9336
-            kfit[(1,2)] = -86.0036
-            kfit[(1,3)] = 93.7371
-            kfit[(1,4)] = 200.975
-            kfit[(2,0)] = -146.822
-            kfit[(2,1)] = 387.184
-            kfit[(2,2)] = 447.009
-            kfit[(2,3)] = -467.383
-            kfit[(2,4)] = -884.339
-            kfit[(3,0)] = 223.911
-            kfit[(3,1)] = -648.502
-            kfit[(3,2)] = -697.177
-            kfit[(3,3)] = 753.738
-            kfit[(3,4)] = 1166.89
+            kfit = np.array( [[np.nan, 3.39221, 4.48865, -5.77101, -13.0459] ,
+                              [35.1278, -72.9336, -86.0036, 93.7371, 200.975],
+                              [-146.822, 387.184, 447.009, -467.383, -884.339],
+                              [223.911, -648.502, -697.177, 753.738, 1166.89]])
             xifit = 0.474046
 
-
         # Calculate K00 from Eq 11
-        kfit[(0,0)] = (4.**2.) * ( 0.68646 - reduce(lambda x,y: x+y, [kfit[(i,0)]/(4.**(2.+i))  for i in range(1,nM+1)]) - (3**0.5)/2. )
+        kfit[0,0] = 4**2 * ( 0.68646 - np.sum( kfit[1:,0] /(4**(3+np.arange(kfit.shape[0]-1)))) - (3**0.5)/2)
 
-        theta12 = np.arccos(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2))
+        theta12 = eval_theta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi)
 
         # Eq 18
         if 'corr' in which:
@@ -5974,37 +5932,42 @@ def finalspin(theta1,theta2,deltaphi,q,S1,S2,which='HBR16_34corr'):
             theta2 = theta2 + eps2 * np.sin(theta2)
             theta12 = theta12 + eps12 * np.sin(theta12)
 
-        costheta1 = np.cos(theta1)
-        costheta2 = np.cos(theta2)
-        costheta12 = np.cos(theta12)
-
         # Eq. 14 - 15
-        atot = ( chi1*costheta1 + chi2*costheta2*q**2. ) / (1.+q)**2.
-        aeff = atot + xifit*eta* ( chi1*costheta1 + chi2*costheta2 )
+        atot = ( chi1*np.cos(theta1) + chi2*np.cos(theta2)*q**2 ) / (1+q)**2
+        aeff = atot + xifit*eta* ( chi1*np.cos(theta1) + chi2*np.cos(theta2) )
 
         # Eq 2 - 6 evaluated at aeff, as specified in Eq 11
-        Z1= 1. + (1.-(aeff**2.))**(1./3.) * ( (1.+aeff)**(1./3.) + (1.-aeff)**(1./3.) )
-        Z2= ( (3.*aeff**2.) + (Z1**2.) )**(1./2.)
-        risco= 3. + Z2 - np.sign(aeff) * ( (3.-Z1)*(3.+Z1+2.*Z2) )**(1./2.)
-        Eisco=(1.-2./(3.*risco))**(1./2.)
-        Lisco = (2./(3.*(3**(1./2.)))) * ( 1. + 2.*(3.*risco - 2. )**(1./2.) )
+        Z1= 1 + (1-(aeff**2))**(1/3) * ( (1+aeff)**(1/3) + (1-aeff)**(1/3) )
+        Z2= ( (3*aeff**2) + (Z1**2) )**(1/2)
+        risco= 3 + Z2 - np.sign(aeff) * ( (3-Z1)*(3+Z1+2*Z2) )**(1/2)
+        Eisco=(1-2/(3*risco))**(1/2)
+        Lisco = (2/(3*(3**(1/2)))) * ( 1 + 2*(3*risco - 2 )**(1/2) )
+
+
+
+        print(eta)
+        print(1+np.arange(kfit.shape[0])[:,np.newaxis])
+
+        print(eta**(1+np.arange(kfit.shape[0])[:,np.newaxis]))
+
+        print(kfit)
+
+
+        print(kfit * eta**(1+np.arange(kfit.shape[0])[:,np.newaxis]) )
+
 
         # Eq 13
-        sumell = reduce(lambda x,y: x+y, [kfit[(i,j)] * eta**(1.+i) * aeff**j for i in range(0,nM+1) for j in range(0,nJ+1)])
-        ell = np.abs( Lisco  - 2.*atot*(Eisco-1.)  + sumell )
+        sumell = np.sum( np.sum(kfit*eta**(1+np.arange(kfit.shape[0]))[:,np.newaxis], axis=0) *aeff**np.arange(kfit.shape[1]) )
+        ell = np.abs( Lisco  - 2*atot*(Eisco-1)  + sumell )
 
         # Eq 16
-        chifin = (1./(1.+q)**2.) * ( chi1**2. + (chi2**2.)*(q**4.)  + 2.*chi1*chi2*(q**2.)*costheta12
-                + 2.*(chi1*costheta1 + chi2*(q**2.)*costheta2)*ell*q + ((ell*q)**2.)  )**0.5
+        chifin = (1/(1+q)**2) * ( chi1**2 + (chi2**2)*(q**4)  + 2*chi1*chi2*(q**2)*np.cos(theta12)
+                + 2*(chi1*np.cos(theta1) + chi2*(q**2)*np.cos(theta2))*ell*q + ((ell*q)**2)  )**(1/2)
 
     else:
-        raise ValueError("[finalspin] Wrong fit option, see keyword which")
+        raise ValueError("`which` needs to be one of the following: `BR09`, `HBR16_12`, `HBR16_12corr`, `HBR16_33`, `HBR16_33corr`, `HBR16_34`, `HBR16_34corr`.")
 
-    if chifin>1.: #Check on the final spin, as suggested by Emanuele
-        print("[finalspin] Warning: got chi>1, force chi=1")
-        chifin=1.
-
-    return chifin
+    return np.minimum(chifin,1)
 
 
 
@@ -7104,6 +7067,11 @@ if __name__ == '__main__':
     # result = inspiral_precav(theta1=theta1inf, theta2=theta2inf, r=r, q=q, chi1=chi1, chi2=chi2)
     # print(result)
 
-    print(remnantmass(1,1,1,1,1,1))
+    #print(final(1,1,1,1,1,1))
 
-    print(remnantmass([1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1]))
+    #print(remnantmass([1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1]))
+
+
+    #print(remnantspin(1,1,1,1,1,1,which='HBR16_34corr'))
+
+    print(remnantspin([1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_34corr'))
