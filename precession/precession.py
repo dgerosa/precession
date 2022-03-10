@@ -5842,33 +5842,43 @@ def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
 
 
 def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
+    """
+    Estimate the final spin of the post-merger renmant. We implement the fitting
+    formula to numerical relativity simulations by  Barausse and Rezzolla 2009
+    and Hofmann, Barausse and Rezzolla 2016. This can be selected by the keywork `
+    `which`, see those references for details. By default this returns the
+    Hofmann+ expression with nM=3, nJ=4 and corrections for the effective
+    angles (HBR16_34corr). This formula has to be applied *close to merger*,
+    where numerical relativity simulations are available. You should do a PN
+    evolution to transfer binaries at r~10M.
 
-    '''
-    Estimate the final mass of the BH renmant following a BH merger. We
-    implement the fitting formula to numerical relativity simulations by
-    Barausse and Rezzolla 2009 and Hofmann, Barausse and Rezzolla 2016.
-    See also Gerosa and Sesana 2015. By default returns the Hofmann+ expression
-    with nM=3, nJ=4 and corrections for the effective angles. We return the
-    dimensionless spin, which is the spin in units of the (pre-merger) binary
-    total mass, not the spin in units of the actual BH remnant. This can be
-    obtained combing this function with `precession.finalmass`. Maximally
-    spinning BHs are returned if/whenever the fitting formula returns
-    dimensionless spins greater than 1. This formula has to be applied
-    *close to merger*, where numerical relativity simulations are available.
-    You should do a PN evolution to transfer binaries at r~10M.
-    **Call:**
-        chifin=precession.finalspin(theta1,theta2,deltaphi,q,S1,S2, which="HBZ16_34corr")
-    **Parameters:**
-    - `theta1`: angle between the spin of the primary and the orbital angular momentum.
-    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.
-    - `deltaphi`: angle between the projection of the two spins on the orbital plane.
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
-    - `which`: select fitting formula, should be: BR09, HBR16_12, HBR16_12corr, HBR16_33, HBR16_33corr, HBR16_34, HBR16_34corr.
-    **Returns:**
-    - `chifin`: dimensionless spin of the BH remnant
-    '''
+    Call
+    ----
+    chifin = remnantspin(theta1,theta2,deltaphi,q,chi1,chi2,which='HBR16_34corr')
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    which: string, optional (default: 'HBR16_34corr')
+        Select function behavior.
+
+    Returns
+    -------
+    chifin: float
+        Spin of the black-hole remnant.
+    """
+
 
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
@@ -5943,25 +5953,11 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
         Eisco=(1-2/(3*risco))**(1/2)
         Lisco = (2/(3*(3**(1/2)))) * ( 1 + 2*(3*risco - 2 )**(1/2) )
 
-
-
-        print(eta[:,np.newaxis])
-        print(1+np.arange(kfit.shape[0]))
-
-        etatoi = eta[:,np.newaxis]**(1+np.arange(kfit.shape[0]))
-
-        print([eta**i for i in 1+np.arange(kfit.shape[0])] )
-        print(etatoi)
-        print(kfit, kfit[:,0])
-        #print(kfit * eta[:,np.newaxis]**(1+np.arange(kfit.shape[0]))   )
-
-
-        #sumell = reduce(lambda x,y: x+y, [kfit[(i,j)] * eta**(1.+i) * aeff**j for i in range(0,nM+1) for j in range(0,nJ+1)])
-
-
-
         # Eq 13
-        sumell = np.sum( np.sum(kfit*eta**(1+np.arange(kfit.shape[0]))[:,np.newaxis], axis=0) *aeff**np.arange(kfit.shape[1]) )
+        etatoi = eta[:,np.newaxis]**(1+np.arange(kfit.shape[0]))
+        innersum = np.sum(kfit.T * etatoi[:,np.newaxis],axis=2)
+        aefftoj = aeff[:,np.newaxis]**(np.arange(kfit.shape[1]))
+        sumell = (np.sum(innersum  * aefftoj,axis=1))
         ell = np.abs( Lisco  - 2*atot*(Eisco-1)  + sumell )
 
         # Eq 16
@@ -7078,4 +7074,4 @@ if __name__ == '__main__':
 
     #print(remnantspin(1,1,1,1,1,1,which='HBR16_34corr'))
 
-    print(remnantspin([1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_34corr'))
+    print(remnantspin([0.1,1,1], [0.1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_33'))
