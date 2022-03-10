@@ -5970,7 +5970,7 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
     return np.minimum(chifin,1)
 
 
-
+#TODO:this is still the old function
 def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False,more=False):
 
     '''
@@ -6016,15 +6016,10 @@ def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False,more=False)
     chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
     eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
 
-
-
     # Spins here are defined in a frame with L along z and S1 in xz
     hatL=np.array([0,0,1])
     hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
     hatS2 = np.array([np.sin(theta2)*np.cos(deltaPhi),np.sin(theta2)*np.sin(deltaPhi),np.cos(theta2)])
-
-
-
 
     #Useful spin combinations.
     Delta= -(q*chi2*hatS2-chi1*hatS1)/(1.+q) # Minus sign added in v1.0.2. Typo in the paper.
@@ -7074,4 +7069,4 @@ if __name__ == '__main__':
 
     #print(remnantspin(1,1,1,1,1,1,which='HBR16_34corr'))
 
-    print(remnantspin([0.1,1,1], [0.1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_33'))
+    print(remnantspin([0.1,1,1], [0.1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_12'))
