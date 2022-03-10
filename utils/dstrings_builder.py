@@ -150,7 +150,11 @@ def descr(varname,vardef=None):
     lookup['deltaphiatmin']=["float","Value of the angle deltaphi at the resonance that minimizes either J or chieff, depending on the input"]
     lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input"]
     lookup['precomputedroots']=["array","Pre-computed output of Ssroots for computational efficiency"]
+    lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input"]
 
+    lookup['mfin']=["float","Mass of the black-hole remnant"]
+    lookup['chifin']=["float","Spin of the black-hole remnant"]
+    lookup['vk']=["float","Kick of the black-hole remnant"]
 
 
     if varname in lookup:

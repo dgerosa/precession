@@ -44,7 +44,7 @@ def norm_nested(x):
 
     Call
     ----
-    x = normalize_nested(x)
+    n = norm_nested(x)
 
     Parameters
     ----------
@@ -53,8 +53,8 @@ def norm_nested(x):
 
     Returns
     -------
-    x : array
-        Normalized array.
+    n : array
+        Norm of the input arrays.
     """
 
     return np.linalg.norm(x, axis=1)
@@ -66,7 +66,7 @@ def normalize_nested(x):
 
     Call
     ----
-    x = normalize_nested(x)
+    y = normalize_nested(x)
 
     Parameters
     ----------
@@ -75,7 +75,7 @@ def normalize_nested(x):
 
     Returns
     -------
-    x : array
+    y : array
         Normalized array.
     """
 
@@ -104,6 +104,30 @@ def dot_nested(x, y):
     """
 
     return np.einsum('ij, ij->i', x, y)
+
+
+def scalar_nested(k, x):
+    """
+    Nested scalar product between a 1D and a 2D array.
+
+    Call
+    ----
+    y = scalar_nested(k, x)
+
+    Parameters
+    ----------
+    k : float
+        Input scalar.
+    x : array
+        Input array.
+
+    Returns
+    -------
+    y : array
+        Scalar product array.
+    """
+
+    return k[:,np.newaxis]*x
 
 
 def sample_unitsphere(N=1):
@@ -5750,6 +5774,363 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     return f
 
 
+
+def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
+
+    """
+    Estimate the final mass of the post-merger renmant. We implement the fitting
+    formula to numerical relativity simulations by Barausse Morozova Rezzolla
+    2012. This formula has to be applied *close to merger*, where numerical
+    relativity simulations are available. You should do a PN evolution to
+    transfer binaries to r~10M.
+
+    Call
+    ----
+    mfin = remnantmass(theta1,theta2,deltaphi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    mfin: float
+        Mass of the black-hole remnant.
+    """
+
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    eta = eval_eta(q)
+
+    Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, 1, q, chi1, chi2)
+    hatL = normalize_nested(Lvec)
+    hatS1 = normalize_nested(S1vec)
+    hatS2 = normalize_nested(S2vec)
+
+    #More spin parameters.
+    Delta = scalar_nested(1/(1+q), (scalar_nested(q*chi2,hatS2)-scalar_nested(chi1,hatS1)) )
+    Delta_par = dot_nested(Delta,hatL)
+    Delta_perp = norm_nested(np.cross(Delta,hatL))
+    chit = scalar_nested(1/(1+q)**2, (scalar_nested(chi2*q**2,hatS2)+scalar_nested(chi1,hatS1)) )
+    chit_par = dot_nested(chit,hatL)
+    chit_perp = norm_nested(np.cross(chit,hatL))
+
+    #Final mass. Barausse Morozova Rezzolla 2012
+    p0 = 0.04827
+    p1 = 0.01707
+    Z1 = 1 + (1-chit_par**2)**(1/3)* ((1+chit_par)**(1/3)+(1-chit_par)**(1/3))
+    Z2 = (3* chit_par**2 + Z1**2)**(1/2)
+    risco = 3 + Z2 - np.sign(chit_par) * ((3-Z1)*(3+Z1+2*Z2))**(1/2)
+    Eisco = (1-2/(3*risco))**(1/2)
+    #Radiated energy, in units of the initial total mass of the binary
+    Erad = eta*(1-Eisco) + 4* eta**2 * (4*p0+16*p1*chit_par*(chit_par+1)+Eisco-1)
+    Mfin = 1- Erad # Final mass
+
+    return Mfin
+
+
+def finalspin(theta1,theta2,deltaphi,q,S1,S2,which='HBR16_34corr'):
+
+    '''
+    Estimate the final mass of the BH renmant following a BH merger. We
+    implement the fitting formula to numerical relativity simulations by
+    Barausse and Rezzolla 2009 and Hofmann, Barausse and Rezzolla 2016.
+    See also Gerosa and Sesana 2015. By default returns the Hofmann+ expression
+    with nM=3, nJ=4 and corrections for the effective angles. We return the
+    dimensionless spin, which is the spin in units of the (pre-merger) binary
+    total mass, not the spin in units of the actual BH remnant. This can be
+    obtained combing this function with `precession.finalmass`. Maximally
+    spinning BHs are returned if/whenever the fitting formula returns
+    dimensionless spins greater than 1. This formula has to be applied
+    *close to merger*, where numerical relativity simulations are available.
+    You should do a PN evolution to transfer binaries at r~10M.
+    **Call:**
+        chifin=precession.finalspin(theta1,theta2,deltaphi,q,S1,S2, which="HBZ16_34corr")
+    **Parameters:**
+    - `theta1`: angle between the spin of the primary and the orbital angular momentum.
+    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.
+    - `deltaphi`: angle between the projection of the two spins on the orbital plane.
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+    - `which`: select fitting formula, should be: BR09, HBR16_12, HBR16_12corr, HBR16_33, HBR16_33corr, HBR16_34, HBR16_34corr.
+    **Returns:**
+    - `chifin`: dimensionless spin of the BH remnant
+    '''
+
+    chi1=S1/(M/(1.+q))**2   # Dimensionless spin
+    chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
+    eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
+
+    if which == 'BR09': # This was the default in precession v1
+
+        # Spins here are defined in a frame with L along z and S1 in xz
+        hatL=np.array([0,0,1])
+        hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
+        hatS2 = np.array([np.sin(theta2)*np.cos(deltaphi),np.sin(theta2)*np.sin(deltaphi),np.cos(theta2)])
+        #Useful spin combinations.
+        Delta= (q*chi2*hatS2-chi1*hatS1)/(1.+q)
+        Delta_par=np.dot(Delta,hatL)
+        Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
+        chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
+        chit_par=np.dot(chit,hatL)
+        chit_perp=np.linalg.norm(np.cross(chit,hatL))
+
+        #Final spin. Barausse Rezzolla 2009
+        t0=-2.8904
+        t2=-3.51712
+        t3=2.5763
+        s4=-0.1229
+        s5=0.4537
+        smalll = 2.*pow(3.,1./2.) + t2*eta+t3*pow(eta,2.) + s4*np.dot(chit,chit)*pow(1.+q,4.)*pow(1+q*q,-2.) + (s5*eta+t0+2.)*chit_par*pow(1.+q,2)*pow(1.+q*q,-1)
+        chifin=np.linalg.norm( chit+hatL*smalll*q/pow(1.+q,2.) )
+
+    elif which in ['HBR16_12', 'HBR16_12corr', 'HBR16_33', 'HBR16_33corr', 'HBR16_34', 'HBR16_34corr']:
+
+        kfit = {}
+
+        if 'HBR16_12' in which:
+            nM=1
+            nJ=2
+            #kfit[(0,0)] = -3.82
+            kfit[(0,1)] = -1.2019
+            kfit[(0,2)] = -1.20764
+            kfit[(1,0)] = 3.79245
+            kfit[(1,1)] = 1.18385
+            kfit[(1,2)] = 4.90494
+            xifit = 0.41616
+
+        if 'HBR16_33' in which:
+            nM=3
+            nJ=3
+            #kfit[(0,0)] = -5.9
+            kfit[(0,1)] = 2.87025
+            kfit[(0,2)] = -1.53315
+            kfit[(0,3)] = -3.78893
+            kfit[(1,0)] = 32.9127
+            kfit[(1,1)] = -62.9901
+            kfit[(1,2)] = 10.0068
+            kfit[(1,3)] = 56.1926
+            kfit[(2,0)] = -136.832
+            kfit[(2,1)] = 329.32
+            kfit[(2,2)] = -13.2034
+            kfit[(2,3)] = -252.27
+            kfit[(3,0)] = 210.075
+            kfit[(3,1)] = -545.35
+            kfit[(3,2)] = -3.97509
+            kfit[(3,3)] = 368.405
+            xifit = 0.463926
+
+        if 'HBR16_34' in which:
+            nM=3
+            nJ=4
+            #kfit[(0,0)] = -5.97723
+            kfit[(0,1)] = 3.39221
+            kfit[(0,2)] = 4.48865
+            kfit[(0,3)] = -5.77101
+            kfit[(0,4)] = -13.0459
+            kfit[(1,0)] = 35.1278
+            kfit[(1,1)] = -72.9336
+            kfit[(1,2)] = -86.0036
+            kfit[(1,3)] = 93.7371
+            kfit[(1,4)] = 200.975
+            kfit[(2,0)] = -146.822
+            kfit[(2,1)] = 387.184
+            kfit[(2,2)] = 447.009
+            kfit[(2,3)] = -467.383
+            kfit[(2,4)] = -884.339
+            kfit[(3,0)] = 223.911
+            kfit[(3,1)] = -648.502
+            kfit[(3,2)] = -697.177
+            kfit[(3,3)] = 753.738
+            kfit[(3,4)] = 1166.89
+            xifit = 0.474046
+
+
+        # Calculate K00 from Eq 11
+        kfit[(0,0)] = (4.**2.) * ( 0.68646 - reduce(lambda x,y: x+y, [kfit[(i,0)]/(4.**(2.+i))  for i in range(1,nM+1)]) - (3**0.5)/2. )
+
+        theta12 = np.arccos(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2))
+
+        # Eq 18
+        if 'corr' in which:
+            eps1 = 0.024
+            eps2 = 0.024
+            eps12 = 0
+            theta1 = theta1 + eps1 * np.sin(theta1)
+            theta2 = theta2 + eps2 * np.sin(theta2)
+            theta12 = theta12 + eps12 * np.sin(theta12)
+
+        costheta1 = np.cos(theta1)
+        costheta2 = np.cos(theta2)
+        costheta12 = np.cos(theta12)
+
+        # Eq. 14 - 15
+        atot = ( chi1*costheta1 + chi2*costheta2*q**2. ) / (1.+q)**2.
+        aeff = atot + xifit*eta* ( chi1*costheta1 + chi2*costheta2 )
+
+        # Eq 2 - 6 evaluated at aeff, as specified in Eq 11
+        Z1= 1. + (1.-(aeff**2.))**(1./3.) * ( (1.+aeff)**(1./3.) + (1.-aeff)**(1./3.) )
+        Z2= ( (3.*aeff**2.) + (Z1**2.) )**(1./2.)
+        risco= 3. + Z2 - np.sign(aeff) * ( (3.-Z1)*(3.+Z1+2.*Z2) )**(1./2.)
+        Eisco=(1.-2./(3.*risco))**(1./2.)
+        Lisco = (2./(3.*(3**(1./2.)))) * ( 1. + 2.*(3.*risco - 2. )**(1./2.) )
+
+        # Eq 13
+        sumell = reduce(lambda x,y: x+y, [kfit[(i,j)] * eta**(1.+i) * aeff**j for i in range(0,nM+1) for j in range(0,nJ+1)])
+        ell = np.abs( Lisco  - 2.*atot*(Eisco-1.)  + sumell )
+
+        # Eq 16
+        chifin = (1./(1.+q)**2.) * ( chi1**2. + (chi2**2.)*(q**4.)  + 2.*chi1*chi2*(q**2.)*costheta12
+                + 2.*(chi1*costheta1 + chi2*(q**2.)*costheta2)*ell*q + ((ell*q)**2.)  )**0.5
+
+    else:
+        raise ValueError("[finalspin] Wrong fit option, see keyword which")
+
+    if chifin>1.: #Check on the final spin, as suggested by Emanuele
+        print("[finalspin] Warning: got chi>1, force chi=1")
+        chifin=1.
+
+    return chifin
+
+
+
+def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False,more=False):
+
+    '''
+    Estimate the final kick of the BH remnant following a BH merger. We
+    implement the fitting formula to numerical relativity simulations developed
+    by the Rochester group. The larger contribution comes from the component of
+    the kick parallel to L. Flags let you switch on and off the various
+    contributions (all on by default): superkicks (Gonzalez et al. 2007a;
+    Campanelli et al. 2007), hang-up kicks (Lousto & Zlochower 2011),
+    cross-kicks (Lousto & Zlochower 2013). The orbital-plane kick components are
+    implemented as described in Kesden et al. 2010a. See also Gerosa and Sesana
+    2015.
+    The final kick depends on the orbital phase at merger Theta. By default,
+    this is assumed to be randonly distributed in [0,2pi]. The maximum kick is
+    realized for Theta=0 and can be computed with the optional argument
+    maxkick=True. This formula has to be applied *close to merger*, where
+    numerical relativity simulations are available. You should do a PN evolution
+    to transfer binaries at r~10M.
+    The final kick is returned in geometrical units (i.e. vkick/c) by default,
+    and converted to km/s if kms=True.
+    **Call:**
+        vkick=precession.finalkick(theta1,theta2,deltaphi,q,S1,S2,maxkick=False,kms=False,more=False)
+    **Parameters:**
+    - `theta1`: angle between the spin of the primary and the orbital angular momentum.
+    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.
+    - `deltaphi`: angle between the projection of the two spins on the orbital plane.
+    - `q`: binary mass ratio. Must be q<=1.
+    - `S1`: spin magnitude of the primary BH.
+    - `S2`: spin magnitude of the secondary BH.
+    - `maxkick`: if `True` maximizes over the orbital phase at merger.
+    - `kms`: if `True` convert result to km/s.
+    - `more`: if `True` returns additional quantities.
+    **Returns:**
+    - `vkick`: kick of the BH remnant
+    - `vm`: (optional) mass-asymmetry term
+    - `vperp`: (optional) spin-asymmetry term perpendicular to L
+    - `v_e1`: (optional) component of the orbital-plane kick
+    - `v_e2`: (optional) component of the orbital-plane kick
+    - `vpar`: (optional) spin-asymmetry term along L
+    '''
+
+    chi1=S1/(M/(1.+q))**2   # Dimensionless spin
+    chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
+    eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
+
+
+
+    # Spins here are defined in a frame with L along z and S1 in xz
+    hatL=np.array([0,0,1])
+    hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
+    hatS2 = np.array([np.sin(theta2)*np.cos(deltaPhi),np.sin(theta2)*np.sin(deltaPhi),np.cos(theta2)])
+
+
+
+
+    #Useful spin combinations.
+    Delta= -(q*chi2*hatS2-chi1*hatS1)/(1.+q) # Minus sign added in v1.0.2. Typo in the paper.
+    Delta_par=np.dot(Delta,hatL)
+    Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
+    chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
+    chit_par=np.dot(chit,hatL)
+    chit_perp=np.linalg.norm(np.cross(chit,hatL))
+
+    #Kick. Coefficients are quoted in km/s
+
+    # vm and vperp are like in Kesden at 2010a, vpar is modified from Lousto Zlochower 2013
+    zeta=np.radians(145.)
+    A=1.2e4
+    B=-0.93
+    H=6.9e3
+
+    # Switch on/off the various (super)kick contribution. Default are all on
+    superkick=True
+    hangupkick=True
+    crosskick=True
+
+    if superkick==True:
+        V11=3677.76
+    else:
+        V11=0.
+    if hangupkick==True:
+        VA=2481.21
+        VB=1792.45
+        VC=1506.52
+    else:
+        VA=0.
+        VB=0.
+        VC=0.
+    if crosskick==True:
+        C2=1140.
+        C3=2481.
+    else:
+        C2=0.
+        C3=0.
+
+    if maxkick==True:
+        bigTheta=0
+    else:
+        bigTheta=np.random.uniform(0., 2.*np.pi)
+
+    vm=A*eta*eta*(1.+B*eta)*(1.-q)/(1.+q)
+    vperp=H*eta*eta*Delta_par
+    vpar=16.*eta*eta* (Delta_perp*(V11+2.*VA*chit_par+4.*VB*pow(chit_par,2.)+8.*VC*pow(chit_par,3.)) + chit_perp*Delta_par*(2.*C2+4.*C3*chit_par)) * np.cos(bigTheta)
+    vkick=np.linalg.norm([vm+vperp*np.cos(zeta),vperp*np.sin(zeta),vpar])
+
+    if vkick>5000:
+        print("[finalkick] Warning; I got v_kick>5000km/s. This shouldn't be possibile")
+
+    if not kms: # divide by the speed of light in km/s
+        c_kms=299792.458
+        vkick=vkick/299792.458
+        vm=vm/299792.458
+        vperp=vperp/299792.458
+        vpar=vpar/299792.458
+
+    if more:
+        return vkick, vm, vperp, vm+vperp*np.cos(zeta), vperp*np.sin(zeta), vpar
+    else:
+        return vkick
+
+
+
+
 if __name__ == '__main__':
 
     import sys
@@ -6710,15 +7091,19 @@ if __name__ == '__main__':
 
     #print(eval_cyclesign(Lvec=[1,2,3],S1vec=[3,2,1],S2vec=[1,1,0]))
 
-    n=10
-    theta1inf = np.arccos(np.random.uniform(-1, 1, n))
-    theta2inf = np.arccos(np.random.uniform(-1, 1, n))
-    chi1 = np.random.uniform(0, 1, n)
-    chi2 = np.random.uniform(0, 1, n)
-    q = np.random.uniform(0.01, 0.99, n)
-    r = [np.inf, 10.]
-    r = np.repeat([r], n, axis=0)
-    #print(chi1)
+    # n=10
+    # theta1inf = np.arccos(np.random.uniform(-1, 1, n))
+    # theta2inf = np.arccos(np.random.uniform(-1, 1, n))
+    # chi1 = np.random.uniform(0, 1, n)
+    # chi2 = np.random.uniform(0, 1, n)
+    # q = np.random.uniform(0.01, 0.99, n)
+    # r = [np.inf, 10.]
+    # r = np.repeat([r], n, axis=0)
+    # #print(chi1)
+    #
+    # result = inspiral_precav(theta1=theta1inf, theta2=theta2inf, r=r, q=q, chi1=chi1, chi2=chi2)
+    # print(result)
 
-    result = inspiral_precav(theta1=theta1inf, theta2=theta2inf, r=r, q=q, chi1=chi1, chi2=chi2)
-    print(result)
+    print(remnantmass(1,1,1,1,1,1))
+
+    print(remnantmass([1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1]))
