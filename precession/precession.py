@@ -5776,7 +5776,6 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
 
 
 def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
-
     """
     Estimate the final mass of the post-merger renmant. We implement the fitting
     formula to numerical relativity simulations by Barausse Morozova Rezzolla
@@ -5814,18 +5813,7 @@ def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
     chi2 = np.atleast_1d(chi2)
     eta = eval_eta(q)
 
-    Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, 1, q, chi1, chi2)
-    hatL = normalize_nested(Lvec)
-    hatS1 = normalize_nested(S1vec)
-    hatS2 = normalize_nested(S2vec)
-
-    #More spin parameters.
-    Delta = scalar_nested(1/(1+q), (scalar_nested(q*chi2,hatS2)-scalar_nested(chi1,hatS1)) )
-    Delta_par = dot_nested(Delta,hatL)
-    Delta_perp = norm_nested(np.cross(Delta,hatL))
-    chit = scalar_nested(1/(1+q)**2, (scalar_nested(chi2*q**2,hatS2)+scalar_nested(chi1,hatS1)) )
-    chit_par = dot_nested(chit,hatL)
-    chit_perp = norm_nested(np.cross(chit,hatL))
+    chit_par =  ( chi2*q**2 * np.cos(theta2) + np.cos(theta1) ) / (1+q)**2
 
     #Final mass. Barausse Morozova Rezzolla 2012
     p0 = 0.04827
@@ -5887,14 +5875,7 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
 
     if which == 'BR09': # Barausse Rezzolla 2009. This was the default in precession v1
 
-        Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, 1, q, chi1, chi2)
-        hatL = normalize_nested(Lvec)
-        hatS1 = normalize_nested(S1vec)
-        hatS2 = normalize_nested(S2vec)
-
-        #More spin parameters.
-        chit = scalar_nested(1/(1+q)**2, (scalar_nested(chi2*q**2,hatS2)+scalar_nested(chi1,hatS1)) )
-        chit_par = dot_nested(chit,hatL)
+        chit_par =  ( chi2*q**2 * np.cos(theta2) + np.cos(theta1) ) / (1+q)**2
 
         #Final spin.
         t0=-2.8904
@@ -5933,7 +5914,7 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
 
         theta12 = eval_theta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi)
 
-        # Eq 18
+        # Eq. 18
         if 'corr' in which:
             eps1 = 0.024
             eps2 = 0.024
@@ -5946,21 +5927,21 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
         atot = ( chi1*np.cos(theta1) + chi2*np.cos(theta2)*q**2 ) / (1+q)**2
         aeff = atot + xifit*eta* ( chi1*np.cos(theta1) + chi2*np.cos(theta2) )
 
-        # Eq 2 - 6 evaluated at aeff, as specified in Eq 11
+        # Eq. 2 - 6 evaluated at aeff, as specified in Eq. 11
         Z1= 1 + (1-(aeff**2))**(1/3) * ( (1+aeff)**(1/3) + (1-aeff)**(1/3) )
         Z2= ( (3*aeff**2) + (Z1**2) )**(1/2)
         risco= 3 + Z2 - np.sign(aeff) * ( (3-Z1)*(3+Z1+2*Z2) )**(1/2)
         Eisco=(1-2/(3*risco))**(1/2)
         Lisco = (2/(3*(3**(1/2)))) * ( 1 + 2*(3*risco - 2 )**(1/2) )
 
-        # Eq 13
+        # Eq. 13
         etatoi = eta[:,np.newaxis]**(1+np.arange(kfit.shape[0]))
         innersum = np.sum(kfit.T * etatoi[:,np.newaxis],axis=2)
         aefftoj = aeff[:,np.newaxis]**(np.arange(kfit.shape[1]))
         sumell = (np.sum(innersum  * aefftoj,axis=1))
         ell = np.abs( Lisco  - 2*atot*(Eisco-1)  + sumell )
 
-        # Eq 16
+        # Eq. 16
         chifin = (1/(1+q)**2) * ( chi1**2 + (chi2**2)*(q**4)  + 2*chi1*chi2*(q**2)*np.cos(theta12)
                 + 2*(chi1*np.cos(theta1) + chi2*(q**2)*np.cos(theta2))*ell*q + ((ell*q)**2)  )**(1/2)
 
@@ -5970,121 +5951,116 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
     return np.minimum(chifin,1)
 
 
-#TODO:this is still the old function
-def finalkick(theta1,theta2,deltaPhi,q,S1,S2,maxkick=False,kms=False,more=False):
-
-    '''
-    Estimate the final kick of the BH remnant following a BH merger. We
-    implement the fitting formula to numerical relativity simulations developed
-    by the Rochester group. The larger contribution comes from the component of
-    the kick parallel to L. Flags let you switch on and off the various
-    contributions (all on by default): superkicks (Gonzalez et al. 2007a;
+def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=False, superkick=True, hangupkick=True, crosskick=True, full_output=False):
+    """
+    Estimate the kick of the merger remnant. We collect various numerical-relativity
+    results, as described in Gerosa and Kesden 2016. Flags let you switch the
+    various contributions on and off (all on by default): superkicks (Gonzalez et al. 2007a;
     Campanelli et al. 2007), hang-up kicks (Lousto & Zlochower 2011),
     cross-kicks (Lousto & Zlochower 2013). The orbital-plane kick components are
-    implemented as described in Kesden et al. 2010a. See also Gerosa and Sesana
-    2015.
-    The final kick depends on the orbital phase at merger Theta. By default,
-    this is assumed to be randonly distributed in [0,2pi]. The maximum kick is
-    realized for Theta=0 and can be computed with the optional argument
-    maxkick=True. This formula has to be applied *close to merger*, where
+    implemented as described in Kesden et al. 2010a.  The final kick depends on
+    the orbital phase at merger. By default, this is assumed to be uniformly
+    distributed in [0,2pi]. The maximum kick is realized for Theta=0 and can be
+    computed with the optional argument maxphase. The final kick is returned in
+    geometrical units (i.e. vkick/c) by default, and converted to km/s if
+    kms=True. This formula has to be applied *close to merger*, where
     numerical relativity simulations are available. You should do a PN evolution
     to transfer binaries at r~10M.
-    The final kick is returned in geometrical units (i.e. vkick/c) by default,
-    and converted to km/s if kms=True.
-    **Call:**
-        vkick=precession.finalkick(theta1,theta2,deltaphi,q,S1,S2,maxkick=False,kms=False,more=False)
-    **Parameters:**
-    - `theta1`: angle between the spin of the primary and the orbital angular momentum.
-    - `theta2`: angle between the spin of the secondary and the orbital angular momentum.
-    - `deltaphi`: angle between the projection of the two spins on the orbital plane.
-    - `q`: binary mass ratio. Must be q<=1.
-    - `S1`: spin magnitude of the primary BH.
-    - `S2`: spin magnitude of the secondary BH.
-    - `maxkick`: if `True` maximizes over the orbital phase at merger.
-    - `kms`: if `True` convert result to km/s.
-    - `more`: if `True` returns additional quantities.
-    **Returns:**
-    - `vkick`: kick of the BH remnant
-    - `vm`: (optional) mass-asymmetry term
-    - `vperp`: (optional) spin-asymmetry term perpendicular to L
-    - `v_e1`: (optional) component of the orbital-plane kick
-    - `v_e2`: (optional) component of the orbital-plane kick
-    - `vpar`: (optional) spin-asymmetry term along L
-    '''
 
-    chi1=S1/(M/(1.+q))**2   # Dimensionless spin
-    chi2=S2/(q*M/(1.+q))**2 # Dimensionless spin
-    eta=q*pow(1.+q,-2.)     # Symmetric mass ratio
+    Call
+    ----
+    vk = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)
+    vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)
 
-    # Spins here are defined in a frame with L along z and S1 in xz
-    hatL=np.array([0,0,1])
-    hatS1=np.array([np.sin(theta1),0,np.cos(theta1)])
-    hatS2 = np.array([np.sin(theta2)*np.cos(deltaPhi),np.sin(theta2)*np.sin(deltaPhi),np.cos(theta2)])
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    kms: boolean, optional (default: False)
+        Return velocities in km/s.
+    maxphase: boolean, optional (default: False)
+        Maximize over orbital phase at merger.
+    superkick: boolean, optional (default: True)
+        Switch kick terms on and off.
+    hangupkick: boolean, optional (default: True)
+        Switch kick terms on and off.
+    crosskick: boolean, optional (default: True)
+        Switch kick terms on and off.
+    full_output: boolean, optional (default: False)
+        Return additional outputs.
 
-    #Useful spin combinations.
-    Delta= -(q*chi2*hatS2-chi1*hatS1)/(1.+q) # Minus sign added in v1.0.2. Typo in the paper.
-    Delta_par=np.dot(Delta,hatL)
-    Delta_perp=np.linalg.norm(np.cross(Delta,hatL))
-    chit= (q*q*chi2*hatS2+chi1*hatS1)/pow(1.+q,2.)
-    chit_par=np.dot(chit,hatL)
-    chit_perp=np.linalg.norm(np.cross(chit,hatL))
+    Returns
+    -------
+    vk: float
+        Kick of the black-hole remnant (magnitude).
 
-    #Kick. Coefficients are quoted in km/s
+    Other parameters
+    -------
+    vk_array: array
+        Kick of the black-hole remnant (in a frame aligned with L).
+    """
 
-    # vm and vperp are like in Kesden at 2010a, vpar is modified from Lousto Zlochower 2013
-    zeta=np.radians(145.)
+
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+    eta = eval_eta(q)
+
+    Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, 1, q, chi1, chi2)
+    hatL = normalize_nested(Lvec)
+    hatS1 = normalize_nested(S1vec)
+    hatS2 = normalize_nested(S2vec)
+
+    #More spin parameters.
+    Delta = - scalar_nested(1/(1+q), (scalar_nested(q*chi2,hatS2)-scalar_nested(chi1,hatS1)) )
+    Delta_par = dot_nested(Delta,hatL)
+    Delta_perp = norm_nested(np.cross(Delta,hatL))
+    chit = scalar_nested(1/(1+q)**2, (scalar_nested(chi2*q**2,hatS2)+scalar_nested(chi1,hatS1)) )
+    chit_par = dot_nested(chit,hatL)
+    chit_perp = norm_nested(np.cross(chit,hatL))
+
+    #Coefficients are quoted in km/s
+    #vm and vperp from Kesden at 2010a. vpar from Lousto Zlochower 2013
+    zeta=np.radians(145)
     A=1.2e4
     B=-0.93
     H=6.9e3
 
-    # Switch on/off the various (super)kick contribution. Default are all on
-    superkick=True
-    hangupkick=True
-    crosskick=True
+    #Multiply by 0/1 boolean flags to select terms
+    V11 = 3677.76 * superkick
+    VA = 2481.21 * hangupkick
+    VB = 1792.45 * hangupkick
+    VC = 1506.52 * hangupkick
+    C2 = 1140 * crosskick
+    C3 = 2481 * crosskick
 
-    if superkick==True:
-        V11=3677.76
+    #maxkick
+    bigTheta=np.random.uniform(0, 2*np.pi,q.shape) * (not maxphase)
+
+    vm = A * eta**2 * (1+B*eta) * (1-q)/(1+q)
+    vperp = H * eta**2 * Delta_par
+    vpar = 16*eta**2 * (Delta_perp * (V11 + 2*VA*chit_par + 4*VB*chit_par**2 + 8*VC*chit_par**3) + chit_perp * Delta_par * (2*C2 + 4*C3*chit_par)) * np.cos(bigTheta)
+    kick = np.array([vm+vperp*np.cos(zeta),vperp*np.sin(zeta),vpar]).T
+
+    if not kms:
+        kick = kick/299792.458 # speed of light in km/s
+
+    vk = norm_nested(kick)
+
+    if full_output:
+        return vk, kick
     else:
-        V11=0.
-    if hangupkick==True:
-        VA=2481.21
-        VB=1792.45
-        VC=1506.52
-    else:
-        VA=0.
-        VB=0.
-        VC=0.
-    if crosskick==True:
-        C2=1140.
-        C3=2481.
-    else:
-        C2=0.
-        C3=0.
-
-    if maxkick==True:
-        bigTheta=0
-    else:
-        bigTheta=np.random.uniform(0., 2.*np.pi)
-
-    vm=A*eta*eta*(1.+B*eta)*(1.-q)/(1.+q)
-    vperp=H*eta*eta*Delta_par
-    vpar=16.*eta*eta* (Delta_perp*(V11+2.*VA*chit_par+4.*VB*pow(chit_par,2.)+8.*VC*pow(chit_par,3.)) + chit_perp*Delta_par*(2.*C2+4.*C3*chit_par)) * np.cos(bigTheta)
-    vkick=np.linalg.norm([vm+vperp*np.cos(zeta),vperp*np.sin(zeta),vpar])
-
-    if vkick>5000:
-        print("[finalkick] Warning; I got v_kick>5000km/s. This shouldn't be possibile")
-
-    if not kms: # divide by the speed of light in km/s
-        c_kms=299792.458
-        vkick=vkick/299792.458
-        vm=vm/299792.458
-        vperp=vperp/299792.458
-        vpar=vpar/299792.458
-
-    if more:
-        return vkick, vm, vperp, vm+vperp*np.cos(zeta), vperp*np.sin(zeta), vpar
-    else:
-        return vkick
+        return vk
 
 
 
@@ -7064,9 +7040,14 @@ if __name__ == '__main__':
 
     #print(final(1,1,1,1,1,1))
 
-    #print(remnantmass([1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1]))
+    #remnantmass([1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1])
 
-
+    #remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxkick=False, superkick=True, hangupkick=True, crosskick=True, full_output=False)
     #print(remnantspin(1,1,1,1,1,1,which='HBR16_34corr'))
 
-    print(remnantspin([0.1,1,1], [0.1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_12'))
+    #print(remnantspin([0.1,1,1], [0.1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_12'))
+    print(remnantkick(0.5,0.5,1,0.5,1,1,maxkick=True))
+
+    print('ciao')
+    vk,k = remnantkick([0.5,0.5,0.5], [0.5,0.5,0.5], [1,1,1], [0.5,0.5,0.5], [1,1,1], [1,1,1],maxkick=True,full_output=True)
+    print(k)

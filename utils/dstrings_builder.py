@@ -154,8 +154,13 @@ def descr(varname,vardef=None):
 
     lookup['mfin']=["float","Mass of the black-hole remnant"]
     lookup['chifin']=["float","Spin of the black-hole remnant"]
-    lookup['vk']=["float","Kick of the black-hole remnant"]
-
+    lookup['vk']=["float","Kick of the black-hole remnant (magnitude)"]
+    lookup['vk_array']=["array","Kick of the black-hole remnant (in a frame aligned with L)"]
+    lookup['superkick']=['boolean', "Switch kick terms on and off"]
+    lookup['hangupkick']=['boolean', "Switch kick terms on and off"]
+    lookup['crosskick']=['boolean', "Switch kick terms on and off"]
+    lookup['kms']=['boolean', "Return velocities in km/s"]
+    lookup['maxphase']=['boolean', "Maximize over orbital phase at merger"]
 
     if varname in lookup:
         pass
