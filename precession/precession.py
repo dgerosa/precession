@@ -5813,7 +5813,7 @@ def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
     chi2 = np.atleast_1d(chi2)
     eta = eval_eta(q)
 
-    chit_par =  ( chi2*q**2 * np.cos(theta2) + np.cos(theta1) ) / (1+q)**2
+    chit_par =  ( chi2*q**2 * np.cos(theta2) + chi1*np.cos(theta1) ) / (1+q)**2
 
     #Final mass. Barausse Morozova Rezzolla 2012
     p0 = 0.04827
@@ -7046,8 +7046,16 @@ if __name__ == '__main__':
     #print(remnantspin(1,1,1,1,1,1,which='HBR16_34corr'))
 
     #print(remnantspin([0.1,1,1], [0.1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_12'))
-    print(remnantkick(0.5,0.5,1,0.5,1,1,maxkick=True))
+    #print(remnantkick(0.5,0.5,1,0.5,1,1,maxkick=True))
 
-    print('ciao')
-    vk,k = remnantkick([0.5,0.5,0.5], [0.5,0.5,0.5], [1,1,1], [0.5,0.5,0.5], [1,1,1], [1,1,1],maxkick=True,full_output=True)
-    print(k)
+    #print('ciao')
+    #vk,k = remnantkick([0.5,0.5,0.5], [0.5,0.5,0.5], [1,1,1], [0.5,0.5,0.5], [1,1,1], [1,1,1],maxkick=True,full_output=True)
+    #print(k)
+
+    theta1=1
+    theta2=2
+    deltaphi=3
+    q=0.5
+    chi1=0.7
+    chi2=0.8
+    print(remnantspin(theta1,theta2,deltaphi,q,chi1,chi2))
