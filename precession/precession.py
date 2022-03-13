@@ -5875,7 +5875,7 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
 
     if which == 'BR09': # Barausse Rezzolla 2009. This was the default in precession v1
 
-        chit_par =  ( chi2*q**2 * np.cos(theta2) + np.cos(theta1) ) / (1+q)**2
+        chit_par =  ( chi2*q**2 * np.cos(theta2) + chi1*np.cos(theta1) ) / (1+q)**2
 
         #Final spin.
         t0=-2.8904
