@@ -4832,7 +4832,7 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
         # res =scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, tracktime, quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0, rtol=1e-12, atol=1e-12)
         # print(time.time()-t0)
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method='RK45', t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula))
+        ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method='LSODA', t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula),rtol=1e-12,atol=1e-12)
 
         # Return ODE object. The key methods is .sol --callable, sol(t).
         return ODEsolution
@@ -6455,8 +6455,10 @@ if __name__ == '__main__':
     #
     # print(d)
     #
-    #d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #print(d['chieff'])
+
+    print('hello')
+    d=inspiral_orbav(theta1=[-0.4],theta2=[0.6],deltaphi=[0.4],q=[0.8],chi1=[0.1],chi2=[0.2],r=[1e4,10])
+    print(d)
 
     #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     #print(d['chieff'])
@@ -7052,10 +7054,66 @@ if __name__ == '__main__':
     #vk,k = remnantkick([0.5,0.5,0.5], [0.5,0.5,0.5], [1,1,1], [0.5,0.5,0.5], [1,1,1], [1,1,1],maxkick=True,full_output=True)
     #print(k)
 
-    theta1=1
-    theta2=2
-    deltaphi=3
-    q=0.5
-    chi1=0.7
-    chi2=0.8
-    print(remnantspin(theta1,theta2,deltaphi,q,chi1,chi2))
+    # theta1=1
+    # theta2=2
+    # deltaphi=3
+    # q=0.5
+    # chi1=0.7
+    # chi2=0.8
+    # print(remnantspin(theta1,theta2,deltaphi,q,chi1,chi2))
+
+
+    def ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi):
+        '''Convert GW frequency to PN orbital separation conversion'''
+
+        c_cgs = 2.99e10
+        G_cgs = 6.67e-8
+        om = np.pi * f
+        M_sec = M_msun * 2e33 * G_cgs / c_cgs**3
+        mom = M_sec * om
+        m1 = 1 / (1+q)
+        m2 = q / (1+q)
+        eta = m1*m2
+        ct1 = np.cos(theta1)
+        ct2 = np.cos(theta2)
+        ct12 = np.sin(theta1) * np.sin(theta2) * np.cos(deltaphi) + ct1 * ct2
+        # Eq. 4.13, Kidder 1995. gr-qc/9506022
+        r = (mom)**(-2./3.)*(1. \
+                        - (1./3.)*(3.-eta)*mom**(2./3.)  \
+                        - (1./3.)* ( chi1*ct1*(2.*m1**2.+3.*eta) + chi2*ct2*(2.*m2**2.+3.*eta))*mom \
+                        + ( eta*(19./4. + eta/9.) -eta*chi1*chi2/2. * (ct12 - 3.*ct1*ct2 ))*mom**(4./3.)\
+                        )
+        return r
+
+
+    #
+    # while True:
+    #     f = 20
+    #     M_msun=np.random.uniform(5,100)
+    #     q=np.random.uniform(0,1)
+    #     chi1=np.random.uniform(0,1)
+    #     chi2=np.random.uniform(0,1)
+    #     theta1=np.arccos(np.random.uniform(-1,1))
+    #     theta2=np.arccos(np.random.uniform(-1,1))
+    #     deltaphi=np.random.uniform(0,2*np.pi)
+    #     old = ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi)
+    #     new = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun)
+    #
+    #     print(old,new, (old-new)/new)
+    #     if (old-new)/new>0.01:
+    #         break
+    #
+
+
+    # f=10
+    # M_msun=77.3
+    # q=2/5
+    # chi1=0.95
+    # chi2=0.95
+    # theta1=np.pi/2
+    # theta2=np.pi/2
+    # deltaphi=0.1
+    # old = ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi)
+    # new = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun)
+    #
+    # print(old,new, (old-new)/new)
