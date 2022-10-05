@@ -177,6 +177,7 @@ def wraproots(coefficientfunction, *args, **kwargs):
 
     coeffs = coefficientfunction(*args, **kwargs)
     sols = np.sort_complex(roots_vec(coeffs.T))
+    #print('wraproots', sols)
     sols = np.real(np.where(np.isreal(sols), sols, np.nan))
 
     return sols
@@ -819,7 +820,7 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
-def kapparesonances(u, chieff, q, chi1, chi2):
+def kapparesonances(u, chieff, q, chi1, chi2, tol= 1e-5):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
 
@@ -839,6 +840,7 @@ def kapparesonances(u, chieff, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    tol: FIX ME
 
     Returns
     -------
@@ -855,14 +857,31 @@ def kapparesonances(u, chieff, q, chi1, chi2):
     chi2 = np.atleast_1d(chi2)
 
     kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
-
+    #print('kapparoots', kapparoots)
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparoots, u, chieff, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
         Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), chieff=np.tile(chieff, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
         Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
         kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
-        assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
+        #print("kappa",kapparoots, kappares)
+        #print("S",Sroots,Smin, Smax)
+
+        if len(kappares) > 2:
+
+            #print('xxxxx', kappares, np.diff(kappares),np.argmin(np.diff(kappares)),)
+            diff = np.diff(kappares)
+            if np.min(diff)<tol:
+                warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
+                kappares = np.delete(kappares, [np.argmin(diff),np.argmin(diff)+1])
+
+            assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
+
+
+
+            #assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
+
+
         # If you didn't find enough solutions, append nans
         kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
         return kappares
@@ -1328,6 +1347,7 @@ def chieffresonances(J, r, q, chi1, chi2):
         Sroots = Satresonance(J=np.tile(J, chieffroots.shape), r=np.tile(r, chieffroots.shape), chieff=chieffroots, q=np.tile(q, chieffroots.shape), chi1=np.tile(chi1, chieffroots.shape), chi2=np.tile(chi2, chieffroots.shape))
         chieffres = chieffroots[np.logical_and(Sroots > Smin, Sroots < Smax)]
         assert len(chieffres) <= 2, "I found more than two resonances, this should not be possible."
+        # TODO: implement extra check as in kapparesonances. Useful when integrating close to updown
         # If you didn't find enough solutions, append nans
         chieffres = np.concatenate([chieffres, np.repeat(np.nan, 2-len(chieffres))])
         return chieffres
@@ -7118,7 +7138,13 @@ if __name__ == '__main__':
     #
     # print(old,new, (old-new)/new)
 
-    print(anglesresonances(J=None, r=10, chieff=0.4, q=0.5, chi1=0.5, chi2=0.5))
+    #print(anglesresonances(J=None, r=10, chieff=0.4, q=0.5, chi1=0.5, chi2=0.5))
 
 
-    print(anglesresonances(J=None, r=8, chieff=0.22, q=0.59, chi1=0.53, chi2=0.29))
+    #print(anglesresonances(J=None, r=8.32333121212124241, chieff=0.224232903924038232, q=0.59212013209454231, chi1=0.535453289094290, chi2=0.2921210982093203193809328109381029))
+
+
+    print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906))
+
+
+    print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906142849))
