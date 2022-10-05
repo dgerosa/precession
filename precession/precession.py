@@ -6456,13 +6456,13 @@ if __name__ == '__main__':
     # print(d)
     #
 
-    print('hello')
-    d=inspiral_orbav(theta1=[-0.4],theta2=[0.6],deltaphi=[0.4],q=[0.8],chi1=[0.1],chi2=[0.2],r=[1e4,10])
-    print(d)
-
-    #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
-    #print(d['chieff'])
-
+    # print('hello')
+    # d=inspiral_orbav(theta1=[-0.4],theta2=[0.6],deltaphi=[0.4],q=[0.8],chi1=[0.1],chi2=[0.2],r=[1e4,10])
+    # print(d)
+    #
+    # #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
+    # #print(d['chieff'])
+    #
 
 
 
@@ -7117,3 +7117,8 @@ if __name__ == '__main__':
     # new = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun)
     #
     # print(old,new, (old-new)/new)
+
+    print(anglesresonances(J=None, r=10, chieff=0.4, q=0.5, chi1=0.5, chi2=0.5))
+
+
+    print(anglesresonances(J=None, r=8, chieff=0.22, q=0.59, chi1=0.53, chi2=0.29))
