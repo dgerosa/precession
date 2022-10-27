@@ -177,7 +177,6 @@ def wraproots(coefficientfunction, *args, **kwargs):
 
     coeffs = coefficientfunction(*args, **kwargs)
     sols = np.sort_complex(roots_vec(coeffs.T))
-    #print('wraproots', sols)
     sols = np.real(np.where(np.isreal(sols), sols, np.nan))
 
     return sols
@@ -857,15 +856,17 @@ def kapparesonances(u, chieff, q, chi1, chi2, tol= 1e-5):
     chi2 = np.atleast_1d(chi2)
 
     kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
-    #print('kapparoots', kapparoots)
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparoots, u, chieff, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
+        print('kapparoots', kapparoots)
+
         Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), chieff=np.tile(chieff, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
         Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
         kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
-        #print("kappa",kapparoots, kappares)
-        #print("S",Sroots,Smin, Smax)
+
+        print("S",Sroots,Smin, Smax)
+        print('kapparoots', kappares)
 
         if len(kappares) > 2:
 
@@ -1400,6 +1401,7 @@ def anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
     if J is None and r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
 
         Jmin, Jmax = Jresonances(r, chieff, q, chi1, chi2)
+        #sys.exit()
         Satmin = Satresonance(J=Jmin, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
         theta1atmin = eval_theta1(Satmin, Jmin, r, chieff, q, chi1, chi2)
         theta2atmin = eval_theta2(Satmin, Jmin, r, chieff, q, chi1, chi2)
@@ -1795,6 +1797,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=N
     else:
         raise TypeError("Please provide either J or kappa.")
 
+    print('Satres', kappa)
     coeffs = Scubic_coefficients(kappa, u, chieff, q, chi1, chi2)
     with np.errstate(invalid='ignore'):  # nan is ok here
         # This is with a simple for loop
@@ -4692,7 +4695,7 @@ def widenutation(q, chi1, chi2):
 # TODO: replace quadrupole_formula flag with parameter to select a given PN order. Update docstrings when you do it
 
 
-def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula=False):
+def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula=False):
     """
     Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unite vectors, v is the orbital velocity, and t is time. This is an internal function used by the ODE integrator and is not array-compatible.
 
@@ -4732,6 +4735,7 @@ def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
     """
 
     # Unpack inputs
+    print(v)
     Lh = allvars[0:3]
     S1h = allvars[3:6]
     S2h = allvars[6:9]
@@ -4785,7 +4789,9 @@ def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
 
 
 # TODO: update docstrings when you fix the quadrupole_formula flag
-def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi1, chi2, quadrupole_formula=False):
+#Fix v instead of v initial v final
+# Pass rtol and atol
+def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, quadrupole_formula=False, **odeint_kwargs):
     """
     Integration of the systems of ODEs describing orbit-averaged inspirals. Integration is performed in a reference frame
     where the z axis is along J and L lies in the x-z plane at the initial separation.
@@ -4824,13 +4830,18 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
     Lhinitial = np.atleast_2d(Lhinitial)
     S1hinitial = np.atleast_2d(S1hinitial)
     S2hinitial = np.atleast_2d(S2hinitial)
-    vinitial = np.atleast_1d(vinitial)
-    vfinal = np.atleast_1d(vfinal)
+    v = np.atleast_2d(v)
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    def _compute(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi1, chi2):
+    # Defaults for the integrators, can be changed by the user
+    if 'mxstep' not in odeint_kwargs: odeint_kwargs['mxstep']=5000000
+    if 'rol' not in odeint_kwargs: odeint_kwargs['rtol']=1e-10
+    if 'aol' not in odeint_kwargs: odeint_kwargs['atol']=1e-10
+    odeint_kwargs['full_output']=0 # This needs to be forced for compatibility with the rest of the code
+
+    def _compute(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2):
 
         # I need unit vectors
         assert np.isclose(np.linalg.norm(Lhinitial), 1)
@@ -4851,19 +4862,27 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
         # t0=time.time()
         # res =scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, tracktime, quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0, rtol=1e-12, atol=1e-12)
         # print(time.time()-t0)
+        #print(ic)
+        #ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method='LSODA', t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula),rtol=1e-12,atol=1e-12)
+        #ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula))
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method='LSODA', t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula),rtol=1e-12,atol=1e-12)
+        #print(odeint_kwargs)
+        #sys.exit()
 
-        # Return ODE object. The key methods is .sol --callable, sol(t).
+        # Make sure the first step is large enough. This is to avoid LSODA to propose a tiny step which causes the integration to stall
+        if 'h0' not in odeint_kwargs: odeint_kwargs['h0']=v[0]/1e6
+
+        ODEsolution = scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
         return ODEsolution
 
-    ODEsolution = np.array(list(map(_compute, Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi1, chi2)))
+    ODEsolution = np.array(list(map(_compute, Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2)))
 
     return ODEsolution
 
 
 # TODO: update docstrings when you fix the quadrupole_formula flag
-def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h=None, S2h=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, quadrupole_formula=False, requested_outputs=None):
+# Docstrings odeing_kwargs
+def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h=None, S2h=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, quadrupole_formula=False, requested_outputs=None, **odeint_kwargs):
     """
     Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. Orbit-averaged integration can only be done between finite separations.
     The initial conditions must be specified in terms of one an only one of the following:
@@ -4976,9 +4995,9 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         v = eval_v(r)
 
         # Integration
-        ODEsolution = integrator_orbav(Lh, S1h, S2h, v[0], v[-1], q, chi1, chi2, quadrupole_formula=quadrupole_formula)
+        evaluations = integrator_orbav(Lh, S1h, S2h, v, q, chi1, chi2, quadrupole_formula=quadrupole_formula,**odeint_kwargs)[0].T
 
-        evaluations = np.squeeze(ODEsolution.item().sol(v))
+        #evaluations = np.squeeze(ODEsolution.item().sol(v))
         # Returned output is
         # Lx, Ly, Lz, S1x, S1y, S1z, S2x, S2y, S2z, (t)
         Lh = evaluations[0:3, :].T
@@ -6476,9 +6495,16 @@ if __name__ == '__main__':
     # print(d)
     #
 
-    # print('hello')
-    # d=inspiral_orbav(theta1=[-0.4],theta2=[0.6],deltaphi=[0.4],q=[0.8],chi1=[0.1],chi2=[0.2],r=[1e4,10])
-    # print(d)
+
+    print('hello')
+    d=inspiral_orbav(theta1=[-0.4],theta2=[0.6],deltaphi=[0.4],q=[0.8],chi1=[0.2],chi2=[0.2],r=[1e4,1e3,1e2,10])
+
+    #d=inspiral_orbav(theta1=[-0.4,-0.4],theta2=[0.6,0.6],deltaphi=[0.4,0.4],q=[0.8,0.8],chi1=[0.2,0.2],chi2=[0.2,0.2],r=[[1e2,10],[1e2,10]])
+
+
+    print(d)
+
+
     #
     # #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
     # #print(d['chieff'])
@@ -7144,7 +7170,15 @@ if __name__ == '__main__':
     #print(anglesresonances(J=None, r=8.32333121212124241, chieff=0.224232903924038232, q=0.59212013209454231, chi1=0.535453289094290, chi2=0.2921210982093203193809328109381029))
 
 
-    print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906))
+    #print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906))
 
 
-    print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906142849))
+    #print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906142849))
+    #print(anglesresonances(r=7.7255545367765235, chieff=0.27444770582406697+1e-5, q=0.9926485848200008, chi1=0.8095329056692561, chi2=0.264600259415532))
+
+    # q=0.9926485848200008
+    # chi1=0.8095329056692561
+    # chi2=0.264600259415532
+    # chieff = (chi1-q*chi2)/(1+q)
+    # print(chieff)
+    # print(anglesresonances(r=7.7255545367765235, chieff=chieff, q=q, chi1=chi1, chi2=chi2))
