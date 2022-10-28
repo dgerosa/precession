@@ -21,10 +21,13 @@ Cell[CellGroupData[{
 
 Cell["\<\
 Export expressions in a format that python and numpy are going to like. Use a \
-modified version of the packaged by Gustavo Wiederhecker  \
+modified version of the package by Gustavo Wiederhecker  \
 https://github.com/gwiederhecker/ToPython, supplemented by a set of custom \
 transformation for the precession code. \
-\>", "Subsubsection",ExpressionUUID->"e9b046e6-a73b-4267-9087-44473ef83e97"],
+\>", "Subsubsection",
+ CellChangeTimes->{
+  3.855916718056891*^9},ExpressionUUID->"e9b046e6-a73b-4267-9087-\
+44473ef83e97"],
 
 Cell[BoxData[
  RowBox[{
@@ -2908,7 +2911,7 @@ Cell[BoxData[
 WindowSize->{1654, 847},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
-FrontEndVersion->"12.3 for Mac OS X x86 (64-bit) (May 11, 2021)",
+FrontEndVersion->"13.0 for Mac OS X x86 (64-bit) (December 2, 2021)",
 StyleDefinitions->"Default.nb",
 $CellContext`TrackCellChangeTimes -> False,
 ExpressionUUID->"ceb27b6a-17ef-40ed-91d0-092d78b52fe3"

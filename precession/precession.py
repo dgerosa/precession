@@ -44,7 +44,7 @@ def norm_nested(x):
 
     Call
     ----
-    x = normalize_nested(x)
+    n = norm_nested(x)
 
     Parameters
     ----------
@@ -53,8 +53,8 @@ def norm_nested(x):
 
     Returns
     -------
-    x : array
-        Normalized array.
+    n : array
+        Norm of the input arrays.
     """
 
     return np.linalg.norm(x, axis=1)
@@ -66,7 +66,7 @@ def normalize_nested(x):
 
     Call
     ----
-    x = normalize_nested(x)
+    y = normalize_nested(x)
 
     Parameters
     ----------
@@ -75,7 +75,7 @@ def normalize_nested(x):
 
     Returns
     -------
-    x : array
+    y : array
         Normalized array.
     """
 
@@ -104,6 +104,30 @@ def dot_nested(x, y):
     """
 
     return np.einsum('ij, ij->i', x, y)
+
+
+def scalar_nested(k, x):
+    """
+    Nested scalar product between a 1D and a 2D array.
+
+    Call
+    ----
+    y = scalar_nested(k, x)
+
+    Parameters
+    ----------
+    k : float
+        Input scalar.
+    x : array
+        Input array.
+
+    Returns
+    -------
+    y : array
+        Scalar product array.
+    """
+
+    return k[:,np.newaxis]*x
 
 
 def sample_unitsphere(N=1):
@@ -795,7 +819,7 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
-def kapparesonances(u, chieff, q, chi1, chi2):
+def kapparesonances(u, chieff, q, chi1, chi2, tol= 1e-5):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
 
@@ -815,6 +839,7 @@ def kapparesonances(u, chieff, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    tol: FIX ME
 
     Returns
     -------
@@ -831,14 +856,33 @@ def kapparesonances(u, chieff, q, chi1, chi2):
     chi2 = np.atleast_1d(chi2)
 
     kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
-
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparoots, u, chieff, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
+        print('kapparoots', kapparoots)
+
         Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), chieff=np.tile(chieff, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
         Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
         kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
-        assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
+
+        print("S",Sroots,Smin, Smax)
+        print('kapparoots', kappares)
+
+        if len(kappares) > 2:
+
+            #print('xxxxx', kappares, np.diff(kappares),np.argmin(np.diff(kappares)),)
+            diff = np.diff(kappares)
+            if np.min(diff)<tol:
+                warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
+                kappares = np.delete(kappares, [np.argmin(diff),np.argmin(diff)+1])
+
+            assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
+
+
+
+            #assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
+
+
         # If you didn't find enough solutions, append nans
         kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
         return kappares
@@ -987,7 +1031,7 @@ def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
 
     Call
     ----
-    kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
+        kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
     ----------
@@ -1304,6 +1348,7 @@ def chieffresonances(J, r, q, chi1, chi2):
         Sroots = Satresonance(J=np.tile(J, chieffroots.shape), r=np.tile(r, chieffroots.shape), chieff=chieffroots, q=np.tile(q, chieffroots.shape), chi1=np.tile(chi1, chieffroots.shape), chi2=np.tile(chi2, chieffroots.shape))
         chieffres = chieffroots[np.logical_and(Sroots > Smin, Sroots < Smax)]
         assert len(chieffres) <= 2, "I found more than two resonances, this should not be possible."
+        # TODO: implement extra check as in kapparesonances. Useful when integrating close to updown
         # If you didn't find enough solutions, append nans
         chieffres = np.concatenate([chieffres, np.repeat(np.nan, 2-len(chieffres))])
         return chieffres
@@ -1356,6 +1401,7 @@ def anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
     if J is None and r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
 
         Jmin, Jmax = Jresonances(r, chieff, q, chi1, chi2)
+        #sys.exit()
         Satmin = Satresonance(J=Jmin, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
         theta1atmin = eval_theta1(Satmin, Jmin, r, chieff, q, chi1, chi2)
         theta2atmin = eval_theta2(Satmin, Jmin, r, chieff, q, chi1, chi2)
@@ -1751,6 +1797,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=N
     else:
         raise TypeError("Please provide either J or kappa.")
 
+    print('Satres', kappa)
     coeffs = Scubic_coefficients(kappa, u, chieff, q, chi1, chi2)
     with np.errstate(invalid='ignore'):  # nan is ok here
         # This is with a simple for loop
@@ -4648,7 +4695,7 @@ def widenutation(q, chi1, chi2):
 # TODO: replace quadrupole_formula flag with parameter to select a given PN order. Update docstrings when you do it
 
 
-def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula=False):
+def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula=False):
     """
     Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unite vectors, v is the orbital velocity, and t is time. This is an internal function used by the ODE integrator and is not array-compatible.
 
@@ -4688,6 +4735,7 @@ def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
     """
 
     # Unpack inputs
+    print(v)
     Lh = allvars[0:3]
     S1h = allvars[3:6]
     S2h = allvars[6:9]
@@ -4741,7 +4789,9 @@ def rhs_orbav(v, allvars, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
 
 
 # TODO: update docstrings when you fix the quadrupole_formula flag
-def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi1, chi2, quadrupole_formula=False):
+#Fix v instead of v initial v final
+# Pass rtol and atol
+def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, quadrupole_formula=False, **odeint_kwargs):
     """
     Integration of the systems of ODEs describing orbit-averaged inspirals. Integration is performed in a reference frame
     where the z axis is along J and L lies in the x-z plane at the initial separation.
@@ -4780,13 +4830,18 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
     Lhinitial = np.atleast_2d(Lhinitial)
     S1hinitial = np.atleast_2d(S1hinitial)
     S2hinitial = np.atleast_2d(S2hinitial)
-    vinitial = np.atleast_1d(vinitial)
-    vfinal = np.atleast_1d(vfinal)
+    v = np.atleast_2d(v)
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    def _compute(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi1, chi2):
+    # Defaults for the integrators, can be changed by the user
+    if 'mxstep' not in odeint_kwargs: odeint_kwargs['mxstep']=5000000
+    if 'rol' not in odeint_kwargs: odeint_kwargs['rtol']=1e-10
+    if 'aol' not in odeint_kwargs: odeint_kwargs['atol']=1e-10
+    odeint_kwargs['full_output']=0 # This needs to be forced for compatibility with the rest of the code
+
+    def _compute(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2):
 
         # I need unit vectors
         assert np.isclose(np.linalg.norm(Lhinitial), 1)
@@ -4807,19 +4862,27 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi
         # t0=time.time()
         # res =scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, tracktime, quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0, rtol=1e-12, atol=1e-12)
         # print(time.time()-t0)
+        #print(ic)
+        #ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method='LSODA', t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula),rtol=1e-12,atol=1e-12)
+        #ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula))
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method='RK45', t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula))
+        #print(odeint_kwargs)
+        #sys.exit()
 
-        # Return ODE object. The key methods is .sol --callable, sol(t).
+        # Make sure the first step is large enough. This is to avoid LSODA to propose a tiny step which causes the integration to stall
+        if 'h0' not in odeint_kwargs: odeint_kwargs['h0']=v[0]/1e6
+
+        ODEsolution = scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
         return ODEsolution
 
-    ODEsolution = np.array(list(map(_compute, Lhinitial, S1hinitial, S2hinitial, vinitial, vfinal, q, chi1, chi2)))
+    ODEsolution = np.array(list(map(_compute, Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2)))
 
     return ODEsolution
 
 
 # TODO: update docstrings when you fix the quadrupole_formula flag
-def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h=None, S2h=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, quadrupole_formula=False, requested_outputs=None):
+# Docstrings odeing_kwargs
+def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h=None, S2h=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, quadrupole_formula=False, requested_outputs=None, **odeint_kwargs):
     """
     Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. Orbit-averaged integration can only be done between finite separations.
     The initial conditions must be specified in terms of one an only one of the following:
@@ -4932,9 +4995,9 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         v = eval_v(r)
 
         # Integration
-        ODEsolution = integrator_orbav(Lh, S1h, S2h, v[0], v[-1], q, chi1, chi2, quadrupole_formula=quadrupole_formula)
+        evaluations = integrator_orbav(Lh, S1h, S2h, v, q, chi1, chi2, quadrupole_formula=quadrupole_formula,**odeint_kwargs)[0].T
 
-        evaluations = np.squeeze(ODEsolution.item().sol(v))
+        #evaluations = np.squeeze(ODEsolution.item().sol(v))
         # Returned output is
         # Lx, Ly, Lz, S1x, S1y, S1z, S2x, S2y, S2z, (t)
         Lh = evaluations[0:3, :].T
@@ -5750,6 +5813,282 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     return f
 
 
+
+def remnantmass(theta1, theta2, q, chi1, chi2):
+    """
+    Estimate the final mass of the post-merger renmant. We implement the fitting
+    formula to numerical relativity simulations by Barausse Morozova Rezzolla
+    2012. This formula has to be applied *close to merger*, where numerical
+    relativity simulations are available. You should do a PN evolution to
+    transfer binaries to r~10M.
+
+    Call
+    ----
+    mfin = remnantmass(theta1,theta2,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    mfin: float
+        Mass of the black-hole remnant.
+    """
+
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+    eta = eval_eta(q)
+
+    chit_par =  ( chi2*q**2 * np.cos(theta2) + chi1*np.cos(theta1) ) / (1+q)**2
+
+    #Final mass. Barausse Morozova Rezzolla 2012
+    p0 = 0.04827
+    p1 = 0.01707
+    Z1 = 1 + (1-chit_par**2)**(1/3)* ((1+chit_par)**(1/3)+(1-chit_par)**(1/3))
+    Z2 = (3* chit_par**2 + Z1**2)**(1/2)
+    risco = 3 + Z2 - np.sign(chit_par) * ((3-Z1)*(3+Z1+2*Z2))**(1/2)
+    Eisco = (1-2/(3*risco))**(1/2)
+    #Radiated energy, in units of the initial total mass of the binary
+    Erad = eta*(1-Eisco) + 4* eta**2 * (4*p0+16*p1*chit_par*(chit_par+1)+Eisco-1)
+    Mfin = 1- Erad # Final mass
+
+    return Mfin
+
+
+def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
+    """
+    Estimate the final spin of the post-merger renmant. We implement the fitting
+    formula to numerical relativity simulations by  Barausse and Rezzolla 2009
+    and Hofmann, Barausse and Rezzolla 2016. This can be selected by the keywork `
+    `which`, see those references for details. By default this returns the
+    Hofmann+ expression with nM=3, nJ=4 and corrections for the effective
+    angles (HBR16_34corr). This formula has to be applied *close to merger*,
+    where numerical relativity simulations are available. You should do a PN
+    evolution to transfer binaries at r~10M.
+
+    Call
+    ----
+    chifin = remnantspin(theta1,theta2,deltaphi,q,chi1,chi2,which='HBR16_34corr')
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    which: string, optional (default: 'HBR16_34corr')
+        Select function behavior.
+
+    Returns
+    -------
+    chifin: float
+        Spin of the black-hole remnant.
+    """
+
+
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+    eta = eval_eta(q)
+
+    if which in ['HBR16_12', 'HBR16_12corr', 'HBR16_33', 'HBR16_33corr', 'HBR16_34', 'HBR16_34corr']:
+
+        kfit = {}
+
+        if 'HBR16_12' in which:
+            kfit = np.array( [[np.nan, -1.2019, -1.20764] ,
+                              [3.79245, 1.18385, 4.90494] ]  )
+            xifit = 0.41616
+
+        if 'HBR16_33' in which:
+            kfit = np.array( [[np.nan, 2.87025, -1.53315, -3.78893] ,
+                              [32.9127, -62.9901, 10.0068, 56.1926],
+                              [-136.832, 329.32, -13.2034, -252.27],
+                              [210.075, -545.35, -3.97509, 368.405]]  )
+            xifit = 0.463926
+
+        if 'HBR16_34' in which:
+            kfit = np.array( [[np.nan, 3.39221, 4.48865, -5.77101, -13.0459] ,
+                              [35.1278, -72.9336, -86.0036, 93.7371, 200.975],
+                              [-146.822, 387.184, 447.009, -467.383, -884.339],
+                              [223.911, -648.502, -697.177, 753.738, 1166.89]])
+            xifit = 0.474046
+
+        # Calculate K00 from Eq 11
+        kfit[0,0] = 4**2 * ( 0.68646 - np.sum( kfit[1:,0] /(4**(3+np.arange(kfit.shape[0]-1)))) - (3**0.5)/2)
+
+        theta12 = eval_theta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi)
+
+        # Eq. 18
+        if 'corr' in which:
+            eps1 = 0.024
+            eps2 = 0.024
+            eps12 = 0
+            theta1 = theta1 + eps1 * np.sin(theta1)
+            theta2 = theta2 + eps2 * np.sin(theta2)
+            theta12 = theta12 + eps12 * np.sin(theta12)
+
+        # Eq. 14 - 15
+        atot = ( chi1*np.cos(theta1) + chi2*np.cos(theta2)*q**2 ) / (1+q)**2
+        aeff = atot + xifit*eta* ( chi1*np.cos(theta1) + chi2*np.cos(theta2) )
+
+        # Eq. 2 - 6 evaluated at aeff, as specified in Eq. 11
+        Z1= 1 + (1-(aeff**2))**(1/3) * ( (1+aeff)**(1/3) + (1-aeff)**(1/3) )
+        Z2= ( (3*aeff**2) + (Z1**2) )**(1/2)
+        risco= 3 + Z2 - np.sign(aeff) * ( (3-Z1)*(3+Z1+2*Z2) )**(1/2)
+        Eisco=(1-2/(3*risco))**(1/2)
+        Lisco = (2/(3*(3**(1/2)))) * ( 1 + 2*(3*risco - 2 )**(1/2) )
+
+        # Eq. 13
+        etatoi = eta[:,np.newaxis]**(1+np.arange(kfit.shape[0]))
+        innersum = np.sum(kfit.T * etatoi[:,np.newaxis],axis=2)
+        aefftoj = aeff[:,np.newaxis]**(np.arange(kfit.shape[1]))
+        sumell = (np.sum(innersum  * aefftoj,axis=1))
+        ell = np.abs( Lisco  - 2*atot*(Eisco-1)  + sumell )
+
+        # Eq. 16
+        chifin = (1/(1+q)**2) * ( chi1**2 + (chi2**2)*(q**4)  + 2*chi1*chi2*(q**2)*np.cos(theta12)
+                + 2*(chi1*np.cos(theta1) + chi2*(q**2)*np.cos(theta2))*ell*q + ((ell*q)**2)  )**(1/2)
+
+    else:
+        raise ValueError("`which` needs to be one of the following: `HBR16_12`, `HBR16_12corr`, `HBR16_33`, `HBR16_33corr`, `HBR16_34`, `HBR16_34corr`.")
+
+    return np.minimum(chifin,1)
+
+
+def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=False, superkick=True, hangupkick=True, crosskick=True, full_output=False):
+    """
+    Estimate the kick of the merger remnant. We collect various numerical-relativity
+    results, as described in Gerosa and Kesden 2016. Flags let you switch the
+    various contributions on and off (all on by default): superkicks (Gonzalez et al. 2007a;
+    Campanelli et al. 2007), hang-up kicks (Lousto & Zlochower 2011),
+    cross-kicks (Lousto & Zlochower 2013). The orbital-plane kick components are
+    implemented as described in Kesden et al. 2010a.  The final kick depends on
+    the orbital phase at merger. By default, this is assumed to be uniformly
+    distributed in [0,2pi]. The maximum kick is realized for Theta=0 and can be
+    computed with the optional argument maxphase. The final kick is returned in
+    geometrical units (i.e. vkick/c) by default, and converted to km/s if
+    kms=True. This formula has to be applied *close to merger*, where
+    numerical relativity simulations are available. You should do a PN evolution
+    to transfer binaries at r~10M.
+
+    Call
+    ----
+    vk = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)
+    vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    kms: boolean, optional (default: False)
+        Return velocities in km/s.
+    maxphase: boolean, optional (default: False)
+        Maximize over orbital phase at merger.
+    superkick: boolean, optional (default: True)
+        Switch kick terms on and off.
+    hangupkick: boolean, optional (default: True)
+        Switch kick terms on and off.
+    crosskick: boolean, optional (default: True)
+        Switch kick terms on and off.
+    full_output: boolean, optional (default: False)
+        Return additional outputs.
+
+    Returns
+    -------
+    vk: float
+        Kick of the black-hole remnant (magnitude).
+
+    Other parameters
+    -------
+    vk_array: array
+        Kick of the black-hole remnant (in a frame aligned with L).
+    """
+
+
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+    eta = eval_eta(q)
+
+    Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, 1, q, chi1, chi2)
+    hatL = normalize_nested(Lvec)
+    hatS1 = normalize_nested(S1vec)
+    hatS2 = normalize_nested(S2vec)
+
+    #More spin parameters.
+    Delta = - scalar_nested(1/(1+q), (scalar_nested(q*chi2,hatS2)-scalar_nested(chi1,hatS1)) )
+    Delta_par = dot_nested(Delta,hatL)
+    Delta_perp = norm_nested(np.cross(Delta,hatL))
+    chit = scalar_nested(1/(1+q)**2, (scalar_nested(chi2*q**2,hatS2)+scalar_nested(chi1,hatS1)) )
+    chit_par = dot_nested(chit,hatL)
+    chit_perp = norm_nested(np.cross(chit,hatL))
+
+    #Coefficients are quoted in km/s
+    #vm and vperp from Kesden at 2010a. vpar from Lousto Zlochower 2013
+    zeta=np.radians(145)
+    A=1.2e4
+    B=-0.93
+    H=6.9e3
+
+    #Multiply by 0/1 boolean flags to select terms
+    V11 = 3677.76 * superkick
+    VA = 2481.21 * hangupkick
+    VB = 1792.45 * hangupkick
+    VC = 1506.52 * hangupkick
+    C2 = 1140 * crosskick
+    C3 = 2481 * crosskick
+
+    #maxkick
+    bigTheta=np.random.uniform(0, 2*np.pi,q.shape) * (not maxphase)
+
+    vm = A * eta**2 * (1+B*eta) * (1-q)/(1+q)
+    vperp = H * eta**2 * Delta_par
+    vpar = 16*eta**2 * (Delta_perp * (V11 + 2*VA*chit_par + 4*VB*chit_par**2 + 8*VC*chit_par**3) + chit_perp * Delta_par * (2*C2 + 4*C3*chit_par)) * np.cos(bigTheta)
+    kick = np.array([vm+vperp*np.cos(zeta),vperp*np.sin(zeta),vpar]).T
+
+    if not kms:
+        kick = kick/299792.458 # speed of light in km/s
+
+    vk = norm_nested(kick)
+
+    if full_output:
+        return vk, kick
+    else:
+        return vk
+
+
+
+
 if __name__ == '__main__':
 
     import sys
@@ -6140,12 +6479,21 @@ if __name__ == '__main__':
     #
     # print(d)
     #
-    #d=inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    #print(d['chieff'])
 
-    #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
-    #print(d['chieff'])
 
+    print('hello')
+    d=inspiral_orbav(theta1=[-0.4],theta2=[0.6],deltaphi=[0.4],q=[0.8],chi1=[0.2],chi2=[0.2],r=[1e4,1e3,1e2,10])
+
+    #d=inspiral_orbav(theta1=[-0.4,-0.4],theta2=[0.6,0.6],deltaphi=[0.4,0.4],q=[0.8,0.8],chi1=[0.2,0.2],chi2=[0.2,0.2],r=[[1e2,10],[1e2,10]])
+
+
+    print(d)
+
+
+    #
+    # #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
+    # #print(d['chieff'])
+    #
 
 
 
@@ -6710,15 +7058,112 @@ if __name__ == '__main__':
 
     #print(eval_cyclesign(Lvec=[1,2,3],S1vec=[3,2,1],S2vec=[1,1,0]))
 
-    n=10
-    theta1inf = np.arccos(np.random.uniform(-1, 1, n))
-    theta2inf = np.arccos(np.random.uniform(-1, 1, n))
-    chi1 = np.random.uniform(0, 1, n)
-    chi2 = np.random.uniform(0, 1, n)
-    q = np.random.uniform(0.01, 0.99, n)
-    r = [np.inf, 10.]
-    r = np.repeat([r], n, axis=0)
-    #print(chi1)
+    # n=10
+    # theta1inf = np.arccos(np.random.uniform(-1, 1, n))
+    # theta2inf = np.arccos(np.random.uniform(-1, 1, n))
+    # chi1 = np.random.uniform(0, 1, n)
+    # chi2 = np.random.uniform(0, 1, n)
+    # q = np.random.uniform(0.01, 0.99, n)
+    # r = [np.inf, 10.]
+    # r = np.repeat([r], n, axis=0)
+    # #print(chi1)
+    #
+    # result = inspiral_precav(theta1=theta1inf, theta2=theta2inf, r=r, q=q, chi1=chi1, chi2=chi2)
+    # print(result)
 
-    result = inspiral_precav(theta1=theta1inf, theta2=theta2inf, r=r, q=q, chi1=chi1, chi2=chi2)
-    print(result)
+    #print(final(1,1,1,1,1,1))
+
+    #remnantmass([1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1])
+
+    #remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxkick=False, superkick=True, hangupkick=True, crosskick=True, full_output=False)
+    #print(remnantspin(1,1,1,1,1,1,which='HBR16_34corr'))
+
+    #print(remnantspin([0.1,1,1], [0.1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_12'))
+    #print(remnantkick(0.5,0.5,1,0.5,1,1,maxkick=True))
+
+    #print('ciao')
+    #vk,k = remnantkick([0.5,0.5,0.5], [0.5,0.5,0.5], [1,1,1], [0.5,0.5,0.5], [1,1,1], [1,1,1],maxkick=True,full_output=True)
+    #print(k)
+
+    # theta1=1
+    # theta2=2
+    # deltaphi=3
+    # q=0.5
+    # chi1=0.7
+    # chi2=0.8
+    # print(remnantspin(theta1,theta2,deltaphi,q,chi1,chi2))
+
+
+    def ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi):
+        '''Convert GW frequency to PN orbital separation conversion'''
+
+        c_cgs = 2.99e10
+        G_cgs = 6.67e-8
+        om = np.pi * f
+        M_sec = M_msun * 2e33 * G_cgs / c_cgs**3
+        mom = M_sec * om
+        m1 = 1 / (1+q)
+        m2 = q / (1+q)
+        eta = m1*m2
+        ct1 = np.cos(theta1)
+        ct2 = np.cos(theta2)
+        ct12 = np.sin(theta1) * np.sin(theta2) * np.cos(deltaphi) + ct1 * ct2
+        # Eq. 4.13, Kidder 1995. gr-qc/9506022
+        r = (mom)**(-2./3.)*(1. \
+                        - (1./3.)*(3.-eta)*mom**(2./3.)  \
+                        - (1./3.)* ( chi1*ct1*(2.*m1**2.+3.*eta) + chi2*ct2*(2.*m2**2.+3.*eta))*mom \
+                        + ( eta*(19./4. + eta/9.) -eta*chi1*chi2/2. * (ct12 - 3.*ct1*ct2 ))*mom**(4./3.)\
+                        )
+        return r
+
+
+    #
+    # while True:
+    #     f = 20
+    #     M_msun=np.random.uniform(5,100)
+    #     q=np.random.uniform(0,1)
+    #     chi1=np.random.uniform(0,1)
+    #     chi2=np.random.uniform(0,1)
+    #     theta1=np.arccos(np.random.uniform(-1,1))
+    #     theta2=np.arccos(np.random.uniform(-1,1))
+    #     deltaphi=np.random.uniform(0,2*np.pi)
+    #     old = ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi)
+    #     new = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun)
+    #
+    #     print(old,new, (old-new)/new)
+    #     if (old-new)/new>0.01:
+    #         break
+    #
+
+
+    # f=10
+    # M_msun=77.3
+    # q=2/5
+    # chi1=0.95
+    # chi2=0.95
+    # theta1=np.pi/2
+    # theta2=np.pi/2
+    # deltaphi=0.1
+    # old = ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi)
+    # new = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun)
+    #
+    # print(old,new, (old-new)/new)
+
+    #print(anglesresonances(J=None, r=10, chieff=0.4, q=0.5, chi1=0.5, chi2=0.5))
+
+
+    #print(anglesresonances(J=None, r=8.32333121212124241, chieff=0.224232903924038232, q=0.59212013209454231, chi1=0.535453289094290, chi2=0.2921210982093203193809328109381029))
+
+
+    #print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906))
+
+
+    #print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906142849))
+    #print(anglesresonances(r=7.7255545367765235, chieff=0.27444770582406697+1e-5, q=0.9926485848200008, chi1=0.8095329056692561, chi2=0.264600259415532))
+
+    # q=0.9926485848200008
+    # chi1=0.8095329056692561
+    # chi2=0.264600259415532
+    # chieff = (chi1-q*chi2)/(1+q)
+    # print(chieff)
+    # print(anglesresonances(r=7.7255545367765235, chieff=chieff, q=q, chi1=chi1, chi2=chi2))

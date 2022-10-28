@@ -63,437 +63,462 @@ from functools import wraps
 #
 #         return self.test_single() and self.test_multiple()
 
+def both(multiple=5,ignore=[]):
 
-def both(testfunction, multiple=5):
-    """
-    testfunction is the function that performes the test and it's called "test_codefunction" where codefunction is a function of the precession code.
-    """
+    def decorator(testfunction):
+        """
+        testfunction is the function that performes the test and it's called "test_codefunction" where codefunction is a function of the precession code.
+        """
 
-    @wraps(testfunction)
-    def wrapper():
+        @wraps(testfunction)
+        def wrapper(*args, **kwargs):
 
-        #input, output = testfunction
-        testargs = testfunction()
-        if len(testargs) == 2:
-            input, output = testargs
-            input_repeat = list(input.keys())
-        elif len(testargs) == 3:
-            input, output, input_repeat = testargs
-            if input_repeat is None:
-                input_repeat = []
-            elif input_repeat == 'all':
-                input_repeat = list(input.keys())
-            elif type(input_repeat) is str:
-                input_repeat = [input_repeat]
+            input, output = testfunction()
+            input_repeat = [i for i in input.keys() if i not in ignore]
+            # Extract the codefunction
+            cfs = testfunction.__name__.split("_")
+            assert cfs[0] == 'test'
+            if cfs[1].isdigit():
+                codefunction = "_".join(cfs[2:])
+            else:
+                codefunction = "_".join(cfs[1:])
 
-        # Extract the codefunction
-        cfs = testfunction.__name__.split("_")
-        assert cfs[0] == 'test'
-        if cfs[1].isdigit():
-            codefunction = "_".join(cfs[2:])
-        else:
-            codefunction = "_".join(cfs[1:])
+            codefunction = eval("precession."+codefunction)
 
-        codefunction = eval("precession."+codefunction)
+            # Inflate the inputs
+            _input = input.copy()
+            for arg in input_repeat:
+                #_input[arg] = np.repeat(_input[arg], multiple, axis=-1)
+                #_input[arg] = np.squeeze(np.tile(_input[arg], multiple).reshape(multiple, np.size(input[arg])))
+                _input[arg] = np.squeeze(np.repeat([_input[arg]], multiple, axis=0))
 
-        # Inflate the inputs
-        _input = input.copy()
-        for arg in input_repeat:
-            #_input[arg] = np.repeat(_input[arg], multiple, axis=-1)
-            #_input[arg] = np.squeeze(np.tile(_input[arg], multiple).reshape(multiple, np.size(input[arg])))
-            _input[arg] = np.squeeze(np.repeat([_input[arg]], multiple, axis=0))
+            # Random seed for functions which use resampling
+            np.random.seed(42)
+            returns = codefunction(**input)
 
-        # Random seed for functions which use resampling
-        np.random.seed(42)
-        returns = codefunction(**input)
+            np.random.seed(42)
+            _returns = codefunction(**_input)
 
-        np.random.seed(42)
-        _returns = codefunction(**_input)
+            # If codefunction returns a dictionary, convert it to a list
+            if type(output) is dict:
+                assert (type(returns) is dict) and (type(_returns) is dict)
 
-        # If codefunction returns a dictionary, convert it to a list
-        if type(output) is dict:
-            assert (type(returns) is dict) and (type(_returns) is dict)
+                # This bit can change depending on whether output has same keys as returns
+                # and if so, whether same ordering can be assumed or not
+                # E.g., for key in keys can be replaced with np.array(list(returns.values))
+                #assert sorted(output.keys()) == sorted(returns.keys())
+                #returns = list(returns.values())
+                #_returns = list(_returns.values())
+                #output = list(output.values())
+                # Make sure returns are same order as output
+                keys = sorted(output.keys())
+                returns = [returns[key] for key in keys]
+                _returns = [_returns[key] for key in keys]
+                output = [np.array(output[key]) for key in keys]
 
-            # This bit can change depending on whether output has same keys as returns
-            # and if so, whether same ordering can be assumed or not
-            # E.g., for key in keys can be replaced with np.array(list(returns.values))
-            #assert sorted(output.keys()) == sorted(returns.keys())
-            #returns = list(returns.values())
-            #_returns = list(_returns.values())
-            #output = list(output.values())
-            # Make sure returns are same order as output
-            keys = sorted(output.keys())
-            returns = [returns[key] for key in keys]
-            _returns = [_returns[key] for key in keys]
-            output = [np.array(output[key]) for key in keys]
+            # Make sure output is ready for reshaping
+            #output = np.array(output)
+            # Inflate the outputs
+            #_output = np.reshape( np.repeat(output, multiple, axis=0), (output.shape[0],multiple) )
+            #_output = np.tile(output, multiple)
 
-        # Make sure output is ready for reshaping
-        #output = np.array(output)
-        # Inflate the outputs
-        #_output = np.reshape( np.repeat(output, multiple, axis=0), (output.shape[0],multiple) )
-        #_output = np.tile(output, multiple)
+            # arrays in output dictionary can have different shapes
+            _output = []
+            for par in output:
+                _output.append(np.squeeze(np.repeat([par], multiple, axis=0)))
 
-        # arrays in output dictionary can have different shapes
-        _output = []
-        for par in output:
-            _output.append(np.squeeze(np.repeat([par], multiple, axis=0)))
+            # Test on a single entry
+            #checksingle = np.allclose(returns, output)
+            # Test on multiple entries
+            #checkmultiple = np.allclose(_returns, _output)
 
-        # Test on a single entry
-        #checksingle = np.allclose(returns, output)
-        # Test on multiple entries
-        #checkmultiple = np.allclose(_returns, _output)
+            # Actual test for pytest
+            #assert checksingle
+            #assert checkmultiple
 
-        # Actual test for pytest
-        #assert checksingle
-        #assert checkmultiple
+            for which in [[returns, output], [_returns, _output]]:
+                for r, o in zip(*which):
+                    print(r)
+                    assert np.allclose(r, o)
 
-        for which in [[returns, output], [_returns, _output]]:
-            for r, o in zip(*which):
-                assert np.allclose(r, o)
-
-    return wrapper
+        return wrapper
+    return decorator
 
 
-@both
+@both()
 def test_eval_m1():
     return {"q":0.8}, [0.55555556]
 
-@both
+@both()
 def test_eval_m2():
     return {"q":0.8}, [0.44444444]
 
-@both
+@both()
 def test_masses():
     return {"q":0.8}, [[0.55555556],[0.44444444]]
 
-@both
+@both()
 def test_eval_q():
     return {"m1":36, "m2":29}, [0.80555556]
 
-@both
+@both()
 def test_eval_eta():
     return {"q":1}, [0.25]
 
-@both
+@both()
 def test_eval_S1():
     return {"q":0.8, "chi1":1}, [0.30864198]
 
-@both
+@both()
 def test_eval_S2():
     return {"q":0.8, "chi2":1}, [0.19753086]
 
-@both
+@both()
 def test_spinmags():
     return {"q":0.8, "chi1":1, "chi2":1}, [[0.30864198],[0.19753086]]
 
-@both
+@both()
 def test_eval_L():
     return {"r":10, "q":0.8}, [0.7808093]
 
-@both
+@both()
 def test_eval_v():
     return {"r":10}, [0.31622777]
 
-@both
+@both()
 def test_1_eval_r():
     return {"L":1 ,"q":0.8}, [16.4025]
 
-@both
+@both()
 def test_2_eval_r():
     return {"u":0.5 ,"q":0.8}, [16.4025]
 
-@both
+@both()
 def test_Jlimits_LS1S2():
     # See Fig 5 in arxiv:1506.03492
     return {"r":10 ,"q":0.8, "chi1":1, "chi2":1}, [[0.27463646],[1.28698214]]
 
-@both
+@both()
 def test_kappadiscriminant_coefficients():
     return {"u":0.5 ,"chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[-2.22902511e+03],[ 3.19940568e+03],[-1.79577102e+03],[ 4.89088064e+02],[-6.38228469e+01],[ 3.11722082e+00]]
 
-@both
+@both()
 def test_kapparesonances():
     return {"u":0.5 ,"chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[0.28276221],[0.38587938]]
 
-@both
+@both()
 def test_kappainfresonances():
     return {"chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[0.22839506],[0.28395062]]
 
-@both
+@both()
 def test_Jresonances():
     # See Fig 5 in arxiv:1506.03492
     return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
 
-@both
+@both()
 def test_1_Jlimits():
     # Should be like test_Jlimits_LS1S2
     return {"r":10 ,"q":0.8, "chi1":1, "chi2":1}, [[0.27463646],[1.28698214]]
 
-@both
+@both()
 def test_2_Jlimits():
     # Should be like test_Jresonances
     return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
 
-@both
+@both()
 def test_1_kappainflimits():
     return {"q":0.8, "chi1":1, "chi2":1}, [[-0.50617284],[ 0.50617284]]
 
-@both
+@both()
 def test_2_kappainflimits():
     return {"chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[0.22839506],[0.28395062]]
 
-@both
+@both()
 def test_chiefflimits_definition():
     return {"q":0.8, "chi1":1, "chi2":1}, [[-1],[1]]
 
-@both
+@both()
 def test_chiefflimits_definition():
     return {"q":0.8, "chi1":1, "chi2":1}, [[-1],[1]]
 
-@both
+@both()
 def test_chieffdiscriminant_coefficients():
     return {"kappa":0, "u":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.67772160e+01], [7.18727648e+01], [1.65274010e+01], [-2.22873533e+00], [-5.73039852e-01], [-9.48560958e-03], [2.68503758e-03]]
 
-@both
+@both()
 def test_chieffresonances():
     # See Fig 4 in arxiv:1506.03492
     return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[0.16035695],[0.43413573]]
 
-@both
+@both()
 def test_1_anglesresonances():
     # See Fig 5 in arxiv:1506.03492
     return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[1.2517679], [1.60205348], [0], [1.39849931], [0.7036308], [np.pi]]
 
-@both
+@both()
 def test_2_anglesresonances():
     # See Fig 5 in arxiv:1506.03492
     return {"J":0.25, "r":10, "q":0.2, "chi1":1, "chi2":1}, [[3.0860461], [1.41114207], [np.pi], [2.9563055], [0.05030985], [np.pi]]
 
-@both
+@both()
 def test_3_anglesresonances():
     # See Fig 5 in arxiv:1506.03492
     return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.27123854], [0.71342048], [np.pi], [0.90362362], [1.21157995], [0]]
 
-@both
+@both()
 def test_1_chiefflimits():
     # Should be like test_chiefflimits_definition
     return {"q":0.8, "chi1":1, "chi2":1}, [[-1],[1]]
 
-@both
+@both()
 def test_2_chiefflimits():
     # Should be like test_chieffresonances
     return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[0.16035695],[0.43413573]]
 
-@both
+@both()
 def test_Slimits_S1S2():
     return {"q":0.8, "chi1":1, "chi2":1}, [[0.11111111],[0.50617284]]
 
-@both
+@both()
 def test_Slimits_LJ():
     return {"J":1, "r":10, "q":0.8}, [[0.2191907], [1.7808093]]
 
-@both
+@both()
 def test_Slimits_LJS1S2():
     # See Fig 4 in arxiv:1506.03492
     return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[0.2191907], [0.50617284]]
 
-@both
+@both()
 def test_Scubic_coefficients():
     return {"kappa":0, "u":0.5, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[6.48000000e-01], [6.74375309e-01], [1.47249383e-01], [1.02484377e-04]]
 
-@both
+@both()
 def test_1_Ssroots():
     return {"J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [[0.08748025], [0.19301536], [0.01050669]]
 
-#TODO: the following test fails because of some array inflating in @both
+#TODO: the following test fails because of some array inflating in @both()
 # This works fine:
 #    precomputedroots=Ssroots(J=1,r=10,chieff=0.3,q=0.8,chi1=1,chi2=1)
 #    print(Ssroots(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,precomputedroots=precomputedroots))
 
-# @both
+# @both()
 # def test_2_Ssroots():
 #     precomputedroots=precession.Ssroots(J=1,r=10,chieff=0.3,q=0.8,chi1=1,chi2=1)
 #     return {"J":None, "r":None, "chieff":None, "q":None, "chi1":None, "chi2":None, "precomputedroots":precomputedroots}, [[0.08748025], [0.19301536], [0.01050669]]
 
-@both
+@both()
 def test_Slimits_plusminus():
     # See Fig 4 in arxiv:1506.03492
     return {"J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [[0.2957706], [0.43933514]]
 
-@both
+@both()
 def test_1_Satresonance():
     # See Fig 4 in arxiv:1506.03492. precession_v1, resonant_finder with more=True
     return {"J":1, "r":10, "chieff":0.43413573, "q":0.8, "chi1":1, "chi2":1}, [0.26925273]
 
-@both
+@both()
 def test_2_Satresonance():
     return {"J":1, "u":0.64036123, "chieff":0.43413573, "q":0.8, "chi1":1, "chi2":1}, [0.26925273]
 
-@both
+@both()
 def test_3_Satresonance():
     return {"kappa":0.24995658, "r":10, "chieff":0.43413573, "q":0.8, "chi1":1, "chi2":1}, [0.26925273]
 
-@both
+@both()
 def test_4_Satresonance():
     return {"kappa":0.24995658, "u":0.64036123, "chieff":0.43413573, "q":0.8, "chi1":1, "chi2":1}, [0.26925273]
 
 
-@both
+@both()
 def test_1_Slimits():
     # Should be like test_Slimits_S1S2
     return {"q":0.8, "chi1":1, "chi2":1}, [[0.11111111],[0.50617284]]
 
-@both
+@both()
 def test_2_Slimits():
     # Should be like test_Slimits_LJ
     return {"J":1, "r":10, "q":0.8}, [[0.2191907], [1.7808093]]
 
-@both
+@both()
 def test_3_Slimits():
     # Should be like test_Slimits_LJS1S2
     return {"J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [[0.2191907], [0.50617284]]
 
-@both
+@both()
 def test_4_Slimits():
     # Should be like test_Slimits_plusminus
     return {"J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [[0.2957706], [0.43933514]]
 
-@both
+@both()
 def test_1_eval_chieff():
     return {"theta1":np.pi/8, "theta2":np.pi/4, "q":0.6, "chi1":1, "chi2":1}, [0.84258975]
 
-@both
+@both()
 def test_2_eval_chieff():
     # See Fig 2 in arxiv:1506.03492.
     return {"S":0.4, "varphi":np.pi/4, "J":2.34, "r":100, "q":0.6, "chi1":1, "chi2":1}, [-0.16650103]
 
-@both
+@both()
 def test_effectivepotential_plus():
     # See Fig 5 in arxiv:1506.03492.
     return {"S":0.4, "J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [0.34933852]
 
-@both
+@both()
 def test_effectivepotential_minus():
     # See Fig 5 in arxiv:1506.03492.
     return {"S":0.4, "J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [0.22470033]
 
-@both
+@both()
 def test_eval_varphi():
     # See Fig 2 in arxiv:1506.03492.
     return {"S":0.4, "J":2.34, "r":100, "chieff":-0.05, "q":0.6, "chi1":1, "chi2":1, "cyclesign":-1}, [1.66785314]
 
-@both
+@both()
 def test_eval_costheta1():
     return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [0.22948025]
 
-@both
+@both()
 def test_eval_theta1():
     return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [1.33925268]
 
-@both
+@both()
 def test_eval_costheta2():
     return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [0.38814969]
 
-@both
+@both()
 def test_eval_theta2():
     return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [1.1721733]
 
-@both
+@both()
 def test_1_eval_costheta12():
     return {"S":0.4, "q":0.8, "chi1":1, "chi2":1}, [0.21095]
 
-@both
+@both()
 def test_2_eval_costheta12():
     return {"theta1":1.33925268, "theta2":1.1721733, "deltaphi":1.43450291}, [0.21095]
 
-@both
+@both()
 def test_1_eval_theta12():
     return {"S":0.4, "q":0.8, "chi1":1, "chi2":1}, [1.3582496]
 
-@both
+@both()
 def test_2_eval_theta12():
     return {"theta1":1.33925268, "theta2":1.1721733, "deltaphi":1.43450291}, [1.3582496]
 
-@both
+@both()
 def test_eval_cosdeltaphi():
     return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1}, [0.13587184]
 
-@both
+@both()
 def test_eval_deltaphi():
     return {"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1, "cyclesign":-1}, [1.43450291]
 
-@both
+@both()
 def test_eval_costhetaL():
     return {"S":0.4, "J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [0.92830808]
 
-@both
+@both()
 def test_eval_thetaL():
     return {"S":0.4, "J":1, "r":10, "q":0.8, "chi1":1, "chi2":1}, [0.38096012]
 
-@both
+@both()
 def test_1_eval_J():
     return {"theta1":np.pi/8, "theta2":np.pi/4, "deltaphi":np.pi/3, "r":100, "q":0.6, "chi1":1, "chi2":1}, [2.81246294]
 
-@both
+@both()
 def test_2_eval_J():
     return {"kappa":0.24995658, "r":10, "q":0.8}, [1.]
 
-@both
+@both()
 def test_eval_S():
     return {"theta1":np.pi/8, "theta2":np.pi/4, "deltaphi":np.pi/3, "q":0.6, "chi1":1, "chi2":1}, [0.50891976]
 
-@both
+@both()
 def test_eval_kappa():
     return {"J":1, "r":10, "q":0.8}, [0.24995658]
 
-@both
+@both()
 def test_eval_u():
     return {"r":16.4025 ,"q":0.8}, [0.5]
 
-@both
+@both()
 def test_eval_kappainf():
     return {"theta1inf":np.pi/8 , "theta2inf":np.pi/4, "q":0.6, "chi1":1, "chi2":1}, [0.46032733]
 
-@both
+@both()
 def test_eval_costheta1inf():
     return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.cos(np.pi/8)]
 
-@both
+@both()
 def test_eval_theta1inf():
     return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.pi/8]
 
-@both
+@both()
 def test_eval_costheta2inf():
     return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.cos(np.pi/4)]
 
-@both
+@both()
 def test_eval_theta2inf():
     return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [np.pi/4]
 
-# TODO These two don't work because the simpler flag is repeated by yhe both decorator...
-# @both
+# TODO These two don't work because the output is a string... Need to fix the both decorator.
+# @both(ignore=['simpler'])
 # def test_1_morphology():
 #     return {"J":1 , "r":10, "chieff":0.35, "q":0.8, "chi1":1, "chi2":1, "simpler":True}, ["C"]
 #
-# @both
-# def test_1_morphology():
+# @both(ignore=['simpler'])
+# def test_2_morphology():
 #     return {"J":1 , "r":10, "chieff":0.35, "q":0.8, "chi1":1, "chi2":1, "simpler":False}, ["C-"]
 
-@both
+@both()
 def test_1_eval_cyclesign():
     return {"dSdt":1}, [1]
 
-@both
+@both()
 def test_2_eval_cyclesign():
     return {"deltaphi":1}, [-1]
 
-@both
+@both()
 def test_3_eval_cyclesign():
     return {"varphi":1}, [-1]
 
-@both
+@both()
 def test_4_eval_cyclesign():
     return {"Lvec":[1,2,3],"S1vec":[3,2,1],"S2vec":[1,1,0]}, [-1]
+
+@both()
+def test_conserved_to_angles():
+    return{"S":0.4, "J":1, "r":10, "chieff":0.3, "q":0.8, "chi1":1, "chi2":1, "cyclesign":-1},[[1.33925268],[1.1721733],[1.43450291]]
+
+@both(ignore=['full_output'])
+def test_1_angles_to_conserved():
+    return{"theta1":1.33925268, "theta2":1.1721733, "deltaphi":1.43450291, "r":10, "q":0.8, "chi1":1, "chi2":1,"full_output":False},[[0.4],[1],[0.3]]
+
+@both(ignore=['full_output'])
+def test_2_angles_to_conserved():
+    return{"theta1":1.33925268, "theta2":1.1721733, "deltaphi":1.43450291, "r":10, "q":0.8, "chi1":1, "chi2":1,"full_output":True},[[0.4],[1],[0.3],[-1]]
+
+@both()
+def test_angles_to_asymptotic():
+    return {"theta1inf":np.pi/8 , "theta2inf":np.pi/4, "q":0.6, "chi1":1, "chi2":1}, [[0.46032733],[0.84258975]]
+
+@both()
+def test_asymptotic_to_angles():
+    return {"kappainf":0.46032733 , "chieff":0.84258975, "q":0.6, "chi1":1, "chi2":1}, [[np.pi/8],[np.pi/4]]
+
+@both(ignore=['full_output'])
+def test_1_vectors_to_conserved():
+    return {"Lvec":[ 0.14922458,  0.24902684,  0.72483158], "S1vec": [ 0.01318246, -0.26149364,  0.16342328], "S2vec":[-0.16240703,  0.0124668 ,  0.11174514], "q":0.8, "full_output":False}, [[0.4],[1],[0.3]]
+
+@both(ignore=['full_output'])
+def test_2_vectors_to_conserved():
+    return {"Lvec":[ 0.14922458,  0.24902684,  0.72483158], "S1vec": [ 0.01318246, -0.26149364,  0.16342328], "S2vec":[-0.16240703,  0.0124668 ,  0.11174514], "q":0.8, "full_output":True}, [[0.4],[1],[0.3],[1]]
+
+@both()
+def test_vectors_to_angles():
+    return {"Lvec":[ 0.14922458,  0.24902684,  0.72483158], "S1vec": [ 0.01318246, -0.26149364,  0.16342328], "S2vec":[-0.16240703,  0.0124668 ,  0.11174514]}, [[1.33925268], [1.1721733], [-1.43450291]]
+
+
 
 # TODO
 # limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None)
@@ -501,12 +526,6 @@ def test_4_eval_cyclesign():
 
 
 ### There needs to be tests for all these functions, multiple ones for some functions.
-# conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=+1)
-# angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False)
-# angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2)
-# asymptotic_to_angles(kappainf, chieff, q, chi1, chi2)
-# vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False)
-# vectors_to_angles(Lvec, S1vec, S2vec)
 # conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1)
 # angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
 # angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
@@ -561,7 +580,7 @@ def test_4_eval_cyclesign():
 #
 # # For precav the precession-timescale parameters are not testable due to resampling
 # # You can just get rid of those parameters from the output dictionary and the decorator handles it
-# @both
+# @both()
 # def test_inspiral_precav():
 #     input = {'theta1': np.pi/3,
 #              'theta2': np.pi/4,
@@ -586,7 +605,7 @@ def test_4_eval_cyclesign():
 #     return input, output
 #
 #
-# @both
+# @both()
 # def test_inspiral_orbav():
 #     input = {'theta1': np.pi/3,
 #              'theta2': np.pi/4,
