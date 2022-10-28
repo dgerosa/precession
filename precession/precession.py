@@ -5814,7 +5814,7 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
 
 
 
-def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
+def remnantmass(theta1, theta2, q, chi1, chi2):
     """
     Estimate the final mass of the post-merger renmant. We implement the fitting
     formula to numerical relativity simulations by Barausse Morozova Rezzolla
@@ -5824,7 +5824,7 @@ def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
 
     Call
     ----
-    mfin = remnantmass(theta1,theta2,deltaphi,q,chi1,chi2)
+    mfin = remnantmass(theta1,theta2,q,chi1,chi2)
 
     Parameters
     ----------
@@ -5832,8 +5832,6 @@ def remnantmass(theta1, theta2, deltaphi, q, chi1, chi2):
         Angle between orbital angular momentum and primary spin.
     theta2: float
         Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
     q: float
         Mass ratio: 0<=q<=1.
     chi1: float
