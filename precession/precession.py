@@ -859,14 +859,14 @@ def kapparesonances(u, chieff, q, chi1, chi2, tol= 1e-5):
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparoots, u, chieff, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
-        print('kapparoots', kapparoots)
+        #print('kapparoots', kapparoots)
 
         Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), chieff=np.tile(chieff, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
         Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
         kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
 
-        print("S",Sroots,Smin, Smax)
-        print('kapparoots', kappares)
+        #print("S",Sroots,Smin, Smax)
+        #print('kapparoots', kappares)
 
         if len(kappares) > 2:
 
@@ -1797,7 +1797,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=N
     else:
         raise TypeError("Please provide either J or kappa.")
 
-    print('Satres', kappa)
+    #print('Satres', kappa)
     coeffs = Scubic_coefficients(kappa, u, chieff, q, chi1, chi2)
     with np.errstate(invalid='ignore'):  # nan is ok here
         # This is with a simple for loop
@@ -4186,7 +4186,7 @@ def Ssavinf(theta1inf, theta2inf, q, chi1, chi2):
 
 # Precession-averaged evolution
 
-def rhs_precav(u, kappa, chieff, q, chi1, chi2):
+def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     """
     Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
 
@@ -4249,7 +4249,9 @@ def rhs_precav(u, kappa, chieff, q, chi1, chi2):
     return Ssav
 
 
-def integrator_precav(kappainitial, uinitial, ufinal, chieff, q, chi1, chi2):
+# Update docstrings
+#Careful that here u needs to be an array
+def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     """
     Integration of ODE dkappa/du describing precession-averaged inspirals.
 
@@ -4281,27 +4283,40 @@ def integrator_precav(kappainitial, uinitial, ufinal, chieff, q, chi1, chi2):
     """
 
     kappainitial = np.atleast_1d(kappainitial)
-    uinitial = np.atleast_1d(uinitial)
-    ufinal = np.atleast_1d(ufinal)
-
+    u = np.atleast_2d(u)
     chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    def _compute(kappainitial, uinitial, ufinal, chieff, q, chi1, chi2):
+    # Defaults for the integrators, can be changed by the user
+    if 'mxstep' not in odeint_kwargs: odeint_kwargs['mxstep']=5000000
+    if 'rol' not in odeint_kwargs: odeint_kwargs['rtol']=1e-10
+    if 'aol' not in odeint_kwargs: odeint_kwargs['atol']=1e-10
+    odeint_kwargs['full_output']=0 # This needs to be forced for compatibility with the rest of the code
+
+
+    def _compute(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # h0= 1e-3 if u[0]==0 else 0
 
-        ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(chieff, q, chi1, chi2), atol=1e-8, rtol=1e-8)  # ,events=event)
+        # Make sure the first step is large enough. This is to avoid LSODA to propose a tiny step which causes the integration to stall
+        if 'h0' not in odeint_kwargs: odeint_kwargs['h0']=u[0]/1e6
+
+        ODEsolution = scipy.integrate.odeint(rhs_precav, kappainitial, u, args=(chieff, q, chi1, chi2), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
+        return np.squeeze(ODEsolution)
+
+
+
+        #ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(chieff, q, chi1, chi2), atol=1e-8, rtol=1e-8)  # ,events=event)
 
         # TODO: let user pick rtol and atol
 
         # Return ODE object. The key methods is .sol --callable, sol(t).
         return ODEsolution
 
-    ODEsolution = np.array(list(map(_compute, kappainitial, uinitial, ufinal, chieff, q, chi1, chi2)))
+    ODEsolution = np.array(list(map(_compute, kappainitial, u, chieff, q, chi1, chi2)))
 
     return ODEsolution
 
@@ -4426,11 +4441,9 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         # TODO: pass rtol and atol to integrator_precav
 
         # Integration. Return interpolant along the solution
-        ODEsolution = integrator_precav(kappa, u[0], u[-1], chieff, q, chi1, chi2)
-
+        kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
         # Evaluate the interpolant at the requested values of u
-        kappa = np.squeeze(ODEsolution.item().sol(u))
-
+        #kappa = np.squeeze(ODEsolution.item().sol(u))
         # Select finite separations
         rok = r[u != 0]
         kappaok = kappa[u != 0]
@@ -6482,7 +6495,7 @@ if __name__ == '__main__':
 
 
     print('hello')
-    d=inspiral_orbav(theta1=[-0.4],theta2=[0.6],deltaphi=[0.4],q=[0.8],chi1=[0.2],chi2=[0.2],r=[1e4,1e3,1e2,10])
+    d=inspiral_precav(theta1=[-0.4],theta2=[0.6],deltaphi=[0.4],q=[0.8],chi1=[0.2],chi2=[0.2],r=[1e4,1e3,1e2,10])
 
     #d=inspiral_orbav(theta1=[-0.4,-0.4],theta2=[0.6,0.6],deltaphi=[0.4,0.4],q=[0.8,0.8],chi1=[0.2,0.2],chi2=[0.2,0.2],r=[[1e2,10],[1e2,10]])
 
