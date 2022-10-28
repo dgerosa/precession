@@ -5912,20 +5912,7 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
     chi2 = np.atleast_1d(chi2)
     eta = eval_eta(q)
 
-    if which == 'BR09': # Barausse Rezzolla 2009. This was the default in precession v1
-
-        chit_par =  ( chi2*q**2 * np.cos(theta2) + chi1*np.cos(theta1) ) / (1+q)**2
-
-        #Final spin.
-        t0=-2.8904
-        t2=-3.51712
-        t3=2.5763
-        s4=-0.1229
-        s5=0.4537
-        smalll = 2*3**(1/2) + t2*eta+t3*eta**2 + s4 * dot_nested(chit,chit)*(1+q)**4 / (1+q**2)**2 + (s5*eta+t0+2)*chit_par*(1+q)**2 / (1+q**2)
-        chifin=norm_nested( chit + hatL*smalll*q/(1+q)**2 )
-
-    elif which in ['HBR16_12', 'HBR16_12corr', 'HBR16_33', 'HBR16_33corr', 'HBR16_34', 'HBR16_34corr']:
+    if which in ['HBR16_12', 'HBR16_12corr', 'HBR16_33', 'HBR16_33corr', 'HBR16_34', 'HBR16_34corr']:
 
         kfit = {}
 
@@ -5985,7 +5972,7 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
                 + 2*(chi1*np.cos(theta1) + chi2*(q**2)*np.cos(theta2))*ell*q + ((ell*q)**2)  )**(1/2)
 
     else:
-        raise ValueError("`which` needs to be one of the following: `BR09`, `HBR16_12`, `HBR16_12corr`, `HBR16_33`, `HBR16_33corr`, `HBR16_34`, `HBR16_34corr`.")
+        raise ValueError("`which` needs to be one of the following: `HBR16_12`, `HBR16_12corr`, `HBR16_33`, `HBR16_33corr`, `HBR16_34`, `HBR16_34corr`.")
 
     return np.minimum(chifin,1)
 
