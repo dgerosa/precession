@@ -4,9 +4,9 @@ precession. TODO: write me here
 
 import warnings
 import numpy as np
+# TODO: remember to require scipy>=1.8.0
 import scipy.special
 import scipy.integrate
-from sympy import elliptic_pi
 
 
 def roots_vec(p):
@@ -182,10 +182,9 @@ def wraproots(coefficientfunction, *args, **kwargs):
     return sols
 
 
-@np.vectorize
 def ellippi(n, phi, m):
     """
-    Incomplete elliptic integral of the third kind. At the time of writing, this has not been implemented in scipy yet; here wrapping the sympy implementation. For the complete integral, set phi=np.pi/2.
+    Incomplete elliptic integral of the third kind. This is reconstructed using scipy's implementation of Carlson's R integrals (arxiv:math/9409227).
 
     Call
     ----
@@ -206,7 +205,26 @@ def ellippi(n, phi, m):
         Incomplete elliptic integral of the third kind
     """
 
-    return float(elliptic_pi(n, phi, m))
+    # Important: this requires scipy>=1.8.0
+    # https://docs.scipy.org/doc/scipy/release.1.8.0.html
+
+    # Notation used here:
+    # https://reference.wolfram.com/language/ref/EllipticPi.html
+
+    # A much slower implementation using simpy
+    # from sympy import elliptic_pi
+    # return float(elliptic_pi(n, phi, m))
+
+    n=np.array(n)
+    phi=np.array(phi)
+    m=np.array(m)
+
+    if ~np.all(n>0) or ~np.all(n<1) or ~np.all(phi>0) or ~np.all(phi<np.pi/2) or ~np.all(m>0) or ~np.all(m<1):
+        warnings.warn("Elliptic intergal of the third kind evaluated outside of the expected domain. The implementation has not been tested in this regime!", Warning)
+
+    # Eq (61) in Carlson 1994 (arxiv:math/9409227v1). Careful with the notation: one has k^2 --> m and n --> -n.
+    c = (1/np.sin(phi))**2
+    return scipy.special.elliprf(c-1,c-m,c) +(np.array(n)/3)*scipy.special.elliprj(c-1,c-m,c,c-n)
 
 
 def rotate_zaxis(vec, angle):
@@ -1447,7 +1465,7 @@ def chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
     ----
     chieffmin,chieffmax = chiefflimits(J=None,r=None,q=None,chi1=None,chi2=None,enforce=False)
 
-    Parameters
+    Parametersell
     ----------
     J: float, optional (default: None)
         Magnitude of the total angular momentum.
