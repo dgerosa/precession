@@ -215,9 +215,9 @@ def ellippi(n, phi, m):
     # from sympy import elliptic_pi
     # return float(elliptic_pi(n, phi, m))
 
-    n=np.array(n)
-    phi=np.array(phi)
-    m=np.array(m)
+    n = np.array(n)
+    phi = np.array(phi)
+    m = np.array(m)
 
     if ~np.all(n>0) or ~np.all(n<1) or ~np.all(phi>0) or ~np.all(phi<np.pi/2) or ~np.all(m>0) or ~np.all(m<1):
         warnings.warn("Elliptic intergal of the third kind evaluated outside of the expected domain. The implementation has not been tested in this regime!", Warning)
