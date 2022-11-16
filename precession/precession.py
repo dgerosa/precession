@@ -8,7 +8,7 @@ import numpy as np
 import scipy.special
 import scipy.integrate
 
-
+# TODO: This needs to be updated with Giovanni's algorithm to shift the roots.
 def roots_vec(p):
     """
     Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
@@ -603,8 +603,7 @@ def eval_r(L=None, u=None, q=None):
     return r
 
 
-# Limits
-
+# TODO: Do we need this?
 def Jlimits_LS1S2(r, q, chi1, chi2):
     """
     Limits on the magnitude of the total angular momentum due to the vector relation J=L+S1+S2.
@@ -640,6 +639,7 @@ def Jlimits_LS1S2(r, q, chi1, chi2):
     return np.stack([Jmin, Jmax])
 
 
+# TODO: edit this
 def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     """
     Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.
@@ -837,6 +837,338 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
+
+# TODO: edit this
+def kappadiscriminant_coefficients_new(u, chieff, q, chi1, chi2):
+    """
+    Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.
+
+    Call
+    ----
+    coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = kappadiscriminant_coefficients(u,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    u: float
+        Compactified separation 1/(2L).
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    coeff5: float
+        Coefficient to the x^5 term in polynomial.
+    coeff4: float
+        Coefficient to the x^4 term in polynomial.
+    coeff3: float
+        Coefficient to the x^3 term in polynomial.
+    coeff2: float
+        Coefficient to the x^2 term in polynomial.
+    coeff1: float
+        Coefficient to the x^1 term in polynomial.
+    coeff0: float
+        Coefficient to the x^0 term in polynomial.
+    """
+
+    u = np.atleast_1d(u)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    coeff5 = u
+
+    # Machine generated with eq_generator.nb
+    coeff4 = -1/16 * q**(-1) * ((1 + q))**(-4) * (1 + (q**6 + (q * (2 + \
+    (80 * u**2 * (chi1)**2 + 40 * u * chieff)) + (q**5 * (2 + (80 * u**2 \
+    * (chi2)**2 + 40 * u * chieff)) + (4 * q**3 * (-1 + (60 * u * chieff \
+    + 8 * u**2 * chieff**2)) + (q**2 * (-1 + (160 * u * chieff + 16 * \
+    u**2 * (-3 * (chi1)**2 + chieff**2))) + q**4 * (-1 + (160 * u * \
+    chieff + 16 * u**2 * (-3 * (chi2)**2 + chieff**2)))))))))
+
+    # Machine generated with eq_generator.nb
+    coeff3 = 1/8 * q**(-1) * ((1 + q))**(-8) * (((-1 + q))**2 * ((1 + \
+    q))**8 * chieff + (8 * q * u**3 * ((10 + (-12 * q + 3 * q**2)) * \
+    (chi1)**4 + (-2 * q * (chi1)**2 * (6 * q**2 * (chi2)**2 + (6 * q**4 * \
+    (chi2)**2 + (-2 * chieff**2 + (-3 * q * chieff**2 + q**3 * (-11 * \
+    (chi2)**2 + chieff**2))))) + q**4 * (chi2)**2 * (10 * q**4 * \
+    (chi2)**2 + (-2 * chieff**2 + (4 * q**3 * (-3 * (chi2)**2 + \
+    chieff**2) + 3 * q**2 * ((chi2)**2 + 2 * chieff**2)))))) + (4 * q * \
+    ((1 + q))**3 * u**2 * chieff * (-1 * (-20 + (3 * q + q**2)) * \
+    (chi1)**2 + q * (20 * q**4 * (chi2)**2 + (4 * chieff**2 + (12 * q * \
+    chieff**2 + (-1 * q**2 * ((chi2)**2 + -12 * chieff**2) + q**3 * (-3 * \
+    (chi2)**2 + 4 * chieff**2)))))) + 2 * ((1 + q))**4 * u * (-1 * ((-1 + \
+    q))**2 * (-1 + 5 * q) * (chi1)**2 + q * (q**5 * (chi2)**2 + (8 * \
+    chieff**2 + (40 * q * chieff**2 + (q**4 * (-7 * (chi2)**2 + 8 * \
+    chieff**2) + (q**3 * (11 * (chi2)**2 + 40 * chieff**2) + q**2 * (-5 * \
+    (chi2)**2 + 64 * chieff**2))))))))))
+
+    # Machine generated with eq_generator.nb
+    coeff2 = -1/16 * q**(-1) * ((1 + q))**(-12) * (-16 * q * (-10 + (18 * \
+    q + (-9 * q**2 + q**3))) * u**4 * (chi1)**6 + (chieff**2 + (4 * q * \
+    chieff**2 * (3 + 2 * u * chieff) + (q**(14) * (6 * u**2 * (chi2)**4 + \
+    (chieff**2 + (chi2)**2 * (-1 + 6 * u * chieff))) + (q**2 * (-1 * \
+    (chi2)**2 + chieff**2 * (59 + (144 * u * chieff + 16 * u**2 * \
+    chieff**2))) + (4 * q**(13) * (40 * u**4 * (chi2)**6 + (chieff**2 * \
+    (3 + 2 * u * chieff) + (12 * u**2 * (chi2)**4 * (-1 + 5 * u * chieff) \
+    + (chi2)**2 * (-1 + (-4 * u * chieff + 24 * u**2 * chieff**2))))) + \
+    (-4 * q**3 * ((chi2)**2 * (1 + 2 * u * chieff) + -2 * chieff**2 * (19 \
+    + (126 * u * chieff + 24 * u**2 * chieff**2))) + (q**4 * (-2 * \
+    (chi2)**2 * (1 + (43 * u * chieff + 4 * u**2 * chieff**2)) + \
+    chieff**2 * (201 + (3920 * u * chieff + 976 * u**2 * chieff**2))) + \
+    (4 * q**5 * (chieff**2 * (13 + (2430 * u * chieff + 704 * u**2 * \
+    chieff**2)) + (chi2)**2 * (3 + (-72 * u * chieff + (10 * u**2 * \
+    chieff**2 + 8 * u**3 * chieff**3)))) + (-4 * q**7 * (u**2 * (chi2)**4 \
+    * (19 + 8 * u * chieff) + (-4 * chieff**2 * (-27 + (1218 * u * chieff \
+    + 392 * u**2 * chieff**2)) + -2 * (chi2)**2 * (-1 + (20 * u * chieff \
+    + (169 * u**2 * chieff**2 + 32 * u**3 * chieff**3))))) + (q**(12) * \
+    (-288 * u**4 * (chi2)**6 + (chieff**2 * (59 + (144 * u * chieff + 16 \
+    * u**2 * chieff**2)) + (2 * u**2 * (chi2)**4 * (-67 + (204 * u * \
+    chieff + 48 * u**2 * chieff**2)) + 2 * (chi2)**2 * (-1 + (-95 * u * \
+    chieff + (296 * u**2 * chieff**2 + 48 * u**3 * chieff**3)))))) + (4 * \
+    q**9 * (2 * u**2 * (chi2)**4 * (13 + (6 * u * chieff + -8 * u**2 * \
+    chieff**2)) + (chieff**2 * (13 + (2430 * u * chieff + 704 * u**2 * \
+    chieff**2)) + 2 * (chi2)**2 * (-1 + (70 * u * chieff + (379 * u**2 * \
+    chieff**2 + 100 * u**3 * chieff**3))))) + (4 * q**(11) * (36 * u**4 * \
+    (chi2)**6 + (u**2 * (chi2)**4 * (5 + (-16 * u * chieff + 24 * u**2 * \
+    chieff**2)) + (2 * chieff**2 * (19 + (126 * u * chieff + 24 * u**2 * \
+    chieff**2)) + (chi2)**2 * (3 + (-102 * u * chieff + (406 * u**2 * \
+    chieff**2 + 112 * u**3 * chieff**3)))))) + (q**8 * (2 * u**2 * \
+    (chi2)**4 * (-53 + (28 * u * chieff + 8 * u**2 * chieff**2)) + \
+    (chieff**2 * (-261 + (16416 * u * chieff + 5152 * u**2 * chieff**2)) \
+    + 4 * (chi2)**2 * (-7 + (189 * u * chieff + (614 * u**2 * chieff**2 + \
+    120 * u**3 * chieff**3))))) + (q**6 * (-8 * u**2 * (chi2)**4 + \
+    (chieff**2 * (-261 + (16416 * u * chieff + 5152 * u**2 * chieff**2)) \
+    + (chi2)**2 * (17 + (-338 * u * chieff + (424 * u**2 * chieff**2 + \
+    128 * u**3 * chieff**3))))) + (q**10 * (-16 * u**4 * (chi2)**6 + (-2 \
+    * u**2 * (chi2)**4 * (-121 + (136 * u * chieff + 40 * u**2 * \
+    chieff**2)) + (chieff**2 * (201 + (3920 * u * chieff + 976 * u**2 * \
+    chieff**2)) + (chi2)**2 * (17 + (-148 * u * chieff + (2680 * u**2 * \
+    chieff**2 + 832 * u**3 * chieff**3)))))) + (2 * u**2 * (chi1)**4 * (3 \
+    + (-4 * q**8 + (2 * q**7 * (-19 + (36 * u**2 * (chi2)**2 + -8 * u * \
+    chieff)) + (24 * q * (-1 + 5 * u * chieff) + (2 * q**3 * (5 + (-16 * \
+    u * chieff + 24 * u**2 * chieff**2)) + (q**2 * (-67 + (204 * u * \
+    chieff + 48 * u**2 * chieff**2)) + (4 * q**5 * (13 + (6 * u * chieff \
+    + 8 * u**2 * (9 * (chi2)**2 + -1 * chieff**2))) + (q**6 * (-53 + (28 \
+    * u * chieff + 8 * u**2 * (-27 * (chi2)**2 + chieff**2))) + -1 * q**4 \
+    * (-121 + (136 * u * chieff + 8 * u**2 * (18 * (chi2)**2 + 5 * \
+    chieff**2))))))))))) + -1 * (chi1)**2 * (1 + (q**(12) + (-6 * u * \
+    chieff + (q**(11) * (4 + (60 * u**2 * (chi2)**2 + 8 * u * chieff)) + \
+    (q * (4 + (16 * u * chieff + -96 * u**2 * chieff**2)) + (q**2 * (2 + \
+    (190 * u * chieff + (-592 * u**2 * chieff**2 + -96 * u**3 * \
+    chieff**3))) + (q**10 * (2 + (288 * u**4 * (chi2)**4 + (86 * u * \
+    chieff + (24 * u**3 * (chi2)**2 * chieff + 4 * u**2 * ((chi2)**2 + 2 \
+    * chieff**2))))) + (-4 * q**3 * (3 + (-102 * u * chieff + (112 * u**3 \
+    * chieff**3 + u**2 * (-15 * (chi2)**2 + 406 * chieff**2)))) + (-4 * \
+    q**9 * (3 + (-72 * u * chieff + (8 * u**3 * chieff * (-3 * (chi2)**2 \
+    + chieff**2) + (2 * u**2 * (29 * (chi2)**2 + 5 * chieff**2) + 24 * \
+    u**4 * (6 * (chi2)**4 + -1 * (chi2)**2 * chieff**2))))) + (q**4 * \
+    (-17 + (148 * u * chieff + (4 * u**2 * ((chi2)**2 + -670 * chieff**2) \
+    + 8 * u**3 * (3 * (chi2)**2 * chieff + -104 * chieff**3)))) + (8 * \
+    q**5 * (1 + (-70 * u * chieff + (12 * u**4 * (chi2)**2 * chieff**2 + \
+    (-1 * u**2 * (29 * (chi2)**2 + 379 * chieff**2) + 4 * u**3 * (3 * \
+    (chi2)**2 * chieff + -25 * chieff**3))))) + (4 * q**6 * (7 + (-189 * \
+    u * chieff + (8 * u**4 * (chi2)**2 * chieff**2 + (-1 * u**2 * \
+    ((chi2)**2 + 614 * chieff**2) + 6 * u**3 * (7 * (chi2)**2 * chieff + \
+    -20 * chieff**3))))) + (q**8 * (-17 + (338 * u * chieff + (-4 * u**2 \
+    * ((chi2)**2 + 106 * chieff**2) + (16 * u**4 * (27 * (chi2)**4 + 2 * \
+    (chi2)**2 * chieff**2) + 8 * u**3 * (21 * (chi2)**2 * chieff + -16 * \
+    chieff**3))))) + -8 * q**7 * (-1 + (20 * u * chieff + (u**2 * (-43 * \
+    (chi2)**2 + 169 * chieff**2) + (2 * u**4 * (9 * (chi2)**4 + 8 * \
+    (chi2)**2 * chieff**2) + -8 * u**3 * (3 * (chi2)**2 * chieff + -4 * \
+    chieff**3)))))))))))))))))))))))))))))))))))
+
+    # Machine generated with eq_generator.nb
+    coeff1 = 1/8 * q**(-1) * ((1 + q))**(-16) * (-1 * ((-1 + q))**2 * ((1 \
+    + q))**(11) * chieff * (((-1 + q))**2 * (chi1)**2 + q * (q**4 * \
+    (chi2)**2 + (-1 * chieff**2 + (-3 * q * chieff**2 + (q**2 * \
+    ((chi2)**2 + -3 * chieff**2) + -1 * q**3 * (2 * (chi2)**2 + \
+    chieff**2)))))) + (8 * (-1 + q) * q * u**5 * (-1 * (chi1)**2 + q**3 * \
+    (chi2)**2) * ((5 + (-7 * q + 2 * q**2)) * (chi1)**6 + (q * (chi1)**4 \
+    * (-7 * q**2 * (chi2)**2 + (-2 * q**4 * (chi2)**2 + (2 * q**5 * \
+    (chi2)**2 + (4 * chieff**2 + (6 * q * chieff**2 + q**3 * (7 * \
+    (chi2)**2 + -2 * chieff**2)))))) + (-1 * q**4 * (chi1)**2 * (chi2)**2 \
+    * (7 * q**5 * (chi2)**2 + (2 * chieff**2 + (4 * q * chieff**2 + (-2 * \
+    q**2 * ((chi2)**2 + -2 * chieff**2) + (q**4 * (-7 * (chi2)**2 + 2 * \
+    chieff**2) + 2 * q**3 * ((chi2)**2 + 2 * chieff**2)))))) + q**8 * \
+    (chi2)**4 * (5 * q**4 * (chi2)**2 + (-2 * chieff**2 + (2 * q**2 * \
+    ((chi2)**2 + 3 * chieff**2) + q**3 * (-7 * (chi2)**2 + 4 * \
+    chieff**2))))))) + (4 * q * ((1 + q))**3 * u**4 * chieff * ((20 + \
+    (-49 * q + (41 * q**2 + -12 * q**3))) * (chi1)**6 + (q**4 * (chi1)**2 \
+    * (chi2)**2 * (-3 * q**6 * (chi2)**2 + (8 * chieff**2 + (4 * q * \
+    chieff**2 + (q**3 * (22 * (chi2)**2 + -28 * chieff**2) + (q**4 * (-14 \
+    * (chi2)**2 + 4 * chieff**2) + (-4 * q**2 * (2 * (chi2)**2 + 7 * \
+    chieff**2) + q**5 * (3 * (chi2)**2 + 8 * chieff**2))))))) + (q**8 * \
+    (chi2)**4 * (20 * q**5 * (chi2)**2 + (12 * chieff**2 + (4 * q * \
+    chieff**2 + (-4 * q**2 * (3 * (chi2)**2 + 4 * chieff**2) + (q**3 * \
+    (41 * (chi2)**2 + 4 * chieff**2) + q**4 * (-49 * (chi2)**2 + 12 * \
+    chieff**2)))))) + q * (chi1)**4 * (22 * q**5 * (chi2)**2 + (-8 * q**6 \
+    * (chi2)**2 + (12 * chieff**2 + (4 * q * chieff**2 + (-2 * q**4 * (7 \
+    * (chi2)**2 + -6 * chieff**2) + (q**3 * (3 * (chi2)**2 + 4 * \
+    chieff**2) + -1 * q**2 * (3 * (chi2)**2 + 16 * chieff**2)))))))))) + \
+    (-1 * ((1 + q))**8 * u * (((-1 + q))**4 * (chi1)**4 + (((-1 + q))**2 \
+    * (chi1)**2 * (-14 * q**5 * (chi2)**2 + (q**6 * (chi2)**2 + (-1 * \
+    chieff**2 + (16 * q * chieff**2 + (q**4 * (26 * (chi2)**2 + 7 * \
+    chieff**2) + (q**3 * (-14 * (chi2)**2 + 32 * chieff**2) + q**2 * \
+    ((chi2)**2 + 42 * chieff**2))))))) + q**2 * (-8 * chieff**4 + (-56 * \
+    q * chieff**4 + (q**8 * ((chi2)**4 + -1 * (chi2)**2 * chieff**2) + \
+    (q**7 * (-4 * (chi2)**4 + 18 * (chi2)**2 * chieff**2) + (q**4 * \
+    ((chi2)**4 + (-15 * (chi2)**2 * chieff**2 + -152 * chieff**4)) + \
+    (q**2 * (7 * (chi2)**2 * chieff**2 + -152 * chieff**4) + (2 * q**3 * \
+    (9 * (chi2)**2 * chieff**2 + -104 * chieff**4) + (q**6 * (6 * \
+    (chi2)**4 + (9 * (chi2)**2 * chieff**2 + -8 * chieff**4)) + -4 * q**5 \
+    * ((chi2)**4 + (9 * (chi2)**2 * chieff**2 + 14 * \
+    chieff**4)))))))))))) + (2 * ((1 + q))**4 * u**3 * (-1 * ((-1 + \
+    q))**2 * (-1 + (15 * q + 4 * q**2)) * (chi1)**6 + (-1 * q * (chi1)**4 \
+    * (10 * q**6 * (chi2)**2 + (4 * q**7 * (chi2)**2 + (-24 * chieff**2 + \
+    (16 * q * chieff**2 + (q**4 * (143 * (chi2)**2 + -32 * chieff**2) + \
+    (-5 * q**3 * (17 * (chi2)**2 + 12 * chieff**2) + (q**5 * (-87 * \
+    (chi2)**2 + 20 * chieff**2) + q**2 * (15 * (chi2)**2 + 32 * \
+    chieff**2)))))))) + (q**2 * (chi1)**2 * (-15 * q**9 * (chi2)**4 + (8 \
+    * chieff**4 + (24 * q * chieff**4 + (q**8 * (85 * (chi2)**4 + -4 * \
+    (chi2)**2 * chieff**2) + (q**7 * (-143 * (chi2)**4 + 24 * (chi2)**2 * \
+    chieff**2) + (-2 * q**5 * (5 * (chi2)**4 + (48 * (chi2)**2 * \
+    chieff**2 + -44 * chieff**4)) + (-4 * q**4 * ((chi2)**4 + (5 * \
+    (chi2)**2 * chieff**2 + -30 * chieff**4)) + (8 * q**3 * (3 * \
+    (chi2)**2 * chieff**2 + 10 * chieff**4) + (q**6 * (87 * (chi2)**4 + \
+    (-20 * (chi2)**2 * chieff**2 + 24 * chieff**4)) + q**2 * (-4 * \
+    (chi2)**2 * chieff**2 + 40 * chieff**4)))))))))) + q**6 * (chi2)**2 * \
+    (q**8 * (chi2)**4 + (24 * chieff**4 + (88 * q * chieff**4 + (-20 * \
+    q**2 * chieff**2 * ((chi2)**2 + -6 * chieff**2) + (q**7 * (-17 * \
+    (chi2)**4 + 24 * (chi2)**2 * chieff**2) + (16 * q**3 * (2 * (chi2)**2 \
+    * chieff**2 + 5 * chieff**4) + (q**6 * (27 * (chi2)**4 + (-16 * \
+    (chi2)**2 * chieff**2 + 8 * chieff**4)) + (q**5 * (-7 * (chi2)**4 + \
+    (-32 * (chi2)**2 * chieff**2 + 24 * chieff**4)) + q**4 * (-4 * \
+    (chi2)**4 + (60 * (chi2)**2 * chieff**2 + 40 * chieff**4))))))))))))) \
+    + ((1 + q))**7 * u**2 * chieff * (-1 * ((-1 + q))**2 * (-3 + (49 * q \
+    + 16 * q**2)) * (chi1)**4 + (-2 * q * (1 + q) * (chi1)**2 * (22 * \
+    q**4 * (chi2)**2 + (-15 * q**5 * (chi2)**2 + (4 * q**6 * (chi2)**2 + \
+    (-4 * chieff**2 + (6 * q * chieff**2 + (4 * q**2 * ((chi2)**2 + -7 * \
+    chieff**2) + -1 * q**3 * (15 * (chi2)**2 + 38 * chieff**2))))))) + \
+    q**3 * (3 * q**8 * (chi2)**4 + (16 * chieff**4 + (80 * q * chieff**4 \
+    + (160 * q**2 * chieff**4 + (q**6 * (85 * (chi2)**4 + -4 * (chi2)**2 \
+    * chieff**2) + (q**7 * (-55 * (chi2)**4 + 8 * (chi2)**2 * chieff**2) \
+    + (q**5 * (-17 * (chi2)**4 + (44 * (chi2)**2 * chieff**2 + 16 * \
+    chieff**4)) + (4 * q**3 * (19 * (chi2)**2 * chieff**2 + 40 * \
+    chieff**4) + q**4 * (-16 * (chi2)**4 + (132 * (chi2)**2 * chieff**2 + \
+    80 * chieff**4)))))))))))))))))
+
+    # Machine generated with eq_generator.nb
+    coeff0 = 1/16 * q**(-1) * ((1 + q))**(-20) * (((-1 + q))**2 * ((1 + \
+    q))**(12) * (-1 * ((-1 + q))**2 * (chi1)**2 + q**2 * ((1 + q))**2 * \
+    chieff**2) * (-2 * q**3 * (chi2)**2 + (q**4 * (chi2)**2 + (-1 * \
+    chieff**2 + (-2 * q * chieff**2 + q**2 * ((chi2)**2 + -1 * \
+    chieff**2))))) + (-16 * ((-1 + q))**2 * q * u**6 * (((chi1)**4 + (-1 \
+    * q**3 * (1 + q) * (chi1)**2 * (chi2)**2 + q**7 * (chi2)**4)))**2 * \
+    (-1 * (-1 + q) * (chi1)**2 + q * (q**3 * (chi2)**2 + (chieff**2 + (2 \
+    * q * chieff**2 + q**2 * (-1 * (chi2)**2 + chieff**2))))) + (-8 * (-1 \
+    + q) * q * ((1 + q))**3 * u**5 * (-1 * (chi1)**2 + q**4 * (chi2)**2) \
+    * chieff * ((5 + (-13 * q + 8 * q**2)) * (chi1)**6 + (q**8 * \
+    (chi2)**4 * (8 * q**2 * (chi2)**2 + (5 * q**4 * (chi2)**2 + (-8 * \
+    chieff**2 + (-12 * q * chieff**2 + q**3 * (-13 * (chi2)**2 + 4 * \
+    chieff**2))))) + (q**4 * (chi1)**2 * (chi2)**2 * (-1 * q**5 * \
+    (chi2)**2 + (4 * chieff**2 + (8 * q * chieff**2 + (-2 * q**3 * \
+    ((chi2)**2 + -4 * chieff**2) + (-4 * q**2 * ((chi2)**2 + -2 * \
+    chieff**2) + q**4 * (7 * (chi2)**2 + 4 * chieff**2)))))) + -1 * \
+    (chi1)**4 * (2 * q**5 * (chi2)**2 + (4 * q**6 * (chi2)**2 + (-4 * q * \
+    chieff**2 + (q**4 * (-7 * (chi2)**2 + 8 * chieff**2) + q**3 * \
+    ((chi2)**2 + 12 * chieff**2)))))))) + (2 * ((1 + q))**(11) * u * \
+    chieff * (((-1 + q))**4 * (chi1)**4 + (-1 * ((-1 + q))**2 * q * (1 + \
+    q) * (chi1)**2 * (-10 * q**3 * (chi2)**2 + (5 * q**4 * (chi2)**2 + \
+    (-5 * chieff**2 + (-8 * q * chieff**2 + q**2 * (5 * (chi2)**2 + -3 * \
+    chieff**2))))) + q**3 * (q**8 * (chi2)**4 + (-4 * chieff**4 + (-20 * \
+    q * chieff**4 + (5 * q**3 * chieff**2 * ((chi2)**2 + -8 * chieff**2) \
+    + (3 * q**6 * (chi2)**2 * (2 * (chi2)**2 + chieff**2) + (q**7 * (-4 * \
+    (chi2)**4 + 5 * (chi2)**2 * chieff**2) + (q**2 * (3 * (chi2)**2 * \
+    chieff**2 + -40 * chieff**4) + (q**4 * ((chi2)**4 + (-6 * (chi2)**2 * \
+    chieff**2 + -20 * chieff**4)) + -2 * q**5 * (2 * (chi2)**4 + (5 * \
+    (chi2)**2 * chieff**2 + 2 * chieff**4)))))))))))) + (2 * ((1 + q))**7 \
+    * u**3 * chieff * (((-1 + q))**2 * (-1 + (25 * q + 12 * q**2)) * \
+    (chi1)**6 + (q * (chi1)**4 * (85 * q**6 * (chi2)**2 + (-32 * q**7 * \
+    (chi2)**2 + (-4 * chieff**2 + (48 * q * chieff**2 + (q**4 * (83 * \
+    (chi2)**2 + -40 * chieff**2) + (4 * q**2 * ((chi2)**2 + 7 * \
+    chieff**2) + (q**5 * (-103 * (chi2)**2 + 20 * chieff**2) + -1 * q**3 \
+    * (37 * (chi2)**2 + 84 * chieff**2)))))))) + (q**3 * (chi1)**2 * (-37 \
+    * q**8 * (chi2)**4 + (4 * q**9 * (chi2)**4 + (16 * chieff**4 + (32 * \
+    q * chieff**4 + (16 * q**2 * chieff**2 * ((chi2)**2 + -2 * chieff**2) \
+    + (q**7 * (83 * (chi2)**4 + 16 * (chi2)**2 * chieff**2) + (q**6 * \
+    (-103 * (chi2)**4 + 24 * (chi2)**2 * chieff**2) + (q**5 * (85 * \
+    (chi2)**4 + (-8 * (chi2)**2 * chieff**2 + -32 * chieff**4)) + (8 * \
+    q**3 * (3 * (chi2)**2 * chieff**2 + -16 * chieff**4) + -8 * q**4 * (4 \
+    * (chi2)**4 + ((chi2)**2 * chieff**2 + 14 * chieff**4))))))))))) + \
+    q**7 * (chi2)**2 * (-1 * q**8 * (chi2)**4 + (-32 * chieff**4 + (-112 \
+    * q * chieff**4 + (q**7 * (27 * (chi2)**4 + -4 * (chi2)**2 * \
+    chieff**2) + (q**6 * (-39 * (chi2)**4 + 48 * (chi2)**2 * chieff**2) + \
+    (4 * q**2 * (5 * (chi2)**2 * chieff**2 + -32 * chieff**4) + (-8 * \
+    q**3 * (5 * (chi2)**2 * chieff**2 + 4 * chieff**4) + (4 * q**4 * (3 * \
+    (chi2)**4 + (-21 * (chi2)**2 * chieff**2 + 8 * chieff**4)) + q**5 * \
+    ((chi2)**4 + (28 * (chi2)**2 * chieff**2 + 16 * \
+    chieff**4))))))))))))) + (((1 + q))**4 * u**4 * (((-1 + q))**2 * (-1 \
+    + (20 * q + 8 * q**2)) * (chi1)**8 + (-4 * (-1 + q) * q * (chi1)**6 * \
+    (-11 * q**5 * (chi2)**2 + (8 * q**6 * (chi2)**2 + (-8 * chieff**2 + \
+    (20 * q * chieff**2 + (q**4 * (30 * (chi2)**2 + -22 * chieff**2) + \
+    (-8 * q**3 * (4 * (chi2)**2 + chieff**2) + q**2 * (5 * (chi2)**2 + 42 \
+    * chieff**2))))))) + (q**10 * (chi2)**4 * (-1 * q**8 * (chi2)**4 + \
+    (-96 * chieff**4 + (-288 * q * chieff**4 + (q**7 * (22 * (chi2)**4 + \
+    -32 * (chi2)**2 * chieff**2) + (8 * q**2 * (11 * (chi2)**2 * \
+    chieff**2 + -26 * chieff**4) + (-8 * q**3 * (7 * (chi2)**2 * \
+    chieff**2 + -16 * chieff**4) + (q**6 * (-33 * (chi2)**4 + (112 * \
+    (chi2)**2 * chieff**2 + -16 * chieff**4)) + (4 * q**5 * ((chi2)**4 + \
+    (22 * (chi2)**2 * chieff**2 + 8 * chieff**4)) + 8 * q**4 * ((chi2)**4 \
+    + (-25 * (chi2)**2 * chieff**2 + 24 * chieff**4)))))))))) + (4 * q**6 \
+    * (chi1)**2 * (chi2)**2 * (5 * q**9 * (chi2)**4 + (24 * chieff**4 + \
+    (56 * q * chieff**4 + (12 * q**3 * chieff**2 * ((chi2)**2 + -4 * \
+    chieff**2) + (8 * q**2 * chieff**2 * (-2 * (chi2)**2 + chieff**2) + \
+    (q**7 * (62 * (chi2)**4 + -6 * (chi2)**2 * chieff**2) + (q**8 * (-37 \
+    * (chi2)**4 + 2 * (chi2)**2 * chieff**2) + (q**4 * (-8 * (chi2)**4 + \
+    (52 * (chi2)**2 * chieff**2 + 8 * chieff**4)) + (q**6 * (-41 * \
+    (chi2)**4 + (-38 * (chi2)**2 * chieff**2 + 24 * chieff**4)) + q**5 * \
+    (19 * (chi2)**4 + (-6 * (chi2)**2 * chieff**2 + 56 * \
+    chieff**4))))))))))) + 2 * q**2 * (chi1)**4 * (-2 * q**9 * (chi2)**4 \
+    + (4 * q**10 * (chi2)**4 + (-8 * chieff**4 + (16 * q * chieff**4 + (4 \
+    * q**2 * chieff**2 * ((chi2)**2 + 24 * chieff**2) + (q**8 * (53 * \
+    (chi2)**4 + -32 * (chi2)**2 * chieff**2) + (q**7 * (-110 * (chi2)**4 \
+    + 24 * (chi2)**2 * chieff**2) + (q**6 * (53 * (chi2)**4 + (104 * \
+    (chi2)**2 * chieff**2 + -48 * chieff**4)) + (4 * q**4 * ((chi2)**4 + \
+    (-19 * (chi2)**2 * chieff**2 + -26 * chieff**4)) + (q**3 * (-12 * \
+    (chi2)**2 * chieff**2 + 64 * chieff**4) + -2 * q**5 * ((chi2)**4 + (6 \
+    * (chi2)**2 * chieff**2 + 72 * chieff**4)))))))))))))))) + ((1 + \
+    q))**8 * u**2 * (((-1 + q))**4 * (chi1)**6 + (-1 * ((-1 + q))**2 * \
+    (chi1)**4 * (4 * q**5 * (chi2)**2 + (10 * q**6 * (chi2)**2 + \
+    (chieff**2 + (-38 * q * chieff**2 + (q**3 * (26 * (chi2)**2 + -86 * \
+    chieff**2) + (-1 * q**4 * (39 * (chi2)**2 + 23 * chieff**2) + -1 * \
+    q**2 * ((chi2)**2 + 102 * chieff**2))))))) + (q**2 * (chi1)**2 * (-28 \
+    * q**9 * (chi2)**4 + (q**10 * (chi2)**4 + (32 * chieff**4 + (72 * q * \
+    chieff**4 + (48 * q**3 * chieff**2 * ((chi2)**2 + -5 * chieff**2) + \
+    (q**8 * (92 * (chi2)**4 + -22 * (chi2)**2 * chieff**2) + (-12 * q**7 \
+    * (9 * (chi2)**4 + -4 * (chi2)**2 * chieff**2) + (8 * q**5 * (2 * \
+    (chi2)**4 + (-12 * (chi2)**2 * chieff**2 + -11 * chieff**4)) + (q**6 \
+    * (37 * (chi2)**4 + (22 * (chi2)**2 * chieff**2 + -8 * chieff**4)) + \
+    (-2 * q**2 * (11 * (chi2)**2 * chieff**2 + 20 * chieff**4) + -2 * \
+    q**4 * (5 * (chi2)**4 + (-11 * (chi2)**2 * chieff**2 + 120 * \
+    chieff**4)))))))))))) + q**4 * (-16 * chieff**6 + (-96 * q * \
+    chieff**6 + (-8 * q**2 * chieff**4 * ((chi2)**2 + 30 * chieff**2) + \
+    (-4 * q**9 * ((chi2)**6 + -10 * (chi2)**4 * chieff**2) + (q**10 * \
+    ((chi2)**6 + -1 * (chi2)**4 * chieff**2) + (-4 * q**7 * ((chi2)**6 + \
+    (20 * (chi2)**4 * chieff**2 + -18 * (chi2)**2 * chieff**4)) + (q**8 * \
+    (6 * (chi2)**6 + (25 * (chi2)**4 * chieff**2 + 32 * (chi2)**2 * \
+    chieff**4)) + (q**4 * (23 * (chi2)**4 * chieff**2 + (-240 * (chi2)**2 \
+    * chieff**4 + -240 * chieff**6)) + (q**6 * ((chi2)**6 + (-47 * \
+    (chi2)**4 * chieff**2 + (-40 * (chi2)**2 * chieff**4 + -16 * \
+    chieff**6))) + (8 * q**5 * (5 * (chi2)**4 * chieff**2 + (-30 * \
+    (chi2)**2 * chieff**4 + -12 * chieff**6)) + -8 * q**3 * (11 * \
+    (chi2)**2 * chieff**4 + 40 * chieff**6))))))))))))))))))))
+
+    return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
+
+
+# TODO: edit this
 def kapparesonances(u, chieff, q, chi1, chi2, tol= 1e-5):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
@@ -910,6 +1242,81 @@ def kapparesonances(u, chieff, q, chi1, chi2, tol= 1e-5):
     return np.stack([kappamin, kappamax])
 
 
+
+# TODO: edit this
+def kapparesonances_new(u, chieff, q, chi1, chi2, tol= 1e-5):
+    """
+    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
+
+    Call
+    ----
+    kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    u: float
+        Compactified separation 1/(2L).
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    tol: FIX ME
+
+    Returns
+    -------
+    kappamin: float
+        Minimum value of the regularized angular momentum kappa.
+    kappamax: float
+        Maximum value of the regularized angular momentum kappa.
+    """
+
+    u = np.atleast_1d(u)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
+    # There are in principle five solutions, but only two are physical.
+    def _compute(kapparoots, u, chieff, q, chi1, chi2):
+        kapparoots = kapparoots[np.isfinite(kapparoots)]
+        #print('kapparoots', kapparoots)
+
+        Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), chieff=np.tile(chieff, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
+        Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
+        kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
+
+        #print("S",Sroots,Smin, Smax)
+        #print('kapparoots', kappares)
+
+        if len(kappares) > 2:
+
+            #print('xxxxx', kappares, np.diff(kappares),np.argmin(np.diff(kappares)),)
+            diff = np.diff(kappares)
+            if np.min(diff)<tol:
+                warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
+                kappares = np.delete(kappares, [np.argmin(diff),np.argmin(diff)+1])
+
+            assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
+
+
+
+            #assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
+
+
+        # If you didn't find enough solutions, append nans
+        kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
+        return kappares
+
+    kappamin, kappamax = np.array(list(map(_compute, kapparoots, u, chieff, q, chi1, chi2))).T
+
+    return np.stack([kappamin, kappamax])
+
+# TODO: edit this
 def kappainfresonances(chieff, q, chi1, chi2):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
@@ -946,7 +1353,7 @@ def kappainfresonances(chieff, q, chi1, chi2):
 
     return np.stack([kappainfmin, kappainfmax])
 
-
+# TODO: this one should be ok as it is
 def Jresonances(r, chieff, q, chi1, chi2):
     """
     Total angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes J for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
@@ -984,6 +1391,7 @@ def Jresonances(r, chieff, q, chi1, chi2):
     return np.stack([Jmin, Jmax])
 
 
+# TODO: check
 def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
@@ -1039,7 +1447,7 @@ def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
 
     return np.stack([Jmin, Jmax])
 
-
+# TODO: check when rewriting the large separation limit
 def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
@@ -1132,7 +1540,7 @@ def chiefflimits_definition(q, chi1, chi2):
 
     return np.stack([-chiefflim, chiefflim])
 
-
+# TODO: I think this can be removed. It's misleading to specify J before chieff, the user should not do it.
 def chieffdiscriminant_coefficients(kappa, u, q, chi1, chi2):
     """
     Coefficients of the sixth-degree equation in chieff that defines the spin-orbit resonances.
@@ -1318,7 +1726,7 @@ def chieffdiscriminant_coefficients(kappa, u, q, chi1, chi2):
 
     return np.stack([coeff6, coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
-
+# TODO: I think this can be removed. It's misleading to specify J before chieff, the user should not do it.
 def chieffresonances(J, r, q, chi1, chi2):
     """
     Effective spin of the two spin-orbit resonances. The resonances minimizes and maximizes chieff for a given value of J. The minimum corresponds to either deltaphi=0 or deltaphi=pi, the maximum always corresponds to deltaphi=pi.
@@ -1891,6 +2299,101 @@ def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=F
         raise TypeError("Provide one of the following: (q,chi1,chi2), (J,r,q), (J,r,q,chi1,chi2), (J,r,chieff,q,chi1,chi2).")
 
     return np.stack([Smin, Smax])
+
+
+def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
+    kappa = np.atleast_1d(kappa)
+    u = np.atleast_1d(u)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    coeff3 = u*(1-q)
+
+    # Machine generated with eq_generator.nb
+    coeff2 = -1/2 * q**(-1) * ((1 + q))**(-3) * (1 + (q**6 + (q**2 * (-1 \
+    + (16 * u * kappa + (4 * u**2 * (chi1)**2 + -8 * u * chieff))) + \
+    (q**4 * (-1 + (16 * u * kappa + (4 * u**2 * (chi2)**2 + -8 * u * \
+    chieff))) + (4 * q**3 * (-1 + (6 * u * kappa + -3 * u * chieff)) + (q \
+    * (2 + (4 * u * kappa + (-4 * u**2 * (chi1)**2 + -2 * u * chieff))) + \
+    q**5 * (2 + (4 * u * kappa + (-4 * u**2 * (chi2)**2 + -2 * u * \
+    chieff)))))))))
+
+    # Machine generated with eq_generator.nb
+    coeff1 = q**(-1) * ((1 + q))**(-3) * (-2 * (-1 + q) * ((1 + q))**5 * \
+    kappa + ((-1 + q) * ((1 + q))**5 * chieff + (4 * q**2 * u**2 * \
+    ((chi1)**2 + -1 * q**2 * (chi2)**2) * chieff + (-1 + q**2) * u * (2 * \
+    (chi1)**2 + q * (2 * q**3 * (chi2)**2 + (chieff**2 + (2 * q * \
+    chieff**2 + q**2 * chieff**2)))))))
+
+    # Machine generated with eq_generator.nb
+    coeff0 = 1/2 * q**(-1) * ((1 + q))**(-1) * ((1 + -2 * q * ((1 + \
+    q))**(-2) * u * chieff))**2 * (-4 * u**2 * (chi1)**4 + (8 * q**4 * \
+    u**2 * (chi1)**2 * (chi2)**2 + (-4 * q**8 * u**2 * (chi2)**4 + (4 * \
+    ((1 + q))**4 * u * (chi1)**2 * (2 * kappa + -1 * chieff) + (4 * q**4 \
+    * ((1 + q))**4 * u * (chi2)**2 * (2 * kappa + -1 * chieff) + (-4 * q \
+    * ((1 + q))**2 * u**2 * (chi1)**2 * chieff**2 + (-4 * q**2 * ((1 + \
+    q))**2 * u**2 * (chi1)**2 * chieff**2 + (-4 * q**4 * ((1 + q))**2 * \
+    u**2 * (chi2)**2 * chieff**2 + (-4 * q**5 * ((1 + q))**2 * u**2 * \
+    (chi2)**2 * chieff**2 + (2 * q * ((1 + q))**6 * u * (2 * kappa + -1 * \
+    chieff) * chieff**2 + -1 * ((1 + q))**8 * ((-2 * kappa + \
+    chieff))**2)))))))))) * ((1 + (q**2 + q * (2 + -2 * u * \
+    chieff))))**(-2)
+
+    return np.stack([coeff3, coeff2, coeff1, coeff0])
+
+
+
+# TODO: precomputedroots is not implemented consistently. Check that all functions that can use it have the option to do it
+# Docstrings must be changed for kappa and deltachi everywhere
+def deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
+    """
+    Roots of the cubic equation in S^2 that identifies the effective potentials.
+
+    Call
+    ----
+    Sminuss,Spluss,S3s = Ssroots(J,r,chieff,q,chi1,chi2,precomputedroots=None)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
+
+    Returns
+    -------
+    Sminuss: float
+        Lowest physical root, if present, of the effective potential equation.
+    Spluss: float
+        Largest physical root, if present, of the effective potential equation.
+    S3s: float
+        Spurious root of the effective potential equation.
+    """
+
+    if precomputedroots is None:
+
+        deltachiminus, deltachiplus, deltachi3 = wraproots(deltachicubic_coefficients, kappa, u, chieff, q, chi1, chi2).T
+
+        return np.stack([deltachiminus, deltachiplus, deltachi3])
+
+    else:
+        precomputedroots=np.array(precomputedroots)
+        assert precomputedroots.shape[0] == 3, "Shape of precomputedroots must be (3,N), i.e. Sminuss, Spluss, S3s. [Ssroots]"
+        return precomputedroots
+
+
 
 
 # TODO: Check inter-compatibility of Slimits, Jlimits, chiefflimits
@@ -2627,6 +3130,20 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
         raise TypeError("Provide either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (kappa,r,q,chi1,chi2).")
 
     return J
+
+
+# TODO: This function and the next one needs to be merged together
+def eval_S_from_deltachi(deltachi, kappa, r, chieff, q):
+
+    deltachi = np.atleast_1d(deltachi)
+    kappa = np.atleast_1d(kappa)
+    r = np.atleast_1d(r)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+
+    S = ( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi * (1 - q)/(1 + q)) )**(1/2)
+
+    return S
 
 
 def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
@@ -6117,8 +6634,28 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
     else:
         return vk
 
+# Check...
+def ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi):
+    '''Convert GW frequency to PN orbital separation conversion'''
 
-
+    c_cgs = 2.99e10
+    G_cgs = 6.67e-8
+    om = np.pi * f
+    M_sec = M_msun * 2e33 * G_cgs / c_cgs**3
+    mom = M_sec * om
+    m1 = 1 / (1+q)
+    m2 = q / (1+q)
+    eta = m1*m2
+    ct1 = np.cos(theta1)
+    ct2 = np.cos(theta2)
+    ct12 = np.sin(theta1) * np.sin(theta2) * np.cos(deltaphi) + ct1 * ct2
+    # Eq. 4.13, Kidder 1995. gr-qc/9506022
+    r = (mom)**(-2./3.)*(1. \
+                    - (1./3.)*(3.-eta)*mom**(2./3.)  \
+                    - (1./3.)* ( chi1*ct1*(2.*m1**2.+3.*eta) + chi2*ct2*(2.*m2**2.+3.*eta))*mom \
+                    + ( eta*(19./4. + eta/9.) -eta*chi1*chi2/2. * (ct12 - 3.*ct1*ct2 ))*mom**(4./3.)\
+                    )
+    return r
 
 if __name__ == '__main__':
 
@@ -6127,1074 +6664,22 @@ if __name__ == '__main__':
     import time
     np.set_printoptions(threshold=sys.maxsize)
 
-    # q=0.7
-    # chi1=0.3
-    # chi2=1
-    # theta1=np.pi/3
-    # theta2=np.pi/4
-    # deltaphi=np.pi/5
-    # r=10
-    #
-    # q=[0.7,0.7]
-    # chi1=[0.3,0.3]
-    # chi2=[1,1]
-    # theta1=[np.pi/3,np.pi/3]
-    # theta2=[np.pi/4,np.pi/4]
-    # deltaphi=[np.pi/5,np.pi/5]
-    # r=[10,10]
-    #
-    # print(eval_chip(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,which='heuristic'))
-    # print(eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,which='generalized'))
-    # print(eval_chip(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,which='asymptotic'))
-    # print(eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,method='quadrature',Nsamples=1e4,which='averaged'))
-    # #print(normalize_nested(Lh))
-
-
-    #print(eval_r(u=1, L=None, q=1))
-
-    #print(spinmags([0.5,0.5],[1,1],[1,1]))
-    #print(spinmags(0.5,1,1))
-    #print(eval_S1(0.5,1))
-
-    #print(eval_S2([0.5,0.5],[1,1]))
-
-    #print(masses([0.5,0.6]))
-
-    #
-    # r=[10,10][0]
-    # chieff=[0.35,0.35][0]
-    # q=[0.8,0.8][0]
-    # chi1=[1,1][0]
-    # chi2=[1,1][0]
-    # J=[1,1][0]
-    # u=[1/10,1/10][0]
-    # theta1=[1,1][0]
-    # theta2=[1,1][0]
-    # S=[0.3,0.3][0]
-    # t=[0,100][0]
-
-
-
-    # Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,chieff,q,chi1,chi2)
-    # print(Lvec,S1vec,S2vec)
-    #
-    # phiL= eval_phiL(S,J,r,chieff,q,chi1,chi2)
-    # print(phiL)
-    #
-    # def rotation_zaxis(angle):
-    #     rotmatrix = np.array([ [np.cos(angle), -np.sin(angle), 0],\
-    #                          [np.sin(angle),  np.cos(angle), 0],\
-    #                          [0            ,  0            , 1]])
-    #     return rotmatrix
-    #
-    #
-    # print(np.dot(rotation_zaxis(np.squeeze(phiL)),np.squeeze(Lvec)))
-    #
-    # print('more')
-
-    # r=[10,10]
-    # chieff=[0.35,0.35]
-    # q=[0.8,0.8]
-    # chi1=[1,1]
-    # chi2=[1,1]
-    # J=[1,1]
-    # u=[1/10,1/10]
-    # theta1=[1,1]
-    # theta2=[1,1]
-    # S=[0.3,0.3]
-    # t=[0,100]
-
-    # Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,chieff,q,chi1,chi2)
-    # print(Lvec)
-    # phiL= eval_phiL(S,J,r,chieff,q,chi1,chi2)
-    # print(phiL)
-    #
-    # def rotate_zaxis(vec,angle):
-    #
-    #     newx = vec[:,0]*np.cos(angle) - vec[:,1]*np.sin(angle)
-    #     newy = vec[:,0]*np.sin(angle) + vec[:,1]*np.cos(angle)
-    #     newz = vec[:,2]
-    #     newvec = np.transpose([newx,newy,newz])
-    #
-    #     return newvec
-    #
-    # phiL=0.01
-    # Lvec = rotate_zaxis(Lvec,phiL)
-    # S1vec = rotate_zaxis(S1vec,phiL)
-    # S2vec = rotate_zaxis(S2vec,phiL)
-    # print(Lvec)
-    # r=10
-    # chieff=0.35
-    # q=0.8
-    # chi1=0.6
-    # chi2=0.3
-    # #J=0.2
-    #
-    # #Sminus,Splus=Slimits(J,r,chieff,q,chi1,chi2)
-    # S =np.linspace(0,1,1000)
-    # r=np.tile(r,S.shape)
-    # chieff=np.tile(chieff,S.shape)
-    # q=np.tile(q,S.shape)
-    # chi1=np.tile(chi1,S.shape)
-    # chi2=np.tile(chi2,S.shape)
-    #J=np.tile(J,S.shape)
-    #
-    #
-    # Lvec, S1vec,S2vec = conserved_to_inertial(S,J,r,chieff,q,chi1,chi2)
-
-
-    #print(rotation_zaxis(phiL))
-
-    #Sminus,Splus=Slimits(J,r,chieff,q,chi1,chi2)
-
-    #tau = eval_tau(J,r,chieff,q,chi1,chi2)
-    #print(tau)
-
-        #print(tofS(Sminus,J,r,chieff,q,chi1,chi2,sign=-1))
-
-    # print(eval_alpha(J,r,chieff,q,chi1,chi2))
-    # print(2*eval_phiL(Splus,J,r,chieff,q,chi1,chi2,sign=1))
-
-    #t= np.linspace(0,np.squeeze(tau),100)
-    #S = Soft(t,np.tile(J,t.shape),np.tile(r,t.shape),np.tile(chieff,t.shape),np.tile(q,t.shape),np.tile(chi1,t.shape),np.tile(chi2,t.shape))
-    #print(t)
-    #print(S)
-
-    # S = np.linspace(np.squeeze(Sminus),np.squeeze(Splus),100)
-    # t = tofS(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(chieff,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape),sign = np.tile(1,S.shape))
-    #
-    # phiL = eval_phiL(S,np.tile(J,S.shape),np.tile(r,S.shape),np.tile(chieff,S.shape),np.tile(q,S.shape),np.tile(chi1,S.shape),np.tile(chi2,S.shape))
-    #
-    #
-    # print(S)
-    # print(t)
-    # print(phiL)
-
-
-    #print(omegasq_aligned(r, q, chi1, chi2, ['uu','ud']))
-
-    #print("on many", Jresonances(r,chieff,q,chi1,chi2))
-
-    # print("on one", Jresonances(r[0],chieff[0],q[0],chi1[0],chi2[0]))
-    # u=eval_u(r=r,q=q)
-    # kres = kapparesonances(u,chieff,q,chi1,chi2)
-    # J = eval_J(kappa=kres,r=r,q=r)
-    # print("on one", J)
-
-
-    #print(Satresonance(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
-    #sys.exit()
-    #
-    #
-    # sys.exit()
-    # #
-    #
-    # for x in np.linspace()
-    #
-    # print(Ssav_mfactor([0,1e-,0.2]))
-
-    #print(morphology(J,r,chieff,q,chi1,chi2,simpler=False))
-    #print(morphology(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0],simpler=True))
-
-    # print(Soft(t[0],J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
-    # print(Soft(t[1],J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
-    # print(Soft(t[1],J[1],r[1],chieff[1],q[1],chi1[1],chi2[1]))
-    #
-    # print(Soft(t,J,r,chieff,q,chi1,chi2))
-    #
-    # print(Soft(t,J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
-    #
-    #
-    # print(Soft([[1,100,1,100],[500,600,500,600]],J,r,chieff,q,chi1,chi2))
-
-    #print(Ssampling(J,r,chieff,q,chi1,chi2,N=10).shape)
-    #print(Ssampling(J,r,chieff,q,chi1,chi2,N=1).shape)
-    #print(Ssampling(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0],N=1).shape)
-    #print(Ssampling(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0],N=10).shape)
-
-
-
-    #Lvec = [[1,2454,3],[1,2,334]]
-    #S1vec = [[13,20,30],[1,21,3]]
-    #S2vec = [[12,23,33],[1,23,3]]
-
-    #v1,v2,v3 = conserved_to_Jframe(S[1], J[1], r[1], chieff[1], q[1], chi1[1], chi2[1])
-    #print(v1)
-
-    #v1,v2,v3 = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2)
-    #print(v1)
-
-
-    #print(kappadiscriminant_coefficients(u,chieff,q,chi1,chi2))
-    #print(kappadiscriminant_coefficients(0.1,0.2,0.8,1,1))
-    #print("on one", Jresonances(r[0],chieff[0],q[0],chi1[0],chi2[0]))
-    #print(Jresonances(r[1],chieff[1],q[1],chi1[1],chi2[1]))
-    #print("on many", Jresonances(r,chieff,q,chi1,chi2))
-
-    #print("on one", chieffresonances(J[0],r[0],q[0],chi1[0],chi2[0]))
-
-    #print("on many", chieffresonances(J,r,q,chi1,chi2))
-
-    #print(anglesresonances(J=J[0],r=r[0],chieff=None,q=q[0],chi1=chi1[0],chi2=chi2[0]))
-
-    #print(anglesresonances(J=J,r=r,chieff=None,q=q,chi1=chi1,chi2=chi2))
-    #print(Slimits(J,r,chieff,q,chi1,chi2))
-    #print(Slimits(J[0],r[0],chieff[0],q[0],chi1[0],[chi2[0]]))
-
-    #print(chiefflimits(J=J, r=r,q=q,chi1=chi1,chi2=chi2))
-    #print(eval_chieff(theta1=theta1,theta2=theta2,S=[1,1],varphi=[1,1],J=J,r=r,q=q,chi1=chi1,chi2=chi2))
-    #print(effectivepotential_minus(S[0],J[0],r[0],q[0],chi1[0],chi2[0]))
-
-    #print(effectivepotential_minus(S,J,r,q,chi1,chi2))
-    #print(Slimits_plusminus(J,r,chieff,q,chi1,chi2))
-    #t0=time.time()
-    #print(Jofr(ic=1.8, r=np.linspace(100,10,100), chieff=-0.5, q=0.4, chi1=0.9, chi2=0.8))
-    #print(time.time()-t0)
-
-    # t0=time.time()
-    #print(repr(Jofr(ic=203.7430728810311, r=np.logspace(6,1,100), chieff=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
-    # print(time.time()-t0)
-
-
-
-    # theta1inf=0.5
-    # theta2inf=0.5
-    # q=0.5
-    # chi1=0.6
-    # chi2=0.7
-    # kappainf, chieff = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
-    # r = np.concatenate(([np.inf],np.logspace(10,1,100)))
-    # print(repr(Jofr(kappainf, r, chieff, q, chi1, chi2)))
-
-
-    # r=1e2
-    # chieff=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    #
-    # Jmin,Jmax = Jlimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
-    # J0=(Jmin+Jmax)/2
-    # #print(J)
-    # #print(Jmin,Jmax)
-    # r = np.logspace(np.log10(r),1,100)
-    # J=Jofr(J0, r, chieff, q, chi1, chi2)
-    # print(J)
-    #
-    # J=Jofr([J0,J0], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2])
-    #
-    # print(J)
-
-
-
-    #S = Ssampling(J,r,chieff,q,chi1,chi2,N=1)
-
-    #S = Ssampling([J,J],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2],N=[10,10])
-
-    #print(repr(S))
-
-    ##### INSPIRAL TESTING: precav, to/from finite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # chieff = 0.9141896967861489
-    # kappa = 0.5784355256550922
-    # r=np.logspace(3,1,500)
-    # rswitch =1000
-    # N=100
-    # theta1=np.tile(theta1,(N,1))
-    # theta2=np.tile(theta2,(N,1))
-    # deltaphi=np.tile(deltaphi,(N,1))
-    # q=np.tile(q,(N,1))
-    # chi1=np.tile(chi1,(N,1))
-    # chi2=np.tile(chi2,(N,1))
-    # r=np.tile(r,(N,1))
-    # rswitch=np.tile(rswitch,(N,1))
-    #
-    # #
-    # #
-    # #d= inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #print(d['chieff'])
-    # import cProfile
-    # #cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","slowScubic.prof")
-    # #
-    # cProfile.run("inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)","subsscubic.prof")
-    #print('x')
-    #inspiral_hybrid(q=q,r=r,rswitch=rswitch)
-    #print(inspiral_hybrid(u=np.array([0,1,2,3,4]),uswitch=np.array([2]),q=np.array([0.4])))
-    #print(inspiral_hybrid(u=[[0,1,2,3,4],[0,1,2,3,4]],uswitch=[2,2],q=[0.4,0.4]))
-    #
-    # d= inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,rswitch=rswitch)
-    # for k in d:
-    #     print(k, d[k].shape)
-    #
-    # print(d['r'])
-    #
-    # print(Ssav(J, r[0], chieff, q, chi1, chi2))
-    #
-    #
-    #print(precession_average(J, r[0], chieff, q, chi1, chi2, lambda x:x**2,method='montecarlo'))
-    #
-    #
-    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], lambda x:x**2,method='montecarlo'))
-    #
-    #
-
-    # def func(S,x,y):
-    #     return x*y+S**2
-    #
-    # x=np.array([1,2])
-    # y=np.array([1,2])
-    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func,x[0],y[0], method='quadrature'))
-    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func,x[0],y[0], method='montecarlo'))
-    #
-    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='quadrature'))
-    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func,x,y, method='montecarlo'))
-    # #
-    #
-    # def func(S,x):
-    #     return x+S**2
-    #
-    # x=np.array([1,2])
-    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func,x[0], method='quadrature'))
-    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func,x[0], method='montecarlo'))
-    #
-    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='quadrature'))
-    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func,x, method='montecarlo'))
-    #
-    #
-    # def func(S):
-    #     return S**2
-    #
-    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func, method='quadrature'))
-    # print(precession_average(J, r[0], chieff, q, chi1, chi2, func, method='montecarlo'))
-    #
-    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature'))
-    #
-    # print(precession_average([J,J], [r[0],r[0]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='montecarlo'))
-
-    #
-
-    #
-    # sys.exit()
-
-
-    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,requested_outputs=None)
-    # print(d)
-    # #
-    # #
-    # # #
-    # # #
-    # #print(d['J'])
-    # # #
-    # d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r],requested_outputs=None)
-    #
-    # print(d)
-
-    #
-    #
-    # #print(d)
-    #
-    # #
-    #print(d['J'])
-    #
-    #
-    # sys.exit()
-    #
-    # d=inspiral(which='precav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-    #
-    # print(d)
-    #
-
-
-    print('hello')
-    d=inspiral_precav(theta1=[-0.4],theta2=[0.6],deltaphi=[0.4],q=[0.8],chi1=[0.2],chi2=[0.2],r=[1e4,1e3,1e2,10])
-
-    #d=inspiral_orbav(theta1=[-0.4,-0.4],theta2=[0.6,0.6],deltaphi=[0.4,0.4],q=[0.8,0.8],chi1=[0.2,0.2],chi2=[0.2,0.2],r=[[1e2,10],[1e2,10]])
-
-
-    print(d)
-
-
-    #
-    # #d=inspiral_orbav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
-    # #print(d['chieff'])
-    #
-
-
-
-    #
-    # d=inspiral(which='orbav',theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J'])
-    #
-    # print(d)
-
-    #print('')
-
-    # d=inspiral_precav(theta1=[theta1,theta1],theta2=[theta2,theta2],deltaphi=[deltaphi,deltaphi],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
-    #
-    # # #d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['r','theta1'])
-    # #
-    # # #d=inspiral_precav(S=S,J=J,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
-    # # #d=inspiral_precav(J=J,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
-    # # #d=inspiral_precav(S=S,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
-    # # #d=inspiral_precav(kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
-    # #
-    # print(d)
-
-    ##### INSPIRAL TESTING: precav, from infinite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # kappa = 0.50941012
-    # chieff = 0.9141896967861489
-    # r=np.concatenate(([np.inf],np.logspace(2,1,100)))
-    #
-    #
-    #
-    # d=inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
-    # # d=inspiral_precav(kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r,outputs=['J','theta1'])
-    # #
-    # print(d)
-    #
-    #d=inspiral_precav(kappa=[kappa,kappa],chieff=[chieff,chieff],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],r=[r,r])
-    #
-    #print(d)
-    # ###### INSPIRAL TESTING to infinite #######
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 1.2314871608018418
-    # chieff = 0.9141896967861489
-    # kappa=0.7276876186801603
-    #
-    # #kappa = 0.5784355256550922
-    # r=np.concatenate((np.logspace(1,4,6),[np.inf]))
-    # d=inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2,r=r)
-    # print(d)
-    # sys.exit()
-    #d=inspiral_precav(S=S,J=J,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(J=J,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(S=S,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
-    #d=inspiral_precav(kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2,r=r)
-
-    #print(d)
-    #
-
-    # q=0.5
-    # chi1=1
-    # chi2=1
-    # theta1=0.4
-    # theta2=0.45
-    # deltaphi=0.46
-    # S = 0.5538768649231461
-    # J = 2.740273008918153
-    # chieff = 0.9141896967861489
-    # kappa0 = 0.5784355256550922
-    # r=np.logspace(2,1,3)
-    # u=eval_u(r,q)
-    # #print(integrator_precav(kappa0, u[0],u[-1], chieff, q, chi1, chi2))
-    # sols = integrator_precav([kappa0,kappa0], [u[0],u[0]], [u[-1],u[-1]], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2])
-    # print(sols)
-    #print(sols[0])
-
-    #ode_integrator_precav(kappa0, uinitial, ufinal, chieff, q, chi1, chi2)
-    #
-    # chieff=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    # r=np.logspace(2,1,100)
-    # Jmin,Jmax = Jlimits(r=r[0],chieff=chieff,q=q,chi1=chi1,chi2=chi2)
-    # J=(Jmin+Jmax)/2
-    # Smin,Smax= Slimits(J=J,r=r[0],chieff=chieff,q=q,chi1=chi1,chi2=chi2)
-    # S=(Smin+Smax)/2
-    # Svec, S1vec, S2vec, Jvec, Lvec = conserved_to_Jframe(S, J, r[0], chieff, q, chi1, chi2)
-    # S1h0=S1vec/eval_S1(q,chi1)
-    # S2h0=S2vec/eval_S2(q,chi2)
-    # Lh0=Lvec/eval_L(r[0],q)
-    #
-    # print(J,S)
-
-    # chieff=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    # r=np.logspace(2,1,5)
-    # Lh0,S1h0,S2h0 = sample_unitsphere(3)
-    # #print(Lh0,S1h0,S2h0)
-    # #t0=time.time()
-    # #Lh,S1h,S2h = integrator_orbav(Lh0,S1h0,S2h0,r[0],r[-1],q,chi1,chi2,rsteps=r, tracktime=False)
-    #
-    # print( integrator_orbav([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r[0],r[0]],[r[-1],r[-1]],[q,q],[chi1,chi1],[chi2,chi2],rsteps=[r,r], tracktime=False))
-    #
-    #
-    # print(Lh)
-    #
-    # print( [integrator_orbav([Lh0,Lh0],[S1h0,S1h0],[S2h0,S2h0],[r,r],[q,q],[chi1,chi1],[chi2,chi2],tracktime=True)])
-    # #
-    # print(t)
-    #
-    # print(time.time()-t0)
-    # #print(Lh)
-
-    # ### ORBAV TESTING ####
-    # chieff=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    # r=np.logspace(2,1,4)
-    # Lh,S1h,S2h = sample_unitsphere(3)
-    #
-    # d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2,tracktime=True)
-    #print(d)
-    #print(" ")
-    #
-    # theta1,theta2,deltaphi = vectors_to_angles(Lh,S1h,S2h)
-    # d= inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)
-    # print(d)
-    # print(" ")
-    #
-    # S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2)
-    # d= inspiral_orbav(S=S,J=J,chieff=chieff,r=r,q=q,chi1=chi1,chi2=chi2)
-    # print(d)
-    # print(" ")
-    #
-    #
-    # kappa=eval_kappa(J,r[0],q)
-    # d= inspiral_orbav(S=S,kappa=kappa,chieff=chieff,r=r,q=q,chi1=chi1,chi2=chi2)
-    # print(d)
-    # print(" ")
-    #
-    # d= inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2)
-    # print(d)
-    # print(" ")
-    #
-    #
-    # d= inspiral_orbav(Lh=[Lh,Lh],S1h=[S1h,S1h],S2h=[S2h,S2h],r=[r,r],q=[q,q],chi1=[chi1,chi1],chi2=[chi2,chi2],tracktime=True)
-    # print(d)
-    # print(" ")
-
-
-    # J=6.1
-    # print("LS",Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
-    # print(Ssroots(J,r,chieff,q,chi1,chi2))
-    #
-    # J=6.6
-    # print(Slimits_LJS1S2(J,r,q,chi1,chi2)**2)
-    # print(Ssroots(J,r,chieff,q,chi1,chi2))
-    #
-    # # print(repr(Jofr(ic=(Jmin+Jmax)/2, r=np.logspace(6,1,100), chieff=-0.5, q=0.4, chi1=0.9, chi2=0.8)))
-    # for J in [5.99355616 ,6.0354517,6.20850742,6.57743474,6.94028614]:
-    #     ssol = Slimits_plusminus(J,r,chieff,q,chi1,chi2,coincident=True)[0]**2
-    #     smin,smax = Slimits_LJS1S2(J,r,q,chi1,chi2)**2
-    #     print(ssol>smin,ssol<smax)
-    #
-
-
-    # print( dSdtprefactor(r,chieff,q))
-    # kappa=eval_kappa(J,r,q)
-    # u=eval_u(r,q)
-    # print(Ssroots_NEW(kappa,u,chieff,q,chi1,chi2))
-
-
-    #print(Jresonances(r[0],chieff[0],q[0],chi1[0],chi2[0]))
-    #print(Jresonances(r[1],chieff[1],q[1],chi1[1],chi2[1]))
-    #  print(Jresonances(r,chieff,q,chi1,chi2))
-    #print(Jlimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2))
-    #print(Jlimits(r=r,q=q,chi1=chi1,chi2=chi2))
-
-
-    #
-    # r=1e14
-    # chieff=-0.5
-    # q=0.4
-    # chi1=0.9
-    # chi2=0.8
-    #
-    #
-    # Jmin,Jmax = Jlimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
-    # print(Jmin,Jmax)
-    #
-    # print(Satresonance([Jmin,Jmax],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2]))
-    #
-    #
-    # print(chieffresonances((Jmin+Jmax)/2,r,q,chi1,chi2))
-    #print(chieffresonances(J[1],r[1],q[1],chi1[1],chi2[1]))
-    #print(chieffresonances(J,r,q,chi1,chi2))
-
-    #
-    # t0=time.time()
-    # [Ssroots(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]) for i in range(100)]
-    # #print(Slimits_plusminus(J,r,chieff,q,chi1,chi2))
-    # print(time.time()-t0)
-    #
-    # @np.vectorize
-    # def ell(x):
-    #   if x==0:
-    #     return 1/2
-    #   else:
-    #       return (1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x
-    #
-    # # Should be equivalent to
-    # def ell(x):
-    #     return np.where(x==0, 1/2, (1- scipy.special.ellipe(x)/scipy.special.ellipk(x))/x)
-    #
-    # t0=time.time()
-    # [ell(0.5) for i in range(100)]
-    # print(time.time()-t0)
-
-    #print(chiefflimits(q=q,chi1=chi1,chi2=chi2))
-
-    #print(chiefflimits(J=J,r=r,q=q,chi1=chi1,chi2=chi2))
-    #S=[0.4,0.6668]
-
-    #print(effectivepotential_plus(S,J,r,q,chi1,chi2))
-    #print(effectivepotential_minus(S,J,r,q,chi1,chi2))
-
-    #print(Slimits_cycle(J,r,chieff,q,chi1,chi2))
-
-
-    #M,m1,m2,S1,S2=pre.get_fixed(q[0],chi1[0],chi2[0])
-    #print(pre.J_allowed(chieff[0],q[0],S1[0],S2[0],r[0]))
-
-    #print(Jresonances(r,chieff,q,chi1,chi2))
-
-
-    #print(Jlimits(r,q,chi1,chi2))
-    #print(Ssroots(J,r,chieff,q,chi1,chi2))
-
-
-
-    #print(Slimits_check([0.24,4,6],q,chi1,chi2,which='S1S2'))
-
-    # q=0.7
-    # chi1=0.7
-    # chi2=0.9
-    # r=30
-    # J=1.48
-    # chieff=0.25
-    # S = 0.3
-    # #print("stillworks",Ssroots(J,r,chieff,q,chi1,chi2)**0.5)
-    #
-    # #print(eval_deltaphi(S,J,r,chieff,q,chi1,chi2, sign=1))
-    #
-    # #print(eval_deltaphi([S,S], [J,J], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], sign=[1,1]))
-    # #print(eval_deltaphi([S,S], [J,J], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], sign=1))
-    #
-    # print(morphology(J,r,chieff,q,chi1,chi2,simpler=False))
-    #
-    #
-    # #print(morphology(J,r,chieff,q,chi1,chi2))
-    # print(morphology([J,J],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2]))
-
-
-
-    #print(spinorbitresonances(J=0.0001,r=10,chieff=None,q=0.32,chi1=1,chi2=1))
-    #print(spinorbitresonances(J=[0.0001,0.0001],r=[10,10],chieff=None,q=[0.32,0.32],chi1=[1,1],chi2=[1,1]))
-
-    #print(chiefflimits(J=0.05,r=10,q=0.32,chi1=1,chi2=1))
-
-    # theta1=[0.567,1]
-    # theta2=[1,1]
-    # deltaphi=[1,2]
-    #S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)
-    #print(S,J,chieff)
-    #theta1,theta2,deltaphi=conserved_to_angles(S,J,r,chieff,q,chi1,chi2)
-    #print(theta1,theta2,deltaphi)
-    #print(eval_costheta1(0.4,J[0],r[0],chieff[0],q[0],chi1[0],chi2[0]))
-
-    #print(eval_thetaL([0.5,0.6],J,r,q,chi1,chi2))
-
-    # tau = eval_tau(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0])
-    # Smin,Smax = Slimits_plusminus(J[0],r[0],chieff[0],q[0],chi1[0],chi2[0])
-    # t= np.linspace(0,tau,200)
-    # S= Soft([t,t],J,r,chieff,q,chi1,chi2)
-    #
-    # #print(t)
-    # print(np.shape([t,t]))
-    # print(np.shape(S))
-    # #S= Soft(t,J[0],r[0],chieff[0],q[0],chi1[0],chi2[0])
-
-    #print(S[1:5])
-
-    #S= Soft(t[4],J[0],r[0],chieff[0],q[0],chi1[0],chi2[0])
-
-    #print(S)
-
-    #import pylab as plt
-    #plt.plot(t/1e5,S)
-    #plt.axhline(Smin)
-    #plt.axhline(Smax)
-    #plt.show()
-
-    #
-    # chi1=0.9
-    # chi2=0.8
-    # q=0.8
-    # Lh,S1h,S2h = sample_unitsphere(3)
-    # S1,S2= spinmags(q,chi1,chi2)
-    # r=10
-    # L = eval_L(r,q)
-    # S1vec = S1*S1h
-    # S2vec = S2*S2h
-    # Lvec = L*Lh
-    #
-    # S, J, chieff = vectors_to_conserved(Lvec, S1vec, S2vec, q)
-    # theta1,theta2,deltaphi = conserved_to_angles(S,J,r,chieff,q,chi1,chi2,sign=+1)
-    # #print(theta1,theta2,deltaphi)
-    # #print(vectors_to_conserved([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec], [q,q+0.1]))
-    # #print(' ')
-    # #print(vectors_to_angles(S1vec, S2vec, Lvec))
-    # #print(vectors_to_angles([S1vec,S1vec], [S2vec,S2vec], [Lvec,Lvec]))
-    # # print(conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2))
-    # # print(conserved_to_Jframe([S,S], [J,J], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2]))
-    # #
-    # # print(angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
-    # #print(angles_to_Jframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
-    #
-    # #print(angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2))
-    # print(angles_to_Lframe([theta1,theta1], [theta2,theta2], [deltaphi,deltaphi], [r,r], [q,q], [chi1,chi1], [chi2,chi2]))
-    #
-    # print(conserved_to_Lframe([S,S], [J,J], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2]))
-
-    # r=10
-    # q=0.5
-    # chi1=2
-    # chi2=2
-    # which='uu'
-    # print(omega2_aligned([r,r], [q,q], [chi1,chi1], [chi2,chi2], 'dd'))
-
-    #
-    # print(eval_tau([J,J],[r[0],r[0]],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2]))
-    # pr = Ssroots([J,J],[r[0],r[0]],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2])
-    # print(eval_tau([J,J],[r[0],r[0]],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=pr))
-    # sys.exit()
-
-    # q=0.8
-    # chi1=1
-    # chi2=1
-    # theta1=1
-    # theta2=1
-    #
-    # r=np.concatenate([[np.inf],np.logspace(2,1,100)])
-    #
-    # insp = inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
-    # print(insp)
-
-
-    # q=0.95
-    # chi1=0.1
-    # chi2=1
-    # theta1=np.arccos(-0.95)
-    # theta2=np.arccos(-0.9)
-    #
-    # r=np.concatenate([[np.inf],np.logspace(np.log10(105),np.log10(90),1000)])
-    #
-    # insp = inspiral_precav(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2,r=r)
-    #
-    # J= insp['J'][0,1:]
-    # r= insp['r'][0,1:]
-    # chieff = np.tile(insp['chieff'],r.shape)
-    # q = np.tile(q,r.shape)
-    # chi1 = np.tile(chi1,r.shape)
-    # chi2 = np.tile(chi2,r.shape)
-    #
-    # Sminus, Splus = Slimits(J=J,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
-    #
-    # omegaminus= eval_omegaL(Sminus,J,r,chieff,q,chi1,chi2)
-    # omegaplus= eval_omegaL(Splus,J,r,chieff,q,chi1,chi2)
-    #
-    #
-    # print(omegaminus)
-
-    #print(ellippi(np.array([0.5,0.5]),np.array([0.5,0.5]),np.array([0.5,0.5])))
-
-    #print(gwfrequency_to_pnseparation(0, 0, 0,20,0,0,0,25))
-    #print(pnseparation_to_gwfrequency(0,0,0,10,0,0,0,25))
-    #print(kappadiscriminant_coefficients(3.4, 5.6, 1.1, 1.4, 3.4))
-
-    #print(Scubic_coefficients(0.4, 0.456, 1.3, 0.2, 0.8, 0.9))
-    #print(Slimits_plusminus(2.34, 100, 0, 0.6, 1, 1))
-    #print(chieffresonances(2.34, 100, 0.6, 1, 1))
-
-
-
-    # ### TEST SANITIZER #####
-    # r = [10.0, np.inf]
-    # theta1, theta2, deltaphi, q, chi1, chi2 = 0.5385167956349948, 2.0787674021887943, 0.030298549469360836, 0.520115233263539, 0.7111631983107138, 0.8770205367255773
-    #
-    # S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r[0],q,chi1,chi2,full_output=False)
-    #
-    # Jmin, Jmax = Jlimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2)
-    # J=Jmax-1e-20
-    # result = inspiral_precav(J=J,chieff=chieff, r=r, q=q, chi1=chi1, chi2=chi2)
-    # print(result['kappa'])
-
-    # while True:
-    #     q=np.random.uniform(0.01,1)
-    #     chi1=np.random.uniform(0.01,1)
-    #     chi2=np.random.uniform(0.01,1)
-    #     chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)
-    #     chieff=np.random.uniform(chieffmin,chieffmax)
-    #     r=10
-    #
-    #     Jres = Jresonances(r,chieff,q,chi1,chi2)
-    #     u=eval_u(r=r,q=q)
-    #     kres = kapparesonances(u,chieff,q,chi1,chi2)
-    #     J = eval_J(kappa=kres,r=r,q=q)
-    #     print(Jres-J)
-
-
-    # kappa=3.4
-    # u=0.1
-    # chieff=0.8
-    # q=0.4
-    # chi1=0.9567
-    # chi2=0.979032
-    # #print(Scubic_coefficients(kappa, u, chieff, q, chi1, chi2))
-    # #print(chieffdiscriminant_coefficients(u, chieff, q, chi1, chi2))
-    #
-    # r=34.432
-    # J=1.7
-    # #print(Slimits(r=r,q=q,chi1=chi1,chi2=chi2,chieff=chieff,J=J))
-    # S=0.55
-    # varphi=0.45
-    # t0=time.time()
-    #
-    # Sminuss,Spluss,S3s = Ssroots(J,r,chieff,q,chi1,chi2)
-    # # for i in range(10000):
-    # eval_tau(J, r, chieff, q, chi1, chi2,precomputedroots=[Sminuss,Spluss,S3s])
-    #
-    # Sminuss,Spluss,S3s = Ssroots([J,J],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2])
-    # # for i in range(10000):
-    # print(Sminuss,Spluss,S3s)
-    #
-    # print(eval_tau([J,J],[r,r],[chieff,chieff],[q,q],[chi1,chi1],[chi2,chi2],precomputedroots=[Sminuss,Spluss,S3s]))
-
-    #print(time.time()-t0)
-
-    #t0=time.time()
-    #for i in range(10000):
-    #    eval_tau(J, r, chieff, q, chi1, chi2)
-    #print(time.time()-t0)
-
-    #print(eval_chieff(theta1=None,theta2=None,S=S,varphi=varphi,J=J,r=r,q=q,chi1=chi1,chi2=chi2))
-
-    #
-    # if precomputedroots is None:
-    #     Smin, Smax =....
-    # else:
-    #     Smin, Smax = (precomputedroots[:-1])**0.5
-
-
-    #print(kappadiscriminant_coefficients(0.45, 0.56, 0.2, 0.5, 0.6))
-    #print(Jresonances(10,0.5, 0.8, 1,1))
-    #print(kappainflimits(chieff=0.5, q=0.8, chi1=1, chi2=1))
-
-    #print(kappainflimits(q=0.8, chi1=1, chi2=1))
-    #print(Jlimits_LS1S2(r=16.4,q=0.8,chi1=1,chi2=1))
-    #print(eval_kappa(1.50609663, 16.4, 0.8), eval_u(16.4, 0.8))
-
-    #print(chieffdiscriminant_coefficients(0,0.5,0.8,1,1))
-
-    #print(chieffresonances(1, 10, 0.8, 1, 1))
-
-
-    #print(anglesresonances(J=1,r=10,q=0.8,chi1=1,chi2=1))
-
-    #print(anglesresonances(J=0.25,r=10,q=0.2,chi1=1,chi2=1))
-
-    #print(anglesresonances(r=10,chieff=0.5,q=0.8,chi1=1,chi2=1))
-
-
-    #print(Scubic_coefficients(kappa=0, u=0.5, chieff=0.5, q=0.8, chi1=1, chi2=1))
-    #print(Ssroots(J=1, r=10, chieff=0.3, q=0.8, chi1=1, chi2=1, precomputedroots=None))
-
-    #print(Slimits_plusminus(J=1, r=10, chieff=0.3, q=0.8, chi1=1, chi2=1))
-
-
-    #precomputedroots=Ssroots(J=1,r=10,chieff=0.3,q=0.8,chi1=1,chi2=1)
-    #print(Ssroots(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,precomputedroots=precomputedroots))
-
-
-    #def test_2_Jlimits():
-    # Should be like test_Jresonances
-    #return {"r":10, "chieff":0.5, "q":0.8, "chi1":1, "chi2":1}, [[1.03459125],[1.12552698]]
-    #print(eval_u(10,0.8))
-    #print(Satresonance(J=1, kappa=None, r=10, u=None, chieff=0.43413573, q=0.8, chi1=1, chi2=1))
-
-
-    # q=0.6
-    # chi1=1
-    # chi2=1
-    # r=100
-    # xi=-0.05
-    # S=0.4
-    # J=2.34
-    # chieff=-0.05
-    # # theta1=np.pi/8
-    # # theta2=np.pi/4
-    # # varphi=np.pi/4
-    # # print(eval_chieff(theta1=theta1,theta2=theta2,q=q,chi1=chi1,chi2=chi2))
-    # # print(eval_chieff(S=S,varphi=varphi,J=J,r=r,q=q, chi1=chi1,chi2=chi2))
-    #
-    # #print(effectivepotential_plus(S=0.4, J=1, r=10, q=0.8, chi1=1, chi2=1))
-    # #print(effectivepotential_minus(S=0.4, J=1, r=10, q=0.8, chi1=1, chi2=1))
-    # print(eval_varphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1))
-
-    # q=0.6
-    # chi1=1
-    # chi2=1
-    # #J=1
-    # #S=0.4
-    # #chieff=0.3
-    # r=100
-    # theta1=np.pi/8
-    # theta2=np.pi/4
-    # deltaphi=np.pi/3
-    # print(
-    # #eval_costheta1(S, J, r, chieff, q, chi1, chi2),
-    # #eval_theta1(S, J, r, chieff, q, chi1, chi2),
-    # #eval_costheta2(S, J, r, chieff, q, chi1, chi2),
-    # #eval_theta2(S, J, r, chieff, q, chi1, chi2),
-    # #eval_costheta12(theta1=1, theta2=2, deltaphi=1),
-    # #eval_theta12(S=S, q=q, chi1=chi1, chi2=chi2),
-    # #eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2),
-    # #eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1)
-    # #eval_costhetaL(S, J, r, q, chi1, chi2),
-    # #eval_thetaL(S, J, r, q, chi1, chi2)
-    # eval_S(theta1=theta1, theta2=theta2, deltaphi=deltaphi, q=q, chi1=chi1, chi2=chi2)
-    # )
-
-    #print(eval_kappa(1, 10, 0.8))
-    #print(eval_J(kappa=0.24995658, r=10, q=0.8))
-
-    #print(eval_kappainf(np.pi/8, np.pi/4, 0.6, 1, 1))
-    #print(morphology([1,1], [10,10], [0.35,0.35], [0.8,0.8], [1,1], [1,1], simpler=True))
-#def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
-#    """
-#    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
-
-
-    #print(eval_cyclesign(Lvec=[1,2,3],S1vec=[3,2,1],S2vec=[1,1,0]))
-
-    # n=10
-    # theta1inf = np.arccos(np.random.uniform(-1, 1, n))
-    # theta2inf = np.arccos(np.random.uniform(-1, 1, n))
-    # chi1 = np.random.uniform(0, 1, n)
-    # chi2 = np.random.uniform(0, 1, n)
-    # q = np.random.uniform(0.01, 0.99, n)
-    # r = [np.inf, 10.]
-    # r = np.repeat([r], n, axis=0)
-    # #print(chi1)
-    #
-    # result = inspiral_precav(theta1=theta1inf, theta2=theta2inf, r=r, q=q, chi1=chi1, chi2=chi2)
-    # print(result)
-
-    #print(final(1,1,1,1,1,1))
-
-    #remnantmass([1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1])
-
-    #remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxkick=False, superkick=True, hangupkick=True, crosskick=True, full_output=False)
-    #print(remnantspin(1,1,1,1,1,1,which='HBR16_34corr'))
-
-    #print(remnantspin([0.1,1,1], [0.1,1,1], [1,1,1], [1,1,1], [1,1,1], [1,1,1],which='HBR16_12'))
-    #print(remnantkick(0.5,0.5,1,0.5,1,1,maxkick=True))
-
-    #print('ciao')
-    #vk,k = remnantkick([0.5,0.5,0.5], [0.5,0.5,0.5], [1,1,1], [0.5,0.5,0.5], [1,1,1], [1,1,1],maxkick=True,full_output=True)
-    #print(k)
-
-    # theta1=1
-    # theta2=2
-    # deltaphi=3
-    # q=0.5
-    # chi1=0.7
-    # chi2=0.8
-    # print(remnantspin(theta1,theta2,deltaphi,q,chi1,chi2))
-
-
-    def ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi):
-        '''Convert GW frequency to PN orbital separation conversion'''
-
-        c_cgs = 2.99e10
-        G_cgs = 6.67e-8
-        om = np.pi * f
-        M_sec = M_msun * 2e33 * G_cgs / c_cgs**3
-        mom = M_sec * om
-        m1 = 1 / (1+q)
-        m2 = q / (1+q)
-        eta = m1*m2
-        ct1 = np.cos(theta1)
-        ct2 = np.cos(theta2)
-        ct12 = np.sin(theta1) * np.sin(theta2) * np.cos(deltaphi) + ct1 * ct2
-        # Eq. 4.13, Kidder 1995. gr-qc/9506022
-        r = (mom)**(-2./3.)*(1. \
-                        - (1./3.)*(3.-eta)*mom**(2./3.)  \
-                        - (1./3.)* ( chi1*ct1*(2.*m1**2.+3.*eta) + chi2*ct2*(2.*m2**2.+3.*eta))*mom \
-                        + ( eta*(19./4. + eta/9.) -eta*chi1*chi2/2. * (ct12 - 3.*ct1*ct2 ))*mom**(4./3.)\
-                        )
-        return r
-
-
-    #
-    # while True:
-    #     f = 20
-    #     M_msun=np.random.uniform(5,100)
-    #     q=np.random.uniform(0,1)
-    #     chi1=np.random.uniform(0,1)
-    #     chi2=np.random.uniform(0,1)
-    #     theta1=np.arccos(np.random.uniform(-1,1))
-    #     theta2=np.arccos(np.random.uniform(-1,1))
-    #     deltaphi=np.random.uniform(0,2*np.pi)
-    #     old = ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi)
-    #     new = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun)
-    #
-    #     print(old,new, (old-new)/new)
-    #     if (old-new)/new>0.01:
-    #         break
-    #
-
-
-    # f=10
-    # M_msun=77.3
-    # q=2/5
-    # chi1=0.95
-    # chi2=0.95
-    # theta1=np.pi/2
-    # theta2=np.pi/2
-    # deltaphi=0.1
-    # old = ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi)
-    # new = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun)
-    #
-    # print(old,new, (old-new)/new)
-
-    #print(anglesresonances(J=None, r=10, chieff=0.4, q=0.5, chi1=0.5, chi2=0.5))
-
-
-    #print(anglesresonances(J=None, r=8.32333121212124241, chieff=0.224232903924038232, q=0.59212013209454231, chi1=0.535453289094290, chi2=0.2921210982093203193809328109381029))
-
-
-    #print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906))
-
-
-    #print(anglesresonances(r=8.129630210292124, chieff=0.22393960598553517, q=0.5947703935562467, chi1=0.5299810262, chi2=0.2906142849))
-    #print(anglesresonances(r=7.7255545367765235, chieff=0.27444770582406697+1e-5, q=0.9926485848200008, chi1=0.8095329056692561, chi2=0.264600259415532))
-
-    # q=0.9926485848200008
-    # chi1=0.8095329056692561
-    # chi2=0.264600259415532
-    # chieff = (chi1-q*chi2)/(1+q)
-    # print(chieff)
-    # print(anglesresonances(r=7.7255545367765235, chieff=chieff, q=q, chi1=chi1, chi2=chi2))
+    q=0.8
+    chi1=1
+    chi2=0.5
+    r=10
+    J=1
+    chieff=0.30
+    kappa = eval_kappa(J, r, q)
+    u = eval_u(r, q)
+    #
+    # print(Ssroots(J, r, chieff, q, chi1, chi2)**(1/2))
+    # #print(Slimits_plusminus(J, r, chieff, q, chi1, chi2))
+    #
+    # dchi = deltachiroots(kappa, u, chieff, q, chi1, chi2)
+    # Sconv = eval_S_from_deltachi(dchi, np.tile(kappa, dchi.shape), np.tile(r, dchi.shape), np.tile(chieff, dchi.shape), np.tile(q, dchi.shape))
+    # print(Sconv)
+
+    print(kapparesonances(u, chieff, q, chi1, chi2))
+
+    print(wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2))
