@@ -882,10 +882,10 @@ def kappadiscriminant_coefficients_new(u, chieff, q, chi1, chi2):
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    coeff5 = u
+    coeff5 = -u
 
     # Machine generated with eq_generator.nb
-    coeff4 = -1/16 * q**(-1) * ((1 + q))**(-4) * (1 + (q**6 + (q * (2 + \
+    coeff4 = 1/16 * q**(-1) * ((1 + q))**(-4) * (1 + (q**6 + (q * (2 + \
     (80 * u**2 * (chi1)**2 + 40 * u * chieff)) + (q**5 * (2 + (80 * u**2 \
     * (chi2)**2 + 40 * u * chieff)) + (4 * q**3 * (-1 + (60 * u * chieff \
     + 8 * u**2 * chieff**2)) + (q**2 * (-1 + (160 * u * chieff + 16 * \
@@ -893,7 +893,7 @@ def kappadiscriminant_coefficients_new(u, chieff, q, chi1, chi2):
     chieff + 16 * u**2 * (-3 * (chi2)**2 + chieff**2)))))))))
 
     # Machine generated with eq_generator.nb
-    coeff3 = 1/8 * q**(-1) * ((1 + q))**(-8) * (((-1 + q))**2 * ((1 + \
+    coeff3 = -1/8 * q**(-1) * ((1 + q))**(-8) * (((-1 + q))**2 * ((1 + \
     q))**8 * chieff + (8 * q * u**3 * ((10 + (-12 * q + 3 * q**2)) * \
     (chi1)**4 + (-2 * q * (chi1)**2 * (6 * q**2 * (chi2)**2 + (6 * q**4 * \
     (chi2)**2 + (-2 * chieff**2 + (-3 * q * chieff**2 + q**3 * (-11 * \
@@ -910,7 +910,7 @@ def kappadiscriminant_coefficients_new(u, chieff, q, chi1, chi2):
     (chi2)**2 + 64 * chieff**2))))))))))
 
     # Machine generated with eq_generator.nb
-    coeff2 = -1/16 * q**(-1) * ((1 + q))**(-12) * (-16 * q * (-10 + (18 * \
+    coeff2 = 1/16 * q**(-1) * ((1 + q))**(-12) * (-16 * q * (-10 + (18 * \
     q + (-9 * q**2 + q**3))) * u**4 * (chi1)**6 + (chieff**2 + (4 * q * \
     chieff**2 * (3 + 2 * u * chieff) + (q**(14) * (6 * u**2 * (chi2)**4 + \
     (chieff**2 + (chi2)**2 * (-1 + 6 * u * chieff))) + (q**2 * (-1 * \
@@ -985,8 +985,8 @@ def kappadiscriminant_coefficients_new(u, chieff, q, chi1, chi2):
     chieff**3)))))))))))))))))))))))))))))))))))
 
     # Machine generated with eq_generator.nb
-    coeff1 = 1/8 * q**(-1) * ((1 + q))**(-16) * (-1 * ((-1 + q))**2 * ((1 \
-    + q))**(11) * chieff * (((-1 + q))**2 * (chi1)**2 + q * (q**4 * \
+    coeff1 = -1/8 * q**(-1) * ((1 + q))**(-16) * (-1 * ((-1 + q))**2 * \
+    ((1 + q))**(11) * chieff * (((-1 + q))**2 * (chi1)**2 + q * (q**4 * \
     (chi2)**2 + (-1 * chieff**2 + (-3 * q * chieff**2 + (q**2 * \
     ((chi2)**2 + -3 * chieff**2) + -1 * q**3 * (2 * (chi2)**2 + \
     chieff**2)))))) + (8 * (-1 + q) * q * u**5 * (-1 * (chi1)**2 + q**3 * \
@@ -1060,7 +1060,7 @@ def kappadiscriminant_coefficients_new(u, chieff, q, chi1, chi2):
     80 * chieff**4)))))))))))))))))
 
     # Machine generated with eq_generator.nb
-    coeff0 = 1/16 * q**(-1) * ((1 + q))**(-20) * (((-1 + q))**2 * ((1 + \
+    coeff0 = -1/16 * q**(-1) * ((1 + q))**(-20) * (((-1 + q))**2 * ((1 + \
     q))**(12) * (-1 * ((-1 + q))**2 * (chi1)**2 + q**2 * ((1 + q))**2 * \
     chieff**2) * (-2 * q**3 * (chi2)**2 + (q**4 * (chi2)**2 + (-1 * \
     chieff**2 + (-2 * q * chieff**2 + q**2 * ((chi2)**2 + -1 * \
@@ -1242,9 +1242,25 @@ def kapparesonances(u, chieff, q, chi1, chi2, tol= 1e-5):
     return np.stack([kappamin, kappamax])
 
 
+def kappalimits_geometrical(r , q, chi1, chi2):
+
+    r = np.atleast_1d(r)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    kappamin= np.maximum(
+        (chi1+chi2*q**2) / (1+q)**2 ( (chi1+chi2*q**2) / (2 q*r**(1/2)) -1 ),
+        np.abs(chi1-chi2*q**2) / (1+q)**2 ( np.abs(chi1-chi2*q**2) / (2 q*r**(1/2)) -1 ),
+        -q*r**(1/2)/(2(1+q)**2)
+                        )
+
+    kappamax = (chi1+chi2*q**2) / (1+q)**2 ( (chi1+chi2*q**2) / (2 q*r**(1/2)) +1 ),
+
+    return kappamin,kappamax
 
 # TODO: edit this
-def kapparesonances_new(u, chieff, q, chi1, chi2, tol= 1e-5):
+def kapparesonances_new(r, chieff, q, chi1, chi2, tol= 1e-5):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
 
@@ -1274,38 +1290,50 @@ def kapparesonances_new(u, chieff, q, chi1, chi2, tol= 1e-5):
         Maximum value of the regularized angular momentum kappa.
     """
 
-    u = np.atleast_1d(u)
     chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
+    u = eval_u(r,q)
+
+    kapparoots = wraproots(kappadiscriminant_coefficients_new, u, chieff, q, chi1, chi2)
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparoots, u, chieff, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
-        #print('kapparoots', kapparoots)
+        # This is a quintic. It has either 1, 3, or 5 real roots
 
-        Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), chieff=np.tile(chieff, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
-        Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
-        kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
+        # In this case, the spurious solution is always the smaller one. Just leave it out.
+        if len(kapparoots)==3:
+            kappares = kapparoots[1:]
 
-        #print("S",Sroots,Smin, Smax)
-        #print('kapparoots', kappares)
+        # Here we have two candidate pairs of resonances...
+        if len(kapparoots)==5:
+            warnings.warn("This part still needs to be tested carefully!", Warning)
 
-        if len(kappares) > 2:
+            kappamin,kappamax = kappalimits_geometrical(r , q, chi1, chi2)
+            avs = np.array([np.mean(kappares[1:3],np.mean(kappares[3:5])])
+            check = np.logical_and(avs>kappamin,avs<kappamax)
 
-            #print('xxxxx', kappares, np.diff(kappares),np.argmin(np.diff(kappares)),)
-            diff = np.diff(kappares)
-            if np.min(diff)<tol:
-                warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
-                kappares = np.delete(kappares, [np.argmin(diff),np.argmin(diff)+1])
+            if check[0] and not check[1]:
+                return kappares[1:3]
+            elif check[1] and not check[1]:
+                return kappares[3:5]
+            else:
+                raise ValueError("Input values are not compatible [kapparesonances].")
 
-            assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
-
-
-
-            #assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
+            #TODO: Implement a tolerance?
+            #warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
+        # if len(kappares) > 2:
+        #
+        #     #print('xxxxx', kappares, np.diff(kappares),np.argmin(np.diff(kappares)),)
+        #     diff = np.diff(kappares)
+        #     if np.min(diff)<tol:
+        #         warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
+        #         kappares = np.delete(kappares, [np.argmin(diff),np.argmin(diff)+1])
+        # We know there are always two resonances
+        else:
+            raise ValueError("Input values are not compatible [kapparesonances].")
 
 
         # If you didn't find enough solutions, append nans
@@ -1915,6 +1943,64 @@ def chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
         raise TypeError("Provide either (q,chi1,chi2) or (J,r,q,chi1,chi2).")
 
     return np.stack([chieffmin, chieffmax])
+
+
+# TODO: check when rewriting the large separation limit
+def deltachilimits_rectangle(chieff, q, chi1, chi2):
+    """
+    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
+    - If r, q, chi1, and chi2 are provided, the limits are given by kappa=S1+S2.
+    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    The boolean flag enforce allows raising an error in case the inputs are not compatible.
+
+    Call
+    ----
+        kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
+
+    Parameters
+    ----------
+    r: float, optional (default: None)
+        Binary separation.
+    chieff: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    enforce: boolean, optional (default: False)
+        If True raise errors, if False raise warnings.
+
+    Returns
+    -------
+    kappainfmin: float
+        Minimum value of the asymptotic angular momentum kappainf.
+    kappainfmin: float
+        Minimum value of the asymptotic angular momentum kappainf.
+    """
+
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+
+    deltachimin = np.maximum( -chieff - 2*chi1/(1+q), chieff - 2*q*chi2/(1+q))
+    deltachimax = np.maximum( -chieff + 2*chi1/(1+q), chieff + 2*q*chi2/(1+q))
+
+    return np.stack([deltachimin, deltachimax])
+
+#
+# def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2):
+#
+#     u = eval_u(r, q)
+#     deltachiroots(kappa, u, chieff, q, chi1, chi2)
+#
+#
+#     return np.stack([deltachimin, deltachimax])
+
+
 
 
 def Slimits_S1S2(q, chi1, chi2):
@@ -6666,10 +6752,10 @@ if __name__ == '__main__':
 
     q=0.8
     chi1=1
-    chi2=0.5
+    chi2=1
     r=10
     J=1
-    chieff=0.30
+    chieff=0
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
     #
@@ -6680,6 +6766,14 @@ if __name__ == '__main__':
     # Sconv = eval_S_from_deltachi(dchi, np.tile(kappa, dchi.shape), np.tile(r, dchi.shape), np.tile(chieff, dchi.shape), np.tile(q, dchi.shape))
     # print(Sconv)
 
-    print(kapparesonances(u, chieff, q, chi1, chi2))
+    #print(kapparesonances(u, chieff, q, chi1, chi2))
+    kappa = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
+    J = eval_J(kappa=kappa, r=np.tile(r, kappa.shape), q=np.tile(q, kappa.shape))
+    print(kappa,J)
 
-    print(wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2))
+    kappa = wraproots(kappadiscriminant_coefficients_new, u, chieff, q, chi1, chi2)
+    J = eval_J(kappa=kappa, r=np.tile(r, kappa.shape), q=np.tile(q, kappa.shape))
+    print(kappa,J)
+
+
+    print(kapparesonances_new(r, chieff, q, chi1, chi2))
