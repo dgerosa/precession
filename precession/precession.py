@@ -1250,12 +1250,12 @@ def kappalimits_geometrical(r , q, chi1, chi2):
     chi2 = np.atleast_1d(chi2)
 
     kappamin= np.maximum(
-        (chi1+chi2*q**2) / (1+q)**2 ( (chi1+chi2*q**2) / (2 q*r**(1/2)) -1 ),
-        np.abs(chi1-chi2*q**2) / (1+q)**2 ( np.abs(chi1-chi2*q**2) / (2 q*r**(1/2)) -1 ),
-        -q*r**(1/2)/(2(1+q)**2)
+        (chi1+chi2*q**2) / (1+q)**2 * ( (chi1+chi2*q**2) / (2*q*r**(1/2)) -1 ),
+        np.abs(chi1-chi2*q**2) / (1+q)**2 * ( np.abs(chi1-chi2*q**2) / (2*q*r**(1/2)) -1 ),
+        -q*r**(1/2)/(2*(1+q)**2)
                         )
 
-    kappamax = (chi1+chi2*q**2) / (1+q)**2 ( (chi1+chi2*q**2) / (2 q*r**(1/2)) +1 ),
+    kappamax = (chi1+chi2*q**2) / (1+q)**2 * ( (chi1+chi2*q**2) / (2*q*r**(1/2)) +1 ),
 
     return kappamin,kappamax
 
@@ -1308,11 +1308,12 @@ def kapparesonances_new(r, chieff, q, chi1, chi2, tol= 1e-5):
             kappares = kapparoots[1:]
 
         # Here we have two candidate pairs of resonances...
-        if len(kapparoots)==5:
+        elif len(kapparoots)==5:
             warnings.warn("This part still needs to be tested carefully!", Warning)
+            print("Reproduce with", r, chieff, q, chi1, chi2)
 
             kappamin,kappamax = kappalimits_geometrical(r , q, chi1, chi2)
-            avs = np.array([np.mean(kappares[1:3],np.mean(kappares[3:5])])
+            avs = np.array([np.mean(kappares[1:3]),np.mean(kappares[3:5])])
             check = np.logical_and(avs>kappamin,avs<kappamax)
 
             if check[0] and not check[1]:
@@ -1343,6 +1344,16 @@ def kapparesonances_new(r, chieff, q, chi1, chi2, tol= 1e-5):
     kappamin, kappamax = np.array(list(map(_compute, kapparoots, u, chieff, q, chi1, chi2))).T
 
     return np.stack([kappamin, kappamax])
+
+def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
+
+    kappatilde = np.atleast_1d(kappatilde)
+
+    kappamin, kappamax = kapparesonances_new(r, chieff, q, chi1, chi2)
+
+    kappa = kappamin + kappatilde * (kappamax- kappamin)
+
+    return kappa
 
 # TODO: edit this
 def kappainfresonances(chieff, q, chi1, chi2):
@@ -1514,7 +1525,6 @@ def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
         kappainflim = Slimits_S1S2(q, chi1, chi2)[1]
         kappainfmin, kappainfmax = -kappainflim, kappainflim
 
-        print(kappainflim)
 
 
     elif chieff is not None and q is not None and chi1 is not None and chi2 is not None:
@@ -6750,12 +6760,12 @@ if __name__ == '__main__':
     import time
     np.set_printoptions(threshold=sys.maxsize)
 
-    q=0.8
+    q=0.9
     chi1=1
     chi2=1
     r=10
     J=1
-    chieff=0
+    chieff=0.9
     kappa = eval_kappa(J, r, q)
     u = eval_u(r, q)
     #
@@ -6767,13 +6777,14 @@ if __name__ == '__main__':
     # print(Sconv)
 
     #print(kapparesonances(u, chieff, q, chi1, chi2))
-    kappa = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
-    J = eval_J(kappa=kappa, r=np.tile(r, kappa.shape), q=np.tile(q, kappa.shape))
-    print(kappa,J)
+    #kappa = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
+    #J = eval_J(kappa=kappa, r=np.tile(r, kappa.shape), q=np.tile(q, kappa.shape))
+    #print(kappa,J)
 
-    kappa = wraproots(kappadiscriminant_coefficients_new, u, chieff, q, chi1, chi2)
-    J = eval_J(kappa=kappa, r=np.tile(r, kappa.shape), q=np.tile(q, kappa.shape))
-    print(kappa,J)
+    #kappa = wraproots(kappadiscriminant_coefficients_new, u, chieff, q, chi1, chi2)
+    #J = eval_J(kappa=kappa, r=np.tile(r, kappa.shape), q=np.tile(q, kappa.shape))
+    #print(kappa,J)
+    print(kapparesonances(u, chieff, q, chi1, chi2))
 
 
     print(kapparesonances_new(r, chieff, q, chi1, chi2))
