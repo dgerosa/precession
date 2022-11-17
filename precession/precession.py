@@ -8,8 +8,8 @@ import numpy as np
 import scipy.special
 import scipy.integrate
 
-# TODO: This needs to be updated with Giovanni's algorithm to shift the roots.
-def roots_vec(p):
+# TODO: new algorithm! Needs to be documented!
+def roots_vec(p, enforce=False):
     """
     Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
     Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977
@@ -30,12 +30,36 @@ def roots_vec(p):
     """
 
     p = np.atleast_1d(p)
+    non_zeros = np.count_nonzero(p, axis=1)
+
+    if not non_zeros.all()!=0:
+        if enforce:
+            raise ValueError("There is at least one coefficients line with all zeros [roots_vec_zeros].")
+        else:
+            warnings.warn("There is at least one coefficients line with all zeros [roots_vec_zeros].", Warning)
+
+    #https://stackoverflow.com/a/20361561
+    B = np.append(p, np.ones(p.shape[0])[:,None], axis=1)
+    nz = np.argmax(B!=0,axis=1)
+    rows, columns = np.ogrid[:p.shape[0], :p.shape[1]]
+    shift = np.copy(nz)
+    shift[shift > 0] -= p.shape[1]
+    columns = columns + shift[:, np.newaxis]
+    p = p[rows, columns]
+
     n = p.shape[-1]
     A = np.zeros(p.shape[:1] + (n-1, n-1), float)
     A[..., 1:, :-1] = np.eye(n-2)
     A[..., 0, :] = -p[..., 1:]/p[..., None, 0]
 
-    return np.linalg.eigvals(A)
+    results = np.linalg.eigvals(A)
+
+    nansol = np.reshape(np.repeat(nz, results.shape[1], axis=0), results.shape)
+    resind = np.mgrid[0:results.shape[0], 0:results.shape[1]][1]
+
+    return np.where(resind<nansol, np.nan, results)
+
+
 
 
 def norm_nested(x):
@@ -154,6 +178,12 @@ def sample_unitsphere(N=1):
     return vec.T
 
 
+# TODO: check all tile instances and replace them with this new funtion
+def tiler(scalar,shaper):
+
+    return np.tile(scalar, np.shape(shaper))
+
+
 def wraproots(coefficientfunction, *args, **kwargs):
     """
     Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is essentially a wrapper of numpy.roots.
@@ -220,7 +250,7 @@ def ellippi(n, phi, m):
     m = np.array(m)
 
     if ~np.all(n>0) or ~np.all(n<1) or ~np.all(phi>0) or ~np.all(phi<np.pi/2) or ~np.all(m>0) or ~np.all(m<1):
-        warnings.warn("Elliptic intergal of the third kind evaluated outside of the expected domain. The implementation has not been tested in this regime!", Warning)
+        warnings.warn("Elliptic intergal of the third kind evaluated outside of the expected domain. Our implementation has not been tested in this regime!", Warning)
 
     # Eq (61) in Carlson 1994 (arxiv:math/9409227v1). Careful with the notation: one has k^2 --> m and n --> -n.
     c = (1/np.sin(phi))**2
@@ -640,7 +670,7 @@ def Jlimits_LS1S2(r, q, chi1, chi2):
 
 
 # TODO: edit this
-def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
+def kappadiscriminant_coefficients_old(u, chieff, q, chi1, chi2):
     """
     Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.
 
@@ -839,7 +869,7 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
 
 
 # TODO: edit this
-def kappadiscriminant_coefficients_new(u, chieff, q, chi1, chi2):
+def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     """
     Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.
 
@@ -1169,7 +1199,7 @@ def kappadiscriminant_coefficients_new(u, chieff, q, chi1, chi2):
 
 
 # TODO: edit this
-def kapparesonances(u, chieff, q, chi1, chi2, tol= 1e-5):
+def kapparesonances_old(u, chieff, q, chi1, chi2, tol= 1e-5):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
 
@@ -1205,7 +1235,7 @@ def kapparesonances(u, chieff, q, chi1, chi2, tol= 1e-5):
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
+    kapparoots = wraproots(kappadiscriminant_coefficients_old, u, chieff, q, chi1, chi2)
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparoots, u, chieff, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
@@ -1260,7 +1290,7 @@ def kappalimits_geometrical(r , q, chi1, chi2):
     return kappamin,kappamax
 
 # TODO: edit this
-def kapparesonances_new(r, chieff, q, chi1, chi2, tol= 1e-5):
+def kapparesonances(r, chieff, q, chi1, chi2, tol= 1e-5):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
 
@@ -1297,7 +1327,7 @@ def kapparesonances_new(r, chieff, q, chi1, chi2, tol= 1e-5):
 
     u = eval_u(r,q)
 
-    kapparoots = wraproots(kappadiscriminant_coefficients_new, u, chieff, q, chi1, chi2)
+    kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparoots, u, chieff, q, chi1, chi2):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
@@ -1309,19 +1339,50 @@ def kapparesonances_new(r, chieff, q, chi1, chi2, tol= 1e-5):
 
         # Here we have two candidate pairs of resonances...
         elif len(kapparoots)==5:
-            warnings.warn("This part still needs to be tested carefully!", Warning)
-            print("Reproduce with", r, chieff, q, chi1, chi2)
 
-            kappamin,kappamax = kappalimits_geometrical(r , q, chi1, chi2)
-            avs = np.array([np.mean(kappares[1:3]),np.mean(kappares[3:5])])
-            check = np.logical_and(avs>kappamin,avs<kappamax)
+            # Compute the corresponding values of deltachi at the resonances
+            deltachires = deltachiresonance(kappa=kapparoots, u=tiler(u,kapparoots), chieff=tiler(chieff,kapparoots), q=tiler(q,kapparoots), chi1=tiler(chi1,kapparoots), chi2=tiler(chi2,kapparoots))
+            # Check which of those values is within the allowed region
+            deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
+            check = np.squeeze(np.logical_and(deltachires>deltachimin,deltachires<deltachimax))
 
-            if check[0] and not check[1]:
-                return kappares[1:3]
-            elif check[1] and not check[1]:
-                return kappares[3:5]
-            else:
+            # The first root cannot possibly be right
+            if check[0]:
                 raise ValueError("Input values are not compatible [kapparesonances].")
+            elif check[1] and check[2] and not check[3] and not check[4]:
+                kappares = kapparoots[1:3]
+            elif not check[1] and not check[2] and check[3] and check[4]:
+                kappares = kapparoots[3:5]
+            elif check[1] and check[2] and check[3] and check[4]:
+                warnings.warn("Unphysical resonances detected and removed", Warning)
+                err = np.abs( (kapparoots[2]-kapparoots[3])/np.mean(kapparoots[2:4]))
+                warnings.warn("Unphysical resonances detected and removed. Relative accuracy Delta_kappa/kappa="+str(err)+", [kapparesonances].", Warning)
+                kappares=np.array([kapparoots[1],kapparoots[4]])
+
+            # # Find values of kappa that are within the two candidate intervals. A simple average is enough.
+            # avs = np.array([np.mean(kapparoots[1:3]),np.mean(kapparoots[3:5])])
+            # # Find the corresponding deltachi limits
+            # deltachiminus, deltachiplus, _ = wraproots(deltachicubic_coefficients, avs, [u,u], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2]).T
+            # # Find deltachi values in those intervals. Again an average is enough
+            # avs = np.mean([deltachiminus, deltachiplus],axis=0)
+            # # Check which of those values is within the allowed region
+            # deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
+            # check = np.squeeze(np.logical_and(avs>deltachimin,avs<deltachimax))
+            # #
+            # #print(check, q, kapparoots,avs,deltachimin,deltachimax)
+            # if check[0] and not check[1]:
+            #     kappares = kapparoots[1:3]
+            # elif check[1] and not check[0]:
+            #     kappares = kapparoots[3:5]
+            #
+            # # The code finds solutions, but the 3rd and the 4th are so close that they are likely to be a numerical fluke. Remove them.
+            # elif np.abs( (kapparoots[2]-kapparoots[3])/np.mean(kapparoots[2:4])) <tol:
+            #         warnings.warn("Unphysical resonances detected and removed", Warning)
+            #         kappares=np.array([kapparoots[1],kapparoots[4]])
+            #
+            # else:
+            #     print(eval_r(u=u,q=q), chieff, q, chi1, chi2)
+            #     raise ValueError("Input values are not compatible [kapparesonances].")
 
             #TODO: Implement a tolerance?
             #warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
@@ -1336,7 +1397,6 @@ def kapparesonances_new(r, chieff, q, chi1, chi2, tol= 1e-5):
         else:
             raise ValueError("Input values are not compatible [kapparesonances].")
 
-
         # If you didn't find enough solutions, append nans
         kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
         return kappares
@@ -1349,7 +1409,7 @@ def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
 
     kappatilde = np.atleast_1d(kappatilde)
 
-    kappamin, kappamax = kapparesonances_new(r, chieff, q, chi1, chi2)
+    kappamin, kappamax = kapparesonances(r, chieff, q, chi1, chi2)
 
     kappa = kappamin + kappatilde * (kappamax- kappamin)
 
@@ -1955,62 +2015,6 @@ def chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
     return np.stack([chieffmin, chieffmax])
 
 
-# TODO: check when rewriting the large separation limit
-def deltachilimits_rectangle(chieff, q, chi1, chi2):
-    """
-    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
-    - If r, q, chi1, and chi2 are provided, the limits are given by kappa=S1+S2.
-    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
-    The boolean flag enforce allows raising an error in case the inputs are not compatible.
-
-    Call
-    ----
-        kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
-
-    Parameters
-    ----------
-    r: float, optional (default: None)
-        Binary separation.
-    chieff: float, optional (default: None)
-        Effective spin.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    enforce: boolean, optional (default: False)
-        If True raise errors, if False raise warnings.
-
-    Returns
-    -------
-    kappainfmin: float
-        Minimum value of the asymptotic angular momentum kappainf.
-    kappainfmin: float
-        Minimum value of the asymptotic angular momentum kappainf.
-    """
-
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-
-
-    deltachimin = np.maximum( -chieff - 2*chi1/(1+q), chieff - 2*q*chi2/(1+q))
-    deltachimax = np.maximum( -chieff + 2*chi1/(1+q), chieff + 2*q*chi2/(1+q))
-
-    return np.stack([deltachimin, deltachimax])
-
-#
-# def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2):
-#
-#     u = eval_u(r, q)
-#     deltachiroots(kappa, u, chieff, q, chi1, chi2)
-#
-#
-#     return np.stack([deltachimin, deltachimax])
-
-
 
 
 def Slimits_S1S2(q, chi1, chi2):
@@ -2440,10 +2444,53 @@ def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
+def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2):
+    kappa = np.atleast_1d(kappa)
+    u = np.atleast_1d(u)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    coeff3 = u
+
+    # Machine generated with eq_generator.nb
+    coeff2 = -1/2 * q**(-1) * ((1 + q))**(-3) * (1 + (q**6 + (q**2 * (-1 \
+    + (16 * u * kappa + (4 * u**2 * (chi1)**2 + -8 * u * chieff))) + \
+    (q**4 * (-1 + (16 * u * kappa + (4 * u**2 * (chi2)**2 + -8 * u * \
+    chieff))) + (4 * q**3 * (-1 + (6 * u * kappa + -3 * u * chieff)) + (q \
+    * (2 + (4 * u * kappa + (-4 * u**2 * (chi1)**2 + -2 * u * chieff))) + \
+    q**5 * (2 + (4 * u * kappa + (-4 * u**2 * (chi2)**2 + -2 * u * \
+    chieff)))))))))
+
+    # Machine generated with eq_generator.nb
+    coeff1 = (1 + -1 * q) * q**(-1) * ((1 + q))**(-3) * (-2 * (-1 + q) * \
+    ((1 + q))**5 * kappa + ((-1 + q) * ((1 + q))**5 * chieff + (4 * q**2 \
+    * u**2 * ((chi1)**2 + -1 * q**2 * (chi2)**2) * chieff + (-1 + q**2) * \
+    u * (2 * (chi1)**2 + q * (2 * q**3 * (chi2)**2 + (chieff**2 + (2 * q \
+    * chieff**2 + q**2 * chieff**2)))))))
+
+    # Machine generated with eq_generator.nb
+    coeff0 = 1/2 * ((-1 + q))**2 * q**(-1) * ((1 + q))**(-1) * ((1 + -2 * \
+    q * ((1 + q))**(-2) * u * chieff))**2 * (-4 * u**2 * (chi1)**4 + (8 * \
+    q**4 * u**2 * (chi1)**2 * (chi2)**2 + (-4 * q**8 * u**2 * (chi2)**4 + \
+    (4 * ((1 + q))**4 * u * (chi1)**2 * (2 * kappa + -1 * chieff) + (4 * \
+    q**4 * ((1 + q))**4 * u * (chi2)**2 * (2 * kappa + -1 * chieff) + (-4 \
+    * q * ((1 + q))**2 * u**2 * (chi1)**2 * chieff**2 + (-4 * q**2 * ((1 \
+    + q))**2 * u**2 * (chi1)**2 * chieff**2 + (-4 * q**4 * ((1 + q))**2 * \
+    u**2 * (chi2)**2 * chieff**2 + (-4 * q**5 * ((1 + q))**2 * u**2 * \
+    (chi2)**2 * chieff**2 + (2 * q * ((1 + q))**6 * u * (2 * kappa + -1 * \
+    chieff) * chieff**2 + -1 * ((1 + q))**8 * ((-2 * kappa + \
+    chieff))**2)))))))))) * ((1 + (q**2 + q * (2 + -2 * u * \
+    chieff))))**(-2)
+
+    return np.stack([coeff3, coeff2, coeff1, coeff0])
+
+
 
 # TODO: precomputedroots is not implemented consistently. Check that all functions that can use it have the option to do it
 # Docstrings must be changed for kappa and deltachi everywhere
-def deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
+def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputedroots=None):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
 
@@ -2480,7 +2527,14 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
 
     if precomputedroots is None:
 
-        deltachiminus, deltachiplus, deltachi3 = wraproots(deltachicubic_coefficients, kappa, u, chieff, q, chi1, chi2).T
+        deltachiminus, deltachiplus, _ = wraproots(deltachicubic_coefficients, kappa, u, chieff, q, chi1, chi2).T
+
+        # If you need the spurious root as well.
+        if full_output:
+            _, _, deltachi3 = wraproots(deltachicubic_rescaled_coefficients, kappa, u, chieff, q, chi1, chi2).T
+        # Otherwise avoid (for computational efficiency)
+        else:
+            deltachi3 = np.tile(np.nan, np.shape(deltachiminus))
 
         return np.stack([deltachiminus, deltachiplus, deltachi3])
 
@@ -2488,6 +2542,117 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
         precomputedroots=np.array(precomputedroots)
         assert precomputedroots.shape[0] == 3, "Shape of precomputedroots must be (3,N), i.e. Sminuss, Spluss, S3s. [Ssroots]"
         return precomputedroots
+
+
+
+# TODO: check when rewriting the large separation limit
+def deltachilimits_rectangle(chieff, q, chi1, chi2):
+    """
+    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
+    - If r, q, chi1, and chi2 are provided, the limits are given by kappa=S1+S2.
+    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    The boolean flag enforce allows raising an error in case the inputs are not compatible.
+
+    Call
+    ----
+        kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
+
+    Parameters
+    ----------
+    r: float, optional (default: None)
+        Binary separation.
+    chieff: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    enforce: boolean, optional (default: False)
+        If True raise errors, if False raise warnings.
+
+    Returns
+    -------
+    kappainfmin: float
+        Minimum value of the asymptotic angular momentum kappainf.
+    kappainfmin: float
+        Minimum value of the asymptotic angular momentum kappainf.
+    """
+
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+
+    deltachimin = np.maximum( -chieff - 2*chi1/(1+q), chieff - 2*q*chi2/(1+q))
+    deltachimax = np.maximum( -chieff + 2*chi1/(1+q), chieff + 2*q*chi2/(1+q))
+
+    return np.stack([deltachimin, deltachimax])
+
+
+
+def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2):
+
+    u = eval_u(r,q)
+    deltachiminus, deltachiplus, _ = deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=False, precomputedroots=None)
+
+    return deltachiminus, deltachiplus
+
+
+
+def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None):
+    """
+    Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user. Provide either J or kappa and either r or u.
+
+    Call
+    ----
+    S = Satresonance(J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None)
+
+    Parameters
+    ----------
+    J: float, optional (default: None)
+        Magnitude of the total angular momentum.
+    kappa: float, optional (default: None)
+        Regularized angular momentum (J^2-L^2)/(2L).
+    r: float, optional (default: None)
+        Binary separation.
+    u: float, optional (default: None)
+        Compactified separation 1/(2L).
+    chieff: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    S: float
+        Magnitude of the total spin.
+    """
+
+    if q is None or chi1 is None or chi2 is None or kappa is None:
+        raise TypeError("Please provide q, chi1, and chi2.")
+
+    if r is None and u is None:
+        raise TypeError("Please provide either r or u.")
+    elif r is not None and u is None:
+        u = eval_u(r=r, q=q)
+
+    #print('Satres', kappa)
+    coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
+    with np.errstate(invalid='ignore'):  # nan is ok here
+        # This is with a simple for loop
+        deltachires = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:,:-1]),axis=1)
+        # Sres = np.array([np.mean(np.real(np.sort_complex(np.roots(x))[1:]))**0.5 for x in coeffs.T])
+
+        #deltachires = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:, 1:])**0.5, axis=1)
+
+    return deltachires
 
 
 
@@ -6760,19 +6925,20 @@ if __name__ == '__main__':
     import time
     np.set_printoptions(threshold=sys.maxsize)
 
-    q=0.9
-    chi1=1
-    chi2=1
-    r=10
-    J=1
-    chieff=0.9
-    kappa = eval_kappa(J, r, q)
-    u = eval_u(r, q)
-    #
+    # q=0.9
+    # chi1=1
+    # chi2=1
+    # r=10
+    # J=1
+    # chieff=0.3
+    # kappa = eval_kappa(J, r, q)
+    # u = eval_u(r, q)
+
     # print(Ssroots(J, r, chieff, q, chi1, chi2)**(1/2))
     # #print(Slimits_plusminus(J, r, chieff, q, chi1, chi2))
     #
     # dchi = deltachiroots(kappa, u, chieff, q, chi1, chi2)
+    # dchi[2]= dchi[2]/(1-q)
     # Sconv = eval_S_from_deltachi(dchi, np.tile(kappa, dchi.shape), np.tile(r, dchi.shape), np.tile(chieff, dchi.shape), np.tile(q, dchi.shape))
     # print(Sconv)
 
@@ -6784,7 +6950,23 @@ if __name__ == '__main__':
     #kappa = wraproots(kappadiscriminant_coefficients_new, u, chieff, q, chi1, chi2)
     #J = eval_J(kappa=kappa, r=np.tile(r, kappa.shape), q=np.tile(q, kappa.shape))
     #print(kappa,J)
-    print(kapparesonances(u, chieff, q, chi1, chi2))
+    # print(kapparesonances(u, chieff, q, chi1, chi2))
+    #
+    #
+    # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
+    q=0.5
+    chi1=0.9
+    chi2=0.9
+    chieff=0.3
+    r=10
+    kappatilde = 0.5
+    u = eval_u(r, q)
 
-    print(kapparesonances_new(r, chieff, q, chi1, chi2))
+    kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
+    print(kappa)
+    kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
+    print(kappamin,kappamax)
+
+    kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
+    print(kappamin,kappamax)
