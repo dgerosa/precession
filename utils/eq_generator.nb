@@ -3151,8 +3151,8 @@ Cell[BoxData[
      RowBox[{"O", "[", "u", "]"}], "1"],
     SeriesData[$CellContext`u, 0, {}, 0, 1, 1],
     Editable->False]}],
-  SeriesData[$CellContext`u, 0, {
-   Rational[-1, 2] $CellContext`q^(-1) (1 + $CellContext`q) (1 - 
+  SeriesData[$CellContext`u, 
+   0, {((Rational[-1, 2]/$CellContext`q) (1 + $CellContext`q)) (1 - 
      2 $CellContext`q + $CellContext`q^2)}, 0, 1, 1],
   Editable->False]], "Output",
  CellChangeTimes->{3.877601582761003*^9, 3.877601642542368*^9, 
@@ -3196,9 +3196,9 @@ Cell[BoxData[
     SeriesData[$CellContext`u, 0, {}, 0, 1, 1],
     Editable->False]}],
   SeriesData[$CellContext`u, 
-   0, {-$CellContext`q^(-1) (
-      1 + $CellContext`q)^2 ((-2) $CellContext`\[Kappa] + 
-     2 $CellContext`q $CellContext`\[Kappa] + $CellContext`\[Chi]eff - \
+   0, {(((-1)/$CellContext`q) (
+       1 + $CellContext`q)^2) ((-2) $CellContext`\[Kappa] + (
+       2 $CellContext`q) $CellContext`\[Kappa] + $CellContext`\[Chi]eff - \
 $CellContext`q $CellContext`\[Chi]eff)}, 0, 1, 1],
   Editable->False]], "Output",
  CellChangeTimes->{3.877601592335123*^9, 3.877601647448004*^9, 
@@ -3239,8 +3239,8 @@ Cell[BoxData[
      RowBox[{"O", "[", "u", "]"}], "1"],
     SeriesData[$CellContext`u, 0, {}, 0, 1, 1],
     Editable->False]}],
-  SeriesData[$CellContext`u, 0, {
-   Rational[-1, 2] $CellContext`q^(-1) (1 + $CellContext`q)^3 (
+  SeriesData[$CellContext`u, 
+   0, {((Rational[-1, 2]/$CellContext`q) (1 + $CellContext`q)^3) (
       2 $CellContext`\[Kappa] - $CellContext`\[Chi]eff)^2}, 0, 1, 1],
   Editable->False]], "Output",
  CellChangeTimes->{3.877601595785159*^9, 3.8776016507435102`*^9, 
@@ -3929,8 +3929,8 @@ Cell[BoxData[
          RowBox[{"(", 
            RowBox[{"1", "+", "q"}], ")"}], "14"]}]], Short[#, 5]& ], "line" -> 
    62, "sessionID" -> 30129820522938121008, "byteCount" -> 716680, "size" -> 
-   5, "stored" -> False, "expr" -> Missing["NotStored"], "wrap" -> 
-   OutputSizeLimit`Defer, "version" -> 1|>,
+   5, "stored" -> False, "expr" -> Missing["NotAvailable", "NewSessionID"], 
+   "wrap" -> OutputSizeLimit`Defer, "version" -> 1|>,
   "OutputSizeLimitTemplate"]], "Output",
  CellChangeTimes->{{3.877595513369813*^9, 3.877595541539735*^9}, 
    3.8775957155659447`*^9, 3.877600359637735*^9, 3.877600404348362*^9, 

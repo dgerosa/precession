@@ -4599,6 +4599,97 @@ def Ssavinf(theta1inf, theta2inf, q, chi1, chi2):
     return Ssavinf
 
 
+
+
+def ddchidt_prefactor(r, chieff, q):
+    """
+    Numerical prefactor to the S derivative.
+
+    Call
+    ----
+    mathcalA = derS_prefactor(r,chieff,q)
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+
+    Returns
+    -------
+    mathcalA: float
+        Prefactor in the dSdt equation.
+    """
+
+
+    r = np.atleast_1d(r)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+
+    mathcalA = (3/2)*((1+q)**(-1/2))*(r**(-11/4))*(1-(chieff/r**0.5))
+
+    return mathcalA
+
+
+
+def time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+
+    r=eval_r(u=u,q=q)
+    mathcalA = ddchidt_prefactor(r, chieff, q)
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    llambda = (mathcalA/2)* (deltachi3 - (1-q)*deltachiminus)**(1/2)
+
+    return llambda
+
+
+def elliptic_parameter_new(deltachiminus, deltachiplus, deltachi3):
+    """
+    Parameter m entering elliptic functions for the evolution of S.
+
+    Call
+    ----
+    m = elliptic_parameter(Sminuss,Spluss,S3s)
+
+    Parameters
+    ----------
+    Sminuss: float
+        Lowest physical root, if present, of the effective potential equation.
+    Spluss: float
+        Largest physical root, if present, of the effective potential equation.
+    S3s: float
+        Spurious root of the effective potential equation.
+
+    Returns
+    -------
+    m: float
+        Parameter of elliptic function(s).
+    """
+
+    deltachiminus = np.atleast_1d(deltachiminus)
+    deltachiplus = np.atleast_1d(deltachiplus)
+    deltachi3 = np.atleast_1d(deltachi3)
+
+    m = (deltachiplus-deltachiminus)/(deltachi3/(1-q)-deltachiminus)
+
+    return m
+
+
+
+
+def eval_tau_new(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+
+
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    llambda = time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=None)
+    m = elliptic_parameter_new(deltachiminus, deltachiplus, deltachi3)
+    tau = 2*scipy.special.ellipk(m) /llambda
+    return tau
+
+
 # Precession-averaged evolution
 
 def rhs_precav(kappa, u, chieff, q, chi1, chi2):
@@ -6241,7 +6332,6 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     return f
 
 
-
 def remnantmass(theta1, theta2, q, chi1, chi2):
     """
     Estimate the final mass of the post-merger renmant. We implement the fitting
@@ -6574,18 +6664,26 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.5
-    chi1=0.9
-    chi2=0.9
+    q=0.9999999999
+    chi1=0.8
+    chi2=0.8
     chieff=0.3
-    r=10
+    r=1000
     kappatilde = 0.5
     u = eval_u(r, q)
-
     kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
-    print(kappa)
-    kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
-    print(kappamin,kappamax)
+    J=eval_J(kappa=kappa, r=r, q=q)
 
-    kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
-    print(kappamin,kappamax)
+
+    told = eval_tau(J, r, chieff, q, chi1, chi2)
+
+    tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
+
+    print(told, tnew, tnew/told)
+
+    #print(kappa)
+    #kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
+    #print(kappamin,kappamax)
+
+    #kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
+    #print(kappamin,kappamax)
