@@ -4927,7 +4927,7 @@ def dchidt_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None)
 
 def time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
-    r=eval_r(u=u,q=q)
+    u = eval_u(r,q)
     mathcalA = ddchidt_prefactor(r, chieff, q)
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
@@ -4962,7 +4962,7 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
 
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
-    m = (deltachiplus-deltachiminus)/(deltachi3/(1-q)-deltachiminus)
+    m = (1-q)*(deltachiplus-deltachiminus)/(deltachi3-(1-q)*deltachiminus)
 
     return m
 
@@ -4973,7 +4973,7 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
 
 def eval_tau_new(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
-
+    u = eval_u(r,q)
     precomputedroots = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     llambda = time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
@@ -4983,7 +4983,7 @@ def eval_tau_new(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
 
 
-
+#I changed the broadcasting rule compared Soft!
 def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
@@ -5019,17 +5019,16 @@ def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
     """
 
     t = np.atleast_1d(t)
+    u = eval_u(r,q)
+
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    llambda = time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
 
-    llambda = time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=None)
+    sn, _, _, _ = scipy.special.ellipj(t * llambda, m)
+    deltachi = deltachiminus + (deltachiplus-deltachiminus)*sn**2
 
-    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-
-    sn, _, dn, _ = scipy.special.ellipj(t.T/mathcalT, m)
-    Ssq = Sminuss + (Spluss-Sminuss)*((Sminuss-S3s)/(Spluss-S3s)) * (sn/dn)**2
-    S = Ssq.T**0.5
-
-    return S
+    return deltachi
 
 
 
@@ -7033,12 +7032,34 @@ if __name__ == '__main__':
 
     #print(eval_costheta1(deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
 
+    tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
+    t = np.linspace(0,tnew/2,5)
+
+    print('FROM HERE')
+    dchi = deltachioft(t, kappa , r, chieff, q, chi1, chi2)
+    #print()
+    #dchi = deltachioft(np.repeat(t,2), np.repeat(kappa,2) , np.repeat(r,2), np.repeat(chieff,2), np.repeat(q,2), np.repeat(chi1,2), np.repeat(chi2,2))
+    dchi=np.squeeze(dchi)
+    print(dchi)
+
+    Snew = eval_S_from_deltachi(dchi, tiler(kappa,dchi), tiler(r,dchi), tiler(chieff,dchi), tiler(q,dchi))
 
     told = eval_tau(J, r, chieff, q, chi1, chi2)
 
-    tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
+    t = np.linspace(0,told/2,5)
 
-    print(told, tnew, tnew/told)
+    Sold = np.squeeze(Soft(t, J, r, chieff, q, chi1, chi2))
+
+    print(Snew)
+
+    print(Sold)
+
+    print(Snew[::-1]-Sold)
+
+
+
+    print(tnew,told)
+
 
     #print(kappa)
     #kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
