@@ -3073,7 +3073,6 @@ def eval_cosdeltaphi_old(deltachi, kappa, chieff, q, chi1, chi2):
 
 
 
-
 def eval_deltaphi_old(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
     """
     Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=1 returns the other half of the  precession cycle [-pi,0].
@@ -3114,7 +3113,7 @@ def eval_deltaphi_old(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
     return deltaphi
 
 
-
+# TODO cyclesign needs to be checked again in the entire code
 def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=-1):
     """
     Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=1 returns the other half of the  precession cycle [-pi,0].
@@ -4411,7 +4410,8 @@ def dSdt(S, J, r, chieff, q, chi1, chi2):
     return dSsdt(S, J, r, chieff, q, chi1, chi2) / (2*S)
 
 
-def elliptic_parameter(Sminuss, Spluss, S3s):
+
+def elliptic_parameter_old(Sminuss, Spluss, S3s):
     """
     Parameter m entering elliptic functions for the evolution of S.
 
@@ -4582,7 +4582,7 @@ def eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=None):
 
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
-    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
     tau = 2*mathcalT*scipy.special.ellipk(m)
 
     return tau
@@ -4625,7 +4625,7 @@ def Soft(t, J, r, chieff, q, chi1, chi2, precomputedroots=None):
     t = np.atleast_1d(t)
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
-    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
 
     sn, _, dn, _ = scipy.special.ellipj(t.T/mathcalT, m)
     Ssq = Sminuss + (Spluss-Sminuss)*((Sminuss-S3s)/(Spluss-S3s)) * (sn/dn)**2
@@ -4673,7 +4673,7 @@ def tofS(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
 
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
-    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
     mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
     phi = elliptic_amplitude(S, Sminuss, Spluss)
     tau = eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
@@ -4792,7 +4792,7 @@ def Ssav(J, r, chieff, q, chi1, chi2):
     """
 
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
-    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
     Ssq = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
 
     return Ssq
@@ -4912,6 +4912,19 @@ def ddchidt_prefactor(r, chieff, q):
 
 
 
+def dchidt_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+
+    r= eval_r(u=u,q=q)
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    mathcalA = ddchidt_prefactor(r, chieff, q)
+
+    dchidt = mathcalA*( (deltachi-deltachiminus)*(deltachiplus-deltachi)*(deltachi3-(1-q)*deltachi))**(1/2)
+
+    return dchidt
+
+
+
 def time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
     r=eval_r(u=u,q=q)
@@ -4923,7 +4936,7 @@ def time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     return llambda
 
 
-def elliptic_parameter_new(deltachiminus, deltachiplus, deltachi3):
+def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Parameter m entering elliptic functions for the evolution of S.
 
@@ -4946,9 +4959,8 @@ def elliptic_parameter_new(deltachiminus, deltachiplus, deltachi3):
         Parameter of elliptic function(s).
     """
 
-    deltachiminus = np.atleast_1d(deltachiminus)
-    deltachiplus = np.atleast_1d(deltachiplus)
-    deltachi3 = np.atleast_1d(deltachi3)
+
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
     m = (deltachiplus-deltachiminus)/(deltachi3/(1-q)-deltachiminus)
 
@@ -4957,14 +4969,69 @@ def elliptic_parameter_new(deltachiminus, deltachiplus, deltachi3):
 
 
 
+
+
 def eval_tau_new(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
 
-    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    llambda = time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=None)
-    m = elliptic_parameter_new(deltachiminus, deltachiplus, deltachi3)
+    precomputedroots = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    llambda = time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     tau = 2*scipy.special.ellipk(m) /llambda
     return tau
+
+
+
+
+
+def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
+    """
+    Evolution of S on the precessional timescale (without radiation reaction).
+    The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
+
+    Call
+    ----
+    S = Soft(t,J,r,chieff,q,chi1,chi2,precomputedroots=None)
+
+    Parameters
+    ----------
+    t: float
+        Time.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
+
+    Returns
+    -------
+    S: float
+        Magnitude of the total spin.
+    """
+
+    t = np.atleast_1d(t)
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    llambda = time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=None)
+
+    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
+
+    sn, _, dn, _ = scipy.special.ellipj(t.T/mathcalT, m)
+    Ssq = Sminuss + (Spluss-Sminuss)*((Sminuss-S3s)/(Spluss-S3s)) * (sn/dn)**2
+    S = Ssq.T**0.5
+
+    return S
+
+
 
 
 # Precession-averaged evolution
@@ -5026,7 +5093,7 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
             # Normal case
             else:
                 S3s, Sminuss, Spluss = np.real([S3s, Sminuss, Spluss])
-                m = elliptic_parameter(Sminuss, Spluss, S3s)
+                m = elliptic_parameter_old(Sminuss, Spluss, S3s)
                 Ssav = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
 
     return Ssav
@@ -5330,7 +5397,7 @@ def precession_average(J, r, chieff, q, chi1, chi2, func, *args, method='quadrat
     if method == 'quadrature':
 
         Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
-        m = elliptic_parameter(Sminuss, Spluss, S3s)
+        m = elliptic_parameter_old(Sminuss, Spluss, S3s)
         # This is proportional to tau, takes care of the denominator
         tau_prop = scipy.special.ellipk(m) / ((Spluss-S3s)**0.5)
 
@@ -6163,7 +6230,7 @@ def eval_alpha(J, r, chieff, q, chi1, chi2, precomputedroots=None):
 
     L = eval_L(r, q)
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
     nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
     nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
     mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
@@ -6211,7 +6278,7 @@ def eval_phiL(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None
     L = eval_L(r, q)
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     alpha = eval_alpha(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
-    m = elliptic_parameter(Sminuss, Spluss, S3s)
+    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
     phi = elliptic_amplitude(S, Sminuss, Spluss)
     nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
     nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
@@ -6956,10 +7023,10 @@ if __name__ == '__main__':
 
     deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2)
 
-    S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
+    # S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
 
-    print(eval_costheta1(deltachi, chieff, q, chi1))
-    print(eval_theta1(deltachi, chieff, q, chi1))
+    # print(eval_costheta1(deltachi, chieff, q, chi1))
+    # print(eval_theta1(deltachi, chieff, q, chi1))
 
     #print(eval_cosdeltaphi_old(S=S, J=J, r=r, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
     #print(eval_cosdeltaphi(deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
@@ -6967,11 +7034,11 @@ if __name__ == '__main__':
     #print(eval_costheta1(deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
 
 
-    #told = eval_tau(J, r, chieff, q, chi1, chi2)
+    told = eval_tau(J, r, chieff, q, chi1, chi2)
 
-    #tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
+    tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
 
-    #print(told, tnew, tnew/told)
+    print(told, tnew, tnew/told)
 
     #print(kappa)
     #kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
