@@ -2352,6 +2352,16 @@ def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2):
 
 
 
+def deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2):
+
+    deltachitilde = np.atleast_1d(deltachitilde)
+    deltachiminus, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
+    deltachi = deltachiminus + deltachitilde * (deltachiplus - deltachiminus)
+
+    return deltachi
+
+
+
 def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None):
     """
     Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user. Provide either J or kappa and either r or u.
@@ -2555,7 +2565,7 @@ def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q
 
 # TODO: change S,J to deltachi, kappa in all these angle functions below!
 
-def eval_costheta1(S, J, r, chieff, q, chi1, chi2):
+def eval_costheta1_old(S, J, r, chieff, q, chi1, chi2):
     """
     Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
@@ -2597,8 +2607,56 @@ def eval_costheta1(S, J, r, chieff, q, chi1, chi2):
 
     return costheta1
 
+def eval_costheta1(deltachi, chieff, q, chi1):
+    """
+    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
-def eval_theta1(S, J, r, chieff, q, chi1, chi2):
+    Call
+    ----
+    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    costheta1: float
+        Cosine of the angle between orbital angular momentum and primary spin.
+    """
+
+    deltachi = np.atleast_1d(deltachi)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+
+    costheta1 = (1+q)/(2*chi1)*(chieff+deltachi)
+
+    return costheta1
+
+
+def eval_theta1(deltachi, chieff, q, chi1):
+
+
+    costheta1 = eval_costheta1(deltachi, chieff, q, chi1)
+    theta1 = np.arccos(costheta1)
+
+    return theta1
+
+def eval_theta1_old(S, J, r, chieff, q, chi1, chi2):
     """
     Angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
@@ -2635,7 +2693,7 @@ def eval_theta1(S, J, r, chieff, q, chi1, chi2):
     return theta1
 
 
-def eval_costheta2(S, J, r, chieff, q, chi1, chi2):
+def eval_costheta2_old(S, J, r, chieff, q, chi1, chi2):
     """
     Cosine of the angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
 
@@ -2678,7 +2736,48 @@ def eval_costheta2(S, J, r, chieff, q, chi1, chi2):
     return costheta2
 
 
-def eval_theta2(S, J, r, chieff, q, chi1, chi2):
+def eval_costheta2(deltachi, chieff, q, chi2):
+    """
+    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
+
+    Call
+    ----
+    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    costheta1: float
+        Cosine of the angle between orbital angular momentum and primary spin.
+    """
+
+    deltachi = np.atleast_1d(deltachi)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi2 = np.atleast_1d(chi2)
+
+    costheta2 = (1+q)/(2*q*chi2)*(chieff-deltachi)
+
+    return costheta2
+
+
+def eval_theta2_old(S, J, r, chieff, q, chi1, chi2):
     """
     Angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
 
@@ -2715,7 +2814,16 @@ def eval_theta2(S, J, r, chieff, q, chi1, chi2):
     return theta2
 
 
-def eval_costheta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None):
+def eval_theta2(deltachi, chieff, q, chi2):
+
+
+    costheta2 = eval_costheta1(deltachi, chieff, q, chi2)
+    theta2 = np.arccos(costheta2)
+
+    return theta1
+
+
+def eval_costheta12_old(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None):
     """
     Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
 
@@ -2764,8 +2872,73 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi
 
     return costheta12
 
+
+
+def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
+    """
+    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
+
+    Call
+    ----
+    costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+        Angle between the projections of the two spins onto the orbital plane.
+    S: float, optional (default: None)
+        Magnitude of the total spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    costheta12: float
+        Cosine of the angle between the two spins.
+    """
+
+    if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None and q is None and chi1 is None and chi2 is None:
+
+        theta1=np.atleast_1d(theta1)
+        theta2=np.atleast_1d(theta2)
+        deltaphi=np.atleast_1d(deltaphi)
+        costheta12 = np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2)
+
+    elif theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
+
+        deltachi = np.atleast_1d(deltachi)
+        kappa = np.atleast_1d(kappa)
+        chieff = np.atleast_1d(chieff)
+        q = np.atleast_1d(q)
+        chi1 = np.atleast_1d(chi1)
+        chi2 = np.atleast_1d(chi2)
+
+
+        # Machine generated with eq_generator.nb
+        costheta12 = 1/2 * q**(-2) * (chi1)**(-1) * (chi2)**(-1) * (-1 * \
+        (chi1)**2 + (-1 * q**4 * (chi2)**2 + q * (1 + q) * (r)**(1/2) * (-1 * \
+        (1 + -1 * q) * deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * \
+        chieff))))
+
+
+    else:
+        raise TypeError("Provide either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).")
+
+    return costheta12
+
+
+
+
 # TODO docstrings (actually, all docstrings need to be checked now!)
-def eval_theta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None):
+def eval_theta12_old(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None):
     """
     Angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
 
@@ -2796,7 +2969,17 @@ def eval_theta12(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=N
     return theta12
 
 
-def eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2):
+
+def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
+
+
+    costheta12 = eval_costheta1(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    theta12 = np.arccos(costheta12)
+
+    return theta12
+
+
+def eval_cosdeltaphi_old(S, J, r, chieff, q, chi1, chi2):
     """
     Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
 
@@ -2830,16 +3013,68 @@ def eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2):
     q = np.atleast_1d(q)
 
     S1, S2 = spinmags(q, chi1, chi2)
-    costheta1 = eval_costheta1(S, J, r, chieff, q, chi1, chi2)
-    costheta2 = eval_costheta2(S, J, r, chieff, q, chi1, chi2)
-    costheta12 = eval_costheta12(S=S, q=q, chi1=chi1, chi2=chi2)
+    costheta1 = eval_costheta1_old(S, J, r, chieff, q, chi1, chi2)
+    costheta2 = eval_costheta2_old(S, J, r, chieff, q, chi1, chi2)
+    costheta12 = eval_costheta12_old(S=S, q=q, chi1=chi1, chi2=chi2)
 
     cosdeltaphi = (costheta12 - costheta1*costheta2)/((1-costheta1**2)*(1-costheta2**2))**0.5
 
     return cosdeltaphi
 
 
-def eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
+
+def eval_cosdeltaphi_old(deltachi, kappa, chieff, q, chi1, chi2):
+    """
+    Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
+
+    Call
+    ----
+    cosdeltaphi = eval_cosdeltaphi(S,J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    cosdeltaphi: float
+        Cosine of the angle between the projections of the two spins onto the orbital plane.
+    """
+
+    deltachi = np.atleast_1d(deltachi)
+    kappa = np.atleast_1d(kappa)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    # Machine generated with eq_generator.nb
+    cosdeltaphi = q**(-1) * ((4 * q**2 * (chi2)**2 + -1 * ((1 + q))**2 * \
+    ((-1 * deltachi + chieff))**2) * (4 * (chi1)**2 + -1 * ((1 + q))**2 * \
+    ((deltachi + chieff))**2))**(-1/2) * (-2 * ((chi1)**2 + q**4 * \
+    (chi2)**2) + (2 * q * (1 + q) * (r)**(1/2) * (-1 * (1 + -1 * q) * \
+    deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * chieff)) + -1 * q * \
+    ((1 + q))**2 * (-1 * (deltachi)**2 + chieff**2)))
+
+    return cosdeltaphi
+
+
+
+
+def eval_deltaphi_old(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
     """
     Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=1 returns the other half of the  precession cycle [-pi,0].
 
@@ -2877,6 +3112,48 @@ def eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
     deltaphi = -np.sign(cyclesign)*np.arccos(cosdeltaphi)
 
     return deltaphi
+
+
+
+def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=-1):
+    """
+    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=1 returns the other half of the  precession cycle [-pi,0].
+
+    Call
+    ----
+    deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: -1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+
+    Returns
+    -------
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    """
+
+    cyclesign = np.atleast_1d(cyclesign)
+    cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, chieff, q, chi1, chi2)
+    deltaphi = -np.sign(cyclesign)*np.arccos(cosdeltaphi)
+
+    return deltaphi
+
 
 
 def eval_costhetaL(S, J, r, q, chi1, chi2):
@@ -6664,22 +6941,37 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.9999999999
+    q=0.8
     chi1=0.8
-    chi2=0.8
+    chi2=0.9
     chieff=0.3
     r=1000
     kappatilde = 0.5
+    deltachitilde = 0.7
+
     u = eval_u(r, q)
     kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
     J=eval_J(kappa=kappa, r=r, q=q)
 
 
-    told = eval_tau(J, r, chieff, q, chi1, chi2)
+    deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2)
 
-    tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
+    S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
 
-    print(told, tnew, tnew/told)
+    print(eval_costheta1(deltachi, chieff, q, chi1))
+    print(eval_theta1(deltachi, chieff, q, chi1))
+
+    #print(eval_cosdeltaphi_old(S=S, J=J, r=r, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
+    #print(eval_cosdeltaphi(deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
+
+    #print(eval_costheta1(deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
+
+
+    #told = eval_tau(J, r, chieff, q, chi1, chi2)
+
+    #tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
+
+    #print(told, tnew, tnew/told)
 
     #print(kappa)
     #kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
