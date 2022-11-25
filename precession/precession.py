@@ -1283,14 +1283,12 @@ def kappalimits_geometrical(r , q, chi1, chi2):
 
     return kappamin,kappamax
 
-def kapparesonances(r, chieff, q, chi1, chi2):
+def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
-
     Call
     ----
     kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)
-
     Parameters
     ----------
     u: float
@@ -1304,7 +1302,6 @@ def kapparesonances(r, chieff, q, chi1, chi2):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     tol: FIX ME
-
     Returns
     -------
     kappamin: float
@@ -1320,25 +1317,41 @@ def kapparesonances(r, chieff, q, chi1, chi2):
 
     u = eval_u(r,q)
 
-    kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
+    #kapparoots = wraproots(kappadiscriminant_coefficients, u, chieff, q, chi1, chi2)
+    
+    coeffs = kappadiscriminant_coefficients(u, chieff, q, chi1, chi2)
+    kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
+    #sols = np.real(np.where(np.isreal(sols), sols, np.nan))
+
+
     # There are in principle five solutions, but only two are physical.
-    def _compute(kapparoots, u, chieff, q, chi1, chi2):
-        kapparoots = kapparoots[np.isfinite(kapparoots)]
-        # This is a quintic. It has either 1, 3, or 5 real roots
+    def _compute(kapparootscomplex, u, chieff, q, chi1, chi2):
+        #print(chieff, kapparootscomplex)
+        kapparoots = np.real(kapparootscomplex[np.isreal(kapparootscomplex)])
+ 
+
+        upup,updown,downup,downdown=eval_chieff(theta1=[0,0,np.pi,np.pi], theta2=[0,np.pi,0,np.pi], q=np.repeat(q,4), chi1=np.repeat(chi1,4), chi2=np.repeat(chi2,4))
+
+        if np.isclose(np.repeat(chieff,2),np.squeeze([upup,downdown])).any():
+            warnings.warn("Close to either up-up or down-down configuration. Using analytical results.", Warning)
+
+            S1,S2 = spinmags(q,chi1,chi2)
+            L=1/(2*u)
+            kappar = ((L+np.sign(chieff)*(S1+S2))**2 - L**2) / (2*L)
+            kappares=np.squeeze([kappar,kappar])
+
 
         # In this case, the spurious solution is always the smaller one. Just leave it out.
-        if len(kapparoots)==3:
+        elif len(kapparoots)==3:
             kappares = kapparoots[1:]
 
         # Here we have two candidate pairs of resonances...
         elif len(kapparoots)==5:
-
             # Compute the corresponding values of deltachi at the resonances
             deltachires = deltachiresonance(kappa=kapparoots, u=tiler(u,kapparoots), chieff=tiler(chieff,kapparoots), q=tiler(q,kapparoots), chi1=tiler(chi1,kapparoots), chi2=tiler(chi2,kapparoots))
             # Check which of those values is within the allowed region
             deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
             check = np.squeeze(np.logical_and(deltachires>deltachimin,deltachires<deltachimax))
-
             # The first root cannot possibly be right
             if check[0]:
                 raise ValueError("Input values are not compatible [kapparesonances].")
@@ -1387,16 +1400,67 @@ def kapparesonances(r, chieff, q, chi1, chi2):
         #         warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
         #         kappares = np.delete(kappares, [np.argmin(diff),np.argmin(diff)+1])
         # We know there are always two resonances
-        else:
-            raise ValueError("Input values are not compatible [kapparesonances].")
+
+            #upup,downdown = chiefflimits_definition(q,chi1,chi2)
+            #updown,downup = deltachilimits_definition(q,chi1,chi2)
+            #print(chieff,upup,downdown,updown,downup)
+            #print(np.isclose(np.repeat(chieff,4),np.squeeze([upup,downdown,updown,downup])))
+
+
+            #kappares2 = _compute(kapparootscomplex, u, chieff-tol/2, q, chi1, chi2)
+            #print("k1", kappares1)
+            #print("k2", kappares2)
+        #     warnings.warn("Close to aligned configuration. Cleaning with tolerance DeltaImag(kappa)="+str(tol), Warning)
+        #     kapparoots = np.real(kapparootscomplex)[np.abs(np.imag(kapparootscomplex))<tol]
+        #     print("UD")
+        #     print(kapparoots)
+
+
+        # if len(kapparoots)==3:
+        #     kappares = kapparoots[1:3]
+        # if len(kapparoots)==5:
+        #     kappares=np.array([kapparoots[1],kapparoots[4]])
+
+
+        elif np.isclose(np.repeat(chieff,2),np.squeeze([updown,downup])).any():
+
+            warnings.warn("Close to either up-down or down-up configuration. Using recursive approach (tol="+str(tol)+") and analytical results.", Warning)
+            chieff1 = chieff+tol/2
+            coeffs = kappadiscriminant_coefficients(u, chieff1, q, chi1, chi2)
+            kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
+            kappares1 = _compute(kapparootscomplex, u, chieff1, q, chi1, chi2)
+            chieff2 = chieff-tol/2
+            coeffs = kappadiscriminant_coefficients(u, chieff2, q, chi1, chi2)
+            kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
+            kappares2 = _compute(kapparootscomplex, u, chieff2, q, chi1, chi2)
+ 
+            kappares = np.mean([kappares1,kappares2],axis=0)
+
+        rudplus = rupdown(q, chi1, chi2)[0]
+
+        if np.isclose(chieff,updown) and u<eval_u(r=rudplus,q=q):
+            S1,S2 = spinmags(q,chi1,chi2)
+            L=1/(2*u)
+            kappares[1]= ((L+S1-S2)**2 - L**2) / (2*L)
+        if np.isclose(chieff,downup):
+            S1,S2 = spinmags(q,chi1,chi2)
+            L=1/(2*u)
+            kappares[0]= ((L-S1+S2)**2 - L**2) / (2*L)
+
+
+
+        #else:
+        #    raise ValueError("Input values are not compatible [kapparesonances].")
 
         # If you didn't find enough solutions, append nans
-        kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
+        #kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
+        #print(chieff, kappares)
         return kappares
 
-    kappamin, kappamax = np.array(list(map(_compute, kapparoots, u, chieff, q, chi1, chi2))).T
+    kappamin, kappamax = np.array(list(map(_compute, kapparootscomplex, u, chieff, q, chi1, chi2))).T
 
     return np.stack([kappamin, kappamax])
+
 
 
 # TODO: edit this
@@ -1625,10 +1689,47 @@ def chiefflimits_definition(q, chi1, chi2):
     """
 
     q = np.atleast_1d(q)
-    S1, S2 = spinmags(q, chi1, chi2)
-    chiefflim = (1+q)*S1 + (1+1/q)*S2
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+    chiefflim = (chi1+q*chi2)/(1+q)
 
     return np.stack([-chiefflim, chiefflim])
+
+
+
+def deltachilimits_definition(q, chi1, chi2):
+    """
+    Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.
+
+    Call
+    ----
+    chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chieffmin: float
+        Minimum value of the effective spin chieff.
+    chieffmax: float
+        Maximum value of the effective spin chieff.
+    """
+
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+    deltachilim = np.abs((chi1-q*chi2)/(1+q))
+
+    return np.stack([-deltachilim, deltachilim])
+
+
 
 # Change. This needs to be kappa. All the Js should disappear and be left to the use if they want.
 # Change. Only allow fixing chieff, not J or kappa
@@ -2337,7 +2438,7 @@ def deltachilimits_rectangle(chieff, q, chi1, chi2):
 
 
     deltachimin = np.maximum( -chieff - 2*chi1/(1+q), chieff - 2*q*chi2/(1+q))
-    deltachimax = np.maximum( -chieff + 2*chi1/(1+q), chieff + 2*q*chi2/(1+q))
+    deltachimax = np.minimum( -chieff + 2*chi1/(1+q), chieff + 2*q*chi2/(1+q))
 
     return np.stack([deltachimin, deltachimax])
 
@@ -7032,38 +7133,38 @@ if __name__ == '__main__':
 
     #print(eval_costheta1(deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
 
-    tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
-    t = np.linspace(0,tnew/2,5)
+    # tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
+    # t = np.linspace(0,tnew/2,5)
 
-    print('FROM HERE')
-    dchi = deltachioft(t, kappa , r, chieff, q, chi1, chi2)
-    #print()
-    #dchi = deltachioft(np.repeat(t,2), np.repeat(kappa,2) , np.repeat(r,2), np.repeat(chieff,2), np.repeat(q,2), np.repeat(chi1,2), np.repeat(chi2,2))
-    dchi=np.squeeze(dchi)
-    print(dchi)
+    # print('FROM HERE')
+    # dchi = deltachioft(t, kappa , r, chieff, q, chi1, chi2)
+    # #print()
+    # #dchi = deltachioft(np.repeat(t,2), np.repeat(kappa,2) , np.repeat(r,2), np.repeat(chieff,2), np.repeat(q,2), np.repeat(chi1,2), np.repeat(chi2,2))
+    # dchi=np.squeeze(dchi)
+    # print(dchi)
 
-    Snew = eval_S_from_deltachi(dchi, tiler(kappa,dchi), tiler(r,dchi), tiler(chieff,dchi), tiler(q,dchi))
+    # Snew = eval_S_from_deltachi(dchi, tiler(kappa,dchi), tiler(r,dchi), tiler(chieff,dchi), tiler(q,dchi))
 
-    told = eval_tau(J, r, chieff, q, chi1, chi2)
+    # told = eval_tau(J, r, chieff, q, chi1, chi2)
 
-    t = np.linspace(0,told/2,5)
+    # t = np.linspace(0,told/2,5)
 
-    Sold = np.squeeze(Soft(t, J, r, chieff, q, chi1, chi2))
+    # Sold = np.squeeze(Soft(t, J, r, chieff, q, chi1, chi2))
 
-    print(Snew)
+    # print(Snew)
 
-    print(Sold)
+    # print(Sold)
 
-    print(Snew[::-1]-Sold)
-
-
-
-    print(tnew,told)
+    # print(Snew[::-1]-Sold)
 
 
-    #print(kappa)
-    #kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
-    #print(kappamin,kappamax)
 
-    #kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
-    #print(kappamin,kappamax)
+    # print(tnew,told)
+
+
+    print(kappa)
+    kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
+    print(kappamin,kappamax)
+
+    kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
+    print(kappamin,kappamax)
