@@ -1323,7 +1323,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
     kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
     #sols = np.real(np.where(np.isreal(sols), sols, np.nan))
 
-    #kappares=None
+    kappares=None
 
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparootscomplex, u, chieff, q, chi1, chi2):
@@ -1442,19 +1442,19 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
  
             kappares = np.mean([kappares1,kappares2],axis=0)
 
-            # For stable configurations, we know some resonances analytically. 
-            # Use those instead of the interpolated results above.
-            rudplus = rupdown(q, chi1, chi2)[0]
-            if np.isclose(chieff,updown) and u<eval_u(r=rudplus,q=q):
-                S1,S2 = spinmags(q,chi1,chi2)
-                L=1/(2*u)
-                kappares[1]= ((L+S1-S2)**2 - L**2) / (2*L)
-            if np.isclose(chieff,downup):
-                S1,S2 = spinmags(q,chi1,chi2)
-                L=1/(2*u)
-                kappares[0]= ((L-S1+S2)**2 - L**2) / (2*L)
+        # For stable configurations, we know some resonances analytically. 
+        # Use those instead of the interpolated results above.
+        rudplus = rupdown(q, chi1, chi2)[0]
+        if np.isclose(chieff,updown) and u<eval_u(r=rudplus,q=q):
+            S1,S2 = spinmags(q,chi1,chi2)
+            L=1/(2*u)
+            kappares[1]= ((L+S1-S2)**2 - L**2) / (2*L)
+        if np.isclose(chieff,downup):
+            S1,S2 = spinmags(q,chi1,chi2)
+            L=1/(2*u)
+            kappares[0]= ((L-S1+S2)**2 - L**2) / (2*L)
 
-        else:
+        if kappares is None:
             raise ValueError("Input values are not compatible [kapparesonances].")
 
         # If you didn't find enough solutions, append nans
