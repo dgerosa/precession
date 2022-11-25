@@ -2454,6 +2454,20 @@ def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2):
     u = eval_u(r,q)
     deltachiminus, deltachiplus, _ = deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=False, precomputedroots=None)
 
+    # Correct when too close to perfect alignment
+    angleup=tiler(0,q)
+    angledown=tiler(np.pi,q)
+
+    chieffupup = eval_chieff(theta1=angleup, theta2=angleup, q=q, chi1=chi1, chi2=chi2)
+    deltachiupup = eval_deltachi(theta1=angleup, theta2=angleup, q=q, chi1=chi1, chi2=chi2)
+    deltachiminus = np.where(np.isclose(chieff,chieffupup), deltachiupup,deltachiminus)
+    deltachiplus = np.where(np.isclose(chieff,chieffupup), deltachiupup,deltachiplus)
+
+    chieffdowndown = eval_chieff(theta1=angledown, theta2=angledown, q=q, chi1=chi1, chi2=chi2)
+    deltachidowndown = eval_deltachi(theta1=angledown, theta2=angledown, q=q, chi1=chi1, chi2=chi2)
+    deltachiminus = np.where(np.isclose(chieff,chieffdowndown), deltachidowndown,deltachiminus)
+    deltachiplus = np.where(np.isclose(chieff,chieffdowndown), deltachidowndown,deltachiplus)
+
     return deltachiminus, deltachiplus
 
 
@@ -2668,6 +2682,55 @@ def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q
         raise TypeError("Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).")
 
     return chieff
+
+
+# TODO: update this function to evaluate from S
+def eval_deltachi(theta1, theta2, q, chi1, chi2):
+    """
+    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
+
+    Call
+    ----
+    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    S: float, optional (default: None)
+        Magnitude of the total spin.
+    varphi: float, optional (default: None)
+        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
+    J: float, optional (default: None)
+        Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+        Binary separation.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chieff: float
+        Effective spin.
+    """
+
+
+    theta1 = np.atleast_1d(theta1)
+    theta2 = np.atleast_1d(theta2)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    deltachi = (chi1*np.cos(theta1) -q*chi2*np.cos(theta2))/(1+q)
+
+    return deltachi
+
 
 # TODO: change S,J to deltachi, kappa in all these angle functions below!
 
