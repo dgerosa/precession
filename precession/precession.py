@@ -1323,6 +1323,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
     kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
     #sols = np.real(np.where(np.isreal(sols), sols, np.nan))
 
+    #kappares=None
 
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparootscomplex, u, chieff, q, chi1, chi2):
@@ -1332,6 +1333,8 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
 
         upup,updown,downup,downdown=eval_chieff(theta1=[0,0,np.pi,np.pi], theta2=[0,np.pi,0,np.pi], q=np.repeat(q,4), chi1=np.repeat(chi1,4), chi2=np.repeat(chi2,4))
 
+
+        # If too close to perfect alignment, return the analytical result.
         if np.isclose(np.repeat(chieff,2),np.squeeze([upup,downdown])).any():
             warnings.warn("Close to either up-up or down-down configuration. Using analytical results.", Warning)
 
@@ -1422,35 +1425,37 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
         #     kappares=np.array([kapparoots[1],kapparoots[4]])
 
 
+        # Up-down and down-up are challenging. 
+        # Evaluate the resonances outside of those points and interpolate linearly.
+        # Note usage of recursive functions.
         elif np.isclose(np.repeat(chieff,2),np.squeeze([updown,downup])).any():
 
             warnings.warn("Close to either up-down or down-up configuration. Using recursive approach (tol="+str(tol)+") and analytical results.", Warning)
-            chieff1 = chieff+tol/2
+            chieff1 = max(min(chieff+tol/2,upup),downdown)
             coeffs = kappadiscriminant_coefficients(u, chieff1, q, chi1, chi2)
             kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
             kappares1 = _compute(kapparootscomplex, u, chieff1, q, chi1, chi2)
-            chieff2 = chieff-tol/2
+            chieff2 = max(min(chieff-tol/2,upup),downdown)
             coeffs = kappadiscriminant_coefficients(u, chieff2, q, chi1, chi2)
             kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
             kappares2 = _compute(kapparootscomplex, u, chieff2, q, chi1, chi2)
  
             kappares = np.mean([kappares1,kappares2],axis=0)
 
-        rudplus = rupdown(q, chi1, chi2)[0]
+            # For stable configurations, we know some resonances analytically. 
+            # Use those instead of the interpolated results above.
+            rudplus = rupdown(q, chi1, chi2)[0]
+            if np.isclose(chieff,updown) and u<eval_u(r=rudplus,q=q):
+                S1,S2 = spinmags(q,chi1,chi2)
+                L=1/(2*u)
+                kappares[1]= ((L+S1-S2)**2 - L**2) / (2*L)
+            if np.isclose(chieff,downup):
+                S1,S2 = spinmags(q,chi1,chi2)
+                L=1/(2*u)
+                kappares[0]= ((L-S1+S2)**2 - L**2) / (2*L)
 
-        if np.isclose(chieff,updown) and u<eval_u(r=rudplus,q=q):
-            S1,S2 = spinmags(q,chi1,chi2)
-            L=1/(2*u)
-            kappares[1]= ((L+S1-S2)**2 - L**2) / (2*L)
-        if np.isclose(chieff,downup):
-            S1,S2 = spinmags(q,chi1,chi2)
-            L=1/(2*u)
-            kappares[0]= ((L-S1+S2)**2 - L**2) / (2*L)
-
-
-
-        #else:
-        #    raise ValueError("Input values are not compatible [kapparesonances].")
+        else:
+            raise ValueError("Input values are not compatible [kapparesonances].")
 
         # If you didn't find enough solutions, append nans
         #kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
