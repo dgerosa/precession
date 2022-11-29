@@ -902,11 +902,11 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
         Coefficient to the x^0 term in polynomial.
     """
 
-    u = np.atleast_1d(u)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    u = np.atleast_1d(u).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     coeff5 = -u
 
@@ -1283,7 +1283,7 @@ def kappalimits_geometrical(r , q, chi1, chi2):
 
     return kappamin,kappamax
 
-def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
+def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
     Call
@@ -1327,12 +1327,17 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
 
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparootscomplex, u, chieff, q, chi1, chi2):
-        #print(chieff, kapparootscomplex)
+ 
+        # At infinitely large separations the resonances are analytic...
+        if u==0:
+            kappaminus = np.maximum((q*(1+q)*chieff - (1-q)*chi1)/(1+q)**2 , ((1+q)*chieff - q*(1-q)*chi2)/(1+q)**2)
+            kappaplus = np.minimum((q*(1+q)*chieff + (1-q)*chi1)/(1+q)**2, ((1+q)*chieff + q*(1-q)*chi2)/(1+q)**2)
+            kappares = np.array([kappaminus,kappaplus])
+            return kappares
+
         kapparoots = np.real(kapparootscomplex[np.isreal(kapparootscomplex)])
  
-
         upup,updown,downup,downdown=eval_chieff(theta1=[0,0,np.pi,np.pi], theta2=[0,np.pi,0,np.pi], q=np.repeat(q,4), chi1=np.repeat(chi1,4), chi2=np.repeat(chi2,4))
-
 
         # If too close to perfect alignment, return the analytical result.
         if np.isclose(np.repeat(chieff,2),np.squeeze([upup,downdown])).any():
@@ -1429,7 +1434,6 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
         # Evaluate the resonances outside of those points and interpolate linearly.
         # Note usage of recursive functions.
         elif np.isclose(np.repeat(chieff,2),np.squeeze([updown,downup])).any():
-
             warnings.warn("Close to either up-down or down-up configuration. Using recursive approach (tol="+str(tol)+") and analytical results.", Warning)
             chieff1 = max(min(chieff+tol/2,upup),downdown)
             coeffs = kappadiscriminant_coefficients(u, chieff1, q, chi1, chi2)
@@ -1468,7 +1472,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-5):
 
 
 
-# TODO: edit this
+# TODO: edit this. I think there's something wrong
 def kappainfresonances(chieff, q, chi1, chi2):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
@@ -2258,12 +2262,12 @@ def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=F
 
 
 def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
-    kappa = np.atleast_1d(kappa)
-    u = np.atleast_1d(u)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    kappa = np.atleast_1d(kappa).astype(float)
+    u = np.atleast_1d(u).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     coeff3 = u*(1-q)
 
@@ -2301,12 +2305,12 @@ def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
 
 
 def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2):
-    kappa = np.atleast_1d(kappa)
-    u = np.atleast_1d(u)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    kappa = np.atleast_1d(kappa).astype(float)
+    u = np.atleast_1d(u).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     coeff3 = u
 
@@ -5081,16 +5085,16 @@ def ddchidt_prefactor(r, chieff, q):
 
 
 
-def dchidt_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
-    r= eval_r(u=u,q=q)
+    u= eval_u(r=r,q=q)
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
     mathcalA = ddchidt_prefactor(r, chieff, q)
 
-    dchidt = mathcalA*( (deltachi-deltachiminus)*(deltachiplus-deltachi)*(deltachi3-(1-q)*deltachi))**(1/2)
+    dchidt2 = mathcalA**2 * ( (deltachi-deltachiminus)*(deltachiplus-deltachi)*(deltachi3-(1-q)*deltachi))
 
-    return dchidt
+    return dchidt2
 
 
 
@@ -5628,8 +5632,11 @@ def rupdown(q, chi1, chi2):
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    rudp = (chi1**0.5+(q*chi2)**0.5)**4/(1-q)**2
-    rudm = (chi1**0.5-(q*chi2)**0.5)**4/(1-q)**2
+    #Ignore q=1 "divide by zero" warning here
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+        rudp = (chi1**0.5+(q*chi2)**0.5)**4/(1-q)**2
+        rudm = (chi1**0.5-(q*chi2)**0.5)**4/(1-q)**2
 
     return np.stack([rudp, rudm])
 
@@ -7176,20 +7183,30 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.8
+    q=0.6
     chi1=0.8
     chi2=0.9
     chieff=0.3
-    r=1000
-    kappatilde = 0.5
+    r=1000000000000
+    kappatilde = 0.8
     deltachitilde = 0.7
-
     u = eval_u(r, q)
-    kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
-    J=eval_J(kappa=kappa, r=r, q=q)
+
+    kappamin,kappamax = kapparesonances(r, chieff, q, chi1,chi2)
+
+    print(kappamin,kappamax)
+
+    kappamin,kappamax = kapparesonances(np.inf, chieff, q, chi1,chi2)
+
+    print(kappamin,kappamax)
+
+    print((chi1 + q**2 * chi2) / (1+q)**2)
+
+    #kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
+    #J=eval_J(kappa=kappa, r=r, q=q)
 
 
-    deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2)
+    #deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2)
 
     # S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
 
@@ -7201,9 +7218,18 @@ if __name__ == '__main__':
 
     #print(eval_costheta1(deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
 
-    # tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
-    # t = np.linspace(0,tnew/2,5)
+    #tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
+    #print(tnew)
+    #t = np.linspace(0,tnew/2,5)
 
+   #tan = 4*np.pi*r**(11/4) / (3* (2*kappa-chieff)**(1/2) * (1 -chieff/ r**(1/2)))
+
+    #print(tan)
+
+    #dchim,dchip = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
+    #print(dchip-dchim)
+    #aman = (chieff/2)*np.abs(chi1**2 - chi2**2)*(2*kappa-chieff)**(-1) *r**(-1/2)
+    #print(aman)
     # print('FROM HERE')
     # dchi = deltachioft(t, kappa , r, chieff, q, chi1, chi2)
     # #print()
@@ -7230,9 +7256,9 @@ if __name__ == '__main__':
     # print(tnew,told)
 
 
-    print(kappa)
-    kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
-    print(kappamin,kappamax)
+    # print(kappa)
+    # kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
+    # print(kappamin,kappamax)
 
-    kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
-    print(kappamin,kappamax)
+    # kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
+    # print(kappamin,kappamax)
