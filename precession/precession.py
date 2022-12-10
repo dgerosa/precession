@@ -7330,25 +7330,28 @@ if __name__ == '__main__':
     kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
     #print(kappa)
 
-    print(deltachisampling(kappa, r, chieff, q, chi1, chi2))
 
-    print(deltachisampling(kappa, r, chieff, q, chi1, chi2,N=5))
+    print(integrator_precav(kappainitial, [u,100], chieff, q, chi1, chi2))
 
+    # print(deltachisampling(kappa, r, chieff, q, chi1, chi2))
 
-    q=[0.7,0.1]
-    chi1=[0.8,0.8]
-    chi2=[0.9,0.9]
-    chieff=[0.3,0.3]
-    r=[10,100000]
-    kappatilde = [0.5,0.5]
-    u = eval_u(r, q)
-    kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
-    #print(kappa)
+    # print(deltachisampling(kappa, r, chieff, q, chi1, chi2,N=5))
 
 
-    print(deltachisampling(kappa, r, chieff, q, chi1, chi2))
+    # q=[0.7,0.1]
+    # chi1=[0.8,0.8]
+    # chi2=[0.9,0.9]
+    # chieff=[0.3,0.3]
+    # r=[10,100000]
+    # kappatilde = [0.5,0.5]
+    # u = eval_u(r, q)
+    # kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
+    # #print(kappa)
 
-    print(deltachisampling(kappa, r, chieff, q, chi1, chi2,N=10))
+
+    # print(deltachisampling(kappa, r, chieff, q, chi1, chi2))
+
+    # print(deltachisampling(kappa, r, chieff, q, chi1, chi2,N=10))
 
     #kappa = kapparescaling([kappatilde,kappatilde], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2])
     #print(kappa)
