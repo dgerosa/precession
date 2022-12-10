@@ -184,6 +184,26 @@ def tiler(scalar,shaper):
     return np.tile(scalar, np.shape(shaper))
 
 
+def affine(vec, low, up):
+    vec = np.atleast_1d(vec)
+    up = np.atleast_1d(up)
+    low = np.atleast_1d(low)
+
+    rescaled = ( vec - low ) / (up - low)
+
+    return rescaled
+
+def inverseaffine(rescaled, low, up):
+    
+    rescaled = np.atleast_1d(rescaled)
+    up = np.atleast_1d(up)
+    low = np.atleast_1d(low)
+
+    vec = low + rescaled*(up-low)
+
+    return vec
+
+
 def wraproots(coefficientfunction, *args, **kwargs):
     """
     Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is essentially a wrapper of numpy.roots.
@@ -912,284 +932,273 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
 
     # Machine generated with eq_generator.nb
     coeff4 = 1/16 * q**(-1) * ((1 + q))**(-4) * (1 + (q**6 + (q * (2 + \
-    (80 * u**2 * (chi1)**2 + 40 * u * chieff)) + (q**5 * (2 + (80 * u**2 \
-    * (chi2)**2 + 40 * u * chieff)) + (4 * q**3 * (-1 + (60 * u * chieff \
-    + 8 * u**2 * chieff**2)) + (q**2 * (-1 + (160 * u * chieff + 16 * \
-    u**2 * (-3 * (chi1)**2 + chieff**2))) + q**4 * (-1 + (160 * u * \
-    chieff + 16 * u**2 * (-3 * (chi2)**2 + chieff**2)))))))))
+    (80 * u**2 * chi1**2 + 40 * u * chieff)) + (q**5 * (2 + (80 * u**2 * \
+    chi2**2 + 40 * u * chieff)) + (4 * q**3 * (-1 + (60 * u * chieff + 8 \
+    * u**2 * chieff**2)) + (q**2 * (-1 + (160 * u * chieff + 16 * u**2 * \
+    (-3 * chi1**2 + chieff**2))) + q**4 * (-1 + (160 * u * chieff + 16 * \
+    u**2 * (-3 * chi2**2 + chieff**2)))))))))
 
     # Machine generated with eq_generator.nb
     coeff3 = -1/8 * q**(-1) * ((1 + q))**(-8) * (((-1 + q))**2 * ((1 + \
     q))**8 * chieff + (8 * q * u**3 * ((10 + (-12 * q + 3 * q**2)) * \
-    (chi1)**4 + (-2 * q * (chi1)**2 * (6 * q**2 * (chi2)**2 + (6 * q**4 * \
-    (chi2)**2 + (-2 * chieff**2 + (-3 * q * chieff**2 + q**3 * (-11 * \
-    (chi2)**2 + chieff**2))))) + q**4 * (chi2)**2 * (10 * q**4 * \
-    (chi2)**2 + (-2 * chieff**2 + (4 * q**3 * (-3 * (chi2)**2 + \
-    chieff**2) + 3 * q**2 * ((chi2)**2 + 2 * chieff**2)))))) + (4 * q * \
-    ((1 + q))**3 * u**2 * chieff * (-1 * (-20 + (3 * q + q**2)) * \
-    (chi1)**2 + q * (20 * q**4 * (chi2)**2 + (4 * chieff**2 + (12 * q * \
-    chieff**2 + (-1 * q**2 * ((chi2)**2 + -12 * chieff**2) + q**3 * (-3 * \
-    (chi2)**2 + 4 * chieff**2)))))) + 2 * ((1 + q))**4 * u * (-1 * ((-1 + \
-    q))**2 * (-1 + 5 * q) * (chi1)**2 + q * (q**5 * (chi2)**2 + (8 * \
-    chieff**2 + (40 * q * chieff**2 + (q**4 * (-7 * (chi2)**2 + 8 * \
-    chieff**2) + (q**3 * (11 * (chi2)**2 + 40 * chieff**2) + q**2 * (-5 * \
-    (chi2)**2 + 64 * chieff**2))))))))))
+    chi1**4 + (-2 * q * chi1**2 * (6 * q**2 * chi2**2 + (6 * q**4 * \
+    chi2**2 + (-2 * chieff**2 + (-3 * q * chieff**2 + q**3 * (-11 * \
+    chi2**2 + chieff**2))))) + q**4 * chi2**2 * (10 * q**4 * chi2**2 + \
+    (-2 * chieff**2 + (4 * q**3 * (-3 * chi2**2 + chieff**2) + 3 * q**2 * \
+    (chi2**2 + 2 * chieff**2)))))) + (4 * q * ((1 + q))**3 * u**2 * \
+    chieff * (-1 * (-20 + (3 * q + q**2)) * chi1**2 + q * (20 * q**4 * \
+    chi2**2 + (4 * chieff**2 + (12 * q * chieff**2 + (-1 * q**2 * \
+    (chi2**2 + -12 * chieff**2) + q**3 * (-3 * chi2**2 + 4 * \
+    chieff**2)))))) + 2 * ((1 + q))**4 * u * (-1 * ((-1 + q))**2 * (-1 + \
+    5 * q) * chi1**2 + q * (q**5 * chi2**2 + (8 * chieff**2 + (40 * q * \
+    chieff**2 + (q**4 * (-7 * chi2**2 + 8 * chieff**2) + (q**3 * (11 * \
+    chi2**2 + 40 * chieff**2) + q**2 * (-5 * chi2**2 + 64 * \
+    chieff**2))))))))))
 
     # Machine generated with eq_generator.nb
     coeff2 = 1/16 * q**(-1) * ((1 + q))**(-12) * (-16 * q * (-10 + (18 * \
-    q + (-9 * q**2 + q**3))) * u**4 * (chi1)**6 + (chieff**2 + (4 * q * \
-    chieff**2 * (3 + 2 * u * chieff) + (q**(14) * (6 * u**2 * (chi2)**4 + \
-    (chieff**2 + (chi2)**2 * (-1 + 6 * u * chieff))) + (q**2 * (-1 * \
-    (chi2)**2 + chieff**2 * (59 + (144 * u * chieff + 16 * u**2 * \
-    chieff**2))) + (4 * q**(13) * (40 * u**4 * (chi2)**6 + (chieff**2 * \
-    (3 + 2 * u * chieff) + (12 * u**2 * (chi2)**4 * (-1 + 5 * u * chieff) \
-    + (chi2)**2 * (-1 + (-4 * u * chieff + 24 * u**2 * chieff**2))))) + \
-    (-4 * q**3 * ((chi2)**2 * (1 + 2 * u * chieff) + -2 * chieff**2 * (19 \
-    + (126 * u * chieff + 24 * u**2 * chieff**2))) + (q**4 * (-2 * \
-    (chi2)**2 * (1 + (43 * u * chieff + 4 * u**2 * chieff**2)) + \
-    chieff**2 * (201 + (3920 * u * chieff + 976 * u**2 * chieff**2))) + \
-    (4 * q**5 * (chieff**2 * (13 + (2430 * u * chieff + 704 * u**2 * \
-    chieff**2)) + (chi2)**2 * (3 + (-72 * u * chieff + (10 * u**2 * \
-    chieff**2 + 8 * u**3 * chieff**3)))) + (-4 * q**7 * (u**2 * (chi2)**4 \
-    * (19 + 8 * u * chieff) + (-4 * chieff**2 * (-27 + (1218 * u * chieff \
-    + 392 * u**2 * chieff**2)) + -2 * (chi2)**2 * (-1 + (20 * u * chieff \
-    + (169 * u**2 * chieff**2 + 32 * u**3 * chieff**3))))) + (q**(12) * \
-    (-288 * u**4 * (chi2)**6 + (chieff**2 * (59 + (144 * u * chieff + 16 \
-    * u**2 * chieff**2)) + (2 * u**2 * (chi2)**4 * (-67 + (204 * u * \
-    chieff + 48 * u**2 * chieff**2)) + 2 * (chi2)**2 * (-1 + (-95 * u * \
-    chieff + (296 * u**2 * chieff**2 + 48 * u**3 * chieff**3)))))) + (4 * \
-    q**9 * (2 * u**2 * (chi2)**4 * (13 + (6 * u * chieff + -8 * u**2 * \
-    chieff**2)) + (chieff**2 * (13 + (2430 * u * chieff + 704 * u**2 * \
-    chieff**2)) + 2 * (chi2)**2 * (-1 + (70 * u * chieff + (379 * u**2 * \
-    chieff**2 + 100 * u**3 * chieff**3))))) + (4 * q**(11) * (36 * u**4 * \
-    (chi2)**6 + (u**2 * (chi2)**4 * (5 + (-16 * u * chieff + 24 * u**2 * \
-    chieff**2)) + (2 * chieff**2 * (19 + (126 * u * chieff + 24 * u**2 * \
-    chieff**2)) + (chi2)**2 * (3 + (-102 * u * chieff + (406 * u**2 * \
-    chieff**2 + 112 * u**3 * chieff**3)))))) + (q**8 * (2 * u**2 * \
-    (chi2)**4 * (-53 + (28 * u * chieff + 8 * u**2 * chieff**2)) + \
-    (chieff**2 * (-261 + (16416 * u * chieff + 5152 * u**2 * chieff**2)) \
-    + 4 * (chi2)**2 * (-7 + (189 * u * chieff + (614 * u**2 * chieff**2 + \
-    120 * u**3 * chieff**3))))) + (q**6 * (-8 * u**2 * (chi2)**4 + \
-    (chieff**2 * (-261 + (16416 * u * chieff + 5152 * u**2 * chieff**2)) \
-    + (chi2)**2 * (17 + (-338 * u * chieff + (424 * u**2 * chieff**2 + \
-    128 * u**3 * chieff**3))))) + (q**10 * (-16 * u**4 * (chi2)**6 + (-2 \
-    * u**2 * (chi2)**4 * (-121 + (136 * u * chieff + 40 * u**2 * \
-    chieff**2)) + (chieff**2 * (201 + (3920 * u * chieff + 976 * u**2 * \
-    chieff**2)) + (chi2)**2 * (17 + (-148 * u * chieff + (2680 * u**2 * \
-    chieff**2 + 832 * u**3 * chieff**3)))))) + (2 * u**2 * (chi1)**4 * (3 \
-    + (-4 * q**8 + (2 * q**7 * (-19 + (36 * u**2 * (chi2)**2 + -8 * u * \
-    chieff)) + (24 * q * (-1 + 5 * u * chieff) + (2 * q**3 * (5 + (-16 * \
-    u * chieff + 24 * u**2 * chieff**2)) + (q**2 * (-67 + (204 * u * \
-    chieff + 48 * u**2 * chieff**2)) + (4 * q**5 * (13 + (6 * u * chieff \
-    + 8 * u**2 * (9 * (chi2)**2 + -1 * chieff**2))) + (q**6 * (-53 + (28 \
-    * u * chieff + 8 * u**2 * (-27 * (chi2)**2 + chieff**2))) + -1 * q**4 \
-    * (-121 + (136 * u * chieff + 8 * u**2 * (18 * (chi2)**2 + 5 * \
-    chieff**2))))))))))) + -1 * (chi1)**2 * (1 + (q**(12) + (-6 * u * \
-    chieff + (q**(11) * (4 + (60 * u**2 * (chi2)**2 + 8 * u * chieff)) + \
-    (q * (4 + (16 * u * chieff + -96 * u**2 * chieff**2)) + (q**2 * (2 + \
-    (190 * u * chieff + (-592 * u**2 * chieff**2 + -96 * u**3 * \
-    chieff**3))) + (q**10 * (2 + (288 * u**4 * (chi2)**4 + (86 * u * \
-    chieff + (24 * u**3 * (chi2)**2 * chieff + 4 * u**2 * ((chi2)**2 + 2 \
-    * chieff**2))))) + (-4 * q**3 * (3 + (-102 * u * chieff + (112 * u**3 \
-    * chieff**3 + u**2 * (-15 * (chi2)**2 + 406 * chieff**2)))) + (-4 * \
-    q**9 * (3 + (-72 * u * chieff + (8 * u**3 * chieff * (-3 * (chi2)**2 \
-    + chieff**2) + (2 * u**2 * (29 * (chi2)**2 + 5 * chieff**2) + 24 * \
-    u**4 * (6 * (chi2)**4 + -1 * (chi2)**2 * chieff**2))))) + (q**4 * \
-    (-17 + (148 * u * chieff + (4 * u**2 * ((chi2)**2 + -670 * chieff**2) \
-    + 8 * u**3 * (3 * (chi2)**2 * chieff + -104 * chieff**3)))) + (8 * \
-    q**5 * (1 + (-70 * u * chieff + (12 * u**4 * (chi2)**2 * chieff**2 + \
-    (-1 * u**2 * (29 * (chi2)**2 + 379 * chieff**2) + 4 * u**3 * (3 * \
-    (chi2)**2 * chieff + -25 * chieff**3))))) + (4 * q**6 * (7 + (-189 * \
-    u * chieff + (8 * u**4 * (chi2)**2 * chieff**2 + (-1 * u**2 * \
-    ((chi2)**2 + 614 * chieff**2) + 6 * u**3 * (7 * (chi2)**2 * chieff + \
-    -20 * chieff**3))))) + (q**8 * (-17 + (338 * u * chieff + (-4 * u**2 \
-    * ((chi2)**2 + 106 * chieff**2) + (16 * u**4 * (27 * (chi2)**4 + 2 * \
-    (chi2)**2 * chieff**2) + 8 * u**3 * (21 * (chi2)**2 * chieff + -16 * \
-    chieff**3))))) + -8 * q**7 * (-1 + (20 * u * chieff + (u**2 * (-43 * \
-    (chi2)**2 + 169 * chieff**2) + (2 * u**4 * (9 * (chi2)**4 + 8 * \
-    (chi2)**2 * chieff**2) + -8 * u**3 * (3 * (chi2)**2 * chieff + -4 * \
-    chieff**3)))))))))))))))))))))))))))))))))))
+    q + (-9 * q**2 + q**3))) * u**4 * chi1**6 + (chieff**2 + (4 * q * \
+    chieff**2 * (3 + 2 * u * chieff) + (q**(14) * (6 * u**2 * chi2**4 + \
+    (chieff**2 + chi2**2 * (-1 + 6 * u * chieff))) + (q**2 * (-1 * \
+    chi2**2 + chieff**2 * (59 + (144 * u * chieff + 16 * u**2 * \
+    chieff**2))) + (4 * q**(13) * (40 * u**4 * chi2**6 + (chieff**2 * (3 \
+    + 2 * u * chieff) + (12 * u**2 * chi2**4 * (-1 + 5 * u * chieff) + \
+    chi2**2 * (-1 + (-4 * u * chieff + 24 * u**2 * chieff**2))))) + (-4 * \
+    q**3 * (chi2**2 * (1 + 2 * u * chieff) + -2 * chieff**2 * (19 + (126 \
+    * u * chieff + 24 * u**2 * chieff**2))) + (q**4 * (-2 * chi2**2 * (1 \
+    + (43 * u * chieff + 4 * u**2 * chieff**2)) + chieff**2 * (201 + \
+    (3920 * u * chieff + 976 * u**2 * chieff**2))) + (4 * q**5 * \
+    (chieff**2 * (13 + (2430 * u * chieff + 704 * u**2 * chieff**2)) + \
+    chi2**2 * (3 + (-72 * u * chieff + (10 * u**2 * chieff**2 + 8 * u**3 \
+    * chieff**3)))) + (-4 * q**7 * (u**2 * chi2**4 * (19 + 8 * u * \
+    chieff) + (-4 * chieff**2 * (-27 + (1218 * u * chieff + 392 * u**2 * \
+    chieff**2)) + -2 * chi2**2 * (-1 + (20 * u * chieff + (169 * u**2 * \
+    chieff**2 + 32 * u**3 * chieff**3))))) + (q**(12) * (-288 * u**4 * \
+    chi2**6 + (chieff**2 * (59 + (144 * u * chieff + 16 * u**2 * \
+    chieff**2)) + (2 * u**2 * chi2**4 * (-67 + (204 * u * chieff + 48 * \
+    u**2 * chieff**2)) + 2 * chi2**2 * (-1 + (-95 * u * chieff + (296 * \
+    u**2 * chieff**2 + 48 * u**3 * chieff**3)))))) + (4 * q**9 * (2 * \
+    u**2 * chi2**4 * (13 + (6 * u * chieff + -8 * u**2 * chieff**2)) + \
+    (chieff**2 * (13 + (2430 * u * chieff + 704 * u**2 * chieff**2)) + 2 \
+    * chi2**2 * (-1 + (70 * u * chieff + (379 * u**2 * chieff**2 + 100 * \
+    u**3 * chieff**3))))) + (4 * q**(11) * (36 * u**4 * chi2**6 + (u**2 * \
+    chi2**4 * (5 + (-16 * u * chieff + 24 * u**2 * chieff**2)) + (2 * \
+    chieff**2 * (19 + (126 * u * chieff + 24 * u**2 * chieff**2)) + \
+    chi2**2 * (3 + (-102 * u * chieff + (406 * u**2 * chieff**2 + 112 * \
+    u**3 * chieff**3)))))) + (q**8 * (2 * u**2 * chi2**4 * (-53 + (28 * u \
+    * chieff + 8 * u**2 * chieff**2)) + (chieff**2 * (-261 + (16416 * u * \
+    chieff + 5152 * u**2 * chieff**2)) + 4 * chi2**2 * (-7 + (189 * u * \
+    chieff + (614 * u**2 * chieff**2 + 120 * u**3 * chieff**3))))) + \
+    (q**6 * (-8 * u**2 * chi2**4 + (chieff**2 * (-261 + (16416 * u * \
+    chieff + 5152 * u**2 * chieff**2)) + chi2**2 * (17 + (-338 * u * \
+    chieff + (424 * u**2 * chieff**2 + 128 * u**3 * chieff**3))))) + \
+    (q**10 * (-16 * u**4 * chi2**6 + (-2 * u**2 * chi2**4 * (-121 + (136 \
+    * u * chieff + 40 * u**2 * chieff**2)) + (chieff**2 * (201 + (3920 * \
+    u * chieff + 976 * u**2 * chieff**2)) + chi2**2 * (17 + (-148 * u * \
+    chieff + (2680 * u**2 * chieff**2 + 832 * u**3 * chieff**3)))))) + (2 \
+    * u**2 * chi1**4 * (3 + (-4 * q**8 + (2 * q**7 * (-19 + (36 * u**2 * \
+    chi2**2 + -8 * u * chieff)) + (24 * q * (-1 + 5 * u * chieff) + (2 * \
+    q**3 * (5 + (-16 * u * chieff + 24 * u**2 * chieff**2)) + (q**2 * \
+    (-67 + (204 * u * chieff + 48 * u**2 * chieff**2)) + (4 * q**5 * (13 \
+    + (6 * u * chieff + 8 * u**2 * (9 * chi2**2 + -1 * chieff**2))) + \
+    (q**6 * (-53 + (28 * u * chieff + 8 * u**2 * (-27 * chi2**2 + \
+    chieff**2))) + -1 * q**4 * (-121 + (136 * u * chieff + 8 * u**2 * (18 \
+    * chi2**2 + 5 * chieff**2))))))))))) + -1 * chi1**2 * (1 + (q**(12) + \
+    (-6 * u * chieff + (q**(11) * (4 + (60 * u**2 * chi2**2 + 8 * u * \
+    chieff)) + (q * (4 + (16 * u * chieff + -96 * u**2 * chieff**2)) + \
+    (q**2 * (2 + (190 * u * chieff + (-592 * u**2 * chieff**2 + -96 * \
+    u**3 * chieff**3))) + (q**10 * (2 + (288 * u**4 * chi2**4 + (86 * u * \
+    chieff + (24 * u**3 * chi2**2 * chieff + 4 * u**2 * (chi2**2 + 2 * \
+    chieff**2))))) + (-4 * q**3 * (3 + (-102 * u * chieff + (112 * u**3 * \
+    chieff**3 + u**2 * (-15 * chi2**2 + 406 * chieff**2)))) + (-4 * q**9 \
+    * (3 + (-72 * u * chieff + (8 * u**3 * chieff * (-3 * chi2**2 + \
+    chieff**2) + (2 * u**2 * (29 * chi2**2 + 5 * chieff**2) + 24 * u**4 * \
+    (6 * chi2**4 + -1 * chi2**2 * chieff**2))))) + (q**4 * (-17 + (148 * \
+    u * chieff + (4 * u**2 * (chi2**2 + -670 * chieff**2) + 8 * u**3 * (3 \
+    * chi2**2 * chieff + -104 * chieff**3)))) + (8 * q**5 * (1 + (-70 * u \
+    * chieff + (12 * u**4 * chi2**2 * chieff**2 + (-1 * u**2 * (29 * \
+    chi2**2 + 379 * chieff**2) + 4 * u**3 * (3 * chi2**2 * chieff + -25 * \
+    chieff**3))))) + (4 * q**6 * (7 + (-189 * u * chieff + (8 * u**4 * \
+    chi2**2 * chieff**2 + (-1 * u**2 * (chi2**2 + 614 * chieff**2) + 6 * \
+    u**3 * (7 * chi2**2 * chieff + -20 * chieff**3))))) + (q**8 * (-17 + \
+    (338 * u * chieff + (-4 * u**2 * (chi2**2 + 106 * chieff**2) + (16 * \
+    u**4 * (27 * chi2**4 + 2 * chi2**2 * chieff**2) + 8 * u**3 * (21 * \
+    chi2**2 * chieff + -16 * chieff**3))))) + -8 * q**7 * (-1 + (20 * u * \
+    chieff + (u**2 * (-43 * chi2**2 + 169 * chieff**2) + (2 * u**4 * (9 * \
+    chi2**4 + 8 * chi2**2 * chieff**2) + -8 * u**3 * (3 * chi2**2 * \
+    chieff + -4 * chieff**3)))))))))))))))))))))))))))))))))))
 
     # Machine generated with eq_generator.nb
     coeff1 = -1/8 * q**(-1) * ((1 + q))**(-16) * (-1 * ((-1 + q))**2 * \
-    ((1 + q))**(11) * chieff * (((-1 + q))**2 * (chi1)**2 + q * (q**4 * \
-    (chi2)**2 + (-1 * chieff**2 + (-3 * q * chieff**2 + (q**2 * \
-    ((chi2)**2 + -3 * chieff**2) + -1 * q**3 * (2 * (chi2)**2 + \
-    chieff**2)))))) + (8 * (-1 + q) * q * u**5 * (-1 * (chi1)**2 + q**3 * \
-    (chi2)**2) * ((5 + (-7 * q + 2 * q**2)) * (chi1)**6 + (q * (chi1)**4 \
-    * (-7 * q**2 * (chi2)**2 + (-2 * q**4 * (chi2)**2 + (2 * q**5 * \
-    (chi2)**2 + (4 * chieff**2 + (6 * q * chieff**2 + q**3 * (7 * \
-    (chi2)**2 + -2 * chieff**2)))))) + (-1 * q**4 * (chi1)**2 * (chi2)**2 \
-    * (7 * q**5 * (chi2)**2 + (2 * chieff**2 + (4 * q * chieff**2 + (-2 * \
-    q**2 * ((chi2)**2 + -2 * chieff**2) + (q**4 * (-7 * (chi2)**2 + 2 * \
-    chieff**2) + 2 * q**3 * ((chi2)**2 + 2 * chieff**2)))))) + q**8 * \
-    (chi2)**4 * (5 * q**4 * (chi2)**2 + (-2 * chieff**2 + (2 * q**2 * \
-    ((chi2)**2 + 3 * chieff**2) + q**3 * (-7 * (chi2)**2 + 4 * \
+    ((1 + q))**(11) * chieff * (((-1 + q))**2 * chi1**2 + q * (q**4 * \
+    chi2**2 + (-1 * chieff**2 + (-3 * q * chieff**2 + (q**2 * (chi2**2 + \
+    -3 * chieff**2) + -1 * q**3 * (2 * chi2**2 + chieff**2)))))) + (8 * \
+    (-1 + q) * q * u**5 * (-1 * chi1**2 + q**3 * chi2**2) * ((5 + (-7 * q \
+    + 2 * q**2)) * chi1**6 + (q * chi1**4 * (-7 * q**2 * chi2**2 + (-2 * \
+    q**4 * chi2**2 + (2 * q**5 * chi2**2 + (4 * chieff**2 + (6 * q * \
+    chieff**2 + q**3 * (7 * chi2**2 + -2 * chieff**2)))))) + (-1 * q**4 * \
+    chi1**2 * chi2**2 * (7 * q**5 * chi2**2 + (2 * chieff**2 + (4 * q * \
+    chieff**2 + (-2 * q**2 * (chi2**2 + -2 * chieff**2) + (q**4 * (-7 * \
+    chi2**2 + 2 * chieff**2) + 2 * q**3 * (chi2**2 + 2 * chieff**2)))))) \
+    + q**8 * chi2**4 * (5 * q**4 * chi2**2 + (-2 * chieff**2 + (2 * q**2 \
+    * (chi2**2 + 3 * chieff**2) + q**3 * (-7 * chi2**2 + 4 * \
     chieff**2))))))) + (4 * q * ((1 + q))**3 * u**4 * chieff * ((20 + \
-    (-49 * q + (41 * q**2 + -12 * q**3))) * (chi1)**6 + (q**4 * (chi1)**2 \
-    * (chi2)**2 * (-3 * q**6 * (chi2)**2 + (8 * chieff**2 + (4 * q * \
-    chieff**2 + (q**3 * (22 * (chi2)**2 + -28 * chieff**2) + (q**4 * (-14 \
-    * (chi2)**2 + 4 * chieff**2) + (-4 * q**2 * (2 * (chi2)**2 + 7 * \
-    chieff**2) + q**5 * (3 * (chi2)**2 + 8 * chieff**2))))))) + (q**8 * \
-    (chi2)**4 * (20 * q**5 * (chi2)**2 + (12 * chieff**2 + (4 * q * \
-    chieff**2 + (-4 * q**2 * (3 * (chi2)**2 + 4 * chieff**2) + (q**3 * \
-    (41 * (chi2)**2 + 4 * chieff**2) + q**4 * (-49 * (chi2)**2 + 12 * \
-    chieff**2)))))) + q * (chi1)**4 * (22 * q**5 * (chi2)**2 + (-8 * q**6 \
-    * (chi2)**2 + (12 * chieff**2 + (4 * q * chieff**2 + (-2 * q**4 * (7 \
-    * (chi2)**2 + -6 * chieff**2) + (q**3 * (3 * (chi2)**2 + 4 * \
-    chieff**2) + -1 * q**2 * (3 * (chi2)**2 + 16 * chieff**2)))))))))) + \
-    (-1 * ((1 + q))**8 * u * (((-1 + q))**4 * (chi1)**4 + (((-1 + q))**2 \
-    * (chi1)**2 * (-14 * q**5 * (chi2)**2 + (q**6 * (chi2)**2 + (-1 * \
-    chieff**2 + (16 * q * chieff**2 + (q**4 * (26 * (chi2)**2 + 7 * \
-    chieff**2) + (q**3 * (-14 * (chi2)**2 + 32 * chieff**2) + q**2 * \
-    ((chi2)**2 + 42 * chieff**2))))))) + q**2 * (-8 * chieff**4 + (-56 * \
-    q * chieff**4 + (q**8 * ((chi2)**4 + -1 * (chi2)**2 * chieff**2) + \
-    (q**7 * (-4 * (chi2)**4 + 18 * (chi2)**2 * chieff**2) + (q**4 * \
-    ((chi2)**4 + (-15 * (chi2)**2 * chieff**2 + -152 * chieff**4)) + \
-    (q**2 * (7 * (chi2)**2 * chieff**2 + -152 * chieff**4) + (2 * q**3 * \
-    (9 * (chi2)**2 * chieff**2 + -104 * chieff**4) + (q**6 * (6 * \
-    (chi2)**4 + (9 * (chi2)**2 * chieff**2 + -8 * chieff**4)) + -4 * q**5 \
-    * ((chi2)**4 + (9 * (chi2)**2 * chieff**2 + 14 * \
-    chieff**4)))))))))))) + (2 * ((1 + q))**4 * u**3 * (-1 * ((-1 + \
-    q))**2 * (-1 + (15 * q + 4 * q**2)) * (chi1)**6 + (-1 * q * (chi1)**4 \
-    * (10 * q**6 * (chi2)**2 + (4 * q**7 * (chi2)**2 + (-24 * chieff**2 + \
-    (16 * q * chieff**2 + (q**4 * (143 * (chi2)**2 + -32 * chieff**2) + \
-    (-5 * q**3 * (17 * (chi2)**2 + 12 * chieff**2) + (q**5 * (-87 * \
-    (chi2)**2 + 20 * chieff**2) + q**2 * (15 * (chi2)**2 + 32 * \
-    chieff**2)))))))) + (q**2 * (chi1)**2 * (-15 * q**9 * (chi2)**4 + (8 \
-    * chieff**4 + (24 * q * chieff**4 + (q**8 * (85 * (chi2)**4 + -4 * \
-    (chi2)**2 * chieff**2) + (q**7 * (-143 * (chi2)**4 + 24 * (chi2)**2 * \
-    chieff**2) + (-2 * q**5 * (5 * (chi2)**4 + (48 * (chi2)**2 * \
-    chieff**2 + -44 * chieff**4)) + (-4 * q**4 * ((chi2)**4 + (5 * \
-    (chi2)**2 * chieff**2 + -30 * chieff**4)) + (8 * q**3 * (3 * \
-    (chi2)**2 * chieff**2 + 10 * chieff**4) + (q**6 * (87 * (chi2)**4 + \
-    (-20 * (chi2)**2 * chieff**2 + 24 * chieff**4)) + q**2 * (-4 * \
-    (chi2)**2 * chieff**2 + 40 * chieff**4)))))))))) + q**6 * (chi2)**2 * \
-    (q**8 * (chi2)**4 + (24 * chieff**4 + (88 * q * chieff**4 + (-20 * \
-    q**2 * chieff**2 * ((chi2)**2 + -6 * chieff**2) + (q**7 * (-17 * \
-    (chi2)**4 + 24 * (chi2)**2 * chieff**2) + (16 * q**3 * (2 * (chi2)**2 \
-    * chieff**2 + 5 * chieff**4) + (q**6 * (27 * (chi2)**4 + (-16 * \
-    (chi2)**2 * chieff**2 + 8 * chieff**4)) + (q**5 * (-7 * (chi2)**4 + \
-    (-32 * (chi2)**2 * chieff**2 + 24 * chieff**4)) + q**4 * (-4 * \
-    (chi2)**4 + (60 * (chi2)**2 * chieff**2 + 40 * chieff**4))))))))))))) \
-    + ((1 + q))**7 * u**2 * chieff * (-1 * ((-1 + q))**2 * (-3 + (49 * q \
-    + 16 * q**2)) * (chi1)**4 + (-2 * q * (1 + q) * (chi1)**2 * (22 * \
-    q**4 * (chi2)**2 + (-15 * q**5 * (chi2)**2 + (4 * q**6 * (chi2)**2 + \
-    (-4 * chieff**2 + (6 * q * chieff**2 + (4 * q**2 * ((chi2)**2 + -7 * \
-    chieff**2) + -1 * q**3 * (15 * (chi2)**2 + 38 * chieff**2))))))) + \
-    q**3 * (3 * q**8 * (chi2)**4 + (16 * chieff**4 + (80 * q * chieff**4 \
-    + (160 * q**2 * chieff**4 + (q**6 * (85 * (chi2)**4 + -4 * (chi2)**2 \
-    * chieff**2) + (q**7 * (-55 * (chi2)**4 + 8 * (chi2)**2 * chieff**2) \
-    + (q**5 * (-17 * (chi2)**4 + (44 * (chi2)**2 * chieff**2 + 16 * \
-    chieff**4)) + (4 * q**3 * (19 * (chi2)**2 * chieff**2 + 40 * \
-    chieff**4) + q**4 * (-16 * (chi2)**4 + (132 * (chi2)**2 * chieff**2 + \
-    80 * chieff**4)))))))))))))))))
+    (-49 * q + (41 * q**2 + -12 * q**3))) * chi1**6 + (q**4 * chi1**2 * \
+    chi2**2 * (-3 * q**6 * chi2**2 + (8 * chieff**2 + (4 * q * chieff**2 \
+    + (q**3 * (22 * chi2**2 + -28 * chieff**2) + (q**4 * (-14 * chi2**2 + \
+    4 * chieff**2) + (-4 * q**2 * (2 * chi2**2 + 7 * chieff**2) + q**5 * \
+    (3 * chi2**2 + 8 * chieff**2))))))) + (q**8 * chi2**4 * (20 * q**5 * \
+    chi2**2 + (12 * chieff**2 + (4 * q * chieff**2 + (-4 * q**2 * (3 * \
+    chi2**2 + 4 * chieff**2) + (q**3 * (41 * chi2**2 + 4 * chieff**2) + \
+    q**4 * (-49 * chi2**2 + 12 * chieff**2)))))) + q * chi1**4 * (22 * \
+    q**5 * chi2**2 + (-8 * q**6 * chi2**2 + (12 * chieff**2 + (4 * q * \
+    chieff**2 + (-2 * q**4 * (7 * chi2**2 + -6 * chieff**2) + (q**3 * (3 \
+    * chi2**2 + 4 * chieff**2) + -1 * q**2 * (3 * chi2**2 + 16 * \
+    chieff**2)))))))))) + (-1 * ((1 + q))**8 * u * (((-1 + q))**4 * \
+    chi1**4 + (((-1 + q))**2 * chi1**2 * (-14 * q**5 * chi2**2 + (q**6 * \
+    chi2**2 + (-1 * chieff**2 + (16 * q * chieff**2 + (q**4 * (26 * \
+    chi2**2 + 7 * chieff**2) + (q**3 * (-14 * chi2**2 + 32 * chieff**2) + \
+    q**2 * (chi2**2 + 42 * chieff**2))))))) + q**2 * (-8 * chieff**4 + \
+    (-56 * q * chieff**4 + (q**8 * (chi2**4 + -1 * chi2**2 * chieff**2) + \
+    (q**7 * (-4 * chi2**4 + 18 * chi2**2 * chieff**2) + (q**4 * (chi2**4 \
+    + (-15 * chi2**2 * chieff**2 + -152 * chieff**4)) + (q**2 * (7 * \
+    chi2**2 * chieff**2 + -152 * chieff**4) + (2 * q**3 * (9 * chi2**2 * \
+    chieff**2 + -104 * chieff**4) + (q**6 * (6 * chi2**4 + (9 * chi2**2 * \
+    chieff**2 + -8 * chieff**4)) + -4 * q**5 * (chi2**4 + (9 * chi2**2 * \
+    chieff**2 + 14 * chieff**4)))))))))))) + (2 * ((1 + q))**4 * u**3 * \
+    (-1 * ((-1 + q))**2 * (-1 + (15 * q + 4 * q**2)) * chi1**6 + (-1 * q \
+    * chi1**4 * (10 * q**6 * chi2**2 + (4 * q**7 * chi2**2 + (-24 * \
+    chieff**2 + (16 * q * chieff**2 + (q**4 * (143 * chi2**2 + -32 * \
+    chieff**2) + (-5 * q**3 * (17 * chi2**2 + 12 * chieff**2) + (q**5 * \
+    (-87 * chi2**2 + 20 * chieff**2) + q**2 * (15 * chi2**2 + 32 * \
+    chieff**2)))))))) + (q**2 * chi1**2 * (-15 * q**9 * chi2**4 + (8 * \
+    chieff**4 + (24 * q * chieff**4 + (q**8 * (85 * chi2**4 + -4 * \
+    chi2**2 * chieff**2) + (q**7 * (-143 * chi2**4 + 24 * chi2**2 * \
+    chieff**2) + (-2 * q**5 * (5 * chi2**4 + (48 * chi2**2 * chieff**2 + \
+    -44 * chieff**4)) + (-4 * q**4 * (chi2**4 + (5 * chi2**2 * chieff**2 \
+    + -30 * chieff**4)) + (8 * q**3 * (3 * chi2**2 * chieff**2 + 10 * \
+    chieff**4) + (q**6 * (87 * chi2**4 + (-20 * chi2**2 * chieff**2 + 24 \
+    * chieff**4)) + q**2 * (-4 * chi2**2 * chieff**2 + 40 * \
+    chieff**4)))))))))) + q**6 * chi2**2 * (q**8 * chi2**4 + (24 * \
+    chieff**4 + (88 * q * chieff**4 + (-20 * q**2 * chieff**2 * (chi2**2 \
+    + -6 * chieff**2) + (q**7 * (-17 * chi2**4 + 24 * chi2**2 * \
+    chieff**2) + (16 * q**3 * (2 * chi2**2 * chieff**2 + 5 * chieff**4) + \
+    (q**6 * (27 * chi2**4 + (-16 * chi2**2 * chieff**2 + 8 * chieff**4)) \
+    + (q**5 * (-7 * chi2**4 + (-32 * chi2**2 * chieff**2 + 24 * \
+    chieff**4)) + q**4 * (-4 * chi2**4 + (60 * chi2**2 * chieff**2 + 40 * \
+    chieff**4))))))))))))) + ((1 + q))**7 * u**2 * chieff * (-1 * ((-1 + \
+    q))**2 * (-3 + (49 * q + 16 * q**2)) * chi1**4 + (-2 * q * (1 + q) * \
+    chi1**2 * (22 * q**4 * chi2**2 + (-15 * q**5 * chi2**2 + (4 * q**6 * \
+    chi2**2 + (-4 * chieff**2 + (6 * q * chieff**2 + (4 * q**2 * (chi2**2 \
+    + -7 * chieff**2) + -1 * q**3 * (15 * chi2**2 + 38 * chieff**2))))))) \
+    + q**3 * (3 * q**8 * chi2**4 + (16 * chieff**4 + (80 * q * chieff**4 \
+    + (160 * q**2 * chieff**4 + (q**6 * (85 * chi2**4 + -4 * chi2**2 * \
+    chieff**2) + (q**7 * (-55 * chi2**4 + 8 * chi2**2 * chieff**2) + \
+    (q**5 * (-17 * chi2**4 + (44 * chi2**2 * chieff**2 + 16 * chieff**4)) \
+    + (4 * q**3 * (19 * chi2**2 * chieff**2 + 40 * chieff**4) + q**4 * \
+    (-16 * chi2**4 + (132 * chi2**2 * chieff**2 + 80 * \
+    chieff**4)))))))))))))))))
+
 
     # Machine generated with eq_generator.nb
     coeff0 = -1/16 * q**(-1) * ((1 + q))**(-20) * (((-1 + q))**2 * ((1 + \
-    q))**(12) * (-1 * ((-1 + q))**2 * (chi1)**2 + q**2 * ((1 + q))**2 * \
-    chieff**2) * (-2 * q**3 * (chi2)**2 + (q**4 * (chi2)**2 + (-1 * \
-    chieff**2 + (-2 * q * chieff**2 + q**2 * ((chi2)**2 + -1 * \
-    chieff**2))))) + (-16 * ((-1 + q))**2 * q * u**6 * (((chi1)**4 + (-1 \
-    * q**3 * (1 + q) * (chi1)**2 * (chi2)**2 + q**7 * (chi2)**4)))**2 * \
-    (-1 * (-1 + q) * (chi1)**2 + q * (q**3 * (chi2)**2 + (chieff**2 + (2 \
-    * q * chieff**2 + q**2 * (-1 * (chi2)**2 + chieff**2))))) + (-8 * (-1 \
-    + q) * q * ((1 + q))**3 * u**5 * (-1 * (chi1)**2 + q**4 * (chi2)**2) \
-    * chieff * ((5 + (-13 * q + 8 * q**2)) * (chi1)**6 + (q**8 * \
-    (chi2)**4 * (8 * q**2 * (chi2)**2 + (5 * q**4 * (chi2)**2 + (-8 * \
-    chieff**2 + (-12 * q * chieff**2 + q**3 * (-13 * (chi2)**2 + 4 * \
-    chieff**2))))) + (q**4 * (chi1)**2 * (chi2)**2 * (-1 * q**5 * \
-    (chi2)**2 + (4 * chieff**2 + (8 * q * chieff**2 + (-2 * q**3 * \
-    ((chi2)**2 + -4 * chieff**2) + (-4 * q**2 * ((chi2)**2 + -2 * \
-    chieff**2) + q**4 * (7 * (chi2)**2 + 4 * chieff**2)))))) + -1 * \
-    (chi1)**4 * (2 * q**5 * (chi2)**2 + (4 * q**6 * (chi2)**2 + (-4 * q * \
-    chieff**2 + (q**4 * (-7 * (chi2)**2 + 8 * chieff**2) + q**3 * \
-    ((chi2)**2 + 12 * chieff**2)))))))) + (2 * ((1 + q))**(11) * u * \
-    chieff * (((-1 + q))**4 * (chi1)**4 + (-1 * ((-1 + q))**2 * q * (1 + \
-    q) * (chi1)**2 * (-10 * q**3 * (chi2)**2 + (5 * q**4 * (chi2)**2 + \
-    (-5 * chieff**2 + (-8 * q * chieff**2 + q**2 * (5 * (chi2)**2 + -3 * \
-    chieff**2))))) + q**3 * (q**8 * (chi2)**4 + (-4 * chieff**4 + (-20 * \
-    q * chieff**4 + (5 * q**3 * chieff**2 * ((chi2)**2 + -8 * chieff**2) \
-    + (3 * q**6 * (chi2)**2 * (2 * (chi2)**2 + chieff**2) + (q**7 * (-4 * \
-    (chi2)**4 + 5 * (chi2)**2 * chieff**2) + (q**2 * (3 * (chi2)**2 * \
-    chieff**2 + -40 * chieff**4) + (q**4 * ((chi2)**4 + (-6 * (chi2)**2 * \
-    chieff**2 + -20 * chieff**4)) + -2 * q**5 * (2 * (chi2)**4 + (5 * \
-    (chi2)**2 * chieff**2 + 2 * chieff**4)))))))))))) + (2 * ((1 + q))**7 \
-    * u**3 * chieff * (((-1 + q))**2 * (-1 + (25 * q + 12 * q**2)) * \
-    (chi1)**6 + (q * (chi1)**4 * (85 * q**6 * (chi2)**2 + (-32 * q**7 * \
-    (chi2)**2 + (-4 * chieff**2 + (48 * q * chieff**2 + (q**4 * (83 * \
-    (chi2)**2 + -40 * chieff**2) + (4 * q**2 * ((chi2)**2 + 7 * \
-    chieff**2) + (q**5 * (-103 * (chi2)**2 + 20 * chieff**2) + -1 * q**3 \
-    * (37 * (chi2)**2 + 84 * chieff**2)))))))) + (q**3 * (chi1)**2 * (-37 \
-    * q**8 * (chi2)**4 + (4 * q**9 * (chi2)**4 + (16 * chieff**4 + (32 * \
-    q * chieff**4 + (16 * q**2 * chieff**2 * ((chi2)**2 + -2 * chieff**2) \
-    + (q**7 * (83 * (chi2)**4 + 16 * (chi2)**2 * chieff**2) + (q**6 * \
-    (-103 * (chi2)**4 + 24 * (chi2)**2 * chieff**2) + (q**5 * (85 * \
-    (chi2)**4 + (-8 * (chi2)**2 * chieff**2 + -32 * chieff**4)) + (8 * \
-    q**3 * (3 * (chi2)**2 * chieff**2 + -16 * chieff**4) + -8 * q**4 * (4 \
-    * (chi2)**4 + ((chi2)**2 * chieff**2 + 14 * chieff**4))))))))))) + \
-    q**7 * (chi2)**2 * (-1 * q**8 * (chi2)**4 + (-32 * chieff**4 + (-112 \
-    * q * chieff**4 + (q**7 * (27 * (chi2)**4 + -4 * (chi2)**2 * \
-    chieff**2) + (q**6 * (-39 * (chi2)**4 + 48 * (chi2)**2 * chieff**2) + \
-    (4 * q**2 * (5 * (chi2)**2 * chieff**2 + -32 * chieff**4) + (-8 * \
-    q**3 * (5 * (chi2)**2 * chieff**2 + 4 * chieff**4) + (4 * q**4 * (3 * \
-    (chi2)**4 + (-21 * (chi2)**2 * chieff**2 + 8 * chieff**4)) + q**5 * \
-    ((chi2)**4 + (28 * (chi2)**2 * chieff**2 + 16 * \
-    chieff**4))))))))))))) + (((1 + q))**4 * u**4 * (((-1 + q))**2 * (-1 \
-    + (20 * q + 8 * q**2)) * (chi1)**8 + (-4 * (-1 + q) * q * (chi1)**6 * \
-    (-11 * q**5 * (chi2)**2 + (8 * q**6 * (chi2)**2 + (-8 * chieff**2 + \
-    (20 * q * chieff**2 + (q**4 * (30 * (chi2)**2 + -22 * chieff**2) + \
-    (-8 * q**3 * (4 * (chi2)**2 + chieff**2) + q**2 * (5 * (chi2)**2 + 42 \
-    * chieff**2))))))) + (q**10 * (chi2)**4 * (-1 * q**8 * (chi2)**4 + \
-    (-96 * chieff**4 + (-288 * q * chieff**4 + (q**7 * (22 * (chi2)**4 + \
-    -32 * (chi2)**2 * chieff**2) + (8 * q**2 * (11 * (chi2)**2 * \
-    chieff**2 + -26 * chieff**4) + (-8 * q**3 * (7 * (chi2)**2 * \
-    chieff**2 + -16 * chieff**4) + (q**6 * (-33 * (chi2)**4 + (112 * \
-    (chi2)**2 * chieff**2 + -16 * chieff**4)) + (4 * q**5 * ((chi2)**4 + \
-    (22 * (chi2)**2 * chieff**2 + 8 * chieff**4)) + 8 * q**4 * ((chi2)**4 \
-    + (-25 * (chi2)**2 * chieff**2 + 24 * chieff**4)))))))))) + (4 * q**6 \
-    * (chi1)**2 * (chi2)**2 * (5 * q**9 * (chi2)**4 + (24 * chieff**4 + \
-    (56 * q * chieff**4 + (12 * q**3 * chieff**2 * ((chi2)**2 + -4 * \
-    chieff**2) + (8 * q**2 * chieff**2 * (-2 * (chi2)**2 + chieff**2) + \
-    (q**7 * (62 * (chi2)**4 + -6 * (chi2)**2 * chieff**2) + (q**8 * (-37 \
-    * (chi2)**4 + 2 * (chi2)**2 * chieff**2) + (q**4 * (-8 * (chi2)**4 + \
-    (52 * (chi2)**2 * chieff**2 + 8 * chieff**4)) + (q**6 * (-41 * \
-    (chi2)**4 + (-38 * (chi2)**2 * chieff**2 + 24 * chieff**4)) + q**5 * \
-    (19 * (chi2)**4 + (-6 * (chi2)**2 * chieff**2 + 56 * \
-    chieff**4))))))))))) + 2 * q**2 * (chi1)**4 * (-2 * q**9 * (chi2)**4 \
-    + (4 * q**10 * (chi2)**4 + (-8 * chieff**4 + (16 * q * chieff**4 + (4 \
-    * q**2 * chieff**2 * ((chi2)**2 + 24 * chieff**2) + (q**8 * (53 * \
-    (chi2)**4 + -32 * (chi2)**2 * chieff**2) + (q**7 * (-110 * (chi2)**4 \
-    + 24 * (chi2)**2 * chieff**2) + (q**6 * (53 * (chi2)**4 + (104 * \
-    (chi2)**2 * chieff**2 + -48 * chieff**4)) + (4 * q**4 * ((chi2)**4 + \
-    (-19 * (chi2)**2 * chieff**2 + -26 * chieff**4)) + (q**3 * (-12 * \
-    (chi2)**2 * chieff**2 + 64 * chieff**4) + -2 * q**5 * ((chi2)**4 + (6 \
-    * (chi2)**2 * chieff**2 + 72 * chieff**4)))))))))))))))) + ((1 + \
-    q))**8 * u**2 * (((-1 + q))**4 * (chi1)**6 + (-1 * ((-1 + q))**2 * \
-    (chi1)**4 * (4 * q**5 * (chi2)**2 + (10 * q**6 * (chi2)**2 + \
-    (chieff**2 + (-38 * q * chieff**2 + (q**3 * (26 * (chi2)**2 + -86 * \
-    chieff**2) + (-1 * q**4 * (39 * (chi2)**2 + 23 * chieff**2) + -1 * \
-    q**2 * ((chi2)**2 + 102 * chieff**2))))))) + (q**2 * (chi1)**2 * (-28 \
-    * q**9 * (chi2)**4 + (q**10 * (chi2)**4 + (32 * chieff**4 + (72 * q * \
-    chieff**4 + (48 * q**3 * chieff**2 * ((chi2)**2 + -5 * chieff**2) + \
-    (q**8 * (92 * (chi2)**4 + -22 * (chi2)**2 * chieff**2) + (-12 * q**7 \
-    * (9 * (chi2)**4 + -4 * (chi2)**2 * chieff**2) + (8 * q**5 * (2 * \
-    (chi2)**4 + (-12 * (chi2)**2 * chieff**2 + -11 * chieff**4)) + (q**6 \
-    * (37 * (chi2)**4 + (22 * (chi2)**2 * chieff**2 + -8 * chieff**4)) + \
-    (-2 * q**2 * (11 * (chi2)**2 * chieff**2 + 20 * chieff**4) + -2 * \
-    q**4 * (5 * (chi2)**4 + (-11 * (chi2)**2 * chieff**2 + 120 * \
-    chieff**4)))))))))))) + q**4 * (-16 * chieff**6 + (-96 * q * \
-    chieff**6 + (-8 * q**2 * chieff**4 * ((chi2)**2 + 30 * chieff**2) + \
-    (-4 * q**9 * ((chi2)**6 + -10 * (chi2)**4 * chieff**2) + (q**10 * \
-    ((chi2)**6 + -1 * (chi2)**4 * chieff**2) + (-4 * q**7 * ((chi2)**6 + \
-    (20 * (chi2)**4 * chieff**2 + -18 * (chi2)**2 * chieff**4)) + (q**8 * \
-    (6 * (chi2)**6 + (25 * (chi2)**4 * chieff**2 + 32 * (chi2)**2 * \
-    chieff**4)) + (q**4 * (23 * (chi2)**4 * chieff**2 + (-240 * (chi2)**2 \
-    * chieff**4 + -240 * chieff**6)) + (q**6 * ((chi2)**6 + (-47 * \
-    (chi2)**4 * chieff**2 + (-40 * (chi2)**2 * chieff**4 + -16 * \
-    chieff**6))) + (8 * q**5 * (5 * (chi2)**4 * chieff**2 + (-30 * \
-    (chi2)**2 * chieff**4 + -12 * chieff**6)) + -8 * q**3 * (11 * \
-    (chi2)**2 * chieff**4 + 40 * chieff**6))))))))))))))))))))
+    q))**(12) * (-1 * ((-1 + q))**2 * chi1**2 + q**2 * ((1 + q))**2 * \
+    chieff**2) * (-2 * q**3 * chi2**2 + (q**4 * chi2**2 + (-1 * chieff**2 \
+    + (-2 * q * chieff**2 + q**2 * (chi2**2 + -1 * chieff**2))))) + (-16 \
+    * ((-1 + q))**2 * q * u**6 * ((chi1**4 + (-1 * q**3 * (1 + q) * \
+    chi1**2 * chi2**2 + q**7 * chi2**4)))**2 * (-1 * (-1 + q) * chi1**2 + \
+    q * (q**3 * chi2**2 + (chieff**2 + (2 * q * chieff**2 + q**2 * (-1 * \
+    chi2**2 + chieff**2))))) + (-8 * (-1 + q) * q * ((1 + q))**3 * u**5 * \
+    (-1 * chi1**2 + q**4 * chi2**2) * chieff * ((5 + (-13 * q + 8 * \
+    q**2)) * chi1**6 + (q**8 * chi2**4 * (8 * q**2 * chi2**2 + (5 * q**4 \
+    * chi2**2 + (-8 * chieff**2 + (-12 * q * chieff**2 + q**3 * (-13 * \
+    chi2**2 + 4 * chieff**2))))) + (q**4 * chi1**2 * chi2**2 * (-1 * q**5 \
+    * chi2**2 + (4 * chieff**2 + (8 * q * chieff**2 + (-2 * q**3 * \
+    (chi2**2 + -4 * chieff**2) + (-4 * q**2 * (chi2**2 + -2 * chieff**2) \
+    + q**4 * (7 * chi2**2 + 4 * chieff**2)))))) + -1 * chi1**4 * (2 * \
+    q**5 * chi2**2 + (4 * q**6 * chi2**2 + (-4 * q * chieff**2 + (q**4 * \
+    (-7 * chi2**2 + 8 * chieff**2) + q**3 * (chi2**2 + 12 * \
+    chieff**2)))))))) + (2 * ((1 + q))**(11) * u * chieff * (((-1 + \
+    q))**4 * chi1**4 + (-1 * ((-1 + q))**2 * q * (1 + q) * chi1**2 * (-10 \
+    * q**3 * chi2**2 + (5 * q**4 * chi2**2 + (-5 * chieff**2 + (-8 * q * \
+    chieff**2 + q**2 * (5 * chi2**2 + -3 * chieff**2))))) + q**3 * (q**8 \
+    * chi2**4 + (-4 * chieff**4 + (-20 * q * chieff**4 + (5 * q**3 * \
+    chieff**2 * (chi2**2 + -8 * chieff**2) + (3 * q**6 * chi2**2 * (2 * \
+    chi2**2 + chieff**2) + (q**7 * (-4 * chi2**4 + 5 * chi2**2 * \
+    chieff**2) + (q**2 * (3 * chi2**2 * chieff**2 + -40 * chieff**4) + \
+    (q**4 * (chi2**4 + (-6 * chi2**2 * chieff**2 + -20 * chieff**4)) + -2 \
+    * q**5 * (2 * chi2**4 + (5 * chi2**2 * chieff**2 + 2 * \
+    chieff**4)))))))))))) + (2 * ((1 + q))**7 * u**3 * chieff * (((-1 + \
+    q))**2 * (-1 + (25 * q + 12 * q**2)) * chi1**6 + (q * chi1**4 * (85 * \
+    q**6 * chi2**2 + (-32 * q**7 * chi2**2 + (-4 * chieff**2 + (48 * q * \
+    chieff**2 + (q**4 * (83 * chi2**2 + -40 * chieff**2) + (4 * q**2 * \
+    (chi2**2 + 7 * chieff**2) + (q**5 * (-103 * chi2**2 + 20 * chieff**2) \
+    + -1 * q**3 * (37 * chi2**2 + 84 * chieff**2)))))))) + (q**3 * \
+    chi1**2 * (-37 * q**8 * chi2**4 + (4 * q**9 * chi2**4 + (16 * \
+    chieff**4 + (32 * q * chieff**4 + (16 * q**2 * chieff**2 * (chi2**2 + \
+    -2 * chieff**2) + (q**7 * (83 * chi2**4 + 16 * chi2**2 * chieff**2) + \
+    (q**6 * (-103 * chi2**4 + 24 * chi2**2 * chieff**2) + (q**5 * (85 * \
+    chi2**4 + (-8 * chi2**2 * chieff**2 + -32 * chieff**4)) + (8 * q**3 * \
+    (3 * chi2**2 * chieff**2 + -16 * chieff**4) + -8 * q**4 * (4 * \
+    chi2**4 + (chi2**2 * chieff**2 + 14 * chieff**4))))))))))) + q**7 * \
+    chi2**2 * (-1 * q**8 * chi2**4 + (-32 * chieff**4 + (-112 * q * \
+    chieff**4 + (q**7 * (27 * chi2**4 + -4 * chi2**2 * chieff**2) + (q**6 \
+    * (-39 * chi2**4 + 48 * chi2**2 * chieff**2) + (4 * q**2 * (5 * \
+    chi2**2 * chieff**2 + -32 * chieff**4) + (-8 * q**3 * (5 * chi2**2 * \
+    chieff**2 + 4 * chieff**4) + (4 * q**4 * (3 * chi2**4 + (-21 * \
+    chi2**2 * chieff**2 + 8 * chieff**4)) + q**5 * (chi2**4 + (28 * \
+    chi2**2 * chieff**2 + 16 * chieff**4))))))))))))) + (((1 + q))**4 * \
+    u**4 * (((-1 + q))**2 * (-1 + (20 * q + 8 * q**2)) * chi1**8 + (-4 * \
+    (-1 + q) * q * chi1**6 * (-11 * q**5 * chi2**2 + (8 * q**6 * chi2**2 \
+    + (-8 * chieff**2 + (20 * q * chieff**2 + (q**4 * (30 * chi2**2 + -22 \
+    * chieff**2) + (-8 * q**3 * (4 * chi2**2 + chieff**2) + q**2 * (5 * \
+    chi2**2 + 42 * chieff**2))))))) + (q**10 * chi2**4 * (-1 * q**8 * \
+    chi2**4 + (-96 * chieff**4 + (-288 * q * chieff**4 + (q**7 * (22 * \
+    chi2**4 + -32 * chi2**2 * chieff**2) + (8 * q**2 * (11 * chi2**2 * \
+    chieff**2 + -26 * chieff**4) + (-8 * q**3 * (7 * chi2**2 * chieff**2 \
+    + -16 * chieff**4) + (q**6 * (-33 * chi2**4 + (112 * chi2**2 * \
+    chieff**2 + -16 * chieff**4)) + (4 * q**5 * (chi2**4 + (22 * chi2**2 \
+    * chieff**2 + 8 * chieff**4)) + 8 * q**4 * (chi2**4 + (-25 * chi2**2 \
+    * chieff**2 + 24 * chieff**4)))))))))) + (4 * q**6 * chi1**2 * \
+    chi2**2 * (5 * q**9 * chi2**4 + (24 * chieff**4 + (56 * q * chieff**4 \
+    + (12 * q**3 * chieff**2 * (chi2**2 + -4 * chieff**2) + (8 * q**2 * \
+    chieff**2 * (-2 * chi2**2 + chieff**2) + (q**7 * (62 * chi2**4 + -6 * \
+    chi2**2 * chieff**2) + (q**8 * (-37 * chi2**4 + 2 * chi2**2 * \
+    chieff**2) + (q**4 * (-8 * chi2**4 + (52 * chi2**2 * chieff**2 + 8 * \
+    chieff**4)) + (q**6 * (-41 * chi2**4 + (-38 * chi2**2 * chieff**2 + \
+    24 * chieff**4)) + q**5 * (19 * chi2**4 + (-6 * chi2**2 * chieff**2 + \
+    56 * chieff**4))))))))))) + 2 * q**2 * chi1**4 * (-2 * q**9 * chi2**4 \
+    + (4 * q**10 * chi2**4 + (-8 * chieff**4 + (16 * q * chieff**4 + (4 * \
+    q**2 * chieff**2 * (chi2**2 + 24 * chieff**2) + (q**8 * (53 * chi2**4 \
+    + -32 * chi2**2 * chieff**2) + (q**7 * (-110 * chi2**4 + 24 * chi2**2 \
+    * chieff**2) + (q**6 * (53 * chi2**4 + (104 * chi2**2 * chieff**2 + \
+    -48 * chieff**4)) + (4 * q**4 * (chi2**4 + (-19 * chi2**2 * chieff**2 \
+    + -26 * chieff**4)) + (q**3 * (-12 * chi2**2 * chieff**2 + 64 * \
+    chieff**4) + -2 * q**5 * (chi2**4 + (6 * chi2**2 * chieff**2 + 72 * \
+    chieff**4)))))))))))))))) + ((1 + q))**8 * u**2 * (((-1 + q))**4 * \
+    chi1**6 + (-1 * ((-1 + q))**2 * chi1**4 * (4 * q**5 * chi2**2 + (10 * \
+    q**6 * chi2**2 + (chieff**2 + (-38 * q * chieff**2 + (q**3 * (26 * \
+    chi2**2 + -86 * chieff**2) + (-1 * q**4 * (39 * chi2**2 + 23 * \
+    chieff**2) + -1 * q**2 * (chi2**2 + 102 * chieff**2))))))) + (q**2 * \
+    chi1**2 * (-28 * q**9 * chi2**4 + (q**10 * chi2**4 + (32 * chieff**4 \
+    + (72 * q * chieff**4 + (48 * q**3 * chieff**2 * (chi2**2 + -5 * \
+    chieff**2) + (q**8 * (92 * chi2**4 + -22 * chi2**2 * chieff**2) + \
+    (-12 * q**7 * (9 * chi2**4 + -4 * chi2**2 * chieff**2) + (8 * q**5 * \
+    (2 * chi2**4 + (-12 * chi2**2 * chieff**2 + -11 * chieff**4)) + (q**6 \
+    * (37 * chi2**4 + (22 * chi2**2 * chieff**2 + -8 * chieff**4)) + (-2 \
+    * q**2 * (11 * chi2**2 * chieff**2 + 20 * chieff**4) + -2 * q**4 * (5 \
+    * chi2**4 + (-11 * chi2**2 * chieff**2 + 120 * chieff**4)))))))))))) \
+    + q**4 * (-16 * chieff**6 + (-96 * q * chieff**6 + (-8 * q**2 * \
+    chieff**4 * (chi2**2 + 30 * chieff**2) + (-4 * q**9 * (chi2**6 + -10 \
+    * chi2**4 * chieff**2) + (q**10 * (chi2**6 + -1 * chi2**4 * \
+    chieff**2) + (-4 * q**7 * (chi2**6 + (20 * chi2**4 * chieff**2 + -18 \
+    * chi2**2 * chieff**4)) + (q**8 * (6 * chi2**6 + (25 * chi2**4 * \
+    chieff**2 + 32 * chi2**2 * chieff**4)) + (q**4 * (23 * chi2**4 * \
+    chieff**2 + (-240 * chi2**2 * chieff**4 + -240 * chieff**6)) + (q**6 \
+    * (chi2**6 + (-47 * chi2**4 * chieff**2 + (-40 * chi2**2 * chieff**4 \
+    + -16 * chieff**6))) + (8 * q**5 * (5 * chi2**4 * chieff**2 + (-30 * \
+    chi2**2 * chieff**4 + -12 * chieff**6)) + -8 * q**3 * (11 * chi2**2 * \
+    chieff**4 + 40 * chieff**6))))))))))))))))))))
 
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
@@ -1512,9 +1521,8 @@ def kappainfresonances(chieff, q, chi1, chi2):
 def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
 
     kappatilde = np.atleast_1d(kappatilde)
-    kappamin, kappamax = kapparesonances(r, chieff, q, chi1, chi2)
-    kappa = kappamin + kappatilde * (kappamax- kappamin)
-
+    kappaminus, kappaplus = kapparesonances(r, chieff, q, chi1, chi2)
+    kappa = inverseaffine(kappatilde,kappaminus,kappaplus)
     return kappa
 
 
@@ -2273,33 +2281,31 @@ def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
 
     # Machine generated with eq_generator.nb
     coeff2 = -1/2 * q**(-1) * ((1 + q))**(-3) * (1 + (q**6 + (q**2 * (-1 \
-    + (16 * u * kappa + (4 * u**2 * (chi1)**2 + -8 * u * chieff))) + \
-    (q**4 * (-1 + (16 * u * kappa + (4 * u**2 * (chi2)**2 + -8 * u * \
-    chieff))) + (4 * q**3 * (-1 + (6 * u * kappa + -3 * u * chieff)) + (q \
-    * (2 + (4 * u * kappa + (-4 * u**2 * (chi1)**2 + -2 * u * chieff))) + \
-    q**5 * (2 + (4 * u * kappa + (-4 * u**2 * (chi2)**2 + -2 * u * \
-    chieff)))))))))
+    + (16 * u * kappa + (4 * u**2 * chi1**2 + -8 * u * chieff))) + (q**4 \
+    * (-1 + (16 * u * kappa + (4 * u**2 * chi2**2 + -8 * u * chieff))) + \
+    (4 * q**3 * (-1 + (6 * u * kappa + -3 * u * chieff)) + (q * (2 + (4 * \
+    u * kappa + (-4 * u**2 * chi1**2 + -2 * u * chieff))) + q**5 * (2 + \
+    (4 * u * kappa + (-4 * u**2 * chi2**2 + -2 * u * chieff)))))))))
 
     # Machine generated with eq_generator.nb
     coeff1 = q**(-1) * ((1 + q))**(-3) * (-2 * (-1 + q) * ((1 + q))**5 * \
     kappa + ((-1 + q) * ((1 + q))**5 * chieff + (4 * q**2 * u**2 * \
-    ((chi1)**2 + -1 * q**2 * (chi2)**2) * chieff + (-1 + q**2) * u * (2 * \
-    (chi1)**2 + q * (2 * q**3 * (chi2)**2 + (chieff**2 + (2 * q * \
-    chieff**2 + q**2 * chieff**2)))))))
+    (chi1**2 + -1 * q**2 * chi2**2) * chieff + (-1 + q**2) * u * (2 * \
+    chi1**2 + q * (2 * q**3 * chi2**2 + (chieff**2 + (2 * q * chieff**2 + \
+    q**2 * chieff**2)))))))
 
     # Machine generated with eq_generator.nb
     coeff0 = 1/2 * q**(-1) * ((1 + q))**(-1) * ((1 + -2 * q * ((1 + \
-    q))**(-2) * u * chieff))**2 * (-4 * u**2 * (chi1)**4 + (8 * q**4 * \
-    u**2 * (chi1)**2 * (chi2)**2 + (-4 * q**8 * u**2 * (chi2)**4 + (4 * \
-    ((1 + q))**4 * u * (chi1)**2 * (2 * kappa + -1 * chieff) + (4 * q**4 \
-    * ((1 + q))**4 * u * (chi2)**2 * (2 * kappa + -1 * chieff) + (-4 * q \
-    * ((1 + q))**2 * u**2 * (chi1)**2 * chieff**2 + (-4 * q**2 * ((1 + \
-    q))**2 * u**2 * (chi1)**2 * chieff**2 + (-4 * q**4 * ((1 + q))**2 * \
-    u**2 * (chi2)**2 * chieff**2 + (-4 * q**5 * ((1 + q))**2 * u**2 * \
-    (chi2)**2 * chieff**2 + (2 * q * ((1 + q))**6 * u * (2 * kappa + -1 * \
-    chieff) * chieff**2 + -1 * ((1 + q))**8 * ((-2 * kappa + \
-    chieff))**2)))))))))) * ((1 + (q**2 + q * (2 + -2 * u * \
-    chieff))))**(-2)
+    q))**(-2) * u * chieff))**2 * (-4 * u**2 * chi1**4 + (8 * q**4 * u**2 \
+    * chi1**2 * chi2**2 + (-4 * q**8 * u**2 * chi2**4 + (4 * ((1 + q))**4 \
+    * u * chi1**2 * (2 * kappa + -1 * chieff) + (4 * q**4 * ((1 + q))**4 \
+    * u * chi2**2 * (2 * kappa + -1 * chieff) + (-4 * q * ((1 + q))**2 * \
+    u**2 * chi1**2 * chieff**2 + (-4 * q**2 * ((1 + q))**2 * u**2 * \
+    chi1**2 * chieff**2 + (-4 * q**4 * ((1 + q))**2 * u**2 * chi2**2 * \
+    chieff**2 + (-4 * q**5 * ((1 + q))**2 * u**2 * chi2**2 * chieff**2 + \
+    (2 * q * ((1 + q))**6 * u * (2 * kappa + -1 * chieff) * chieff**2 + \
+    -1 * ((1 + q))**8 * ((-2 * kappa + chieff))**2)))))))))) * ((1 + \
+    (q**2 + q * (2 + -2 * u * chieff))))**(-2)
 
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
@@ -2316,33 +2322,31 @@ def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2):
 
     # Machine generated with eq_generator.nb
     coeff2 = -1/2 * q**(-1) * ((1 + q))**(-3) * (1 + (q**6 + (q**2 * (-1 \
-    + (16 * u * kappa + (4 * u**2 * (chi1)**2 + -8 * u * chieff))) + \
-    (q**4 * (-1 + (16 * u * kappa + (4 * u**2 * (chi2)**2 + -8 * u * \
-    chieff))) + (4 * q**3 * (-1 + (6 * u * kappa + -3 * u * chieff)) + (q \
-    * (2 + (4 * u * kappa + (-4 * u**2 * (chi1)**2 + -2 * u * chieff))) + \
-    q**5 * (2 + (4 * u * kappa + (-4 * u**2 * (chi2)**2 + -2 * u * \
-    chieff)))))))))
+    + (16 * u * kappa + (4 * u**2 * chi1**2 + -8 * u * chieff))) + (q**4 \
+    * (-1 + (16 * u * kappa + (4 * u**2 * chi2**2 + -8 * u * chieff))) + \
+    (4 * q**3 * (-1 + (6 * u * kappa + -3 * u * chieff)) + (q * (2 + (4 * \
+    u * kappa + (-4 * u**2 * chi1**2 + -2 * u * chieff))) + q**5 * (2 + \
+    (4 * u * kappa + (-4 * u**2 * chi2**2 + -2 * u * chieff)))))))))
 
     # Machine generated with eq_generator.nb
     coeff1 = (1 + -1 * q) * q**(-1) * ((1 + q))**(-3) * (-2 * (-1 + q) * \
     ((1 + q))**5 * kappa + ((-1 + q) * ((1 + q))**5 * chieff + (4 * q**2 \
-    * u**2 * ((chi1)**2 + -1 * q**2 * (chi2)**2) * chieff + (-1 + q**2) * \
-    u * (2 * (chi1)**2 + q * (2 * q**3 * (chi2)**2 + (chieff**2 + (2 * q \
-    * chieff**2 + q**2 * chieff**2)))))))
+    * u**2 * (chi1**2 + -1 * q**2 * chi2**2) * chieff + (-1 + q**2) * u * \
+    (2 * chi1**2 + q * (2 * q**3 * chi2**2 + (chieff**2 + (2 * q * \
+    chieff**2 + q**2 * chieff**2)))))))
 
     # Machine generated with eq_generator.nb
     coeff0 = 1/2 * ((-1 + q))**2 * q**(-1) * ((1 + q))**(-1) * ((1 + -2 * \
-    q * ((1 + q))**(-2) * u * chieff))**2 * (-4 * u**2 * (chi1)**4 + (8 * \
-    q**4 * u**2 * (chi1)**2 * (chi2)**2 + (-4 * q**8 * u**2 * (chi2)**4 + \
-    (4 * ((1 + q))**4 * u * (chi1)**2 * (2 * kappa + -1 * chieff) + (4 * \
-    q**4 * ((1 + q))**4 * u * (chi2)**2 * (2 * kappa + -1 * chieff) + (-4 \
-    * q * ((1 + q))**2 * u**2 * (chi1)**2 * chieff**2 + (-4 * q**2 * ((1 \
-    + q))**2 * u**2 * (chi1)**2 * chieff**2 + (-4 * q**4 * ((1 + q))**2 * \
-    u**2 * (chi2)**2 * chieff**2 + (-4 * q**5 * ((1 + q))**2 * u**2 * \
-    (chi2)**2 * chieff**2 + (2 * q * ((1 + q))**6 * u * (2 * kappa + -1 * \
-    chieff) * chieff**2 + -1 * ((1 + q))**8 * ((-2 * kappa + \
-    chieff))**2)))))))))) * ((1 + (q**2 + q * (2 + -2 * u * \
-    chieff))))**(-2)
+    q * ((1 + q))**(-2) * u * chieff))**2 * (-4 * u**2 * chi1**4 + (8 * \
+    q**4 * u**2 * chi1**2 * chi2**2 + (-4 * q**8 * u**2 * chi2**4 + (4 * \
+    ((1 + q))**4 * u * chi1**2 * (2 * kappa + -1 * chieff) + (4 * q**4 * \
+    ((1 + q))**4 * u * chi2**2 * (2 * kappa + -1 * chieff) + (-4 * q * \
+    ((1 + q))**2 * u**2 * chi1**2 * chieff**2 + (-4 * q**2 * ((1 + q))**2 \
+    * u**2 * chi1**2 * chieff**2 + (-4 * q**4 * ((1 + q))**2 * u**2 * \
+    chi2**2 * chieff**2 + (-4 * q**5 * ((1 + q))**2 * u**2 * chi2**2 * \
+    chieff**2 + (2 * q * ((1 + q))**6 * u * (2 * kappa + -1 * chieff) * \
+    chieff**2 + -1 * ((1 + q))**8 * ((-2 * kappa + chieff))**2)))))))))) \
+    * ((1 + (q**2 + q * (2 + -2 * u * chieff))))**(-2)
 
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
@@ -2386,7 +2390,6 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
     """
 
     if precomputedroots is None:
-
         deltachiminus, deltachiplus, _ = wraproots(deltachicubic_coefficients, kappa, u, chieff, q, chi1, chi2).T
 
         # If you need the spurious root as well.
@@ -2453,10 +2456,10 @@ def deltachilimits_rectangle(chieff, q, chi1, chi2):
 
 
 
-def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2):
+def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
     u = eval_u(r,q)
-    deltachiminus, deltachiplus, _ = deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=False, precomputedroots=None)
+    deltachiminus, deltachiplus, _ = deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=False, precomputedroots=precomputedroots)
 
     # Correct when too close to perfect alignment
     angleup=tiler(0,q)
@@ -2476,13 +2479,15 @@ def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2):
 
 
 
-def deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2):
 
-    deltachitilde = np.atleast_1d(deltachitilde)
-    deltachiminus, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
-    deltachi = deltachiminus + deltachitilde * (deltachiplus - deltachiminus)
+def deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2,precomputedroots=None):
+
+    deltachiminus, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2,precomputedroots=precomputedroots)
+    deltachi =  inverseaffine(deltachitilde, deltachiminus, deltachiplus)
 
     return deltachi
+
+
 
 
 
@@ -4686,6 +4691,7 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
     return n
 
 
+# remove this
 def time_normalization(Spluss, S3s, r, chieff, q):
     """
     Numerical prefactors entering the precession period.
@@ -4722,7 +4728,8 @@ def time_normalization(Spluss, S3s, r, chieff, q):
     return mathcalT
 
 
-def eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=None):
+# remove this
+def eval_tau_old(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Period of S as it oscillates from S- to S+ and back to S-.
 
@@ -4761,6 +4768,7 @@ def eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     return tau
 
 
+# remove this
 def Soft(t, J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
@@ -4807,6 +4815,8 @@ def Soft(t, J, r, chieff, q, chi1, chi2, precomputedroots=None):
     return S
 
 
+
+#remove this
 def tofS(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     """
     Time t as a function of S (without radiation reaction). Only covers half of a precession cycle, assuming t=0 at S=S- and t=tau/2 at S=S+. Set sign=-1 to cover the second half, i.e. from t=tau/2 at S=S+ to t=tau at S=S-.
@@ -4849,12 +4859,14 @@ def tofS(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     m = elliptic_parameter_old(Sminuss, Spluss, S3s)
     mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
     phi = elliptic_amplitude(S, Sminuss, Spluss)
-    tau = eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    tau = eval_tau_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
 
     return t
 
 
+
+# remove this
 def Ssampling(J, r, chieff, q, chi1, chi2, N=1):
     """
     Sample N values of S at fixed separation accoring to its PN-weighted distribution function.
@@ -4893,7 +4905,7 @@ def Ssampling(J, r, chieff, q, chi1, chi2, N=1):
     # Compute the S roots only once and pass them to both functions
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
 
-    tau = eval_tau(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    tau = eval_tau_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     # For each binary, generate N samples between 0 and tau.
     t = np.random.uniform(size=tau.size*N).reshape((tau.size, N)) * tau[:, None]
     # Note the special broadcasting rules of Soft, see Soft.__docs__
@@ -4903,6 +4915,10 @@ def Ssampling(J, r, chieff, q, chi1, chi2, N=1):
     # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
     # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
     return np.atleast_1d(np.squeeze(S))
+
+
+    # remove this
+
 
 
 def Ssav_mfactor(m):
@@ -5098,17 +5114,6 @@ def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None
 
 
 
-def time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
-
-    u = eval_u(r,q)
-    mathcalA = ddchidt_prefactor(r, chieff, q)
-    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-
-    llambda = (mathcalA/2)* (deltachi3 - (1-q)*deltachiminus)**(1/2)
-
-    return llambda
-
-
 def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Parameter m entering elliptic functions for the evolution of S.
@@ -5132,6 +5137,7 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
         Parameter of elliptic function(s).
     """
 
+    q=np.atleast_1d(q)
 
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
@@ -5142,15 +5148,23 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
 
 
 
+def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psiperiod=False):
+
+    q=np.atleast_1d(q)
 
 
-def eval_tau_new(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
-
+    # if psiperiod=True return tau/2K(m). Useful to avoid the evaluation of an elliptic integral when it's not needed
     u = eval_u(r,q)
-    precomputedroots = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    llambda = time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    tau = 2*scipy.special.ellipk(m) /llambda
+    mathcalA = ddchidt_prefactor(r, chieff, q)
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+
+    psiperiod =  2 / ( mathcalA * (deltachi3 - (1-q)*deltachiminus)**(1/2) )
+    if return_psiperiod:
+        tau = psiperiod
+    else:
+        tau = 2*scipy.special.ellipk(m) * psiperiod
+
     return tau
 
 
@@ -5195,19 +5209,144 @@ def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
     u = eval_u(r,q)
 
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    llambda = time_prefactor(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
-    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+    psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), return_psiperiod=True)
 
-    sn, _, _, _ = scipy.special.ellipj(t * llambda, m)
-    deltachi = deltachiminus + (deltachiplus-deltachiminus)*sn**2
+
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+ 
+
+    sn, _, _, _ = scipy.special.ellipj(t / psiperiod, m)
+    deltachitilde = sn**2
+
+
+
+    deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2,precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
 
     return deltachi
 
 
 
+def tofS(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
+    """
+    Time t as a function of S (without radiation reaction). Only covers half of a precession cycle, assuming t=0 at S=S- and t=tau/2 at S=S+. Set sign=-1 to cover the second half, i.e. from t=tau/2 at S=S+ to t=tau at S=S-.
+
+    Call
+    ----
+    t = tofS(S,J,r,chieff,q,chi1,chi2,cyclesign=1,precomputedroots=None)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: 1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
+
+    Returns
+    -------
+    t: float
+        Time.
+    """
+
+    S = np.atleast_1d(S)
+
+    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
+    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
+    phi = elliptic_amplitude(S, Sminuss, Spluss)
+    tau = eval_tau_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
+
+    return t
+
+def tofdeltachi(deltachi, kappa , r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
+
+
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), return_psiperiod=True)
+    deltachitilde = affine(deltachi,deltachiminus,deltachiplus)
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+    t = np.sign(cyclesign) * psiperiod * scipy.special.ellipkinc(np.arcsin(deltachitilde**(1/2)), m)
+
+    return t 
+
+
+def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None):
+    """
+    Sample N values of S at fixed separation accoring to its PN-weighted distribution function.
+    Can only be used to sample the *same* number of configuration for each binary. If the inputs J,r,chieff,q,chi1, and chi2 have shape (M,) the output will have shape
+    - (M,N) if M>1 and N>1;
+    - (M,) if N=1;
+    - (N,) if M=1.
+
+    Call
+    ----
+    S = Ssampling(J,r,chieff,q,chi1,chi2,N = 1)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    N: integer, optional (default: 1)
+        Number of samples.
+
+    Returns
+    -------
+    S: float
+        Magnitude of the total spin.
+    """
+
+    u= eval_u(r=r,q=q)
+
+    # Compute the deltachi roots only once and pass them to both functions
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    tau = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+
+    # For each binary, generate N samples between 0 and tau.
+    t = np.random.uniform(np.zeros(len(tau)),tau,size=(N,len(tau)))
+
+    # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
+    # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
+    t= np.atleast_1d(np.squeeze(t))
+
+    # Note the special broadcasting rules of deltachioft, see Soft.__docs__
+    # deltachi has shape (M, N).
+    deltachi = deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+    return deltachi.T
+
+
+    
+
+###############
+
 
 # Precession-averaged evolution
-
 def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     """
     Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
@@ -7183,24 +7322,51 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.6
+    q=0.7
     chi1=0.8
     chi2=0.9
     chieff=0.3
-    r=1000000000000
-    kappatilde = 0.8
+    r=10
+    kappatilde = 0.9
     deltachitilde = 0.7
     u = eval_u(r, q)
+    kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
+    #print(kappa)
 
-    kappamin,kappamax = kapparesonances(r, chieff, q, chi1,chi2)
+    print(deltachisampling(kappa, r, chieff, q, chi1, chi2))
 
-    print(kappamin,kappamax)
+    print(deltachisampling(kappa, r, chieff, q, chi1, chi2,N=5))
 
-    kappamin,kappamax = kapparesonances(np.inf, chieff, q, chi1,chi2)
 
-    print(kappamin,kappamax)
+    q=[0.7,0.1]
+    chi1=[0.8,0.8]
+    chi2=[0.9,0.9]
+    chieff=[0.3,0.3]
+    r=[10,100000]
+    kappatilde = [0.5,0.5]
+    u = eval_u(r, q)
+    kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
+    #print(kappa)
 
-    print((chi1 + q**2 * chi2) / (1+q)**2)
+
+    print(deltachisampling(kappa, r, chieff, q, chi1, chi2))
+
+    print(deltachisampling(kappa, r, chieff, q, chi1, chi2,N=10))
+
+    #kappa = kapparescaling([kappatilde,kappatilde], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2])
+    #print(kappa)
+
+    #dchim,dchip = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
+    #print(dchim,dchip)
+    #kappamin,kappamax = kapparesonances(r, chieff, q, chi1,chi2)
+
+    #print(kappamin,kappamax)
+
+    #kappamin,kappamax = kapparesonances(np.inf, chieff, q, chi1,chi2)
+
+    #print(kappamin,kappamax)
+
+    #print((chi1 + q**2 * chi2) / (1+q)**2)
 
     #kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
     #J=eval_J(kappa=kappa, r=r, q=q)
@@ -7218,11 +7384,13 @@ if __name__ == '__main__':
 
     #print(eval_costheta1(deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
 
-    #tnew = eval_tau_new(kappa, r, chieff, q, chi1, chi2)
+    #tnew = eval_tau(kappa, r, chieff, q, chi1, chi2)
     #print(tnew)
-    #t = np.linspace(0,tnew/2,5)
+    #t = np.squeeze(np.linspace(0,tnew/2,10))
+    #print(t)
+    #print(Soft(t, J, r, chieff, q, chi1, chi2))
 
-   #tan = 4*np.pi*r**(11/4) / (3* (2*kappa-chieff)**(1/2) * (1 -chieff/ r**(1/2)))
+    #tan = 4*np.pi*r**(11/4) / (3* (2*kappa-chieff)**(1/2) * (1 -chieff/ r**(1/2)))
 
     #print(tan)
 
@@ -7230,17 +7398,20 @@ if __name__ == '__main__':
     #print(dchip-dchim)
     #aman = (chieff/2)*np.abs(chi1**2 - chi2**2)*(2*kappa-chieff)**(-1) *r**(-1/2)
     #print(aman)
-    # print('FROM HERE')
-    # dchi = deltachioft(t, kappa , r, chieff, q, chi1, chi2)
-    # #print()
-    # #dchi = deltachioft(np.repeat(t,2), np.repeat(kappa,2) , np.repeat(r,2), np.repeat(chieff,2), np.repeat(q,2), np.repeat(chi1,2), np.repeat(chi2,2))
-    # dchi=np.squeeze(dchi)
-    # print(dchi)
+    #print('FROM HERE')
+    #dchi = deltachioft(t, kappa , r, chieff, q, chi1, chi2)
+    #print()
+    #dchi = deltachioft(np.repeat(t,2), np.repeat(kappa,2) , np.repeat(r,2), np.repeat(chieff,2), np.repeat(q,2), np.repeat(chi1,2), np.repeat(chi2,2))
+    #dchi=np.squeeze(dchi)
+    #print(dchi)
+
+
+    #print(tofdeltachi(dchi, kappa , r, chieff, q, chi1, chi2) -t )
 
     # Snew = eval_S_from_deltachi(dchi, tiler(kappa,dchi), tiler(r,dchi), tiler(chieff,dchi), tiler(q,dchi))
 
-    # told = eval_tau(J, r, chieff, q, chi1, chi2)
-
+    #told = eval_tau_old(J, r, chieff, q, chi1, chi2)
+    #print(told)
     # t = np.linspace(0,told/2,5)
 
     # Sold = np.squeeze(Soft(t, J, r, chieff, q, chi1, chi2))
