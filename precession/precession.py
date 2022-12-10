@@ -177,7 +177,6 @@ def sample_unitsphere(N=1):
     return vec.T
 
 
-# TODO: check all tile instances and replace them with this new funtion
 def tiler(scalar,shaper):
 
     return np.tile(scalar, np.shape(shaper))
@@ -191,6 +190,7 @@ def affine(vec, low, up):
     rescaled = ( vec - low ) / (up - low)
 
     return rescaled
+
 
 def inverseaffine(rescaled, low, up):
     
@@ -341,6 +341,9 @@ def ismonotonic(vec, which):
     else:
         raise ValueError("`which` needs to be one of the following: `>`, `>=`, `<`, `<=`.")
 
+
+def squarewithsign(x):
+    return x*np.abs(x)
 
 # Definitions
 
@@ -529,6 +532,7 @@ def eval_S2(q, chi2):
     return S2
 
 
+# TODO: remove
 def spinmags(q, chi1, chi2):
     """
     Spins of the black holes in units of the total mass.
@@ -651,6 +655,35 @@ def eval_r(L=None, u=None, q=None):
 
     return r
 
+
+def eval_u(r, q):
+    """
+    Change of independent variable to regularize the infinite orbital separation
+    limit of the precession-averaged evolution equation.
+
+    Call
+    ----
+    u = eval_u(r,q)
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+
+    Returns
+    -------
+    u: float
+        Compactified separation 1/(2L).
+    """
+
+    L = eval_L(r, q)
+    u = 1 / (2*L)
+
+    return u
+
+
 # TODO: Do we need this?
 def Jlimits_LS1S2(r, q, chi1, chi2):
     """
@@ -686,204 +719,7 @@ def Jlimits_LS1S2(r, q, chi1, chi2):
 
     return np.stack([Jmin, Jmax])
 
-# TODO: edit this
-def kappadiscriminant_coefficients_old(u, chieff, q, chi1, chi2):
-    """
-    Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.
 
-    Call
-    ----
-    coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = kappadiscriminant_coefficients(u,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    u: float
-        Compactified separation 1/(2L).
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    coeff5: float
-        Coefficient to the x^5 term in polynomial.
-    coeff4: float
-        Coefficient to the x^4 term in polynomial.
-    coeff3: float
-        Coefficient to the x^3 term in polynomial.
-    coeff2: float
-        Coefficient to the x^2 term in polynomial.
-    coeff1: float
-        Coefficient to the x^1 term in polynomial.
-    coeff0: float
-        Coefficient to the x^0 term in polynomial.
-    """
-
-    u = np.atleast_1d(u)
-    q = np.atleast_1d(q)
-    chieff = np.atleast_1d(chieff)
-    S1, S2 = spinmags(q, chi1, chi2)
-
-    # Machine generated with polycoefficients.nb
-    coeff5 = -256 * q**3 * ((1 + q))**6 * u
-
-    # Machine generated with polycoefficients.nb
-    coeff4 = 16 * q**2 * ((1 + q))**4 * (((-1 + q**2))**2 + (-16 * ((1 +
-    q))**2 * (q * (-5 + 3 * q) * S1**2 + (3 + -5 * q) * S2**2) * u**2 +
-    (40 * q * ((1 + q))**2 * u * chieff + 16 * q**2 * u**2 * chieff**2)))
-
-    # Machine generated with polycoefficients.nb
-    coeff3 = -32 * q * ((1 + q))**4 * (2 * q**6 * S1**2 * u * (-5 + 12 *
-    S1**2 * u**2) + (2 * S2**2 * u * (-5 + 12 * S2**2 * u**2) + (2 * q**2
-    * u * (40 * S1**4 * u**2 + (-44 * S2**4 * u**2 + (8 * chieff**2 +
-    (S1**2 * (-5 + (-8 * S2**2 * u**2 + 40 * u * chieff)) + -2 * S2**2 *
-    (-5 + 4 * u * chieff * (1 + u * chieff)))))) + (2 * q**3 * (32 *
-    S1**4 * u**3 + (32 * S2**4 * u**3 + (chieff * (-1 + 8 * u * chieff *
-    (3 + u * chieff)) + (2 * S2**2 * u * (-1 + u * chieff * (17 + 8 * u *
-    chieff)) + 2 * S1**2 * u * (-1 + (40 * S2**2 * u**2 + u * chieff *
-    (17 + 8 * u * chieff))))))) + (q * (chieff + 2 * u * (S1**2 * (1 +
-    -48 * S2**2 * u**2) + S2**2 * (1 + -2 * u * (12 * S2**2 * u +
-    chieff)))) + (q**5 * (chieff + 2 * u * (S2**2 + S1**2 * (1 + -2 * u *
-    (12 * (S1**2 + 2 * S2**2) * u + chieff)))) + -2 * q**4 * u * (5 *
-    S2**2 + (44 * S1**4 * u**2 + (-8 * (5 * S2**4 * u**2 + (5 * S2**2 * u
-    * chieff + chieff**2)) + 2 * S1**2 * (-5 + 4 * u * (chieff + u *
-    (S2**2 + chieff**2))))))))))))
-
-    # Machine generated with polycoefficients.nb
-    coeff2 = -16 * ((1 + q))**2 * (16 * (-1 + q) * q**3 * ((1 + q))**4 *
-    (10 + (-8 + q) * q) * S1**6 * u**4 + (-16 * ((-1 + q))**3 * ((1 +
-    q))**4 * S2**6 * u**4 + (-1 * ((-1 + q**2))**2 * S2**4 * u**2 * (((1
-    + q))**2 * (-8 + (-20 + q) * q) + (8 * (-4 + q) * q * (1 + q) * u *
-    chieff + 16 * q**2 * u**2 * chieff**2)) + (-1 * q**2 * (((1 + q) *
-    S2**2 * u + q * chieff))**2 * ((-1 + q) * ((1 + q))**2 * (-1 + (q +
-    48 * S2**2 * u**2)) + (8 * q * (1 + q) * (5 + q) * u * chieff + 16 *
-    q**2 * u**2 * chieff**2)) + (2 * q**2 * ((1 + q))**2 * S1**4 * u**2 *
-    ((-1 + q) * ((1 + q))**2 * ((-1 + q) * (-3 + (30 * q + 4 * q**2)) +
-    -72 * (2 + (-2 + q) * q) * S2**2 * u**2) + (4 * q * (1 + q) * (-30 +
-    q * (39 + q * (-19 + 4 * q))) * u * chieff + -8 * q**2 * (6 + (-6 +
-    q) * q) * u**2 * chieff**2)) + (-4 * q * (-1 * (1 + q) * S2**2 * u +
-    -1 * q * chieff) * (-1 * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * u *
-    (-10 + (q + 24 * S2**2 * u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 *
-    (-1 + (q + 4 * (1 + 2 * q) * S2**2 * u**2)) * chieff + (-8 * q**2 *
-    (1 + q) * u * (2 + (q + 2 * (-1 + q) * S2**2 * u**2)) * chieff**2 +
-    -16 * q**3 * u**2 * chieff**3))) + (q * (1 + q) * S1**2 * ((-1 + q) *
-    ((1 + q))**3 * (((-1 + q))**3 * q + (4 * (-1 + q) * (15 + q * (-29 +
-    15 * q)) * S2**2 * u**2 + 144 * (1 + 2 * (-1 + q) * q) * S2**4 *
-    u**4)) + (2 * q * ((1 + q))**2 * u * (((-1 + q))**2 * (-3 + q * (23 +
-    4 * q)) + 12 * (1 + q) * (1 + q**2) * S2**2 * u**2) * chieff + (8 *
-    q**2 * (1 + q) * u**2 * (-12 + (-2 * q + (-11 * q**2 + (q**3 + 4 * (3
-    + q * (-5 + 3 * q)) * S2**2 * u**2)))) * chieff**2 + -32 * q**3 * (3
-    + (-1 + q) * q) * u**3 * chieff**3))) + (S2**2 * (((-1 + q**2))**4 +
-    (2 * ((-1 + q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * chieff + (8
-    * (-1 + q) * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * chieff**2 +
-    32 * q**3 * (-1 + q**2) * u**3 * chieff**3))) + -1 * q**2 * chieff**2
-    * (1 + q * (8 * u * chieff + q * (-2 + (16 * u * chieff + ((q + 4 * u
-    * chieff))**2))))))))))))
-
-    # Machine generated with polycoefficients.nb
-    coeff1 = -16 * (1 + q) * (-16 * ((-1 + q))**2 * q**3 * ((1 + q))**5 *
-    (-5 + 2 * q) * S1**8 * u**5 + (-4 * (-1 + q) * q**2 * ((1 + q))**3 *
-    S1**6 * u**3 * ((-1 + q) * ((1 + q))**2 * (-1 + (15 * q + (4 * q**2 +
-    8 * (6 + (-1 + q) * q) * S2**2 * u**2))) + (2 * q * (1 + q) * (20 + q
-    * (-29 + 12 * q)) * u * chieff + -8 * (-2 + q) * q**2 * u**2 *
-    chieff**2)) + (-2 * q * (((1 + q) * S2**2 * u + q * chieff))**2 * (-1
-    * ((-1 + q))**2 * ((1 + q))**3 * S2**2 * u * (-10 + (q + 24 * S2**2 *
-    u**2)) + (-1 * (-1 + q) * q * ((1 + q))**2 * (-1 + (q + 4 * (1 + 2 *
-    q) * S2**2 * u**2)) * chieff + (-8 * q**2 * (1 + q) * u * (2 + (q + 2
-    * (-1 + q) * S2**2 * u**2)) * chieff**2 + -16 * q**3 * u**2 *
-    chieff**3))) + (-2 * q * ((1 + q))**2 * S1**4 * u * (((-1 + q))**2 *
-    ((1 + q))**3 * (((-1 + q))**2 * q + (2 * (15 + q * (-55 + 2 * q * (9
-    + 2 * q))) * S2**2 * u**2 + -72 * (1 + q**2) * S2**4 * u**4)) + ((-1
-    + q) * q * ((1 + q))**2 * u * (3 + (-52 * q + (33 * q**2 + (16 * q**3
-    + 4 * (-3 + 2 * q**2 * (-7 + 4 * q)) * S2**2 * u**2)))) * chieff +
-    (-8 * q**2 * (1 + q) * u**2 * (6 + (-16 * q + (18 * q**2 + (-5 * q**3
-    + 2 * (-1 + q) * (3 + (-1 + q) * q) * S2**2 * u**2)))) * chieff**2 +
-    -16 * q**3 * (3 + q * (-5 + 3 * q)) * u**3 * chieff**3))) + (S1**2 *
-    (-32 * ((-1 + q))**2 * ((1 + q))**5 * (1 + q * (-1 + 6 * q)) * S2**6
-    * u**5 + (-4 * (-1 + q) * ((1 + q))**3 * S2**4 * u**3 * ((-1 + q) *
-    ((1 + q))**2 * (4 + q * (18 + 5 * q * (-11 + 3 * q))) + (2 * q * (1 +
-    q) * (-8 + (14 * q + 3 * q**3)) * u * chieff + 8 * q**2 * (1 + q *
-    (-1 + 3 * q)) * u**2 * chieff**2)) + (2 * ((1 + q))**3 * S2**2 * u *
-    (-1 * ((-1 + q))**4 * ((1 + q))**2 * (1 + (-12 + q) * q) + (-2 * q *
-    ((-1 + q**2))**2 * (4 + q * (-7 + 4 * q)) * u * chieff + (-8 * q**2 *
-    (1 + q * (-8 + q * (20 + (-8 + q) * q))) * u**2 * chieff**2 + 16 *
-    (-2 + q) * q**3 * (-1 + 2 * q) * u**3 * chieff**3))) + 2 * q**2 *
-    chieff * (-1 * ((-1 + q**2))**4 + (-1 * ((-1 + q))**2 * ((1 + q))**3
-    * (-1 + q * (18 + 7 * q)) * u * chieff + (4 * q * ((1 + q))**2 * (2 +
-    q * (-5 + 19 * q)) * u**2 * chieff**2 + 16 * q**2 * (1 + q**2 * (2 +
-    3 * q)) * u**3 * chieff**3)))))) + -2 * (-1 * (1 + q) * S2**2 * u +
-    -1 * q * chieff) * (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 * u**4
-    + (((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20 + q)
-    * q) + (8 * (-4 + q) * q * (1 + q) * u * chieff + 16 * q**2 * u**2 *
-    chieff**2)) + (S2**2 * (-1 * ((-1 + q**2))**4 + (-2 * ((-1 + q))**2 *
-    q * ((1 + q))**3 * (4 + 5 * q) * u * chieff + (-8 * (-1 + q) * q**2 *
-    ((1 + q))**2 * (-1 + 4 * q) * u**2 * chieff**2 + -32 * q**3 * (-1 +
-    q**2) * u**3 * chieff**3))) + q**2 * chieff**2 * (1 + q * (8 * u *
-    chieff + q * (-2 + (16 * u * chieff + ((q + 4 * u *
-    chieff))**2))))))))))))
-
-    # Machine generated with polycoefficients.nb
-    coeff0 = -16 * (16 * ((-1 + q))**3 * q**3 * ((1 + q))**6 * S1**10 *
-    u**6 + (-1 * ((-1 + q))**2 * q**2 * ((1 + q))**4 * S1**8 * u**4 *
-    (((1 + q))**2 * (1 + (-20 * q + (-8 * q**2 + 16 * (-3 + (q + 2 *
-    q**2)) * S2**2 * u**2))) + (-8 * q * (1 + q) * (-5 + 8 * q) * u *
-    chieff + 16 * q**2 * u**2 * chieff**2)) + ((-1 + q) * q * ((1 +
-    q))**3 * S1**6 * u**2 * (q * ((-1 + q**2))**3 + (-4 * (-1 + q) * ((1
-    + q))**3 * (-5 + q * (27 + q * (-3 + 8 * q))) * S2**2 * u**2 + (16 *
-    ((-1 + q))**2 * ((1 + q))**3 * (3 + q * (6 + q)) * S2**4 * u**4 + (-2
-    * (-1 + q) * q * ((1 + q))**2 * u * (1 + (-25 * q + (-12 * q**2 + 4 *
-    (-1 + (q + 12 * q**2)) * S2**2 * u**2))) * chieff + (8 * q**2 * (1 +
-    q) * u**2 * (4 + (-18 * q + (11 * q**2 + 4 * (-1 + q**2) * S2**2 *
-    u**2))) * chieff**2 + 32 * (1 + -2 * q) * q**3 * u**3 *
-    chieff**3))))) + (((1 + q))**2 * S1**4 * u * (-16 * ((-1 + q))**3 *
-    ((1 + q))**4 * (1 + 3 * q * (2 + q)) * S2**6 * u**5 + (2 * S2**4 *
-    u**3 * (((-1 + q))**2 * ((1 + q))**4 * (4 + q * (6 + q * (61 + (6 * q
-    + 4 * q**2)))) + (4 * ((-1 + q))**2 * q * ((1 + q))**4 * (4 + (q + 4
-    * q**2)) * u * chieff + -8 * q**2 * ((-1 + q**2))**2 * (1 + q * (4 +
-    q)) * u**2 * chieff**2)) + (chieff * (2 * ((-1 + q))**4 * q**2 * ((1
-    + q))**3 + (((q + -1 * q**3))**2 * (-1 + q * (40 + 23 * q)) * u *
-    chieff + (8 * q**3 * (1 + q) * (-1 + q * (14 + 5 * (-4 + q) * q)) *
-    u**2 * chieff**2 + -16 * q**4 * (1 + 6 * (-1 + q) * q) * u**3 *
-    chieff**3))) + (-1 + q) * (1 + q) * S2**2 * u * (-1 * ((-1 +
-    q**2))**3 * (-1 + 2 * q * (12 + 5 * q)) + (-2 * (-1 + q) * q * ((1 +
-    q))**2 * (-4 + q * (29 + q * (-21 + 32 * q))) * u * chieff + (-8 *
-    q**2 * (1 + q) * (1 + 2 * (-2 + q) * q * (1 + 4 * q)) * u**2 *
-    chieff**2 + 32 * q**3 * (1 + q * (-1 + 3 * q)) * u**3 *
-    chieff**3)))))) + ((1 + q) * S1**2 * (16 * ((-1 + q))**3 * ((1 +
-    q))**5 * (2 + 3 * q) * S2**8 * u**6 + (q**2 * chieff**2 * (((-1 +
-    q))**4 * ((1 + q))**3 + (2 * q * (5 + 3 * q) * ((-1 + q**2))**2 * u *
-    chieff + (-8 * q**2 * (1 + q) * (-4 + q * (7 + q)) * u**2 * chieff**2
-    + 32 * (1 + -2 * q) * q**3 * u**3 * chieff**3))) + ((-1 + q) * ((1 +
-    q))**2 * S2**4 * u**2 * ((-10 + (-24 + q) * q) * ((-1 + q**2))**3 +
-    (2 * (-1 + q) * q * ((1 + q))**2 * (-32 + q * (21 + q * (-29 + 4 *
-    q))) * u * chieff + (8 * q**2 * (1 + q) * (8 + q * (-14 + (-4 + q) *
-    q)) * u**2 * chieff**2 + -32 * q**3 * (3 + (-1 + q) * q) * u**3 *
-    chieff**3))) + (S2**2 * (-1 * ((-1 + q))**6 * ((1 + q))**5 + (-10 *
-    ((-1 + q))**4 * q * ((1 + q))**5 * u * chieff + (-2 * ((-1 + q))**2 *
-    q**2 * ((1 + q))**3 * (11 + q * (-24 + 11 * q)) * u**2 * chieff**2 +
-    (16 * q**3 * ((1 + q))**3 * (2 + q * (-3 + 2 * q)) * u**3 * chieff**3
-    + 32 * q**4 * (1 + q) * (3 + q * (-5 + 3 * q)) * u**4 * chieff**4))))
-    + 4 * ((-1 + q))**2 * ((1 + q))**4 * S2**6 * u**4 * (-8 + q * (-5 +
-    (-24 * q + (-22 * q**2 + (5 * q**3 + (2 * (-4 + q) * (3 + q) * u *
-    chieff + 8 * q * u**2 * chieff**2)))))))))) + -1 * (((1 + q) * S2**2
-    * u + q * chieff))**2 * (16 * ((-1 + q))**3 * ((1 + q))**4 * S2**6 *
-    u**4 + (((-1 + q**2))**2 * S2**4 * u**2 * (((1 + q))**2 * (-8 + (-20
-    + q) * q) + (8 * (-4 + q) * q * (1 + q) * u * chieff + 16 * q**2 *
-    u**2 * chieff**2)) + (S2**2 * (-1 * ((-1 + q**2))**4 + (-2 * ((-1 +
-    q))**2 * q * ((1 + q))**3 * (4 + 5 * q) * u * chieff + (-8 * (-1 + q)
-    * q**2 * ((1 + q))**2 * (-1 + 4 * q) * u**2 * chieff**2 + -32 * q**3
-    * (-1 + q**2) * u**3 * chieff**3))) + q**2 * chieff**2 * (1 + q * (8
-    * u * chieff + q * (-2 + (16 * u * chieff + ((q + 4 * u *
-    chieff))**2))))))))))))
-
-    return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
-
-# TODO: edit this
 def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     """
     Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.
@@ -1201,78 +1037,6 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
 
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
-# TODO: edit this
-def kapparesonances_old(u, chieff, q, chi1, chi2, tol= 1e-5):
-    """
-    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
-
-    Call
-    ----
-    kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    u: float
-        Compactified separation 1/(2L).
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    tol: FIX ME
-
-    Returns
-    -------
-    kappamin: float
-        Minimum value of the regularized angular momentum kappa.
-    kappamax: float
-        Maximum value of the regularized angular momentum kappa.
-    """
-
-    u = np.atleast_1d(u)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-
-    kapparoots = wraproots(kappadiscriminant_coefficients_old, u, chieff, q, chi1, chi2)
-    # There are in principle five solutions, but only two are physical.
-    def _compute(kapparoots, u, chieff, q, chi1, chi2):
-        kapparoots = kapparoots[np.isfinite(kapparoots)]
-        #print('kapparoots', kapparoots)
-
-        Sroots = Satresonance(kappa=kapparoots, u=tiler(u, kapparoots), chieff=tilere(chieff, kapparoots), q=tiler(q, kapparoots), chi1=tiler(chi1, kapparoots), chi2=tiler(chi2, kapparoots))
-        Smin, Smax = Slimits_S1S2(tiler(q, kapparoots), tiler(chi1, kapparoots), tiler(chi2, kapparoots))
-        kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
-
-        #print("S",Sroots,Smin, Smax)
-        #print('kapparoots', kappares)
-
-        if len(kappares) > 2:
-
-            #print('xxxxx', kappares, np.diff(kappares),np.argmin(np.diff(kappares)),)
-            diff = np.diff(kappares)
-            if np.min(diff)<tol:
-                warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
-                kappares = np.delete(kappares, [np.argmin(diff),np.argmin(diff)+1])
-
-            assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
-
-
-
-            #assert len(kappares) <= 2, "I found more than two resonances, this should not be possible."
-
-
-        # If you didn't find enough solutions, append nans
-        kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
-        return kappares
-
-    kappamin, kappamax = np.array(list(map(_compute, kapparoots, u, chieff, q, chi1, chi2))).T
-
-    return np.stack([kappamin, kappamax])
 
 def kappalimits_geometrical(r , q, chi1, chi2):
 
@@ -1280,16 +1044,18 @@ def kappalimits_geometrical(r , q, chi1, chi2):
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
+    
+    kappamin= q*r**(1/2)/(2*(1+q)**2)*(
+         np.maximum.reduce([np.zeros(q.shape), 
+            squarewithsign( 1- (chi1+chi2*q**2) / (q*r**(1/2))),
+            squarewithsign( np.abs(chi1-chi2*q**2) / (q*r**(1/2)) - 1 )] )
+         -1)
 
-    kappamin= np.maximum(
-        (chi1+chi2*q**2) / (1+q)**2 * ( (chi1+chi2*q**2) / (2*q*r**(1/2)) -1 ),
-        np.abs(chi1-chi2*q**2) / (1+q)**2 * ( np.abs(chi1-chi2*q**2) / (2*q*r**(1/2)) -1 ),
-        -q*r**(1/2)/(2*(1+q)**2)
-                        )
+    kappamax = (chi1+chi2*q**2) / (1+q)**2 * ( (chi1+chi2*q**2) / (2*q*r**(1/2)) +1 )
 
-    kappamax = (chi1+chi2*q**2) / (1+q)**2 * ( (chi1+chi2*q**2) / (2*q*r**(1/2)) +1 ),
 
-    return kappamin,kappamax
+    return np.stack([kappamin,kappamax])
+
 
 def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     """
@@ -1499,7 +1265,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
 
 
 
-# TODO: edit this. I think there's something wrong
+# Remove this
 def kappainfresonances(chieff, q, chi1, chi2):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
@@ -1536,6 +1302,7 @@ def kappainfresonances(chieff, q, chi1, chi2):
 
     return np.stack([kappainfmin, kappainfmax])
 
+
 def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
 
     kappatilde = np.atleast_1d(kappatilde)
@@ -1544,44 +1311,7 @@ def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
     return kappa
 
 
-# TODO: this one should be ok as it is
-def Jresonances(r, chieff, q, chi1, chi2):
-    """
-    Total angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes J for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
-
-    Call
-    ----
-    Jmin,Jmax = Jresonances(r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Jmin: float
-        Minimum value of the total angular momentum J.
-    Jmax: float
-        Maximum value of the total angular momentum J.
-    """
-
-    kappamin, kappamax = kapparesonances(r, chieff, q, chi1, chi2)
-    Jmin = eval_J(kappa=kappamin, r=r, q=q)
-    Jmax = eval_J(kappa=kappamax, r=r, q=q)
-
-    return np.stack([Jmin, Jmax])
-
-
-# TODO: check
+# TODO: rewrite, needs to become kappalimits
 def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
@@ -1839,7 +1569,7 @@ def anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
         Satmax = Satresonance(J=J, r=r, chieff=chieffmax, q=q, chi1=chi1, chi2=chi2)
         theta1atmax = eval_theta1(Satmax, J, r, chieffmax, q, chi1, chi2)
         theta2atmax = eval_theta2(Satmax, J, r, chieffmax, q, chi1, chi2)
-        deltaphiatmax = tile(np.pi, q)
+        deltaphiatmax = tiler(np.pi, q)
 
     else:
         raise TypeError("Provide either (r,chieff,q,chi1,chi2) or (J,r,q,chi1,chi2).")
@@ -2415,13 +2145,13 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
             _, _, deltachi3 = wraproots(deltachicubic_rescaled_coefficients, kappa, u, chieff, q, chi1, chi2).T
         # Otherwise avoid (for computational efficiency)
         else:
-            deltachi3 = tile(np.nan,deltachiminus)
+            deltachi3 = tiler(np.nan,deltachiminus)
 
         return np.stack([deltachiminus, deltachiplus, deltachi3])
 
     else:
         precomputedroots=np.array(precomputedroots)
-        assert precomputedroots.shape[0] == 3, "Shape of precomputedroots must be (3,N), i.e. Sminuss, Spluss, S3s. [Ssroots]"
+        assert precomputedroots.shape[0] == 3, "Shape of precomputedroots must be (3,N), i.e. deltachiminus, deltachiplus, deltachi3. [deltachiroots]"
         return precomputedroots
 
 
@@ -3570,32 +3300,6 @@ def eval_kappa(J, r, q):
     return kappa
 
 
-def eval_u(r, q):
-    """
-    Change of independent variable to regularize the infinite orbital separation
-    limit of the precession-averaged evolution equation.
-
-    Call
-    ----
-    u = eval_u(r,q)
-
-    Parameters
-    ----------
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-
-    Returns
-    -------
-    u: float
-        Compactified separation 1/(2L).
-    """
-
-    L = eval_L(r, q)
-    u = 1 / (2*L)
-
-    return u
 
 
 def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
@@ -5424,7 +5128,7 @@ def rhs_precav_old(kappa, u, chieff, q, chi1, chi2):
             else:
                 S3s, Sminuss, Spluss = np.real([S3s, Sminuss, Spluss])
 
-                #print('hhh')
+                #print('hhh old')
                 #print(S3s, Sminuss, Spluss)
 
                 m = elliptic_parameter_old(Sminuss, Spluss, S3s)
@@ -5471,11 +5175,7 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
         Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
 
-        coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
-        coeffs = np.squeeze(coeffs)
-
-        sols = np.roots(coeffs)
-        deltachiminus, deltachiplus, deltachi3 = np.squeeze(np.sort_complex(sols))
+        deltachiminus, deltachiplus, deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
 
         # deltachiminus, deltachiplus are complex. This can happen if the binary is very close to a spin-orbit resonance
         if np.iscomplex([deltachiminus, deltachiplus]).any():
@@ -5486,12 +5186,12 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
         else:
             deltachiminus, deltachiplus, deltachi3 = np.real([deltachiminus, deltachiplus, deltachi3])
             deltachi3ss = deltachi3/(1-q)
-            #print('hhh')
+            #print('hhh new')
 
             #r=eval_r(u=u,q=q)
             #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachiminus * (1 - q)/(1 + q)) )
             #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachiplus * (1 - q)/(1 + q)) )
-            #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi3* (1 - q)/(1 + q)) )
+            #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi3/(1 + q)) )
 
 
 
@@ -5564,15 +5264,6 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
 
 
         ODEsolution = scipy.integrate.odeint(rhs_precav, kappainitial, u, args=(chieff, q, chi1, chi2), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
-        print('new', ODEsolution)
-
-
-        ODEsolution = scipy.integrate.odeint(rhs_precav_old, kappainitial, u, args=(chieff, q, chi1, chi2), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
-        print('old', ODEsolution)
-
-
-
-
 
         return np.squeeze(ODEsolution)
 
@@ -7430,18 +7121,19 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.999
+    q=0.45
     chi1=0.8
     chi2=0.9
     chieff=0.30
-    r=100000
+    r=10
     kappatilde = 0.9
     deltachitilde = 0.7
     kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
     #print(kappa)
     #kappa=0.19702426300035386
-    u = eval_u([r,10], [q,q])
-    print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
+    u=eval_u(r=r,q=q)
+    #u = eval_u([r,1000,100,10], [q,q,q,q])
+    #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
 
 
     #print(rhs_precav(kappa, u[0], chieff, q, chi1, chi2))
@@ -7484,7 +7176,7 @@ if __name__ == '__main__':
     #print((chi1 + q**2 * chi2) / (1+q)**2)
 
     #kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
-    #J=eval_J(kappa=kappa, r=r, q=q)
+    J=eval_J(kappa=kappa, r=r, q=q)
 
 
     #deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2)
@@ -7500,7 +7192,7 @@ if __name__ == '__main__':
     #print(eval_costheta1(deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1,chi2=chi2))
 
     #tnew = eval_tau(kappa, r, chieff, q, chi1, chi2)
-    #print(tnew)
+    #print('%.15f' % tnew)
     #t = np.squeeze(np.linspace(0,tnew/2,10))
     #print(t)
     #print(Soft(t, J, r, chieff, q, chi1, chi2))
@@ -7526,7 +7218,7 @@ if __name__ == '__main__':
     # Snew = eval_S_from_deltachi(dchi, tiler(kappa,dchi), tiler(r,dchi), tiler(chieff,dchi), tiler(q,dchi))
 
     #told = eval_tau_old(J, r, chieff, q, chi1, chi2)
-    #print(told)
+    #print('%.15f' % told)
     # t = np.linspace(0,told/2,5)
 
     # Sold = np.squeeze(Soft(t, J, r, chieff, q, chi1, chi2))
@@ -7548,3 +7240,11 @@ if __name__ == '__main__':
 
     # kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
     # print(kappamin,kappamax)
+
+# TODO: Do we need this?
+    Jmin,Jmax = Jlimits_LS1S2(r, q, chi1, chi2)
+    print(Jmin,Jmax)
+
+    kmin,kmax = kappalimits_geometrical(r , q, chi1, chi2)
+    print(eval_J(kappa=np.squeeze([kmin,kmax]), r=[r,r], q=[q,q]))
+
