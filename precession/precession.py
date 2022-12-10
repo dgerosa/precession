@@ -7,6 +7,8 @@ import numpy as np
 # TODO: remember to require scipy>=1.8.0
 import scipy.special
 import scipy.integrate
+from itertools import repeat
+
 
 # TODO: new algorithm! Needs to be documented!
 def roots_vec(p, enforce=False):
@@ -1329,11 +1331,11 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
     #sols = np.real(np.where(np.isreal(sols), sols, np.nan))
 
-    kappares=None
 
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparootscomplex, u, chieff, q, chi1, chi2):
- 
+        kappares=None
+
         # At infinitely large separations the resonances are analytic...
         if u==0:
             kappaminus = np.maximum((q*(1+q)*chieff - (1-q)*chi1)/(1+q)**2 , ((1+q)*chieff - q*(1-q)*chi2)/(1+q)**2)
@@ -1342,7 +1344,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
             return kappares
 
         kapparoots = np.real(kapparootscomplex[np.isreal(kapparootscomplex)])
- 
+
         upup,updown,downup,downdown=eval_chieff(theta1=[0,0,np.pi,np.pi], theta2=[0,np.pi,0,np.pi], q=np.repeat(q,4), chi1=np.repeat(chi1,4), chi2=np.repeat(chi2,4))
 
         # If too close to perfect alignment, return the analytical result.
@@ -1353,6 +1355,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
             L=1/(2*u)
             kappar = ((L+np.sign(chieff)*(S1+S2))**2 - L**2) / (2*L)
             kappares=np.squeeze([kappar,kappar])
+
 
 
         # In this case, the spurious solution is always the smaller one. Just leave it out.
@@ -1378,6 +1381,24 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
                 err = np.abs( (kapparoots[2]-kapparoots[3])/np.mean(kapparoots[2:4]))
                 warnings.warn("Unphysical resonances detected and removed. Relative accuracy Delta_kappa/kappa="+str(err)+", [kapparesonances].", Warning)
                 kappares=np.array([kapparoots[1],kapparoots[4]])
+
+        # This is an edge (and hopefully rare) case where the resonances are missed because of numerical errors
+        elif len(kapparoots)==1:
+            warnings.warn("Resonances not detected, best guess returned", Warning)
+            # 5 complex solutions correspond to 3 real parts (i.e. thare are two conjugate pairs)
+            kapparoots = np.unique(np.real(kapparootscomplex))
+            deltachires = deltachiresonance(kappa=kapparoots, u=tiler(u,kapparoots), chieff=tiler(chieff,kapparoots), q=tiler(q,kapparoots), chi1=tiler(chi1,kapparoots), chi2=tiler(chi2,kapparoots))
+
+            deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
+            check = np.squeeze(np.logical_and(deltachires>deltachimin,deltachires<deltachimax))
+            if not check[2]:
+                raise ValueError("Input values are not compatible [kapparesonances].")
+            elif check[0] and check[1]:
+                raise ValueError("Input values are not compatible [kapparesonances].")
+            elif check[1] and check[2]:
+                kappares = kapparoots[1:3]
+            elif check[0] and check[2]:
+                kappares = kapparoots[0:2]
 
             # # Find values of kappa that are within the two candidate intervals. A simple average is enough.
             # avs = np.array([np.mean(kapparoots[1:3]),np.mean(kapparoots[3:5])])
@@ -4918,13 +4939,14 @@ def Ssampling(J, r, chieff, q, chi1, chi2, N=1):
 
 
 
-def Ssav_mfactor(m):
+# re do docstrings
+def deltachitildeav(m):
     """
     Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
 
     Call
     ----
-    coeff = Ssav_mfactor(m)
+    coeff = deltachitildeav(m)
 
     Parameters
     ----------
@@ -4979,7 +5001,7 @@ def Ssav(J, r, chieff, q, chi1, chi2):
 
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
     m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-    Ssq = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
+    Ssq = Spluss - (Spluss-Sminuss)*deltachitildeav(m)
 
     return Ssq
 
@@ -5344,7 +5366,7 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
 
 
 # Precession-averaged evolution
-def rhs_precav(kappa, u, chieff, q, chi1, chi2):
+def rhs_precav_old(kappa, u, chieff, q, chi1, chi2):
     """
     Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
 
@@ -5401,10 +5423,85 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
             # Normal case
             else:
                 S3s, Sminuss, Spluss = np.real([S3s, Sminuss, Spluss])
+
+                #print('hhh')
+                #print(S3s, Sminuss, Spluss)
+
                 m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-                Ssav = Spluss - (Spluss-Sminuss)*Ssav_mfactor(m)
+                Ssav = Spluss - (Spluss-Sminuss)*deltachitildeav(m)
 
     return Ssav
+
+
+
+
+# Precession-averaged evolution
+def rhs_precav(kappa, u, chieff, q, chi1, chi2):
+    """
+    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
+
+    Call
+    ----
+    RHS = rhs_precav(kappa,u,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    kappa: float
+        Regularized angular momentum (J^2-L^2)/(2L).
+    u: float
+        Compactified separation 1/(2L).
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    RHS: float
+        Right-hand side.
+    """
+
+    if u == 0:
+        # In this case use analytic result
+        theta1inf, theta2inf = asymptotic_to_angles(kappa, chieff, q, chi1, chi2)
+        Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
+    else:
+
+        coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
+        coeffs = np.squeeze(coeffs)
+
+        sols = np.roots(coeffs)
+        deltachiminus, deltachiplus, deltachi3 = np.squeeze(np.sort_complex(sols))
+
+        # deltachiminus, deltachiplus are complex. This can happen if the binary is very close to a spin-orbit resonance
+        if np.iscomplex([deltachiminus, deltachiplus]).any():
+            warnings.warn("Sanitizing RHS output; too close to resonance. [rhs_precav].", Warning)
+            deltachiav = np.mean(np.real([deltachiminus, deltachiplus]))
+
+        # Normal case
+        else:
+            deltachiminus, deltachiplus, deltachi3 = np.real([deltachiminus, deltachiplus, deltachi3])
+            deltachi3ss = deltachi3/(1-q)
+            #print('hhh')
+
+            #r=eval_r(u=u,q=q)
+            #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachiminus * (1 - q)/(1 + q)) )
+            #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachiplus * (1 - q)/(1 + q)) )
+            #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi3* (1 - q)/(1 + q)) )
+
+
+
+            m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus, deltachiplus, deltachi3]))
+            deltachiav = inverseaffine( deltachitildeav(m),  deltachiminus, deltachiplus)
+            #print('dchiav' ,deltachiav)
+        Ssav = (2*kappa - chieff - (1-q)/(1+q)*deltachiav)/(2*u)
+
+    return Ssav
+
 
 
 # Update docstrings
@@ -5451,18 +5548,32 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     if 'mxstep' not in odeint_kwargs: odeint_kwargs['mxstep']=5000000
     if 'rol' not in odeint_kwargs: odeint_kwargs['rtol']=1e-10
     if 'aol' not in odeint_kwargs: odeint_kwargs['atol']=1e-10
-    odeint_kwargs['full_output']=0 # This needs to be forced for compatibility with the rest of the code
+    # I'm sorry but this needs to be forced for compatibility with the rest of the code
+    odeint_kwargs['full_output'] = 0 
 
 
-    def _compute(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
+    def _compute(kappainitial, u, chieff, q, chi1, chi2, odeint_kwargs):
 
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # h0= 1e-3 if u[0]==0 else 0
 
         # Make sure the first step is large enough. This is to avoid LSODA to propose a tiny step which causes the integration to stall
-        if 'h0' not in odeint_kwargs: odeint_kwargs['h0']=u[0]/1e6
+        # if 'h0' not in odeint_kwargs: odeint_kwargs['h0']=min(u[0])/1e6
+
+        # Update: This does not seem to be necessary after all.
+
 
         ODEsolution = scipy.integrate.odeint(rhs_precav, kappainitial, u, args=(chieff, q, chi1, chi2), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
+        print('new', ODEsolution)
+
+
+        ODEsolution = scipy.integrate.odeint(rhs_precav_old, kappainitial, u, args=(chieff, q, chi1, chi2), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
+        print('old', ODEsolution)
+
+
+
+
+
         return np.squeeze(ODEsolution)
 
 
@@ -5472,9 +5583,9 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
         # TODO: let user pick rtol and atol
 
         # Return ODE object. The key methods is .sol --callable, sol(t).
-        return ODEsolution
+        #return ODEsolution
 
-    ODEsolution = np.array(list(map(_compute, kappainitial, u, chieff, q, chi1, chi2)))
+    ODEsolution = np.array(list(map(_compute, kappainitial, u, chieff, q, chi1, chi2, repeat(odeint_kwargs))))
 
     return ODEsolution
 
@@ -7319,19 +7430,23 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.7
+    q=0.999
     chi1=0.8
     chi2=0.9
-    chieff=0.3
-    r=10
+    chieff=0.30
+    r=100000
     kappatilde = 0.9
     deltachitilde = 0.7
-    u = eval_u(r, q)
     kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
     #print(kappa)
+    #kappa=0.19702426300035386
+    u = eval_u([r,10], [q,q])
+    print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
 
 
-    print(integrator_precav(kappainitial, [u,100], chieff, q, chi1, chi2))
+    #print(rhs_precav(kappa, u[0], chieff, q, chi1, chi2))
+    #print(rhs_precav_old(kappa, u[0], chieff, q, chi1, chi2))
+
 
     # print(deltachisampling(kappa, r, chieff, q, chi1, chi2))
 
