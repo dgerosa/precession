@@ -59,9 +59,6 @@ def roots_vec(p, enforce=False):
 
     return np.where(resind<nansol, np.nan, results)
 
-
-
-
 def norm_nested(x):
     """
     Norm of 2D array of shape (N,3) along last axis.
@@ -1245,8 +1242,8 @@ def kapparesonances_old(u, chieff, q, chi1, chi2, tol= 1e-5):
         kapparoots = kapparoots[np.isfinite(kapparoots)]
         #print('kapparoots', kapparoots)
 
-        Sroots = Satresonance(kappa=kapparoots, u=np.tile(u, kapparoots.shape), chieff=np.tile(chieff, kapparoots.shape), q=np.tile(q, kapparoots.shape), chi1=np.tile(chi1, kapparoots.shape), chi2=np.tile(chi2, kapparoots.shape))
-        Smin, Smax = Slimits_S1S2(np.tile(q, kapparoots.shape), np.tile(chi1, kapparoots.shape), np.tile(chi2, kapparoots.shape))
+        Sroots = Satresonance(kappa=kapparoots, u=tiler(u, kapparoots), chieff=tilere(chieff, kapparoots), q=tiler(q, kapparoots), chi1=tiler(chi1, kapparoots), chi2=tiler(chi2, kapparoots))
+        Smin, Smax = Slimits_S1S2(tiler(q, kapparoots), tiler(chi1, kapparoots), tiler(chi2, kapparoots))
         kappares = kapparoots[np.logical_and(Sroots > Smin, Sroots < Smax)]
 
         #print("S",Sroots,Smin, Smax)
@@ -1798,12 +1795,12 @@ def anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
         Satmin = Satresonance(J=Jmin, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
         theta1atmin = eval_theta1(Satmin, Jmin, r, chieff, q, chi1, chi2)
         theta2atmin = eval_theta2(Satmin, Jmin, r, chieff, q, chi1, chi2)
-        deltaphiatmin = np.tile(np.pi, q.shape)
+        deltaphiatmin = tilere(np.pi, q)
 
         Satmax = Satresonance(J=Jmax, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
         theta1atmax = eval_theta1(Satmax, Jmax, r, chieff, q, chi1, chi2)
         theta2atmax = eval_theta2(Satmax, Jmax, r, chieff, q, chi1, chi2)
-        deltaphiatmax = np.tile(0, q.shape)
+        deltaphiatmax = tiler(0, q)
 
     elif J is not None and r is not None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
 
@@ -1821,7 +1818,7 @@ def anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
         Satmax = Satresonance(J=J, r=r, chieff=chieffmax, q=q, chi1=chi1, chi2=chi2)
         theta1atmax = eval_theta1(Satmax, J, r, chieffmax, q, chi1, chi2)
         theta2atmax = eval_theta2(Satmax, J, r, chieffmax, q, chi1, chi2)
-        deltaphiatmax = np.tile(np.pi, q.shape)
+        deltaphiatmax = tile(np.pi, q)
 
     else:
         raise TypeError("Provide either (r,chieff,q,chi1,chi2) or (J,r,q,chi1,chi2).")
@@ -2397,7 +2394,7 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
             _, _, deltachi3 = wraproots(deltachicubic_rescaled_coefficients, kappa, u, chieff, q, chi1, chi2).T
         # Otherwise avoid (for computational efficiency)
         else:
-            deltachi3 = np.tile(np.nan, np.shape(deltachiminus))
+            deltachi3 = tile(np.nan,deltachiminus)
 
         return np.stack([deltachiminus, deltachiplus, deltachi3])
 
@@ -5535,7 +5532,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     inputs = [theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
-            inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
+            inputs[k] = np.atleast_1d(np.squeeze(tiler(None, np.atleast_1d(q))))
         else:
             if k == 6 or k == 7:  # Either u or r
                 inputs[k] = np.atleast_2d(inputs[k])
@@ -5550,10 +5547,10 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
         if r is not None and u is None:
             assert np.logical_or(ismonotonic(r, '<='), ismonotonic(r, '>=')), 'r must be monotonic'
-            u = eval_u(r, np.tile(q, r.shape))
+            u = eval_u(r, tiler(q, r))
         elif r is None and u is not None:
             assert np.logical_or(ismonotonic(u, '<='), ismonotonic(u, '>=')), 'u must be monotonic'
-            r = eval_r(u=u, q=np.tile(q, u.shape))
+            r = eval_r(u=u, q=tiler(q, u))
         else:
             raise TypeError("Please provide either r or u. Use np.inf for infinity.")
 
@@ -5610,11 +5607,11 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         kappaok = kappa[u != 0]
 
         # Resample S and assign random sign to deltaphi
-        J = eval_J(kappa=kappaok, r=rok, q=np.tile(q, rok.shape))
-        S = Ssampling(J, rok, np.tile(chieff, rok.shape), np.tile(q, rok.shape),
-        np.tile(chi1, rok.shape), np.tile(chi2, rok.shape), N=1)
-        theta1, theta2, deltaphi = conserved_to_angles(S, J, rok, chieff, np.tile(q, rok.shape),
-        np.tile(chi1, rok.shape), np.tile(chi2, rok.shape))
+        J = eval_J(kappa=kappaok, r=rok, q=tiler(q, rok))
+        S = Ssampling(J, rok, tiler(chieff, rok), tilere(q, rok),
+        tiler(chi1, rok), tiler(chi2, rok), N=1)
+        theta1, theta2, deltaphi = conserved_to_angles(S, J, rok, chieff, tiler(q, rok),
+        tiler(chi1, rok), tiler(chi2, rok))
         deltaphi = deltaphi * np.random.choice([-1, 1], deltaphi.shape)
 
         # Integrating from infinite separation.
@@ -6120,7 +6117,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
     inputs = [theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
-            inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
+            inputs[k] = np.atleast_1d(np.squeeze(tiler(None, np.atleast_1d(q))))
         else:
             if k == 4 or k == 5 or k == 6 or k == 9 or k == 10:  # Lh, S1h, S2h, u, or r
                 inputs[k] = np.atleast_2d(inputs[k])
@@ -6135,10 +6132,10 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
 
         if r is not None and u is None:
             assert np.logical_or(ismonotonic(r, '<='), ismonotonic(r, '>=')), 'r must be monotonic'
-            u = eval_u(r, np.tile(q, r.shape))
+            u = eval_u(r, tiler(q, r))
         elif r is None and u is not None:
             assert np.logical_or(ismonotonic(u, '<='), ismonotonic(u, '>=')), 'u must be monotonic'
-            r = eval_r(u=u, q=np.tile(q, u.shape))
+            r = eval_r(u=u, q=tiler(q, u))
         else:
             raise TypeError("Please provide either r or u.")
 
@@ -6184,7 +6181,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         # TODO: Should I renormalize here? The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
 
         S1, S2 = spinmags(q, chi1, chi2)
-        L = eval_L(r, np.tile(q, r.shape))
+        L = eval_L(r, tiler(q, r))
         Lvec = (L*Lh.T).T
         S1vec = S1*S1h
         S2vec = S2*S2h
@@ -6284,7 +6281,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     inputs = [theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
-            inputs[k] = np.atleast_1d(np.squeeze(np.tile(None, np.atleast_1d(q).shape)))
+            inputs[k] = np.atleast_1d(np.squeeze(tiler(None, np.atleast_1d(q))))
         else:
             if k == 6 or k == 8:  # Either u or r
                 inputs[k] = np.atleast_2d(inputs[k])
@@ -6295,8 +6292,8 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     def _compute(theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2):
 
         if r is None and rswitch is None and u is not None and uswitch is not None:
-            r = eval_r(u=u, q=np.tile(q, u.shape))
-            rswitch = eval_r(u=uswitch, q=np.tile(q, uswitch.shape))
+            r = eval_r(u=u, q=tiler(q, u))
+            rswitch = eval_r(u=uswitch, q=tiler(q, uswitch))
 
         forwards = ismonotonic(r, ">=")
         backwards = ismonotonic(r, "<=")
@@ -6336,9 +6333,9 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
             # Quantities that vary only on the orbit-averaged evolution
             if k in ['chieff']:
                 if forwards:
-                    evolution_full[k] = np.atleast_2d(np.append(np.tile(evolution_first[k][:], rfirst[:-1].shape), evolution_second[k][:, 1:]))
+                    evolution_full[k] = np.atleast_2d(np.append(tiler(evolution_first[k][:], rfirst[:-1]), evolution_second[k][:, 1:]))
                 elif backwards:
-                    evolution_full[k] = np.atleast_2d(np.append(evolution_first[k][:, :-1], np.tile(evolution_second[k][:], rsecond[1:].shape)))
+                    evolution_full[k] = np.atleast_2d(np.append(evolution_first[k][:, :-1], tiler(evolution_second[k][:], rsecond[1:])))
             # Quanties that do not vary
             if k in ['q', 'chi1', 'chi2']:
                 evolution_full[k] = evolution_second[k]
