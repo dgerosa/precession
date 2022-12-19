@@ -12,7 +12,6 @@ from itertools import repeat
 
 ################ Utilities ################
 
-
 # TODO: new algorithm! Needs to be documented!
 def roots_vec(p, enforce=False):
     """
@@ -63,6 +62,7 @@ def roots_vec(p, enforce=False):
     resind = np.mgrid[0:results.shape[0], 0:results.shape[1]][1]
 
     return np.where(resind<nansol, np.nan, results)
+
 
 def norm_nested(x):
     """
@@ -234,7 +234,6 @@ def wraproots(coefficientfunction, *args, **kwargs):
     coeffs = coefficientfunction(*args, **kwargs)
     sols = np.sort_complex(roots_vec(coeffs.T))
     sols = np.real(np.where(np.isreal(sols), sols, np.nan))
-
     return sols
 
 
@@ -1274,7 +1273,6 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     return np.stack([kappamin, kappamax])
 
 
-
 # Remove this
 def kappainfresonances(chieff, q, chi1, chi2):
     """
@@ -1376,6 +1374,7 @@ def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
         raise TypeError("Provide either (r,q,chi1,chi2) or (r,chieff,q,chi1,chi2).")
 
     return np.stack([Jmin, Jmax])
+
 
 # TODO: check when rewriting the large separation limit
 def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
@@ -2150,12 +2149,13 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
     if precomputedroots is None:
         deltachiminus, deltachiplus, _ = wraproots(deltachicubic_coefficients, kappa, u, chieff, q, chi1, chi2).T
 
+
         # If you need the spurious root as well.
         if full_output:
             _, _, deltachi3 = wraproots(deltachicubic_rescaled_coefficients, kappa, u, chieff, q, chi1, chi2).T
         # Otherwise avoid (for computational efficiency)
         else:
-            deltachi3 = tiler(np.nan,deltachiminus)
+            deltachi3 = np.atleast_1d(tiler(np.nan,deltachiminus))
 
         return np.stack([deltachiminus, deltachiplus, deltachi3])
 
@@ -2214,6 +2214,7 @@ def deltachilimits_rectangle(chieff, q, chi1, chi2):
 
 
 def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+
 
     u = eval_u(r,q)
     deltachiminus, deltachiplus, _ = deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=False, precomputedroots=precomputedroots)
@@ -2671,7 +2672,7 @@ def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=N
     return theta12
 
 
-def eval_cosdeltaphi(deltachi, kappa, chieff, q, chi1, chi2):
+def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
     """
     Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
 
@@ -2755,7 +2756,7 @@ def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=-1):
     """
 
     cyclesign = np.atleast_1d(cyclesign)
-    cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, chieff, q, chi1, chi2)
+    cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2)
     deltaphi = -np.sign(cyclesign)*np.arccos(cosdeltaphi)
 
     return deltaphi
@@ -3161,7 +3162,7 @@ def eval_theta2inf(kappainf, chieff, q, chi1, chi2):
 
 
 #TODO regen docstrings
-def morphology(J, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None):
+def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None):
     """
     Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
 
@@ -3192,13 +3193,13 @@ def morphology(J, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None
         Spin morphology.
     """
 
-    Smin, Smax = Slimits_plusminus(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    deltachiminus,deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     # Pairs of booleans based on the values of deltaphi at S- and S+
-    status = np.transpose([eval_cosdeltaphi(Smin, J, r, chieff, q, chi1, chi2) > 0, eval_cosdeltaphi(Smax, J, r, chieff, q, chi1, chi2) > 0])
+    status = np.transpose([eval_cosdeltaphi(deltachiminus, kappa, r, chieff, q, chi1, chi2) > 0, eval_cosdeltaphi(deltachiplus, kappa, r, chieff, q, chi1, chi2) > 0])
     # Map to labels
     dictlabel = {(False, False): "Lpi", (True, True): "L0", (False, True): "C-", (True, False): "C+"}
     # Subsitute pairs with labels
-    morphs = np.zeros(Smin.shape)
+    morphs = np.zeros(deltachiminus.shape)
     for k, v in dictlabel.items():
         morphs = np.where((status == k).all(axis=1), v, morphs)
     # Simplifies output, only one circulating morphology
@@ -3844,151 +3845,6 @@ def angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2):
 
 # Precessional timescale dynamics
 
-def derS_prefactor(r, chieff, q):
-    """
-    Numerical prefactor to the S derivative.
-
-    Call
-    ----
-    mathcalA = derS_prefactor(r,chieff,q)
-
-    Parameters
-    ----------
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-
-    Returns
-    -------
-    mathcalA: float
-        Prefactor in the dSdt equation.
-    """
-
-    r = np.atleast_1d(r)
-    chieff = np.atleast_1d(chieff)
-
-    eta = eval_eta(q)
-    mathcalA = (3/2)*(1/(r**3*eta**0.5))*(1-(chieff/r**0.5))
-
-    return mathcalA
-
-
-def dSsdtsquared(S, J, r, chieff, q, chi1, chi2):
-    """
-    Squared first time derivative of the squared total spin, on the precession timescale.
-
-    Call
-    ----
-    dSsdts = dSsdtsquared(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    dSsdts: float
-        Squared first derivative of the squared total spin.
-    """
-
-    mathcalA = derS_prefactor(r, chieff, q)
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
-    dSsdts = - mathcalA**2 * (S**2-Spluss) * (S**2-Sminuss) * (S**2-S3s)
-
-    return dSsdts
-
-
-# Change name to this function, otherwise is identical to the returned variable.
-def dSsdt(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
-    """
-    Time derivative of the squared total spin, on the precession timescale.
-
-    Call
-    ----
-    dSsdt = dSsdt(S,J,r,chieff,q,chi1,chi2,cyclesign=1)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: 1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle. One has sign(deltaphi)=sign(varphi)=-sign(dS/dt).
-
-    Returns
-    -------
-    dSsdt: float
-        Time derivative of the squared total spin.
-    """
-
-    cyclesign = np.atleast_1d(cyclesign)
-
-    return cyclesign*dSsdtsquared(S, J, r, chieff, q, chi1, chi2)**0.5
-
-
-# Change name to this function, otherwise is identical to the returned variable.
-def dSdt(S, J, r, chieff, q, chi1, chi2):
-    """
-    Time derivative of the total spin, on the precession timescale.
-
-    Call
-    ----
-    dSdt = dSdt(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    dSdt: float
-        Time derivative of the total spin.
-    """
-
-    return dSsdt(S, J, r, chieff, q, chi1, chi2) / (2*S)
-
-
-
 def elliptic_parameter_old(Sminuss, Spluss, S3s):
     """
     Parameter m entering elliptic functions for the evolution of S.
@@ -4091,83 +3947,6 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
     return n
 
 
-# remove this
-def time_normalization(Spluss, S3s, r, chieff, q):
-    """
-    Numerical prefactors entering the precession period.
-
-    Call
-    ----
-    mathcalT = time_normalization(Spluss,S3s,r,chieff,q)
-
-    Parameters
-    ----------
-    Spluss: float
-        Largest physical root, if present, of the effective potential equation.
-    S3s: float
-        Spurious root of the effective potential equation.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-
-    Returns
-    -------
-    mathcalT: float
-        Prefactor in the tau equation.
-    """
-
-    Spluss = np.atleast_1d(Spluss)
-    S3s = np.atleast_1d(S3s)
-
-    mathcalA = derS_prefactor(r, chieff, q)
-    mathcalT = 2/(mathcalA*(Spluss-S3s)**0.5)
-
-    return mathcalT
-
-
-# remove this
-def eval_tau_old(J, r, chieff, q, chi1, chi2, precomputedroots=None):
-    """
-    Period of S as it oscillates from S- to S+ and back to S-.
-
-    Call
-    ----
-    tau = eval_tau(J,r,chieff,q,chi1,chi2,precomputedroots=None)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
-    Returns
-    -------
-    tau: float
-        Nutation period.
-    """
-
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
-    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-    tau = 2*mathcalT*scipy.special.ellipk(m)
-
-    return tau
-
-
 # re do docstrings
 def deltachitildeav(m):
     """
@@ -4232,7 +4011,6 @@ def ddchidt_prefactor(r, chieff, q):
     return mathcalA
 
 
-
 def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None, donotnormalize=False):
 
     q=np.atleast_1d(q)
@@ -4248,7 +4026,6 @@ def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None
     dchidt2 = mathcalA**2 * ( (deltachi-deltachiminus)*(deltachiplus-deltachi)*(deltachi3-(1-q)*deltachi))
 
     return dchidt2
-
 
 
 def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
@@ -4283,8 +4060,6 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
     return m
 
 
-
-
 def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psiperiod=False, donotnormalize=False):
 
     q=np.atleast_1d(q)
@@ -4308,8 +4083,6 @@ def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psip
         tau = 2*scipy.special.ellipk(m) * psiperiod
 
     return tau
-
-
 
 
 #I changed the broadcasting rule compared Soft!
@@ -4366,54 +4139,6 @@ def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
 
     return deltachi
 
-
-
-def tofS(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
-    """
-    Time t as a function of S (without radiation reaction). Only covers half of a precession cycle, assuming t=0 at S=S- and t=tau/2 at S=S+. Set sign=-1 to cover the second half, i.e. from t=tau/2 at S=S+ to t=tau at S=S-.
-
-    Call
-    ----
-    t = tofS(S,J,r,chieff,q,chi1,chi2,cyclesign=1,precomputedroots=None)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: 1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-    precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
-    Returns
-    -------
-    t: float
-        Time.
-    """
-
-    S = np.atleast_1d(S)
-
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-
-    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
-    phi = elliptic_amplitude(S, Sminuss, Spluss)
-    tau = eval_tau_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
-    t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
-
-    return t
 
 def tofdeltachi(deltachi, kappa , r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
 
@@ -4482,8 +4207,6 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
     deltachi = deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
     return deltachi.T
 
-
-    
 
 ################ Precession-averaged evolution ################
 
@@ -6482,46 +6205,53 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.45
-    chi1=0.8
-    chi2=0.9
-    chieff=0.30
+    q=0.8
+    chi1=1
+    chi2=1
+    chieff=0.25
     r=10
-    kappatilde = 0.9
+    #kappatilde = 0.9
     deltachitilde = 0.7
-    kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
+    #kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
     #print(kappa)
     #kappa=0.19702426300035386
     u=eval_u(r=r,q=q)
+    #J=eval_J(kappa=kappa, r=r, q=q)
+    J=1
+    kappa=eval_kappa(J=J,r=r,q=q)
     #u = eval_u([r,1000,100,10], [q,q,q,q])
     #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
 
-    def func(dchi):
-        return dchi
+    #def func(dchi):
+    #    return dchi
+
+
+    m = morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None)
+    print(m)
 
     #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='quadrature')
     #print('q1', res)
 
 
-    res = precession_average([kappa,kappa], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature')
-    print(res)
+    #res = precession_average([kappa,kappa], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature')
+    #print(res)
 
 
 
     #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='montecarlo', Nsamples=1e4)
 
-    res = precession_average([kappa,kappa], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='montecarlo')
+    #res = precession_average([kappa,kappa], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='montecarlo')
 
 
-    print(res)
+    #print(res)
 
 
-    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
-    deltachi3ss = deltachi3/(1-q)
+    #deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
+    #deltachi3ss = deltachi3/(1-q)
 
-    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus, deltachiplus, deltachi3]))
-    deltachiav = inverseaffine( deltachitildeav(m),  deltachiminus, deltachiplus)
-    print('dchiav' ,deltachiav)
+    #m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus, deltachiplus, deltachi3]))
+    #deltachiav = inverseaffine( deltachitildeav(m),  deltachiminus, deltachiplus)
+    #print('dchiav' ,deltachiav)
 
 
     #print(rhs_precav(kappa, u[0], chieff, q, chi1, chi2))
@@ -6564,7 +6294,6 @@ if __name__ == '__main__':
     #print((chi1 + q**2 * chi2) / (1+q)**2)
 
     #kappa = kapparescaling(kappatilde, r, chieff, q, chi1, chi2)
-    J=eval_J(kappa=kappa, r=r, q=q)
 
 
     #deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2)
