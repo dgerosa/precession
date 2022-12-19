@@ -1106,7 +1106,6 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
     #sols = np.real(np.where(np.isreal(sols), sols, np.nan))
 
-
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparootscomplex, u, chieff, q, chi1, chi2):
         kappares=None
@@ -1139,23 +1138,28 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
 
         # Here we have two candidate pairs of resonances...
         elif len(kapparoots)==5:
-            # Compute the corresponding values of deltachi at the resonances
-            deltachires = deltachiresonance(kappa=kapparoots, u=tiler(u,kapparoots), chieff=tiler(chieff,kapparoots), q=tiler(q,kapparoots), chi1=tiler(chi1,kapparoots), chi2=tiler(chi2,kapparoots))
-            # Check which of those values is within the allowed region
-            deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
-            check = np.squeeze(np.logical_and(deltachires>deltachimin,deltachires<deltachimax))
-            # The first root cannot possibly be right
-            if check[0]:
-                raise ValueError("Input values are not compatible [kapparesonances].")
-            elif check[1] and check[2] and not check[3] and not check[4]:
-                kappares = kapparoots[1:3]
-            elif not check[1] and not check[2] and check[3] and check[4]:
-                kappares = kapparoots[3:5]
-            elif check[1] and check[2] and check[3] and check[4]:
-                warnings.warn("Unphysical resonances detected and removed", Warning)
-                err = np.abs( (kapparoots[2]-kapparoots[3])/np.mean(kapparoots[2:4]))
-                warnings.warn("Unphysical resonances detected and removed. Relative accuracy Delta_kappa/kappa="+str(err)+", [kapparesonances].", Warning)
-                kappares=np.array([kapparoots[1],kapparoots[4]])
+
+            # Edge case with two coincident roots that are exactly zeros. This happens for q=chi1=chi2=1
+            if np.count_nonzero(kapparoots):
+                kappares = kapparoots[kapparoots != 0][1:]
+            else:
+                # Compute the corresponding values of deltachi at the resonances
+                deltachires = deltachiresonance(kappa=kapparoots, u=tiler(u,kapparoots), chieff=tiler(chieff,kapparoots), q=tiler(q,kapparoots), chi1=tiler(chi1,kapparoots), chi2=tiler(chi2,kapparoots))
+                # Check which of those values is within the allowed region
+                deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
+                check = np.squeeze(np.logical_and(deltachires>deltachimin,deltachires<deltachimax))
+                # The first root cannot possibly be right
+                if check[0]:
+                    raise ValueError("Input values are not compatible [kapparesonances].")
+                elif check[1] and check[2] and not check[3] and not check[4]:
+                    kappares = kapparoots[1:3]
+                elif not check[1] and not check[2] and check[3] and check[4]:
+                    kappares = kapparoots[3:5]
+                elif check[1] and check[2] and check[3] and check[4]:
+                    warnings.warn("Unphysical resonances detected and removed", Warning)
+                    err = np.abs( (kapparoots[2]-kapparoots[3])/np.mean(kapparoots[2:4]))
+                    warnings.warn("Unphysical resonances detected and removed. Relative accuracy Delta_kappa/kappa="+str(err)+", [kapparesonances].", Warning)
+                    kappares=np.array([kapparoots[1],kapparoots[4]])
 
         # This is an edge (and hopefully rare) case where the resonances are missed because of numerical errors
         elif len(kapparoots)==1:
@@ -2292,11 +2296,11 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
 
     #print('Satres', kappa)
     coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
+    print(coeffs)
     with np.errstate(invalid='ignore'):  # nan is ok here
         # This is with a simple for loop
         deltachires = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:,:-1]),axis=1)
         # Sres = np.array([np.mean(np.real(np.sort_complex(np.roots(x))[1:]))**0.5 for x in coeffs.T])
-
         #deltachires = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:, 1:])**0.5, axis=1)
 
     return deltachires
@@ -6205,29 +6209,40 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.8
-    chi1=1
-    chi2=1
-    chieff=0.25
-    r=10
-    #kappatilde = 0.9
-    deltachitilde = 0.7
-    #kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
-    #print(kappa)
-    #kappa=0.19702426300035386
-    u=eval_u(r=r,q=q)
-    #J=eval_J(kappa=kappa, r=r, q=q)
-    J=1
-    kappa=eval_kappa(J=J,r=r,q=q)
-    #u = eval_u([r,1000,100,10], [q,q,q,q])
-    #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
+    # q=0.8
+    # chi1=1
+    # chi2=1
+    # chieff=0.25
+    # r=10
+    # #kappatilde = 0.9
+    # deltachitilde = 0.7
+    # #kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
+    # #print(kappa)
+    # #kappa=0.19702426300035386
+    # u=eval_u(r=r,q=q)
+    # #J=eval_J(kappa=kappa, r=r, q=q)
+    # J=1
+    # kappa=eval_kappa(J=J,r=r,q=q)
+    # #u = eval_u([r,1000,100,10], [q,q,q,q])
+    # #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
 
-    #def func(dchi):
-    #    return dchi
+    # #def func(dchi):
+    # #    return dchi
 
 
-    m = morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None)
-    print(m)
+    # m = morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None)
+    # print(m)
+
+
+    q=1 #np.linspace(0.1,1,10)
+    chi1=1.
+    chi2=1.
+    chieff=0.
+    r=np.geomspace(100,10,100)
+    kappatilde = 0.5
+    #kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
+    print(kapparesonances(tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q)))
+
 
     #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='quadrature')
     #print('q1', res)
