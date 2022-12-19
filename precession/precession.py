@@ -177,9 +177,13 @@ def sample_unitsphere(N=1):
     return vec.T
 
 
-def tiler(scalar,shaper):
+def tiler(thing,shaper):
+    thing =np.atleast_1d(thing)
+    shaper =np.atleast_1d(shaper)
+    assert thing.ndim == 1 and shaper.ndim==1
 
-    return np.tile(scalar, np.shape(shaper))
+    return np.squeeze(np.tile(thing, np.shape(shaper)).reshape(len(shaper),len(thing)))
+
 
 
 def affine(vec, low, up):
@@ -7242,9 +7246,9 @@ if __name__ == '__main__':
     # print(kappamin,kappamax)
 
 # TODO: Do we need this?
-    Jmin,Jmax = Jlimits_LS1S2(r, q, chi1, chi2)
-    print(Jmin,Jmax)
+    # Jmin,Jmax = Jlimits_LS1S2(r, q, chi1, chi2)
+    # print(Jmin,Jmax)
 
-    kmin,kmax = kappalimits_geometrical(r , q, chi1, chi2)
-    print(eval_J(kappa=np.squeeze([kmin,kmax]), r=[r,r], q=[q,q]))
+    # kmin,kmax = kappalimits_geometrical(r , q, chi1, chi2)
+    # print(eval_J(kappa=np.squeeze([kmin,kmax]), r=[r,r], q=[q,q]))
 
