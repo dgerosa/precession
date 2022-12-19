@@ -1131,19 +1131,17 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
             kappares=np.squeeze([kappar,kappar])
 
 
-
         # In this case, the spurious solution is always the smaller one. Just leave it out.
         elif len(kapparoots)==3:
             kappares = kapparoots[1:]
 
         # Here we have two candidate pairs of resonances...
         elif len(kapparoots)==5:
-            print(kapparoots,np.count_nonzero(kapparoots))
+
             # Edge case with two coincident roots that are exactly zeros. This happens for q=chi1=chi2=1
             if np.count_nonzero(kapparoots)==3:
                 kappares = kapparoots[kapparoots != 0][1:]
             elif np.count_nonzero(kapparoots)==1:
-                print(kapparoots[kapparoots != 0])
                 kappares = np.sort(np.concatenate([[0],kapparoots[kapparoots != 0]]))
             else:
                 # Compute the corresponding values of deltachi at the resonances
