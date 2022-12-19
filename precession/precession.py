@@ -1138,10 +1138,13 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
 
         # Here we have two candidate pairs of resonances...
         elif len(kapparoots)==5:
-
+            print(kapparoots,np.count_nonzero(kapparoots))
             # Edge case with two coincident roots that are exactly zeros. This happens for q=chi1=chi2=1
-            if np.count_nonzero(kapparoots):
+            if np.count_nonzero(kapparoots)==3:
                 kappares = kapparoots[kapparoots != 0][1:]
+            elif np.count_nonzero(kapparoots)==1:
+                print(kapparoots[kapparoots != 0])
+                kappares = np.sort(np.concatenate([[0],kapparoots[kapparoots != 0]]))
             else:
                 # Compute the corresponding values of deltachi at the resonances
                 deltachires = deltachiresonance(kappa=kapparoots, u=tiler(u,kapparoots), chieff=tiler(chieff,kapparoots), q=tiler(q,kapparoots), chi1=tiler(chi1,kapparoots), chi2=tiler(chi2,kapparoots))
@@ -2296,7 +2299,7 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
 
     #print('Satres', kappa)
     coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
-    print(coeffs)
+
     with np.errstate(invalid='ignore'):  # nan is ok here
         # This is with a simple for loop
         deltachires = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:,:-1]),axis=1)
@@ -4260,19 +4263,10 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
         # Normal case
         else:
             deltachiminus, deltachiplus, deltachi3 = np.real([deltachiminus, deltachiplus, deltachi3])
-            deltachi3ss = deltachi3/(1-q)
-            #print('hhh new')
-
-            #r=eval_r(u=u,q=q)
-            #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachiminus * (1 - q)/(1 + q)) )
-            #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachiplus * (1 - q)/(1 + q)) )
-            #print( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi3/(1 + q)) )
-
-
 
             m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus, deltachiplus, deltachi3]))
             deltachiav = inverseaffine( deltachitildeav(m),  deltachiminus, deltachiplus)
-            #print('dchiav' ,deltachiav)
+
         Ssav = (2*kappa - chieff - (1-q)/(1+q)*deltachiav)/(2*u)
 
     return Ssav
@@ -4325,7 +4319,6 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     if 'aol' not in odeint_kwargs: odeint_kwargs['atol']=1e-10
     # I'm sorry but this needs to be forced for compatibility with the rest of the code
     odeint_kwargs['full_output'] = 0 
-
 
     def _compute(kappainitial, u, chieff, q, chi1, chi2, odeint_kwargs):
 
@@ -6234,15 +6227,29 @@ if __name__ == '__main__':
     # print(m)
 
 
-    q=1 #np.linspace(0.1,1,10)
-    chi1=1.
-    chi2=1.
-    chieff=0.
-    r=np.geomspace(100,10,100)
-    kappatilde = 0.5
-    #kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
-    print(kapparesonances(tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q)))
+    # q=0.8 #np.linspace(0.1,1,10)
+    # chi1=1.
+    # chi2=1.
+    # chieff=0.
+    # r=np.geomspace(10000,10,100)
+    # kappatilde = 0.5
+    # #kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
+    # #print(kapparesonances(tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q)))
+    # kappatilde = np.linspace(0,1,20)[1:-1]
+    # kappa = kapparescaling(kappatilde, tiler(r[0],kappatilde), tiler(chieff,kappatilde), tiler(q,kappatilde), tiler(chi1,kappatilde), tiler(chi2,kappatilde))
 
+    q=np.linspace(0.1,0.5,3)
+    chi1=1
+    chi2=1
+    chieff=0.
+    r=np.geomspace(100,10,10)
+    u=np.array([eval_u(r=r,q=tiler(qx,r)) for qx in q])
+
+    kappatilde = 0.5
+    kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
+    kappasol = integrator_precav(kappa, u , tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
+
+    print(kappasol)
 
     #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='quadrature')
     #print('q1', res)
