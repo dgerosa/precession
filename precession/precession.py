@@ -10,6 +10,9 @@ import scipy.integrate
 from itertools import repeat
 
 
+################ Utilities ################
+
+
 # TODO: new algorithm! Needs to be documented!
 def roots_vec(p, enforce=False):
     """
@@ -349,7 +352,9 @@ def ismonotonic(vec, which):
 def squarewithsign(x):
     return x*np.abs(x)
 
-# Definitions
+
+################ Dynamics on the precession timescale ################
+
 
 def eval_m1(q):
     """
@@ -537,6 +542,7 @@ def eval_S2(q, chi2):
 
 
 # TODO: remove
+# TODO: check all places where I use spinmags and rewrite using chi1 chi2 directly
 def spinmags(q, chi1, chi2):
     """
     Spins of the black holes in units of the total mass.
@@ -2160,7 +2166,6 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
 
 
 
-# TODO: check when rewriting the large separation limit
 def deltachilimits_rectangle(chieff, q, chi1, chi2):
     """
     Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
@@ -2495,48 +2500,6 @@ def eval_deltachi(theta1, theta2, q, chi1, chi2):
 
 # TODO: change S,J to deltachi, kappa in all these angle functions below!
 
-def eval_costheta1_old(S, J, r, chieff, q, chi1, chi2):
-    """
-    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
-
-    Call
-    ----
-    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    costheta1: float
-        Cosine of the angle between orbital angular momentum and primary spin.
-    """
-
-    S = np.atleast_1d(S)
-    J = np.atleast_1d(J)
-    q = np.atleast_1d(q)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    L = eval_L(r, q)
-
-    costheta1 = (((J**2-L**2-S**2)/L) - (2*q*chieff)/(1+q))/(2*(1-q)*S1)
-
-    return costheta1
-
 def eval_costheta1(deltachi, chieff, q, chi1):
     """
     Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
@@ -2586,85 +2549,6 @@ def eval_theta1(deltachi, chieff, q, chi1):
 
     return theta1
 
-def eval_theta1_old(S, J, r, chieff, q, chi1, chi2):
-    """
-    Angle theta1 between the orbital angular momentum and the spin of the primary black hole.
-
-    Call
-    ----
-    theta1 = eval_theta1(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    """
-
-    costheta1 = eval_costheta1(S, J, r, chieff, q, chi1, chi2)
-    theta1 = np.arccos(costheta1)
-
-    return theta1
-
-
-def eval_costheta2_old(S, J, r, chieff, q, chi1, chi2):
-    """
-    Cosine of the angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
-
-    Call
-    ----
-    costheta2 = eval_costheta2(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    costheta2: float
-        Cosine of the angle between orbital angular momentum and secondary spin.
-    """
-
-    S = np.atleast_1d(S)
-    J = np.atleast_1d(J)
-    q = np.atleast_1d(q)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    L = eval_L(r, q)
-
-    costheta2 = (((J**2-L**2-S**2)*(-q/L)) + (2*q*chieff)/(1+q))/(2*(1-q)*S2)
-
-    return costheta2
-
 
 def eval_costheta2(deltachi, chieff, q, chi2):
     """
@@ -2707,43 +2591,6 @@ def eval_costheta2(deltachi, chieff, q, chi2):
     return costheta2
 
 
-def eval_theta2_old(S, J, r, chieff, q, chi1, chi2):
-    """
-    Angle theta2 between the orbital angular momentum and the spin of the secondary black hole.
-
-    Call
-    ----
-    theta2 = eval_theta2(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    """
-
-    costheta2 = eval_costheta2(S, J, r, chieff, q, chi1, chi2)
-    theta2 = np.arccos(costheta2)
-
-    return theta2
-
-
 def eval_theta2(deltachi, chieff, q, chi2):
 
 
@@ -2751,57 +2598,6 @@ def eval_theta2(deltachi, chieff, q, chi2):
     theta2 = np.arccos(costheta2)
 
     return theta1
-
-
-def eval_costheta12_old(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None):
-    """
-    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
-
-    Call
-    ----
-    costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)
-
-    Parameters
-    ----------
-    theta1: float, optional (default: None)
-        Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float, optional (default: None)
-        Angle between the projections of the two spins onto the orbital plane.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    costheta12: float
-        Cosine of the angle between the two spins.
-    """
-
-    if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and q is None and chi1 is None and chi2 is None:
-
-        theta1=np.atleast_1d(theta1)
-        theta2=np.atleast_1d(theta2)
-        deltaphi=np.atleast_1d(deltaphi)
-        costheta12 = np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2)
-
-    elif theta1 is None and theta2 is None and deltaphi is None and S is not None and q is not None and chi1 is not None and chi2 is not None:
-
-        S = np.atleast_1d(S)
-        S1, S2 = spinmags(q, chi1, chi2)
-        costheta12 = (S**2-S1**2-S2**2)/(2*S1*S2)
-
-    else:
-        raise TypeError("Provide either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).")
-
-    return costheta12
-
 
 
 def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
@@ -2866,40 +2662,6 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
 
 
 
-
-# TODO docstrings (actually, all docstrings need to be checked now!)
-def eval_theta12_old(theta1=None, theta2=None, deltaphi=None, S=None, q=None, chi1=None, chi2=None):
-    """
-    Angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
-
-    Call
-    ----
-    theta12 = eval_theta12(S,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    theta12: float
-        Angle between the two spins.
-    """
-
-    costheta12 = eval_costheta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi, S=S, q=q, chi1=chi1, chi2=chi2)
-    theta12 = np.arccos(costheta12)
-
-    return theta12
-
-
-
 def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
 
 
@@ -2909,51 +2671,7 @@ def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=N
     return theta12
 
 
-def eval_cosdeltaphi_old(S, J, r, chieff, q, chi1, chi2):
-    """
-    Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
-
-    Call
-    ----
-    cosdeltaphi = eval_cosdeltaphi(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    cosdeltaphi: float
-        Cosine of the angle between the projections of the two spins onto the orbital plane.
-    """
-
-    q = np.atleast_1d(q)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    costheta1 = eval_costheta1_old(S, J, r, chieff, q, chi1, chi2)
-    costheta2 = eval_costheta2_old(S, J, r, chieff, q, chi1, chi2)
-    costheta12 = eval_costheta12_old(S=S, q=q, chi1=chi1, chi2=chi2)
-
-    cosdeltaphi = (costheta12 - costheta1*costheta2)/((1-costheta1**2)*(1-costheta2**2))**0.5
-
-    return cosdeltaphi
-
-
-
-def eval_cosdeltaphi_old(deltachi, kappa, chieff, q, chi1, chi2):
+def eval_cosdeltaphi(deltachi, kappa, chieff, q, chi1, chi2):
     """
     Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
 
@@ -3002,47 +2720,6 @@ def eval_cosdeltaphi_old(deltachi, kappa, chieff, q, chi1, chi2):
     return cosdeltaphi
 
 
-
-def eval_deltaphi_old(S, J, r, chieff, q, chi1, chi2, cyclesign=-1):
-    """
-    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=1 returns the other half of the  precession cycle [-pi,0].
-
-    Call
-    ----
-    deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: -1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-
-    Returns
-    -------
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    """
-
-    cyclesign = np.atleast_1d(cyclesign)
-    cosdeltaphi = eval_cosdeltaphi(S, J, r, chieff, q, chi1, chi2)
-    deltaphi = -np.sign(cyclesign)*np.arccos(cosdeltaphi)
-
-    return deltaphi
-
-
 # TODO cyclesign needs to be checked again in the entire code
 def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=-1):
     """
@@ -3082,7 +2759,6 @@ def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=-1):
     deltaphi = -np.sign(cyclesign)*np.arccos(cosdeltaphi)
 
     return deltaphi
-
 
 
 def eval_costhetaL(S, J, r, q, chi1, chi2):
@@ -3302,8 +2978,6 @@ def eval_kappa(J, r, q):
     kappa = (J**2 - L**2) / (2*L)
 
     return kappa
-
-
 
 
 def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
@@ -4494,159 +4168,6 @@ def eval_tau_old(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     return tau
 
 
-# remove this
-def Soft(t, J, r, chieff, q, chi1, chi2, precomputedroots=None):
-    """
-    Evolution of S on the precessional timescale (without radiation reaction).
-    The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
-
-    Call
-    ----
-    S = Soft(t,J,r,chieff,q,chi1,chi2,precomputedroots=None)
-
-    Parameters
-    ----------
-    t: float
-        Time.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
-    Returns
-    -------
-    S: float
-        Magnitude of the total spin.
-    """
-
-    t = np.atleast_1d(t)
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
-    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-
-    sn, _, dn, _ = scipy.special.ellipj(t.T/mathcalT, m)
-    Ssq = Sminuss + (Spluss-Sminuss)*((Sminuss-S3s)/(Spluss-S3s)) * (sn/dn)**2
-    S = Ssq.T**0.5
-
-    return S
-
-
-
-#remove this
-def tofS(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
-    """
-    Time t as a function of S (without radiation reaction). Only covers half of a precession cycle, assuming t=0 at S=S- and t=tau/2 at S=S+. Set sign=-1 to cover the second half, i.e. from t=tau/2 at S=S+ to t=tau at S=S-.
-
-    Call
-    ----
-    t = tofS(S,J,r,chieff,q,chi1,chi2,cyclesign=1,precomputedroots=None)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: 1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-    precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
-    Returns
-    -------
-    t: float
-        Time.
-    """
-
-    S = np.atleast_1d(S)
-
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-
-    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
-    phi = elliptic_amplitude(S, Sminuss, Spluss)
-    tau = eval_tau_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
-    t = tau/2 - np.sign(cyclesign)*mathcalT*scipy.special.ellipkinc(phi, m)
-
-    return t
-
-
-
-# remove this
-def Ssampling(J, r, chieff, q, chi1, chi2, N=1):
-    """
-    Sample N values of S at fixed separation accoring to its PN-weighted distribution function.
-    Can only be used to sample the *same* number of configuration for each binary. If the inputs J,r,chieff,q,chi1, and chi2 have shape (M,) the output will have shape
-    - (M,N) if M>1 and N>1;
-    - (M,) if N=1;
-    - (N,) if M=1.
-
-    Call
-    ----
-    S = Ssampling(J,r,chieff,q,chi1,chi2,N = 1)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    N: integer, optional (default: 1)
-        Number of samples.
-
-    Returns
-    -------
-    S: float
-        Magnitude of the total spin.
-    """
-
-    # Compute the S roots only once and pass them to both functions
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
-
-    tau = eval_tau_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
-    # For each binary, generate N samples between 0 and tau.
-    t = np.random.uniform(size=tau.size*N).reshape((tau.size, N)) * tau[:, None]
-    # Note the special broadcasting rules of Soft, see Soft.__docs__
-    # S has shape (M, N).
-    S = Soft(t, J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
-
-    # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
-    # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
-    return np.atleast_1d(np.squeeze(S))
-
-
-    # remove this
-
-
-
 # re do docstrings
 def deltachitildeav(m):
     """
@@ -4675,122 +4196,6 @@ def deltachitildeav(m):
     coeff = (1-scipy.special.ellipe(m)/scipy.special.ellipk(m))/m
 
     return coeff
-
-
-# TODO: change name to this function
-def Ssav(J, r, chieff, q, chi1, chi2):
-    """
-    Analytic precession averaged expression for the squared total spin.
-
-    Call
-    ----
-    Ssq = Ssav(J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Ssq: float
-        Squared magnitude of the total spin.
-    """
-
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
-    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-    Ssq = Spluss - (Spluss-Sminuss)*deltachitildeav(m)
-
-    return Ssq
-
-
-def Ssrootsinf(theta1inf, theta2inf, q, chi1, chi2):
-    """
-    Infinite orbital separation limit of the roots of the cubic equation in S^2.
-
-    Call
-    ----
-    Sminussinf,Splussinf,S3sinf = Ssrootsinf(theta1inf,theta2inf,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1inf: float
-        Asymptotic value of the angle between orbital angular momentum and primary spin.
-    theta2inf: float
-        Asymptotic value of the angle between orbital angular momentum and secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Sminussinf: float
-        Asymptotic value of the lowest physical root, if present, of the effective potential equation.
-    Splussinf: float
-        Asymptotic value of the largest physical root, if present, of the effective potential equation.
-    S3sinf: float
-        Asymptotic value of the spurious root of the effective potential equation.
-    """
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    coscos = np.cos(theta1inf)*np.cos(theta2inf)
-    sinsin = np.sin(theta1inf)*np.sin(theta2inf)
-    Sminussinf = S1**2 + S2**2 + 2*S1*S2*(coscos - sinsin)
-    Splussinf = S1**2 + S2**2 + 2*S1*S2*(coscos + sinsin)
-    S3sinf = -np.inf
-
-    return np.stack([Sminussinf, Splussinf, S3sinf])
-
-
-def Ssavinf(theta1inf, theta2inf, q, chi1, chi2):
-    """
-    Infinite orbital separation limit of the precession averaged values of S^2
-    from the asymptotic angles (theta1, theta2).
-
-    Call
-    ----
-    Ssq = Ssavinf(theta1inf,theta2inf,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1inf: float
-        Asymptotic value of the angle between orbital angular momentum and primary spin.
-    theta2inf: float
-        Asymptotic value of the angle between orbital angular momentum and secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Ssq: float
-        Squared magnitude of the total spin.
-    """
-
-    theta1inf = np.atleast_1d(theta1inf)
-    theta2inf = np.atleast_1d(theta2inf)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    Ssavinf = S1**2 + S2**2 + 2*S1*S2*np.cos(theta1inf)*np.cos(theta2inf)
-
-    return Ssavinf
-
 
 
 
@@ -4828,13 +4233,18 @@ def ddchidt_prefactor(r, chieff, q):
 
 
 
-def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None, donotnormalize=False):
+
+    q=np.atleast_1d(q)
 
     u= eval_u(r=r,q=q)
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
-    mathcalA = ddchidt_prefactor(r, chieff, q)
-
+    if donotnormalize:
+        mathcalA = 1
+    else:
+        mathcalA = ddchidt_prefactor(r, chieff, q)
+    
     dchidt2 = mathcalA**2 * ( (deltachi-deltachiminus)*(deltachiplus-deltachi)*(deltachi3-(1-q)*deltachi))
 
     return dchidt2
@@ -4875,14 +4285,19 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
 
 
 
-def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psiperiod=False):
+def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psiperiod=False, donotnormalize=False):
 
     q=np.atleast_1d(q)
 
 
     # if psiperiod=True return tau/2K(m). Useful to avoid the evaluation of an elliptic integral when it's not needed
     u = eval_u(r,q)
-    mathcalA = ddchidt_prefactor(r, chieff, q)
+
+    if donotnormalize:
+        mathcalA = 1
+    else:
+        mathcalA = ddchidt_prefactor(r, chieff, q)
+    
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
 
@@ -5070,80 +4485,9 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
 
     
 
-###############
+################ Precession-averaged evolution ################
 
 
-# Precession-averaged evolution
-def rhs_precav_old(kappa, u, chieff, q, chi1, chi2):
-    """
-    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
-
-    Call
-    ----
-    RHS = rhs_precav(kappa,u,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    kappa: float
-        Regularized angular momentum (J^2-L^2)/(2L).
-    u: float
-        Compactified separation 1/(2L).
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    RHS: float
-        Right-hand side.
-    """
-
-    if u == 0:
-        # In this case use analytic result
-        theta1inf, theta2inf = asymptotic_to_angles(kappa, chieff, q, chi1, chi2)
-        Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
-    else:
-
-        coeffs = Scubic_coefficients(kappa, u, chieff, q, chi1, chi2)
-        coeffs = np.squeeze(coeffs)
-
-        # The first coefficient is tiny, 10^-100 small than the others. This is in practice a 2nd order polynomial
-        if np.abs(coeffs[0]) < 10**-100 * np.abs(np.mean(coeffs[1:])):
-            warnings.warn("Sanitizing RHS output; solving quadratic. [rhs_precav].", Warning)
-            sols = np.roots(coeffs[1:])
-            Sminuss, Spluss = sols
-            Ssav = np.mean(np.real([Sminuss, Spluss]))
-
-        else:
-            sols = np.roots(coeffs)
-            S3s, Sminuss, Spluss = np.squeeze(np.sort_complex(sols))
-
-            # Sminus and Splus are complex. This can happen if the binary is very close to a spin-orbit resonance
-            if np.iscomplex([Sminuss, Spluss]).any():
-                warnings.warn("Sanitizing RHS output; too close to resonance. [rhs_precav].", Warning)
-                Ssav = np.mean(np.real([Sminuss, Spluss]))
-
-            # Normal case
-            else:
-                S3s, Sminuss, Spluss = np.real([S3s, Sminuss, Spluss])
-
-                #print('hhh old')
-                #print(S3s, Sminuss, Spluss)
-
-                m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-                Ssav = Spluss - (Spluss-Sminuss)*deltachitildeav(m)
-
-    return Ssav
-
-
-
-
-# Precession-averaged evolution
 def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     """
     Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
@@ -5467,7 +4811,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     return outcome
 
 # TODO: Add an exmple to the docstrings
-def precession_average(J, r, chieff, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4):
+def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4):
     """
     Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported.
 
@@ -5508,31 +4852,32 @@ def precession_average(J, r, chieff, q, chi1, chi2, func, *args, method='quadrat
         Precession averaged value of func.
     """
 
+    u = eval_u(r=r,q=q)
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
+
     if method == 'quadrature':
 
-        Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2)
-        m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-        # This is proportional to tau, takes care of the denominator
-        tau_prop = scipy.special.ellipk(m) / ((Spluss-S3s)**0.5)
+
+        tau = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), donotnormalize=True)
 
         # Each args needs to be iterable
         args = [np.atleast_1d(a) for a in args]
 
         # Compute the numerator explicitely
-        def _integrand(S, Sminuss, Spluss, S3s, *sargs):
-            # This is proportional to dSdt
-            dSdt_prop = (-(S**2-Spluss) * (S**2-Sminuss) * (S**2-S3s))**0.5 / S
-            return func(S, *sargs) / dSdt_prop
+        def _integrand(deltachi, deltachiminus,deltachiplus,deltachi3, kappa, r, chieff, q, chi1, chi2, *args):
+            dchidt2 = dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]),donotnormalize=True)
 
-        def _compute(Sminuss, Spluss, S3s, *sargs):
-            return scipy.integrate.quad(_integrand, Sminuss**0.5, Spluss**0.5, args=(Sminuss, Spluss, S3s, *sargs))[0]
+            return func(deltachi, *args) / dchidt2**(1/2)
 
-        func_av = np.array(list(map(_compute, Sminuss, Spluss, S3s, *args))) / tau_prop
+        def _compute(deltachiminus,deltachiplus,deltachi3, kappa, r, chieff, q, chi1, chi2, *args):
+            return scipy.integrate.quad(_integrand, deltachiminus, deltachiplus, args=(deltachiminus,deltachiplus,deltachi3, kappa, r, chieff, q, chi1, chi2, *args))[0]
+
+        func_av = np.array(list(map(_compute, deltachiminus,deltachiplus,deltachi3, kappa, r, chieff, q, chi1, chi2, *args))) / tau * 2 
 
     elif method == 'montecarlo':
 
-        S = np.transpose(Ssampling(J, r, chieff, q, chi1, chi2, N=int(Nsamples)))
-        evals = np.transpose(func(S, *args))
+        deltachi = deltachisampling(kappa, r, chieff, q, chi1, chi2, N=int(Nsamples), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+        evals = func(deltachi, *args)
         func_av = np.sum(evals, axis=-1)/Nsamples
         func_av = np.atleast_1d(func_av)
 
@@ -5670,7 +5015,7 @@ def widenutation(q, chi1, chi2):
 
 # TODO: write function with values of J and chieff where wide nutation happens
 
-# Orbit averaged things
+################ Orbit-averaged evolution ################
 
 # TODO: replace quadrupole_formula flag with parameter to select a given PN order. Update docstrings when you do it
 
@@ -6220,6 +5565,10 @@ def frequency_prefactor(J, r, chieff, q, chi1, chi2):
     mathcalCminus = - 3/2 * (L*(1+q)**2 - q*chieff)/(J*q*(1+q)**2) * ((1+q)*((1+q)*(J-L)**2 - (1-q)*(S1**2-S2**2)) + 2*q*chieff*(L-J))
 
     return np.stack([mathcalC0, mathcalCplus, mathcalCminus])
+
+
+
+################ Dynamics in an intertial frame, chip and other stuff ################
 
 
 def azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=None):
@@ -6793,6 +6142,33 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     return f
 
 
+
+# Check...
+def ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi):
+    '''Convert GW frequency to PN orbital separation conversion'''
+
+    c_cgs = 2.99e10
+    G_cgs = 6.67e-8
+    om = np.pi * f
+    M_sec = M_msun * 2e33 * G_cgs / c_cgs**3
+    mom = M_sec * om
+    m1 = 1 / (1+q)
+    m2 = q / (1+q)
+    eta = m1*m2
+    ct1 = np.cos(theta1)
+    ct2 = np.cos(theta2)
+    ct12 = np.sin(theta1) * np.sin(theta2) * np.cos(deltaphi) + ct1 * ct2
+    # Eq. 4.13, Kidder 1995. gr-qc/9506022
+    r = (mom)**(-2./3.)*(1. \
+                    - (1./3.)*(3.-eta)*mom**(2./3.)  \
+                    - (1./3.)* ( chi1*ct1*(2.*m1**2.+3.*eta) + chi2*ct2*(2.*m2**2.+3.*eta))*mom \
+                    + ( eta*(19./4. + eta/9.) -eta*chi1*chi2/2. * (ct12 - 3.*ct1*ct2 ))*mom**(4./3.)\
+                    )
+    return r
+
+
+################ Remnant properties ################
+
 def remnantmass(theta1, theta2, q, chi1, chi2):
     """
     Estimate the final mass of the post-merger renmant. We implement the fitting
@@ -7065,28 +6441,9 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
     else:
         return vk
 
-# Check...
-def ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi):
-    '''Convert GW frequency to PN orbital separation conversion'''
 
-    c_cgs = 2.99e10
-    G_cgs = 6.67e-8
-    om = np.pi * f
-    M_sec = M_msun * 2e33 * G_cgs / c_cgs**3
-    mom = M_sec * om
-    m1 = 1 / (1+q)
-    m2 = q / (1+q)
-    eta = m1*m2
-    ct1 = np.cos(theta1)
-    ct2 = np.cos(theta2)
-    ct12 = np.sin(theta1) * np.sin(theta2) * np.cos(deltaphi) + ct1 * ct2
-    # Eq. 4.13, Kidder 1995. gr-qc/9506022
-    r = (mom)**(-2./3.)*(1. \
-                    - (1./3.)*(3.-eta)*mom**(2./3.)  \
-                    - (1./3.)* ( chi1*ct1*(2.*m1**2.+3.*eta) + chi2*ct2*(2.*m2**2.+3.*eta))*mom \
-                    + ( eta*(19./4. + eta/9.) -eta*chi1*chi2/2. * (ct12 - 3.*ct1*ct2 ))*mom**(4./3.)\
-                    )
-    return r
+################ Main ################
+
 
 if __name__ == '__main__':
 
@@ -7138,6 +6495,33 @@ if __name__ == '__main__':
     u=eval_u(r=r,q=q)
     #u = eval_u([r,1000,100,10], [q,q,q,q])
     #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
+
+    def func(dchi):
+        return dchi
+
+    #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='quadrature')
+    #print('q1', res)
+
+
+    res = precession_average([kappa,kappa], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature')
+    print(res)
+
+
+
+    #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='montecarlo', Nsamples=1e4)
+
+    res = precession_average([kappa,kappa], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='montecarlo')
+
+
+    print(res)
+
+
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
+    deltachi3ss = deltachi3/(1-q)
+
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus, deltachiplus, deltachi3]))
+    deltachiav = inverseaffine( deltachitildeav(m),  deltachiminus, deltachiplus)
+    print('dchiav' ,deltachiav)
 
 
     #print(rhs_precav(kappa, u[0], chieff, q, chi1, chi2))
