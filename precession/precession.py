@@ -7,7 +7,6 @@ import numpy as np
 # TODO: remember to require scipy>=1.8.0
 import scipy.special
 import scipy.integrate
-from itertools import repeat
 
 
 ################ Utilities ################
@@ -233,14 +232,7 @@ def wraproots(coefficientfunction, *args, **kwargs):
 
 
     coeffs = coefficientfunction(*args, **kwargs)
-
-
     sols = np.sort_complex(roots_vec(coeffs.T))
-    print("rootvec", roots_vec(coeffs.T))
-    #import mpmath
-    #print("mpmath", mpmath.polyroots(np.squeeze(coeffs.T)))
-
-
     sols = np.real(np.where(np.isreal(sols), sols, np.nan))
     return sols
 
@@ -1114,8 +1106,6 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
     #sols = np.real(np.where(np.isreal(sols), sols, np.nan))
 
-    print('kroots', kapparootscomplex)
-
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparootscomplex, u, chieff, q, chi1, chi2):
         kappares=None
@@ -1159,29 +1149,35 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
                 # Check which of those values is within the allowed region
                 deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
                 check = np.squeeze(np.logical_and(deltachires>deltachimin,deltachires<deltachimax))
-                print("check 5", check,deltachires-deltachimin,deltachimax-deltachires)
+
                 # The first root cannot possibly be right
-                if check[0]:
+                if check[0] and not np.isclose(kapparoots[1],kapparoots[0]):
                     raise ValueError("Input values are not compatible [kapparesonances].")
                 elif check[1] and check[2] and not check[3] and not check[4]:
                     kappares = kapparoots[1:3]
                 elif not check[1] and not check[2] and check[3] and check[4]:
                     kappares = kapparoots[3:5]
                 elif check[1] and check[2] and check[3] and check[4]:
-                    #warnings.warn("Unphysical resonances detected and removed", Warning)
+                    
+                    warnings.warn("Unphysical resonances detected and removed", Warning)
+                    
+                    # Root 1 is a spurious copy of root 0
+                    if np.isclose(kapparoots[1],kapparoots[0]):
+
+
+
+                        kappares = np.array([np.mean(kapparoots[2:4]),kapparoots[4]])
                     #err = np.abs( (kapparoots[2]-kapparoots[3])/np.mean(kapparoots[2:4]))
                     #warnings.warn("Unphysical resonances detected and removed. Relative accuracy Delta_kappa/kappa="+str(err)+", [kapparesonances].", Warning)
-                    #kappares=np.array([kapparoots[1],kapparoots[4]])
-                    
-                    # Root 1 is a spurious copy of root 0:
-                    print("I'm debugging here")
-                    sys.exit()
-                    print('extracheck',kapparoots[1]-kapparoots[0], kapparoots[3]-kapparoots[2])
-                    if kapparoots[1]-kapparoots[0]<kapparoots[3]-kapparoots[2]:
-                        kappares = kapparoots[3:5]
-                    # Root 2 and 3 are actually complex but appear real because of numerical errors 
                     else:
                         kappares=np.array([kapparoots[1],kapparoots[4]])
+                    
+                    # # Root 1 is a spurious copy of root 0:
+                    # if kapparoots[1]-kapparoots[0]<kapparoots[3]-kapparoots[2]:
+                    #     kappares = kapparoots[3:5]
+                    # # Root 2 and 3 are actually complex but appear real because of numerical errors 
+                    # else:
+                    #     kappares=np.array([kapparoots[1],kapparoots[4]])
 
         # This is an edge (and hopefully rare) case where the resonances are missed because of numerical errors
         elif len(kapparoots)==1:
@@ -1192,7 +1188,6 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
 
             deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
             check = np.squeeze(np.logical_and(deltachires>deltachimin,deltachires<deltachimax))
-            print("jjj", check,np.sum(check),np.sum(check)!=2)
 
             # Two of these are compatible
             if np.sum(check)==2:
@@ -1229,8 +1224,8 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
         # For stable configurations, we know some resonances analytically. 
         # Use those instead of the interpolated results above.
         rudplus = rupdown(q, chi1, chi2)[0]
+
         if np.isclose(chieff,updown) and u<eval_u(r=rudplus,q=q):
-            print("heeeeee", kappares)
             S1,S2 = spinmags(q,chi1,chi2)
             L=1/(2*u)
             kappares[1]= ((L+S1-S2)**2 - L**2) / (2*L)
@@ -1244,7 +1239,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
 
         # If you didn't find enough solutions, append nans
         #kappares = np.concatenate([kappares, np.repeat(np.nan, 2-len(kappares))])
-        #print(chieff, kappares)
+        
         return kappares
 
     kappamin, kappamax = np.array(list(map(_compute, kapparootscomplex, u, chieff, q, chi1, chi2))).T
@@ -1927,7 +1922,6 @@ def Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=N
     else:
         raise TypeError("Please provide either J or kappa.")
 
-    #print('Satres', kappa)
     coeffs = Scubic_coefficients(kappa, u, chieff, q, chi1, chi2)
     with np.errstate(invalid='ignore'):  # nan is ok here
         # This is with a simple for loop
@@ -2136,8 +2130,6 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
         else:
             deltachi3 = np.atleast_1d(tiler(np.nan,deltachiminus))
 
-
-        print("dchiroots", deltachiminus, deltachiplus,deltachi3)
         return np.stack([deltachiminus, deltachiplus, deltachi3])
 
     else:
@@ -2271,7 +2263,6 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
     elif r is not None and u is None:
         u = eval_u(r=r, q=q)
 
-    #print('Satres', kappa)
     coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
 
     with np.errstate(invalid='ignore'):  # nan is ok here
@@ -4220,8 +4211,9 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     RHS: float
         Right-hand side.
     """
-    print("u kappa", u, kappa,chieff, q, chi1, chi2,eval_r(u=u,q=q))
-    print("res", kapparesonances(eval_r(u=u,q=q), chieff, q, chi1, chi2))
+    
+    #print("u kappa", u, kappa,chieff, q, chi1, chi2,eval_r(u=u,q=q))
+    #print("res", kapparesonances(eval_r(u=u,q=q), chieff, q, chi1, chi2))
 
     if u == 0:
         # In this case use analytic result
@@ -4229,7 +4221,14 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
         Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
     else:
 
-        deltachiminus, deltachiplus, deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
+        # I don't use deltachiroots because I want to keep complex numbers. This is needed to sanitize the output in some tricky cases
+        #deltachiminus, deltachiplus, deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
+
+        coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
+        deltachiminus, deltachiplus, _ = np.squeeze(np.sort_complex(roots_vec(coeffs.T)))
+        coeffs = deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2)
+        _, _, deltachi3 = np.squeeze(np.sort_complex(roots_vec(coeffs.T)))
+
 
         # deltachiminus, deltachiplus are complex. This can happen if the binary is very close to a spin-orbit resonance
         if np.iscomplex([deltachiminus, deltachiplus]).any():
@@ -6225,7 +6224,6 @@ if __name__ == '__main__':
     kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
     kappasol = integrator_precav(kappa, u , tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
 
-    print(kappasol)
 
     #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='quadrature')
     #print('q1', res)
