@@ -231,8 +231,16 @@ def wraproots(coefficientfunction, *args, **kwargs):
         Roots of the polynomial.
     """
 
+
     coeffs = coefficientfunction(*args, **kwargs)
+
+
     sols = np.sort_complex(roots_vec(coeffs.T))
+    print("rootvec", roots_vec(coeffs.T))
+    #import mpmath
+    #print("mpmath", mpmath.polyroots(np.squeeze(coeffs.T)))
+
+
     sols = np.real(np.where(np.isreal(sols), sols, np.nan))
     return sols
 
@@ -1106,6 +1114,8 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     kapparootscomplex = np.sort_complex(roots_vec(coeffs.T))
     #sols = np.real(np.where(np.isreal(sols), sols, np.nan))
 
+    print('kroots', kapparootscomplex)
+
     # There are in principle five solutions, but only two are physical.
     def _compute(kapparootscomplex, u, chieff, q, chi1, chi2):
         kappares=None
@@ -1149,6 +1159,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
                 # Check which of those values is within the allowed region
                 deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
                 check = np.squeeze(np.logical_and(deltachires>deltachimin,deltachires<deltachimax))
+                print("check 5", check,deltachires-deltachimin,deltachimax-deltachires)
                 # The first root cannot possibly be right
                 if check[0]:
                     raise ValueError("Input values are not compatible [kapparesonances].")
@@ -1157,84 +1168,46 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
                 elif not check[1] and not check[2] and check[3] and check[4]:
                     kappares = kapparoots[3:5]
                 elif check[1] and check[2] and check[3] and check[4]:
-                    warnings.warn("Unphysical resonances detected and removed", Warning)
-                    err = np.abs( (kapparoots[2]-kapparoots[3])/np.mean(kapparoots[2:4]))
-                    warnings.warn("Unphysical resonances detected and removed. Relative accuracy Delta_kappa/kappa="+str(err)+", [kapparesonances].", Warning)
-                    kappares=np.array([kapparoots[1],kapparoots[4]])
+                    #warnings.warn("Unphysical resonances detected and removed", Warning)
+                    #err = np.abs( (kapparoots[2]-kapparoots[3])/np.mean(kapparoots[2:4]))
+                    #warnings.warn("Unphysical resonances detected and removed. Relative accuracy Delta_kappa/kappa="+str(err)+", [kapparesonances].", Warning)
+                    #kappares=np.array([kapparoots[1],kapparoots[4]])
+                    
+                    # Root 1 is a spurious copy of root 0:
+                    print("I'm debugging here")
+                    sys.exit()
+                    print('extracheck',kapparoots[1]-kapparoots[0], kapparoots[3]-kapparoots[2])
+                    if kapparoots[1]-kapparoots[0]<kapparoots[3]-kapparoots[2]:
+                        kappares = kapparoots[3:5]
+                    # Root 2 and 3 are actually complex but appear real because of numerical errors 
+                    else:
+                        kappares=np.array([kapparoots[1],kapparoots[4]])
 
         # This is an edge (and hopefully rare) case where the resonances are missed because of numerical errors
         elif len(kapparoots)==1:
-            warnings.warn("Resonances not detected, best guess returned", Warning)
+
             # 5 complex solutions correspond to 3 real parts (i.e. thare are two conjugate pairs)
             kapparoots = np.unique(np.real(kapparootscomplex))
             deltachires = deltachiresonance(kappa=kapparoots, u=tiler(u,kapparoots), chieff=tiler(chieff,kapparoots), q=tiler(q,kapparoots), chi1=tiler(chi1,kapparoots), chi2=tiler(chi2,kapparoots))
 
             deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
             check = np.squeeze(np.logical_and(deltachires>deltachimin,deltachires<deltachimax))
-            if not check[2]:
-                raise ValueError("Input values are not compatible [kapparesonances].")
-            elif check[0] and check[1]:
-                raise ValueError("Input values are not compatible [kapparesonances].")
-            elif check[1] and check[2]:
-                kappares = kapparoots[1:3]
-            elif check[0] and check[2]:
-                kappares = kapparoots[0:2]
+            print("jjj", check,np.sum(check),np.sum(check)!=2)
 
-            # # Find values of kappa that are within the two candidate intervals. A simple average is enough.
-            # avs = np.array([np.mean(kapparoots[1:3]),np.mean(kapparoots[3:5])])
-            # # Find the corresponding deltachi limits
-            # deltachiminus, deltachiplus, _ = wraproots(deltachicubic_coefficients, avs, [u,u], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2]).T
-            # # Find deltachi values in those intervals. Again an average is enough
-            # avs = np.mean([deltachiminus, deltachiplus],axis=0)
-            # # Check which of those values is within the allowed region
-            # deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
-            # check = np.squeeze(np.logical_and(avs>deltachimin,avs<deltachimax))
-            # #
-            # #print(check, q, kapparoots,avs,deltachimin,deltachimax)
-            # if check[0] and not check[1]:
-            #     kappares = kapparoots[1:3]
-            # elif check[1] and not check[0]:
-            #     kappares = kapparoots[3:5]
-            #
-            # # The code finds solutions, but the 3rd and the 4th are so close that they are likely to be a numerical fluke. Remove them.
-            # elif np.abs( (kapparoots[2]-kapparoots[3])/np.mean(kapparoots[2:4])) <tol:
-            #         warnings.warn("Unphysical resonances detected and removed", Warning)
-            #         kappares=np.array([kapparoots[1],kapparoots[4]])
-            #
-            # else:
-            #     print(eval_r(u=u,q=q), chieff, q, chi1, chi2)
-            #     raise ValueError("Input values are not compatible [kapparesonances].")
+            # Two of these are compatible
+            if np.sum(check)==2:
+                kappares=kapparoots[check]
+                warnings.warn("Resonances not detected, best guess returned (soft sanitizing)", Warning)
 
-            #TODO: Implement a tolerance?
-            #warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
-        # if len(kappares) > 2:
-        #
-        #     #print('xxxxx', kappares, np.diff(kappares),np.argmin(np.diff(kappares)),)
-        #     diff = np.diff(kappares)
-        #     if np.min(diff)<tol:
-        #         warnings.warn("There are additional resonances but I believe are spurious and I removed them", Warning)
-        #         kappares = np.delete(kappares, [np.argmin(diff),np.argmin(diff)+1])
-        # We know there are always two resonances
+            # In case that also fails, returns the closest two
+            else:
+                warnings.warn("Resonances not detected, best guess returned (aggressive sanitizing)", Warning)
 
-            #upup,downdown = chiefflimits_definition(q,chi1,chi2)
-            #updown,downup = deltachilimits_definition(q,chi1,chi2)
-            #print(chieff,upup,downdown,updown,downup)
-            #print(np.isclose(np.repeat(chieff,4),np.squeeze([upup,downdown,updown,downup])))
+                diffmin = np.abs(deltachires-deltachimin)
+                diffmax = np.abs(deltachires-deltachimax)
 
-
-            #kappares2 = _compute(kapparootscomplex, u, chieff-tol/2, q, chi1, chi2)
-            #print("k1", kappares1)
-            #print("k2", kappares2)
-        #     warnings.warn("Close to aligned configuration. Cleaning with tolerance DeltaImag(kappa)="+str(tol), Warning)
-        #     kapparoots = np.real(kapparootscomplex)[np.abs(np.imag(kapparootscomplex))<tol]
-        #     print("UD")
-        #     print(kapparoots)
-
-
-        # if len(kapparoots)==3:
-        #     kappares = kapparoots[1:3]
-        # if len(kapparoots)==5:
-        #     kappares=np.array([kapparoots[1],kapparoots[4]])
+                kappares = np.sort(np.squeeze([kapparoots[diffmin==min(diffmin)], kapparoots[diffmax==min(diffmax)]]))
+            
 
 
         # Up-down and down-up are challenging. 
@@ -1257,6 +1230,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
         # Use those instead of the interpolated results above.
         rudplus = rupdown(q, chi1, chi2)[0]
         if np.isclose(chieff,updown) and u<eval_u(r=rudplus,q=q):
+            print("heeeeee", kappares)
             S1,S2 = spinmags(q,chi1,chi2)
             L=1/(2*u)
             kappares[1]= ((L+S1-S2)**2 - L**2) / (2*L)
@@ -2162,6 +2136,8 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
         else:
             deltachi3 = np.atleast_1d(tiler(np.nan,deltachiminus))
 
+
+        print("dchiroots", deltachiminus, deltachiplus,deltachi3)
         return np.stack([deltachiminus, deltachiplus, deltachi3])
 
     else:
@@ -4244,6 +4220,8 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     RHS: float
         Right-hand side.
     """
+    print("u kappa", u, kappa,chieff, q, chi1, chi2,eval_r(u=u,q=q))
+    print("res", kapparesonances(eval_r(u=u,q=q), chieff, q, chi1, chi2))
 
     if u == 0:
         # In this case use analytic result
