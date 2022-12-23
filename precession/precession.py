@@ -7,7 +7,7 @@ import numpy as np
 # TODO: remember to require scipy>=1.8.0
 import scipy.special
 import scipy.integrate
-
+from itertools import repeat
 
 ################ Utilities ################
 
@@ -3920,7 +3920,7 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
 
 
 # re do docstrings
-def deltachitildeav(m):
+def deltachitildeav(m,tol=1e-7):
     """
     Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
 
@@ -3943,7 +3943,7 @@ def deltachitildeav(m):
     # The limit of the Ssav coefficient as m->0 is finite and equal to 1/2.
     # This is implementation is numerically stable up to m~1e-10.
     # For m=1e-7, the analytic m=0 limit is returned with a precision of 1e-9, which is enough.
-    m = np.maximum(1e-7, m)
+    m = np.minimum(np.maximum(tol, m),1-tol)
     coeff = (1-scipy.special.ellipe(m)/scipy.special.ellipk(m))/m
 
     return coeff
@@ -4231,7 +4231,7 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
 
 
         # deltachiminus, deltachiplus are complex. This can happen if the binary is very close to a spin-orbit resonance
-        if np.iscomplex([deltachiminus, deltachiplus]).any():
+        if np.iscomplex(deltachiminus) and np.iscomplex(deltachiplus):
             warnings.warn("Sanitizing RHS output; too close to resonance. [rhs_precav].", Warning)
             deltachiav = np.mean(np.real([deltachiminus, deltachiplus]))
 
@@ -4296,7 +4296,7 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     odeint_kwargs['full_output'] = 0 
 
     def _compute(kappainitial, u, chieff, q, chi1, chi2, odeint_kwargs):
-
+        #print(kappainitial)
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # h0= 1e-3 if u[0]==0 else 0
 
@@ -6213,16 +6213,16 @@ if __name__ == '__main__':
     # kappatilde = np.linspace(0,1,20)[1:-1]
     # kappa = kapparescaling(kappatilde, tiler(r[0],kappatilde), tiler(chieff,kappatilde), tiler(q,kappatilde), tiler(chi1,kappatilde), tiler(chi2,kappatilde))
 
-    q=np.linspace(0.1,0.5,3)
-    chi1=1
-    chi2=1
-    chieff=0.
-    r=np.geomspace(100,10,10)
-    u=np.array([eval_u(r=r,q=tiler(qx,r)) for qx in q])
+    # q=np.linspace(0.1,0.5,3)
+    # chi1=1
+    # chi2=1
+    # chieff=0.
+    # r=np.geomspace(100,10,10)
+    # u=np.array([eval_u(r=r,q=tiler(qx,r)) for qx in q])
 
-    kappatilde = 0.5
-    kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
-    kappasol = integrator_precav(kappa, u , tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
+    # kappatilde = 0.5
+    # kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
+    # kappasol = integrator_precav(kappa, u , tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
 
 
     #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='quadrature')
@@ -6346,10 +6346,20 @@ if __name__ == '__main__':
 
     # print(tnew,told)
 
+    r=10
+    chieff = 0
+    q=1
+    chi1=0.8
+    chi2=1
+    kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
+    print(kappamin,kappamax)
 
-    # print(kappa)
-    # kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
-    # print(kappamin,kappamax)
+    print((chi1+chi2)**2 / (8*r**0.5) + chieff/2)
+
+    print((chi1-chi2)**2 / (8*r**0.5) + chieff/2)
+
+    print(chieff**2 / (2*r**0.5) + chieff/2)
+
 
     # kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
     # print(kappamin,kappamax)
