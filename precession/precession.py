@@ -2010,80 +2010,46 @@ def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     coeff3 = u*(1-q)
 
     # Machine generated with eq_generator.nb
-    coeff2 = -1/2 * q**(-1) * ((1 + q))**(-3) * (1 + (q**6 + (q**2 * (-1 \
-    + (16 * u * kappa + (4 * u**2 * chi1**2 + -8 * u * chieff))) + (q**4 \
-    * (-1 + (16 * u * kappa + (4 * u**2 * chi2**2 + -8 * u * chieff))) + \
-    (4 * q**3 * (-1 + (6 * u * kappa + -3 * u * chieff)) + (q * (2 + (4 * \
-    u * kappa + (-4 * u**2 * chi1**2 + -2 * u * chieff))) + q**5 * (2 + \
-    (4 * u * kappa + (-4 * u**2 * chi2**2 + -2 * u * chieff)))))))))
+    coeff2 = (-1/2 * ((1 + -1 * q))**2 * q**(-1) * (1 + q) + (2 * (1 + -1 \
+    * q) * ((1 + q))**(-3) * u**2 * (chi1**2 + -1 * q**3 * chi2**2) + -1 \
+    * (1 + q) * u * (2 * kappa + -1 * chieff)))
 
     # Machine generated with eq_generator.nb
-    coeff1 = q**(-1) * ((1 + q))**(-3) * (-2 * (-1 + q) * ((1 + q))**5 * \
-    kappa + ((-1 + q) * ((1 + q))**5 * chieff + (4 * q**2 * u**2 * \
-    (chi1**2 + -1 * q**2 * chi2**2) * chieff + (-1 + q**2) * u * (2 * \
-    chi1**2 + q * (2 * q**3 * chi2**2 + (chieff**2 + (2 * q * chieff**2 + \
-    q**2 * chieff**2)))))))
+    coeff1 = ((1 + -1 * q) * q**(-1) * ((1 + q))**2 * (2 * kappa + -1 * \
+    chieff) + (4 * q * ((1 + q))**(-3) * u**2 * (chi1**2 + -1 * q**2 * \
+    chi2**2) * chieff + -1 * (1 + -1 * q) * q**(-1) * ((1 + q))**(-2) * u \
+    * (2 * (chi1**2 + q**4 * chi2**2) + q * ((1 + q))**2 * chieff**2)))
+
 
     # Machine generated with eq_generator.nb
-    coeff0 = 1/2 * q**(-1) * ((1 + q))**(-1) * ((1 + -2 * q * ((1 + \
-    q))**(-2) * u * chieff))**2 * (-4 * u**2 * chi1**4 + (8 * q**4 * u**2 \
-    * chi1**2 * chi2**2 + (-4 * q**8 * u**2 * chi2**4 + (4 * ((1 + q))**4 \
-    * u * chi1**2 * (2 * kappa + -1 * chieff) + (4 * q**4 * ((1 + q))**4 \
-    * u * chi2**2 * (2 * kappa + -1 * chieff) + (-4 * q * ((1 + q))**2 * \
-    u**2 * chi1**2 * chieff**2 + (-4 * q**2 * ((1 + q))**2 * u**2 * \
-    chi1**2 * chieff**2 + (-4 * q**4 * ((1 + q))**2 * u**2 * chi2**2 * \
-    chieff**2 + (-4 * q**5 * ((1 + q))**2 * u**2 * chi2**2 * chieff**2 + \
-    (2 * q * ((1 + q))**6 * u * (2 * kappa + -1 * chieff) * chieff**2 + \
-    -1 * ((1 + q))**8 * ((-2 * kappa + chieff))**2)))))))))) * ((1 + \
-    (q**2 + q * (2 + -2 * u * chieff))))**(-2)
+    coeff0 = (-1/2 * q**(-1) * ((1 + q))**3 * ((2 * kappa + -1 * \
+    chieff))**2 + (q**(-1) * ((1 + q))**(-1) * u * (2 * kappa + -1 * \
+    chieff) * (2 * (chi1**2 + q**4 * chi2**2) + q * ((1 + q))**2 * \
+    chieff**2) + -2 * q**(-1) * ((1 + q))**(-5) * u**2 * (((chi1**2 + -1 \
+    * q**4 * chi2**2))**2 + q * ((1 + q))**3 * (chi1**2 + q**3 * chi2**2) \
+    * chieff**2)))
 
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
 def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2):
-    kappa = np.atleast_1d(kappa).astype(float)
+    
     u = np.atleast_1d(u).astype(float)
-    chieff = np.atleast_1d(chieff).astype(float)
     q = np.atleast_1d(q).astype(float)
-    chi1 = np.atleast_1d(chi1).astype(float)
-    chi2 = np.atleast_1d(chi2).astype(float)
 
-    coeff3 = u
+    _, coeff2, coeff1, coeff0 = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
 
-    # Machine generated with eq_generator.nb
-    coeff2 = -1/2 * q**(-1) * ((1 + q))**(-3) * (1 + (q**6 + (q**2 * (-1 \
-    + (16 * u * kappa + (4 * u**2 * chi1**2 + -8 * u * chieff))) + (q**4 \
-    * (-1 + (16 * u * kappa + (4 * u**2 * chi2**2 + -8 * u * chieff))) + \
-    (4 * q**3 * (-1 + (6 * u * kappa + -3 * u * chieff)) + (q * (2 + (4 * \
-    u * kappa + (-4 * u**2 * chi1**2 + -2 * u * chieff))) + q**5 * (2 + \
-    (4 * u * kappa + (-4 * u**2 * chi2**2 + -2 * u * chieff)))))))))
+    # Careful! Do not divide coeff3 by (1-q) but recompute explicitely
+    coeff3r = u 
+    coeff2r = coeff2
+    coeff1r = (1-q) * coeff1
+    coeff0r = (1-q)**2 * coeff0
 
-    # Machine generated with eq_generator.nb
-    coeff1 = (1 + -1 * q) * q**(-1) * ((1 + q))**(-3) * (-2 * (-1 + q) * \
-    ((1 + q))**5 * kappa + ((-1 + q) * ((1 + q))**5 * chieff + (4 * q**2 \
-    * u**2 * (chi1**2 + -1 * q**2 * chi2**2) * chieff + (-1 + q**2) * u * \
-    (2 * chi1**2 + q * (2 * q**3 * chi2**2 + (chieff**2 + (2 * q * \
-    chieff**2 + q**2 * chieff**2)))))))
-
-    # Machine generated with eq_generator.nb
-    coeff0 = 1/2 * ((-1 + q))**2 * q**(-1) * ((1 + q))**(-1) * ((1 + -2 * \
-    q * ((1 + q))**(-2) * u * chieff))**2 * (-4 * u**2 * chi1**4 + (8 * \
-    q**4 * u**2 * chi1**2 * chi2**2 + (-4 * q**8 * u**2 * chi2**4 + (4 * \
-    ((1 + q))**4 * u * chi1**2 * (2 * kappa + -1 * chieff) + (4 * q**4 * \
-    ((1 + q))**4 * u * chi2**2 * (2 * kappa + -1 * chieff) + (-4 * q * \
-    ((1 + q))**2 * u**2 * chi1**2 * chieff**2 + (-4 * q**2 * ((1 + q))**2 \
-    * u**2 * chi1**2 * chieff**2 + (-4 * q**4 * ((1 + q))**2 * u**2 * \
-    chi2**2 * chieff**2 + (-4 * q**5 * ((1 + q))**2 * u**2 * chi2**2 * \
-    chieff**2 + (2 * q * ((1 + q))**6 * u * (2 * kappa + -1 * chieff) * \
-    chieff**2 + -1 * ((1 + q))**8 * ((-2 * kappa + chieff))**2)))))))))) \
-    * ((1 + (q**2 + q * (2 + -2 * u * chieff))))**(-2)
-
-    return np.stack([coeff3, coeff2, coeff1, coeff0])
-
+    return np.stack([coeff3r, coeff2r, coeff1r, coeff0r])
 
 
 # TODO: precomputedroots is not implemented consistently. Check that all functions that can use it have the option to do it
-# Docstrings must be changed for kappa and deltachi everywhere
+# TODO: Docstrings must be changed for kappa and deltachi everywhere
 def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputedroots=None):
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
@@ -6346,20 +6312,31 @@ if __name__ == '__main__':
 
     # print(tnew,told)
 
-    r=10
-    chieff = 0
-    q=1
-    chi1=0.8
-    chi2=1
-    kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
-    print(kappamin,kappamax)
+    # r=10
+    # chieff = 0
+    # q=1
+    # chi1=0.8
+    # chi2=1
 
-    print((chi1+chi2)**2 / (8*r**0.5) + chieff/2)
 
-    print((chi1-chi2)**2 / (8*r**0.5) + chieff/2)
+    # kappamin,kappamax = kapparesonances(r, chieff, q, chi1, chi2)
+    # print(kappamin,kappamax)
 
-    print(chieff**2 / (2*r**0.5) + chieff/2)
+    # print((chi1+chi2)**2 / (8*r**0.5) + chieff/2)
 
+    # print((chi1-chi2)**2 / (8*r**0.5) + chieff/2)
+
+    # print(chieff**2 / (2*r**0.5) + chieff/2)
+
+    import timeit
+
+
+    x = deltachicubic_coefficients([0.45,0.32], [0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
+    y = deltachicubic_coefficients_old([0.45,0.32], [0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
+
+    print(x-y)
+
+    print(y)
 
     # kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
     # print(kappamin,kappamax)
