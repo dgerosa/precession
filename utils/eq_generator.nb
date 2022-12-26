@@ -13108,17 +13108,623 @@ Cell[BoxData[{
   "In[732]:=",ExpressionUUID->"c3883bfa-eb72-4c0a-b99b-a4c72fc08e26"],
 
 Cell[BoxData["0"], "Output",
- CellLabel->
-  "Out[733]=",ExpressionUUID->"3172ac76-babc-4e6a-b9ac-e2296599dc5f"],
+ CellLabel->"Out[733]=",ExpressionUUID->"3172ac76-babc-4e6a-b9ac-e2296599dc5f"]
+}, Open  ]],
 
-Cell["-\\frac{(1-q)^2 \\text{$\\chi $eff}}{8 q}", "Output",
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"CoefficientList", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"myc", "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "/", "overalldiscr"}], ",", "u"}], 
+    "]"}], "[", 
+   RowBox[{"[", "5", "]"}], "]"}], "//", "FullSimplify"}]], "Input",
  CellLabel->
-  "Out[734]//TeXForm=",ExpressionUUID->"b379e0a7-028e-4f04-b0bb-0837b11f57ca"]\
+  "In[736]:=",ExpressionUUID->"7ce0b5cf-93a4-4fae-b18f-017b7ce6c673"],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"t\[Chi]1", "-", 
+      RowBox[{"q", " ", "t\[Chi]3"}]}], ")"}], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"10", " ", 
+       SuperscriptBox["t\[Chi]1", "2"]}], "-", 
+      RowBox[{"12", " ", 
+       SuperscriptBox["q", "4"], " ", "t\[Chi]2"}], "-", 
+      RowBox[{"8", " ", "q", " ", "t\[Chi]1", " ", "t\[Chi]3"}], "+", 
+      RowBox[{
+       SuperscriptBox["q", "2"], " ", 
+       SuperscriptBox["t\[Chi]3", "2"]}]}], ")"}]}], "+", 
+   RowBox[{"q", " ", 
+    SuperscriptBox[
+     RowBox[{"(", 
+      RowBox[{"1", "+", "q"}], ")"}], "2"], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"6", " ", "t\[Chi]1", " ", 
+       RowBox[{"(", 
+        RowBox[{"t\[Chi]1", "-", 
+         RowBox[{"q", " ", "t\[Chi]3"}]}], ")"}]}], "+", 
+      RowBox[{
+       SuperscriptBox["q", "2"], " ", 
+       SuperscriptBox["t\[Chi]4", "2"]}]}], ")"}], " ", 
+    SuperscriptBox["\[Chi]eff", "2"]}]}], 
+  SuperscriptBox[
+   RowBox[{"(", 
+    RowBox[{"1", "+", "q"}], ")"}], "12"]]], "Output",
+ CellLabel->"Out[736]=",ExpressionUUID->"584e5df7-d65c-4056-af42-a67e1c05efcf"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Delta]24", "=", " ", 
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "-", "q"}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{"10", "-", 
+         RowBox[{"8", " ", "q"}], "+", 
+         SuperscriptBox["q", "2"]}], ")"}], " "}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "+", "q"}], ")"}], "12"]], 
+     SuperscriptBox["\[Chi]1", "6"]}], "-", " ", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"9", " ", 
+       SuperscriptBox["q", "3"], 
+       RowBox[{"(", 
+        RowBox[{"1", "-", "q"}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{"2", "-", 
+         RowBox[{"2", " ", "q"}], "+", 
+         SuperscriptBox["q", "2"]}], ")"}], " "}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "+", "q"}], ")"}], "12"]], 
+     SuperscriptBox["\[Chi]1", "4"], " ", 
+     SuperscriptBox["\[Chi]2", "2"]}], "+", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"9", " ", 
+       SuperscriptBox["q", "6"], 
+       RowBox[{"(", 
+        RowBox[{"1", "-", "q"}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"2", " ", "q"}], "+", 
+         RowBox[{"2", " ", 
+          SuperscriptBox["q", "2"]}]}], ")"}]}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "+", "q"}], ")"}], "12"]], "  ", 
+     SuperscriptBox["\[Chi]1", "2"], " ", 
+     SuperscriptBox["\[Chi]2", "4"]}], "-", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["q", "9"], 
+       RowBox[{"(", 
+        RowBox[{"1", "-", "q"}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"8", " ", "q"}], "+", 
+         RowBox[{"10", " ", 
+          SuperscriptBox["q", "2"]}]}], ")"}]}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "+", "q"}], ")"}], "12"]], "  ", 
+     SuperscriptBox["\[Chi]2", "6"]}], "+", "\[IndentingNewLine]", " ", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"q", 
+       RowBox[{"(", 
+        RowBox[{"6", "-", 
+         RowBox[{"6", " ", "q"}], "+", 
+         SuperscriptBox["q", "2"]}], ")"}], " "}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "+", "q"}], ")"}], "10"]], 
+     SuperscriptBox["\[Chi]1", "4"], 
+     SuperscriptBox["\[Chi]eff", "2"]}], "-", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"2", " ", 
+       SuperscriptBox["q", "4"], " ", 
+       RowBox[{"(", 
+        RowBox[{"3", "-", 
+         RowBox[{"5", " ", "q"}], "+", 
+         RowBox[{"3", " ", 
+          SuperscriptBox["q", "2"]}]}], ")"}]}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "+", "q"}], ")"}], "10"]], " ", 
+     SuperscriptBox["\[Chi]1", "2"], " ", 
+     SuperscriptBox["\[Chi]2", "2"], 
+     SuperscriptBox["\[Chi]eff", "2"]}], "+", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["q", "7"], " ", 
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"6", " ", "q"}], "+", 
+         RowBox[{"6", " ", 
+          SuperscriptBox["q", "2"]}]}], ")"}], " "}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "+", "q"}], ")"}], "10"]], 
+     SuperscriptBox["\[Chi]2", "4"], 
+     SuperscriptBox["\[Chi]eff", "2"]}]}]}], " ", 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[Delta]24", "-", " ", 
+    RowBox[{
+     RowBox[{"CoefficientList", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"coeffs", "[", 
+         RowBox[{"[", "3", "]"}], "]"}], "/", "overalldiscr"}], ",", "u"}], 
+      "]"}], "[", 
+     RowBox[{"[", "5", "]"}], "]"}]}], "/.", "\[Chi]tr"}], "//", 
+  "FullSimplify"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Evaluate", "[", "%%", "]"}], "//", "HoldForm"}], "//", 
+  "TeXForm"}]}], "Input",
+ CellLabel->
+  "In[785]:=",ExpressionUUID->"7f28c4fe-54ff-4e7c-939b-f53948ffc3a7"],
+
+Cell[BoxData["0"], "Output",
+ CellLabel->
+  "Out[786]=",ExpressionUUID->"2f29ec5b-74d7-468f-bf0b-88e0b390d9f8"],
+
+Cell["\<\
+\\frac{(1-q) \\left(10-8 q+q^2\\right) \\text{$\\chi
+   $1}^6}{(1+q)^{12}}-\\frac{9 (1-q) q^3 \\left(2-2 q+q^2\\right)
+   \\text{$\\chi $1}^4 \\text{$\\chi $2}^2}{(1+q)^{12}}+\\frac{9
+   (1-q) q^6 \\left(1-2 q+2 q^2\\right) \\text{$\\chi $1}^2
+   \\text{$\\chi $2}^4}{(1+q)^{12}}-\\frac{(1-q) q^9 \\left(1-8 q+10
+   q^2\\right) \\text{$\\chi $2}^6}{(1+q)^{12}}+\\frac{q \\left(6-6
+   q+q^2\\right) \\text{$\\chi $1}^4 \\text{$\\chi
+   $eff}^2}{(1+q)^{10}}-\\frac{2 q^4 \\left(3-5 q+3 q^2\\right)
+   \\text{$\\chi $1}^2 \\text{$\\chi $2}^2 \\text{$\\chi
+   $eff}^2}{(1+q)^{10}}+\\frac{q^7 \\left(1-6 q+6 q^2\\right)
+   \\text{$\\chi $2}^4 \\text{$\\chi $eff}^2}{(1+q)^{10}}\
+\>", "Output",
+ CellLabel->
+  "Out[787]//TeXForm=",ExpressionUUID->"a0466e89-93c3-4de3-ba29-a0f384d0ec84"]\
 
 }, Open  ]],
 
-Cell[BoxData[""], \
-"Input",ExpressionUUID->"5994b588-d667-4060-96bd-9e9305d09d84"],
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"CoefficientList", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"myc", "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "/", "overalldiscr"}], ",", "u"}], 
+    "]"}], "[", 
+   RowBox[{"[", "4", "]"}], "]"}], "//", "FullSimplify"}]], "Input",
+ CellLabel->
+  "In[788]:=",ExpressionUUID->"5994b588-d667-4060-96bd-9e9305d09d84"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", 
+   RowBox[{"2", " ", 
+    SuperscriptBox[
+     RowBox[{"(", 
+      RowBox[{"1", "+", "q"}], ")"}], "9"]}]], 
+  RowBox[{"\[Chi]eff", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"30", " ", 
+      RowBox[{"(", 
+       RowBox[{"1", "+", "q"}], ")"}], " ", 
+      SuperscriptBox["t\[Chi]1", "2"]}], "+", 
+     RowBox[{"3", " ", "q", " ", "t\[Chi]1", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "12"}], " ", 
+         RowBox[{"(", 
+          RowBox[{"1", "+", "q"}], ")"}], " ", "t\[Chi]3"}], "+", 
+        RowBox[{"11", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1"}], "+", "q"}], ")"}], " ", "t\[Chi]4"}], "+", 
+        RowBox[{"4", " ", 
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{"1", "+", "q"}], ")"}], "3"], " ", 
+         SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}], "+", 
+     RowBox[{
+      SuperscriptBox["q", "2"], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", "3"}], " ", 
+         RowBox[{"(", 
+          RowBox[{"1", "+", "q"}], ")"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"4", " ", 
+            SuperscriptBox["q", "2"], " ", "t\[Chi]2"}], "-", 
+           RowBox[{"3", " ", 
+            SuperscriptBox["t\[Chi]3", "2"]}]}], ")"}]}], "-", 
+        RowBox[{"13", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "1"}], "+", "q"}], ")"}], " ", "t\[Chi]3", " ", 
+         "t\[Chi]4"}], "-", 
+        RowBox[{"2", " ", 
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{"1", "+", "q"}], ")"}], "2"], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"3", " ", 
+            RowBox[{"(", 
+             RowBox[{"1", "+", "q"}], ")"}], " ", "t\[Chi]3"}], "-", 
+           RowBox[{"5", " ", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"-", "1"}], "+", "q"}], ")"}], " ", "t\[Chi]4"}]}], 
+          ")"}], " ", 
+         SuperscriptBox["\[Chi]eff", "2"]}]}], ")"}]}]}], ")"}]}]}]], "Output",
+ CellLabel->"Out[788]=",ExpressionUUID->"80394ef0-cd74-4621-9f45-cdf35f1a3652"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Delta]23", "=", " ", 
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{"(", 
+       RowBox[{"30", "-", 
+        RowBox[{"39", " ", "q"}], "+", 
+        RowBox[{"19", " ", 
+         SuperscriptBox["q", "2"]}], "-", 
+        RowBox[{"4", " ", 
+         SuperscriptBox["q", "3"]}]}], ")"}], 
+      RowBox[{"2", " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "9"]}]], " ", 
+     SuperscriptBox["\[Chi]1", "4"], "\[Chi]eff"}], "-", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"3", " ", 
+       SuperscriptBox["q", "3"], "  ", 
+       RowBox[{"(", 
+        RowBox[{"1", "+", 
+         SuperscriptBox["q", "2"]}], ")"}], " "}], 
+      RowBox[{"2", " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "8"]}]], 
+     SuperscriptBox["\[Chi]1", "2"], " ", 
+     SuperscriptBox["\[Chi]2", "2"], "\[Chi]eff"}], "-", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["q", "6"], " ", 
+       RowBox[{"(", 
+        RowBox[{"4", "-", 
+         RowBox[{"19", " ", "q"}], "+", 
+         RowBox[{"39", " ", 
+          SuperscriptBox["q", "2"]}], "-", 
+         RowBox[{"30", " ", 
+          SuperscriptBox["q", "3"]}]}], ")"}], " "}], 
+      RowBox[{"2", " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "9"]}]], 
+     SuperscriptBox["\[Chi]2", "4"], "\[Chi]eff"}], "+", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"2", "q", " ", 
+       RowBox[{"(", 
+        RowBox[{"3", "-", "q", "+", 
+         SuperscriptBox["q", "2"]}], ")"}], " "}], 
+      RowBox[{" ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "7"]}]], " ", 
+     SuperscriptBox["\[Chi]1", "2"], 
+     SuperscriptBox["\[Chi]eff", "3"]}], " ", "+", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"2", 
+       SuperscriptBox["q", "4"], "  ", 
+       RowBox[{"(", 
+        RowBox[{"1", "-", "q", "+", 
+         RowBox[{"3", " ", 
+          SuperscriptBox["q", "2"]}]}], ")"}], " "}], 
+      RowBox[{" ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "7"]}]], " ", 
+     SuperscriptBox["\[Chi]2", "2"], 
+     SuperscriptBox["\[Chi]eff", "3"]}]}]}], "   ", 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[Delta]23", "-", " ", 
+    RowBox[{
+     RowBox[{"CoefficientList", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"coeffs", "[", 
+         RowBox[{"[", "3", "]"}], "]"}], "/", "overalldiscr"}], ",", "u"}], 
+      "]"}], "[", 
+     RowBox[{"[", "4", "]"}], "]"}]}], "/.", "\[Chi]tr"}], "//", 
+  "FullSimplify"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Evaluate", "[", "%%", "]"}], "//", "HoldForm"}], "//", 
+  "TeXForm"}]}], "Input",
+ CellLabel->
+  "In[856]:=",ExpressionUUID->"aca35bec-ff20-4441-8f25-dd272c829f67"],
+
+Cell[BoxData["0"], "Output",
+ CellLabel->
+  "Out[857]=",ExpressionUUID->"b73484db-e792-4e4b-ba3b-d870ddb39961"],
+
+Cell["\<\
+\\frac{\\left(30-39 q+19 q^2-4 q^3\\right) \\text{$\\chi $1}^4
+   \\text{$\\chi $eff}}{2 (1+q)^9}-\\frac{3 q^3 \\left(1+q^2\\right)
+   \\text{$\\chi $1}^2 \\text{$\\chi $2}^2 \\text{$\\chi $eff}}{2
+   (1+q)^8}-\\frac{q^6 \\left(4-19 q+39 q^2-30 q^3\\right)
+   \\text{$\\chi $2}^4 \\text{$\\chi $eff}}{2 (1+q)^9}+\\frac{2 q
+   \\left(3-q+q^2\\right) \\text{$\\chi $1}^2 \\text{$\\chi
+   $eff}^3}{(1+q)^7}+\\frac{2 q^4 \\left(1-q+3 q^2\\right)
+   \\text{$\\chi $2}^2 \\text{$\\chi $eff}^3}{(1+q)^7}\
+\>", "Output",
+ CellLabel->
+  "Out[858]//TeXForm=",ExpressionUUID->"d68a2641-1563-499a-9c42-46260a72f5a4"]\
+
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"CoefficientList", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"myc", "[", 
+       RowBox[{"[", "3", "]"}], "]"}], "/", "overalldiscr"}], ",", "u"}], 
+    "]"}], "[", 
+   RowBox[{"[", "3", "]"}], "]"}], "//", "FullSimplify"}]], "Input",
+ CellLabel->
+  "In[859]:=",ExpressionUUID->"8b392161-d7df-4cd7-92a4-f4633d15cab8"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", 
+   RowBox[{"8", " ", 
+    SuperscriptBox[
+     RowBox[{"(", 
+      RowBox[{"1", "+", "q"}], ")"}], "8"]}]], 
+  RowBox[{"(", 
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"-", "1"}], "+", "q"}], ")"}], "2"], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"3", " ", 
+         SuperscriptBox["t\[Chi]1", "2"]}], "+", 
+        RowBox[{"60", " ", 
+         SuperscriptBox["q", "4"], " ", "t\[Chi]2"}], "-", 
+        RowBox[{"30", " ", "q", " ", "t\[Chi]1", " ", "t\[Chi]3"}], "-", 
+        RowBox[{"4", " ", 
+         SuperscriptBox["q", "2"], " ", 
+         SuperscriptBox["t\[Chi]3", "2"]}]}], ")"}]}], "q"], "+", 
+    RowBox[{"2", " ", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"1", "+", "q"}], ")"}], "2"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"24", " ", 
+        RowBox[{"(", 
+         RowBox[{"1", "+", 
+          RowBox[{"q", " ", 
+           RowBox[{"(", 
+            RowBox[{"3", "+", "q"}], ")"}]}]}], ")"}], " ", "t\[Chi]1"}], "-", 
+       RowBox[{"q", " ", 
+        RowBox[{"(", 
+         RowBox[{"35", "+", 
+          RowBox[{"q", " ", 
+           RowBox[{"(", 
+            RowBox[{"2", "+", 
+             RowBox[{"35", " ", "q"}]}], ")"}]}]}], ")"}], " ", "t\[Chi]3"}], 
+       "+", 
+       RowBox[{"33", " ", "q", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"-", "1"}], "+", 
+          SuperscriptBox["q", "2"]}], ")"}], " ", "t\[Chi]4"}]}], ")"}], " ", 
+     
+     SuperscriptBox["\[Chi]eff", "2"]}], "+", 
+    RowBox[{"8", " ", "q", " ", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"1", "+", "q"}], ")"}], "4"], " ", 
+     RowBox[{"(", 
+      RowBox[{"1", "+", 
+       RowBox[{"q", " ", 
+        RowBox[{"(", 
+         RowBox[{"4", "+", "q"}], ")"}]}]}], ")"}], " ", 
+     SuperscriptBox["\[Chi]eff", "4"]}]}], ")"}]}]], "Output",
+ CellLabel->"Out[859]=",ExpressionUUID->"77ba1916-33c9-4c4d-89d0-ca420ca8722d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Delta]22", "=", " ", 
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "-", "q"}], ")"}], "2"], 
+       RowBox[{"(", 
+        RowBox[{"3", "-", 
+         RowBox[{"30", " ", "q"}], "-", 
+         RowBox[{"4", " ", 
+          SuperscriptBox["q", "2"]}]}], ")"}]}], 
+      RowBox[{"8", " ", "q", " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "8"]}]], " ", 
+     SuperscriptBox["\[Chi]1", "4"]}], "-", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"2", " ", 
+       SuperscriptBox["q", "3"], " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "-", "q"}], ")"}], "2"], 
+       RowBox[{"(", 
+        RowBox[{"15", "-", 
+         RowBox[{"29", " ", "q"}], "+", 
+         RowBox[{"15", " ", 
+          SuperscriptBox["q", "2"]}]}], ")"}]}], 
+      RowBox[{"8", " ", "q", " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "8"]}]], " ", 
+     SuperscriptBox["\[Chi]1", "2"], " ", 
+     SuperscriptBox["\[Chi]2", "2"]}], "-", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["q", "6"], " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "-", "q"}], ")"}], "2"], 
+       RowBox[{"(", 
+        RowBox[{"4", "+", 
+         RowBox[{"30", " ", "q"}], "-", 
+         RowBox[{"3", " ", 
+          SuperscriptBox["q", "2"]}]}], ")"}], " "}], 
+      RowBox[{"8", " ", "q", " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "8"]}]], 
+     SuperscriptBox["\[Chi]2", "4"]}], "+", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"12", "+", 
+       RowBox[{"2", " ", "q"}], "+", 
+       RowBox[{"11", " ", 
+        SuperscriptBox["q", "2"]}], "-", " ", 
+       SuperscriptBox["q", "3"]}], 
+      RowBox[{"2", " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "6"]}]], " ", 
+     SuperscriptBox["\[Chi]1", "2"], 
+     SuperscriptBox["\[Chi]eff", "2"]}], "-", " ", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["q", "3"], " ", 
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"11", " ", "q"}], "-", 
+         RowBox[{"2", " ", 
+          SuperscriptBox["q", "2"]}], "-", 
+         RowBox[{"12", " ", 
+          SuperscriptBox["q", "3"]}]}], ")"}]}], 
+      RowBox[{"2", " ", 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"1", "+", "q"}], ")"}], "6"]}]], " ", 
+     SuperscriptBox["\[Chi]2", "2"], 
+     SuperscriptBox["\[Chi]eff", "2"]}], " ", "+", 
+    RowBox[{
+     FractionBox[
+      RowBox[{" ", 
+       RowBox[{"q", " ", 
+        RowBox[{"(", 
+         RowBox[{"1", "+", 
+          RowBox[{"4", "q"}], "+", " ", 
+          SuperscriptBox["q", "2"]}], ")"}], " "}]}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"1", "+", "q"}], ")"}], "4"]], " ", 
+     SuperscriptBox["\[Chi]eff", "4"]}]}]}], " ", 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[Delta]22", "-", " ", 
+    RowBox[{
+     RowBox[{"CoefficientList", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"coeffs", "[", 
+         RowBox[{"[", "3", "]"}], "]"}], "/", "overalldiscr"}], ",", "u"}], 
+      "]"}], "[", 
+     RowBox[{"[", "3", "]"}], "]"}]}], "/.", "\[Chi]tr"}], "//", 
+  "FullSimplify"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Evaluate", "[", "%%", "]"}], "//", "HoldForm"}], "//", 
+  "TeXForm"}]}], "Input",
+ CellLabel->
+  "In[906]:=",ExpressionUUID->"2bd98d3d-f543-49f5-a437-bd265e792429"],
+
+Cell[BoxData["0"], "Output",
+ CellLabel->
+  "Out[907]=",ExpressionUUID->"a9dc015b-dc11-4e4a-9dfe-19bfed6741c4"],
+
+Cell["\<\
+\\frac{(1-q)^2 \\left(3-30 q-4 q^2\\right) \\text{$\\chi $1}^4}{8 q
+   (1+q)^8}-\\frac{(1-q)^2 q^2 \\left(15-29 q+15 q^2\\right)
+   \\text{$\\chi $1}^2 \\text{$\\chi $2}^2}{4 (1+q)^8}-\\frac{(1-q)^2
+   q^5 \\left(4+30 q-3 q^2\\right) \\text{$\\chi $2}^4}{8
+   (1+q)^8}+\\frac{\\left(12+2 q+11 q^2-q^3\\right) \\text{$\\chi
+   $1}^2 \\text{$\\chi $eff}^2}{2 (1+q)^6}-\\frac{q^3 \\left(1-11
+   q-2 q^2-12 q^3\\right) \\text{$\\chi $2}^2 \\text{$\\chi
+   $eff}^2}{2 (1+q)^6}+\\frac{q \\left(1+4 q+q^2\\right)
+   \\text{$\\chi $eff}^4}{(1+q)^4}\
+\>", "Output",
+ CellLabel->
+  "Out[908]//TeXForm=",ExpressionUUID->"ddc8d172-13e7-49b3-a989-0d43f41b74f1"]\
+
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -13126,29 +13732,53 @@ Cell[BoxData[
  RowBox[{
   RowBox[{
    RowBox[{
-    RowBox[{"(", 
-     RowBox[{
-      RowBox[{"-", "t\[Chi]1"}], "+", 
-      RowBox[{"5", " ", "q", " ", "t\[Chi]3"}]}], ")"}], "/.", "\[Chi]tr"}], "//",
-    "Expand"}], "//", "Simplify"}]], "Input",
+    RowBox[{
+     RowBox[{"24", " ", 
+      RowBox[{"(", 
+       RowBox[{"1", "+", 
+        RowBox[{"q", " ", 
+         RowBox[{"(", 
+          RowBox[{"3", "+", "q"}], ")"}]}]}], ")"}], " ", "t\[Chi]1"}], "-", 
+     RowBox[{"q", " ", 
+      RowBox[{"(", 
+       RowBox[{"35", "+", 
+        RowBox[{"q", " ", 
+         RowBox[{"(", 
+          RowBox[{"2", "+", 
+           RowBox[{"35", " ", "q"}]}], ")"}]}]}], ")"}], " ", "t\[Chi]3"}], 
+     "+", 
+     RowBox[{"33", " ", "q", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        SuperscriptBox["q", "2"]}], ")"}], " ", "t\[Chi]4"}]}], "/.", 
+    "\[Chi]tr"}], "//", "Expand"}], "//", "Simplify"}]], "Input",
  CellLabel->
-  "In[714]:=",ExpressionUUID->"c792af63-9f92-4a88-a733-676529f01fb3"],
+  "In[894]:=",ExpressionUUID->"c792af63-9f92-4a88-a733-676529f01fb3"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{
    RowBox[{"(", 
-    RowBox[{
-     RowBox[{"-", "1"}], "+", 
-     RowBox[{"5", " ", "q"}]}], ")"}], " ", 
-   SuperscriptBox["\[Chi]1", "2"]}], "-", 
-  RowBox[{
+    RowBox[{"24", "+", 
+     RowBox[{"4", " ", "q"}], "+", 
+     RowBox[{"22", " ", 
+      SuperscriptBox["q", "2"]}], "-", 
+     RowBox[{"2", " ", 
+      SuperscriptBox["q", "3"]}]}], ")"}], " ", 
+   SuperscriptBox["\[Chi]1", "2"]}], "+", 
+  RowBox[{"2", " ", 
+   SuperscriptBox["q", "3"], " ", 
    RowBox[{"(", 
     RowBox[{
-     RowBox[{"-", "5"}], "+", "q"}], ")"}], " ", 
-   SuperscriptBox["q", "3"], " ", 
+     RowBox[{"-", "1"}], "+", 
+     RowBox[{"11", " ", "q"}], "+", 
+     RowBox[{"2", " ", 
+      SuperscriptBox["q", "2"]}], "+", 
+     RowBox[{"12", " ", 
+      SuperscriptBox["q", "3"]}]}], ")"}], " ", 
    SuperscriptBox["\[Chi]2", "2"]}]}]], "Output",
- CellLabel->"Out[714]=",ExpressionUUID->"fd877766-9f5e-4a9e-bc90-a1bd7993ee6b"]
+ CellLabel->"Out[894]=",ExpressionUUID->"c5c5b3f3-a1b5-43d5-83e0-f02b73a94b40"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -13157,20 +13787,24 @@ Cell[BoxData[
  RowBox[{"Factor", "[", 
   RowBox[{"(", 
    RowBox[{
-    RowBox[{"-", "1"}], "-", 
-    RowBox[{"3", " ", "q"}], "+", 
-    RowBox[{"20", " ", 
-     SuperscriptBox["q", "2"]}]}], ")"}], "]"}]], "Input",
+    RowBox[{"-", "1"}], "+", 
+    RowBox[{"11", " ", "q"}], "+", 
+    RowBox[{"2", " ", 
+     SuperscriptBox["q", "2"]}], "+", 
+    RowBox[{"12", " ", 
+     SuperscriptBox["q", "3"]}]}], ")"}], "]"}]], "Input",
  CellLabel->
-  "In[685]:=",ExpressionUUID->"f7655767-2657-42db-b349-ee6aefc0f364"],
+  "In[896]:=",ExpressionUUID->"f7655767-2657-42db-b349-ee6aefc0f364"],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"-", "1"}], "-", 
-  RowBox[{"3", " ", "q"}], "+", 
-  RowBox[{"20", " ", 
-   SuperscriptBox["q", "2"]}]}]], "Output",
- CellLabel->"Out[685]=",ExpressionUUID->"d81dab98-1d9c-4b35-870b-8c61a89361e0"]
+  RowBox[{"-", "1"}], "+", 
+  RowBox[{"11", " ", "q"}], "+", 
+  RowBox[{"2", " ", 
+   SuperscriptBox["q", "2"]}], "+", 
+  RowBox[{"12", " ", 
+   SuperscriptBox["q", "3"]}]}]], "Output",
+ CellLabel->"Out[896]=",ExpressionUUID->"21ec3ede-0cf7-4f80-af06-10609c039514"]
 }, Open  ]],
 
 Cell[CellGroupData[{
