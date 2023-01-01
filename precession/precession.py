@@ -1047,6 +1047,7 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
+
 def kappalimits_geometrical(r , q, chi1, chi2):
 
     r = np.atleast_1d(r)
@@ -6331,8 +6332,8 @@ if __name__ == '__main__':
     import timeit
 
 
-    x = deltachicubic_coefficients([0.45,0.32], [0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
-    y = deltachicubic_coefficients_old([0.45,0.32], [0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
+    x = kappadiscriminant_coefficients([0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
+    y = kappadiscriminant_coefficients_old([0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
 
     print(x-y)
 
