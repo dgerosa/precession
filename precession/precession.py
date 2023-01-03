@@ -2661,9 +2661,9 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
 
 
 # TODO cyclesign needs to be checked again in the entire code
-def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=-1):
+def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=1):
     """
-    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=1 returns the other half of the  precession cycle [-pi,0].
+    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=-1 returns the other half of the  precession cycle [-pi,0].
 
     Call
     ----
@@ -2696,7 +2696,7 @@ def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=-1):
 
     cyclesign = np.atleast_1d(cyclesign)
     cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2)
-    deltaphi = -np.sign(cyclesign)*np.arccos(cosdeltaphi)
+    deltaphi = np.sign(cyclesign)*np.arccos(cosdeltaphi)
 
     return deltaphi
 
