@@ -180,12 +180,12 @@ def sample_unitsphere(N=1):
 
 
 def tiler(thing,shaper):
+
     thing =np.atleast_1d(thing)
     shaper =np.atleast_1d(shaper)
     assert thing.ndim == 1 and shaper.ndim==1
 
     return np.squeeze(np.tile(thing, np.shape(shaper)).reshape(len(shaper),len(thing)))
-
 
 
 def affine(vec, low, up):
@@ -230,10 +230,10 @@ def wraproots(coefficientfunction, *args, **kwargs):
         Roots of the polynomial.
     """
 
-
     coeffs = coefficientfunction(*args, **kwargs)
     sols = np.sort_complex(roots_vec(coeffs.T))
     sols = np.real(np.where(np.isreal(sols), sols, np.nan))
+
     return sols
 
 
@@ -348,8 +348,6 @@ def ismonotonic(vec, which):
         raise ValueError("`which` needs to be one of the following: `>`, `>=`, `<`, `<=`.")
 
 
-def squarewithsign(x):
-    return x*np.abs(x)
 
 
 ################ Dynamics on the precession timescale ################
@@ -595,7 +593,9 @@ def eval_L(r, q):
     """
 
     r = np.atleast_1d(r)
-    L = eval_m1(q)*eval_m2(q)*r**0.5
+    q = np.atleast_1d(q)
+
+    L = (q/(1+q)**2)*r**0.5
 
     return L
 
@@ -625,7 +625,7 @@ def eval_v(r):
     return v
 
 
-def eval_r(L=None, u=None, q=None):
+def eval_r(L=None,u=None,q=None):
     """
     Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).
 
@@ -648,16 +648,17 @@ def eval_r(L=None, u=None, q=None):
         Binary separation.
     """
 
+    q = np.atleast_1d(q)
+
     if L is not None and u is None and q is not None:
 
         L = np.atleast_1d(L)
-        m1, m2 = masses(q)
-        r = (L / (m1 * m2))**2
+        r = (L * (1+q)**2 / q )**2
 
     elif L is None and u is not None and q is not None:
 
         u = np.atleast_1d(u)
-        r = (2*eval_m1(q)*eval_m2(q)*u)**(-2)
+        r = (2*u*q/(1+q)**2)**(-2)
 
     else:
         raise TypeError("Provide either (L,q) or (u,q).")
@@ -1047,7 +1048,6 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     return np.stack([coeff5, coeff4, coeff3, coeff2, coeff1, coeff0])
 
 
-
 def kappalimits_geometrical(r , q, chi1, chi2):
 
     r = np.atleast_1d(r)
@@ -1055,11 +1055,26 @@ def kappalimits_geometrical(r , q, chi1, chi2):
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
     
-    kappamin= q*r**(1/2)/(2*(1+q)**2)*(
-         np.maximum.reduce([np.zeros(q.shape), 
-            squarewithsign( 1- (chi1+chi2*q**2) / (q*r**(1/2))),
-            squarewithsign( np.abs(chi1-chi2*q**2) / (q*r**(1/2)) - 1 )] )
-         -1)
+    k1 = -q*r**(1/2)/(2*(1+q)**2)
+    k2 = np.where(q*r**(1/2)>=chi1+chi2*q**2,
+                (chi1+chi2*q**2)/(1+q)**2 *(-1+ (chi1+chi2*q**2)/(2*q*r**(1/2))),
+                1/(1+q)**2 * (-q*r**(1/2) + (chi1+chi2*q**2) - (chi1+chi2*q**2)**2 /(2*q*r**(1/2)))
+                )
+    k3 = np.where(np.abs(chi1-chi2*q**2)>= q*r**(1/2),
+                np.abs(chi1-chi2*q**2)/(1+q)**2 *(-1+ np.abs(chi1-chi2*q**2)/(2*q*r**(1/2))),
+                1/(1+q)**2 * (-q*r**(1/2) + np.abs(chi1-chi2*q**2) - (chi1-chi2*q**2)**2 /(2*q*r**(1/2)))
+                )
+
+    kappamin = np.maximum.reduce([k1,k2,k3])
+
+    # An alternative implementation that breaks down for r=inf
+    # def squarewithsign(x):
+    #     return x*np.abs(x)
+    # kappamin_old= q*r**(1/2)/(2*(1+q)**2)*(
+    #      np.maximum.reduce([np.zeros(q.shape), 
+    #         squarewithsign( 1- (chi1+chi2*q**2) / (q*r**(1/2))),
+    #         squarewithsign( np.abs(chi1-chi2*q**2) / (q*r**(1/2)) - 1 )] )
+    #      -1)
 
     kappamax = (chi1+chi2*q**2) / (1+q)**2 * ( (chi1+chi2*q**2) / (2*q*r**(1/2)) +1 )
 
@@ -1351,7 +1366,7 @@ def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     return np.stack([Jmin, Jmax])
 
 
-# TODO: check when rewriting the large separation limit
+# TODO: Remove this? check when rewriting the large separation limit
 def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
@@ -1480,7 +1495,7 @@ def deltachilimits_definition(q, chi1, chi2):
 
 
 
-# Change. This needs to be kappa. All the Js should disappear and be left to the use if they want.
+# Change. This needs to be kappa. All the Js should disappear and be left to the user if really want it.
 # Change. Only allow fixing chieff, not J or kappa
 def anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
     """
@@ -1617,6 +1632,7 @@ def chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
     return np.stack([chieffmin, chieffmax])
 
 
+# Remove?
 def Slimits_S1S2(q, chi1, chi2):
     """
     Limits on the total spin magnitude due to the vector relation S=S1+S2.
@@ -1648,7 +1664,7 @@ def Slimits_S1S2(q, chi1, chi2):
 
     return np.stack([Smin, Smax])
 
-
+# Remove?
 def Slimits_LJ(J, r, q):
     """
     Limits on the total spin magnitude due to the vector relation S=J-L.
@@ -1680,7 +1696,7 @@ def Slimits_LJ(J, r, q):
 
     return np.stack([Smin, Smax])
 
-
+# Remove?
 def Slimits_LJS1S2(J, r, q, chi1, chi2):
     """
     Limits on the total spin magnitude due to the vector relations S=S1+S2 and S=J-L.
@@ -1718,6 +1734,7 @@ def Slimits_LJS1S2(J, r, q, chi1, chi2):
     return np.stack([Smin, Smax])
 
 
+# Remove?
 def Scubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     """
     Coefficients of the cubic equation in S^2 that identifies the effective potentials.
@@ -1782,6 +1799,7 @@ def Scubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
+# Remove?
 # TODO: precomputedroots is not implemented consistently. Check that all functions that can use it have the option to do it
 def Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
@@ -1832,6 +1850,7 @@ def Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=None):
         return precomputedroots
 
 
+# Remove?
 def Slimits_plusminus(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Limits on the total spin magnitude compatible with both J and chieff.
@@ -1873,6 +1892,7 @@ def Slimits_plusminus(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     return np.stack([Smin, Smax])
 
 
+# Remove?
 def Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None):
     """
     Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user. Provide either J or kappa and either r or u.
@@ -1932,6 +1952,7 @@ def Satresonance(J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=N
     return Sres
 
 
+# Remove?
 def Slimits(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False, precomputedroots=None):
     """
     Limits on the total spin magnitude. The contraints considered depend on the inputs provided.
@@ -2176,17 +2197,12 @@ def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=N
     return deltachiminus, deltachiplus
 
 
-
-
 def deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2,precomputedroots=None):
 
     deltachiminus, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2,precomputedroots=precomputedroots)
     deltachi =  inverseaffine(deltachitilde, deltachiminus, deltachiplus)
 
     return deltachi
-
-
-
 
 
 def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None):
@@ -2323,7 +2339,7 @@ def limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=No
 
 
 # Evaluations and conversions
-
+# TODO: deltachi instead of S here
 def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
     """
     Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
@@ -2438,8 +2454,6 @@ def eval_deltachi(theta1, theta2, q, chi1, chi2):
     return deltachi
 
 
-# TODO: change S,J to deltachi, kappa in all these angle functions below!
-
 def eval_costheta1(deltachi, chieff, q, chi1):
     """
     Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
@@ -2482,7 +2496,6 @@ def eval_costheta1(deltachi, chieff, q, chi1):
 
 
 def eval_theta1(deltachi, chieff, q, chi1):
-
 
     costheta1 = eval_costheta1(deltachi, chieff, q, chi1)
     theta1 = np.arccos(costheta1)
@@ -2532,7 +2545,6 @@ def eval_costheta2(deltachi, chieff, q, chi2):
 
 
 def eval_theta2(deltachi, chieff, q, chi2):
-
 
     costheta2 = eval_costheta1(deltachi, chieff, q, chi2)
     theta2 = np.arccos(costheta2)
@@ -2587,13 +2599,11 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         chi1 = np.atleast_1d(chi1)
         chi2 = np.atleast_1d(chi2)
 
-
         # Machine generated with eq_generator.nb
         costheta12 = 1/2 * q**(-2) * (chi1)**(-1) * (chi2)**(-1) * (-1 * \
         (chi1)**2 + (-1 * q**4 * (chi2)**2 + q * (1 + q) * (r)**(1/2) * (-1 * \
         (1 + -1 * q) * deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * \
         chieff))))
-
 
     else:
         raise TypeError("Provide either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).")
@@ -2601,9 +2611,7 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     return costheta12
 
 
-
 def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
-
 
     costheta12 = eval_costheta1(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
     theta12 = np.arccos(costheta12)
@@ -2701,6 +2709,7 @@ def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=1):
     return deltaphi
 
 
+# TODO: check this one. S...
 def eval_costhetaL(S, J, r, q, chi1, chi2):
     """
     Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
@@ -2739,7 +2748,7 @@ def eval_costhetaL(S, J, r, q, chi1, chi2):
 
     return costhetaL
 
-
+# TODO: check this one. S...
 def eval_thetaL(S, J, r, q, chi1, chi2):
     """
     Angle thetaL betwen orbital angular momentum and total angular momentum.
@@ -2920,6 +2929,7 @@ def eval_kappa(J, r, q):
     return kappa
 
 
+# TODO: Remove?
 def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
     """
     Infinite orbital-separation limit of the regularized momentum kappa.
@@ -2955,7 +2965,7 @@ def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
 
     return kappainf
 
-
+# TODO: remove and merge with eval_costheta1
 def eval_costheta1inf(kappainf, chieff, q, chi1, chi2):
     """
     Infinite orbital separation limit of the cosine of the angle between the
@@ -2993,7 +3003,7 @@ def eval_costheta1inf(kappainf, chieff, q, chi1, chi2):
 
     return costheta1inf
 
-
+# TODO: remove after you merged the previous one
 def eval_theta1inf(kappainf, chieff, q, chi1, chi2):
     """
     Infinite orbital separation limit of the angle between the orbital angular
@@ -3027,7 +3037,7 @@ def eval_theta1inf(kappainf, chieff, q, chi1, chi2):
 
     return theta1inf
 
-
+# TODO: remove and merge with eval_costheta2
 def eval_costheta2inf(kappainf, chieff, q, chi1, chi2):
     """
     Infinite orbital separation limit of the cosine of the angle between the
@@ -3066,6 +3076,7 @@ def eval_costheta2inf(kappainf, chieff, q, chi1, chi2):
     return costheta2inf
 
 
+# TODO: remove after you merged the previous one
 def eval_theta2inf(kappainf, chieff, q, chi1, chi2):
     """
     Infinite orbital separation limit of the angle between the orbital angular
@@ -3147,7 +3158,7 @@ def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=
 
     return morphs
 
-
+# TODO: check this very carefully. The sign of dSdt and ddeltachidt are different!
 def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None):
     """
     Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the 'sign' of a precession cycle, defined as +1 if S is increasing and -1 S is decreasing. Valid inputs are one and not more of the following:
@@ -3205,6 +3216,7 @@ def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None,
     return cyclesign
 
 
+# TODO: update
 def conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=+1):
     """
     Convert conserved quantities (S,J,chieff) into angles (theta1,theta2,deltaphi).
@@ -3249,6 +3261,7 @@ def conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=+1):
     return np.stack([theta1, theta2, deltaphi])
 
 
+# TODO: update
 def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False):
     """
     Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,chieff).
@@ -3305,6 +3318,7 @@ def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=
         return np.stack([S, J, chieff])
 
 
+# TODO: Remove? I think this can be merged with "conserved"
 def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     """
     Convert asymptotic angles (theta1, theta2) into regularized momentum and effective spin (kappa, chieff).
@@ -3340,6 +3354,7 @@ def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
     return np.stack([kappainf, chieff])
 
 
+# TODO: Remove? I think this can be merged with "conserved"
 def asymptotic_to_angles(kappainf, chieff, q, chi1, chi2):
     """
     Convert regularized momentum and effective spin (kappa, chieff) into asymptotic angles (theta1, theta2).
@@ -3430,8 +3445,6 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False):
 
     else:
         return np.stack([S, J, chieff])
-
-# TODO: write function to get theta12 from theta1, theta2 and deltaphi
 
 
 def vectors_to_angles(Lvec, S1vec, S2vec):
@@ -6329,23 +6342,40 @@ if __name__ == '__main__':
 
     # print(chieff**2 / (2*r**0.5) + chieff/2)
 
-    import timeit
+    #import timeit
 
 
-    x = kappadiscriminant_coefficients([0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
-    y = kappadiscriminant_coefficients_old([0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
+    #x = kappadiscriminant_coefficients([0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
+    #y = kappadiscriminant_coefficients_old([0.345,0.3131], [0.12,0.93231], [0.43231232,0.31312], [0.5344234,0.32312], [0.9681,0.321])
 
-    print(x-y)
+    #print(x-y)
 
-    print(y)
+    #print(y)
 
     # kappamin,kappamax = kapparesonances_old(u, chieff, q, chi1, chi2)
     # print(kappamin,kappamax)
 
-# TODO: Do we need this?
+    # TODO: Do we need this?
     # Jmin,Jmax = Jlimits_LS1S2(r, q, chi1, chi2)
     # print(Jmin,Jmax)
 
     # kmin,kmax = kappalimits_geometrical(r , q, chi1, chi2)
     # print(eval_J(kappa=np.squeeze([kmin,kmax]), r=[r,r], q=[q,q]))
+
+    # r=10
+    # q=0.4
+    # L = eval_L(r, q)
+    # u= eval_u(r, q)
+    # print(eval_r(L=L,q=q))
+    # print(eval_r(u=u,q=q))
+
+
+    while True:
+        r= np.exp(np.random.uniform(10,1,1))
+        q=np.random.uniform(0.1,1,1)
+        chi1=np.random.uniform(0,1,1)
+        chi2=np.random.uniform(0,1,1)
+        kmin,kmax = kappalimits_geometrical(np.inf , q, chi1, chi2)
+        print(kmin,kmax)
+
 
