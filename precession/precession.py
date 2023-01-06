@@ -1451,8 +1451,6 @@ def deltachilimits_definition(q, chi1, chi2):
     return np.stack([-deltachilim, deltachilim])
 
 
-# Change. This needs to be kappa. All the Js should disappear and be left to the user if really want it.
-# Change. Only allow fixing chieff, not J or kappa
 def anglesresonances(r, chieff, q, chi1, chi2):
     """
     Compute the values of the angles corresponding to the two spin-orbit resonances.
