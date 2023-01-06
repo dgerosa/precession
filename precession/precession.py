@@ -185,7 +185,7 @@ def tiler(thing,shaper):
     shaper =np.atleast_1d(shaper)
     assert thing.ndim == 1 and shaper.ndim==1
 
-    return np.squeeze(np.tile(thing, np.shape(shaper)).reshape(len(shaper),len(thing)))
+    return np.atleast_1d(np.squeeze(np.tile(thing, np.shape(shaper)).reshape(len(shaper),len(thing))))
 
 
 def affine(vec, low, up):
@@ -1263,43 +1263,6 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     return np.stack([kappamin, kappamax])
 
 
-# Remove this
-def kappainfresonances(chieff, q, chi1, chi2):
-    """
-    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
-
-    Call
-    ----
-    kappainfmin,kappainfmax = kappainfresonances(chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    kappainfmin: float
-        Minimum value of the asymptotic angular momentum kappainf.
-    kappainfmax: float
-        Maximum value of the asymptotic angular momentum kappainf.
-    """
-
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    kappainfmin = np.maximum((chieff - (q**-1-q)*S2)/(1+q), (chieff - (q**-1-q)*S1)/(1+q**-1))
-    kappainfmax = np.minimum((chieff + (q**-1-q)*S2)/(1+q), (chieff + (q**-1-q)*S1)/(1+q**-1))
-
-    return np.stack([kappainfmin, kappainfmax])
-
 
 def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
 
@@ -1309,7 +1272,7 @@ def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
     return kappa
 
 
-# TODO: rewrite, needs to become kappalimits
+# TODO: remove
 def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
@@ -1366,8 +1329,6 @@ def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     return np.stack([Jmin, Jmax])
 
 
-
-# TODO: rewrite, needs to become kappalimits
 def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False, **kwargs):
     """
     Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
@@ -1424,67 +1385,6 @@ def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False
     return np.stack([kappamin, kappamax])
 
 
-# TODO: Remove this? check when rewriting the large separation limit
-def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
-    """
-    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
-    - If r, q, chi1, and chi2 are provided, the limits are given by kappa=S1+S2.
-    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
-    The boolean flag enforce allows raising an error in case the inputs are not compatible.
-
-    Call
-    ----
-        kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
-
-    Parameters
-    ----------
-    r: float, optional (default: None)
-        Binary separation.
-    chieff: float, optional (default: None)
-        Effective spin.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    enforce: boolean, optional (default: False)
-        If True raise errors, if False raise warnings.
-
-    Returns
-    -------
-    kappainfmin: float
-        Minimum value of the asymptotic angular momentum kappainf.
-    kappainfmin: float
-        Minimum value of the asymptotic angular momentum kappainf.
-    """
-
-    if chieff is None and q is not None and chi1 is not None and chi2 is not None:
-        kappainflim = Slimits_S1S2(q, chi1, chi2)[1]
-        kappainfmin, kappainfmax = -kappainflim, kappainflim
-
-
-
-    elif chieff is not None and q is not None and chi1 is not None and chi2 is not None:
-        kappainfmin, kappainfmax = kappainfresonances(chieff, q, chi1, chi2)
-        # Check precondition
-        kappainflim = Slimits_S1S2(q, chi1, chi2)[1]
-        kappainfmin_cond, kappainfmax_cond = -kappainflim, kappainflim
-
-        if (kappainfmin > kappainfmin_cond).all() and (kappainfmax < kappainfmax_cond).all():
-            pass
-        else:
-            if enforce:
-                raise ValueError("Input values are not compatible [kappainflimits].")
-            else:
-                warnings.warn("Input values are not compatible [kappainflimits].", Warning)
-
-    else:
-        raise TypeError("Provide either (q,chi1,chi2) or (chieff,q,chi1,chi2).")
-
-    return np.stack([kappainfmin, kappainfmax])
-
-
 def chiefflimits_definition(q, chi1, chi2):
     """
     Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.
@@ -1516,7 +1416,6 @@ def chiefflimits_definition(q, chi1, chi2):
     chiefflim = (chi1+q*chi2)/(1+q)
 
     return np.stack([-chiefflim, chiefflim])
-
 
 
 def deltachilimits_definition(q, chi1, chi2):
@@ -1552,12 +1451,11 @@ def deltachilimits_definition(q, chi1, chi2):
     return np.stack([-deltachilim, deltachilim])
 
 
-
 # Change. This needs to be kappa. All the Js should disappear and be left to the user if really want it.
 # Change. Only allow fixing chieff, not J or kappa
-def anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
+def anglesresonances(r, chieff, q, chi1, chi2):
     """
-    Compute the values of the angles corresponding to the two spin-orbit resonances. Provide either J or chieff, not both.
+    Compute the values of the angles corresponding to the two spin-orbit resonances.
 
     Call
     ----
@@ -1596,40 +1494,17 @@ def anglesresonances(J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
 
     q = np.atleast_1d(q)
 
-    if J is None and r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
+    kappamin, kappamax = kapparesonances(r, chieff, q, chi1, chi2)
 
-        Jmin, Jmax = Jresonances(r, chieff, q, chi1, chi2)
-        #sys.exit()
-        Satmin = Satresonance(J=Jmin, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
-        theta1atmin = eval_theta1(Satmin, Jmin, r, chieff, q, chi1, chi2)
-        theta2atmin = eval_theta2(Satmin, Jmin, r, chieff, q, chi1, chi2)
-        deltaphiatmin = tilere(np.pi, q)
+    deltachiatmin = deltachiresonance(kappa=kappamin, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    theta1atmin = eval_theta1(deltachiatmin, chieff, q, chi1)
+    theta2atmin = eval_theta2(deltachiatmin, chieff, q, chi2)
+    deltaphiatmin = tiler(np.pi, q)
 
-        Satmax = Satresonance(J=Jmax, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
-        theta1atmax = eval_theta1(Satmax, Jmax, r, chieff, q, chi1, chi2)
-        theta2atmax = eval_theta2(Satmax, Jmax, r, chieff, q, chi1, chi2)
-        deltaphiatmax = tiler(0, q)
-
-    elif J is not None and r is not None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
-
-        chieffmin, chieffmax = chieffresonances(J, r, q, chi1, chi2)
-
-        Satmin = Satresonance(J=J, r=r, chieff=chieffmin, q=q, chi1=chi1, chi2=chi2)
-        theta1atmin = eval_theta1(Satmin, J, r, chieffmin, q, chi1, chi2)
-        theta2atmin = eval_theta2(Satmin, J, r, chieffmin, q, chi1, chi2)
-        # See Fig 5 in arxiv:1506.03492
-        J = np.atleast_1d(J)
-        S1, S2 = spinmags(q, chi1, chi2)
-        L = eval_L(r, q)
-        deltaphiatmin = np.where(J > np.abs(L-S1-S2), 0, np.pi)
-
-        Satmax = Satresonance(J=J, r=r, chieff=chieffmax, q=q, chi1=chi1, chi2=chi2)
-        theta1atmax = eval_theta1(Satmax, J, r, chieffmax, q, chi1, chi2)
-        theta2atmax = eval_theta2(Satmax, J, r, chieffmax, q, chi1, chi2)
-        deltaphiatmax = tiler(np.pi, q)
-
-    else:
-        raise TypeError("Provide either (r,chieff,q,chi1,chi2) or (J,r,q,chi1,chi2).")
+    deltachiatmax = deltachiresonance(kappa=kappamax, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    theta1atmax = eval_theta1(deltachiatmax, chieff, q, chi1)
+    theta2atmax = eval_theta2(deltachiatmax, chieff, q, chi2)
+    deltaphiatmax = tiler(0, q)
 
     return np.stack([theta1atmin, theta2atmin, deltaphiatmin, theta1atmax, theta2atmax, deltaphiatmax])
 
@@ -2604,10 +2479,10 @@ def eval_costheta2(deltachi, chieff, q, chi2):
 
 def eval_theta2(deltachi, chieff, q, chi2):
 
-    costheta2 = eval_costheta1(deltachi, chieff, q, chi2)
+    costheta2 = eval_costheta2(deltachi, chieff, q, chi2)
     theta2 = np.arccos(costheta2)
 
-    return theta1
+    return theta2
 
 
 def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
@@ -4493,7 +4368,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
         # Resample S and assign random sign to deltaphi
         J = eval_J(kappa=kappaok, r=rok, q=tiler(q, rok))
-        S = Ssampling(J, rok, tiler(chieff, rok), tilere(q, rok),
+        S = Ssampling(J, rok, tiler(chieff, rok), tiler(q, rok),
         tiler(chi1, rok), tiler(chi2, rok), N=1)
         theta1, theta2, deltaphi = conserved_to_angles(S, J, rok, chieff, tiler(q, rok),
         tiler(chi1, rok), tiler(chi2, rok))
@@ -6429,12 +6304,14 @@ if __name__ == '__main__':
     # print(eval_r(L=L,q=q))
     # print(eval_r(u=u,q=q))
 
-    r=np.inf
+    r=10
     q=0.8
     chi1=0.6
     chi2=0.9
     chieff=0.1
-    print(kappalimits_geometrical(r , q, chi1, chi2))
-    print(kappalimits(r=r, q=q, chi1=chi1, chi2=chi2))
-    print(kapparesonances(r , chieff, q, chi1, chi2))
-    print(kappalimits(r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2,enforce=True))
+    # print(kappalimits_geometrical(r , q, chi1, chi2))
+    # print(kappalimits(r=r, q=q, chi1=chi1, chi2=chi2))
+    # print(kapparesonances(r , chieff, q, chi1, chi2))
+    # print(kappalimits(r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2,enforce=True))
+    print(anglesresonances(r, chieff, q, chi1, chi2))
+
