@@ -1366,6 +1366,64 @@ def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     return np.stack([Jmin, Jmax])
 
 
+
+# TODO: rewrite, needs to become kappalimits
+def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False, **kwargs):
+    """
+    Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
+    - If r, q, chi1, and chi2 are provided, the limits are given by J=L+S1+S2.
+    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
+    The boolean flag enforce allows raising an error in case the inputs are not compatible.
+
+    Call
+    ----
+    Jmin,Jmax = Jlimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
+
+    Parameters
+    ----------
+    r: float, optional (default: None)
+        Binary separation.
+    chieff: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    enforce: boolean, optional (default: False)
+        If True raise errors, if False raise warnings.
+
+    Returns
+    -------
+    Jmin: float
+        Minimum value of the total angular momentum J.
+    Jmax: float
+        Maximum value of the total angular momentum J.
+    """
+
+    if r is not None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
+        kappamin, kappamax = kappalimits_geometrical(r , q, chi1, chi2)
+
+    elif r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
+        kappamin, kappamax = kapparesonances(r, chieff, q, chi1, chi2, **kwargs)
+        # Check precondition
+        kappamin_cond, kappamax_cond = kappalimits_geometrical(r , q, chi1, chi2)
+
+        if (kappamin >= kappamin_cond).all() and (kappamax <= kappamax_cond).all():
+            pass
+        else:
+            if enforce:
+                raise ValueError("Input values are not compatible [kappalimits].")
+            else:
+                warnings.warn("Input values are not compatible [kappalimits].", Warning)
+
+    else:
+        raise TypeError("Provide either (r,q,chi1,chi2) or (r,chieff,q,chi1,chi2).")
+
+    return np.stack([kappamin, kappamax])
+
+
 # TODO: Remove this? check when rewriting the large separation limit
 def kappainflimits(chieff=None, q=None, chi1=None, chi2=None, enforce=False):
     """
@@ -4395,6 +4453,8 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
                 raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,chieff).")
 
             # Enforce limits
+            # TODO:kappainflimits will disappear
+            print("TODO, kappainflimits will disappear")
             kappainfmin, kappainfmax = kappainflimits(chieff=chieff, q=q, chi1=chi1, chi2=chi2, enforce=True)
             assert kappa > kappainfmin and kappa < kappainfmax, "Unphysical initial conditions [inspiral_precav]."
 
@@ -6369,13 +6429,10 @@ if __name__ == '__main__':
     # print(eval_r(L=L,q=q))
     # print(eval_r(u=u,q=q))
 
-
-    while True:
-        r= np.exp(np.random.uniform(10,1,1))
-        q=np.random.uniform(0.1,1,1)
-        chi1=np.random.uniform(0,1,1)
-        chi2=np.random.uniform(0,1,1)
-        kmin,kmax = kappalimits_geometrical(np.inf , q, chi1, chi2)
-        print(kmin,kmax)
-
+    r=10
+    q=0.8
+    chi1=0.6
+    chi2=0.9
+    print(kappalimits_geometrical(r , q, chi1, chi2))
+    print(kappalimits(r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
 
