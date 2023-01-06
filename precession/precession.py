@@ -6429,10 +6429,12 @@ if __name__ == '__main__':
     # print(eval_r(L=L,q=q))
     # print(eval_r(u=u,q=q))
 
-    r=10
+    r=np.inf
     q=0.8
     chi1=0.6
     chi2=0.9
+    chieff=0.1
     print(kappalimits_geometrical(r , q, chi1, chi2))
-    print(kappalimits(r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
-
+    print(kappalimits(r=r, q=q, chi1=chi1, chi2=chi2))
+    print(kapparesonances(r , chieff, q, chi1, chi2))
+    print(kappalimits(r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2,enforce=True))
