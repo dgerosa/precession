@@ -185,7 +185,7 @@ def tiler(thing,shaper):
     shaper =np.atleast_1d(shaper)
     assert thing.ndim == 1 and shaper.ndim==1
 
-    return np.atleast_1d(np.squeeze(np.tile(thing, np.shape(shaper)).reshape(len(shaper),len(thing))))
+    return np.squeeze(np.tile(thing, np.shape(shaper)).reshape(len(shaper),len(thing)))
 
 
 def affine(vec, low, up):
@@ -1497,12 +1497,12 @@ def anglesresonances(r, chieff, q, chi1, chi2):
     deltachiatmin = deltachiresonance(kappa=kappamin, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
     theta1atmin = eval_theta1(deltachiatmin, chieff, q, chi1)
     theta2atmin = eval_theta2(deltachiatmin, chieff, q, chi2)
-    deltaphiatmin = tiler(np.pi, q)
+    deltaphiatmin = np.atleast1d(tiler(np.pi, q))
 
     deltachiatmax = deltachiresonance(kappa=kappamax, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
     theta1atmax = eval_theta1(deltachiatmax, chieff, q, chi1)
     theta2atmax = eval_theta2(deltachiatmax, chieff, q, chi2)
-    deltaphiatmax = tiler(0, q)
+    deltaphiatmax = np.atleast1d(tiler(0, q))
 
     return np.stack([theta1atmin, theta2atmin, deltaphiatmin, theta1atmax, theta2atmax, deltaphiatmax])
 
@@ -6076,14 +6076,14 @@ if __name__ == '__main__':
     # print(eval_r(L=L,q=q))
     # print(eval_r(u=u,q=q))
 
-    r=10
-    q=0.8
-    chi1=0.6
-    chi2=0.9
-    chieff=0.1
+    #r=10
+    #q=0.8
+    #chi1=0.6
+    #chi2=0.9
+    #chieff=0.1
     # print(kappalimits_geometrical(r , q, chi1, chi2))
     # print(kappalimits(r=r, q=q, chi1=chi1, chi2=chi2))
     # print(kapparesonances(r , chieff, q, chi1, chi2))
     # print(kappalimits(r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2,enforce=True))
-    print(anglesresonances(r, chieff, q, chi1, chi2))
-
+    #print(anglesresonances(r, chieff, q, chi1, chi2))
+    print(tiler(0, [4]))
