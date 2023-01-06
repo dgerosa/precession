@@ -1960,10 +1960,7 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
     coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
 
     with np.errstate(invalid='ignore'):  # nan is ok here
-        # This is with a simple for loop
         deltachires = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:,:-1]),axis=1)
-        # Sres = np.array([np.mean(np.real(np.sort_complex(np.roots(x))[1:]))**0.5 for x in coeffs.T])
-        #deltachires = np.mean(np.real(np.sort_complex(roots_vec(coeffs.T))[:, 1:])**0.5, axis=1)
 
     return deltachires
 
@@ -3919,7 +3916,6 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
         deltachiminus, deltachiplus, _ = np.squeeze(np.sort_complex(roots_vec(coeffs.T)))
         coeffs = deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2)
         _, _, deltachi3 = np.squeeze(np.sort_complex(roots_vec(coeffs.T)))
-
 
         # deltachiminus, deltachiplus are complex. This can happen if the binary is very close to a spin-orbit resonance
         if np.iscomplex(deltachiminus) and np.iscomplex(deltachiplus):
