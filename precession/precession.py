@@ -3633,7 +3633,7 @@ def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
 
 def tofdeltachi(deltachi, kappa , r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
 
-
+    u= eval_u(r=r,q=q)
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
     psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), return_psiperiod=True)
