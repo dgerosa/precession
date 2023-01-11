@@ -19445,7 +19445,7 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{1440, 847},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowMargins->{{1000, Automatic}, {Automatic, -270}},
 PrivateNotebookOptions->{"FileOutlineCache"->False},
 TaggingRules-><|"TryRealOnly" -> False|>,
 TrackCellChangeTimes->False,
