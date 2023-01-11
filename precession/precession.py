@@ -3283,7 +3283,7 @@ def conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
     """
 
     Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-    phiL = eval_phiL(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+    phiL = eval_phiL_old(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
 
     Lvec = rotate_zaxis(Lvec, phiL)
     S1vec = rotate_zaxis(S1vec, phiL)
@@ -4735,6 +4735,10 @@ def inspiral(*args, which=None, **kwargs):
         raise ValueError("`which` needs to be `precav`, `orbav` or `hybrid`.")
 
 
+################ Dynamics in an intertial frame ################
+
+
+
 def frequency_prefactor_old(J, r, chieff, q, chi1, chi2):
     """
     Numerical prefactors entering the precession frequency.
@@ -4781,9 +4785,6 @@ def frequency_prefactor_old(J, r, chieff, q, chi1, chi2):
 
     return np.stack([mathcalC0, mathcalCplus, mathcalCminus])
 
-
-
-################ Dynamics in an intertial frame, chip and other stuff ################
 
 
 def azimuthalangle_prefactor_old(J, r, chieff, q, chi1, chi2, precomputedroots=None):
@@ -4878,13 +4879,13 @@ def eval_OmegaL_old(S, J, r, chieff, q, chi1, chi2):
     return OmegaL
 
 
-def eval_alpha(J, r, chieff, q, chi1, chi2, precomputedroots=None):
+def eval_alpha_old(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Compute the azimuthal angle spanned by L about J during an entire nutation cycle.
 
     Call
     ----
-    alpha = eval_alpha(J,r,chieff,q,chi1,chi2,precomputedroots=None)
+    alpha = eval_alpha_old(J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -4921,13 +4922,13 @@ def eval_alpha(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     return alpha
 
 
-def eval_phiL(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
+def eval_phiL_old(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
     """
     Compute the azimuthal angle spanned by L about J. This is the integral of the frequency OmegaL.
 
     Call
     ----
-    phiL = eval_phiL(S,J,r,chieff,q,chi1,chi2,cyclesign=1,precomputedroots=None)
+    phiL = eval_phiL_old(S,J,r,chieff,q,chi1,chi2,cyclesign=1,precomputedroots=None)
 
     Parameters
     ----------
@@ -4958,7 +4959,7 @@ def eval_phiL(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None
 
     L = eval_L(r, q)
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    alpha = eval_alpha(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    alpha = eval_alpha_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
     m = elliptic_parameter_old(Sminuss, Spluss, S3s)
     phi = elliptic_amplitude(S, Sminuss, Spluss)
     nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
@@ -4968,6 +4969,127 @@ def eval_phiL(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None
     phiL = alpha/2 - np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi, m) + mathcalCplusprime*ellippi(nplus, phi, m) + mathcalCminusprime*ellippi(nminus, phi, m))
 
     return phiL
+
+
+
+
+def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
+    """
+    Numerical prefactors entering the precession frequency.
+
+    Call
+    ----
+    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor_old(J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    mathcalC0: float
+        Prefactor in the OmegaL equation.
+    mathcalCplus: float
+        Prefactor in the OmegaL equation.
+    mathcalCminus: float
+        Prefactor in the OmegaL equation.
+    """
+
+    kappa = np.atleast_1d(kappa)
+    r = np.atleast_1d(r)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    # Machine generated with eq_generator.nb
+    bigC0 = 1/2 * q * ((1 + q))**(-2) * (r)**(-5/2) * ((1 + 2 * q**(-1) * \
+    ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)
+
+    # Machine generated with eq_generator.nb
+    bigCplus = ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
+    kappa))**(-1/2) * (1 + -1 * (r)**(-1/2) * chieff) * (3 * q**(-1) * \
+    ((1 + q))**3 * (r)**(-1/2) * kappa + (-3/2 * (1 + -1 * q) * q**(-2) * \
+    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + 3 * (1 + q) * (1 + ((1 \
+    + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) * (1 + \
+    (r)**(-1/2) * chieff)))
+
+    # Machine generated with eq_generator.nb
+    bigCminus = ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
+    kappa))**(-1/2) * (-1 + (r)**(-1/2) * chieff) * (3 * q**(-1) * ((1 + \
+    q))**3 * (r)**(-1/2) * kappa + (-3/2 * (1 + -1 * q) * q**(-2) * \
+    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + 3 * (1 + q) * (1 + -1 * \
+    ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) * (1 \
+    + (r)**(-1/2) * chieff)))
+
+    # Machine generated with eq_generator.nb
+    bigRplus = (2 * q * ((1 + q))**(-1) * (1 + ((1 + 2 * q**(-1) * ((1 + \
+    q))**2 * (r)**(-1/2) * kappa))**(1/2)) + (1 + q) * (r)**(-1/2) * \
+    chieff)
+
+    # Machine generated with eq_generator.nb
+    bigRminus = (2 * q * ((1 + q))**(-1) * (1 + -1 * ((1 + 2 * q**(-1) * \
+    ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) + (1 + q) * (r)**(-1/2) \
+    * chieff)
+
+    return np.stack([bigC0, bigCplus, bigCminus,bigRplus,bigRminus])
+
+
+def eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2):
+    """
+    Compute the precession frequency OmegaL along the precession cycle.
+
+    Call
+    ----
+    OmegaL = eval_OmegaL(S,J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    OmegaL: float
+        Precession frequency of L about J.
+    """
+
+    deltachi = np.atleast_1d(deltachi).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    r = np.atleast_1d(r).astype(float)
+
+    bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
+
+    OmegaL =  bigC0 * (1 + bigCplus/(deltachi * (1-q)*r**(-1/2) + bigRplus) +  bigCminus/(deltachi * (1-q)*r**(-1/2) + bigRminus) )
+
+    return OmegaL
+
+
+
+################ chip and other stuff ################
 
 
 def chip_terms(theta1, theta2, q, chi1, chi2):
@@ -5697,22 +5819,31 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    # q=0.8
-    # chi1=1
-    # chi2=1
-    # chieff=0.25
-    # r=10
-    # #kappatilde = 0.9
-    # deltachitilde = 0.7
-    # #kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
-    # #print(kappa)
-    # #kappa=0.19702426300035386
-    # u=eval_u(r=r,q=q)
-    # #J=eval_J(kappa=kappa, r=r, q=q)
-    # J=1
-    # kappa=eval_kappa(J=J,r=r,q=q)
-    # #u = eval_u([r,1000,100,10], [q,q,q,q])
-    # #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
+    q=0.8
+    chi1=1
+    chi2=1
+    chieff=0.25
+    r=10
+    #kappatilde = 0.9
+    deltachitilde = 0.7
+    #kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
+    #print(kappa)
+    #kappa=0.19702426300035386
+    u=eval_u(r=r,q=q)
+    #J=eval_J(kappa=kappa, r=r, q=q)
+    J=1
+    kappa=eval_kappa(J=J,r=r,q=q)
+    #u = eval_u([r,1000,100,10], [q,q,q,q])
+    #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
+    deltachi = deltachirescaling(0.5, kappa, r, chieff, q, chi1, chi2)
+
+    S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
+
+
+    print(deltachi, kappa, r, chieff, q, chi1, chi2)
+
+    print(eval_OmegaL_old(S, J, r, chieff, q, chi1, chi2))
+    print(eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2))
 
     # #def func(dchi):
     # #    return dchi
@@ -5919,4 +6050,7 @@ if __name__ == '__main__':
     # print(kapparesonances(r , chieff, q, chi1, chi2))
     # print(kappalimits(r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2,enforce=True))
     #print(anglesresonances(r, chieff, q, chi1, chi2))
-    print(tiler(0, [4]))
+    #print(tiler(0, [4]))
+
+
+
