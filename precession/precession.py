@@ -4735,13 +4735,13 @@ def inspiral(*args, which=None, **kwargs):
         raise ValueError("`which` needs to be `precav`, `orbav` or `hybrid`.")
 
 
-def frequency_prefactor(J, r, chieff, q, chi1, chi2):
+def frequency_prefactor_old(J, r, chieff, q, chi1, chi2):
     """
     Numerical prefactors entering the precession frequency.
 
     Call
     ----
-    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor(J,r,chieff,q,chi1,chi2)
+    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor_old(J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -4786,13 +4786,13 @@ def frequency_prefactor(J, r, chieff, q, chi1, chi2):
 ################ Dynamics in an intertial frame, chip and other stuff ################
 
 
-def azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=None):
+def azimuthalangle_prefactor_old(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Numerical prefactors entering the precession frequency.
 
     Call
     ----
-    mathcalC0prime,mathcalCplusprime,mathcalCminusprime = azimuthalangle_prefactor(J,r,chieff,q,chi1,chi2,precomputedroots=None)
+    mathcalC0prime,mathcalCplusprime,mathcalCminusprime = azimuthalangle_prefactor_old(J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
     ----------
@@ -4826,7 +4826,7 @@ def azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=None)
 
     Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
-    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor(J, r, chieff, q, chi1, chi2)
+    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor_old(J, r, chieff, q, chi1, chi2)
     mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
 
     mathcalC0prime = mathcalT*mathcalC0
@@ -4836,13 +4836,13 @@ def azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=None)
     return np.stack([mathcalC0prime, mathcalCplusprime, mathcalCminusprime])
 
 
-def eval_OmegaL(S, J, r, chieff, q, chi1, chi2):
+def eval_OmegaL_old(S, J, r, chieff, q, chi1, chi2):
     """
     Compute the precession frequency OmegaL along the precession cycle.
 
     Call
     ----
-    OmegaL = eval_OmegaL(S,J,r,chieff,q,chi1,chi2)
+    OmegaL = eval_OmegaL_old(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
     ----------
@@ -4871,7 +4871,7 @@ def eval_OmegaL(S, J, r, chieff, q, chi1, chi2):
     J = np.atleast_1d(J)
     L = eval_L(r, q)
 
-    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor(J, r, chieff, q, chi1, chi2)
+    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor_old(J, r, chieff, q, chi1, chi2)
 
     OmegaL = mathcalC0 * (1 + mathcalCplus/((J+L)**2 - S**2) + mathcalCminus/((J-L)**2 - S**2))
 
@@ -4914,7 +4914,7 @@ def eval_alpha(J, r, chieff, q, chi1, chi2, precomputedroots=None):
     m = elliptic_parameter_old(Sminuss, Spluss, S3s)
     nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
     nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
-    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
     alpha = 2*(mathcalC0prime*scipy.special.ellipk(m) + mathcalCplusprime*ellippi(nplus, np.pi/2, m) + mathcalCminusprime*ellippi(nminus, np.pi/2, m))
 
@@ -4963,7 +4963,7 @@ def eval_phiL(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None
     phi = elliptic_amplitude(S, Sminuss, Spluss)
     nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
     nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
-    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
+    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
 
     phiL = alpha/2 - np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi, m) + mathcalCplusprime*ellippi(nplus, phi, m) + mathcalCminusprime*ellippi(nminus, phi, m))
 
