@@ -267,14 +267,15 @@ def ellippi(n, phi, m):
     # https://reference.wolfram.com/language/ref/EllipticPi.html
 
     # A much slower implementation using simpy
-    # from sympy import elliptic_pi
-    # return float(elliptic_pi(n, phi, m))
+    from sympy import elliptic_pi
+
+    #return float(elliptic_pi(float(n), float(phi), float(m)))
 
     n = np.array(n)
     phi = np.array(phi)
     m = np.array(m)
 
-    if ~np.all(n>0) or ~np.all(n<1) or ~np.all(phi>0) or ~np.all(phi<np.pi/2) or ~np.all(m>0) or ~np.all(m<1):
+    if ~np.all(phi>0) or ~np.all(phi<=np.pi/2) or ~np.all(m>0) or ~np.all(m<1):
         warnings.warn("Elliptic intergal of the third kind evaluated outside of the expected domain. Our implementation has not been tested in this regime!", Warning)
 
     # Eq (61) in Carlson 1994 (arxiv:math/9409227v1). Careful with the notation: one has k^2 --> m and n --> -n.
@@ -5013,35 +5014,36 @@ def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
+
     # Machine generated with eq_generator.nb
     bigC0 = 1/2 * q * ((1 + q))**(-2) * (r)**(-5/2) * ((1 + 2 * q**(-1) * \
     ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)
 
     # Machine generated with eq_generator.nb
-    bigCplus = ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
-    kappa))**(-1/2) * (1 + -1 * (r)**(-1/2) * chieff) * (3 * q**(-1) * \
-    ((1 + q))**3 * (r)**(-1/2) * kappa + (-3/2 * (1 + -1 * q) * q**(-2) * \
-    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + 3 * (1 + q) * (1 + ((1 \
+    bigCplus = 3 * ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
+    kappa))**(-1/2) * (1 + -1 * (r)**(-1/2) * chieff) * (q**(-1) * ((1 + \
+    q))**3 * (r)**(-1/2) * kappa + (-1/2 * (1 + -1 * q) * q**(-2) * \
+    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + (1 + q) * (1 + ((1 + 2 \
+    * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) * (1 + \
+    (r)**(-1/2) * chieff)))
+
+    # Machine generated with eq_generator.nb
+    bigCminus = -3 * ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
+    kappa))**(-1/2) * (1 + -1 * (r)**(-1/2) * chieff) * (q**(-1) * ((1 + \
+    q))**3 * (r)**(-1/2) * kappa + (-1/2 * (1 + -1 * q) * q**(-2) * \
+    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + (1 + q) * (1 + -1 * ((1 \
     + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) * (1 + \
     (r)**(-1/2) * chieff)))
 
     # Machine generated with eq_generator.nb
-    bigCminus = ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
-    kappa))**(-1/2) * (-1 + (r)**(-1/2) * chieff) * (3 * q**(-1) * ((1 + \
-    q))**3 * (r)**(-1/2) * kappa + (-3/2 * (1 + -1 * q) * q**(-2) * \
-    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + 3 * (1 + q) * (1 + -1 * \
-    ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) * (1 \
-    + (r)**(-1/2) * chieff)))
-
-    # Machine generated with eq_generator.nb
-    bigRplus = (2 * q * ((1 + q))**(-1) * (1 + ((1 + 2 * q**(-1) * ((1 + \
-    q))**2 * (r)**(-1/2) * kappa))**(1/2)) + (1 + q) * (r)**(-1/2) * \
+    bigRplus = (-2 * q * ((1 + q))**(-1) * (1 + ((1 + 2 * q**(-1) * ((1 + \
+    q))**2 * (r)**(-1/2) * kappa))**(1/2)) + -1 * (1 + q) * (r)**(-1/2) * \
     chieff)
 
     # Machine generated with eq_generator.nb
-    bigRminus = (2 * q * ((1 + q))**(-1) * (1 + -1 * ((1 + 2 * q**(-1) * \
-    ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) + (1 + q) * (r)**(-1/2) \
-    * chieff)
+    bigRminus = (-2 * q * ((1 + q))**(-1) * (1 + -1 * ((1 + 2 * q**(-1) * \
+    ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) + -1 * (1 + q) * \
+    (r)**(-1/2) * chieff)
 
     return np.stack([bigC0, bigCplus, bigCminus,bigRplus,bigRminus])
 
@@ -5083,9 +5085,59 @@ def eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2):
 
     bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
 
-    OmegaL =  bigC0 * (1 + bigCplus/(deltachi * (1-q)*r**(-1/2) + bigRplus) +  bigCminus/(deltachi * (1-q)*r**(-1/2) + bigRminus) )
+    OmegaL =  bigC0 * (1 - bigCplus/(bigRplus - deltachi * (1-q)*r**(-1/2)) -  bigCminus/(bigRminus - deltachi * (1-q)*r**(-1/2)) )
 
     return OmegaL
+
+
+
+def eval_phiL(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
+
+    q = np.atleast_1d(q).astype(float)
+    r = np.atleast_1d(r).astype(float)
+    
+    u= eval_u(r=r,q=q)
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
+
+    psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), return_psiperiod=True)
+    deltachitilde = affine(deltachi,deltachiminus,deltachiplus)
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+
+
+
+
+    phiL = np.sign(cyclesign) * bigC0 * psiperiod * ( scipy.special.ellipkinc(np.arcsin(deltachitilde**(1/2)), m)
+        - bigCplus / (bigRplus - deltachiminus*(1-q)*r**(-1/2))
+        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRplus - deltachiminus*(1-q)*r**(-1/2)), np.arcsin(deltachitilde**(1/2)), m)
+        - bigCminus / (bigRminus - deltachiminus*(1-q)*r**(-1/2))
+        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRminus - deltachiminus*(1-q)*r**(-1/2)), np.arcsin(deltachitilde**(1/2)), m) )
+    return phiL 
+
+
+
+def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+    
+    q = np.atleast_1d(q).astype(float)
+    r = np.atleast_1d(r).astype(float)
+
+    u= eval_u(r=r,q=q)
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
+
+    psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]),return_psiperiod=True)
+    deltachitilde = affine(deltachi,deltachiminus,deltachiplus)
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+
+    alpha = 2 * bigC0 * psiperiod * ( scipy.special.ellipk(m)
+        - bigCplus / (bigRplus - deltachiminus*(1-q)*r**(-1/2))
+        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRplus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m)
+        - bigCminus / (bigRminus - deltachiminus*(1-q)*r**(-1/2))
+        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRminus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m) )
+    
+    return alpha 
 
 
 
@@ -5819,31 +5871,42 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.8
+    q=0.7
     chi1=1
     chi2=1
     chieff=0.25
     r=10
-    #kappatilde = 0.9
-    deltachitilde = 0.7
-    #kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
+    kappatilde = 0.5
+    deltachitilde = 1
+    kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
     #print(kappa)
     #kappa=0.19702426300035386
     u=eval_u(r=r,q=q)
-    #J=eval_J(kappa=kappa, r=r, q=q)
-    J=1
+    J=eval_J(kappa=kappa, r=r, q=q)
+    #J=1
     kappa=eval_kappa(J=J,r=r,q=q)
     #u = eval_u([r,1000,100,10], [q,q,q,q])
     #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
-    deltachi = deltachirescaling(0.5, kappa, r, chieff, q, chi1, chi2)
+    deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2)
 
     S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
 
 
-    print(deltachi, kappa, r, chieff, q, chi1, chi2)
+    print(deltachi, kappa, r, chieff, q, chi1, chi2, S,J)
 
-    print(eval_OmegaL_old(S, J, r, chieff, q, chi1, chi2))
-    print(eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2))
+    #print(eval_OmegaL_old(S, J, r, chieff, q, chi1, chi2))
+    #print(eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2))
+
+    #print(r**(-5/2) *  (3 + 8 * q + 3 * q**2)*(4 * (1 + q)**2))
+
+
+    #print(r**(-5/2) *  (4+3*q)*q/2/(1+q)**2 )
+    #print(r**(-5/2) *  (4+3/q)*q/2/(1+q)**2 )
+
+    #print(eval_alpha_old(kappa, r, chieff, q, chi1, chi2))
+
+    print(eval_tau(kappa, r, chieff, q, chi1, chi2))
+    print(eval_alpha(kappa, r, chieff, q, chi1, chi2))
 
     # #def func(dchi):
     # #    return dchi
