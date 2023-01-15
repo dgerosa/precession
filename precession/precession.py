@@ -275,7 +275,7 @@ def ellippi(n, phi, m):
     phi = np.array(phi)
     m = np.array(m)
 
-    if ~np.all(phi>0) or ~np.all(phi<=np.pi/2) or ~np.all(m>0) or ~np.all(m<1):
+    if ~np.all(phi>=0) or ~np.all(phi<=np.pi/2) or ~np.all(m>=0) or ~np.all(m<=1):
         warnings.warn("Elliptic intergal of the third kind evaluated outside of the expected domain. Our implementation has not been tested in this regime!", Warning)
 
     # Eq (61) in Carlson 1994 (arxiv:math/9409227v1). Careful with the notation: one has k^2 --> m and n --> -n.
@@ -5871,9 +5871,9 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.7
-    chi1=1
-    chi2=1
+    q=1
+    chi1=0.6
+    chi2=0.4
     chieff=0.25
     r=10
     kappatilde = 0.5
@@ -5892,20 +5892,25 @@ if __name__ == '__main__':
     S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
 
 
-    print(deltachi, kappa, r, chieff, q, chi1, chi2, S,J)
+    #print(deltachi, kappa, r, chieff, q, chi1, chi2, S,J)
 
     #print(eval_OmegaL_old(S, J, r, chieff, q, chi1, chi2))
     #print(eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2))
-
+    #print((np.sqrt(1 + (8*kappa)/np.sqrt(r))*(7*np.sqrt(r) - 6*chieff))/(8*r**3))
     #print(r**(-5/2) *  (3 + 8 * q + 3 * q**2)*(4 * (1 + q)**2))
 
+    alphaq1 = x = 1/6 * np.pi * (r)**(1/4) * ((1 + 8 * (r)**(-1/2) * kappa))**(1/2) \
+    * (7 * (r)**(1/2) + -6 * chieff) * (-1 * (((r)**(1/2) + -1 * \
+    chieff))**2 * (-2 * kappa + chieff))**(-1/2)
+
+    print(alphaq1)
 
     #print(r**(-5/2) *  (4+3*q)*q/2/(1+q)**2 )
     #print(r**(-5/2) *  (4+3/q)*q/2/(1+q)**2 )
 
     #print(eval_alpha_old(kappa, r, chieff, q, chi1, chi2))
 
-    print(eval_tau(kappa, r, chieff, q, chi1, chi2))
+    #print(eval_tau(kappa, r, chieff, q, chi1, chi2))
     print(eval_alpha(kappa, r, chieff, q, chi1, chi2))
 
     # #def func(dchi):
