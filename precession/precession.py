@@ -694,6 +694,1239 @@ def eval_u(r, q):
     return u
 
 
+# TODO: deltachi instead of S here
+def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
+    """
+    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
+
+    Call
+    ----
+    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    S: float, optional (default: None)
+        Magnitude of the total spin.
+    varphi: float, optional (default: None)
+        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
+    J: float, optional (default: None)
+        Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+        Binary separation.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chieff: float
+        Effective spin.
+    """
+
+    if theta1 is not None and theta2 is not None and S is None and varphi is None and J is None and r is None and q is not None and chi1 is not None and chi2 is not None:
+
+        theta1 = np.atleast_1d(theta1)
+        theta2 = np.atleast_1d(theta2)
+        q = np.atleast_1d(q)
+        S1, S2 = spinmags(q, chi1, chi2)
+        chieff = (1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
+
+    elif theta1 is None and theta2 is None and S is not None and varphi is not None and J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
+
+        S = np.atleast_1d(S)
+        varphi = np.atleast_1d(varphi)
+        J = np.atleast_1d(J)
+        q = np.atleast_1d(q)
+        S1, S2 = spinmags(q, chi1, chi2)
+        L = eval_L(r, q)
+
+        # Machine generated with polycoefficients.nb
+        chieff = 1/4 * L**(-1) * q**(-1) * S**(-2) * ((J**2 + (-1 * L**2 + -1
+        * S**2)) * (((1 + q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2))
+        + -1 * (1 + -1 * q**2) * ((J**2 + -1 * ((L + -1 * S))**2))**(1/2) *
+        ((-1 * J**2 + ((L + S))**2))**(1/2) * ((S**2 + -1 * ((S1 + -1 *
+        S2))**2))**(1/2) * ((-1 * S**2 + ((S1 + S2))**2))**(1/2) *
+        np.cos(varphi))
+
+    else:
+        raise TypeError("Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).")
+
+    return chieff
+
+
+# TODO: update this function to evaluate from S
+def eval_deltachi(theta1, theta2, q, chi1, chi2):
+    """
+    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
+
+    Call
+    ----
+    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    S: float, optional (default: None)
+        Magnitude of the total spin.
+    varphi: float, optional (default: None)
+        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
+    J: float, optional (default: None)
+        Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+        Binary separation.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chieff: float
+        Effective spin.
+    """
+
+
+    theta1 = np.atleast_1d(theta1)
+    theta2 = np.atleast_1d(theta2)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    deltachi = (chi1*np.cos(theta1) -q*chi2*np.cos(theta2))/(1+q)
+
+    return deltachi
+
+
+def eval_costheta1(deltachi, chieff, q, chi1):
+    """
+    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
+
+    Call
+    ----
+    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    costheta1: float
+        Cosine of the angle between orbital angular momentum and primary spin.
+    """
+
+    deltachi = np.atleast_1d(deltachi)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+
+    costheta1 = (1+q)/(2*chi1)*(chieff+deltachi)
+
+    return costheta1
+
+
+def eval_theta1(deltachi, chieff, q, chi1):
+
+    costheta1 = eval_costheta1(deltachi, chieff, q, chi1)
+    theta1 = np.arccos(costheta1)
+
+    return theta1
+
+
+def eval_costheta2(deltachi, chieff, q, chi2):
+    """
+    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
+
+    Call
+    ----
+    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    costheta1: float
+        Cosine of the angle between orbital angular momentum and primary spin.
+    """
+
+    deltachi = np.atleast_1d(deltachi)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi2 = np.atleast_1d(chi2)
+
+    costheta2 = (1+q)/(2*q*chi2)*(chieff-deltachi)
+
+    return costheta2
+
+
+def eval_theta2(deltachi, chieff, q, chi2):
+
+    costheta2 = eval_costheta2(deltachi, chieff, q, chi2)
+    theta2 = np.arccos(costheta2)
+
+    return theta2
+
+
+def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
+    """
+    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
+
+    Call
+    ----
+    costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+        Angle between the projections of the two spins onto the orbital plane.
+    S: float, optional (default: None)
+        Magnitude of the total spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    costheta12: float
+        Cosine of the angle between the two spins.
+    """
+
+    if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None and q is None and chi1 is None and chi2 is None:
+
+        theta1=np.atleast_1d(theta1)
+        theta2=np.atleast_1d(theta2)
+        deltaphi=np.atleast_1d(deltaphi)
+        costheta12 = np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2)
+
+    elif theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
+
+        deltachi = np.atleast_1d(deltachi)
+        kappa = np.atleast_1d(kappa)
+        chieff = np.atleast_1d(chieff)
+        q = np.atleast_1d(q)
+        chi1 = np.atleast_1d(chi1)
+        chi2 = np.atleast_1d(chi2)
+
+        # Machine generated with eq_generator.nb
+        costheta12 = 1/2 * q**(-2) * (chi1)**(-1) * (chi2)**(-1) * (-1 * \
+        (chi1)**2 + (-1 * q**4 * (chi2)**2 + q * (1 + q) * (r)**(1/2) * (-1 * \
+        (1 + -1 * q) * deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * \
+        chieff))))
+
+    else:
+        raise TypeError("Provide either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).")
+
+    return costheta12
+
+
+def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
+
+    costheta12 = eval_costheta1(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    theta12 = np.arccos(costheta12)
+
+    return theta12
+
+
+def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
+    """
+    Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
+
+    Call
+    ----
+    cosdeltaphi = eval_cosdeltaphi(S,J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    cosdeltaphi: float
+        Cosine of the angle between the projections of the two spins onto the orbital plane.
+    """
+
+    deltachi = np.atleast_1d(deltachi)
+    kappa = np.atleast_1d(kappa)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    # Machine generated with eq_generator.nb
+    cosdeltaphi = q**(-1) * ((4 * q**2 * (chi2)**2 + -1 * ((1 + q))**2 * \
+    ((-1 * deltachi + chieff))**2) * (4 * (chi1)**2 + -1 * ((1 + q))**2 * \
+    ((deltachi + chieff))**2))**(-1/2) * (-2 * ((chi1)**2 + q**4 * \
+    (chi2)**2) + (2 * q * (1 + q) * (r)**(1/2) * (-1 * (1 + -1 * q) * \
+    deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * chieff)) + -1 * q * \
+    ((1 + q))**2 * (-1 * (deltachi)**2 + chieff**2)))
+
+    return cosdeltaphi
+
+
+# TODO cyclesign needs to be checked again in the entire code
+def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=1):
+    """
+    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=-1 returns the other half of the  precession cycle [-pi,0].
+
+    Call
+    ----
+    deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: -1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+
+    Returns
+    -------
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    """
+
+    cyclesign = np.atleast_1d(cyclesign)
+    cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2)
+    deltaphi = np.sign(cyclesign)*np.arccos(cosdeltaphi)
+
+    return deltaphi
+
+
+# TODO: check this one. S...
+def eval_costhetaL(S, J, r, q, chi1, chi2):
+    """
+    Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
+
+    Call
+    ----
+    costhetaL = eval_costhetaL(S,J,r,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    costhetaL: float
+        Cosine of the angle betwen orbital angular momentum and total angular momentum.
+    """
+
+    S = np.atleast_1d(S)
+    J = np.atleast_1d(J)
+
+    S1, S2 = spinmags(q, chi1, chi2)
+    L = eval_L(r, q)
+    costhetaL = (J**2+L**2-S**2)/(2*J*L)
+
+    return costhetaL
+
+# TODO: check this one. S...
+def eval_thetaL(S, J, r, q, chi1, chi2):
+    """
+    Angle thetaL betwen orbital angular momentum and total angular momentum.
+
+    Call
+    ----
+    thetaL = eval_thetaL(S,J,r,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    thetaL: float
+        Angle betwen orbital angular momentum and total angular momentum.
+    """
+
+    costhetaL = eval_costhetaL(S, J, r, q, chi1, chi2)
+    thetaL = np.arccos(costhetaL)
+
+    return thetaL
+
+
+def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, chi1=None, chi2=None):
+    """
+    Magnitude of the total angular momentum. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).
+
+    Call
+    ----
+    J = eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+        Angle between the projections of the two spins onto the orbital plane.
+    kappa: float, optional (default: None)
+        Regularized angular momentum (J^2-L^2)/(2L).
+    r: float, optional (default: None)
+        Binary separation.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    J: float
+        Magnitude of the total angular momentum.
+    """
+
+    if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
+
+        theta1 = np.atleast_1d(theta1)
+        theta2 = np.atleast_1d(theta2)
+        deltaphi = np.atleast_1d(deltaphi)
+        q = np.atleast_1d(q)
+
+        S1, S2 = spinmags(q, chi1, chi2)
+        L = eval_L(r, q)
+        S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
+
+        J = (L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
+
+    elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and r is not None and q is not None and chi1 is None and chi2 is None:
+
+        kappa = np.atleast_1d(kappa)
+
+        L = eval_L(r, q)
+        J = (2*L*kappa + L**2)**0.5
+
+    else:
+        raise TypeError("Provide either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (kappa,r,q,chi1,chi2).")
+
+    return J
+
+
+def eval_kappa(J, r, q):
+    """
+    Change of dependent variable to regularize the infinite orbital separation
+    limit of the precession-averaged evolution equation.
+
+    Call
+    ----
+    kappa = eval_kappa(J,r,q)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+
+    Returns
+    -------
+    kappa: float
+        Regularized angular momentum (J^2-L^2)/(2L).
+    """
+
+    J = np.atleast_1d(J)
+
+    L = eval_L(r, q)
+    kappa = (J**2 - L**2) / (2*L)
+
+    return kappa
+
+
+# TODO: This function and the next one needs to be merged together
+def eval_S_from_deltachi(deltachi, kappa, r, chieff, q):
+
+    deltachi = np.atleast_1d(deltachi)
+    kappa = np.atleast_1d(kappa)
+    r = np.atleast_1d(r)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+
+    S = ( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi * (1 - q)/(1 + q)) )**(1/2)
+
+    return S
+
+
+def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
+    """
+    Magnitude of the total spin from the spin angles.
+
+    Call
+    ----
+    S = eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    S: float
+        Magnitude of the total spin.
+    """
+
+    theta1 = np.atleast_1d(theta1)
+    theta2 = np.atleast_1d(theta2)
+    deltaphi = np.atleast_1d(deltaphi)
+
+    S1, S2 = spinmags(q, chi1, chi2)
+
+    S = (S1**2 + S2**2 + 2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
+
+    return S
+
+
+
+################ Conversions ################
+
+# TODO Check all these conversion functions
+
+# TODO: check this very carefully. The sign of dSdt and ddeltachidt are different!
+def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None):
+    """
+    Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the 'sign' of a precession cycle, defined as +1 if S is increasing and -1 S is decreasing. Valid inputs are one and not more of the following:
+    - dSdt
+    - deltaphi
+    - varphi
+    - Lvec, S1vec, S2vec.
+
+    Call
+    ----
+    cyclesign = eval_cyclesign(dSdt=None,deltaphi=None,varphi=None,Lvec=None,S1vec=None,S2vec=None)
+
+    Parameters
+    ----------
+    dSdt: float, optional (default: None)
+        Time derivative of the total spin.
+    deltaphi: float, optional (default: None)
+        Angle between the projections of the two spins onto the orbital plane.
+    varphi: float, optional (default: None)
+        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
+    Lvec: array, optional (default: None)
+        Cartesian vector of the orbital angular momentum.
+    S1vec: array, optional (default: None)
+        Cartesian vector of the primary spin.
+    S2vec: array, optional (default: None)
+        Cartesian vector of the secondary spin.
+
+    Returns
+    -------
+    cyclesign: integer
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    """
+
+    if dSdt is not None and deltaphi is None and varphi is None and Lvec is None and S1vec is None and S2vec is None:
+        dSdt = np.atleast_1d(dSdt)
+        cyclesign = np.sign(dSdt)
+
+    elif dSdt is None and deltaphi is not None and varphi is None and Lvec is None and S1vec is None and S2vec is None:
+        deltaphi = np.atleast_1d(deltaphi)
+        cyclesign = -np.sign(deltaphi)
+
+    elif dSdt is None and deltaphi is None and varphi is not None and Lvec is None and S1vec is None and S2vec is None:
+        varphi = np.atleast_1d(varphi)
+        cyclesign = -np.sign(varphi)
+
+    elif dSdt is None and deltaphi is None and varphi is None and Lvec is not None and S1vec is not None and S2vec is not None:
+        Lvec = np.atleast_2d(Lvec)
+        S1vec = np.atleast_2d(S1vec)
+        S2vec = np.atleast_2d(S2vec)
+        cyclesign = -np.sign(dot_nested(S1vec, np.cross(S2vec, Lvec)))
+
+    else:
+        TypeError("Please provide one and not more of the following: dSdt, deltaphi, (Lvec, S1vec, S2vec).")
+
+    return cyclesign
+
+
+# TODO: update
+def conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=+1):
+    """
+    Convert conserved quantities (S,J,chieff) into angles (theta1,theta2,deltaphi).
+
+    Call
+    ----
+    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,chieff,q,chi1,chi2,cyclesign=+1)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: +1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+
+    Returns
+    -------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    """
+
+    theta1 = eval_theta1(S, J, r, chieff, q, chi1, chi2)
+    theta2 = eval_theta2(S, J, r, chieff, q, chi1, chi2)
+    deltaphi = eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+
+    return np.stack([theta1, theta2, deltaphi])
+
+
+# TODO: update
+def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False):
+    """
+    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,chieff).
+
+    Call
+    ----
+    S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False)
+    S,J,chieff,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    full_output: boolean, optional (default: False)
+        Return additional outputs.
+
+    Returns
+    -------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    chieff: float
+        Effective spin.
+
+    Other parameters
+    -------
+    cyclesign: integer
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    """
+
+    S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
+    J = eval_J(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
+    chieff = eval_chieff(theta1=theta1, theta2=theta2, q=q, chi1=chi1, chi2=chi2)
+
+    if full_output:
+        cyclesign = eval_cyclesign(deltaphi=deltaphi)
+
+        return np.stack([S, J, chieff, cyclesign])
+
+    else:
+        return np.stack([S, J, chieff])
+
+
+# TODO: Remove? I think this can be merged with "conserved"
+def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
+    """
+    Convert asymptotic angles (theta1, theta2) into regularized momentum and effective spin (kappa, chieff).
+
+    Call
+    ----
+    kappainf,chieff = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1inf: float
+        Asymptotic value of the angle between orbital angular momentum and primary spin.
+    theta2inf: float
+        Asymptotic value of the angle between orbital angular momentum and secondary spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    kappainf: float
+        Asymptotic value of the regularized momentum kappa.
+    chieff: float
+        Effective spin.
+    """
+
+    kappainf = eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
+    chieff = eval_chieff(theta1=theta1inf, theta2=theta2inf, q=q, chi1=chi1, chi2=chi2)
+
+    return np.stack([kappainf, chieff])
+
+
+# TODO: Remove? I think this can be merged with "conserved"
+def asymptotic_to_angles(kappainf, chieff, q, chi1, chi2):
+    """
+    Convert regularized momentum and effective spin (kappa, chieff) into asymptotic angles (theta1, theta2).
+
+    Call
+    ----
+    theta1inf,theta2inf = asymptotic_to_angles(kappainf,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    kappainf: float
+        Asymptotic value of the regularized momentum kappa.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    theta1inf: float
+        Asymptotic value of the angle between orbital angular momentum and primary spin.
+    theta2inf: float
+        Asymptotic value of the angle between orbital angular momentum and secondary spin.
+    """
+
+    theta1inf = eval_theta1inf(kappainf, chieff, q, chi1, chi2)
+    theta2inf = eval_theta2inf(kappainf, chieff, q, chi1, chi2)
+
+    return np.stack([theta1inf, theta2inf])
+
+
+def vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False):
+    """
+    Convert cartesian vectors (L,S1,S2) into conserved quantities (S,J,chieff).
+
+    Call
+    ----
+    S,J,chieff = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=False)
+    S,J,chieff,cyclesign = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=True)
+
+    Parameters
+    ----------
+    Lvec: array
+        Cartesian vector of the orbital angular momentum.
+    S1vec: array
+        Cartesian vector of the primary spin.
+    S2vec: array
+        Cartesian vector of the secondary spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    full_output: boolean, optional (default: False)
+        Return additional outputs.
+
+    Returns
+    -------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    chieff: float
+        Effective spin.
+
+    Other parameters
+    -------
+    cyclesign: integer
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    """
+
+    Lvec = np.atleast_2d(Lvec)
+    S1vec = np.atleast_2d(S1vec)
+    S2vec = np.atleast_2d(S2vec)
+
+    S = norm_nested(S1vec+S2vec)
+    J = norm_nested(S1vec+S2vec+Lvec)
+    L = norm_nested(Lvec)
+    m1, m2 = masses(q)
+
+    chieff = dot_nested(S1vec, Lvec)/(m1*L) + dot_nested(S2vec, Lvec)/(m2*L)
+
+    if full_output:
+        cyclesign = eval_cyclesign(Lvec=Lvec, S1vec=S1vec, S2vec=S2vec)
+
+        return np.stack([S, J, chieff, cyclesign])
+
+    else:
+        return np.stack([S, J, chieff])
+
+
+def vectors_to_angles(Lvec, S1vec, S2vec):
+    """
+    Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi). The convention for the sign of deltaphi is given in Eq. (2d) of arxiv:1506.03492.
+
+    Call
+    ----
+    theta1,theta2,deltaphi = vectors_to_angles(Lvec,S1vec,S2vec)
+
+    Parameters
+    ----------
+    Lvec: array
+        Cartesian vector of the orbital angular momentum.
+    S1vec: array
+        Cartesian vector of the primary spin.
+    S2vec: array
+        Cartesian vector of the secondary spin.
+
+    Returns
+    -------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    """
+
+    Lvec = np.atleast_2d(Lvec)
+    S1vec = np.atleast_2d(S1vec)
+    S2vec = np.atleast_2d(S2vec)
+
+    S1vec = normalize_nested(S1vec)
+    S2vec = normalize_nested(S2vec)
+    Lvec = normalize_nested(Lvec)
+
+    theta1 = np.arccos(dot_nested(S1vec, Lvec))
+    theta2 = np.arccos(dot_nested(S2vec, Lvec))
+    S1crL = np.cross(S1vec, Lvec)
+    S2crL = np.cross(S2vec, Lvec)
+
+    absdeltaphi = np.arccos(dot_nested(normalize_nested(S1crL), normalize_nested(S2crL)))
+    cyclesign = eval_cyclesign(Lvec=Lvec, S1vec=S1vec, S2vec=S2vec)
+    deltaphi = -absdeltaphi*cyclesign
+
+    return np.stack([theta1, theta2, deltaphi])
+
+
+def conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
+    """
+    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in the frame
+    aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+        Cartesian vector of the orbital angular momentum.
+    S1vec: array
+        Cartesian vector of the primary spin.
+    S2vec: array
+        Cartesian vector of the secondary spin.
+    """
+
+    S = np.atleast_1d(S)
+    J = np.atleast_1d(J)
+
+    L = eval_L(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+    varphi = eval_varphi(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+    thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
+
+    Lx = L * np.sin(thetaL)
+    Ly = np.zeros(L.shape)
+    Lz = L * np.cos(thetaL)
+    Lvec = np.transpose([Lx, Ly, Lz])
+
+    A1 = (J**2 - (L-S)**2)**0.5
+    A2 = ((L+S)**2 - J**2)**0.5
+    A3 = (S**2 - (S1-S2)**2)**0.5
+    A4 = ((S1+S2)**2 - S**2)**0.5
+
+    S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) \
+        / (4*J*S**2)
+    S1y = A3 * A4 * np.sin(varphi) / (2*S)
+    S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) \
+        / (4*J*S**2)
+    S1vec = np.transpose([S1x, S1y, S1z])
+
+    S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) \
+        / (4*J*S**2)
+    S2y = -A3*A4*np.sin(varphi) / (2*S)
+    S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) \
+        / (4*J*S**2)
+    S2vec = np.transpose([S2x, S2y, S2z])
+
+    return np.stack([Lvec, S1vec, S2vec])
+
+
+def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame
+    aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+        Cartesian vector of the orbital angular momentum.
+    S1vec: array
+        Cartesian vector of the primary spin.
+    S2vec: array
+        Cartesian vector of the secondary spin.
+    """
+
+    S, J, chieff, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
+    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+
+    return np.stack([Lvec, S1vec, S2vec])
+
+
+def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+        Cartesian vector of the orbital angular momentum.
+    S1vec: array
+        Cartesian vector of the primary spin.
+    S2vec: array
+        Cartesian vector of the secondary spin.
+    """
+
+    L = eval_L(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+
+    Lx = np.zeros(L.shape)
+    Ly = np.zeros(L.shape)
+    Lz = L
+    Lvec = np.transpose([Lx, Ly, Lz])
+
+    S1x = S1 * np.sin(theta1)
+    S1y = np.zeros(S1.shape)
+    S1z = S1 * np.cos(theta1)
+    S1vec = np.transpose([S1x, S1y, S1z])
+
+    S2x = S2 * np.sin(theta2) * np.cos(deltaphi)
+    S2y = S2 * np.sin(theta2) * np.sin(deltaphi)
+    S2z = S2 * np.cos(theta2)
+    S2vec = np.transpose([S2x, S2y, S2z])
+
+    return np.stack([Lvec, S1vec, S2vec])
+
+
+def conserved_to_Lframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
+    """
+    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = conserved_to_Lframe(S,J,r,chieff,q,chi1,chi2,cyclesign=1)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: 1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+
+    Returns
+    -------
+    Lvec: array
+        Cartesian vector of the orbital angular momentum.
+    S1vec: array
+        Cartesian vector of the primary spin.
+    S2vec: array
+        Cartesian vector of the secondary spin.
+    """
+
+    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+    Lvec, S1vec, S2vec = angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
+
+    return np.stack([Lvec, S1vec, S2vec])
+
+
+def conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
+    """
+    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = conserved_to_inertial(S,J,r,chieff,q,chi1,chi2,cyclesign=1)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: 1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+
+    Returns
+    -------
+    Lvec: array
+        Cartesian vector of the orbital angular momentum.
+    S1vec: array
+        Cartesian vector of the primary spin.
+    S2vec: array
+        Cartesian vector of the secondary spin.
+    """
+
+    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+    phiL = eval_phiL_old(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+
+    Lvec = rotate_zaxis(Lvec, phiL)
+    S1vec = rotate_zaxis(S1vec, phiL)
+    S2vec = rotate_zaxis(S2vec, phiL)
+
+    return np.stack([Lvec, S1vec, S2vec])
+
+
+def angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    Convert the angles (theta1, theta2, deltaphi) to angular momentum vectors (L, S1, S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
+
+    Call
+    ----
+    Lvec,S1vec,S2vec = angles_to_inertial(theta1,theta2,deltaphi,r,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    Lvec: array
+        Cartesian vector of the orbital angular momentum.
+    S1vec: array
+        Cartesian vector of the primary spin.
+    S2vec: array
+        Cartesian vector of the secondary spin.
+    """
+
+    deltaphi = np.atleast_1d(deltaphi)
+    S, J, chieff, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
+    Lvec, S1vec, S2vec = conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+
+    return np.stack([Lvec, S1vec, S2vec])
+
+
+
 ################ Spin-orbit resonances ################
 
 
@@ -1650,1287 +2883,6 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
     return deltachires
 
 
-################ Evaluations and conversions ################
-
-# TODO: deltachi instead of S here
-def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
-    """
-    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
-
-    Call
-    ----
-    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
-
-    Parameters
-    ----------
-    theta1: float, optional (default: None)
-        Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
-        Angle between orbital angular momentum and secondary spin.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
-    varphi: float, optional (default: None)
-        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
-    r: float, optional (default: None)
-        Binary separation.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    chieff: float
-        Effective spin.
-    """
-
-    if theta1 is not None and theta2 is not None and S is None and varphi is None and J is None and r is None and q is not None and chi1 is not None and chi2 is not None:
-
-        theta1 = np.atleast_1d(theta1)
-        theta2 = np.atleast_1d(theta2)
-        q = np.atleast_1d(q)
-        S1, S2 = spinmags(q, chi1, chi2)
-        chieff = (1+q)*(q*S1*np.cos(theta1)+S2*np.cos(theta2))/q
-
-    elif theta1 is None and theta2 is None and S is not None and varphi is not None and J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
-
-        S = np.atleast_1d(S)
-        varphi = np.atleast_1d(varphi)
-        J = np.atleast_1d(J)
-        q = np.atleast_1d(q)
-        S1, S2 = spinmags(q, chi1, chi2)
-        L = eval_L(r, q)
-
-        # Machine generated with polycoefficients.nb
-        chieff = 1/4 * L**(-1) * q**(-1) * S**(-2) * ((J**2 + (-1 * L**2 + -1
-        * S**2)) * (((1 + q))**2 * S**2 + (-1 + q**2) * (S1**2 + -1 * S2**2))
-        + -1 * (1 + -1 * q**2) * ((J**2 + -1 * ((L + -1 * S))**2))**(1/2) *
-        ((-1 * J**2 + ((L + S))**2))**(1/2) * ((S**2 + -1 * ((S1 + -1 *
-        S2))**2))**(1/2) * ((-1 * S**2 + ((S1 + S2))**2))**(1/2) *
-        np.cos(varphi))
-
-    else:
-        raise TypeError("Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).")
-
-    return chieff
-
-
-# TODO: update this function to evaluate from S
-def eval_deltachi(theta1, theta2, q, chi1, chi2):
-    """
-    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
-
-    Call
-    ----
-    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
-
-    Parameters
-    ----------
-    theta1: float, optional (default: None)
-        Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
-        Angle between orbital angular momentum and secondary spin.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
-    varphi: float, optional (default: None)
-        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
-    r: float, optional (default: None)
-        Binary separation.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    chieff: float
-        Effective spin.
-    """
-
-
-    theta1 = np.atleast_1d(theta1)
-    theta2 = np.atleast_1d(theta2)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-
-    deltachi = (chi1*np.cos(theta1) -q*chi2*np.cos(theta2))/(1+q)
-
-    return deltachi
-
-
-def eval_costheta1(deltachi, chieff, q, chi1):
-    """
-    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
-
-    Call
-    ----
-    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    costheta1: float
-        Cosine of the angle between orbital angular momentum and primary spin.
-    """
-
-    deltachi = np.atleast_1d(deltachi)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-
-    costheta1 = (1+q)/(2*chi1)*(chieff+deltachi)
-
-    return costheta1
-
-
-def eval_theta1(deltachi, chieff, q, chi1):
-
-    costheta1 = eval_costheta1(deltachi, chieff, q, chi1)
-    theta1 = np.arccos(costheta1)
-
-    return theta1
-
-
-def eval_costheta2(deltachi, chieff, q, chi2):
-    """
-    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
-
-    Call
-    ----
-    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    costheta1: float
-        Cosine of the angle between orbital angular momentum and primary spin.
-    """
-
-    deltachi = np.atleast_1d(deltachi)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi2 = np.atleast_1d(chi2)
-
-    costheta2 = (1+q)/(2*q*chi2)*(chieff-deltachi)
-
-    return costheta2
-
-
-def eval_theta2(deltachi, chieff, q, chi2):
-
-    costheta2 = eval_costheta2(deltachi, chieff, q, chi2)
-    theta2 = np.arccos(costheta2)
-
-    return theta2
-
-
-def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
-    """
-    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
-
-    Call
-    ----
-    costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)
-
-    Parameters
-    ----------
-    theta1: float, optional (default: None)
-        Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float, optional (default: None)
-        Angle between the projections of the two spins onto the orbital plane.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    costheta12: float
-        Cosine of the angle between the two spins.
-    """
-
-    if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None and q is None and chi1 is None and chi2 is None:
-
-        theta1=np.atleast_1d(theta1)
-        theta2=np.atleast_1d(theta2)
-        deltaphi=np.atleast_1d(deltaphi)
-        costheta12 = np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2)
-
-    elif theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
-
-        deltachi = np.atleast_1d(deltachi)
-        kappa = np.atleast_1d(kappa)
-        chieff = np.atleast_1d(chieff)
-        q = np.atleast_1d(q)
-        chi1 = np.atleast_1d(chi1)
-        chi2 = np.atleast_1d(chi2)
-
-        # Machine generated with eq_generator.nb
-        costheta12 = 1/2 * q**(-2) * (chi1)**(-1) * (chi2)**(-1) * (-1 * \
-        (chi1)**2 + (-1 * q**4 * (chi2)**2 + q * (1 + q) * (r)**(1/2) * (-1 * \
-        (1 + -1 * q) * deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * \
-        chieff))))
-
-    else:
-        raise TypeError("Provide either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).")
-
-    return costheta12
-
-
-def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
-
-    costheta12 = eval_costheta1(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
-    theta12 = np.arccos(costheta12)
-
-    return theta12
-
-
-def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
-    """
-    Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
-
-    Call
-    ----
-    cosdeltaphi = eval_cosdeltaphi(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    cosdeltaphi: float
-        Cosine of the angle between the projections of the two spins onto the orbital plane.
-    """
-
-    deltachi = np.atleast_1d(deltachi)
-    kappa = np.atleast_1d(kappa)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-
-    # Machine generated with eq_generator.nb
-    cosdeltaphi = q**(-1) * ((4 * q**2 * (chi2)**2 + -1 * ((1 + q))**2 * \
-    ((-1 * deltachi + chieff))**2) * (4 * (chi1)**2 + -1 * ((1 + q))**2 * \
-    ((deltachi + chieff))**2))**(-1/2) * (-2 * ((chi1)**2 + q**4 * \
-    (chi2)**2) + (2 * q * (1 + q) * (r)**(1/2) * (-1 * (1 + -1 * q) * \
-    deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * chieff)) + -1 * q * \
-    ((1 + q))**2 * (-1 * (deltachi)**2 + chieff**2)))
-
-    return cosdeltaphi
-
-
-# TODO cyclesign needs to be checked again in the entire code
-def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=1):
-    """
-    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=-1 returns the other half of the  precession cycle [-pi,0].
-
-    Call
-    ----
-    deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: -1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-
-    Returns
-    -------
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    """
-
-    cyclesign = np.atleast_1d(cyclesign)
-    cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2)
-    deltaphi = np.sign(cyclesign)*np.arccos(cosdeltaphi)
-
-    return deltaphi
-
-
-# TODO: check this one. S...
-def eval_costhetaL(S, J, r, q, chi1, chi2):
-    """
-    Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
-
-    Call
-    ----
-    costhetaL = eval_costhetaL(S,J,r,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    costhetaL: float
-        Cosine of the angle betwen orbital angular momentum and total angular momentum.
-    """
-
-    S = np.atleast_1d(S)
-    J = np.atleast_1d(J)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    L = eval_L(r, q)
-    costhetaL = (J**2+L**2-S**2)/(2*J*L)
-
-    return costhetaL
-
-# TODO: check this one. S...
-def eval_thetaL(S, J, r, q, chi1, chi2):
-    """
-    Angle thetaL betwen orbital angular momentum and total angular momentum.
-
-    Call
-    ----
-    thetaL = eval_thetaL(S,J,r,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    thetaL: float
-        Angle betwen orbital angular momentum and total angular momentum.
-    """
-
-    costhetaL = eval_costhetaL(S, J, r, q, chi1, chi2)
-    thetaL = np.arccos(costhetaL)
-
-    return thetaL
-
-
-def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, chi1=None, chi2=None):
-    """
-    Magnitude of the total angular momentum. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).
-
-    Call
-    ----
-    J = eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None)
-
-    Parameters
-    ----------
-    theta1: float, optional (default: None)
-        Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float, optional (default: None)
-        Angle between the projections of the two spins onto the orbital plane.
-    kappa: float, optional (default: None)
-        Regularized angular momentum (J^2-L^2)/(2L).
-    r: float, optional (default: None)
-        Binary separation.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    J: float
-        Magnitude of the total angular momentum.
-    """
-
-    if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
-
-        theta1 = np.atleast_1d(theta1)
-        theta2 = np.atleast_1d(theta2)
-        deltaphi = np.atleast_1d(deltaphi)
-        q = np.atleast_1d(q)
-
-        S1, S2 = spinmags(q, chi1, chi2)
-        L = eval_L(r, q)
-        S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
-
-        J = (L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
-
-    elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and r is not None and q is not None and chi1 is None and chi2 is None:
-
-        kappa = np.atleast_1d(kappa)
-
-        L = eval_L(r, q)
-        J = (2*L*kappa + L**2)**0.5
-
-    else:
-        raise TypeError("Provide either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (kappa,r,q,chi1,chi2).")
-
-    return J
-
-
-def eval_kappa(J, r, q):
-    """
-    Change of dependent variable to regularize the infinite orbital separation
-    limit of the precession-averaged evolution equation.
-
-    Call
-    ----
-    kappa = eval_kappa(J,r,q)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-
-    Returns
-    -------
-    kappa: float
-        Regularized angular momentum (J^2-L^2)/(2L).
-    """
-
-    J = np.atleast_1d(J)
-
-    L = eval_L(r, q)
-    kappa = (J**2 - L**2) / (2*L)
-
-    return kappa
-
-
-# TODO: This function and the next one needs to be merged together
-def eval_S_from_deltachi(deltachi, kappa, r, chieff, q):
-
-    deltachi = np.atleast_1d(deltachi)
-    kappa = np.atleast_1d(kappa)
-    r = np.atleast_1d(r)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-
-    S = ( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi * (1 - q)/(1 + q)) )**(1/2)
-
-    return S
-
-
-def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
-    """
-    Magnitude of the total spin from the spin angles.
-
-    Call
-    ----
-    S = eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    S: float
-        Magnitude of the total spin.
-    """
-
-    theta1 = np.atleast_1d(theta1)
-    theta2 = np.atleast_1d(theta2)
-    deltaphi = np.atleast_1d(deltaphi)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-
-    S = (S1**2 + S2**2 + 2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
-
-    return S
-
-
-
-#TODO regen docstrings
-# TODO: this can be made easier using the sign a single term from the dphi expression
-def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None):
-    """
-    Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
-
-    Call
-    ----
-    morph = morphology(J,r,chieff,q,chi1,chi2,simpler = False)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    simpler: boolean, optional (default: False)
-        If True simplifies output.
-
-    Returns
-    -------
-    morph: string
-        Spin morphology.
-    """
-
-    deltachiminus,deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
-    # Pairs of booleans based on the values of deltaphi at S- and S+
-    status = np.transpose([eval_cosdeltaphi(deltachiminus, kappa, r, chieff, q, chi1, chi2) > 0, eval_cosdeltaphi(deltachiplus, kappa, r, chieff, q, chi1, chi2) > 0])
-    # Map to labels
-    dictlabel = {(False, False): "Lpi", (True, True): "L0", (False, True): "C-", (True, False): "C+"}
-    # Subsitute pairs with labels
-    morphs = np.zeros(deltachiminus.shape)
-    for k, v in dictlabel.items():
-        morphs = np.where((status == k).all(axis=1), v, morphs)
-    # Simplifies output, only one circulating morphology
-    if simpler:
-        morphs = np.where(np.logical_or(morphs == 'C+', morphs == 'C-'), 'C', morphs)
-
-    return morphs
-
-
-# TODO: check this very carefully. The sign of dSdt and ddeltachidt are different!
-def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None):
-    """
-    Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the 'sign' of a precession cycle, defined as +1 if S is increasing and -1 S is decreasing. Valid inputs are one and not more of the following:
-    - dSdt
-    - deltaphi
-    - varphi
-    - Lvec, S1vec, S2vec.
-
-    Call
-    ----
-    cyclesign = eval_cyclesign(dSdt=None,deltaphi=None,varphi=None,Lvec=None,S1vec=None,S2vec=None)
-
-    Parameters
-    ----------
-    dSdt: float, optional (default: None)
-        Time derivative of the total spin.
-    deltaphi: float, optional (default: None)
-        Angle between the projections of the two spins onto the orbital plane.
-    varphi: float, optional (default: None)
-        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
-    Lvec: array, optional (default: None)
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array, optional (default: None)
-        Cartesian vector of the primary spin.
-    S2vec: array, optional (default: None)
-        Cartesian vector of the secondary spin.
-
-    Returns
-    -------
-    cyclesign: integer
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-    """
-
-    if dSdt is not None and deltaphi is None and varphi is None and Lvec is None and S1vec is None and S2vec is None:
-        dSdt = np.atleast_1d(dSdt)
-        cyclesign = np.sign(dSdt)
-
-    elif dSdt is None and deltaphi is not None and varphi is None and Lvec is None and S1vec is None and S2vec is None:
-        deltaphi = np.atleast_1d(deltaphi)
-        cyclesign = -np.sign(deltaphi)
-
-    elif dSdt is None and deltaphi is None and varphi is not None and Lvec is None and S1vec is None and S2vec is None:
-        varphi = np.atleast_1d(varphi)
-        cyclesign = -np.sign(varphi)
-
-    elif dSdt is None and deltaphi is None and varphi is None and Lvec is not None and S1vec is not None and S2vec is not None:
-        Lvec = np.atleast_2d(Lvec)
-        S1vec = np.atleast_2d(S1vec)
-        S2vec = np.atleast_2d(S2vec)
-        cyclesign = -np.sign(dot_nested(S1vec, np.cross(S2vec, Lvec)))
-
-    else:
-        TypeError("Please provide one and not more of the following: dSdt, deltaphi, (Lvec, S1vec, S2vec).")
-
-    return cyclesign
-
-
-# TODO: update
-def conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=+1):
-    """
-    Convert conserved quantities (S,J,chieff) into angles (theta1,theta2,deltaphi).
-
-    Call
-    ----
-    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,chieff,q,chi1,chi2,cyclesign=+1)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: +1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-
-    Returns
-    -------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    """
-
-    theta1 = eval_theta1(S, J, r, chieff, q, chi1, chi2)
-    theta2 = eval_theta2(S, J, r, chieff, q, chi1, chi2)
-    deltaphi = eval_deltaphi(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-
-    return np.stack([theta1, theta2, deltaphi])
-
-
-# TODO: update
-def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False):
-    """
-    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,chieff).
-
-    Call
-    ----
-    S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False)
-    S,J,chieff,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    full_output: boolean, optional (default: False)
-        Return additional outputs.
-
-    Returns
-    -------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    chieff: float
-        Effective spin.
-
-    Other parameters
-    -------
-    cyclesign: integer
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-    """
-
-    S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
-    J = eval_J(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
-    chieff = eval_chieff(theta1=theta1, theta2=theta2, q=q, chi1=chi1, chi2=chi2)
-
-    if full_output:
-        cyclesign = eval_cyclesign(deltaphi=deltaphi)
-
-        return np.stack([S, J, chieff, cyclesign])
-
-    else:
-        return np.stack([S, J, chieff])
-
-
-# TODO: Remove? I think this can be merged with "conserved"
-def angles_to_asymptotic(theta1inf, theta2inf, q, chi1, chi2):
-    """
-    Convert asymptotic angles (theta1, theta2) into regularized momentum and effective spin (kappa, chieff).
-
-    Call
-    ----
-    kappainf,chieff = angles_to_asymptotic(theta1inf,theta2inf,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1inf: float
-        Asymptotic value of the angle between orbital angular momentum and primary spin.
-    theta2inf: float
-        Asymptotic value of the angle between orbital angular momentum and secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    kappainf: float
-        Asymptotic value of the regularized momentum kappa.
-    chieff: float
-        Effective spin.
-    """
-
-    kappainf = eval_kappainf(theta1inf, theta2inf, q, chi1, chi2)
-    chieff = eval_chieff(theta1=theta1inf, theta2=theta2inf, q=q, chi1=chi1, chi2=chi2)
-
-    return np.stack([kappainf, chieff])
-
-
-# TODO: Remove? I think this can be merged with "conserved"
-def asymptotic_to_angles(kappainf, chieff, q, chi1, chi2):
-    """
-    Convert regularized momentum and effective spin (kappa, chieff) into asymptotic angles (theta1, theta2).
-
-    Call
-    ----
-    theta1inf,theta2inf = asymptotic_to_angles(kappainf,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    kappainf: float
-        Asymptotic value of the regularized momentum kappa.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    theta1inf: float
-        Asymptotic value of the angle between orbital angular momentum and primary spin.
-    theta2inf: float
-        Asymptotic value of the angle between orbital angular momentum and secondary spin.
-    """
-
-    theta1inf = eval_theta1inf(kappainf, chieff, q, chi1, chi2)
-    theta2inf = eval_theta2inf(kappainf, chieff, q, chi1, chi2)
-
-    return np.stack([theta1inf, theta2inf])
-
-
-def vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=False):
-    """
-    Convert cartesian vectors (L,S1,S2) into conserved quantities (S,J,chieff).
-
-    Call
-    ----
-    S,J,chieff = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=False)
-    S,J,chieff,cyclesign = vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=True)
-
-    Parameters
-    ----------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    full_output: boolean, optional (default: False)
-        Return additional outputs.
-
-    Returns
-    -------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    chieff: float
-        Effective spin.
-
-    Other parameters
-    -------
-    cyclesign: integer
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-    """
-
-    Lvec = np.atleast_2d(Lvec)
-    S1vec = np.atleast_2d(S1vec)
-    S2vec = np.atleast_2d(S2vec)
-
-    S = norm_nested(S1vec+S2vec)
-    J = norm_nested(S1vec+S2vec+Lvec)
-    L = norm_nested(Lvec)
-    m1, m2 = masses(q)
-
-    chieff = dot_nested(S1vec, Lvec)/(m1*L) + dot_nested(S2vec, Lvec)/(m2*L)
-
-    if full_output:
-        cyclesign = eval_cyclesign(Lvec=Lvec, S1vec=S1vec, S2vec=S2vec)
-
-        return np.stack([S, J, chieff, cyclesign])
-
-    else:
-        return np.stack([S, J, chieff])
-
-
-def vectors_to_angles(Lvec, S1vec, S2vec):
-    """
-    Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi). The convention for the sign of deltaphi is given in Eq. (2d) of arxiv:1506.03492.
-
-    Call
-    ----
-    theta1,theta2,deltaphi = vectors_to_angles(Lvec,S1vec,S2vec)
-
-    Parameters
-    ----------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-
-    Returns
-    -------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    """
-
-    Lvec = np.atleast_2d(Lvec)
-    S1vec = np.atleast_2d(S1vec)
-    S2vec = np.atleast_2d(S2vec)
-
-    S1vec = normalize_nested(S1vec)
-    S2vec = normalize_nested(S2vec)
-    Lvec = normalize_nested(Lvec)
-
-    theta1 = np.arccos(dot_nested(S1vec, Lvec))
-    theta2 = np.arccos(dot_nested(S2vec, Lvec))
-    S1crL = np.cross(S1vec, Lvec)
-    S2crL = np.cross(S2vec, Lvec)
-
-    absdeltaphi = np.arccos(dot_nested(normalize_nested(S1crL), normalize_nested(S2crL)))
-    cyclesign = eval_cyclesign(Lvec=Lvec, S1vec=S1vec, S2vec=S2vec)
-    deltaphi = -absdeltaphi*cyclesign
-
-    return np.stack([theta1, theta2, deltaphi])
-
-
-def conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
-    """
-    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in the frame
-    aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
-
-    Call
-    ----
-    Lvec,S1vec,S2vec = conserved_to_Jframe(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-    """
-
-    S = np.atleast_1d(S)
-    J = np.atleast_1d(J)
-
-    L = eval_L(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
-    varphi = eval_varphi(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-    thetaL = eval_thetaL(S, J, r, q, chi1, chi2)
-
-    Lx = L * np.sin(thetaL)
-    Ly = np.zeros(L.shape)
-    Lz = L * np.cos(thetaL)
-    Lvec = np.transpose([Lx, Ly, Lz])
-
-    A1 = (J**2 - (L-S)**2)**0.5
-    A2 = ((L+S)**2 - J**2)**0.5
-    A3 = (S**2 - (S1-S2)**2)**0.5
-    A4 = ((S1+S2)**2 - S**2)**0.5
-
-    S1x = (-(S**2+S1**2-S2**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) \
-        / (4*J*S**2)
-    S1y = A3 * A4 * np.sin(varphi) / (2*S)
-    S1z = ((S**2+S1**2-S2**2)*(J**2-L**2+S**2) + A1*A2*A3*A4*np.cos(varphi)) \
-        / (4*J*S**2)
-    S1vec = np.transpose([S1x, S1y, S1z])
-
-    S2x = -((S**2+S2**2-S1**2)*A1*A2 + (J**2-L**2+S**2)*A3*A4*np.cos(varphi)) \
-        / (4*J*S**2)
-    S2y = -A3*A4*np.sin(varphi) / (2*S)
-    S2z = ((S**2+S2**2-S1**2)*(J**2-L**2+S**2) - A1*A2*A3*A4*np.cos(varphi)) \
-        / (4*J*S**2)
-    S2vec = np.transpose([S2x, S2y, S2z])
-
-    return np.stack([Lvec, S1vec, S2vec])
-
-
-def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
-    """
-    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame
-    aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
-
-    Call
-    ----
-    Lvec,S1vec,S2vec = angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-    """
-
-    S, J, chieff, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
-    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-
-    return np.stack([Lvec, S1vec, S2vec])
-
-
-def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
-    """
-    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
-
-    Call
-    ----
-    Lvec,S1vec,S2vec = angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-    """
-
-    L = eval_L(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
-
-    Lx = np.zeros(L.shape)
-    Ly = np.zeros(L.shape)
-    Lz = L
-    Lvec = np.transpose([Lx, Ly, Lz])
-
-    S1x = S1 * np.sin(theta1)
-    S1y = np.zeros(S1.shape)
-    S1z = S1 * np.cos(theta1)
-    S1vec = np.transpose([S1x, S1y, S1z])
-
-    S2x = S2 * np.sin(theta2) * np.cos(deltaphi)
-    S2y = S2 * np.sin(theta2) * np.sin(deltaphi)
-    S2z = S2 * np.cos(theta2)
-    S2vec = np.transpose([S2x, S2y, S2z])
-
-    return np.stack([Lvec, S1vec, S2vec])
-
-
-def conserved_to_Lframe(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
-    """
-    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
-
-    Call
-    ----
-    Lvec,S1vec,S2vec = conserved_to_Lframe(S,J,r,chieff,q,chi1,chi2,cyclesign=1)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: 1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-
-    Returns
-    -------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-    """
-
-    theta1, theta2, deltaphi = conserved_to_angles(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-    Lvec, S1vec, S2vec = angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
-
-    return np.stack([Lvec, S1vec, S2vec])
-
-
-def conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
-    """
-    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
-
-    Call
-    ----
-    Lvec,S1vec,S2vec = conserved_to_inertial(S,J,r,chieff,q,chi1,chi2,cyclesign=1)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: 1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-
-    Returns
-    -------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-    """
-
-    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-    phiL = eval_phiL_old(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-
-    Lvec = rotate_zaxis(Lvec, phiL)
-    S1vec = rotate_zaxis(S1vec, phiL)
-    S2vec = rotate_zaxis(S2vec, phiL)
-
-    return np.stack([Lvec, S1vec, S2vec])
-
-
-def angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2):
-    """
-    Convert the angles (theta1, theta2, deltaphi) to angular momentum vectors (L, S1, S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
-
-    Call
-    ----
-    Lvec,S1vec,S2vec = angles_to_inertial(theta1,theta2,deltaphi,r,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-    """
-
-    deltaphi = np.atleast_1d(deltaphi)
-    S, J, chieff, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
-    Lvec, S1vec, S2vec = conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-
-    return np.stack([Lvec, S1vec, S2vec])
-
-
-# Precessional timescale dynamics
-
 def elliptic_amplitude(S, Sminuss, Spluss):
     """
     Amplitdue phi entering elliptic functions for the evolution of S.
@@ -3001,7 +2953,6 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
     return n
 
 
-# re do docstrings
 def deltachitildeav(m,tol=1e-7):
     """
     Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
@@ -3144,7 +3095,6 @@ def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psip
     return tau
 
 
-#I changed the broadcasting rule compared Soft!
 def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Evolution of S on the precessional timescale (without radiation reaction).
@@ -3265,8 +3215,6 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
     # deltachi has shape (M, N).
     deltachi = deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
     return deltachi.T
-
-
 
 
 ################ Dynamics in an intertial frame ################
@@ -3453,6 +3401,458 @@ def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     return alpha 
 
 
+
+################ More phenomenology ################
+
+
+#TODO regen docstrings
+# TODO: this can be made easier using the sign a single term from the dphi expression
+def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None):
+    """
+    Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
+
+    Call
+    ----
+    morph = morphology(J,r,chieff,q,chi1,chi2,simpler = False)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    simpler: boolean, optional (default: False)
+        If True simplifies output.
+
+    Returns
+    -------
+    morph: string
+        Spin morphology.
+    """
+
+    deltachiminus,deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
+    # Pairs of booleans based on the values of deltaphi at S- and S+
+    status = np.transpose([eval_cosdeltaphi(deltachiminus, kappa, r, chieff, q, chi1, chi2) > 0, eval_cosdeltaphi(deltachiplus, kappa, r, chieff, q, chi1, chi2) > 0])
+    # Map to labels
+    dictlabel = {(False, False): "Lpi", (True, True): "L0", (False, True): "C-", (True, False): "C+"}
+    # Subsitute pairs with labels
+    morphs = np.zeros(deltachiminus.shape)
+    for k, v in dictlabel.items():
+        morphs = np.where((status == k).all(axis=1), v, morphs)
+    # Simplifies output, only one circulating morphology
+    if simpler:
+        morphs = np.where(np.logical_or(morphs == 'C+', morphs == 'C-'), 'C', morphs)
+
+    return morphs
+
+
+# TODO all the chip stuff needs to be checked and debugged
+
+def chip_terms(theta1, theta2, q, chi1, chi2):
+    """
+    Compute the two terms entering the effective precessing spin chip.
+
+    Call
+    ----
+    chipterm1,chipterm2 = chip_terms(theta1,theta2,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chipterm1: float
+        Term in effective precessing spin chip.
+    chipterm2: float
+        Term in effective precessing spin chip.
+    """
+
+    theta1 = np.atleast_1d(theta1)
+    theta2 = np.atleast_1d(theta2)
+    q = np.atleast_1d(q)
+
+    chipterm1 = chi1*np.sin(theta1)
+    omegatilde = q*(4*q+3)/(4+3*q)
+    chipterm2 = omegatilde * chi2*np.sin(theta2)
+
+    return np.stack([chipterm1, chipterm2])
+
+
+def eval_chip_heuristic(theta1, theta2, q, chi1, chi2):
+    """
+    Heuristic definition of the effective precessing spin chip (Schmidt et al 2015), see arxiv:2011.11948. This definition inconsistently averages over some, but not all, variations on the precession timescale.
+
+    Call
+    ----
+    chip = eval_chip_heuristic(theta1,theta2,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chip: float
+        Effective precessing spin chip.
+    """
+
+    term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
+    chip = np.maximum(term1, term2)
+    return chip
+
+
+def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
+    """
+    Generalized definition of the effective precessing spin chip, see arxiv:2011.11948. This definition retains all variations on the precession timescale.
+
+    Call
+    ----
+    chip = eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chip: float
+        Effective precessing spin chip.
+    """
+
+    term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
+    chip = (term1**2 + term2**2 + 2*term1*term2*np.cos(deltaphi))**0.5
+    return chip
+
+
+def eval_chip_asymptotic(theta1, theta2, q, chi1, chi2):
+    """
+    Asymptotic definition of the effective precessing spin chip, see arxiv:2011.11948. This definition is valid when spin-spin couplings can be neglected, notably at infinitely large separations.
+
+    Call
+    ----
+    chip = eval_chip_asymptotic(theta1,theta2,q,chi1,chi2)
+
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    chip: float
+        Effective precessing spin chip.
+    """
+
+    term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
+    chip = (np.abs(term1-term2) * scipy.special.ellipe(-4*term1*term2/(term1-term2)**2) + np.abs(term1+term2) * scipy.special.ellipe(4*term1*term2/(term1+term2)**2))/np.pi
+    return chip
+
+
+def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, method='quadrature', Nsamples=1e4):
+    """
+    Averaged definition of the effective precessing spin chip, see arxiv:2011.11948. This definition consistently averages over all variations on the precession timescale. Valid inputs are one of the following (but not both)
+    - theta1, theta2, deltaphi
+    - J, chieff
+    The parameters r, q, chi1, and chi2 should always be provided. The keywords arguments method and Nsamples are passed directly to `precession_average`.
+
+    Call
+    ----
+    chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+        Angle between the projections of the two spins onto the orbital plane.
+    J: float, optional (default: None)
+        Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+        Binary separation.
+    chieff: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    method: string (default: 'quadrature')
+        Either 'quadrature' or 'montecarlo'
+    Nsamples: integer (default: 1e4)
+        Number of Monte Carlo samples.
+
+    Returns
+    -------
+    chip: float
+        Effective precessing spin chip.
+    """
+
+    if r is None or q is None or chi1 is None or chi2 is None:
+        raise TypeError("Please provide r, q, chi1, and chi2.")
+
+    if theta1 is not None and theta2 is not None and deltaphi is not None and J is None and chieff is None:
+        # cyclesign doesn't matter here. Outout S is not needed
+        _, J, chieff = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
+
+    elif theta1 is None and theta2 is None and deltaphi is None and J is not None and chieff is not None:
+        pass
+
+    else:
+        raise TypeError("Please provide either (theta1,theta2,deltaphi) or (J,chieff).")
+
+    def _integrand(S, J, r, chieff, q, chi1, chi2):
+        theta1, theta2, deltaphi = conserved_to_angles(S, J, r, chieff, q, chi1, chi2)
+        chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
+        return chip_integrand
+
+    chip = precession_average(J, r, chieff, q, chi1, chi2, _integrand, J, r, chieff, q, chi1, chi2, method=method, Nsamples=Nsamples)
+
+    return chip
+
+
+def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", method='quadrature', Nsamples=1e4):
+    """
+    Compute the effective precessing spin chip, see arxiv:2011.11948. The keyword `which` one of the following definitions:
+    - `heuristic`, as in Schmidt et al 2015. Required inputs: theta1,theta2,q,chi1,chi2
+    - `generalized`, retail all precession-timescale variations. Required inputs: theta1,theta2,deltaphi,q,chi1,chi2
+    - `asymptotic`, large-separation limit. Required inputs: theta1,theta2,q,chi1,chi2
+    - `averaged` (default), averages over all precession-timescale variations. Required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (J,r,chieff,q,chi1,chi2). The additional keywords `methods` and `Nsamples` are passed to `precession_average`.
+
+    Call
+    ----
+    chip = eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,which="averaged",method='quadrature',Nsamples=1e4)
+
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+        Angle between the projections of the two spins onto the orbital plane.
+    J: float, optional (default: None)
+        Magnitude of the total angular momentum.
+    r: float, optional (default: None)
+        Binary separation.
+    chieff: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    which: string, optional (default: "averaged")
+        Select function behavior.
+    method: string (default: 'quadrature')
+        Either 'quadrature' or 'montecarlo'
+    Nsamples: integer (default: 1e4)
+        Number of Monte Carlo samples.
+
+    Returns
+    -------
+    chip: float
+        Effective precessing spin chip.
+    """
+
+    if which == 'heuristic':
+        chip = eval_chip_heuristic(theta1, theta2, q, chi1, chi2)
+
+    elif which == 'generalized':
+        chip = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
+
+    elif which == 'asymptotic':
+        chip = eval_chip_asymptotic(theta1, theta2, q, chi1, chi2)
+
+    elif which == 'averaged':
+        chip = eval_chip_averaged(theta1=theta1, theta2=theta2, deltaphi=deltaphi, J=J, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2, method='quadrature', Nsamples=1e4)
+
+    else:
+        raise ValueError("`which` needs to be one of the following: `heuristic`, `generalized`, `asymptotic`, `averaged`.")
+
+    return chip
+
+
+
+# TODO Add updown endpoint.
+# TODO Add limits of the resonances at small separations from the endpoint paper
+
+
+def rupdown(q, chi1, chi2):
+    """
+    The critical separations r_ud+/- marking the region of the up-down precessional instability.
+
+    Call
+    ----
+    rudp,rudm = rupdown(q,chi1,chi2)
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    rudp: float
+        Outer orbital separation in the up-down instability.
+    rudm: float
+        Inner orbital separation in the up-down instability.
+    """
+
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    #Ignore q=1 "divide by zero" warning here
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+        rudp = (chi1**0.5+(q*chi2)**0.5)**4/(1-q)**2
+        rudm = (chi1**0.5-(q*chi2)**0.5)**4/(1-q)**2
+
+    return np.stack([rudp, rudm])
+
+
+def omegasq_aligned(r, q, chi1, chi2, which):
+    """
+    Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
+
+    Call
+    ----
+    omegasq = omegasq_aligned(r,q,chi1,chi2,which)
+
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    which: string
+        Select function behavior.
+
+    Returns
+    -------
+    omegasq: float
+        Squared frequency.
+    """
+
+    q = np.atleast_1d(q)
+
+    # These are all the valid input flags
+    uulabels = np.array(['uu', 'up-up', 'upup', '++'])
+    udlabels = np.array(['ud', 'up-down', 'updown', '+-'])
+    dulabels = np.array(['du', 'down-up', 'downup', '-+'])
+    ddlabels = np.array(['dd', 'down-down', 'downdown', '--'])
+
+    assert np.isin(which, np.concatenate([uulabels, udlabels, dulabels, ddlabels])).all(), "Set `which` flag to either uu, ud, du, or dd."
+
+    # +1 if primary is co-aligned, -1 if primary is counter-aligned
+    alpha1 = np.where(np.isin(which, np.concatenate([uulabels, udlabels])), 1, -1)
+    # +1 if secondary is co-aligned, -1 if secondary is counter-aligned
+    alpha2 = np.where(np.isin(which, np.concatenate([uulabels, dulabels])), 1, -1)
+
+    L = eval_L(r, q)
+    S1, S2 = spinmags(q, chi1, chi2)
+    # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1
+    omegasq = (3 * q**5 / (2 * (1 + q)**11 * L**7))**2 * (L - (q *
+        alpha1 * S1 + alpha2 * S2) / (1 + q))**2 * (L**2 * (1 - q)**2 -
+        2 * L * (q * alpha1 * S1 - alpha2 * S2) * (1 - q) + (q * alpha1 *
+        S1 + alpha2 * S2)**2)
+
+    return omegasq
+
+
+def widenutation(q, chi1, chi2):
+    """
+    The critical separation r_wide below which the binary component with
+    smaller dimensionless spin may undergo wide nutations.
+
+    Call
+    ----
+    r_wide = widenutation(q,chi1,chi2)
+
+    Parameters
+    ----------
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    r_wide: float
+        Orbital separation where wide nutations becomes possible.
+    """
+
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    rwide = ((q*chi2 - chi1) / (1-q))**2
+
+    return rwide
+
+# TODO: write function with values of J and chieff where wide nutation happens
+
+
 ################ Precession-averaged evolution ################
 
 
@@ -3522,7 +3922,6 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
 
 
     return float(Ssav)
-
 
 
 # Update docstrings
@@ -3860,134 +4259,6 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
 
     return func_av
 
-# TODO Add updown endpoint.
-# TODO Add limits of the resonances at small separations from the endpoint paper
-
-
-def rupdown(q, chi1, chi2):
-    """
-    The critical separations r_ud+/- marking the region of the up-down precessional instability.
-
-    Call
-    ----
-    rudp,rudm = rupdown(q,chi1,chi2)
-
-    Parameters
-    ----------
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    rudp: float
-        Outer orbital separation in the up-down instability.
-    rudm: float
-        Inner orbital separation in the up-down instability.
-    """
-
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-
-    #Ignore q=1 "divide by zero" warning here
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=RuntimeWarning)
-        rudp = (chi1**0.5+(q*chi2)**0.5)**4/(1-q)**2
-        rudm = (chi1**0.5-(q*chi2)**0.5)**4/(1-q)**2
-
-    return np.stack([rudp, rudm])
-
-
-def omegasq_aligned(r, q, chi1, chi2, which):
-    """
-    Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
-
-    Call
-    ----
-    omegasq = omegasq_aligned(r,q,chi1,chi2,which)
-
-    Parameters
-    ----------
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    which: string
-        Select function behavior.
-
-    Returns
-    -------
-    omegasq: float
-        Squared frequency.
-    """
-
-    q = np.atleast_1d(q)
-
-    # These are all the valid input flags
-    uulabels = np.array(['uu', 'up-up', 'upup', '++'])
-    udlabels = np.array(['ud', 'up-down', 'updown', '+-'])
-    dulabels = np.array(['du', 'down-up', 'downup', '-+'])
-    ddlabels = np.array(['dd', 'down-down', 'downdown', '--'])
-
-    assert np.isin(which, np.concatenate([uulabels, udlabels, dulabels, ddlabels])).all(), "Set `which` flag to either uu, ud, du, or dd."
-
-    # +1 if primary is co-aligned, -1 if primary is counter-aligned
-    alpha1 = np.where(np.isin(which, np.concatenate([uulabels, udlabels])), 1, -1)
-    # +1 if secondary is co-aligned, -1 if secondary is counter-aligned
-    alpha2 = np.where(np.isin(which, np.concatenate([uulabels, dulabels])), 1, -1)
-
-    L = eval_L(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
-    # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1
-    omegasq = (3 * q**5 / (2 * (1 + q)**11 * L**7))**2 * (L - (q *
-        alpha1 * S1 + alpha2 * S2) / (1 + q))**2 * (L**2 * (1 - q)**2 -
-        2 * L * (q * alpha1 * S1 - alpha2 * S2) * (1 - q) + (q * alpha1 *
-        S1 + alpha2 * S2)**2)
-
-    return omegasq
-
-
-def widenutation(q, chi1, chi2):
-    """
-    The critical separation r_wide below which the binary component with
-    smaller dimensionless spin may undergo wide nutations.
-
-    Call
-    ----
-    r_wide = widenutation(q,chi1,chi2)
-
-    Parameters
-    ----------
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    r_wide: float
-        Orbital separation where wide nutations becomes possible.
-    """
-
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-
-    rwide = ((q*chi2 - chi1) / (1-q))**2
-
-    return rwide
-
-# TODO: write function with values of J and chieff where wide nutation happens
 
 ################ Orbit-averaged evolution ################
 
@@ -4086,7 +4357,6 @@ def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
     # Pack outputs
     return np.concatenate([dLhdv, dS1hdv, dS2hdv, [dtdv]])
 
-
 # TODO: update docstrings when you fix the quadrupole_formula flag
 #Fix v instead of v initial v final
 # Pass rtol and atol
@@ -4177,7 +4447,6 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, quadru
     ODEsolution = np.array(list(map(_compute, Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2)))
 
     return ODEsolution
-
 
 # TODO: update docstrings when you fix the quadrupole_formula flag
 # Docstrings odeing_kwargs
@@ -4493,274 +4762,6 @@ def inspiral(*args, which=None, **kwargs):
     else:
         raise ValueError("`which` needs to be `precav`, `orbav` or `hybrid`.")
 
-
-################ chip and other stuff ################
-
-
-def chip_terms(theta1, theta2, q, chi1, chi2):
-    """
-    Compute the two terms entering the effective precessing spin chip.
-
-    Call
-    ----
-    chipterm1,chipterm2 = chip_terms(theta1,theta2,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    chipterm1: float
-        Term in effective precessing spin chip.
-    chipterm2: float
-        Term in effective precessing spin chip.
-    """
-
-    theta1 = np.atleast_1d(theta1)
-    theta2 = np.atleast_1d(theta2)
-    q = np.atleast_1d(q)
-
-    chipterm1 = chi1*np.sin(theta1)
-    omegatilde = q*(4*q+3)/(4+3*q)
-    chipterm2 = omegatilde * chi2*np.sin(theta2)
-
-    return np.stack([chipterm1, chipterm2])
-
-
-def eval_chip_heuristic(theta1, theta2, q, chi1, chi2):
-    """
-    Heuristic definition of the effective precessing spin chip (Schmidt et al 2015), see arxiv:2011.11948. This definition inconsistently averages over some, but not all, variations on the precession timescale.
-
-    Call
-    ----
-    chip = eval_chip_heuristic(theta1,theta2,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    chip: float
-        Effective precessing spin chip.
-    """
-
-    term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
-    chip = np.maximum(term1, term2)
-    return chip
-
-
-def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
-    """
-    Generalized definition of the effective precessing spin chip, see arxiv:2011.11948. This definition retains all variations on the precession timescale.
-
-    Call
-    ----
-    chip = eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    chip: float
-        Effective precessing spin chip.
-    """
-
-    term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
-    chip = (term1**2 + term2**2 + 2*term1*term2*np.cos(deltaphi))**0.5
-    return chip
-
-
-def eval_chip_asymptotic(theta1, theta2, q, chi1, chi2):
-    """
-    Asymptotic definition of the effective precessing spin chip, see arxiv:2011.11948. This definition is valid when spin-spin couplings can be neglected, notably at infinitely large separations.
-
-    Call
-    ----
-    chip = eval_chip_asymptotic(theta1,theta2,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    chip: float
-        Effective precessing spin chip.
-    """
-
-    term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
-    chip = (np.abs(term1-term2) * scipy.special.ellipe(-4*term1*term2/(term1-term2)**2) + np.abs(term1+term2) * scipy.special.ellipe(4*term1*term2/(term1+term2)**2))/np.pi
-    return chip
-
-
-def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, method='quadrature', Nsamples=1e4):
-    """
-    Averaged definition of the effective precessing spin chip, see arxiv:2011.11948. This definition consistently averages over all variations on the precession timescale. Valid inputs are one of the following (but not both)
-    - theta1, theta2, deltaphi
-    - J, chieff
-    The parameters r, q, chi1, and chi2 should always be provided. The keywords arguments method and Nsamples are passed directly to `precession_average`.
-
-    Call
-    ----
-    chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4)
-
-    Parameters
-    ----------
-    theta1: float, optional (default: None)
-        Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float, optional (default: None)
-        Angle between the projections of the two spins onto the orbital plane.
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
-    r: float, optional (default: None)
-        Binary separation.
-    chieff: float, optional (default: None)
-        Effective spin.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    method: string (default: 'quadrature')
-        Either 'quadrature' or 'montecarlo'
-    Nsamples: integer (default: 1e4)
-        Number of Monte Carlo samples.
-
-    Returns
-    -------
-    chip: float
-        Effective precessing spin chip.
-    """
-
-    if r is None or q is None or chi1 is None or chi2 is None:
-        raise TypeError("Please provide r, q, chi1, and chi2.")
-
-    if theta1 is not None and theta2 is not None and deltaphi is not None and J is None and chieff is None:
-        # cyclesign doesn't matter here. Outout S is not needed
-        _, J, chieff = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
-
-    elif theta1 is None and theta2 is None and deltaphi is None and J is not None and chieff is not None:
-        pass
-
-    else:
-        raise TypeError("Please provide either (theta1,theta2,deltaphi) or (J,chieff).")
-
-    def _integrand(S, J, r, chieff, q, chi1, chi2):
-        theta1, theta2, deltaphi = conserved_to_angles(S, J, r, chieff, q, chi1, chi2)
-        chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
-        return chip_integrand
-
-    chip = precession_average(J, r, chieff, q, chi1, chi2, _integrand, J, r, chieff, q, chi1, chi2, method=method, Nsamples=Nsamples)
-
-    return chip
-
-
-def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", method='quadrature', Nsamples=1e4):
-    """
-    Compute the effective precessing spin chip, see arxiv:2011.11948. The keyword `which` one of the following definitions:
-    - `heuristic`, as in Schmidt et al 2015. Required inputs: theta1,theta2,q,chi1,chi2
-    - `generalized`, retail all precession-timescale variations. Required inputs: theta1,theta2,deltaphi,q,chi1,chi2
-    - `asymptotic`, large-separation limit. Required inputs: theta1,theta2,q,chi1,chi2
-    - `averaged` (default), averages over all precession-timescale variations. Required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (J,r,chieff,q,chi1,chi2). The additional keywords `methods` and `Nsamples` are passed to `precession_average`.
-
-    Call
-    ----
-    chip = eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,which="averaged",method='quadrature',Nsamples=1e4)
-
-    Parameters
-    ----------
-    theta1: float, optional (default: None)
-        Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float, optional (default: None)
-        Angle between the projections of the two spins onto the orbital plane.
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
-    r: float, optional (default: None)
-        Binary separation.
-    chieff: float, optional (default: None)
-        Effective spin.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    which: string, optional (default: "averaged")
-        Select function behavior.
-    method: string (default: 'quadrature')
-        Either 'quadrature' or 'montecarlo'
-    Nsamples: integer (default: 1e4)
-        Number of Monte Carlo samples.
-
-    Returns
-    -------
-    chip: float
-        Effective precessing spin chip.
-    """
-
-    if which == 'heuristic':
-        chip = eval_chip_heuristic(theta1, theta2, q, chi1, chi2)
-
-    elif which == 'generalized':
-        chip = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
-
-    elif which == 'asymptotic':
-        chip = eval_chip_asymptotic(theta1, theta2, q, chi1, chi2)
-
-    elif which == 'averaged':
-        chip = eval_chip_averaged(theta1=theta1, theta2=theta2, deltaphi=deltaphi, J=J, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2, method='quadrature', Nsamples=1e4)
-
-    else:
-        raise ValueError("`which` needs to be one of the following: `heuristic`, `generalized`, `asymptotic`, `averaged`.")
-
-    return chip
 
 
 # TODO: insert flag to select PN order
