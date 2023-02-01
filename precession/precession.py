@@ -1037,20 +1037,28 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
         Cosine of the angle between the projections of the two spins onto the orbital plane.
     """
 
-    deltachi = np.atleast_1d(deltachi)
-    kappa = np.atleast_1d(kappa)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    deltachi = np.atleast_1d(deltachi).astype(float)
+    kappa = np.atleast_1d(kappa).astype(float)
+    r = np.atleast_1d(r).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
-    # Machine generated with eq_generator.nb
-    cosdeltaphi = q**(-1) * ((4 * q**2 * (chi2)**2 + -1 * ((1 + q))**2 * \
-    ((-1 * deltachi + chieff))**2) * (4 * (chi1)**2 + -1 * ((1 + q))**2 * \
-    ((deltachi + chieff))**2))**(-1/2) * (-2 * ((chi1)**2 + q**4 * \
-    (chi2)**2) + (2 * q * (1 + q) * (r)**(1/2) * (-1 * (1 + -1 * q) * \
-    deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * chieff)) + -1 * q * \
-    ((1 + q))**2 * (-1 * (deltachi)**2 + chieff**2)))
+
+    with warnings.catch_warnings():
+        
+        # If there are infinitely large separation in the array the following will throw a warning. You can safely ignore it because that value is not used, see below  
+        if np.inf in r:
+            warnings.filterwarnings("ignore", category=RuntimeWarning)
+ 
+        # Machine generated with eq_generator.nb
+        cosdeltaphi = q**(-1) * ((4 * q**2 * (chi2)**2 + -1 * ((1 + q))**2 * \
+        ((-1 * deltachi + chieff))**2) * (4 * (chi1)**2 + -1 * ((1 + q))**2 * \
+        ((deltachi + chieff))**2))**(-1/2) * (-2 * ((chi1)**2 + q**4 * \
+        (chi2)**2) + (2 * q * (1 + q) * (r)**(1/2) * (-1 * (1 + -1 * q) * \
+        deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * chieff)) + -1 * q * \
+        ((1 + q))**2 * (-1 * (deltachi)**2 + chieff**2)))
 
     return cosdeltaphi
 
@@ -1392,7 +1400,6 @@ def eval_cyclesign(ddeltachidt=None, deltaphi=None, Lvec=None, S1vec=None, S2vec
     return cyclesign
 
 
-# TODO: fix for r to infinity
 def conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1):
     """
     Convert conserved quantities (S,J,chieff) into angles (theta1,theta2,deltaphi).
@@ -1437,7 +1444,6 @@ def conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
     return np.stack([theta1, theta2, deltaphi])
 
 
-# TODO: check for r to infinity but should be ok
 def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False):
     """
     Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,chieff).
@@ -1486,7 +1492,7 @@ def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=
     chieff = eval_chieff(theta1, theta2, q, chi1, chi2)
 
     if full_output:
-        cyclesign = eval_cyclesign(deltaphi=deltaphi)
+        cyclesign = np.where(r==np.inf,np.nan,eval_cyclesign(deltaphi=deltaphi))
         return np.stack([deltachi, kappa, chieff, cyclesign])
 
     else:
@@ -5482,14 +5488,21 @@ if __name__ == '__main__':
 
     theta1=2
     theta2=0.8
-    deltaphi=-0.79
-    r=10
-    q=0.6
+    deltaphi=1
+    r=np.inf
+    q=1
     chi1=0.4
     chi2=0.8
 
     deltachi,kappa,chieff,cyclesign=angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
     print(deltachi,kappa,chieff,cyclesign)
+
+    #print((2*kappa - chieff)*(1+q)/(1-q))
+
+    theta1,theta2,deltaphi= conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
+
+    print(theta1,theta2,deltaphi)
+
 
 
 
