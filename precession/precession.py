@@ -169,7 +169,7 @@ def rotate_nested(vec, align_zaxis, align_xzplane):
     angle1 = np.arccos(align_zaxis[:,2])
     vec1 = np.cross(align_zaxis,[0,0,1])
     vec1 = normalize_nested(vec1)
-    r1 = scipy.spatial.transform.Rotation.from_rotvec(angle1 * vec1)
+    r1 = scipy.spatial.transform.Rotation.from_rotvec(angle1[:,None] * vec1)
 
     align_xzplane = r1.apply(align_xzplane)    
     align_xzplane[:,2]=0
@@ -178,7 +178,7 @@ def rotate_nested(vec, align_zaxis, align_xzplane):
     angle2= -np.sign(align_xzplane[:,1])*np.arccos(align_xzplane[:,0])
 
     vec2 = np.array([0,0,1])
-    r2 = scipy.spatial.transform.Rotation.from_rotvec(angle2 * vec2)
+    r2 = scipy.spatial.transform.Rotation.from_rotvec(angle2[:,None] * vec2)
     
     vecrot = r2.apply(r1.apply(vec))
 
@@ -590,6 +590,7 @@ def eval_chi2(q, S2):
 
     return chi2
 
+
 # TODO: remove
 # TODO: check all places where I use spinmags and rewrite using chi1 chi2 directly
 def spinmags(q, chi1, chi2):
@@ -787,7 +788,7 @@ def eval_chieff(theta1, theta2, q, chi1, chi2):
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    deltachi = (chi1*np.cos(theta1) + q*chi2*np.cos(theta2))/(1+q)
+    chieff = (chi1*np.cos(theta1) + q*chi2*np.cos(theta2))/(1+q)
 
     return chieff
 
@@ -1260,17 +1261,21 @@ def eval_kappa(theta1=None, theta2=None, deltaphi=None, J=None, r=None, q=None, 
         L = eval_L(r, q)
         kappa = (J**2 - L**2) / (2*L)
 
-    if theta1 not None and theta2 not None and deltaphi not None and J is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
+    elif theta1 is not None and theta2 is not None and deltaphi is not None and J is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
         theta1 = np.atleast_1d(theta1)
         theta2 = np.atleast_1d(theta2)
         deltaphi = np.atleast_1d(deltaphi)
+        r = np.atleast_1d(r)
         q = np.atleast_1d(q)
         chi1 = np.atleast_1d(chi1)
+        chi2 = np.atleast_1d(chi2)
 
         kappa = (chi1 * np.cos(theta1) + q**2 * chi2 * np.cos(theta2) )/(1+q)**2 + \
                 (chi1**2 + q**4 *chi2**2 + 2*chi1*chi2*q**2 * (np.cos(theta1)*np.cos(theta2) + np.cos(deltaphi)*np.sin(theta1)*np.sin(theta2))) / (2*q*(1+q)**2*r**(1/2))
 
+    else:
+        TypeError("Please provide provide iether (J,r,q) or (theta1,theta2,deltaphi,q,chi1,chi2).")
 
     return kappa
 
@@ -1478,7 +1483,7 @@ def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=
     """
 
     deltachi = eval_deltachi(theta1, theta2, q, chi1, chi2)
-    kappa = eval_kappa(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2):
+    kappa = eval_kappa(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
     chieff = eval_chieff(theta1, theta2, q, chi1, chi2)
 
     if full_output:
@@ -1540,26 +1545,26 @@ def vectors_to_Jframe(Lvec, S1vec, S2vec):
 
     Jvec = Lvec + S1vec + S2vec
 
-    rotation = vec: lambda rotate_nested(vec, Jvec, Lvec)
+    rotation = lambda vec: rotate_nested(vec, Jvec, Lvec)
 
-    Lvec = rotation(Lvec)
-    S1vec = rotation(S1vec)
-    S2vec = rotation(S2vec)
+    Lvecrot = rotation(Lvec)
+    S1vecrot = rotation(S1vec)
+    S2vecrot = rotation(S2vec)
 
-    return np.stack([Lvec, S1vec, S2vec])
+    return np.stack([Lvecrot, S1vecrot, S2vecrot])
 
 
 def vectors_to_Lframe(Lvec, S1vec, S2vec):
 
     Jvec = Lvec + S1vec + S2vec
 
-    rotation = vec: lambda rotate_nested(vec, Lvec, S1vec)
+    rotation = lambda vec: rotate_nested(vec, Lvec, S1vec)
 
-    Lvec = rotation(Lvec)
-    S1vec = rotation(S1vec)
-    S2vec = rotation(S2vec)
+    Lvecrot = rotation(Lvec)
+    S1vecrot = rotation(S1vec)
+    S2vecrot = rotation(S2vec)
 
-    return np.stack([Lvec, S1vec, S2vec])
+    return np.stack([Lvecrot, S1vecrot, S2vecrot])
 
 
 def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
@@ -1681,7 +1686,7 @@ def conserved_to_Jframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
 
 
 
-def vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=False)
+def vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=False):
 
     L = norm_nested(Lvec)
     S1 = norm_nested(S1vec)
@@ -1689,7 +1694,7 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=False)
 
     r = eval_r(L=L,q=q)
     chi1 = eval_chi1(q,S1)
-    chi2 = eval_chi1(q,S2)
+    chi2 = eval_chi2(q,S2)
 
     theta1,theta2,deltaphi = vectors_to_angles(Lvec, S1vec, S2vec)
 
@@ -5213,31 +5218,31 @@ if __name__ == '__main__':
     # print(u)
 
 
-    q=0.7
-    chi1=0.6
-    chi2=0.9
-    chieff=0.
-    r=np.geomspace(1000000,10,100)
-    r[0]=np.inf
-    r=r[::-1]
-    kappatilde = 0.8
-    deltachitilde = 0.7
-    kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
-    #print(kappa)
-    #kappa=0.19702426300035386
-    u=eval_u(r=r,q=tiler(q,r))
-    #u = eval_u([r,1000,100,10], [q,q,q,q])
-    kappasol = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
+    # q=0.7
+    # chi1=0.6
+    # chi2=0.9
+    # chieff=0.
+    # r=np.geomspace(1000000,10,100)
+    # r[0]=np.inf
+    # r=r[::-1]
+    # kappatilde = 0.8
+    # deltachitilde = 0.7
+    # kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
+    # #print(kappa)
+    # #kappa=0.19702426300035386
+    # u=eval_u(r=r,q=tiler(q,r))
+    # #u = eval_u([r,1000,100,10], [q,q,q,q])
+    # kappasol = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
 
 
-    #print(kappasol)
+    # #print(kappasol)
 
-    #deltachi = deltachisampling(kappasol[-1], r[-1], chieff, q, chi1, chi2)
-    #print(deltachi)
+    # #deltachi = deltachisampling(kappasol[-1], r[-1], chieff, q, chi1, chi2)
+    # #print(deltachi)
 
-    #alpha = eval_alpha(kappasol[-2], r[-2], chieff, q, chi1, chi2)
+    # #alpha = eval_alpha(kappasol[-2], r[-2], chieff, q, chi1, chi2)
     
-    alpha = eval_alpha(kappasol, r, chieff, q, chi1, chi2)
+    # alpha = eval_alpha(kappasol, r, chieff, q, chi1, chi2)
 
     #print(alpha[-1],alpha[-2])
 
@@ -5476,6 +5481,55 @@ if __name__ == '__main__':
     # print(kappalimits(r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2,enforce=True))
     #print(anglesresonances(r, chieff, q, chi1, chi2))
     #print(tiler(0, [4]))
+
+
+
+
+
+
+    # theta1=2
+    # theta2=0.8
+    # deltaphi=-0.79
+    # r=10
+    # q=0.6
+    # chi1=0.4
+    # chi2=0.8
+
+    # deltachi,kappa,chieff,cyclesign=angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
+    # print(deltachi,kappa,chieff,cyclesign)
+
+
+
+    # Lvec,S1vec,S2vec = angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
+
+    # #print(Lvec,S1vec,S2vec,Lvec+S1vec+S2vec)
+
+    # #print(vectors_to_angles(Lvec,S1vec,S2vec))
+
+    # print(vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=True))
+
+
+    # theta1=[2,2]
+    # theta2=[0.8,0.8]
+    # deltaphi=[-0.79,-0.79]
+    # r=[10,10]
+    # q=[0.6,0.6]
+    # chi1=[0.4,0.4]
+    # chi2=[0.8,0.8]
+
+    # deltachi,kappa,chieff,cyclesign=angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
+    # print(deltachi,kappa,chieff,cyclesign)
+
+
+
+    # Lvec,S1vec,S2vec = angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
+
+    # print(Lvec,S1vec,S2vec,Lvec+S1vec+S2vec)
+
+    # print(vectors_to_angles(Lvec,S1vec,S2vec))
+
+    # print(vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=True))
+
 
 
 
