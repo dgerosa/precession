@@ -2188,7 +2188,6 @@ def eval_kappa(J, r, q):
     return kappa
 
 
-
 # TODO: This function and the next one needs to be merged together
 def eval_S_from_deltachi(deltachi, kappa, r, chieff, q):
 
