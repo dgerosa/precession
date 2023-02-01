@@ -1392,7 +1392,6 @@ def eval_cyclesign(ddeltachidt=None, deltaphi=None, Lvec=None, S1vec=None, S2vec
     return cyclesign
 
 
-
 # TODO: fix for r to infinity
 def conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1):
     """
@@ -1665,7 +1664,6 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     return np.stack([Lvec, S1vec, S2vec])
 
 
-
 def conserved_to_Lframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1):
 
     theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
@@ -1675,7 +1673,6 @@ def conserved_to_Lframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
     return np.stack([Lvec, S1vec, S2vec])
 
 
-
 def conserved_to_Jframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1):
 
     theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
@@ -1683,7 +1680,6 @@ def conserved_to_Jframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
     Lvec, S1vec, S2vec = angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
 
     return np.stack([Lvec, S1vec, S2vec])
-
 
 
 def vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=False):
@@ -1707,9 +1703,7 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=False):
         return np.stack([deltachi, kappa, chieff])
 
 
-
 ## TODO. Still need to understand what I was doing with this inertial thing
-
 def conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
     """
     Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
@@ -1797,7 +1791,6 @@ def angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2):
     Lvec, S1vec, S2vec = conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
 
     return np.stack([Lvec, S1vec, S2vec])
-
 
 
 ################ Spin-orbit resonances ################
@@ -5487,16 +5480,16 @@ if __name__ == '__main__':
 
 
 
-    # theta1=2
-    # theta2=0.8
-    # deltaphi=-0.79
-    # r=10
-    # q=0.6
-    # chi1=0.4
-    # chi2=0.8
+    theta1=2
+    theta2=0.8
+    deltaphi=-0.79
+    r=10
+    q=0.6
+    chi1=0.4
+    chi2=0.8
 
-    # deltachi,kappa,chieff,cyclesign=angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
-    # print(deltachi,kappa,chieff,cyclesign)
+    deltachi,kappa,chieff,cyclesign=angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
+    print(deltachi,kappa,chieff,cyclesign)
 
 
 
@@ -5529,6 +5522,8 @@ if __name__ == '__main__':
     # print(vectors_to_angles(Lvec,S1vec,S2vec))
 
     # print(vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=True))
+
+
 
 
 
