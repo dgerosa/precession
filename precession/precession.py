@@ -350,8 +350,7 @@ def ismonotonic(vec, which):
 
 
 
-
-################ Dynamics on the precession timescale ################
+################ Some definitions ################
 
 
 def eval_m1(q):
@@ -695,40 +694,7 @@ def eval_u(r, q):
     return u
 
 
-# TODO: Do we need this?
-def Jlimits_LS1S2(r, q, chi1, chi2):
-    """
-    Limits on the magnitude of the total angular momentum due to the vector relation J=L+S1+S2.
-
-    Call
-    ----
-    Jmin,Jmax = Jlimits_LS1S2(r,q,chi1,chi2)
-
-    Parameters
-    ----------
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Jmin: float
-        Minimum value of the total angular momentum J.
-    Jmax: float
-        Maximum value of the total angular momentum J.
-    """
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    L = eval_L(r, q)
-    Jmin = np.maximum.reduce([np.zeros(L.shape), L-S1-S2, np.abs(S1-S2)-L])
-    Jmax = L+S1+S2
-
-    return np.stack([Jmin, Jmax])
+################ Spin-orbit resonances ################
 
 
 def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
@@ -1264,70 +1230,12 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     return np.stack([kappamin, kappamax])
 
 
-
 def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
 
     kappatilde = np.atleast_1d(kappatilde)
     kappaminus, kappaplus = kapparesonances(r, chieff, q, chi1, chi2)
     kappa = inverseaffine(kappatilde,kappaminus,kappaplus)
     return kappa
-
-
-# TODO: remove
-def Jlimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False):
-    """
-    Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
-    - If r, q, chi1, and chi2 are provided, the limits are given by J=L+S1+S2.
-    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
-    The boolean flag enforce allows raising an error in case the inputs are not compatible.
-
-    Call
-    ----
-    Jmin,Jmax = Jlimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
-
-    Parameters
-    ----------
-    r: float, optional (default: None)
-        Binary separation.
-    chieff: float, optional (default: None)
-        Effective spin.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    enforce: boolean, optional (default: False)
-        If True raise errors, if False raise warnings.
-
-    Returns
-    -------
-    Jmin: float
-        Minimum value of the total angular momentum J.
-    Jmax: float
-        Maximum value of the total angular momentum J.
-    """
-
-    if r is not None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
-        Jmin, Jmax = Jlimits_LS1S2(r, q, chi1, chi2)
-
-    elif r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
-        Jmin, Jmax = Jresonances(r, chieff, q, chi1, chi2)
-        # Check precondition
-        Jmin_cond, Jmax_cond = Jlimits_LS1S2(r, q, chi1, chi2)
-
-        if (Jmin > Jmin_cond).all() and (Jmax < Jmax_cond).all():
-            pass
-        else:
-            if enforce:
-                raise ValueError("Input values are not compatible [Jlimits].")
-            else:
-                warnings.warn("Input values are not compatible [Jlimits].", Warning)
-
-    else:
-        raise TypeError("Provide either (r,q,chi1,chi2) or (r,chieff,q,chi1,chi2).")
-
-    return np.stack([Jmin, Jmax])
 
 
 def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False, **kwargs):
@@ -1508,60 +1416,7 @@ def anglesresonances(r, chieff, q, chi1, chi2):
     return np.stack([theta1atmin, theta2atmin, deltaphiatmin, theta1atmax, theta2atmax, deltaphiatmax])
 
 
-# I think this is not necessary anymore, because chieffresonances is gone
-def chiefflimits(J=None, r=None, q=None, chi1=None, chi2=None, enforce=False):
-    """
-    Limits on the projected effective spin. The contraints considered depend on the inputs provided.
-    - If q, chi1, and chi2 are provided, enforce chieff = (1+q)S1.L + (1+1/q)S2.L.
-    - If J, r, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
-    The boolean flag enforce allows raising an error in case the inputs are not compatible.
-
-    Call
-    ----
-    chieffmin,chieffmax = chiefflimits(J=None,r=None,q=None,chi1=None,chi2=None,enforce=False)
-
-    Parametersell
-    ----------
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
-    r: float, optional (default: None)
-        Binary separation.
-    q: float, optional (default: None)
-        Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    enforce: boolean, optional (default: False)
-        If True raise errors, if False raise warnings.
-
-    Returns
-    -------
-    chieffmin: float
-        Minimum value of the effective spin chieff.
-    chieffmax: float
-        Maximum value of the effective spin chieff.
-    """
-
-    if J is None and r is None and q is not None and chi1 is not None and chi2 is not None:
-        chieffmin, chieffmax = chiefflimits_definition(q, chi1, chi2)
-
-    elif J is not None and r is not None and q is not None and chi1 is not None and chi2 is not None:
-        chieffmin, chieffmax = chieffresonances(J, r, q, chi1, chi2)
-        # Check precondition
-        chieffmin_cond, chieffmax_cond = chiefflimits_definition(q, chi1, chi2)
-        if (chieffmin > chieffmin_cond).all() and (chieffmax < chieffmax_cond).all():
-            pass
-        else:
-            if enforce:
-                raise ValueError("Input values are not compatible [chiefflimits].")
-            else:
-                warnings.warn("Input values are not compatible [chiefflimits].", Warning)
-
-    else:
-        raise TypeError("Provide either (q,chi1,chi2) or (J,r,q,chi1,chi2).")
-
-    return np.stack([chieffmin, chieffmax])
+################ Precession parametrization ################
 
 
 def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
@@ -1669,7 +1524,6 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
         return precomputedroots
 
 
-
 def deltachilimits_rectangle(chieff, q, chi1, chi2):
     """
     Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
@@ -1714,7 +1568,6 @@ def deltachilimits_rectangle(chieff, q, chi1, chi2):
     deltachimax = np.minimum( -chieff + 2*chi1/(1+q), chieff + 2*q*chi2/(1+q))
 
     return np.stack([deltachimin, deltachimax])
-
 
 
 def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
@@ -1797,88 +1650,8 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
     return deltachires
 
 
-# TODO: Check inter-compatibility of Slimits, Jlimits, chiefflimits
-# TODO: check docstrings
-# Tags for each limit check that fails?
-# Davide: Does this function uses only Jlimits and chiefflimits or also Slimits? Move later?
-def limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
-    """
-    Check if the inputs are consistent with the geometrical constraints.
+################ Evaluations and conversions ################
 
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float, optional
-        Magnitude of the total angular momentum.
-    r: float, optional
-        Binary separation.
-    chieff: float, optional
-        Effective spin
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float, optional
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float, optional
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    -------
-    check: bool
-        True if the given parameters are compatible with each other, false if not.
-    """
-    # q, ch1, chi2
-    # 0, 1
-
-    # J: r, chieff, q, chi1, chi2
-    # r, q, chi1, chi2 -> Jlimits_LS1S2
-    # r, chieff, q, chi1, chi2 -> Jresonances
-
-    # chieff: J, r, q, chi1, chi2
-    # q, chi1, chi2 -> chiefflimits_definition
-    # J, r, q, chi1, chi2 -> chieffresonances
-
-    # S: J, r, chieff, q, chi1, chi2
-    # q, chi1, chi2 -> Slimits_S1S2
-    # J, r, q -> Slimits_LJ
-    # J, r, q, chi1, chi2 -> Slimits_LJS1S2
-    # J, r, chieff, q, chi1, chi2 -> Slimits_plusminus
-
-    def _limits_check(testvalue, interval):
-        """Check if a value is within a given interval"""
-        return np.logical_and(testvalue >= interval[0], testvalue <= interval[1])
-
-    Slim = Slimits(J, r, chieff, q, chi1, chi2)
-    Sbool = _limits_check(S, Slim)
-
-    Jlim = Jlimits(r, chieff, q, chi1, chi2)
-    Jbool = _limits_check(J, Jlim)
-
-    chiefflim = chiefflimits(J, r, q, chi1, chi2)
-    chieffbool = _limits_check(chieff, chiefflim)
-
-    check = all((Sbool, Jbool, chieffbool))
-
-    if r is not None:
-        rbool = _limits_check(r, [10.0, np.inf])
-        check = all((check, rbool))
-
-    if q is not None:
-        qbool = _limits_check(q, [0.0, 1.0])
-        check = all((check, qbool))
-
-    if chi1 is not None:
-        chi1bool = _limits_check(chi1, [0.0, 1.0])
-        check = all((check, chi1bool))
-
-    if chi2 is not None:
-        chi2bool = _limits_check(chi2, [0.0, 1.0])
-        check = all((check, chi2bool))
-
-    return check
-
-
-# Evaluations and conversions
 # TODO: deltachi instead of S here
 def eval_chieff(theta1=None, theta2=None, S=None, varphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
     """
@@ -2383,6 +2156,39 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
     return J
 
 
+def eval_kappa(J, r, q):
+    """
+    Change of dependent variable to regularize the infinite orbital separation
+    limit of the precession-averaged evolution equation.
+
+    Call
+    ----
+    kappa = eval_kappa(J,r,q)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+
+    Returns
+    -------
+    kappa: float
+        Regularized angular momentum (J^2-L^2)/(2L).
+    """
+
+    J = np.atleast_1d(J)
+
+    L = eval_L(r, q)
+    kappa = (J**2 - L**2) / (2*L)
+
+    return kappa
+
+
+
 # TODO: This function and the next one needs to be merged together
 def eval_S_from_deltachi(deltachi, kappa, r, chieff, q):
 
@@ -2437,221 +2243,9 @@ def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
     return S
 
 
-def eval_kappa(J, r, q):
-    """
-    Change of dependent variable to regularize the infinite orbital separation
-    limit of the precession-averaged evolution equation.
-
-    Call
-    ----
-    kappa = eval_kappa(J,r,q)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-
-    Returns
-    -------
-    kappa: float
-        Regularized angular momentum (J^2-L^2)/(2L).
-    """
-
-    J = np.atleast_1d(J)
-
-    L = eval_L(r, q)
-    kappa = (J**2 - L**2) / (2*L)
-
-    return kappa
-
-
-# TODO: Remove?
-def eval_kappainf(theta1inf, theta2inf, q, chi1, chi2):
-    """
-    Infinite orbital-separation limit of the regularized momentum kappa.
-
-    Call
-    ----
-    kappainf = eval_kappainf(theta1inf,theta2inf,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1inf: float
-        Asymptotic value of the angle between orbital angular momentum and primary spin.
-    theta2inf: float
-        Asymptotic value of the angle between orbital angular momentum and secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    kappainf: float
-        Asymptotic value of the regularized momentum kappa.
-    """
-
-    theta1inf = np.atleast_1d(theta1inf)
-    theta2inf = np.atleast_1d(theta2inf)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    kappainf = S1*np.cos(theta1inf) + S2*np.cos(theta2inf)
-
-    return kappainf
-
-# TODO: remove and merge with eval_costheta1
-def eval_costheta1inf(kappainf, chieff, q, chi1, chi2):
-    """
-    Infinite orbital separation limit of the cosine of the angle between the
-    orbital angular momentum and the primary spin.
-
-    Call
-    ----
-    costheta1inf = eval_costheta1inf(kappainf,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    kappainf: float
-        Asymptotic value of the regularized momentum kappa.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    costheta1inf: float
-        Cosine of the asymptotic angle between orbital angular momentum and primary spin.
-    """
-
-    kappainf = np.atleast_1d(kappainf)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    costheta1inf = (-chieff + kappainf*(1+1/q)) / (S1*(1/q-q))
-
-    return costheta1inf
-
-# TODO: remove after you merged the previous one
-def eval_theta1inf(kappainf, chieff, q, chi1, chi2):
-    """
-    Infinite orbital separation limit of the angle between the orbital angular
-    momentum and the primary spin.
-
-    Call
-    ----
-    theta1inf = eval_theta1inf(kappainf,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    kappainf: float
-        Asymptotic value of the regularized momentum kappa.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    theta1inf: float
-        Asymptotic value of the angle between orbital angular momentum and primary spin.
-    """
-
-    costheta1inf = eval_costheta1inf(kappainf, chieff, q, chi1, chi2)
-    theta1inf = np.arccos(costheta1inf)
-
-    return theta1inf
-
-# TODO: remove and merge with eval_costheta2
-def eval_costheta2inf(kappainf, chieff, q, chi1, chi2):
-    """
-    Infinite orbital separation limit of the cosine of the angle between the
-    orbital angular momentum and the secondary spin.
-
-    Call
-    ----
-    theta1inf = eval_costheta2inf(kappainf,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    kappainf: float
-        Asymptotic value of the regularized momentum kappa.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    theta1inf: float
-        Asymptotic value of the angle between orbital angular momentum and primary spin.
-    """
-
-    kappainf = np.atleast_1d(kappainf)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-
-    S1, S2 = spinmags(q, chi1, chi2)
-    costheta2inf = (chieff - kappainf*(1+q)) / (S2*(1/q-q))
-
-    return costheta2inf
-
-
-# TODO: remove after you merged the previous one
-def eval_theta2inf(kappainf, chieff, q, chi1, chi2):
-    """
-    Infinite orbital separation limit of the angle between the orbital angular
-    momentum and the secondary spin.
-
-    Call
-    ----
-    theta2inf = eval_theta2inf(kappainf,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    kappainf: float
-        Asymptotic value of the regularized momentum kappa.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    theta2inf: float
-        Asymptotic value of the angle between orbital angular momentum and secondary spin.
-    """
-
-    costheta2inf = eval_costheta2inf(kappainf, chieff, q, chi1, chi2)
-    theta2inf = np.arccos(costheta2inf)
-
-    return theta2inf
-
 
 #TODO regen docstrings
+# TODO: this can be made easier using the sign a single term from the dphi expression
 def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None):
     """
     Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
@@ -2697,6 +2291,7 @@ def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=
         morphs = np.where(np.logical_or(morphs == 'C+', morphs == 'C-'), 'C', morphs)
 
     return morphs
+
 
 # TODO: check this very carefully. The sign of dSdt and ddeltachidt are different!
 def eval_cyclesign(dSdt=None, deltaphi=None, varphi=None, Lvec=None, S1vec=None, S2vec=None):
@@ -3437,7 +3032,6 @@ def deltachitildeav(m,tol=1e-7):
     return coeff
 
 
-
 def ddchidt_prefactor(r, chieff, q):
     """
     Numerical prefactor to the S derivative.
@@ -3672,6 +3266,192 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
     # deltachi has shape (M, N).
     deltachi = deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
     return deltachi.T
+
+
+
+
+################ Dynamics in an intertial frame ################
+
+
+def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
+    """
+    Numerical prefactors entering the precession frequency.
+
+    Call
+    ----
+    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor_old(J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    mathcalC0: float
+        Prefactor in the OmegaL equation.
+    mathcalCplus: float
+        Prefactor in the OmegaL equation.
+    mathcalCminus: float
+        Prefactor in the OmegaL equation.
+    """
+
+    kappa = np.atleast_1d(kappa)
+    r = np.atleast_1d(r)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+
+    # Machine generated with eq_generator.nb
+    bigC0 = 1/2 * q * ((1 + q))**(-2) * (r)**(-5/2) * ((1 + 2 * q**(-1) * \
+    ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)
+
+    # Machine generated with eq_generator.nb
+    bigCplus = 3 * ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
+    kappa))**(-1/2) * (1 + -1 * (r)**(-1/2) * chieff) * (q**(-1) * ((1 + \
+    q))**3 * (r)**(-1/2) * kappa + (-1/2 * (1 + -1 * q) * q**(-2) * \
+    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + (1 + q) * (1 + ((1 + 2 \
+    * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) * (1 + \
+    (r)**(-1/2) * chieff)))
+
+    # Machine generated with eq_generator.nb
+    bigCminus = -3 * ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
+    kappa))**(-1/2) * (1 + -1 * (r)**(-1/2) * chieff) * (q**(-1) * ((1 + \
+    q))**3 * (r)**(-1/2) * kappa + (-1/2 * (1 + -1 * q) * q**(-2) * \
+    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + (1 + q) * (1 + -1 * ((1 \
+    + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) * (1 + \
+    (r)**(-1/2) * chieff)))
+
+    # Machine generated with eq_generator.nb
+    bigRplus = (-2 * q * ((1 + q))**(-1) * (1 + ((1 + 2 * q**(-1) * ((1 + \
+    q))**2 * (r)**(-1/2) * kappa))**(1/2)) + -1 * (1 + q) * (r)**(-1/2) * \
+    chieff)
+
+    # Machine generated with eq_generator.nb
+    bigRminus = (-2 * q * ((1 + q))**(-1) * (1 + -1 * ((1 + 2 * q**(-1) * \
+    ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) + -1 * (1 + q) * \
+    (r)**(-1/2) * chieff)
+
+    return np.stack([bigC0, bigCplus, bigCminus,bigRplus,bigRminus])
+
+
+def eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2):
+    """
+    Compute the precession frequency OmegaL along the precession cycle.
+
+    Call
+    ----
+    OmegaL = eval_OmegaL(S,J,r,chieff,q,chi1,chi2)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    OmegaL: float
+        Precession frequency of L about J.
+    """
+
+    deltachi = np.atleast_1d(deltachi).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    r = np.atleast_1d(r).astype(float)
+
+    bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
+
+    OmegaL =  bigC0 * (1 - bigCplus/(bigRplus - deltachi * (1-q)*r**(-1/2)) -  bigCminus/(bigRminus - deltachi * (1-q)*r**(-1/2)) )
+
+    return OmegaL
+
+
+
+def eval_phiL(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
+
+    q = np.atleast_1d(q).astype(float)
+    r = np.atleast_1d(r).astype(float)
+    
+    u= eval_u(r=r,q=q)
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
+
+    psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), return_psiperiod=True)
+    deltachitilde = affine(deltachi,deltachiminus,deltachiplus)
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+
+
+
+
+    phiL = np.sign(cyclesign) * bigC0 * psiperiod * ( scipy.special.ellipkinc(np.arcsin(deltachitilde**(1/2)), m)
+        - bigCplus / (bigRplus - deltachiminus*(1-q)*r**(-1/2))
+        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRplus - deltachiminus*(1-q)*r**(-1/2)), np.arcsin(deltachitilde**(1/2)), m)
+        - bigCminus / (bigRminus - deltachiminus*(1-q)*r**(-1/2))
+        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRminus - deltachiminus*(1-q)*r**(-1/2)), np.arcsin(deltachitilde**(1/2)), m) )
+    return phiL 
+
+
+
+def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+    
+    q = np.atleast_1d(q).astype(float)
+    r = np.atleast_1d(r).astype(float)
+
+    u= eval_u(r=r,q=q)
+
+    with warnings.catch_warnings():
+        
+        # If there are infinitely large separation in the array the following will throw a warning. You can safely ignore it because that value is not used, see below  
+        if 0 in u:
+            warnings.filterwarnings("ignore", category=Warning)
+ 
+
+        deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+        bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
+        psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]),return_psiperiod=True)
+        m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+
+        alpha = 2 * bigC0 * psiperiod * ( scipy.special.ellipk(m)
+            - bigCplus / (bigRplus - deltachiminus*(1-q)*r**(-1/2))
+            * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRplus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m)
+            - bigCminus / (bigRminus - deltachiminus*(1-q)*r**(-1/2))
+            * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRminus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m) )
+
+    # At infinitely large separation use the analytic result
+    if 0 in u:
+        
+        mathcalY =  2 * q * (1+q)**3 * kappa * chieff - (1+q)**5 * kappa**2 +(1-q) *(chi1**2 -q**4 * chi2**2)
+        alphainf1= 2*np.pi*(4+3*q)*q/3/(1-q**2)
+        alphainf2 = 2*np.pi*(4*q+3)/3/(1-q**2)
+
+        alphainf = np.where(mathcalY>=0, alphainf1, alphainf2)
+        alpha =np.where(u>0,alpha,alphainf)
+    
+    return alpha 
 
 
 ################ Precession-averaged evolution ################
@@ -4715,191 +4495,6 @@ def inspiral(*args, which=None, **kwargs):
         raise ValueError("`which` needs to be `precav`, `orbav` or `hybrid`.")
 
 
-################ Dynamics in an intertial frame ################
-
-
-def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
-    """
-    Numerical prefactors entering the precession frequency.
-
-    Call
-    ----
-    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor_old(J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    mathcalC0: float
-        Prefactor in the OmegaL equation.
-    mathcalCplus: float
-        Prefactor in the OmegaL equation.
-    mathcalCminus: float
-        Prefactor in the OmegaL equation.
-    """
-
-    kappa = np.atleast_1d(kappa)
-    r = np.atleast_1d(r)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-
-
-    # Machine generated with eq_generator.nb
-    bigC0 = 1/2 * q * ((1 + q))**(-2) * (r)**(-5/2) * ((1 + 2 * q**(-1) * \
-    ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)
-
-    # Machine generated with eq_generator.nb
-    bigCplus = 3 * ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
-    kappa))**(-1/2) * (1 + -1 * (r)**(-1/2) * chieff) * (q**(-1) * ((1 + \
-    q))**3 * (r)**(-1/2) * kappa + (-1/2 * (1 + -1 * q) * q**(-2) * \
-    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + (1 + q) * (1 + ((1 + 2 \
-    * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) * (1 + \
-    (r)**(-1/2) * chieff)))
-
-    # Machine generated with eq_generator.nb
-    bigCminus = -3 * ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
-    kappa))**(-1/2) * (1 + -1 * (r)**(-1/2) * chieff) * (q**(-1) * ((1 + \
-    q))**3 * (r)**(-1/2) * kappa + (-1/2 * (1 + -1 * q) * q**(-2) * \
-    (r)**(-1) * (chi1**2 + -1 * q**4 * chi2**2) + (1 + q) * (1 + -1 * ((1 \
-    + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) * (1 + \
-    (r)**(-1/2) * chieff)))
-
-    # Machine generated with eq_generator.nb
-    bigRplus = (-2 * q * ((1 + q))**(-1) * (1 + ((1 + 2 * q**(-1) * ((1 + \
-    q))**2 * (r)**(-1/2) * kappa))**(1/2)) + -1 * (1 + q) * (r)**(-1/2) * \
-    chieff)
-
-    # Machine generated with eq_generator.nb
-    bigRminus = (-2 * q * ((1 + q))**(-1) * (1 + -1 * ((1 + 2 * q**(-1) * \
-    ((1 + q))**2 * (r)**(-1/2) * kappa))**(1/2)) + -1 * (1 + q) * \
-    (r)**(-1/2) * chieff)
-
-    return np.stack([bigC0, bigCplus, bigCminus,bigRplus,bigRminus])
-
-
-def eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2):
-    """
-    Compute the precession frequency OmegaL along the precession cycle.
-
-    Call
-    ----
-    OmegaL = eval_OmegaL(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    OmegaL: float
-        Precession frequency of L about J.
-    """
-
-    deltachi = np.atleast_1d(deltachi).astype(float)
-    q = np.atleast_1d(q).astype(float)
-    r = np.atleast_1d(r).astype(float)
-
-    bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
-
-    OmegaL =  bigC0 * (1 - bigCplus/(bigRplus - deltachi * (1-q)*r**(-1/2)) -  bigCminus/(bigRminus - deltachi * (1-q)*r**(-1/2)) )
-
-    return OmegaL
-
-
-
-def eval_phiL(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
-
-    q = np.atleast_1d(q).astype(float)
-    r = np.atleast_1d(r).astype(float)
-    
-    u= eval_u(r=r,q=q)
-    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-
-    bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
-
-    psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), return_psiperiod=True)
-    deltachitilde = affine(deltachi,deltachiminus,deltachiplus)
-    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
-
-
-
-
-    phiL = np.sign(cyclesign) * bigC0 * psiperiod * ( scipy.special.ellipkinc(np.arcsin(deltachitilde**(1/2)), m)
-        - bigCplus / (bigRplus - deltachiminus*(1-q)*r**(-1/2))
-        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRplus - deltachiminus*(1-q)*r**(-1/2)), np.arcsin(deltachitilde**(1/2)), m)
-        - bigCminus / (bigRminus - deltachiminus*(1-q)*r**(-1/2))
-        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRminus - deltachiminus*(1-q)*r**(-1/2)), np.arcsin(deltachitilde**(1/2)), m) )
-    return phiL 
-
-
-
-def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
-    
-    q = np.atleast_1d(q).astype(float)
-    r = np.atleast_1d(r).astype(float)
-
-    u= eval_u(r=r,q=q)
-
-    with warnings.catch_warnings():
-        
-        # If there are infinitely large separation in the array the following will throw a warning. You can safely ignore it because that value is not used, see below  
-        if 0 in u:
-            warnings.filterwarnings("ignore", category=Warning)
- 
-
-        deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-        bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
-        psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]),return_psiperiod=True)
-        m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
-
-        alpha = 2 * bigC0 * psiperiod * ( scipy.special.ellipk(m)
-            - bigCplus / (bigRplus - deltachiminus*(1-q)*r**(-1/2))
-            * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRplus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m)
-            - bigCminus / (bigRminus - deltachiminus*(1-q)*r**(-1/2))
-            * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRminus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m) )
-
-    # At infinitely large separation use the analytic result
-    if 0 in u:
-        
-        mathcalY =  2 * q * (1+q)**3 * kappa * chieff - (1+q)**5 * kappa**2 +(1-q) *(chi1**2 -q**4 * chi2**2)
-        alphainf1= 2*np.pi*(4+3*q)*q/3/(1-q**2)
-        alphainf2 = 2*np.pi*(4*q+3)/3/(1-q**2)
-
-        alphainf = np.where(mathcalY>=0, alphainf1, alphainf2)
-        alpha =np.where(u>0,alpha,alphainf)
-    
-    return alpha 
-
-
-
 ################ chip and other stuff ################
 
 
@@ -5588,6 +5183,92 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
         return vk, kick
     else:
         return vk
+
+
+##### TODO
+
+
+# TODO: Check inter-compatibility of Slimits, Jlimits, chiefflimits
+# TODO: check docstrings
+# Tags for each limit check that fails?
+# Davide: Does this function uses only Jlimits and chiefflimits or also Slimits? Move later?
+def limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
+    """
+    Check if the inputs are consistent with the geometrical constraints.
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float, optional
+        Magnitude of the total angular momentum.
+    r: float, optional
+        Binary separation.
+    chieff: float, optional
+        Effective spin
+    q: float
+        Mass ratio: 0 <= q <= 1.
+    chi1: float, optional
+        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
+    chi2: float, optional
+        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
+
+    Returns
+    -------
+    check: bool
+        True if the given parameters are compatible with each other, false if not.
+    """
+    # q, ch1, chi2
+    # 0, 1
+
+    # J: r, chieff, q, chi1, chi2
+    # r, q, chi1, chi2 -> Jlimits_LS1S2
+    # r, chieff, q, chi1, chi2 -> Jresonances
+
+    # chieff: J, r, q, chi1, chi2
+    # q, chi1, chi2 -> chiefflimits_definition
+    # J, r, q, chi1, chi2 -> chieffresonances
+
+    # S: J, r, chieff, q, chi1, chi2
+    # q, chi1, chi2 -> Slimits_S1S2
+    # J, r, q -> Slimits_LJ
+    # J, r, q, chi1, chi2 -> Slimits_LJS1S2
+    # J, r, chieff, q, chi1, chi2 -> Slimits_plusminus
+
+    def _limits_check(testvalue, interval):
+        """Check if a value is within a given interval"""
+        return np.logical_and(testvalue >= interval[0], testvalue <= interval[1])
+
+    Slim = Slimits(J, r, chieff, q, chi1, chi2)
+    Sbool = _limits_check(S, Slim)
+
+    Jlim = Jlimits(r, chieff, q, chi1, chi2)
+    Jbool = _limits_check(J, Jlim)
+
+    chiefflim = chiefflimits(J, r, q, chi1, chi2)
+    chieffbool = _limits_check(chieff, chiefflim)
+
+    check = all((Sbool, Jbool, chieffbool))
+
+    if r is not None:
+        rbool = _limits_check(r, [10.0, np.inf])
+        check = all((check, rbool))
+
+    if q is not None:
+        qbool = _limits_check(q, [0.0, 1.0])
+        check = all((check, qbool))
+
+    if chi1 is not None:
+        chi1bool = _limits_check(chi1, [0.0, 1.0])
+        check = all((check, chi1bool))
+
+    if chi2 is not None:
+        chi2bool = _limits_check(chi2, [0.0, 1.0])
+        check = all((check, chi2bool))
+
+    return check
+
+
 
 
 ################ Main ################
