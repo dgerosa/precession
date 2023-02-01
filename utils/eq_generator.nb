@@ -17839,6 +17839,73 @@ Cell[BoxData[
          RowBox[{"2", " ", "q", " ", "u", " ", "\[Chi]eff"}]}], ")"}]}]}], 
      ")"}]}]}], "}"}]], "Output",
  CellLabel->"Out[197]=",ExpressionUUID->"65c5cb07-bced-47a0-8f77-6313a04331c4"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Collect", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"S1", "^", "2"}], " ", "+", " ", 
+      RowBox[{"S2", "^", "2"}], " ", "+", " ", 
+      RowBox[{"2", "L", " ", "S1", " ", "ct1"}], " ", "+", " ", 
+      RowBox[{"2", "L", " ", "S2", " ", "ct2"}], " ", "+", " ", 
+      RowBox[{"2", " ", "S1", " ", "S2", " ", 
+       RowBox[{"(", "ct1ct2pluscdpst2st2", ")"}]}]}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{"2", "L"}], ")"}]}], ",", "r", ",", "Simplify"}], "]"}]], "Input",
+ CellLabel->
+  "In[271]:=",ExpressionUUID->"d6010e01-9415-428e-9d5a-8b5545e19981"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox[
+   RowBox[{
+    RowBox[{"ct1", " ", "\[Chi]1"}], "+", 
+    RowBox[{"ct2", " ", 
+     SuperscriptBox["q", "2"], " ", "\[Chi]2"}]}], 
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{"1", "+", "q"}], ")"}], "2"]], "+", 
+  FractionBox[
+   RowBox[{
+    SuperscriptBox["\[Chi]1", "2"], "+", 
+    RowBox[{"2", " ", "ct1ct2pluscdpst2st2", " ", 
+     SuperscriptBox["q", "2"], " ", "\[Chi]1", " ", "\[Chi]2"}], "+", 
+    RowBox[{
+     SuperscriptBox["q", "4"], " ", 
+     SuperscriptBox["\[Chi]2", "2"]}]}], 
+   RowBox[{"2", " ", "q", " ", 
+    SuperscriptBox[
+     RowBox[{"(", 
+      RowBox[{"1", "+", "q"}], ")"}], "2"], " ", 
+    SqrtBox["r"]}]]}]], "Output",
+ CellLabel->"Out[271]=",ExpressionUUID->"db918c98-e471-44ee-a4ba-a4a1e521f2a6"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"%", "\\\\", "TeXForm"}]], "Input",
+ EmphasizeSyntaxErrors->True,
+ CellLabel->
+  "In[271]:=",ExpressionUUID->"3d74372a-7185-40de-a6b2-ac9e382c612e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["L"], "Input",
+ CellLabel->
+  "In[272]:=",ExpressionUUID->"d975cee1-fcaa-44bd-9d16-1c7fe1a51649"],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"q", " ", 
+   SqrtBox["r"]}], 
+  SuperscriptBox[
+   RowBox[{"(", 
+    RowBox[{"1", "+", "q"}], ")"}], "2"]]], "Output",
+ CellLabel->"Out[272]=",ExpressionUUID->"548d7777-7836-4fe7-bd83-7c322f0fde7b"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
