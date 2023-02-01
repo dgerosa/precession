@@ -3337,38 +3337,6 @@ def angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2):
 
 # Precessional timescale dynamics
 
-def elliptic_parameter_old(Sminuss, Spluss, S3s):
-    """
-    Parameter m entering elliptic functions for the evolution of S.
-
-    Call
-    ----
-    m = elliptic_parameter(Sminuss,Spluss,S3s)
-
-    Parameters
-    ----------
-    Sminuss: float
-        Lowest physical root, if present, of the effective potential equation.
-    Spluss: float
-        Largest physical root, if present, of the effective potential equation.
-    S3s: float
-        Spurious root of the effective potential equation.
-
-    Returns
-    -------
-    m: float
-        Parameter of elliptic function(s).
-    """
-
-    Sminuss = np.atleast_1d(Sminuss)
-    Spluss = np.atleast_1d(Spluss)
-    S3s = np.atleast_1d(S3s)
-
-    m = (Spluss-Sminuss)/(Spluss-S3s)
-
-    return m
-
-
 def elliptic_amplitude(S, Sminuss, Spluss):
     """
     Amplitdue phi entering elliptic functions for the evolution of S.
@@ -3558,6 +3526,7 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
 
 def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psiperiod=False, donotnormalize=False):
 
+
     q=np.atleast_1d(q)
 
 
@@ -3568,7 +3537,8 @@ def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psip
         mathcalA = 1
     else:
         mathcalA = ddchidt_prefactor(r, chieff, q)
-    
+
+
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
 
@@ -3739,7 +3709,8 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     #print("u kappa", u, kappa,chieff, q, chi1, chi2,eval_r(u=u,q=q))
     #print("res", kapparesonances(eval_r(u=u,q=q), chieff, q, chi1, chi2))
 
-    if u < 0:
+
+    if u <= 0:
        # In this case use analytic result
         if q==1:
             Ssav = (chi1**2+q**4 * chi2**2)/(1 + q)**4  #- ( 2*q*(kappa*(1+q) -chieff)*(kappa*(1+q) -q*chieff)/((-1 + q)**2 *(1 + q)**2))
@@ -3767,7 +3738,10 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
 
         Ssav = (2*kappa - chieff - (1-q)/(1+q)*deltachiav)/(2*u)
 
-    print(u, Ssav)
+
+    print(u,Ssav)
+
+
     return float(Ssav)
 
 
@@ -4744,241 +4718,6 @@ def inspiral(*args, which=None, **kwargs):
 ################ Dynamics in an intertial frame ################
 
 
-
-def frequency_prefactor_old(J, r, chieff, q, chi1, chi2):
-    """
-    Numerical prefactors entering the precession frequency.
-
-    Call
-    ----
-    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor_old(J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    mathcalC0: float
-        Prefactor in the OmegaL equation.
-    mathcalCplus: float
-        Prefactor in the OmegaL equation.
-    mathcalCminus: float
-        Prefactor in the OmegaL equation.
-    """
-
-    J = np.atleast_1d(J)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    S1, S2 = spinmags(q, chi1, chi2)
-    L = eval_L(r, q)
-    eta = eval_eta(q)
-
-    mathcalC0 = (J/2)*(eta/L)**6
-    mathcalCplus = 3/2 * (L*(1+q)**2 - q*chieff)/(J*q*(1+q)**2) * ((1+q)*((1+q)*(J+L)**2 - (1-q)*(S1**2-S2**2)) + 2*q*chieff*(L+J))
-    mathcalCminus = - 3/2 * (L*(1+q)**2 - q*chieff)/(J*q*(1+q)**2) * ((1+q)*((1+q)*(J-L)**2 - (1-q)*(S1**2-S2**2)) + 2*q*chieff*(L-J))
-
-    return np.stack([mathcalC0, mathcalCplus, mathcalCminus])
-
-
-
-def azimuthalangle_prefactor_old(J, r, chieff, q, chi1, chi2, precomputedroots=None):
-    """
-    Numerical prefactors entering the precession frequency.
-
-    Call
-    ----
-    mathcalC0prime,mathcalCplusprime,mathcalCminusprime = azimuthalangle_prefactor_old(J,r,chieff,q,chi1,chi2,precomputedroots=None)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
-    Returns
-    -------
-    mathcalC0prime: float
-        Prefactor in the PhiL equation.
-    mathcalCplusprime: float
-        Prefactor in the PhiL equation.
-    mathcalCminusprime: float
-        Prefactor in the PhiL equation.
-    """
-
-    J = np.atleast_1d(J)
-    L = eval_L(r, q)
-
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-
-    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor_old(J, r, chieff, q, chi1, chi2)
-    mathcalT = time_normalization(Spluss, S3s, r, chieff, q)
-
-    mathcalC0prime = mathcalT*mathcalC0
-    mathcalCplusprime = -mathcalT*mathcalC0*mathcalCplus/(Spluss - (J+L)**2)
-    mathcalCminusprime = -mathcalT*mathcalC0*mathcalCminus/(Spluss - (J-L)**2)
-
-    return np.stack([mathcalC0prime, mathcalCplusprime, mathcalCminusprime])
-
-
-def eval_OmegaL_old(S, J, r, chieff, q, chi1, chi2):
-    """
-    Compute the precession frequency OmegaL along the precession cycle.
-
-    Call
-    ----
-    OmegaL = eval_OmegaL_old(S,J,r,chieff,q,chi1,chi2)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    OmegaL: float
-        Precession frequency of L about J.
-    """
-
-    S = np.atleast_1d(S)
-    J = np.atleast_1d(J)
-    L = eval_L(r, q)
-
-    mathcalC0, mathcalCplus, mathcalCminus = frequency_prefactor_old(J, r, chieff, q, chi1, chi2)
-
-    OmegaL = mathcalC0 * (1 + mathcalCplus/((J+L)**2 - S**2) + mathcalCminus/((J-L)**2 - S**2))
-
-    return OmegaL
-
-
-def eval_alpha_old(J, r, chieff, q, chi1, chi2, precomputedroots=None):
-    """
-    Compute the azimuthal angle spanned by L about J during an entire nutation cycle.
-
-    Call
-    ----
-    alpha = eval_alpha_old(J,r,chieff,q,chi1,chi2,precomputedroots=None)
-
-    Parameters
-    ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
-    Returns
-    -------
-    alpha: float
-        Azimuthal angle spanned by L about J during an entire cycle.
-    """
-
-    L = eval_L(r, q)
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-    nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
-    nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
-    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
-
-    alpha = 2*(mathcalC0prime*scipy.special.ellipk(m) + mathcalCplusprime*ellippi(nplus, np.pi/2, m) + mathcalCminusprime*ellippi(nminus, np.pi/2, m))
-
-    return alpha
-
-
-def eval_phiL_old(S, J, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
-    """
-    Compute the azimuthal angle spanned by L about J. This is the integral of the frequency OmegaL.
-
-    Call
-    ----
-    phiL = eval_phiL_old(S,J,r,chieff,q,chi1,chi2,cyclesign=1,precomputedroots=None)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: 1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-    precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
-    Returns
-    -------
-    phiL: float
-        Azimuthal angle spanned by L about J.
-    """
-
-    L = eval_L(r, q)
-    Sminuss, Spluss, S3s = Ssroots(J, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    alpha = eval_alpha_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
-    m = elliptic_parameter_old(Sminuss, Spluss, S3s)
-    phi = elliptic_amplitude(S, Sminuss, Spluss)
-    nplus = elliptic_characheristic(Sminuss, Spluss, J, L, +1)
-    nminus = elliptic_characheristic(Sminuss, Spluss, J, L, -1)
-    mathcalC0prime, mathcalCplusprime, mathcalCminusprime = azimuthalangle_prefactor_old(J, r, chieff, q, chi1, chi2, precomputedroots=np.stack([Sminuss, Spluss, S3s]))
-
-    phiL = alpha/2 - np.sign(cyclesign)*(mathcalC0prime*scipy.special.ellipkinc(phi, m) + mathcalCplusprime*ellippi(nplus, phi, m) + mathcalCminusprime*ellippi(nminus, phi, m))
-
-    return phiL
-
-
-
-
 def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
     """
     Numerical prefactors entering the precession frequency.
@@ -5128,19 +4867,34 @@ def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     r = np.atleast_1d(r).astype(float)
 
     u= eval_u(r=r,q=q)
-    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
 
-    bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
+    with warnings.catch_warnings():
+        
+        # If there are infinitely large separation in the array the following will throw a warning. You can safely ignore it because that value is not used, see below  
+        if 0 in u:
+            warnings.filterwarnings("ignore", category=Warning)
+ 
 
-    psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]),return_psiperiod=True)
-    deltachitilde = affine(deltachi,deltachiminus,deltachiplus)
-    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+        deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+        bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
+        psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]),return_psiperiod=True)
+        m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
 
-    alpha = 2 * bigC0 * psiperiod * ( scipy.special.ellipk(m)
-        - bigCplus / (bigRplus - deltachiminus*(1-q)*r**(-1/2))
-        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRplus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m)
-        - bigCminus / (bigRminus - deltachiminus*(1-q)*r**(-1/2))
-        * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRminus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m) )
+        alpha = 2 * bigC0 * psiperiod * ( scipy.special.ellipk(m)
+            - bigCplus / (bigRplus - deltachiminus*(1-q)*r**(-1/2))
+            * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRplus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m)
+            - bigCminus / (bigRminus - deltachiminus*(1-q)*r**(-1/2))
+            * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRminus - deltachiminus*(1-q)*r**(-1/2)), np.pi/2, m) )
+
+    # At infinitely large separation use the analytic result
+    if 0 in u:
+        
+        mathcalY =  2 * q * (1+q)**3 * kappa * chieff - (1+q)**5 * kappa**2 +(1-q) *(chi1**2 -q**4 * chi2**2)
+        alphainf1= 2*np.pi*(4+3*q)*q/3/(1-q**2)
+        alphainf2 = 2*np.pi*(4*q+3)/3/(1-q**2)
+
+        alphainf = np.where(mathcalY>=0, alphainf1, alphainf2)
+        alpha =np.where(u>0,alpha,alphainf)
     
     return alpha 
 
@@ -5876,33 +5630,76 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=0.8
+    # q=0.5
+    # chi1=0.6
+    # chi2=0.4
+    # chieff=0.
+    # r=10
+    # kappatilde = 0.5
+    # deltachitilde = 1
+    # kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
+    # #print(kappa)
+    # #kappa=0.19702426300035386
+    # u=eval_u(r=r,q=q)
+    # J=eval_J(kappa=kappa, r=r, q=q)
+    # #J=1
+    # kappa=eval_kappa(J=J,r=r,q=q)
+    # #u = eval_u([r,1000,100,10], [q,q,q,q])
+    # #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
+    # deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2)
+
+    # # S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
+
+    # # #print(u, [float(u),1e-1])
+
+    # # uvals= [float(u), 1e-5,1e-10,1e-15,1e-20,1e-30,0]
+
+    # # kappasol = integrator_precav(kappa, uvals, chieff, q, chi1, chi2)
+    # # #for x,y in zip(uvals[-1000:],kappasol[0][-1000:]):
+    # #    print(x,y)
+    # q=0.5
+    # r=np.geomspace(10000,10,100)
+    # r[0]=np.inf
+    # u=eval_u(r=r,q=tiler(q,r))
+    # print(u)
+
+
+    q=0.7
     chi1=0.6
-    chi2=0.4
+    chi2=0.9
     chieff=0.
-    r=10
-    kappatilde = 0.5
-    deltachitilde = 1
-    kappa = float(kapparescaling(kappatilde, r, chieff, q, chi1, chi2))
+    r=np.geomspace(1000000,10,100)
+    r[0]=np.inf
+    r=r[::-1]
+    kappatilde = 0.8
+    deltachitilde = 0.7
+    kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
     #print(kappa)
     #kappa=0.19702426300035386
-    u=eval_u(r=r,q=q)
-    J=eval_J(kappa=kappa, r=r, q=q)
-    #J=1
-    kappa=eval_kappa(J=J,r=r,q=q)
+    u=eval_u(r=r,q=tiler(q,r))
     #u = eval_u([r,1000,100,10], [q,q,q,q])
-    #print(integrator_precav(kappa, u, chieff, q, chi1, chi2))
-    deltachi = deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2)
+    kappasol = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
 
-    S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
 
-    #print(u, [float(u),1e-1])
+    #print(kappasol)
 
-    uvals= [float(u), 1e-5,1e-10,1e-15,1e-20,1e-30,0]
+    #deltachi = deltachisampling(kappasol[-1], r[-1], chieff, q, chi1, chi2)
+    #print(deltachi)
 
-    kappasol = integrator_precav(kappa, uvals, chieff, q, chi1, chi2)
-    #for x,y in zip(uvals[-1000:],kappasol[0][-1000:]):
-    #    print(x,y)
+    #alpha = eval_alpha(kappasol[-2], r[-2], chieff, q, chi1, chi2)
+    
+    alpha = eval_alpha(kappasol, r, chieff, q, chi1, chi2)
+
+    #print(alpha[-1],alpha[-2])
+
+    #print((alpha[-1]-alpha[-2])/alpha[-1])
+
+    #print(2*np.pi*(4+3*q)*q/3/(1-q**2) )
+    #print(2*np.pi*(4*q+3)/3/(1-q**2) )
+
+
+    #print(tau)
+    #print(4*np.pi*(1+q)/3/(1-q))
 
     #print(deltachi, kappa, r, chieff, q, chi1, chi2, S,J)
 
@@ -5917,8 +5714,7 @@ if __name__ == '__main__':
 
     #print(alphaq1)
 
-    #print(r**(-5/2) *  (4+3*q)*q/2/(1+q)**2 )
-    #print(r**(-5/2) *  (4+3/q)*q/2/(1+q)**2 )
+
 
     #print(eval_alpha_old(kappa, r, chieff, q, chi1, chi2))
 
