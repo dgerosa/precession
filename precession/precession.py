@@ -2292,7 +2292,6 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
                 kappares = np.sort(np.squeeze([kapparoots[diffmin==min(diffmin)], kapparoots[diffmax==min(diffmax)]]))
             
 
-
         # Up-down and down-up are challenging. 
         # Evaluate the resonances outside of those points and interpolate linearly.
         # Note usage of recursive functions.
@@ -3273,7 +3272,6 @@ def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     return alpha 
 
 
-
 ################ More phenomenology ################
 
 
@@ -3595,9 +3593,12 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=No
 
 
 
+### Daria's five parameters should go here
+
+
+
 # TODO Add updown endpoint.
 # TODO Add limits of the resonances at small separations from the endpoint paper
-
 
 def rupdown(q, chi1, chi2):
     """
