@@ -1023,49 +1023,7 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
     return cosdeltaphi
 
 
-# TODO cyclesign needs to be checked again in the entire code
-def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=1):
-    """
-    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=-1 returns the other half of the  precession cycle [-pi,0].
-
-    Call
-    ----
-    deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: -1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-
-    Returns
-    -------
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    """
-
-    cyclesign = np.atleast_1d(cyclesign)
-    cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2)
-    deltaphi = np.sign(cyclesign)*np.arccos(cosdeltaphi)
-
-    return deltaphi
-
-
-# TODO: check this one. S...
-def eval_costhetaL(S, J, r, q, chi1, chi2):
+def eval_costhetaL(deltachi, kappa, r, q):
     """
     Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
 
@@ -1094,17 +1052,20 @@ def eval_costhetaL(S, J, r, q, chi1, chi2):
         Cosine of the angle betwen orbital angular momentum and total angular momentum.
     """
 
-    S = np.atleast_1d(S)
-    J = np.atleast_1d(J)
+    deltachi = np.atleast_1d(deltachi)
+    kappa = np.atleast_1d(kappa)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
 
-    S1, S2 = spinmags(q, chi1, chi2)
-    L = eval_L(r, q)
-    costhetaL = (J**2+L**2-S**2)/(2*J*L)
+    # Machine generated with eq_generator.nb
+    costhetaL = ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
+    kappa))**(-1/2) * (1 + 1/2 * q**(-1) * (1 + q) * (r)**(-1/2) * ((1 + \
+    -1 * q) * deltachi + (1 + q) * chieff))
 
     return costhetaL
 
-# TODO: check this one. S...
-def eval_thetaL(S, J, r, q, chi1, chi2):
+
+def eval_thetaL(deltachi, kappa, r, q):
     """
     Angle thetaL betwen orbital angular momentum and total angular momentum.
 
@@ -1133,7 +1094,7 @@ def eval_thetaL(S, J, r, q, chi1, chi2):
         Angle betwen orbital angular momentum and total angular momentum.
     """
 
-    costhetaL = eval_costhetaL(S, J, r, q, chi1, chi2)
+    costhetaL = eval_costhetaL(deltachi, kappa, r, q)
     thetaL = np.arccos(costhetaL)
 
     return thetaL
@@ -1282,6 +1243,48 @@ def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
     S = (S1**2 + S2**2 + 2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
 
     return S
+
+
+
+# TODO cyclesign needs to be checked again in the entire code
+def eval_deltaphi(deltachi, kappa, chieff, q, chi1, chi2, cyclesign=1):
+    """
+    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=-1 returns the other half of the  precession cycle [-pi,0].
+
+    Call
+    ----
+    deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
+
+    Parameters
+    ----------
+    S: float
+        Magnitude of the total spin.
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: -1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+
+    Returns
+    -------
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    """
+
+    cyclesign = np.atleast_1d(cyclesign)
+    cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2)
+    deltaphi = np.sign(cyclesign)*np.arccos(cosdeltaphi)
+
+    return deltaphi
 
 
 
