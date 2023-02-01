@@ -3546,8 +3546,12 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
     q=np.atleast_1d(q)
 
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    
+    #print(u,"x",deltachiminus,deltachiplus,deltachi3)
 
     m = (1-q)*(deltachiplus-deltachiminus)/(deltachi3-(1-q)*deltachiminus)
+
+
 
     return m
 
@@ -3735,15 +3739,15 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     #print("u kappa", u, kappa,chieff, q, chi1, chi2,eval_r(u=u,q=q))
     #print("res", kapparesonances(eval_r(u=u,q=q), chieff, q, chi1, chi2))
 
-    if u == 0:
-        # In this case use analytic result
-        theta1inf, theta2inf = asymptotic_to_angles(kappa, chieff, q, chi1, chi2)
-        Ssav = Ssavinf(theta1inf, theta2inf, q, chi1, chi2)
+    if u < 0:
+       # In this case use analytic result
+        if q==1:
+            Ssav = (chi1**2+q**4 * chi2**2)/(1 + q)**4  #- ( 2*q*(kappa*(1+q) -chieff)*(kappa*(1+q) -q*chieff)/((-1 + q)**2 *(1 + q)**2))
+        else:
+            Ssav = (chi1**2+q**4 * chi2**2)/(1 + q)**4  - ( 2*q*(kappa*(1+q) -chieff)*(kappa*(1+q) -q*chieff)/((1-q)**2 *(1 + q)**2))
+
     else:
-
         # I don't use deltachiroots because I want to keep complex numbers. This is needed to sanitize the output in some tricky cases
-        #deltachiminus, deltachiplus, deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
-
         coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
         deltachiminus, deltachiplus, _ = np.squeeze(np.sort_complex(roots_vec(coeffs.T)))
         coeffs = deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2)
@@ -3757,13 +3761,14 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
         # Normal case
         else:
             deltachiminus, deltachiplus, deltachi3 = np.real([deltachiminus, deltachiplus, deltachi3])
-
+      
             m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus, deltachiplus, deltachi3]))
             deltachiav = inverseaffine( deltachitildeav(m),  deltachiminus, deltachiplus)
 
         Ssav = (2*kappa - chieff - (1-q)/(1+q)*deltachiav)/(2*u)
 
-    return Ssav
+    print(u, Ssav)
+    return float(Ssav)
 
 
 
@@ -5871,10 +5876,10 @@ if __name__ == '__main__':
     #
     # print(kapparesonances_new(r, chieff, q, chi1, chi2))
 
-    q=1
+    q=0.8
     chi1=0.6
     chi2=0.4
-    chieff=0.25
+    chieff=0.
     r=10
     kappatilde = 0.5
     deltachitilde = 1
@@ -5891,6 +5896,13 @@ if __name__ == '__main__':
 
     S = eval_S_from_deltachi(deltachi, kappa, r, chieff, q)
 
+    #print(u, [float(u),1e-1])
+
+    uvals= [float(u), 1e-5,1e-10,1e-15,1e-20,1e-30,0]
+
+    kappasol = integrator_precav(kappa, uvals, chieff, q, chi1, chi2)
+    #for x,y in zip(uvals[-1000:],kappasol[0][-1000:]):
+    #    print(x,y)
 
     #print(deltachi, kappa, r, chieff, q, chi1, chi2, S,J)
 
@@ -5899,11 +5911,11 @@ if __name__ == '__main__':
     #print((np.sqrt(1 + (8*kappa)/np.sqrt(r))*(7*np.sqrt(r) - 6*chieff))/(8*r**3))
     #print(r**(-5/2) *  (3 + 8 * q + 3 * q**2)*(4 * (1 + q)**2))
 
-    alphaq1 = x = 1/6 * np.pi * (r)**(1/4) * ((1 + 8 * (r)**(-1/2) * kappa))**(1/2) \
-    * (7 * (r)**(1/2) + -6 * chieff) * (-1 * (((r)**(1/2) + -1 * \
-    chieff))**2 * (-2 * kappa + chieff))**(-1/2)
+    #alphaq1 = 1/6 * np.pi * r**(1/4) * (7  -6 * chieff * (r)**(-1/2))  * (1 - chieff * (r)**(-1/2))**(-1) * ((1 + 8 * (r)**(-1/2) * kappa))**(1/2) * (2 * kappa - chieff)**(-1/2)
+#    %((1 + 8 * (r)**(-1/2) * kappa))**(1/2) \
+#* *  (1 - chieff * (r)**(-1/2))**(-1)  * (-2 * kappa + chieff)**(-1/2)
 
-    print(alphaq1)
+    #print(alphaq1)
 
     #print(r**(-5/2) *  (4+3*q)*q/2/(1+q)**2 )
     #print(r**(-5/2) *  (4+3/q)*q/2/(1+q)**2 )
@@ -5911,7 +5923,7 @@ if __name__ == '__main__':
     #print(eval_alpha_old(kappa, r, chieff, q, chi1, chi2))
 
     #print(eval_tau(kappa, r, chieff, q, chi1, chi2))
-    print(eval_alpha(kappa, r, chieff, q, chi1, chi2))
+    #print(eval_alpha(kappa, r, chieff, q, chi1, chi2))
 
     # #def func(dchi):
     # #    return dchi
