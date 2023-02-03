@@ -2853,6 +2853,38 @@ def deltachitildeav(m,tol=1e-7):
     return coeff
 
 
+def deltachitildeav2(m,tol=1e-7):
+    """
+    Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
+
+    Call
+    ----
+    coeff = deltachitildeav(m)
+
+    Parameters
+    ----------
+    m: float
+        Parameter of elliptic function(s).
+
+    Returns
+    -------
+    coeff: float
+        Coefficient.
+    """
+
+    m = np.atleast_1d(m)
+    # The limit of the Ssav coefficient as m->0 is finite and equal to 1/2.
+    # This is implementation is numerically stable up to m~1e-10.
+    # For m=1e-7, the analytic m=0 limit is returned with a precision of 1e-9, which is enough.
+    m = np.minimum(np.maximum(tol, m),1-tol)
+
+    coeff = (2+m-2*(1+m)*scipy.special.ellipe(m)/scipy.special.ellipk(m)) / (3*m**2)
+
+    return coeff
+
+
+
+
 def ddchidt_prefactor(r, chieff, q):
     """
     Numerical prefactor to the S derivative.
