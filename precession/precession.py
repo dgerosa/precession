@@ -1297,6 +1297,8 @@ def eval_S_from_deltachi(deltachi, kappa, r, chieff, q):
     chieff = np.atleast_1d(chieff)
     q = np.atleast_1d(q)
 
+    #print("thisguy", (2*kappa - chieff - deltachi * (1 - q)/(1 + q)))
+
     S = ( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi * (1 - q)/(1 + q)) )**(1/2)
 
     return S
@@ -3823,7 +3825,7 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
         Ssav = (2*kappa - chieff - (1-q)/(1+q)*deltachiav)/(2*u)
 
 
-    print(u,Ssav)
+    #print(u,Ssav)
 
 
     return float(Ssav)
@@ -5250,27 +5252,53 @@ if __name__ == '__main__':
     # print(u)
 
 
-    # q=0.7
-    # chi1=0.6
-    # chi2=0.9
-    # chieff=0.
-    # r=np.geomspace(1000000,10,100)
-    # r[0]=np.inf
-    # r=r[::-1]
-    # kappatilde = 0.8
-    # deltachitilde = 0.7
-    # kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
-    # #print(kappa)
-    # #kappa=0.19702426300035386
-    # u=eval_u(r=r,q=tiler(q,r))
-    # #u = eval_u([r,1000,100,10], [q,q,q,q])
-    # kappasol = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
+    q=0.7
+    chi1=0.6
+    chi2=0.9
+    chieff=0.
+    r=np.geomspace(10,10000000000000,10)
+    #r[0]=np.inf
+    #r=r[::-1]
+    kappatilde = 0.8
+    deltachitilde = 0.7
+    kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
+    #print(kappa)
+    #kappa=0.19702426300035386
+    u=eval_u(r=r,q=tiler(q,r))
+    #u = eval_u([r,1000,100,10], [q,q,q,q])
+    kappasol = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
 
 
-    # #print(kappasol)
+    #print("k", kappasol)
 
-    # #deltachi = deltachisampling(kappasol[-1], r[-1], chieff, q, chi1, chi2)
-    # #print(deltachi)
+    deltachi = deltachisampling(kappasol[-1], r[-1], chieff, q,chi1,chi2,N=100000000)
+
+    #print(tiler(kappasol[-1],deltachi).shape)
+
+    S = eval_S_from_deltachi(deltachi, tiler(kappasol[-1],deltachi), tiler(r[-1],deltachi), tiler(chieff,deltachi), tiler(q,deltachi))
+
+
+    print(np.sum(S**2)/len(S))
+
+    print(rhs_precav(kappasol[-1], u[-1], chieff, q, chi1, chi2))
+
+    print(rhs_precav(kappasol[-1], 0, chieff, q, chi1, chi2))
+
+
+    #theta1,theta2,deltaphi= conserved_to_angles(deltachi, kappasol, r, tiler(chieff,r), tiler(q,r), tiler(chi1,r), tiler(chi2,r))
+    #print(theta1,theta2)
+    #deltachi,kappa,chieff=angles_to_conserved(theta1,theta2,deltaphi,r, tiler(q,r), tiler(chi1,r), tiler(chi2,r),full_output=False)
+    #print("dc", chieff)
+
+
+    #print("k", kappa)
+
+    #print("factroour", (2*kappa- chieff - (1-q)*deltachi/(1+q)))
+
+    #print(tiler(chieff,r).shape)
+    #S = eval_S_from_deltachi(deltachi, kappa, r, chieff, tiler(q,r))
+
+    #print(S**2)
 
     # #alpha = eval_alpha(kappasol[-2], r[-2], chieff, q, chi1, chi2)
     
@@ -5519,22 +5547,22 @@ if __name__ == '__main__':
 
 
 
-    theta1=2
-    theta2=0.8
-    deltaphi=1
-    r=np.inf
-    q=1
-    chi1=0.4
-    chi2=0.8
+    # theta1=2
+    # theta2=0.8
+    # deltaphi=1
+    # r=np.inf
+    # q=1
+    # chi1=0.4
+    # chi2=0.8
 
-    deltachi,kappa,chieff,cyclesign=angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
-    print(deltachi,kappa,chieff,cyclesign)
+    # deltachi,kappa,chieff,cyclesign=angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
+    # print(deltachi,kappa,chieff,cyclesign)
 
-    #print((2*kappa - chieff)*(1+q)/(1-q))
+    # #print((2*kappa - chieff)*(1+q)/(1-q))
 
-    theta1,theta2,deltaphi= conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
+    # theta1,theta2,deltaphi= conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
 
-    print(theta1,theta2,deltaphi)
+    # print(theta1,theta2,deltaphi)
 
 
 
