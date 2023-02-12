@@ -2756,45 +2756,13 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
     return deltachires
 
 
-def elliptic_amplitude(S, Sminuss, Spluss):
+def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
     """
-    Amplitdue phi entering elliptic functions for the evolution of S.
+    Parameter m entering elliptic functions for the evolution of S.
 
     Call
     ----
-    phi = elliptic_amplitude(S,Sminuss,Spluss)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    Sminuss: float
-        Lowest physical root, if present, of the effective potential equation.
-    Spluss: float
-        Largest physical root, if present, of the effective potential equation.
-
-    Returns
-    -------
-    phi: float
-        Amplitude of elliptic function(s).
-    """
-
-    S = np.atleast_1d(S)
-    Sminuss = np.atleast_1d(Sminuss)
-    Spluss = np.atleast_1d(Spluss)
-
-    phi = np.arccos(((S**2 - Sminuss) / (Spluss - Sminuss))**0.5)
-
-    return phi
-
-
-def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
-    """
-    Characheristic m entering elliptic functions for the evolution of S.
-
-    Call
-    ----
-    n = elliptic_characheristic(Sminuss,Spluss,J,L,sign)
+    m = elliptic_parameter(Sminuss,Spluss,S3s)
 
     Parameters
     ----------
@@ -2802,28 +2770,26 @@ def elliptic_characheristic(Sminuss, Spluss, J, L, sign):
         Lowest physical root, if present, of the effective potential equation.
     Spluss: float
         Largest physical root, if present, of the effective potential equation.
-    J: float
-        Magnitude of the total angular momentum.
-    L: float
-        Magnitude of the Newtonian orbital angular momentum.
-    sign: integer
-        Sign, either +1 or -1.
+    S3s: float
+        Spurious root of the effective potential equation.
 
     Returns
     -------
-    n: float
-        Characheristic of elliptic function(s).
+    m: float
+        Parameter of elliptic function(s).
     """
 
-    Sminuss = np.atleast_1d(Sminuss)
-    Spluss = np.atleast_1d(Spluss)
-    J = np.atleast_1d(J)
-    L = np.atleast_1d(L)
+    q=np.atleast_1d(q)
 
-    # Note: sign here is not cyclesign!
-    n = (Spluss - Sminuss)/(Spluss - (J + np.sign(sign)*L)**2)
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    
+    #print(u,"x",deltachiminus,deltachiplus,deltachi3)
 
-    return n
+    m = (1-q)*(deltachiplus-deltachiminus)/(deltachi3-(1-q)*deltachiminus)
+
+
+
+    return m
 
 
 def deltachitildeav(m,tol=1e-7):
@@ -2885,8 +2851,6 @@ def deltachitildeav2(m,tol=1e-7):
     return coeff
 
 
-
-
 def ddchidt_prefactor(r, chieff, q):
     """
     Numerical prefactor to the S derivative.
@@ -2935,42 +2899,6 @@ def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None
     dchidt2 = mathcalA**2 * ( (deltachi-deltachiminus)*(deltachiplus-deltachi)*(deltachi3-(1-q)*deltachi))
 
     return dchidt2
-
-
-def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
-    """
-    Parameter m entering elliptic functions for the evolution of S.
-
-    Call
-    ----
-    m = elliptic_parameter(Sminuss,Spluss,S3s)
-
-    Parameters
-    ----------
-    Sminuss: float
-        Lowest physical root, if present, of the effective potential equation.
-    Spluss: float
-        Largest physical root, if present, of the effective potential equation.
-    S3s: float
-        Spurious root of the effective potential equation.
-
-    Returns
-    -------
-    m: float
-        Parameter of elliptic function(s).
-    """
-
-    q=np.atleast_1d(q)
-
-    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    
-    #print(u,"x",deltachiminus,deltachiplus,deltachi3)
-
-    m = (1-q)*(deltachiplus-deltachiminus)/(deltachi3-(1-q)*deltachiminus)
-
-
-
-    return m
 
 
 def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psiperiod=False, donotnormalize=False):
@@ -3466,6 +3394,8 @@ def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
     return chip
 
 
+
+# TODO: remove this one, put it inside the eval_chip wrapper together with the RMS limit
 def eval_chip_asymptotic(theta1, theta2, q, chi1, chi2):
     """
     Asymptotic definition of the effective precessing spin chip, see arxiv:2011.11948. This definition is valid when spin-spin couplings can be neglected, notably at infinitely large separations.
@@ -3494,11 +3424,12 @@ def eval_chip_asymptotic(theta1, theta2, q, chi1, chi2):
     """
 
     term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
-    chip = (np.abs(term1-term2) * scipy.special.ellipe(-4*term1*term2/(term1-term2)**2) + np.abs(term1+term2) * scipy.special.ellipe(4*term1*term2/(term1+term2)**2))/np.pi
+    chip = 2* np.abs(term1+term2) * scipy.special.ellipe(4*term1*term2/(term1+term2)**2)/np.pi
+
     return chip
 
 
-def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, method='quadrature', Nsamples=1e4):
+def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs):
     """
     Averaged definition of the effective precessing spin chip, see arxiv:2011.11948. This definition consistently averages over all variations on the precession timescale. Valid inputs are one of the following (but not both)
     - theta1, theta2, deltaphi
@@ -3540,30 +3471,66 @@ def eval_chip_averaged(theta1=None, theta2=None, deltaphi=None, J=None, r=None, 
         Effective precessing spin chip.
     """
 
-    if r is None or q is None or chi1 is None or chi2 is None:
-        raise TypeError("Please provide r, q, chi1, and chi2.")
-
-    if theta1 is not None and theta2 is not None and deltaphi is not None and J is None and chieff is None:
-        # cyclesign doesn't matter here. Outout S is not needed
-        _, J, chieff = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
-
-    elif theta1 is None and theta2 is None and deltaphi is None and J is not None and chieff is not None:
-        pass
-
-    else:
-        raise TypeError("Please provide either (theta1,theta2,deltaphi) or (J,chieff).")
-
-    def _integrand(S, J, r, chieff, q, chi1, chi2):
-        theta1, theta2, deltaphi = conserved_to_angles(S, J, r, chieff, q, chi1, chi2)
+    def _integrand(deltachi, kappa, r, chieff, q, chi1, chi2):
+        theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2)
         chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
         return chip_integrand
 
-    chip = precession_average(J, r, chieff, q, chi1, chi2, _integrand, J, r, chieff, q, chi1, chi2, method=method, Nsamples=Nsamples)
+    chip = precession_average(kappa, r, chieff, q, chi1, chi2, _integrand, kappa, r, chieff, q, chi1, chi2, **kwargs)
 
     return chip
 
 
-def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", method='quadrature', Nsamples=1e4):
+def eval_chip_rms(kappa, r, chieff, q, chi1, chi2):
+
+
+    kappa = np.atleast_1d(kappa).astype(float)
+    r = np.atleast_1d(r).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
+
+    u=eval_u(r=r,q=q)
+
+    # Machine generated with eq_generator.nb
+    lambdabar = 1/4 * q**(-1) * (1 + q) * ((4 + 3 * q))**(-2) * u**(-1)
+
+    # Machine generated with eq_generator.nb
+    lambda2 = -1 * ((1 + -1 * q))**2 * q * (1 + q) * u
+
+    # Machine generated with eq_generator.nb
+    lambda1 = -2 * (1 + -1 * q) * ((1 + q))**2 * ((4 + 3 * q) * (3 + 4 * \
+    q) + 7 * q * u * chieff)
+
+    # Machine generated with eq_generator.nb
+    lambda0 = (2 * ((1 + q))**3 * (4 + 3 * q) * (3 + 4 * q) * (2 * kappa \
+    + -1 * chieff) + -1 * u * (12 * (1 + -1 * q) * ((4 + 3 * q) * chi1**2 \
+    + -1 * q**3 * (3 + 4 * q) * chi2**2) + 49 * q * ((1 + q))**3 * \
+    chieff**2))
+
+    deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
+
+    m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus, deltachiplus, deltachi3]))
+    
+    chip = lambdabar**(1/2) * ( (deltachiplus-deltachiminus)**2 * lambda2 * deltachitildeav2(m)  +
+        (deltachiplus-deltachiminus) * (lambda1 + 2*deltachiminus*lambda2) * deltachitildeav(m) +
+        (deltachiminus*lambda1 + deltachiminus**2*lambda2 + lambda0 ))**(1/2)
+
+    # Debug:
+    # def _integrand(deltachi, kappa, r, chieff, q, chi1, chi2):
+    #     theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2)
+    #     chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)**2
+    #     return chip_integrand
+
+    # chip = precession_average(kappa, r, chieff, q, chi1, chi2, _integrand, kappa, r, chieff, q, chi1, chi2, **kwargs)**0.5
+
+    return chip
+
+
+
+# This is still old. Put the infinity limits in here.
+def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", **kwargs):
     """
     Compute the effective precessing spin chip, see arxiv:2011.11948. The keyword `which` one of the following definitions:
     - `heuristic`, as in Schmidt et al 2015. Required inputs: theta1,theta2,q,chi1,chi2
@@ -3607,6 +3574,8 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, J=None, r=None, chieff=No
     chip: float
         Effective precessing spin chip.
     """
+
+    # TODO: first convert the inputs. deltachi can be resampled if not provided 
 
     if which == 'heuristic':
         chip = eval_chip_heuristic(theta1, theta2, q, chi1, chi2)
@@ -4131,6 +4100,13 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
     func_av: float
         Precession averaged value of func.
     """
+
+    kappa=np.atleast_1d(kappa)
+    r=np.atleast_1d(r)
+    chieff=np.atleast_1d(chieff)
+    q=np.atleast_1d(q)
+    chi1=np.atleast_1d(chi1)
+    chi2=np.atleast_1d(chi2)
 
     u = eval_u(r=r,q=q)
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
@@ -5252,11 +5228,11 @@ if __name__ == '__main__':
     # print(u)
 
 
-    q=0.7
+    q=0.2
     chi1=0.6
     chi2=0.9
     chieff=0.
-    r=np.geomspace(10,10000000000000,10)
+    r=np.geomspace(10,1000000000000,10)
     #r[0]=np.inf
     #r=r[::-1]
     kappatilde = 0.8
@@ -5266,23 +5242,51 @@ if __name__ == '__main__':
     #kappa=0.19702426300035386
     u=eval_u(r=r,q=tiler(q,r))
     #u = eval_u([r,1000,100,10], [q,q,q,q])
-    kappasol = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
-
+    kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
 
     #print("k", kappasol)
 
-    deltachi = deltachisampling(kappasol[-1], r[-1], chieff, q,chi1,chi2,N=100000000)
+    deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
 
+
+    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
+
+
+    #print(eval_chip_heuristic(theta1, theta2, q, chi1, chi2))
+    #print(eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2))
+    #print(eval_chip_asymptotic(theta1, theta2, q, chi1, chi2))
+    #print(eval_chip_averaged(theta1=theta1, theta2=theta2,deltaphi=deltaphi, r=r, q=tiler(q,r), chi1=tiler(chi1,r), chi2=tiler(chi2,r)))
+
+    #t0=time.time()
+    #chip2 = (eval_chip_averaged2(theta1=theta1, theta2=theta2,deltaphi=deltaphi, r=r, q=tiler(q,r), chi1=tiler(chi1,r), chi2=tiler(chi2,r)))
+    #print(time.time()-t0)
+
+    #t0=time.time()
+
+    print(eval_chip_averaged(kappa, r, tiler(chieff,r), tiler(q,r), tiler(chi1,r), tiler(chi2,r)))
+
+    chiprms= eval_chip_rms(kappa, r, tiler(chieff,r), tiler(q,r), tiler(chi1,r), tiler(chi2,r))
+
+    print(chiprms)
+    #print(time.time()-t0)
+
+    #print(chip2-chiprms)
+    #print(chiprms[-1])
+
+    #chipterm1,chipterm2 = chip_terms(theta1[-1],theta2[-1],q,chi1,chi2)
+    #limit = (chipterm1**2+chipterm2**2 )**0.5
+    #print(limit)
+    #print(chiprms[-1] - limit)
     #print(tiler(kappasol[-1],deltachi).shape)
 
-    S = eval_S_from_deltachi(deltachi, tiler(kappasol[-1],deltachi), tiler(r[-1],deltachi), tiler(chieff,deltachi), tiler(q,deltachi))
+    #S = eval_S_from_deltachi(deltachi, tiler(kappasol[-1],deltachi), tiler(r[-1],deltachi), tiler(chieff,deltachi), tiler(q,deltachi))
 
 
-    print(np.sum(S**2)/len(S))
+    #print(np.sum(S**2)/len(S))
 
-    print(rhs_precav(kappasol[-1], u[-1], chieff, q, chi1, chi2))
+    #print(rhs_precav(kappasol[-1], u[-1], chieff, q, chi1, chi2))
 
-    print(rhs_precav(kappasol[-1], 0, chieff, q, chi1, chi2))
+    #print(rhs_precav(kappasol[-1], 0, chieff, q, chi1, chi2))
 
 
     #theta1,theta2,deltaphi= conserved_to_angles(deltachi, kappasol, r, tiler(chieff,r), tiler(q,r), tiler(chi1,r), tiler(chi2,r))

@@ -26,7 +26,7 @@ Cell[BoxData[
    RowBox[{"CurrentValue", "[", 
     RowBox[{"$FrontEnd", ",", "\"\<NotebookAutoSave\>\""}], "]"}], "=", 
    "True"}], ";"}]], "Input",
- CellLabel->"In[1]:=",ExpressionUUID->"58d36b88-56e5-487d-acce-8947b4ad174e"],
+ CellLabel->"In[20]:=",ExpressionUUID->"58d36b88-56e5-487d-acce-8947b4ad174e"],
 
 Cell[BoxData[
  RowBox[{
@@ -265,7 +265,7 @@ Cell[BoxData[
           "greekrule"}], "]"}]}], ";", "\n", 
        RowBox[{"PythonForm", "[", "expression", "]"}]}]}], "]"}]}], ";"}], 
   "\[IndentingNewLine]"}]], "Input",
- CellLabel->"In[2]:=",ExpressionUUID->"42f11555-76ce-4590-9e61-d36a6d3ab9a3"],
+ CellLabel->"In[21]:=",ExpressionUUID->"42f11555-76ce-4590-9e61-d36a6d3ab9a3"],
 
 Cell[BoxData[
  RowBox[{
@@ -301,7 +301,7 @@ Cell[BoxData[
         RowBox[{"\"\<(9)\>\"", "->", "\"\<9\>\""}], ",", 
         RowBox[{"\"\<(10)\>\"", "->", "\"\<10\>\""}]}], "}"}]}], "]"}]}]}], 
   ";"}]], "Input",
- CellLabel->"In[3]:=",ExpressionUUID->"b77bd892-bfc4-4b7e-8486-feefb180b24c"],
+ CellLabel->"In[22]:=",ExpressionUUID->"b77bd892-bfc4-4b7e-8486-feefb180b24c"],
 
 Cell[BoxData[""], "Input",
  CellLabel->"In[4]:=",ExpressionUUID->"2e9e5587-d67f-45a1-be52-2a3719764ce1"],
@@ -18275,8 +18275,7 @@ Cell[BoxData[
     RowBox[{"Names", "@", "\"\<`*\>\""}], ",", 
     RowBox[{"\"\<ToPython\>\"", "|", "\"\<precessionform\>\""}]}], 
    "]"}]}]], "Input",
- CellLabel->
-  "In[153]:=",ExpressionUUID->"f24c5b70-7256-4831-91ba-88817831332f"],
+ CellLabel->"In[1]:=",ExpressionUUID->"f24c5b70-7256-4831-91ba-88817831332f"],
 
 Cell[BoxData[
  RowBox[{
@@ -18287,8 +18286,7 @@ Cell[BoxData[
       RowBox[{"4", "q"}], "+", "3"}], 
      RowBox[{"4", "+", 
       RowBox[{"3", "q"}]}]]}]}], ";"}]], "Input",
- CellLabel->
-  "In[154]:=",ExpressionUUID->"aa9cf351-8ac3-4633-af5d-95151d3f667d"],
+ CellLabel->"In[2]:=",ExpressionUUID->"aa9cf351-8ac3-4633-af5d-95151d3f667d"],
 
 Cell[BoxData[{
  RowBox[{
@@ -18336,8 +18334,7 @@ Cell[BoxData[{
         SuperscriptBox["q", "4"]}]}], ")"}]}], 
     RowBox[{"2", " ", "\[Chi]1", " ", "\[Chi]2", " ", 
      SuperscriptBox["q", "2"]}]]}], " ", ";"}]}], "Input",
- CellLabel->
-  "In[155]:=",ExpressionUUID->"d97a3e88-856a-451e-8138-2f9632c0302b"],
+ CellLabel->"In[3]:=",ExpressionUUID->"d97a3e88-856a-451e-8138-2f9632c0302b"],
 
 Cell[BoxData[
  RowBox[{
@@ -18351,8 +18348,7 @@ Cell[BoxData[
       RowBox[{"(", 
        RowBox[{"2", " ", "u", " ", "q"}], " ", ")"}]}], ")"}], "^", "2"}]}], 
   ";"}]], "Input",
- CellLabel->
-  "In[158]:=",ExpressionUUID->"39a09b5f-455c-4c4f-b9fe-2ba3605d37bc"],
+ CellLabel->"In[6]:=",ExpressionUUID->"39a09b5f-455c-4c4f-b9fe-2ba3605d37bc"],
 
 Cell[CellGroupData[{
 
@@ -18379,8 +18375,7 @@ Cell[BoxData[
     RowBox[{
      RowBox[{"0", "<", "q", "<", "1"}], "&&", 
      RowBox[{"u", ">", "0"}]}]}], "]"}]}]], "Input",
- CellLabel->
-  "In[159]:=",ExpressionUUID->"a21e766e-ebdd-45ec-9683-3c9162dbbc68"],
+ CellLabel->"In[7]:=",ExpressionUUID->"a21e766e-ebdd-45ec-9683-3c9162dbbc68"],
 
 Cell[BoxData[
  RowBox[{
@@ -18463,7 +18458,7 @@ Cell[BoxData[
       RowBox[{"(", 
        RowBox[{"4", "+", 
         RowBox[{"3", " ", "q"}]}], ")"}]}]]}], ")"}]}]], "Output",
- CellLabel->"Out[159]=",ExpressionUUID->"aec4b0e9-b204-4281-ac32-64cf9389d0b6"]
+ CellLabel->"Out[7]=",ExpressionUUID->"84164523-812c-4180-ae84-3e77ead123b6"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -18479,8 +18474,7 @@ Cell[BoxData[
        RowBox[{"4", "+", 
         RowBox[{"3", " ", "q"}]}], ")"}], "2"]}]], "//", 
    "FullSimplify"}]}]], "Input",
- CellLabel->
-  "In[160]:=",ExpressionUUID->"34f8facc-7bea-4352-83aa-ac24d6b4e664"],
+ CellLabel->"In[8]:=",ExpressionUUID->"34f8facc-7bea-4352-83aa-ac24d6b4e664"],
 
 Cell[BoxData[
  FractionBox[
@@ -18490,7 +18484,7 @@ Cell[BoxData[
     RowBox[{"(", 
      RowBox[{"4", "+", 
       RowBox[{"3", " ", "q"}]}], ")"}], "2"], " ", "u"}]]], "Output",
- CellLabel->"Out[160]=",ExpressionUUID->"4d155f05-98a5-4313-8c00-29df87583286"]
+ CellLabel->"Out[8]=",ExpressionUUID->"1127508f-6b19-4769-a99b-1568c34430ef"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -18503,8 +18497,7 @@ Cell[BoxData[
      RowBox[{
       RowBox[{"chips", "/", "overallchip"}], ",", "\[Delta]\[Chi]"}], "]"}], "//",
      "Expand"}], "//", "FullSimplify"}]}]], "Input",
- CellLabel->
-  "In[161]:=",ExpressionUUID->"5ed88468-0374-4942-88b7-51887ddcd9b1"],
+ CellLabel->"In[9]:=",ExpressionUUID->"5ed88468-0374-4942-88b7-51887ddcd9b1"],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -18574,7 +18567,7 @@ Cell[BoxData[
         RowBox[{"-", "1"}], "+", "q"}], ")"}], "2"]}], " ", "q", " ", 
     RowBox[{"(", 
      RowBox[{"1", "+", "q"}], ")"}], " ", "u"}]}], "}"}]], "Output",
- CellLabel->"Out[161]=",ExpressionUUID->"3a01f376-9d50-4e39-a3f0-baf0d5093e5e"]
+ CellLabel->"Out[9]=",ExpressionUUID->"85e5ee22-ef47-4930-b663-f76e973f8e9f"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -18594,11 +18587,11 @@ Cell[BoxData[{
   RowBox[{"\[Lambda]2", "  ", "==", " ", 
    RowBox[{"coeffs", "[", 
     RowBox[{"[", "3", "]"}], "]"}]}], "//", "Simplify"}]}], "Input",
- CellLabel->
-  "In[163]:=",ExpressionUUID->"90d3b8ed-d772-458d-ba41-d62ceca8e193"],
+ CellLabel->"In[10]:=",ExpressionUUID->"90d3b8ed-d772-458d-ba41-d62ceca8e193"],
 
 Cell[BoxData["True"], "Output",
- CellLabel->"Out[164]=",ExpressionUUID->"af0add61-f1de-40e5-b8f4-fecb26f6897f"]
+ CellLabel->
+  "Out[11]=",ExpressionUUID->"2b07f4e9-b987-448a-a522-066ff330307b"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -18628,11 +18621,11 @@ Cell[BoxData[{
   RowBox[{"\[Lambda]1", "==", 
    RowBox[{"coeffs", "[", 
     RowBox[{"[", "2", "]"}], "]"}]}], "//", "Simplify"}]}], "Input",
- CellLabel->
-  "In[165]:=",ExpressionUUID->"f2cdf2ae-fa93-4870-bc04-fea866fb230d"],
+ CellLabel->"In[12]:=",ExpressionUUID->"f2cdf2ae-fa93-4870-bc04-fea866fb230d"],
 
 Cell[BoxData["True"], "Output",
- CellLabel->"Out[166]=",ExpressionUUID->"43f841a6-64b0-412a-ade8-2876998eb281"]
+ CellLabel->
+  "Out[13]=",ExpressionUUID->"8997a701-9c2d-4b08-b479-1d3b27946719"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -18685,11 +18678,48 @@ Cell[BoxData[{
   RowBox[{"\[Lambda]0", "==", 
    RowBox[{"coeffs", "[", 
     RowBox[{"[", "1", "]"}], "]"}]}], "//", "Simplify"}]}], "Input",
- CellLabel->
-  "In[170]:=",ExpressionUUID->"1643704e-45bf-4a98-a125-8459207afb7f"],
+ CellLabel->"In[14]:=",ExpressionUUID->"1643704e-45bf-4a98-a125-8459207afb7f"],
 
 Cell[BoxData["True"], "Output",
- CellLabel->"Out[171]=",ExpressionUUID->"eda5d781-72ca-4a56-a082-2e8a2a8ca3ee"]
+ CellLabel->
+  "Out[15]=",ExpressionUUID->"856367a8-c4ec-40f6-8eae-9c66258cc374"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<lambdabar\>\"", ",", "overallchip"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<lambda2\>\"", ",", "\[Lambda]2"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<lambda1\>\"", ",", "\[Lambda]1"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"precessionform", "[", 
+  RowBox[{"\"\<lambda0\>\"", ",", "\[Lambda]0"}], "]"}]}], "Input",
+ CellLabel->"In[39]:=",ExpressionUUID->"09d06ba5-1169-4317-9bcd-d8904ba088d4"],
+
+Cell[BoxData["\<\"# Machine generated with eq_generator.nb\\nlambdabar = 1/4 \
+* q**(-1) * (1 + q) * ((4 + 3 * q))**(-2) * u**(-1)\"\>"], "Output",
+ CellLabel->"Out[39]=",ExpressionUUID->"6b7882dd-3f67-4e76-85ca-d393df162908"],
+
+Cell[BoxData["\<\"# Machine generated with eq_generator.nb\\nlambda2 = -1 * \
+((1 + -1 * q))**2 * q * (1 + q) * u\"\>"], "Output",
+ CellLabel->"Out[40]=",ExpressionUUID->"d43e2be9-0c43-4b32-a6bb-24c1cdad5841"],
+
+Cell[BoxData["\<\"# Machine generated with eq_generator.nb\\nlambda1 = -2 * \
+(1 + -1 * q) * ((1 + q))**2 * ((4 + 3 * q) * (3 + 4 * q) + 7 * q * u * \
+chieff)\"\>"], "Output",
+ CellLabel->"Out[41]=",ExpressionUUID->"3bef2dd2-e993-4fa9-a9af-7bfd44bba942"],
+
+Cell[BoxData["\<\"# Machine generated with eq_generator.nb\\nlambda0 = (2 * \
+((1 + q))**3 * (4 + 3 * q) * (3 + 4 * q) * (2 * kappa + -1 * chieff) + -1 * u \
+* (12 * (1 + -1 * q) * ((4 + 3 * q) * chi1**2 + -1 * q**3 * (3 + 4 * q) * \
+chi2**2) + 49 * q * ((1 + q))**3 * chieff**2))\"\>"], "Output",
+ CellLabel->
+  "Out[42]=",ExpressionUUID->"5ad88ad6-3fea-4385-b2b1-58685b9513eb"]
 }, Open  ]],
 
 Cell[CellGroupData[{
