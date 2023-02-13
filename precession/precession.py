@@ -3394,41 +3394,6 @@ def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
     return chip
 
 
-
-# TODO: remove this one, put it inside the eval_chip wrapper together with the RMS limit
-def eval_chip_asymptotic(theta1, theta2, q, chi1, chi2):
-    """
-    Asymptotic definition of the effective precessing spin chip, see arxiv:2011.11948. This definition is valid when spin-spin couplings can be neglected, notably at infinitely large separations.
-
-    Call
-    ----
-    chip = eval_chip_asymptotic(theta1,theta2,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    chip: float
-        Effective precessing spin chip.
-    """
-
-    term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
-    chip = 2* np.abs(term1+term2) * scipy.special.ellipe(4*term1*term2/(term1+term2)**2)/np.pi
-
-    return chip
-
-
 def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs):
     """
     Averaged definition of the effective precessing spin chip, see arxiv:2011.11948. This definition consistently averages over all variations on the precession timescale. Valid inputs are one of the following (but not both)
@@ -3577,20 +3542,44 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
 
     # TODO: first convert the inputs. deltachi can be resampled if not provided 
 
+    if r is None or q is None or chi1 is None or chi2 is None:
+        raise ValueError("Provide r, q, chi1, and chi2.")
+
+    if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None kappa is None and chieff is None:
+        deltachi, kappa, chieff = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False)
+    
+    elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and chieff is not None:
+        if deltachi is None: 
+            # TODO: this operation might not be needed in some cases, could optimize a bit here.
+            deltachi = deltachisampling(kappa, r, chieff, q, chi1, chi2)
+        theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2)
+     
+    else:
+        raise ValueError("Provide either (theta1,theta2,deltaphi), (deltachi,kappa,chieff), or (kappa,chieff).")
+
+
     if which == 'heuristic':
         chip = eval_chip_heuristic(theta1, theta2, q, chi1, chi2)
 
     elif which == 'generalized':
         chip = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
 
-    elif which == 'asymptotic':
-        chip = eval_chip_asymptotic(theta1, theta2, q, chi1, chi2)
-
     elif which == 'averaged':
-        chip = eval_chip_averaged(theta1=theta1, theta2=theta2, deltaphi=deltaphi, J=J, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2, method='quadrature', Nsamples=1e4)
+        chip_finite = eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs)
+
+        term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
+        chip_infinity = 2* np.abs(term1+term2) * scipy.special.ellipe(4*term1*term2/(term1+term2)**2)/np.pi         
+        chip = np.where(r!=np.inf, chip_finite, chip_infinity)
+
+    elif which == 'rms':
+        chip_finite = eval_chip_averaged(kappa, r, chieff, q, chi1, chi2)
+
+        term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
+        chip_infinity = (term1**2 + term2**2)**(1/2)         
+        chip = np.where(r!=np.inf, chip_finite, chip_infinity)
 
     else:
-        raise ValueError("`which` needs to be one of the following: `heuristic`, `generalized`, `asymptotic`, `averaged`.")
+        raise ValueError("`which` needs to be one of the following: `heuristic`, `generalized`, `averaged`, 'rms`.")
 
     return chip
 
