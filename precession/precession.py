@@ -3645,7 +3645,7 @@ def updown_endpoint(q, chi1, chi2):
     
     q = np.atleast_1d(q)
     chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
     
     return (chi1 - q * chi2) / (chi1 + q * chi2)
 
