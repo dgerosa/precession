@@ -3641,6 +3641,15 @@ def rupdown(q, chi1, chi2):
     return np.stack([rudp, rudm])
 
 
+def updown_endpoint(q, chi1, chi2):
+    
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi1)
+    
+    return (chi1 - q * chi2) / (chi1 + q * chi2)
+
+
 def omegasq_aligned(r, q, chi1, chi2, which):
     """
     Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
