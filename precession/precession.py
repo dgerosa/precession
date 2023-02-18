@@ -184,6 +184,7 @@ def rotate_nested(vec, align_zaxis, align_xzplane):
 
     return vecrot
 
+
 def sample_unitsphere(N=1):
     """
     Sample points uniformly on a sphere of unit radius. Returns array of shape (N,3).
@@ -206,6 +207,16 @@ def sample_unitsphere(N=1):
     vec = np.random.randn(3, N)
     vec /= np.linalg.norm(vec, axis=0)
     return vec.T
+
+
+
+def isotropic_angles(N=1):
+
+    theta1=np.arccos(np.random.uniform(-1,1,N))
+    theta2=np.arccos(np.random.uniform(-1,1,N))
+    deltaphi=np.random.uniform(-np.pi,np.pi,N)
+
+    return theta1,theta2,deltaphi
 
 
 def tiler(thing,shaper):
@@ -3545,7 +3556,7 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
     if r is None or q is None or chi1 is None or chi2 is None:
         raise ValueError("Provide r, q, chi1, and chi2.")
 
-    if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None kappa is None and chieff is None:
+    if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None:
         deltachi, kappa, chieff = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=False)
     
     elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and chieff is not None:
@@ -3572,7 +3583,7 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
         chip = np.where(r!=np.inf, chip_finite, chip_infinity)
 
     elif which == 'rms':
-        chip_finite = eval_chip_averaged(kappa, r, chieff, q, chi1, chi2)
+        chip_finite = eval_chip_rms(kappa, r, chieff, q, chi1, chi2)
 
         term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
         chip_infinity = (term1**2 + term2**2)**(1/2)         
