@@ -3647,7 +3647,13 @@ def updown_endpoint(q, chi1, chi2):
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
     
-    return (chi1 - q * chi2) / (chi1 + q * chi2)
+    costhetaupdown = (chi1 - q * chi2) / (chi1 + q * chi2)
+
+    theta1 = np.arccos(costhetaupdown)
+    theta2 = np.arccos(costhetaupdown)
+    deltaphi = np.zeros(len(theta1))
+
+    return theta1, theta2, deltaphi
 
 
 def omegasq_aligned(r, q, chi1, chi2, which):
