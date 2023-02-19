@@ -3703,7 +3703,7 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     return omegasq
 
 
-def widenutation(q, chi1, chi2):
+def widenutation_separation(q, chi1, chi2):
     """
     The critical separation r_wide below which the binary component with
     smaller dimensionless spin may undergo wide nutations.
@@ -3731,11 +3731,31 @@ def widenutation(q, chi1, chi2):
     chi1 = np.atleast_1d(chi1)
     chi2 = np.atleast_1d(chi2)
 
-    rwide = ((q*chi2 - chi1) / (1-q))**2
+    rwide = ((chi1 - q*chi2) / (1-q))**2
 
     return rwide
 
-# TODO: write function with values of J and chieff where wide nutation happens
+
+def widenutation_condition(r, q, chi1, chi2):
+
+    r = np.atleast_1d(r)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    rwide = widenutation_separation(q, chi1, chi2)
+
+    kappawide1 = (chi1**2 - 2*q*chi1**2 + q**4*chi2**2 - 2*q**2*(1-q)*r)/(2*q*(1+q)**2 * r**0.5)
+    chieffwide1 = -(1-q)*r**0.5/(1+q)
+
+    kappawide2 = (chi1**2 - 2*q**3*chi1**2 + q**4*chi2**2 + 2*q*(1-q)*r)/(2*q*(1+q)**2 * r**0.5)
+    chieffwide2 = (1-q)*r**0.5/(1+q)
+
+    which = np.where(r<=rwide, np.where(chi1<=chi2,"wide1","wide2"), "nowide")
+    kappa = np.where(r<=rwide, np.where(chi1<=chi2,kappawide1,kappawide2), np.nan)
+    chieff = np.where(r<=rwide, np.where(chi1<=chi2,chieffwide1,chieffwide2), np.nan)
+
+    return which, kappa, chieff
 
 
 ################ Precession-averaged evolution ################
@@ -5237,29 +5257,40 @@ if __name__ == '__main__':
     # print(u)
 
 
-    q=0.2
-    chi1=0.6
-    chi2=0.9
-    chieff=0.
-    r=np.geomspace(10,1000000000000,10)
-    #r[0]=np.inf
-    #r=r[::-1]
-    kappatilde = 0.8
-    deltachitilde = 0.7
-    kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
-    #print(kappa)
-    #kappa=0.19702426300035386
-    u=eval_u(r=r,q=tiler(q,r))
-    #u = eval_u([r,1000,100,10], [q,q,q,q])
-    kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
+    # q=0.2
+    # chi1=0.6
+    # chi2=0.9
+    # chieff=0.
+    # r=np.geomspace(10,1000000000000,10)
+    # #r[0]=np.inf
+    # #r=r[::-1]
+    # kappatilde = 0.8
+    # deltachitilde = 0.7
+    # kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
+    # #print(kappa)
+    # #kappa=0.19702426300035386
+    # u=eval_u(r=r,q=tiler(q,r))
+    # #u = eval_u([r,1000,100,10], [q,q,q,q])
+    # kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
 
-    #print("k", kappasol)
+    # #print("k", kappasol)
 
-    deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
+    # deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
 
 
-    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
+    # theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
 
+
+    q=np.random.uniform(0.99,1,100)
+    chi1=np.random.uniform(0.1,1,100)
+    chi2=np.random.uniform(0.1,1,100)
+    r=10**np.random.uniform(1,4,100)
+
+    rwide=widenutation_separation(q,chi1,chi2)
+    which, kappa,chieff = widenutation_condition(r, q, chi1, chi2)
+
+    for x in np.array([r,q,chi1,chi2,rwide,which, kappa,chieff]).T:  
+        print(x)
 
     #print(eval_chip_heuristic(theta1, theta2, q, chi1, chi2))
     #print(eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2))
@@ -5272,11 +5303,11 @@ if __name__ == '__main__':
 
     #t0=time.time()
 
-    print(eval_chip_averaged(kappa, r, tiler(chieff,r), tiler(q,r), tiler(chi1,r), tiler(chi2,r)))
+    #print(eval_chip_averaged(kappa, r, tiler(chieff,r), tiler(q,r), tiler(chi1,r), tiler(chi2,r)))
 
-    chiprms= eval_chip_rms(kappa, r, tiler(chieff,r), tiler(q,r), tiler(chi1,r), tiler(chi2,r))
+    #chiprms= eval_chip_rms(kappa, r, tiler(chieff,r), tiler(q,r), tiler(chi1,r), tiler(chi2,r))
 
-    print(chiprms)
+    #print(chiprms)
     #print(time.time()-t0)
 
     #print(chip2-chiprms)
