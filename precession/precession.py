@@ -209,7 +209,6 @@ def sample_unitsphere(N=1):
     return vec.T
 
 
-
 def isotropic_angles(N=1):
 
     theta1=np.arccos(np.random.uniform(-1,1,N))
@@ -1231,10 +1230,10 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
         deltaphi = np.atleast_1d(deltaphi)
         q = np.atleast_1d(q)
 
-        S1, S2 = spinmags(q, chi1, chi2)
+        S1 = eval_S1(q, chi1):
+        S2 = eval_S2(q, chi2)
         L = eval_L(r, q)
         S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
-
         J = (L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
 
     elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and r is not None and q is not None and chi1 is None and chi2 is None:
@@ -3247,9 +3246,6 @@ def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
 ################ More phenomenology ################
 
-
-#TODO regen docstrings
-# TODO: this can be made easier using the sign a single term from the dphi expression
 def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None):
     """
     Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
@@ -3296,8 +3292,6 @@ def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=
 
     return morphs
 
-
-# TODO all the chip stuff needs to be checked and debugged
 
 def chip_terms(theta1, theta2, q, chi1, chi2):
     """
@@ -3504,8 +3498,6 @@ def eval_chip_rms(kappa, r, chieff, q, chi1, chi2):
     return chip
 
 
-
-# This is still old. Put the infinity limits in here.
 def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", **kwargs):
     """
     Compute the effective precessing spin chip, see arxiv:2011.11948. The keyword `which` one of the following definitions:
@@ -3595,14 +3587,11 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
     return chip
 
 
-
 ### Daria's five parameters should go here
-
 
 
 # TODO Add updown endpoint.
 # TODO Add limits of the resonances at small separations from the endpoint paper
-
 def rupdown(q, chi1, chi2):
     """
     The critical separations r_ud+/- marking the region of the up-down precessional instability.
@@ -3656,6 +3645,7 @@ def updown_endpoint(q, chi1, chi2):
     return theta1, theta2, deltaphi
 
 
+# TODO: check
 def omegasq_aligned(r, q, chi1, chi2, which):
     """
     Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
@@ -3911,6 +3901,7 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     return ODEsolution
 
 
+# TODO: check/rewrite
 # TODO: return Sminus and Splus along the solution. Right now these are computed inside Ssampling but not stored
 def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None):
     """
@@ -4094,7 +4085,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
     return outcome
 
-# TODO: Add an exmple to the docstrings
+
 def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4):
     """
     Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported.
@@ -4181,8 +4172,6 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
 ################ Orbit-averaged evolution ################
 
 # TODO: replace quadrupole_formula flag with parameter to select a given PN order. Update docstrings when you do it
-
-
 def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula=False):
     """
     Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unite vectors, v is the orbital velocity, and t is time. This is an internal function used by the ODE integrator and is not array-compatible.
@@ -4679,7 +4668,6 @@ def inspiral(*args, which=None, **kwargs):
 
     else:
         raise ValueError("`which` needs to be `precav`, `orbav` or `hybrid`.")
-
 
 
 # TODO: insert flag to select PN order
@@ -5287,16 +5275,16 @@ if __name__ == '__main__':
     # theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
 
 
-    q=np.random.uniform(0.99,1,100)
-    chi1=np.random.uniform(0.1,1,100)
-    chi2=np.random.uniform(0.1,1,100)
-    r=10**np.random.uniform(1,4,100)
+    # q=np.random.uniform(0.99,1,100)
+    # chi1=np.random.uniform(0.1,1,100)
+    # chi2=np.random.uniform(0.1,1,100)
+    # r=10**np.random.uniform(1,4,100)
 
-    rwide=widenutation_separation(q,chi1,chi2)
-    which, kappa,chieff = widenutation_condition(r, q, chi1, chi2)
+    # rwide=widenutation_separation(q,chi1,chi2)
+    # which, kappa,chieff = widenutation_condition(r, q, chi1, chi2)
 
-    for x in np.array([r,q,chi1,chi2,rwide,which, kappa,chieff]).T:  
-        print(x)
+    # for x in np.array([r,q,chi1,chi2,rwide,which, kappa,chieff]).T:  
+    #     print(x)
 
     #print(eval_chip_heuristic(theta1, theta2, q, chi1, chi2))
     #print(eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2))
