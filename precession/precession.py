@@ -1129,7 +1129,7 @@ def eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1):
     return deltaphi
 
 
-def eval_costhetaL(deltachi, kappa, r, q):
+def eval_costhetaL(deltachi, kappa, r, chieff, q):
     """
     Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
 
@@ -1171,7 +1171,7 @@ def eval_costhetaL(deltachi, kappa, r, q):
     return costhetaL
 
 
-def eval_thetaL(deltachi, kappa, r, q):
+def eval_thetaL(deltachi, kappa, r, chieff, q):
     """
     Angle thetaL betwen orbital angular momentum and total angular momentum.
 
@@ -1200,7 +1200,7 @@ def eval_thetaL(deltachi, kappa, r, q):
         Angle betwen orbital angular momentum and total angular momentum.
     """
 
-    costhetaL = eval_costhetaL(deltachi, kappa, r, q)
+    costhetaL = eval_costhetaL(deltachi, kappa, r,chieff, q)
     thetaL = np.arccos(costhetaL)
 
     return thetaL
@@ -1289,7 +1289,7 @@ def eval_kappa(theta1=None, theta2=None, deltaphi=None, J=None, r=None, q=None, 
         Regularized angular momentum (J^2-L^2)/(2L).
     """
 
-    if theta1 is None and theta2 is None and deltaphi is None and J is not None and r is None and q is not None and chi1 is None and chi2 is None:
+    if theta1 is None and theta2 is None and deltaphi is None and J is not None and r is not None and q is not None and chi1 is None and chi2 is None:
 
         J = np.atleast_1d(J)
         L = eval_L(r, q)
@@ -3612,6 +3612,190 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
 
 
 ### Daria's five parameters should go here
+def eval_nutation_freq(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+    """
+    Nutation frequency of S as it oscillates from S- to S+ back to S-
+
+    Call
+    ----
+    little_omega = eval_little_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
+
+    Returns
+    -------
+    little_omega: float
+        Nutation frequency.
+    """
+    tau = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    omega = (2 * np.pi) / tau
+    return omega
+
+
+def eval_bracket_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+    """
+    Precession average of the precession frequency of S as it oscillates from S- to S+ back to S-
+
+    Call
+    ----
+    bracket_omega = eval_bracket_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
+
+    Returns
+    -------
+    bracket_omega: float
+        Precession averaged precession frequency.
+    """
+    alpha = eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    tau = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+    bracket_omega = alpha / tau
+    return bracket_omega
+
+
+def eval_delta_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+    """
+    Variation of the precession frequency of S as it oscillates from S- to S+ back to S- due to nutational effects
+
+    Call
+    ----
+    delta_omega = eval_delta_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
+
+    Returns
+    -------
+    delta_omega: float
+        Precession frequency variation due to nutation.
+    """
+    if precomputedroots is None:
+        deltachimin, deltachiplu = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
+    else:
+        deltachimin, deltachiplu, _ = precomputedroots[:-1]
+    Omega_minus = eval_OmegaL(deltachimin, kappa, r, chieff, q, chi1, chi2)
+    Omega_plus = eval_OmegaL(deltachiplu, kappa, r, chieff, q, chi1, chi2)
+    delta_omega = Omega_plus - Omega_minus
+    return delta_omega
+
+
+def eval_delta_theta(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+    """
+    Nutation amplitude of S as it oscillates from S- to S+ back to S-
+
+    Call
+    ----
+    delta_theta = eval_delta_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    xi: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of Ssroots for computational efficiency.
+
+    Returns
+    -------
+    delta_theta: float
+        Nutation amplitude.
+    """
+    if precomputedroots is None:
+        deltachimin, deltachiplu = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
+    else:
+        deltachimin, deltachiplu, _ = precomputedroots[:-1]
+    theta_minus = eval_thetaL(deltachimin, kappa, r, chieff, q)
+    theta_plus = eval_thetaL(deltachiplu, kappa, r, chieff, q)
+    delta_theta = theta_plus - theta_minus
+    return delta_theta
+
+
+def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, **kwargs):
+    """
+    Precession average of precession amplitude of S as it oscillates from S- to S+ back to S-
+
+    Call
+    ----
+    bracket_theta = eval_bracket_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)
+
+    Parameters
+    ----------
+    J: float
+        Magnitude of the total angular momentum.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+
+    Returns
+    -------
+    bracket_theta: float
+        Precession-averaged precession amplitude.
+    """
+
+    def _integrand(deltachi, kappa, r, chieff, q):
+        bracket_theta_integrand = eval_thetaL(deltachi, kappa, r, chieff, q)
+        return bracket_theta_integrand
+
+    bracket_theta = precession_average(kappa, r, chieff, q, chi1, chi2, _integrand, kappa, r, chieff, q, **kwargs)
+    return bracket_theta
 
 
 # TODO Add updown endpoint.
