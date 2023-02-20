@@ -851,6 +851,19 @@ def eval_deltachi(theta1, theta2, q, chi1, chi2):
     return deltachi
 
 
+def eval_deltachiinf(kappa, chieff, q, chi1, chi2):
+
+    kappa = np.atleast_1d(kappa)
+    chieff = np.atleast_1d(chieff)
+    q = np.atleast_1d(q)
+    chi1 = np.atleast_1d(chi1)
+    chi2 = np.atleast_1d(chi2)
+
+    deltachi = (1+q)/(1-q)*(2*kappa-chieff)
+
+    return deltachi
+
+
 def eval_costheta1(deltachi, chieff, q, chi1):
     """
     Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
@@ -1069,6 +1082,9 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
         (chi2)**2) + (2 * q * (1 + q) * (r)**(1/2) * (-1 * (1 + -1 * q) * \
         deltachi + (2 * (1 + q) * kappa + -1 * (1 + q) * chieff)) + -1 * q * \
         ((1 + q))**2 * (-1 * (deltachi)**2 + chieff**2)))
+
+    # At infinity, the only thing I can do is putting a random number for deltaphi, unformly distributed
+    cosdeltaphi = np.where(u!=0, cosdeltaphi, np.cos(np.random.uniform(0,np.pi, len(cosdeltaphi))))
 
     return cosdeltaphi
 
@@ -3061,11 +3077,11 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
     # For infinity use the analytic result. Ignore q=1 "divide by zero" warning:
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=RuntimeWarning)
-        deltachiinf = np.tile( (1+q)/(1-q)*(2*kappa-chieff), (N,1) )
+        deltachiinf = np.tile( eval_deltachiinf(kappa, chieff, q, chi1, chi2), (N,1) )
 
     deltachi=np.where(u!=0, deltachi,deltachiinf)
 
-    return deltachi.T
+    return np.squeeze(deltachi.T)
 
 
 ################ Dynamics in an intertial frame ################
@@ -3971,6 +3987,12 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
                 inputs[k] = np.atleast_1d(inputs[k])
     theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2 = inputs
 
+    # This array has to match the outputs of _compute (in the right order!)
+    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'])
+    # If in doubt, return everything
+    if requested_outputs is None:
+        requested_outputs = alloutputs
+
     def _compute(theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2):
 
         # Make sure you have q, chi1, and chi2.
@@ -3989,96 +4011,58 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
 
         assert np.sum(u == 0) <= 1 and np.sum(u[1:-1] == 0) == 0, "There can only be one r=np.inf location, either at the beginning or at the end."
 
+        # User provided theta1,theta2, and deltaphi. Get chieff and kappa.
+        if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None:
+            deltachi, kappa, chieff = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
 
-        # TODO: check this, might not be needed anymore
-        # Start from r=infinity
-        if u[0] == 0:
-
-            if theta1 is not None and theta2 is not None and S is None and J is None and kappa is None and chieff is None:
-                kappa, chieff = angles_to_asymptotic(theta1, theta2, q, chi1, chi2)
-                theta1inf, theta2inf = theta1, theta2
-
-            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and chieff is not None:
-                theta1inf, theta2inf = asymptotic_to_angles(kappa, chieff, q, chi1, chi2)
-
-            else:
-                raise TypeError("Integrating from infinite separation. Please provide either (theta1,theta2) or (kappa,chieff).")
-
-            # Enforce limits
-            # TODO:kappainflimits will disappear
-            print("TODO, kappainflimits will disappear")
-            kappainfmin, kappainfmax = kappainflimits(chieff=chieff, q=q, chi1=chi1, chi2=chi2, enforce=True)
-            assert kappa > kappainfmin and kappa < kappainfmax, "Unphysical initial conditions [inspiral_precav]."
-
-        # Start from finite separations
-        else:
-
-            # User provided theta1,theta2, and deltaphi. Get chieff and kappa.
-            if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None:
-                deltachi, kappa, chieff = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
-
-            # User provides kappa, chieff, and maybe deltachi.
-            elif theta1 is None and theta2 is None and deltaphi is None and kappa is None and chieff is not None:
-                pass
-
-            else:
-                TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,chieff), (S,J,chieff), (kappa,chieff), (S,kappa,chieff).")
-
-            # Enforce limits
-            chieffmin, chieffmax = chiefflimits_definition(q, chi1, chi2)
-            assert chieff >= chieffmin and chieff <= chieffmax, "Unphysical initial conditions [inspiral_precav]."
-
-            kappamin,kappamax = kappalimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2)
-            assert kappa >= kappamin and kappa <= kappamax, "Unphysical initial conditions [inspiral_precav]."
-
-
-        # Integration.
-        kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2,**odeint_kwargs)
-
-        print("int", kappa)
-
-        rok = r[u != 0]
-        kappaok = kappa[u != 0]
-
-        # Resample S and assign random sign to deltaphi
-        J = eval_J(kappa=kappaok, r=rok, q=tiler(q, rok))
-        S = Ssampling(J, rok, tiler(chieff, rok), tiler(q, rok),
-        tiler(chi1, rok), tiler(chi2, rok), N=1)
-        theta1, theta2, deltaphi = conserved_to_angles(S, J, rok, chieff, tiler(q, rok),
-        tiler(chi1, rok), tiler(chi2, rok))
-        deltaphi = deltaphi * np.random.choice([-1, 1], deltaphi.shape)
-
-        # Integrating from infinite separation.
-        if u[0] == 0:
-            J = np.concatenate(([np.inf], J))
-            S = np.concatenate(([np.nan], S))
-            theta1 = np.concatenate((np.atleast_1d(theta1inf), theta1))
-            theta2 = np.concatenate((np.atleast_1d(theta2inf), theta2))
-            deltaphi = np.concatenate(([np.nan], deltaphi))
-        # Integrating backwards to infinity
-        elif u[-1] == 0:
-            J = np.concatenate((J, [np.inf]))
-            S = np.concatenate((S, [np.nan]))
-            theta1inf, theta2inf = asymptotic_to_angles(kappa[-1], chieff, q, chi1, chi2)
-            theta1 = np.concatenate((theta1, theta1inf))
-            theta2 = np.concatenate((theta2, theta2inf))
-            deltaphi = np.concatenate((deltaphi, [np.nan]))
-        else:
+        # User provides kappa, chieff, and maybe deltachi.
+        elif theta1 is None and theta2 is None and deltaphi is None and kappa is None and chieff is not None:
             pass
 
-        return theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2
+        else:
+            TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,chieff), (S,J,chieff), (kappa,chieff), (S,kappa,chieff).")
 
-    # This array has to match the outputs of _compute (in the right order!)
-    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'])
+        # Enforce limits
+        chieffmin, chieffmax = chiefflimits_definition(q, chi1, chi2)
+        assert chieff >= chieffmin and chieff <= chieffmax, "Unphysical initial conditions [inspiral_precav]."
+
+        kappamin,kappamax = kappalimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+        assert kappa >= kappamin and kappa <= kappamax, "Unphysical initial conditions [inspiral_precav]."
+
+        # Actual integration.
+        kappa = np.squeeze(integrator_precav(kappa, u, chieff, q, chi1, chi2,**odeint_kwargs))
+
+
+        # Roots along the evolution
+        if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'deltachiminus', 'deltachiplus', 'deltachi3']):
+            deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
+        
+            # Resample deltachi
+            if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi']):
+                deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+
+                # Compute the angles. Assign random cyclesign
+                if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi']):
+                    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r), cyclesign = np.random.choice([-1, 1], r.shape))
+
+                else:
+                    theta1=None
+                    theta2=None
+                    deltaphi=None
+            else:
+                deltachi=None
+        else:
+            deltachiminus = None
+            deltachiplus = None
+            deltachi3 = None
+
+
+        return theta1, theta2, deltaphi, deltachi, kappa, r, u, deltachiminus, deltachiplus, deltachi3, chieff, q, chi1, chi2
 
     # Here I force dtype=object because the outputs have different shapes
-    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2)), dtype=object).T
+    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2)), dtype=object).T
 
-    # Handle the outputs.
-    # If in doubt, return everything
-    if requested_outputs is None:
-        requested_outputs = alloutputs
-    # Return only those requested (in1d return boolean array)
+    # Return only requested outputs (in1d return boolean array)
     wantoutputs = np.in1d(alloutputs, requested_outputs)
 
     # Store into a dictionary
@@ -4087,8 +4071,10 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     for k, v in zip(alloutputs[wantoutputs], allresults[wantoutputs]):
         outcome[k] = np.squeeze(np.stack(v))
 
+        # For the constants of motion...
         if k == 'chieff' or k == 'q' or k == 'chi1' or k == 'chi2':  # Constants of motion
             outcome[k] = np.atleast_1d(outcome[k])
+        #... and everything else
         else:
             outcome[k] = np.atleast_2d(outcome[k])
 
@@ -5284,7 +5270,14 @@ if __name__ == '__main__':
     #print("deltachi", deltachi)
 
 
-    inspiral_precav(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    #print(inspiral_precav(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2))
+
+    theta1=0.3
+    theta2=0.5
+    deltaphi=1.
+
+    print(inspiral_precav(theta1=theta1, theta2=theta2,deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2,requested_outputs=["kappa"]))
+
 
     # theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
 
