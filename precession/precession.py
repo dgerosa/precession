@@ -1230,7 +1230,7 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
         deltaphi = np.atleast_1d(deltaphi)
         q = np.atleast_1d(q)
 
-        S1 = eval_S1(q, chi1):
+        S1 = eval_S1(q, chi1)
         S2 = eval_S2(q, chi2)
         L = eval_L(r, q)
         S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
@@ -2795,9 +2795,8 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
     
     #print(u,"x",deltachiminus,deltachiplus,deltachi3)
 
+
     m = (1-q)*(deltachiplus-deltachiminus)/(deltachi3-(1-q)*deltachiminus)
-
-
 
     return m
 
@@ -3048,7 +3047,8 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
     tau = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
 
     # For each binary, generate N samples between 0 and tau.
-    t = np.random.uniform(np.zeros(len(tau)),tau,size=(N,len(tau)))
+    # For r=infinity use a simple placeholder
+    t = np.random.uniform(np.zeros(len(tau)),np.where(u!=0, tau, 0),size=(N,len(tau)))
 
     # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
     # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
@@ -3057,6 +3057,14 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
     # Note the special broadcasting rules of deltachioft, see Soft.__docs__
     # deltachi has shape (M, N).
     deltachi = deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+
+    # For infinity use the analytic result. Ignore q=1 "divide by zero" warning:
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+        deltachiinf = np.tile( (1+q)/(1-q)*(2*kappa-chieff), (N,1) )
+
+    deltachi=np.where(u!=0, deltachi,deltachiinf)
+
     return deltachi.T
 
 
@@ -3903,7 +3911,7 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
 
 # TODO: check/rewrite
 # TODO: return Sminus and Splus along the solution. Right now these are computed inside Ssampling but not stored
-def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None):
+def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, **odeint_kwargs):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. In addition, integration can be done between finite separations, forwards from infinite to finite separation, or backwards from finite to infinite separation. For infinity, use r=np.inf or u=0.
     The initial conditions must be specified in terms of one an only one of the following:
@@ -3952,22 +3960,24 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     """
 
     # Substitute None inputs with arrays of Nones
-    inputs = [theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2]
+    inputs = [theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(tiler(None, np.atleast_1d(q))))
         else:
-            if k == 6 or k == 7:  # Either u or r
+            if k == 5 or k == 6:  # Either u or r
                 inputs[k] = np.atleast_2d(inputs[k])
             else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
-    theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2 = inputs
+    theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2 = inputs
 
-    def _compute(theta1, theta2, deltaphi, S, J, kappa, r, u, chieff, q, chi1, chi2):
+    def _compute(theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2):
 
+        # Make sure you have q, chi1, and chi2.
         if q is None or chi1 is None or chi2 is None:
             raise TypeError("Please provide q, chi1, and chi2.")
 
+        # Make sure you have either r or u.
         if r is not None and u is None:
             assert np.logical_or(ismonotonic(r, '<='), ismonotonic(r, '>=')), 'r must be monotonic'
             u = eval_u(r, tiler(q, r))
@@ -3979,6 +3989,8 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
         assert np.sum(u == 0) <= 1 and np.sum(u[1:-1] == 0) == 0, "There can only be one r=np.inf location, either at the beginning or at the end."
 
+
+        # TODO: check this, might not be needed anymore
         # Start from r=infinity
         if u[0] == 0:
 
@@ -4001,33 +4013,28 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         # Start from finite separations
         else:
 
-            # User provides theta1,theta2, and deltaphi.
-            if theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and chieff is None:
-                S, J, chieff = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
-                kappa = eval_kappa(J, r[0], q)
+            # User provided theta1,theta2, and deltaphi. Get chieff and kappa.
+            if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None:
+                deltachi, kappa, chieff = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
 
-            # User provides J, chieff, and maybe S.
-            elif theta1 is None and theta2 is None and deltaphi is None and J is not None and kappa is None and chieff is not None:
-                kappa = eval_kappa(J, r[0], q)
-
-            # User provides kappa, chieff, and maybe S.
-            elif theta1 is None and theta2 is None and deltaphi is None and J is None and kappa is not None and chieff is not None:
-                J = eval_J(kappa=kappa, r=r[0], q=q)
+            # User provides kappa, chieff, and maybe deltachi.
+            elif theta1 is None and theta2 is None and deltaphi is None and kappa is None and chieff is not None:
+                pass
 
             else:
                 TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,chieff), (S,J,chieff), (kappa,chieff), (S,kappa,chieff).")
 
             # Enforce limits
-            Jmin, Jmax = Jlimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2, enforce=True)
-            assert J > Jmin and J < Jmax, "Unphysical initial conditions [inspiral_precav]."
+            chieffmin, chieffmax = chiefflimits_definition(q, chi1, chi2)
+            assert chieff >= chieffmin and chieff <= chieffmax, "Unphysical initial conditions [inspiral_precav]."
 
-        # TODO: pass rtol and atol to integrator_precav
+            kappamin,kappamax = kappalimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+            assert kappa >= kappamin and kappa <= kappamax, "Unphysical initial conditions [inspiral_precav]."
 
-        # Integration. Return interpolant along the solution
-        kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
-        # Evaluate the interpolant at the requested values of u
-        #kappa = np.squeeze(ODEsolution.item().sol(u))
-        # Select finite separations
+
+        # Integration.
+        kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2,**odeint_kwargs)
+
         rok = r[u != 0]
         kappaok = kappa[u != 0]
 
@@ -5251,26 +5258,28 @@ if __name__ == '__main__':
     # print(u)
 
 
-    # q=0.2
-    # chi1=0.6
-    # chi2=0.9
-    # chieff=0.
-    # r=np.geomspace(10,1000000000000,10)
-    # #r[0]=np.inf
-    # #r=r[::-1]
-    # kappatilde = 0.8
-    # deltachitilde = 0.7
-    # kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
-    # #print(kappa)
-    # #kappa=0.19702426300035386
-    # u=eval_u(r=r,q=tiler(q,r))
-    # #u = eval_u([r,1000,100,10], [q,q,q,q])
-    # kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
+    q=0.9
+    chi1=0.6
+    chi2=0.9
+    chieff=0.
+    r=np.geomspace(10,100000000,10)
+    r[-1]=np.inf
+    #r=r[::-1]
+    kappatilde = 0.8
+    deltachitilde = 0.7
+    kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
+    #print(kappa)
+    #kappa=0.19702426300035386
+    u=eval_u(r=r,q=tiler(q,r))
+    #u = eval_u([r,1000,100,10], [q,q,q,q])
+    kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
 
-    # #print("k", kappasol)
+    print("k", kappa)
 
-    # deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
+    deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r),N=2)
 
+
+    print("deltachi", deltachi)
 
     # theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
 
