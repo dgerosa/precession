@@ -13,7 +13,7 @@ from itertools import repeat
 ################ Utilities ################
 
 # TODO: new algorithm! Needs to be documented!
-def roots_vec(p, enforce=False):
+def roots_vec(p): #, enforce=False):
     """
     Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
     Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977
@@ -35,12 +35,15 @@ def roots_vec(p, enforce=False):
 
     p = np.atleast_1d(p)
     non_zeros = np.count_nonzero(p, axis=1)
+    
+    # Mask arrays with all zeros with a dummy equation
+    p[non_zeros==0,0]=1
 
-    if not non_zeros.all()!=0:
-        if enforce:
-            raise ValueError("There is at least one coefficients line with all zeros [roots_vec_zeros].")
-        else:
-            warnings.warn("There is at least one coefficients line with all zeros [roots_vec_zeros].", Warning)
+    #if not non_zeros.all()!=0:
+    #    if enforce:
+    #        raise ValueError("There is at least one coefficients line with all zeros [roots_vec_zeros].")
+    #    else:
+    #        warnings.warn("There is at least one coefficients line with all zeros [roots_vec_zeros].", Warning)
 
     #https://stackoverflow.com/a/20361561
     B = np.append(p, np.ones(p.shape[0])[:,None], axis=1)
@@ -61,7 +64,12 @@ def roots_vec(p, enforce=False):
     nansol = np.reshape(np.repeat(nz, results.shape[1], axis=0), results.shape)
     resind = np.mgrid[0:results.shape[0], 0:results.shape[1]][1]
 
-    return np.where(resind<nansol, np.nan, results)
+    resind = np.where(resind<nansol, np.nan, results)
+
+    # Replace nans for arrays where it's all zeros
+    resind = np.where(non_zeros==0, np.ones(resind.shape).T*np.nan, resind.T).T
+
+    return resind
 
 
 def norm_nested(x):
@@ -2597,6 +2605,8 @@ def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2):
     coeff1r = (1-q) * coeff1
     coeff0r = (1-q)**2 * coeff0
 
+    print(coeff3r, coeff2r, coeff1r, coeff0r)
+
     return np.stack([coeff3r, coeff2r, coeff1r, coeff0r])
 
 
@@ -2639,7 +2649,6 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
 
     if precomputedroots is None:
         deltachiminus, deltachiplus, _ = wraproots(deltachicubic_coefficients, kappa, u, chieff, q, chi1, chi2).T
-
 
         # If you need the spurious root as well.
         if full_output:
@@ -4081,26 +4090,19 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     odeint_kwargs['full_output'] = 0 
 
     def _compute(kappainitial, u, chieff, q, chi1, chi2, odeint_kwargs):
-        #print(kappainitial)
+
         # h0 controls the first stepsize attempted. If integrating from finite separation, let the solver decide (h0=0). If integrating from infinity, prevent it from being too small.
         # h0= 1e-3 if u[0]==0 else 0
 
         # Make sure the first step is large enough. This is to avoid LSODA to propose a tiny step which causes the integration to stall
         # if 'h0' not in odeint_kwargs: odeint_kwargs['h0']=min(u[0])/1e6
-
         # Update: This does not seem to be necessary after all.
-
 
         ODEsolution = scipy.integrate.odeint(rhs_precav, kappainitial, u, args=(chieff, q, chi1, chi2), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
 
         return np.squeeze(ODEsolution)
 
-
-
         #ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(chieff, q, chi1, chi2), atol=1e-8, rtol=1e-8)  # ,events=event)
-
-        # TODO: let user pick rtol and atol
-
         # Return ODE object. The key methods is .sol --callable, sol(t).
         #return ODEsolution
 
@@ -4109,8 +4111,6 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     return ODEsolution
 
 
-# TODO: check/rewrite
-# TODO: return Sminus and Splus along the solution. Right now these are computed inside Ssampling but not stored
 def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, **odeint_kwargs):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. In addition, integration can be done between finite separations, forwards from infinite to finite separation, or backwards from finite to infinite separation. For infinity, use r=np.inf or u=0.
@@ -4216,6 +4216,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         # Actual integration.
         kappa = np.squeeze(integrator_precav(kappa, u, chieff, q, chi1, chi2,**odeint_kwargs))
 
+        print(q,kappa)
 
         # Roots along the evolution
         if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'deltachiminus', 'deltachiplus', 'deltachi3']):
@@ -5430,7 +5431,13 @@ if __name__ == '__main__':
     # print(u)
 
 
-    q=0.9
+    print( roots_vec([[0,1,2,3],[0,0,0,0]]) ) 
+
+
+    import sys
+    sys.exit()
+
+    q=1
     chi1=0.6
     chi2=0.9
     chieff=0.
@@ -5460,7 +5467,10 @@ if __name__ == '__main__':
     theta2=0.5
     deltaphi=1.
 
-    print(inspiral_precav(theta1=theta1, theta2=theta2,deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2,requested_outputs=["kappa"]))
+    #print(inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2,requested_outputs=["theta1",'chieff']))
+
+
+    print(inspiral_precav(theta1=[theta1,theta1], theta2=[theta2,theta2], deltaphi=[deltaphi,deltaphi], r=[r,r], q=[q,q], chi1=[chi1,chi1], chi2=[chi2,chi2],requested_outputs=["theta1",'chieff']))
 
 
     # theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
