@@ -4035,6 +4035,8 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         # Integration.
         kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2,**odeint_kwargs)
 
+        print("int", kappa)
+
         rok = r[u != 0]
         kappaok = kappa[u != 0]
 
@@ -5272,14 +5274,17 @@ if __name__ == '__main__':
     #kappa=0.19702426300035386
     u=eval_u(r=r,q=tiler(q,r))
     #u = eval_u([r,1000,100,10], [q,q,q,q])
-    kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
+    #kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
 
-    print("k", kappa)
+    #print("k", kappa)
 
-    deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r),N=2)
+    #deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r),N=2)
 
 
-    print("deltachi", deltachi)
+    #print("deltachi", deltachi)
+
+
+    inspiral_precav(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
 
     # theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
 
