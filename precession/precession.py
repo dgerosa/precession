@@ -1092,7 +1092,7 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
         ((1 + q))**2 * (-1 * (deltachi)**2 + chieff**2)))
 
     # At infinity, the only thing I can do is putting a random number for deltaphi, unformly distributed
-    cosdeltaphi = np.where(u!=0, cosdeltaphi, np.cos(np.random.uniform(0,np.pi, len(cosdeltaphi))))
+    cosdeltaphi = np.where(r!=np.inf, cosdeltaphi, np.cos(np.random.uniform(0,np.pi, len(cosdeltaphi))))
 
     return cosdeltaphi
 
@@ -1431,7 +1431,7 @@ def eval_cyclesign(ddeltachidt=None, deltaphi=None, Lvec=None, S1vec=None, S2vec
         cyclesign = np.sign(dot_nested(S1vec, np.cross(S2vec, Lvec)))
 
     else:
-        TypeError("Please provide one and not more of the following: ddeltachidt, deltaphi, (Lvec, S1vec, S2vec).")
+        raise TypeError("Please provide one and not more of the following: ddeltachidt, deltaphi, (Lvec, S1vec, S2vec).")
 
     return cyclesign
 
@@ -1743,96 +1743,6 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=False):
 
     else:
         return np.stack([deltachi, kappa, chieff])
-
-
-## TODO. Still need to understand what I was doing with this inertial thing
-def conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=1):
-    """
-    Convert the conserved quantities (S,J,chieff) to angular momentum vectors (L,S1,S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
-
-    Call
-    ----
-    Lvec,S1vec,S2vec = conserved_to_inertial(S,J,r,chieff,q,chi1,chi2,cyclesign=1)
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
-    chieff: float
-        Effective spin.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: 1)
-        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-
-    Returns
-    -------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-    """
-
-    Lvec, S1vec, S2vec = conserved_to_Jframe(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-    phiL = eval_phiL_old(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-
-    Lvec = rotate_zaxis(Lvec, phiL)
-    S1vec = rotate_zaxis(S1vec, phiL)
-    S2vec = rotate_zaxis(S2vec, phiL)
-
-    return np.stack([Lvec, S1vec, S2vec])
-
-
-def angles_to_inertial(theta1, theta2, deltaphi, r, q, chi1, chi2):
-    """
-    Convert the angles (theta1, theta2, deltaphi) to angular momentum vectors (L, S1, S2) in an inertial frame that aligned is were Lx=Ly=S1y=0 as S=S- but, unlike the Jframe, does not co-precesses with L.
-
-    Call
-    ----
-    Lvec,S1vec,S2vec = angles_to_inertial(theta1,theta2,deltaphi,r,q,chi1,chi2)
-
-    Parameters
-    ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
-    r: float
-        Binary separation.
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    Lvec: array
-        Cartesian vector of the orbital angular momentum.
-    S1vec: array
-        Cartesian vector of the primary spin.
-    S2vec: array
-        Cartesian vector of the secondary spin.
-    """
-
-    deltaphi = np.atleast_1d(deltaphi)
-    S, J, chieff, cyclesign = angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=True)
-    Lvec, S1vec, S2vec = conserved_to_inertial(S, J, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
-
-    return np.stack([Lvec, S1vec, S2vec])
 
 
 ################ Spin-orbit resonances ################
@@ -4003,19 +3913,15 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
         Right-hand side.
     """
     
-    #print("u kappa", u, kappa,chieff, q, chi1, chi2,eval_r(u=u,q=q))
-    #print("res", kapparesonances(eval_r(u=u,q=q), chieff, q, chi1, chi2))
-
-
     if u <= 0:
        # In this case use analytic result
-        if q==1:
+        if q==1: # TODO: think about this again
             Ssav = (chi1**2+q**4 * chi2**2)/(1 + q)**4  #- ( 2*q*(kappa*(1+q) -chieff)*(kappa*(1+q) -q*chieff)/((-1 + q)**2 *(1 + q)**2))
         else:
             Ssav = (chi1**2+q**4 * chi2**2)/(1 + q)**4  - ( 2*q*(kappa*(1+q) -chieff)*(kappa*(1+q) -q*chieff)/((1-q)**2 *(1 + q)**2))
 
     else:
-        # I don't use deltachiroots because I want to keep complex numbers. This is needed to sanitize the output in some tricky cases
+        # I don't use deltachiroots here because I want to keep complex numbers. This is needed to sanitize the output in some tricky cases
         coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
         deltachiminus, deltachiplus, _ = np.squeeze(np.sort_complex(roots_vec(coeffs.T)))
         coeffs = deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2)
@@ -4028,22 +3934,16 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
 
         # Normal case
         else:
-            deltachiminus, deltachiplus, deltachi3 = np.real([deltachiminus, deltachiplus, deltachi3])
-      
+            deltachiminus, deltachiplus, deltachi3 = np.real([deltachiminus, deltachiplus, deltachi3])      
             m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus, deltachiplus, deltachi3]))
             deltachiav = inverseaffine( deltachitildeav(m),  deltachiminus, deltachiplus)
 
         Ssav = (2*kappa - chieff - (1-q)/(1+q)*deltachiav)/(2*u)
 
-
-    #print(u,Ssav)
-
-
     return float(Ssav)
 
 
-# Update docstrings
-#Careful that here u needs to be an array
+# TODO: docstings Careful that here u needs to be an array
 def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     """
     Integration of ODE dkappa/du describing precession-averaged inspirals.
@@ -4102,6 +4002,7 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
 
         return np.squeeze(ODEsolution)
 
+        # solve_ivp implementation. Didn't really work.
         #ODEsolution = scipy.integrate.solve_ivp(rhs_precav, (uinitial, ufinal), np.atleast_1d(kappainitial), method='RK45', t_eval=(uinitial, ufinal), dense_output=True, args=(chieff, q, chi1, chi2), atol=1e-8, rtol=1e-8)  # ,events=event)
         # Return ODE object. The key methods is .sol --callable, sol(t).
         #return ODEsolution
@@ -4204,7 +4105,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
             pass
 
         else:
-            TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,chieff), (S,J,chieff), (kappa,chieff), (S,kappa,chieff).")
+            raise TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,chieff), (S,J,chieff), (kappa,chieff), (S,kappa,chieff).")
 
         # Enforce limits
         chieffmin, chieffmax = chiefflimits_definition(q, chi1, chi2)
@@ -4215,8 +4116,6 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
 
         # Actual integration.
         kappa = np.squeeze(integrator_precav(kappa, u, chieff, q, chi1, chi2,**odeint_kwargs))
-
-        print(q,kappa)
 
         # Roots along the evolution
         if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'deltachiminus', 'deltachiplus', 'deltachi3']):
@@ -4240,7 +4139,6 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
             deltachiminus = None
             deltachiplus = None
             deltachi3 = None
-
 
         return theta1, theta2, deltaphi, deltachi, kappa, r, u, deltachiminus, deltachiplus, deltachi3, chieff, q, chi1, chi2
 
@@ -4352,7 +4250,7 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
 ################ Orbit-averaged evolution ################
 
 # TODO: replace quadrupole_formula flag with parameter to select a given PN order. Update docstrings when you do it
-def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula=False):
+def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5]):
     """
     Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unite vectors, v is the orbital velocity, and t is time. This is an internal function used by the ODE integrator and is not array-compatible.
 
@@ -4392,7 +4290,6 @@ def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
     """
 
     # Unpack inputs
-    print(v)
     Lh = allvars[0:3]
     S1h = allvars[3:6]
     S2h = allvars[6:9]
@@ -4404,36 +4301,39 @@ def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
     ct12 = np.dot(S1h, S2h)
 
     # Spin precession for S1
-    Omega1 = eta*v**5*(2+3*q/2)*Lh + v**6*(S2*S2h-3*S2*ct2*Lh-3*q*S1*ct1*Lh)/2
+    Omega1 = (0 in PNorderpre) * eta*v**5*(2+3*q/2)*Lh + (0.5 in PNorderpre) * v**6*(S2*S2h-3*S2*ct2*Lh-3*q*S1*ct1*Lh)/2
     dS1hdt = np.cross(Omega1, S1h)
 
     # Spin precession for S2
-    Omega2 = eta*v**5*(2+3/(2*q))*Lh + v**6*(S1*S1h-3*S1*ct1*Lh-3*S2*ct2*Lh/q)/2
+    Omega2 = (0 in PNorderpre) * eta*v**5*(2+3/(2*q))*Lh + (0.5 in PNorderpre) * v**6*(S1*S1h-3*S1*ct1*Lh-3*S2*ct2*Lh/q)/2
     dS2hdt = np.cross(Omega2, S2h)
 
     # Conservation of angular momentum
     dLhdt = -v*(S1*dS1hdt+S2*dS2hdt)/eta
 
-    # Radiation reaction
-    if quadrupole_formula:  # Use to switch off higher-order terms
-        dvdt = (32*eta*v**9/5)
-    else:
-        dvdt = (32*eta*v**9/5) * (1
-            - v**2 * (743+924*eta)/336
-            + v**3 * (4*np.pi
-                     - chi1*ct1*(113*m1**2/12 + 25*eta/4)
-                     - chi2*ct2*(113*m2**2/12 + 25*eta/4))
-            + v**4 * (34103/18144 + 13661*eta/2016 + 59*eta**2/18
-                     + eta*chi1*chi2 * (721*ct1*ct2 - 247*ct12)/48
-                     + ((m1*chi1)**2 * (719*ct1**2-233))/96
-                     + ((m2*chi2)**2 * (719*ct2**2-233))/96)
-            - v**5 * np.pi*(4159+15876*eta)/672
-            + v**6 * (16447322263/139708800 + 16*np.pi**2/3
-                     - 1712*(0.5772156649+np.log(4*v))/105
-                     + (451*np.pi**2/48 - 56198689/217728)*eta
-                     + 541*eta**2/896 - 5605*eta**3/2592)
-            + v**7 * np.pi*(-4415/4032 + 358675*eta/6048
-                     + 91495*eta**2/1512))
+    dvdt = (32*eta*v**9/5) * (
+        + (0 in PNorderrad)* 1
+        - (1 in PNorderrad)*v**2 
+                 * (743+924*eta)/336
+        + (1.5 in PNorderrad)*v**3 
+                 * (4*np.pi
+                 - chi1*ct1*(113*m1**2/12 + 25*eta/4)
+                 - chi2*ct2*(113*m2**2/12 + 25*eta/4))
+        + (2 in PNorderrad)*v**4 
+                 * (34103/18144 + 13661*eta/2016 + 59*eta**2/18
+                 + eta*chi1*chi2 * (721*ct1*ct2 - 247*ct12)/48
+                 + ((m1*chi1)**2 * (719*ct1**2-233))/96
+                 + ((m2*chi2)**2 * (719*ct2**2-233))/96)
+        - (2.5 in PNorderrad)*v**5 
+                 * np.pi*(4159+15876*eta)/672
+        + (3 in PNorderrad)*v**6 
+                 * (16447322263/139708800 + 16*np.pi**2/3
+                 - 1712*(0.5772156649+np.log(4*v))/105
+                 + (451*np.pi**2/48 - 56198689/217728)*eta
+                 + 541*eta**2/896 - 5605*eta**3/2592)
+        + (3.5 in PNorderrad)*v**7 
+                 * np.pi*(-4415/4032 + 358675*eta/6048
+                 + 91495*eta**2/1512))
 
     # Integrate in v, not in time
     dtdv = 1./dvdt
@@ -4444,10 +4344,8 @@ def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula
     # Pack outputs
     return np.concatenate([dLhdv, dS1hdv, dS2hdv, [dtdv]])
 
-# TODO: update docstrings when you fix the quadrupole_formula flag
-#Fix v instead of v initial v final
-# Pass rtol and atol
-def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, quadrupole_formula=False, **odeint_kwargs):
+
+def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], **odeint_kwargs):
     """
     Integration of the systems of ODEs describing orbit-averaged inspirals. Integration is performed in a reference frame
     where the z axis is along J and L lies in the x-z plane at the initial separation.
@@ -4514,30 +4412,22 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, quadru
         S2 = eval_S2(q, chi2).item()
         eta = eval_eta(q).item()
 
-        # Integration
-        # t0=time.time()
-        # res =scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, tracktime, quadrupole_formula), mxstep=5000000, full_output=0, printmessg=0, rtol=1e-12, atol=1e-12)
-        # print(time.time()-t0)
-        #print(ic)
+        # solve_ivp implementation. Didn't really work.
         #ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method='LSODA', t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula),rtol=1e-12,atol=1e-12)
         #ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula))
-
-        #print(odeint_kwargs)
-        #sys.exit()
 
         # Make sure the first step is large enough. This is to avoid LSODA to propose a tiny step which causes the integration to stall
         if 'h0' not in odeint_kwargs: odeint_kwargs['h0']=v[0]/1e6
 
-        ODEsolution = scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
+        ODEsolution = scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, PNorderpre, PNorderrad), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
         return ODEsolution
 
     ODEsolution = np.array(list(map(_compute, Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2)))
 
     return ODEsolution
 
-# TODO: update docstrings when you fix the quadrupole_formula flag
-# Docstrings odeing_kwargs
-def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h=None, S2h=None, J=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, quadrupole_formula=False, requested_outputs=None, **odeint_kwargs):
+
+def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, **odeint_kwargs):
     """
     Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. Orbit-averaged integration can only be done between finite separations.
     The initial conditions must be specified in terms of one an only one of the following:
@@ -4595,18 +4485,18 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
     """
 
     # Substitute None inputs with arrays of Nones
-    inputs = [theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2]
+    inputs = [theta1, theta2, deltaphi, Lh, S1h, S2h, deltachi, kappa, r, u, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(tiler(None, np.atleast_1d(q))))
         else:
-            if k == 4 or k == 5 or k == 6 or k == 9 or k == 10:  # Lh, S1h, S2h, u, or r
+            if k == 3 or k == 4 or k == 5 or k == 8 or k == 9:  # Lh, S1h, S2h, u, or r
                 inputs[k] = np.atleast_2d(inputs[k])
             else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
-    theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2 = inputs
+    theta1, theta2, deltaphi, Lh, S1h, S2h, deltachi, kappa, r, u, chieff, q, chi1, chi2 = inputs
 
-    def _compute(theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2):
+    def _compute(theta1, theta2, deltaphi, Lh, S1h, S2h, deltachi, kappa, r, u, chieff, q, chi1, chi2,cyclesign):
 
         if q is None or chi1 is None or chi2 is None:
             raise TypeError("Please provide q, chi1, and chi2.")
@@ -4621,26 +4511,19 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
             raise TypeError("Please provide either r or u.")
 
         # User provides Lh, S1h, and S2h
-        if Lh is not None and S1h is not None and S2h is not None and theta1 is None and theta2 is None and deltaphi is None and S is None and J is None and kappa is None and chieff is None:
+        if Lh is not None and S1h is not None and S2h is not None and theta1 is None and theta2 is None and deltaphi is None and deltachi is None and kappa is None and chieff is None:
             pass
 
         # User provides theta1, theta2, and deltaphi.
-        elif Lh is None and S1h is None and S2h is None and theta1 is not None and theta2 is not None and deltaphi is not None and S is None and J is None and kappa is None and chieff is None:
+        elif Lh is None and S1h is None and S2h is None and theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None:
             Lh, S1h, S2h = angles_to_Jframe(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
 
-        # User provides J, chieff, and S.
-        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is not None and kappa is None and chieff is not None:
-            # TODO: how do I set cyclesign here?
-            Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], chieff, q, chi1, chi2)
-
-        # User provides kappa, chieff, and S.
-        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and S is not None and J is None and kappa is not None and chieff is not None:
-            J = eval_J(kappa=kappa, r=r[0], q=q)
-            # TODO: how do I set cyclesign here?
-            Lh, S1h, S2h = conserved_to_Jframe(S, J, r[0], chieff, q, chi1, chi2)
-
+        # User provides deltachi, kappa, and chieff.
+        elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and chieff is not None:
+            # cyclesign=+1 by default
+            Lh, S1h, S2h = conserved_to_Jframe(deltachi, kappa, r[0], chieff, q, chi1, chi2, cyclesign=cyclesign)
         else:
-            TypeError("Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (S,J,chieff), (S,kappa,chieff).")
+            raise TypeError("Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (deltachi,kappa,chieff).")
 
         # Make sure vectors are normalized
         Lh = Lh/np.linalg.norm(Lh)
@@ -4650,34 +4533,43 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
         v = eval_v(r)
 
         # Integration
-        evaluations = integrator_orbav(Lh, S1h, S2h, v, q, chi1, chi2, quadrupole_formula=quadrupole_formula,**odeint_kwargs)[0].T
-
+        evaluations = integrator_orbav(Lh, S1h, S2h, v, q, chi1, chi2, PNorderpre=PNorderpre, PNorderrad=PNorderrad,**odeint_kwargs)[0].T
+        # For solve_ivp implementation
         #evaluations = np.squeeze(ODEsolution.item().sol(v))
+
         # Returned output is
         # Lx, Ly, Lz, S1x, S1y, S1z, S2x, S2y, S2z, (t)
         Lh = evaluations[0:3, :].T
         S1h = evaluations[3:6, :].T
         S2h = evaluations[6:9, :].T
         t = evaluations[9, :]
-        # TODO: Should I renormalize here? The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
 
-        S1, S2 = spinmags(q, chi1, chi2)
+        # Renormalize. The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
+        Lh = Lh/np.linalg.norm(Lh)
+        S1h = S1h/np.linalg.norm(S1h)
+        S2h = S2h/np.linalg.norm(S2h)
+
+
+        S1 = eval_S1(q, chi1)
+        S2 = eval_S2(q, chi2)
         L = eval_L(r, tiler(q, r))
         Lvec = (L*Lh.T).T
         S1vec = S1*S1h
         S2vec = S2*S2h
 
         theta1, theta2, deltaphi = vectors_to_angles(Lvec, S1vec, S2vec)
-        S, J, chieff = vectors_to_conserved(Lvec, S1vec, S2vec, q)
-        kappa = eval_kappa(J, r, q)
+        deltachi, kappa, chieff, cyclesign = vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=True)
 
-        return t, theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2
+        return t, theta1, theta2, deltaphi, Lh, S1h, S2h, deltachi, kappa, r, u, chieff, q, chi1, chi2, cyclesign
 
     # This array has to match the outputs of _compute (in the right order!)
-    alloutputs = np.array(['t', 'theta1', 'theta2', 'deltaphi', 'S', 'Lh', 'S1h', 'S2h', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'])
+    alloutputs = np.array(['t', 'theta1', 'theta2', 'deltaphi', 'Lh', 'S1h', 'S2h', 'deltachi', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2', 'cyclesign'])
 
+    if cyclesign ==+1 or cyclesign==-1:
+        cyclesign=np.atleast_1d(tiler(cyclesign,q))
+    
     # Here I force dtype=object because the outputs have different shapes
-    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, S, Lh, S1h, S2h, J, kappa, r, u, chieff, q, chi1, chi2)), dtype=object).T
+    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, Lh, S1h, S2h, deltachi, kappa, r, u, chieff, q, chi1, chi2, cyclesign)), dtype=object).T
 
     # Handle the outputs.
     # Return all
@@ -4691,7 +4583,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, S=None, Lh=None, S1h
     for k, v in zip(alloutputs[wantoutputs], allresults[wantoutputs]):
         outcome[k] = np.squeeze(np.stack(v))
 
-        if k == 'q' or k == 'chi1' or k == 'chi2':  # Constants of motion
+        if k == 'q' or k == 'chi1' or k == 'chi2':  # Constants of motion (chieff is not enforced!)
             outcome[k] = np.atleast_1d(outcome[k])
         else:
             outcome[k] = np.atleast_2d(outcome[k])
@@ -5431,46 +5323,46 @@ if __name__ == '__main__':
     # print(u)
 
 
-    print( roots_vec([[0,1,2,3],[0,0,0,0]]) ) 
+    # print( roots_vec([[0,1,2,3],[0,0,0,0]]) ) 
 
 
-    import sys
-    sys.exit()
+    # import sys
+    # sys.exit()
 
-    q=1
-    chi1=0.6
-    chi2=0.9
-    chieff=0.
-    r=np.geomspace(10,100000000,10)
-    r[-1]=np.inf
-    #r=r[::-1]
-    kappatilde = 0.8
-    deltachitilde = 0.7
-    kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
-    #print(kappa)
-    #kappa=0.19702426300035386
-    u=eval_u(r=r,q=tiler(q,r))
-    #u = eval_u([r,1000,100,10], [q,q,q,q])
-    #kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
+    # q=1
+    # chi1=0.6
+    # chi2=0.9
+    # chieff=0.
+    # r=np.geomspace(10,100000000,10)
+    # r[-1]=np.inf
+    # #r=r[::-1]
+    # kappatilde = 0.8
+    # deltachitilde = 0.7
+    # kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
+    # #print(kappa)
+    # #kappa=0.19702426300035386
+    # u=eval_u(r=r,q=tiler(q,r))
+    # #u = eval_u([r,1000,100,10], [q,q,q,q])
+    # #kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
 
-    #print("k", kappa)
+    # #print("k", kappa)
 
-    #deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r),N=2)
-
-
-    #print("deltachi", deltachi)
+    # #deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r),N=2)
 
 
-    #print(inspiral_precav(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2))
-
-    theta1=0.3
-    theta2=0.5
-    deltaphi=1.
-
-    #print(inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2,requested_outputs=["theta1",'chieff']))
+    # #print("deltachi", deltachi)
 
 
-    print(inspiral_precav(theta1=[theta1,theta1], theta2=[theta2,theta2], deltaphi=[deltaphi,deltaphi], r=[r,r], q=[q,q], chi1=[chi1,chi1], chi2=[chi2,chi2],requested_outputs=["theta1",'chieff']))
+    # #print(inspiral_precav(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2))
+
+    # theta1=0.3
+    # theta2=0.5
+    # deltaphi=1.
+
+    # #print(inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2,requested_outputs=["theta1",'chieff']))
+
+
+    # print(inspiral_precav(theta1=[theta1,theta1], theta2=[theta2,theta2], deltaphi=[deltaphi,deltaphi], r=[r,r], q=[q,q], chi1=[chi1,chi1], chi2=[chi2,chi2],requested_outputs=["theta1",'chieff']))
 
 
     # theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
@@ -5605,12 +5497,32 @@ if __name__ == '__main__':
     # kappasol = integrator_precav(kappa, u , tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
 
 
-    #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='quadrature')
-    #print('q1', res)
+    # res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='quadrature')
+    # print('q1', res)
 
 
-    #res = precession_average([kappa,kappa], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature')
-    #print(res)
+    # res = precession_average([kappa,kappa], [r,r], [chieff,chieff], [q,q], [chi1,chi1], [chi2,chi2], func, method='quadrature')
+    # print(res)
+
+
+    q=0.8 #np.linspace(0.1,1,10)
+    chi1=0.6
+    chi2=0.6
+    chieff=0.
+    r=np.geomspace(100,10,100)
+    kappatilde = 0.5
+    #kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
+    #print(kapparesonances(tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q)))
+    kappatilde = 0.5
+    kappa = kapparescaling(kappatilde, r[0],chieff, q,chi1,chi2)
+    deltachitilde = 0.5
+    deltachi = deltachirescaling(deltachitilde, kappa, r[0],chieff, q,chi1,chi2)
+
+    kappasol = inspiral_orbav(deltachi=deltachi, kappa=kappa, r=r , chieff=chieff, q=q, chi1=chi1, chi2=chi2,requested_outputs=['chieff'], PNorderrad=[])
+
+
+
+    print(kappasol)
 
 
 
