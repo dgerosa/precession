@@ -4549,7 +4549,6 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         S1h = S1h/np.linalg.norm(S1h)
         S2h = S2h/np.linalg.norm(S2h)
 
-
         S1 = eval_S1(q, chi1)
         S2 = eval_S2(q, chi2)
         L = eval_L(r, tiler(q, r))
