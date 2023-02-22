@@ -3634,11 +3634,11 @@ def eval_delta_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
         Precession frequency variation due to nutation.
     """
     if precomputedroots is None:
-        deltachimin, deltachiplu = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
+        deltachimin, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     else:
-        deltachimin, deltachiplu, _ = precomputedroots[:-1]
+        deltachimin, deltachiplus, _ = precomputedroots[:-1]
     Omega_minus = eval_OmegaL(deltachimin, kappa, r, chieff, q, chi1, chi2)
-    Omega_plus = eval_OmegaL(deltachiplu, kappa, r, chieff, q, chi1, chi2)
+    Omega_plus = eval_OmegaL(deltachiplus, kappa, r, chieff, q, chi1, chi2)
     delta_omega = Omega_plus - Omega_minus
     return delta_omega
 
@@ -3678,7 +3678,7 @@ def eval_delta_theta(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     else:
         deltachimin, deltachiplus, _ = precomputedroots[:-1]
     theta_minus = eval_thetaL(deltachimin, kappa, r, chieff, q)
-    theta_plus = eval_thetaL(deltachiplu, kappa, r, chieff, q)
+    theta_plus = eval_thetaL(deltachiplus, kappa, r, chieff, q)
     delta_theta = theta_plus - theta_minus
     return delta_theta
 
@@ -5504,25 +5504,24 @@ if __name__ == '__main__':
     # print(res)
 
 
-    q=0.8 #np.linspace(0.1,1,10)
-    chi1=0.6
-    chi2=0.6
-    chieff=0.
-    r=np.geomspace(100,10,100)
-    kappatilde = 0.5
-    #kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
-    #print(kapparesonances(tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q)))
-    kappatilde = 0.5
-    kappa = kapparescaling(kappatilde, r[0],chieff, q,chi1,chi2)
-    deltachitilde = 0.5
-    deltachi = deltachirescaling(deltachitilde, kappa, r[0],chieff, q,chi1,chi2)
-
-    kappasol = inspiral_orbav(deltachi=deltachi, kappa=kappa, r=r , chieff=chieff, q=q, chi1=chi1, chi2=chi2,requested_outputs=['chieff'], PNorderrad=[])
-
-
-
-    print(kappasol)
-
+    # q=0.8 #np.linspace(0.1,1,10)
+    # chi1=0.6
+    # chi2=0.6
+    # chieff=0.
+    # r=np.geomspace(100,10,100)
+    # kappatilde = 0.5
+    # #kappa = kapparescaling(tiler(kappatilde,q), tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q))
+    # #print(kapparesonances(tiler(r[0],q), tiler(chieff,q), q, tiler(chi1,q), tiler(chi2,q)))
+    # kappatilde = 0.5
+    # kappa = kapparescaling(kappatilde, r[0],chieff, q,chi1,chi2)
+    # deltachitilde = 0.5
+    # deltachi = deltachirescaling(deltachitilde, kappa, r[0],chieff, q,chi1,chi2)
+    #
+    # kappasol = inspiral_orbav(deltachi=deltachi, kappa=kappa, r=r , chieff=chieff, q=q, chi1=chi1, chi2=chi2,requested_outputs=['chieff'], PNorderrad=[])
+    #
+    #
+    #
+    # print(kappasol)
 
 
     #res = precession_average(kappa, r, chieff, q, chi1, chi2, func, method='montecarlo', Nsamples=1e4)
