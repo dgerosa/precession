@@ -2515,8 +2515,6 @@ def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2):
     coeff1r = (1-q) * coeff1
     coeff0r = (1-q)**2 * coeff0
 
-    print(coeff3r, coeff2r, coeff1r, coeff0r)
-
     return np.stack([coeff3r, coeff2r, coeff1r, coeff0r])
 
 
@@ -2728,9 +2726,6 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
 
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     
-    #print(u,"x",deltachiminus,deltachiplus,deltachi3)
-
-
     m = (1-q)*(deltachiplus-deltachiminus)/(deltachi3-(1-q)*deltachiminus)
 
     return m
@@ -4518,6 +4513,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         elif Lh is None and S1h is None and S2h is None and theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None:
             Lh, S1h, S2h = angles_to_Jframe(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
 
+
         # User provides deltachi, kappa, and chieff.
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and chieff is not None:
             # cyclesign=+1 by default
@@ -4545,9 +4541,9 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         t = evaluations[9, :]
 
         # Renormalize. The normalization is not enforced by the integrator, it is only maintaied within numerical accuracy.
-        Lh = Lh/np.linalg.norm(Lh)
-        S1h = S1h/np.linalg.norm(S1h)
-        S2h = S2h/np.linalg.norm(S2h)
+        #Lh = Lh/np.linalg.norm(Lh)
+        #S1h = S1h/np.linalg.norm(S1h)
+        #S2h = S2h/np.linalg.norm(S2h)
 
         S1 = eval_S1(q, chi1)
         S2 = eval_S2(q, chi2)
@@ -4555,14 +4551,14 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         Lvec = (L*Lh.T).T
         S1vec = S1*S1h
         S2vec = S2*S2h
-
         theta1, theta2, deltaphi = vectors_to_angles(Lvec, S1vec, S2vec)
-        deltachi, kappa, chieff, cyclesign = vectors_to_conserved(Lvec, S1vec, S2vec, q, full_output=True)
+        deltachi, kappa, chieff, cyclesign = vectors_to_conserved(Lvec, S1vec, S2vec, tiler(q,r), full_output=True)
 
         return t, theta1, theta2, deltaphi, Lh, S1h, S2h, deltachi, kappa, r, u, chieff, q, chi1, chi2, cyclesign
 
     # This array has to match the outputs of _compute (in the right order!)
     alloutputs = np.array(['t', 'theta1', 'theta2', 'deltaphi', 'Lh', 'S1h', 'S2h', 'deltachi', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2', 'cyclesign'])
+
 
     if cyclesign ==+1 or cyclesign==-1:
         cyclesign=np.atleast_1d(tiler(cyclesign,q))
@@ -4590,7 +4586,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
     return outcome
 
 
-def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, rswitch=None, u=None, uswitch=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None):
+def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, rswitch=None, u=None, uswitch=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,**odeint_kwargs):
     """
     Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. If integrating forward in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backward in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.
     The initial conditions must be specified in terms of one an only one of the following:
@@ -4691,10 +4687,10 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
             rsecond = np.append(rswitch, rlarge)
 
         # First chunk of the evolution
-        evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, r=rfirst, chieff=chieff, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs)
+        evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, r=rfirst, chieff=chieff, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs,**odeint_kwargs)
 
         # Second chunk of the evolution
-        evolution_second = inspiral_second(theta1=evolution_first['theta1'][-1], theta2=evolution_first['theta2'][-1], deltaphi=evolution_first['deltaphi'][-1], r=rsecond, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs)
+        evolution_second = inspiral_second(theta1=np.squeeze(evolution_first['theta1'])[-1], theta2=np.squeeze(evolution_first['theta2'])[-1], deltaphi=np.squeeze(evolution_first['deltaphi'])[-1], r=rsecond, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs,**odeint_kwargs)
 
         # Store outputs
         evolution_full = {}
