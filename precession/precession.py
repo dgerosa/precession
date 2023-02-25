@@ -4015,7 +4015,7 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
 
 def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, **odeint_kwargs):
     """
-    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. In addition, integration can be done between finite separations, forwards from infinite to finite separation, or backwards from finite to infinite separation. For infinity, use r=np.inf or u=0.
+    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. In addition, integration can be done between finite separations, forward from infinite to finite separation, or backward from finite to infinite separation. For infinity, use r=np.inf or u=0.
     The initial conditions must be specified in terms of one an only one of the following:
     - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
     - J, chieff (only if integrating from finite separations because J otherwise diverges).
@@ -4429,7 +4429,7 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorde
 
 def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, **odeint_kwargs):
     """
-    Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. Orbit-averaged integration can only be done between finite separations.
+    Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. Orbit-averaged integration can only be done between finite separations.
     The initial conditions must be specified in terms of one an only one of the following:
     - Lh, S1h, and S2h
     - theta1,theta2, and deltaphi.
@@ -4590,9 +4590,9 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
     return outcome
 
 
-def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kappa=None, r=None, rswitch=None, u=None, uswitch=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None):
+def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, rswitch=None, u=None, uswitch=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None):
     """
-    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forwards and backwards in time. If integrating forwards in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backwards in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.
+    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. If integrating forward in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backward in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.
     The initial conditions must be specified in terms of one an only one of the following:
     - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
     - J, chieff (only if integrating from finite separations because J otherwise diverges).
@@ -4643,55 +4643,55 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
     """
 
     # Outputs available in both orbit-averaged and precession-averaged evolutions
-    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'])
+    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'])
     if requested_outputs is None:
         requested_outputs = alloutputs
         # Return only those requested (in1d return boolean array)
     wantoutputs = np.intersect1d(alloutputs, requested_outputs)
 
     # Substitute None inputs with arrays of Nones
-    inputs = [theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2]
+    inputs = [theta1, theta2, deltaphi, deltachi, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(tiler(None, np.atleast_1d(q))))
         else:
-            if k == 6 or k == 8:  # Either u or r
+            if k == 5 or k == 7:  # Either u or r
                 inputs[k] = np.atleast_2d(inputs[k])
             else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
-    theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2 = inputs
+    theta1, theta2, deltaphi, deltachi, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2 = inputs
 
-    def _compute(theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2):
+    def _compute(theta1, theta2, deltaphi, deltachi, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2):
 
         if r is None and rswitch is None and u is not None and uswitch is not None:
             r = eval_r(u=u, q=tiler(q, u))
             rswitch = eval_r(u=uswitch, q=tiler(q, uswitch))
 
-        forwards = ismonotonic(r, ">=")
-        backwards = ismonotonic(r, "<=")
+        forward = ismonotonic(r, ">=")
+        backward = ismonotonic(r, "<=")
 
-        assert np.logical_or(forwards, backwards), "r must be monotonic"
+        assert np.logical_or(forward, backward), "r must be monotonic"
         assert rswitch > np.min(r) and rswitch < np.max(r), "The switching condition must to be within the range spanned by r or u."
 
         rlarge = r[r >= rswitch]
         rsmall = r[r < rswitch]
 
-        # Integrating forwards: precession average first, then orbit average
-        if forwards:
+        # Integrating forward: precession-averaged first, then orbit-averaged
+        if forward:
             inspiral_first = inspiral_precav
             rfirst = np.append(rlarge, rswitch)
             inspiral_second = inspiral_orbav
             rsecond = np.append(rswitch, rsmall)
 
-        # Integrating backwards: orbit average first, then precession average
-        elif backwards:
+        # Integrating backward: orbit-averaged first, then precession-averaged
+        elif backward:
             inspiral_first = inspiral_orbav
             rfirst = np.append(rsmall, rswitch)
             inspiral_second = inspiral_precav
             rsecond = np.append(rswitch, rlarge)
 
         # First chunk of the evolution
-        evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, S=S, J=J, kappa=kappa, r=rfirst, chieff=chieff, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs)
+        evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, r=rfirst, chieff=chieff, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs)
 
         # Second chunk of the evolution
         evolution_second = inspiral_second(theta1=evolution_first['theta1'][-1], theta2=evolution_first['theta2'][-1], deltaphi=evolution_first['deltaphi'][-1], r=rsecond, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs)
@@ -4700,13 +4700,13 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
         evolution_full = {}
         for k in wantoutputs:
             # Quantities that vary in both the precession-averaged and the orbit-averaged evolution
-            if k in ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u']:
+            if k in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u']:
                 evolution_full[k] = np.atleast_2d(np.append(evolution_first[k][:, :-1], evolution_second[k][:, 1:]))
             # Quantities that vary only on the orbit-averaged evolution
             if k in ['chieff']:
-                if forwards:
+                if forward:
                     evolution_full[k] = np.atleast_2d(np.append(tiler(evolution_first[k][:], rfirst[:-1]), evolution_second[k][:, 1:]))
-                elif backwards:
+                elif backward:
                     evolution_full[k] = np.atleast_2d(np.append(evolution_first[k][:, :-1], tiler(evolution_second[k][:], rsecond[1:])))
             # Quanties that do not vary
             if k in ['q', 'chi1', 'chi2']:
@@ -4714,7 +4714,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, S=None, J=None, kap
 
         return evolution_full
 
-    allresults = list(map(_compute, theta1, theta2, deltaphi, S, J, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2))
+    allresults = list(map(_compute, theta1, theta2, deltaphi, deltachi, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2))
     evolution_full = {}
     for k in allresults[0].keys():
         evolution_full[k] = np.concatenate(list(evolution_full[k] for evolution_full in allresults))
