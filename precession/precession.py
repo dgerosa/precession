@@ -3632,8 +3632,8 @@ def eval_delta_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
         deltachimin, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     else:
         deltachimin, deltachiplus, _ = precomputedroots[:-1]
-    Omega_minus = eval_OmegaL(deltachimin, kappa, r, chieff, q, chi1, chi2)
-    Omega_plus = eval_OmegaL(deltachiplus, kappa, r, chieff, q, chi1, chi2)
+    Omega_minus = eval_OmegaL(deltachiplus, kappa, r, chieff, q, chi1, chi2)
+    Omega_plus = eval_OmegaL(deltachimin, kappa, r, chieff, q, chi1, chi2)
     delta_omega = (Omega_plus - Omega_minus)/2
     return delta_omega
 
