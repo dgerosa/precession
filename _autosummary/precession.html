@@ -462,7 +462,7 @@
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#precession.kapparesonances" title="precession.kapparesonances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kapparesonances</span></code></a>(r, chieff, q, chi1, chi2[, tol])</p></td>
-<td><p>Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0. Call ---- kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2) Parameters ---------- u: float     Compactified separation 1/(2L). chieff: float     Effective spin. q: float     Mass ratio: 0&lt;=q&lt;=1. chi1: float     Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1. chi2: float     Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1. tol: FIX ME Returns ------- kappamin: float     Minimum value of the regularized angular momentum kappa. kappamax: float     Maximum value of the regularized angular momentum kappa.</p></td>
+<td><p>Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0. Examples -------- kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2) Parameters ---------- u: float     Compactified separation 1/(2L). chieff: float     Effective spin. q: float     Mass ratio: 0&lt;=q&lt;=1. chi1: float     Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1. chi2: float     Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1. tol: FIX ME Returns ------- kappamin: float     Minimum value of the regularized angular momentum kappa. kappamax: float     Maximum value of the regularized angular momentum kappa.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#precession.limits_check" title="precession.limits_check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">limits_check</span></code></a>([S, J, r, chieff, q, chi1, chi2])</p></td>
 <td><p>Check if the inputs are consistent with the geometrical constraints.</p></td>
@@ -596,6 +596,8 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>Lvec,S1vec,S2vec = angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -632,6 +634,8 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>Lvec,S1vec,S2vec = angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -677,6 +681,9 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False)
+S,J,chieff,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -717,6 +724,8 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = anglesresonances(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -743,6 +752,8 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -773,6 +784,8 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chipterm1,chipterm2 = chip_terms(theta1,theta2,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -821,6 +834,8 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>theta1,theta2,deltaphi = conserved_to_angles(S,J,r,chieff,q,chi1,chi2,cyclesign=+1)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -850,6 +865,8 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>mathcalA = derS_prefactor(r,chieff,q)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -886,6 +903,8 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -926,6 +945,8 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -961,6 +982,8 @@ The broadcasting rules for this function are more general than those of the rest
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S = Soft(t,J,r,chieff,q,chi1,chi2,precomputedroots=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1000,6 +1023,8 @@ The broadcasting rules for this function are more general than those of the rest
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S = Satresonance(J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1036,6 +1061,8 @@ The broadcasting rules for this function are more general than those of the rest
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>Sminuss,Spluss,S3s = Ssroots(J,r,chieff,q,chi1,chi2,precomputedroots=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1072,6 +1099,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S = Ssampling(J,r,chieff,q,chi1,chi2,N = 1)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1092,6 +1121,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>coeff = deltachitildeav(m)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1112,6 +1143,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>coeff = deltachitildeav(m)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1134,6 +1167,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>z = dot_nested(x, y)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1158,6 +1193,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>piintegral = precession.ellippi(n, phi, m)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1182,6 +1219,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>m = elliptic_parameter(Sminuss,Spluss,S3s)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1216,6 +1255,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>J = eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1238,6 +1279,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>L = eval_L(r,q)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1270,6 +1313,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>OmegaL = eval_OmegaL(S,J,r,chieff,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1300,6 +1345,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S = eval_S(theta1,theta2,deltaphi,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1322,6 +1369,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S1 = eval_S1(q,chi1)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1344,6 +1393,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S2 = eval_S2(q,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1386,6 +1437,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>bracket_omega = eval_bracket_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1414,6 +1467,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>bracket_theta = eval_bracket_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1436,6 +1491,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S1 = eval_S1(q,chi1)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1458,6 +1515,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S1 = eval_S1(q,chi1)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1494,6 +1553,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1540,6 +1601,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chip = eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,which=”averaged”,method=’quadrature’,Nsamples=1e4)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1583,6 +1646,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,method=’quadrature’,Nsamples=1e4)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1613,6 +1678,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chip = eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1641,6 +1708,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chip = eval_chip_heuristic(theta1,theta2,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1678,6 +1747,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>cosdeltaphi = eval_cosdeltaphi(S,J,r,chieff,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1710,6 +1781,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1742,6 +1815,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1774,6 +1849,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1804,6 +1881,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>costhetaL = eval_costhetaL(S,J,r,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1838,6 +1917,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>cyclesign = eval_cyclesign(dSdt=None,deltaphi=None,varphi=None,Lvec=None,S1vec=None,S2vec=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1870,6 +1951,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>delta_omega = eval_delta_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1902,6 +1985,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>delta_theta = eval_delta_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1938,6 +2023,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1977,6 +2064,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1997,6 +2086,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>eta = eval_eta(q)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2022,6 +2113,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>kappa = eval_kappa(J,r,q)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2042,6 +2135,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>m1 = eval_m1(q)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2062,6 +2157,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>m2 = eval_m2(q)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2094,6 +2191,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>little_omega = eval_little_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2121,6 +2220,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>q = eval_q(m1,m2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2145,6 +2246,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>r = eval_r(L=None,u=None,q=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2195,6 +2298,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>thetaL = eval_thetaL(S,J,r,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2218,6 +2323,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>u = eval_u(r,q)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2238,6 +2345,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>v = eval_v(r)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2272,6 +2381,8 @@ limit of the precession-averaged evolution equation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>r = gwfrequency_to_pnseparation(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2331,6 +2442,8 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2389,6 +2502,8 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>outputs = inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2438,6 +2553,8 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>outputs = inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2475,6 +2592,8 @@ where the z axis is along J and L lies in the x-z plane at the initial separatio
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>ODEsolution = integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2,quadrupole_formula=False)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2507,6 +2626,8 @@ where the z axis is along J and L lies in the x-z plane at the initial separatio
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>kappa = integrator_precav(kappainitial,uinitial,ufinal,chieff,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2541,6 +2662,8 @@ where the z axis is along J and L lies in the x-z plane at the initial separatio
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor_old(J,r,chieff,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2572,6 +2695,8 @@ where the z axis is along J and L lies in the x-z plane at the initial separatio
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>check = ismonotonic(vec, which):</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2615,6 +2740,8 @@ where the z axis is along J and L lies in the x-z plane at the initial separatio
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = kappadiscriminant_coefficients(u,chieff,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2650,6 +2777,8 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>Jmin,Jmax = Jlimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2666,8 +2795,8 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 <dt class="sig sig-object py" id="precession.kapparesonances">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">kapparesonances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#precession.kapparesonances" title="Permalink to this definition"></a></dt>
 <dd><p>Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
-Call
-—-
+Examples
+——–
 kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)
 Parameters
 ———-
@@ -2750,6 +2879,8 @@ kappamin: float</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>m1,m2 = masses(q)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2782,6 +2913,8 @@ kappamin: float</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>morph = morphology(J,r,chieff,q,chi1,chi2,simpler = False)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2802,6 +2935,8 @@ kappamin: float</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>n = norm_nested(x)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2822,6 +2957,8 @@ kappamin: float</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>y = normalize_nested(x)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2850,6 +2987,8 @@ kappamin: float</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>omegasq = omegasq_aligned(r,q,chi1,chi2,which)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2884,6 +3023,8 @@ kappamin: float</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>r = pnseparation_to_gwfrequency(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2925,6 +3066,8 @@ kappamin: float</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>func_av = precession_average(J,r,chieff,q,chi1,chi2,func,*args,method=’quadrature’,Nsamples=1e4)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2992,6 +3135,9 @@ to transfer binaries at r~10M.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>vk = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)
+vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3024,6 +3170,8 @@ transfer binaries to r~10M.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>mfin = remnantmass(theta1,theta2,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3063,6 +3211,8 @@ evolution to transfer binaries at r~10M.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>chifin = remnantspin(theta1,theta2,deltaphi,q,chi1,chi2,which=’HBR16_34corr’)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3103,6 +3253,8 @@ evolution to transfer binaries at r~10M.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>RHS = rhs_orbav(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula=False)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3133,6 +3285,8 @@ evolution to transfer binaries at r~10M.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>RHS = rhs_precav(kappa,u,chieff,q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3154,6 +3308,8 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>roots = roots_vec(p)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3186,6 +3342,8 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>rudp,rudm = rupdown(q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3206,6 +3364,8 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>vec = sample_unitsphere(N = 1)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3228,6 +3388,8 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>y = scalar_nested(k, x)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3254,6 +3416,8 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>S1,S2 = spinmags(q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3307,6 +3471,8 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>theta1,theta2,deltaphi = vectors_to_angles(Lvec,S1vec,S2vec)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3342,6 +3508,8 @@ smaller dimensionless spin may undergo wide nutations.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>r_wide = widenutation(q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -3364,6 +3532,8 @@ smaller dimensionless spin may undergo wide nutations.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>sols = precession.wraproots(coefficientfunction, <a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)</p>
 </dd></dl>
 
 </section>
