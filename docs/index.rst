@@ -11,6 +11,9 @@ precession's documentation: index
 
    modules
 
+.. automodule:: precession
+   :members:
+
 Indices and tables
 ==================
 
