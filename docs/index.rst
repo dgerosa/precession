@@ -9,11 +9,7 @@ precession's documentation: index
 
    README.md
 
-   .. autosummary::
-      :toctree: _autosummary
-
-      precession
-
+   modules
 
 Indices and tables
 ==================
