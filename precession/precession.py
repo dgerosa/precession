@@ -18,9 +18,9 @@ def roots_vec(p): #, enforce=False):
     Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
     Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977
 
-    Examples
+    Methods
     --------
-    `roots = roots_vec(p)`
+    ``roots = roots_vec(p)``
 
     Parameters
     ----------
