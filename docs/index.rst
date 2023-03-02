@@ -5,6 +5,7 @@ precession's documentation: index
    :maxdepth: 2
    :caption: Contents:
 
+   README.md
    modules
       
 Indices and tables
