@@ -2434,34 +2434,25 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 <dt class="sig sig-object py" id="precession.kapparesonances">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">kapparesonances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#kapparesonances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.kapparesonances" title="Permalink to this definition"></a></dt>
 <dd><p>Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
-Examples
-——–
-kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)
-Parameters
-———-
-u: float</p>
-<blockquote>
-<div><p>Compactified separation 1/(2L).</p>
-</div></blockquote>
-<dl class="simple">
-<dt>chieff: float</dt><dd><p>Effective spin.</p>
+.. rubric:: Examples</p>
+<p>kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<em>float</em>) – Compactified separation 1/(2L).</p></li>
+<li><p><strong>chieff</strong> (<em>float</em>) – Effective spin.</p></li>
+<li><p><strong>q</strong> (<em>float</em>) – Mass ratio: 0&lt;=q&lt;=1.</p></li>
+<li><p><strong>chi1</strong> (<em>float</em>) – Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p></li>
+<li><p><strong>chi2</strong> (<em>float</em>) – Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p></li>
+<li><p><strong>tol</strong> (<em>FIX ME</em>) – </p></li>
+</ul>
 </dd>
-<dt>q: float</dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
-</dd>
-<dt>chi1: float</dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
-</dd>
-<dt>chi2: float</dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
-</dd>
-</dl>
-<p>tol: FIX ME
-Returns
-——-
-kappamin: float</p>
-<blockquote>
-<div><p>Minimum value of the regularized angular momentum kappa.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>kappamax: float</dt><dd><p>Maximum value of the regularized angular momentum kappa.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>kappamin</strong> (<em>float</em>) – Minimum value of the regularized angular momentum kappa.</p></li>
+<li><p><strong>kappamax</strong> (<em>float</em>) – Maximum value of the regularized angular momentum kappa.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2775,8 +2766,8 @@ to transfer binaries at r~10M.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>vk = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)
-vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)</p>
+<p><code class="docutils literal notranslate"><span class="pre">vk</span> <span class="pre">=</span> <span class="pre">remnantkick(theta1,</span> <span class="pre">theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)</span></code></p>
+<p>vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -2947,14 +2938,8 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dl>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<table class="docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><strong>``roots = roots_vec(p)``</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">roots</span> <span class="pre">=</span> <span class="pre">precession.roots_vec(p)</span></code></p>
 </dd></dl>
 
 <dl class="py function">

@@ -87,15 +87,18 @@
 
 <span class="c1">################ Utilities ################</span>
 
+
 <span class="c1"># TODO: new algorithm! Needs to be documented!</span>
 <div class="viewcode-block" id="roots_vec"><a class="viewcode-back" href="../auto.html#precession.roots_vec">[docs]</a><span class="k">def</span> <span class="nf">roots_vec</span><span class="p">(</span><span class="n">p</span><span class="p">):</span> <span class="c1">#, enforce=False):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].</span>
 <span class="sd">    Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977</span>
 
-<span class="sd">    Methods</span>
+
+<span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    ``roots = roots_vec(p)``</span>
+<span class="sd">    ``roots = precession.roots_vec(p)``</span>
+
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -106,6 +109,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    roots: array</span>
 <span class="sd">        Polynomial roots.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -5115,7 +5119,8 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    vk = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)</span>
+<span class="sd">    ``vk = remnantkick(theta1, theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)``</span>
+<span class="sd">    </span>
 <span class="sd">    vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)</span>
 
 <span class="sd">    Parameters</span>
