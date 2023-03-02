@@ -5,3 +5,7 @@ Package documentation
    :toctree: _autosummary      
 
    precession
+
+
+.. autosummary::
+   precession
