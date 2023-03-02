@@ -1,8 +1,3 @@
-Examples
-=====================
-
-ciao ciao ciao
-
 
 Package documentation
 =====================

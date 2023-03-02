@@ -6,10 +6,13 @@ precession's documentation: index
 
 
 .. toctree::
+   :hidden:
    :maxdepth: 2
    :caption: Contents:
    
    self
 
-   modules
+   examples
+
+   auto
 
