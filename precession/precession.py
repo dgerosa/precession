@@ -33,7 +33,7 @@ def roots_vec(p): #, enforce=False):
         Polynomial roots.
     """
 
-    p = np.atleast_1d(p)
+    p = np.atleast_1d(p).astype(float)
     non_zeros = np.count_nonzero(p, axis=1)
     
     # Mask arrays with all zeros with a dummy equation
@@ -228,7 +228,7 @@ def isotropic_angles(N=1):
 
 def tiler(thing,shaper):
 
-    thing =np.atleast_1d(thing)
+    thing =np.atleast_1d(thing).astype(float)
     shaper =np.atleast_1d(shaper)
     assert thing.ndim == 1 and shaper.ndim==1
 
@@ -236,9 +236,9 @@ def tiler(thing,shaper):
 
 
 def affine(vec, low, up):
-    vec = np.atleast_1d(vec)
-    up = np.atleast_1d(up)
-    low = np.atleast_1d(low)
+    vec = np.atleast_1d(vec).astype(float)
+    up = np.atleast_1d(up).astype(float)
+    low = np.atleast_1d(low).astype(float)
 
     rescaled = ( vec - low ) / (up - low)
 
@@ -247,9 +247,9 @@ def affine(vec, low, up):
 
 def inverseaffine(rescaled, low, up):
     
-    rescaled = np.atleast_1d(rescaled)
-    up = np.atleast_1d(up)
-    low = np.atleast_1d(low)
+    rescaled = np.atleast_1d(rescaled).astype(float)
+    up = np.atleast_1d(up).astype(float)
+    low = np.atleast_1d(low).astype(float)
 
     vec = low + rescaled*(up-low)
 
@@ -390,7 +390,7 @@ def eval_m1(q):
         Mass of the primary (heavier) black hole.
     """
 
-    q = np.atleast_1d(q)
+    q = np.atleast_1d(q).astype(float)
     m1 = 1/(1+q)
 
     return m1
@@ -415,7 +415,7 @@ def eval_m2(q):
         Mass of the secondary (lighter) black hole.
     """
 
-    q = np.atleast_1d(q)
+    q = np.atleast_1d(q).astype(float)
     m2 = q/(1+q)
 
     return m2
@@ -469,8 +469,8 @@ def eval_q(m1, m2):
         Mass ratio: 0<=q<=1.
     """
 
-    m1 = np.atleast_1d(m1)
-    m2 = np.atleast_1d(m2)
+    m1 = np.atleast_1d(m1).astype(float)
+    m2 = np.atleast_1d(m2).astype(float)
     q = m2/m1
     assert (q < 1).all(), "The convention used in this code is q=m2/m1<1."
 
@@ -496,7 +496,7 @@ def eval_eta(q):
         Symmetric mass ratio 0<=eta<=1/4.
     """
 
-    q = np.atleast_1d(q)
+    q = np.atleast_1d(q).astype(float)
     eta = q/(1+q)**2
 
     return eta
@@ -523,7 +523,7 @@ def eval_S1(q, chi1):
         Magnitude of the primary spin.
     """
 
-    chi1 = np.atleast_1d(chi1)
+    chi1 = np.atleast_1d(chi1).astype(float)
     S1 = chi1*(eval_m1(q))**2
 
     return S1
@@ -549,7 +549,7 @@ def eval_S2(q, chi2):
         Magnitude of the secondary spin.
     """
 
-    chi2 = np.atleast_1d(chi2)
+    chi2 = np.atleast_1d(chi2).astype(float)
     S2 = chi2*(eval_m2(q))**2
 
     return S2
@@ -576,7 +576,7 @@ def eval_chi1(q, S1):
         Magnitude of the primary spin.
     """
 
-    S1 = np.atleast_1d(S1)
+    S1 = np.atleast_1d(S1).astype(float)
     chi1 = S1/(eval_m1(q))**2
 
     return chi1
@@ -603,7 +603,7 @@ def eval_chi2(q, S2):
         Magnitude of the primary spin.
     """
 
-    S2 = np.atleast_1d(S2)
+    S2 = np.atleast_1d(S2).astype(float)
     chi2 = S2/(eval_m2(q))**2
 
     return chi2
@@ -663,8 +663,8 @@ def eval_L(r, q):
         Magnitude of the Newtonian orbital angular momentum.
     """
 
-    r = np.atleast_1d(r)
-    q = np.atleast_1d(q)
+    r = np.atleast_1d(r).astype(float)
+    q = np.atleast_1d(q).astype(float)
 
     L = (q/(1+q)**2)*r**0.5
 
@@ -690,7 +690,7 @@ def eval_v(r):
         Newtonian orbital velocity.
     """
 
-    r = np.atleast_1d(r)
+    r = np.atleast_1d(r).astype(float)
     v = 1/r**0.5
 
     return v
@@ -719,16 +719,16 @@ def eval_r(L=None,u=None,q=None):
         Binary separation.
     """
 
-    q = np.atleast_1d(q)
+    q = np.atleast_1d(q).astype(float)
 
     if L is not None and u is None and q is not None:
 
-        L = np.atleast_1d(L)
+        L = np.atleast_1d(L).astype(float)
         r = (L * (1+q)**2 / q )**2
 
     elif L is None and u is not None and q is not None:
 
-        u = np.atleast_1d(u)
+        u = np.atleast_1d(u).astype(float)
         r = (2*u*q/(1+q)**2)**(-2)
 
     else:
@@ -800,11 +800,11 @@ def eval_chieff(theta1, theta2, q, chi1, chi2):
         Effective spin.
     """
 
-    theta1 = np.atleast_1d(theta1)
-    theta2 = np.atleast_1d(theta2)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    theta1 = np.atleast_1d(theta1).astype(float)
+    theta2 = np.atleast_1d(theta2).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     chieff = (chi1*np.cos(theta1) + q*chi2*np.cos(theta2))/(1+q)
 
@@ -848,11 +848,11 @@ def eval_deltachi(theta1, theta2, q, chi1, chi2):
     """
 
 
-    theta1 = np.atleast_1d(theta1)
-    theta2 = np.atleast_1d(theta2)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    theta1 = np.atleast_1d(theta1).astype(float)
+    theta2 = np.atleast_1d(theta2).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     deltachi = (chi1*np.cos(theta1) -q*chi2*np.cos(theta2))/(1+q)
 
@@ -861,11 +861,11 @@ def eval_deltachi(theta1, theta2, q, chi1, chi2):
 
 def eval_deltachiinf(kappa, chieff, q, chi1, chi2):
 
-    kappa = np.atleast_1d(kappa)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    kappa = np.atleast_1d(kappa).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     deltachi = (1+q)/(1-q)*(2*kappa-chieff)
 
@@ -903,10 +903,10 @@ def eval_costheta1(deltachi, chieff, q, chi1):
         Cosine of the angle between orbital angular momentum and primary spin.
     """
 
-    deltachi = np.atleast_1d(deltachi)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
+    deltachi = np.atleast_1d(deltachi).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
 
     costheta1 = (1+q)/(2*chi1)*(chieff+deltachi)
 
@@ -952,10 +952,10 @@ def eval_costheta2(deltachi, chieff, q, chi2):
         Cosine of the angle between orbital angular momentum and primary spin.
     """
 
-    deltachi = np.atleast_1d(deltachi)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi2 = np.atleast_1d(chi2)
+    deltachi = np.atleast_1d(deltachi).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     costheta2 = (1+q)/(2*q*chi2)*(chieff-deltachi)
 
@@ -1003,19 +1003,19 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
 
     if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None and q is None and chi1 is None and chi2 is None:
 
-        theta1=np.atleast_1d(theta1)
-        theta2=np.atleast_1d(theta2)
-        deltaphi=np.atleast_1d(deltaphi)
+        theta1=np.atleast_1d(theta1).astype(float)
+        theta2=np.atleast_1d(theta2).astype(float)
+        deltaphi=np.atleast_1d(deltaphi).astype(float)
         costheta12 = np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi) + np.cos(theta1)*np.cos(theta2)
 
     elif theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
 
-        deltachi = np.atleast_1d(deltachi)
-        kappa = np.atleast_1d(kappa)
-        chieff = np.atleast_1d(chieff)
-        q = np.atleast_1d(q)
-        chi1 = np.atleast_1d(chi1)
-        chi2 = np.atleast_1d(chi2)
+        deltachi = np.atleast_1d(deltachi).astype(float)
+        kappa = np.atleast_1d(kappa).astype(float)
+        chieff = np.atleast_1d(chieff).astype(float)
+        q = np.atleast_1d(q).astype(float)
+        chi1 = np.atleast_1d(chi1).astype(float)
+        chi2 = np.atleast_1d(chi2).astype(float)
 
         # Machine generated with eq_generator.nb
         costheta12 = 1/2 * q**(-2) * (chi1)**(-1) * (chi2)**(-1) * (-1 * \
@@ -1166,10 +1166,10 @@ def eval_costhetaL(deltachi, kappa, r, chieff, q):
         Cosine of the angle betwen orbital angular momentum and total angular momentum.
     """
 
-    deltachi = np.atleast_1d(deltachi)
-    kappa = np.atleast_1d(kappa)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
+    deltachi = np.atleast_1d(deltachi).astype(float)
+    kappa = np.atleast_1d(kappa).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
 
     # Machine generated with eq_generator.nb
     costhetaL = ((1 + 2 * q**(-1) * ((1 + q))**2 * (r)**(-1/2) * \
@@ -1249,10 +1249,10 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
 
     if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
-        theta1 = np.atleast_1d(theta1)
-        theta2 = np.atleast_1d(theta2)
-        deltaphi = np.atleast_1d(deltaphi)
-        q = np.atleast_1d(q)
+        theta1 = np.atleast_1d(theta1).astype(float)
+        theta2 = np.atleast_1d(theta2).astype(float)
+        deltaphi = np.atleast_1d(deltaphi).astype(float)
+        q = np.atleast_1d(q).astype(float)
 
         S1 = eval_S1(q, chi1)
         S2 = eval_S2(q, chi2)
@@ -1262,7 +1262,7 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
 
     elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and r is not None and q is not None and chi1 is None and chi2 is None:
 
-        kappa = np.atleast_1d(kappa)
+        kappa = np.atleast_1d(kappa).astype(float)
 
         L = eval_L(r, q)
         J = (2*L*kappa + L**2)**0.5
@@ -1299,19 +1299,19 @@ def eval_kappa(theta1=None, theta2=None, deltaphi=None, J=None, r=None, q=None, 
 
     if theta1 is None and theta2 is None and deltaphi is None and J is not None and r is not None and q is not None and chi1 is None and chi2 is None:
 
-        J = np.atleast_1d(J)
+        J = np.atleast_1d(J).astype(float)
         L = eval_L(r, q)
         kappa = (J**2 - L**2) / (2*L)
 
     elif theta1 is not None and theta2 is not None and deltaphi is not None and J is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
 
-        theta1 = np.atleast_1d(theta1)
-        theta2 = np.atleast_1d(theta2)
-        deltaphi = np.atleast_1d(deltaphi)
-        r = np.atleast_1d(r)
-        q = np.atleast_1d(q)
-        chi1 = np.atleast_1d(chi1)
-        chi2 = np.atleast_1d(chi2)
+        theta1 = np.atleast_1d(theta1).astype(float)
+        theta2 = np.atleast_1d(theta2).astype(float)
+        deltaphi = np.atleast_1d(deltaphi).astype(float)
+        r = np.atleast_1d(r).astype(float)
+        q = np.atleast_1d(q).astype(float)
+        chi1 = np.atleast_1d(chi1).astype(float)
+        chi2 = np.atleast_1d(chi2).astype(float)
 
         kappa = (chi1 * np.cos(theta1) + q**2 * chi2 * np.cos(theta2) )/(1+q)**2 + \
                 (chi1**2 + q**4 *chi2**2 + 2*chi1*chi2*q**2 * (np.cos(theta1)*np.cos(theta2) + np.cos(deltaphi)*np.sin(theta1)*np.sin(theta2))) / (2*q*(1+q)**2*r**(1/2))
@@ -1325,11 +1325,11 @@ def eval_kappa(theta1=None, theta2=None, deltaphi=None, J=None, r=None, q=None, 
 # TODO: This function and the next one needs to be merged together
 def eval_S_from_deltachi(deltachi, kappa, r, chieff, q):
 
-    deltachi = np.atleast_1d(deltachi)
-    kappa = np.atleast_1d(kappa)
-    r = np.atleast_1d(r)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
+    deltachi = np.atleast_1d(deltachi).astype(float)
+    kappa = np.atleast_1d(kappa).astype(float)
+    r = np.atleast_1d(r).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
 
     #print("thisguy", (2*kappa - chieff - deltachi * (1 - q)/(1 + q)))
 
@@ -1367,9 +1367,9 @@ def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
         Magnitude of the total spin.
     """
 
-    theta1 = np.atleast_1d(theta1)
-    theta2 = np.atleast_1d(theta2)
-    deltaphi = np.atleast_1d(deltaphi)
+    theta1 = np.atleast_1d(theta1).astype(float)
+    theta2 = np.atleast_1d(theta2).astype(float)
+    deltaphi = np.atleast_1d(deltaphi).astype(float)
 
     S1, S2 = spinmags(q, chi1, chi2)
 
@@ -1417,17 +1417,17 @@ def eval_cyclesign(ddeltachidt=None, deltaphi=None, Lvec=None, S1vec=None, S2vec
     """
 
     if ddeltachidt is not None and deltaphi is None and Lvec is None and S1vec is None and S2vec is None:
-        ddeltachidt = np.atleast_1d(ddeltachidt)
+        ddeltachidt = np.atleast_1d(ddeltachidt).astype(float)
         cyclesign = np.sign(ddeltachidt)
 
     elif ddeltachidt is None and deltaphi is not None and Lvec is None and S1vec is None and S2vec is None:
-        deltaphi = np.atleast_1d(deltaphi)
+        deltaphi = np.atleast_1d(deltaphi).astype(float)
         cyclesign = np.sign(deltaphi)
 
     elif ddeltachidt is None and deltaphi is None and Lvec is not None and S1vec is not None and S2vec is not None:
-        Lvec = np.atleast_2d(Lvec)
-        S1vec = np.atleast_2d(S1vec)
-        S2vec = np.atleast_2d(S2vec)
+        Lvec = np.atleast_2d(Lvec).astype(float)
+        S1vec = np.atleast_2d(S1vec).astype(float)
+        S2vec = np.atleast_2d(S2vec).astype(float)
         cyclesign = np.sign(dot_nested(S1vec, np.cross(S2vec, Lvec)))
 
     else:
@@ -1562,9 +1562,9 @@ def vectors_to_angles(Lvec, S1vec, S2vec):
         Angle between the projections of the two spins onto the orbital plane.
     """
 
-    Lvec = np.atleast_2d(Lvec)
-    S1vec = np.atleast_2d(S1vec)
-    S2vec = np.atleast_2d(S2vec)
+    Lvec = np.atleast_2d(Lvec).astype(float)
+    S1vec = np.atleast_2d(S1vec).astype(float)
+    S2vec = np.atleast_2d(S2vec).astype(float)
 
     S1vec = normalize_nested(S1vec)
     S2vec = normalize_nested(S2vec)
@@ -2068,10 +2068,10 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
 
 def kappalimits_geometrical(r , q, chi1, chi2):
 
-    r = np.atleast_1d(r)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    r = np.atleast_1d(r).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
     
     k1 = -q*r**(1/2)/(2*(1+q)**2)
     k2 = np.where(q*r**(1/2)>=chi1+chi2*q**2,
@@ -2127,10 +2127,10 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
         Maximum value of the regularized angular momentum kappa.
     """
 
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     u = eval_u(r,q)
 
@@ -2369,9 +2369,9 @@ def chiefflimits_definition(q, chi1, chi2):
         Maximum value of the effective spin chieff.
     """
 
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
     chiefflim = (chi1+q*chi2)/(1+q)
 
     return np.stack([-chiefflim, chiefflim])
@@ -2402,9 +2402,9 @@ def deltachilimits_definition(q, chi1, chi2):
         Maximum value of the effective spin chieff.
     """
 
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
     deltachilim = np.abs((chi1-q*chi2)/(1+q))
 
     return np.stack([-deltachilim, deltachilim])
@@ -2449,19 +2449,19 @@ def anglesresonances(r, chieff, q, chi1, chi2):
         Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input.
     """
 
-    q = np.atleast_1d(q)
+    q = np.atleast_1d(q).astype(float)
 
     kappamin, kappamax = kapparesonances(r, chieff, q, chi1, chi2)
 
     deltachiatmin = deltachiresonance(kappa=kappamin, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
     theta1atmin = eval_theta1(deltachiatmin, chieff, q, chi1)
     theta2atmin = eval_theta2(deltachiatmin, chieff, q, chi2)
-    deltaphiatmin = np.atleast1d(tiler(np.pi, q))
+    deltaphiatmin = np.atleast_1d(tiler(np.pi, q))
 
     deltachiatmax = deltachiresonance(kappa=kappamax, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
     theta1atmax = eval_theta1(deltachiatmax, chieff, q, chi1)
     theta2atmax = eval_theta2(deltachiatmax, chieff, q, chi2)
-    deltaphiatmax = np.atleast1d(tiler(0, q))
+    deltaphiatmax = np.atleast_1d(tiler(0, q))
 
     return np.stack([theta1atmin, theta2atmin, deltaphiatmin, theta1atmax, theta2atmax, deltaphiatmax])
 
@@ -2607,10 +2607,10 @@ def deltachilimits_rectangle(chieff, q, chi1, chi2):
         Minimum value of the asymptotic angular momentum kappainf.
     """
 
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
 
     deltachimin = np.maximum( -chieff - 2*chi1/(1+q), chieff - 2*q*chi2/(1+q))
@@ -2722,7 +2722,7 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
         Parameter of elliptic function(s).
     """
 
-    q=np.atleast_1d(q)
+    q=np.atleast_1d(q).astype(float)
 
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     
@@ -2750,7 +2750,7 @@ def deltachitildeav(m,tol=1e-7):
         Coefficient.
     """
 
-    m = np.atleast_1d(m)
+    m = np.atleast_1d(m).astype(float)
     # The limit of the Ssav coefficient as m->0 is finite and equal to 1/2.
     # This is implementation is numerically stable up to m~1e-10.
     # For m=1e-7, the analytic m=0 limit is returned with a precision of 1e-9, which is enough.
@@ -2779,7 +2779,7 @@ def deltachitildeav2(m,tol=1e-7):
         Coefficient.
     """
 
-    m = np.atleast_1d(m)
+    m = np.atleast_1d(m).astype(float)
     # The limit of the Ssav coefficient as m->0 is finite and equal to 1/2.
     # This is implementation is numerically stable up to m~1e-10.
     # For m=1e-7, the analytic m=0 limit is returned with a precision of 1e-9, which is enough.
@@ -2814,9 +2814,9 @@ def ddchidt_prefactor(r, chieff, q):
     """
 
 
-    r = np.atleast_1d(r)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
+    r = np.atleast_1d(r).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
 
     mathcalA = (3/2)*((1+q)**(-1/2))*(r**(-11/4))*(1-(chieff/r**0.5))
 
@@ -2825,7 +2825,7 @@ def ddchidt_prefactor(r, chieff, q):
 
 def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None, donotnormalize=False):
 
-    q=np.atleast_1d(q)
+    q=np.atleast_1d(q).astype(float)
 
     u= eval_u(r=r,q=q)
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
@@ -2843,7 +2843,7 @@ def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None
 def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psiperiod=False, donotnormalize=False):
 
 
-    q=np.atleast_1d(q)
+    q=np.atleast_1d(q).astype(float)
 
 
     # if psiperiod=True return tau/2K(m). Useful to avoid the evaluation of an elliptic integral when it's not needed
@@ -2901,7 +2901,7 @@ def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
         Magnitude of the total spin.
     """
 
-    t = np.atleast_1d(t)
+    t = np.atleast_1d(t).astype(float)
     u = eval_u(r,q)
 
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
@@ -3034,12 +3034,12 @@ def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
         Prefactor in the OmegaL equation.
     """
 
-    kappa = np.atleast_1d(kappa)
-    r = np.atleast_1d(r)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    kappa = np.atleast_1d(kappa).astype(float)
+    r = np.atleast_1d(r).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
 
     # Machine generated with eq_generator.nb
@@ -3260,9 +3260,9 @@ def chip_terms(theta1, theta2, q, chi1, chi2):
         Term in effective precessing spin chip.
     """
 
-    theta1 = np.atleast_1d(theta1)
-    theta2 = np.atleast_1d(theta2)
-    q = np.atleast_1d(q)
+    theta1 = np.atleast_1d(theta1).astype(float)
+    theta2 = np.atleast_1d(theta2).astype(float)
+    q = np.atleast_1d(q).astype(float)
 
     chipterm1 = chi1*np.sin(theta1)
     omegatilde = q*(4*q+3)/(4+3*q)
@@ -3740,9 +3740,9 @@ def rupdown(q, chi1, chi2):
         Inner orbital separation in the up-down instability.
     """
 
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     #Ignore q=1 "divide by zero" warning here
     with warnings.catch_warnings():
@@ -3755,9 +3755,9 @@ def rupdown(q, chi1, chi2):
 
 def updown_endpoint(q, chi1, chi2):
     
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
     
     costhetaupdown = (chi1 - q * chi2) / (chi1 + q * chi2)
 
@@ -3796,7 +3796,7 @@ def omegasq_aligned(r, q, chi1, chi2, which):
         Squared frequency.
     """
 
-    q = np.atleast_1d(q)
+    q = np.atleast_1d(q).astype(float)
 
     # These are all the valid input flags
     uulabels = np.array(['uu', 'up-up', 'upup', '++'])
@@ -3846,9 +3846,9 @@ def widenutation_separation(q, chi1, chi2):
         Orbital separation where wide nutations becomes possible.
     """
 
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     rwide = ((chi1 - q*chi2) / (1-q))**2
 
@@ -3857,10 +3857,10 @@ def widenutation_separation(q, chi1, chi2):
 
 def widenutation_condition(r, q, chi1, chi2):
 
-    r = np.atleast_1d(r)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    r = np.atleast_1d(r).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     rwide = widenutation_separation(q, chi1, chi2)
 
@@ -3971,12 +3971,12 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
         Regularized angular momentum (J^2-L^2)/(2L).
     """
 
-    kappainitial = np.atleast_1d(kappainitial)
-    u = np.atleast_2d(u)
-    chieff = np.atleast_1d(chieff)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    kappainitial = np.atleast_1d(kappainitial).astype(float)
+    u = np.atleast_2d(u).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     # Defaults for the integrators, can be changed by the user
     if 'mxstep' not in odeint_kwargs: odeint_kwargs['mxstep']=5000000
@@ -4201,12 +4201,12 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
         Precession averaged value of func.
     """
 
-    kappa=np.atleast_1d(kappa)
-    r=np.atleast_1d(r)
-    chieff=np.atleast_1d(chieff)
-    q=np.atleast_1d(q)
-    chi1=np.atleast_1d(chi1)
-    chi2=np.atleast_1d(chi2)
+    kappa=np.atleast_1d(kappa).astype(float)
+    r=np.atleast_1d(r).astype(float)
+    chieff=np.atleast_1d(chieff).astype(float)
+    q=np.atleast_1d(q).astype(float)
+    chi1=np.atleast_1d(chi1).astype(float)
+    chi2=np.atleast_1d(chi2).astype(float)
 
     u = eval_u(r=r,q=q)
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
@@ -4376,13 +4376,13 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorde
         Solution of the ODE. Key method is .sol(t).
     """
 
-    Lhinitial = np.atleast_2d(Lhinitial)
-    S1hinitial = np.atleast_2d(S1hinitial)
-    S2hinitial = np.atleast_2d(S2hinitial)
-    v = np.atleast_2d(v)
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    Lhinitial = np.atleast_2d(Lhinitial).astype(float)
+    S1hinitial = np.atleast_2d(S1hinitial).astype(float)
+    S2hinitial = np.atleast_2d(S2hinitial).astype(float)
+    v = np.atleast_2d(v).astype(float)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     # Defaults for the integrators, can be changed by the user
     if 'mxstep' not in odeint_kwargs: odeint_kwargs['mxstep']=5000000
@@ -4738,9 +4738,9 @@ def inspiral(*args, which=None, **kwargs):
 
 
 # TODO: insert flag to select PN order
-def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_msun):
+def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_msun, PNorder=[0,1,1.5,2]):
     """
-    Convert GW frequency in Hz to PN orbital separation in natural units (c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.
+    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.
 
     Call
     ----
@@ -4771,34 +4771,28 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, f, q, chi1, chi2, M_ms
         Binary separation.
     """
 
-    theta1 = np.atleast_1d(theta1)
-    theta2 = np.atleast_1d(theta2)
-    f = np.atleast_1d(f)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-    M_msun = np.atleast_1d(M_msun)
+    theta1 = np.atleast_1d(theta1).astype(float)
+    theta2 = np.atleast_1d(theta2).astype(float)
+    fGW = np.atleast_1d(fGW).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
+    M_msun = np.atleast_1d(M_msun).astype(float)
 
     # Convert GW frequency in hz to orbital velocity in natural units.
-    # Prefactor is Msun*G/c^3/s with values of the constants as given by Mathematica:
-    # https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
-    # Factor of pi and not 2pi because of f is the GW frequency while omega is the orbital angular velocity
-    omega = 4.93e-6 * M_msun * np.pi * f
+    # Prefactor is pi*Msun*G/c^3/s. It's pi and not 2pi because f is the GW frequency while Kidder's omega is the orbital angular velocity
+    tildeomega = M_msun * fGW * 1.548e-5 
 
-    m1, m2 = masses(q)
-    eta = eval_eta(q)
-    ct1 = np.cos(theta1)
-    ct2 = np.cos(theta2)
-    ct12 = eval_costheta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi)
-    # Eq. 4.13, Kidder 1995. gr-qc/9506022
-    r = omega**(-2/3)*(1
-            - (1/3)*(3-eta)*omega**(2/3)
-            - (1/3)*(chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))*omega
-            + (eta*(19/4 + eta/9) - eta*chi1*chi2/2 * (ct12 - 3*ct1*ct2))*omega**(4/3))
+    r =  tildeomega**(-2/3) * (
+        (0 in PNorder) * 1 
+        - (1 in PNorder) * tildeomega**(2/3) * ( 1- q/(3*(1+q)**2) ) 
+        - (1.5 in PNorder) * tildeomega / (3*(1+q)**2) * ( (2+3*q)*chi1*np.cos(theta1) + q*(3+2*q)*chi2*np.cos(theta2) )
+        + (2 in PNorder) * tildeomega**(4/3) * q/(2*(1+q)**2) * (19/2 +  (2*q)/(9*(1+q)**2)+ chi1*chi2*(2*np.cos(theta1)*np.cos(theta2) - np.cos(deltaphi)*np.sin(theta1)*np.sin(theta2)) ) 
+        )
+
     return r
 
 
-# TODO: insert flag to select PN order
-def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_msun):
+def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_msun, PNorder=[0,1,1.5,2]):
     """
     Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.
 
@@ -4831,12 +4825,12 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
         Binary separation.
     """
 
-    theta1 = np.atleast_1d(theta1)
-    theta2 = np.atleast_1d(theta2)
-    r = np.atleast_1d(r)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-    M_msun = np.atleast_1d(M_msun)
+    theta1 = np.atleast_1d(theta1).astype(float)
+    theta2 = np.atleast_1d(theta2).astype(float)
+    r = np.atleast_1d(r).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
+    M_msun = np.atleast_1d(M_msun).astype(float)
 
     m1, m2 = masses(q)
     eta = eval_eta(q)
@@ -4844,7 +4838,8 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     ct2 = np.cos(theta2)
     ct12 = eval_costheta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi)
 
-    omegasquared = (1/r**3)*(1
+    omegasquared = (1/r**3)*(
+        1
         - (3-eta)/r
         - (chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))/r**(3/2)
         + (6 + 41/4*eta + eta**2 - 3/2*eta*chi1*chi2*(ct12-3*ct1*ct2))/r**(2))
@@ -4853,34 +4848,31 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     # Prefactor is Msun*G/c^3/s with values of the constants as given by Mathematica:
     # https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
     # Factor of pi and not 2pi because of f is the GW frequency while omega is the orbital angular velocity
-    f = np.sqrt(omegasquared) / (4.93e-6 * M_msun * np.pi)
+    #f = np.sqrt(omegasquared) / (4.93e-6 * M_msun * np.pi)
 
-    return f
+    f = np.sqrt(omegasquared) / (1.548e-5  * M_msun)
 
 
 
-# Check...
-def ftor_PN(f, M_msun, q, chi1, chi2, theta1, theta2, deltaphi):
-    '''Convert GW frequency to PN orbital separation conversion'''
+    print(f)
 
-    c_cgs = 2.99e10
-    G_cgs = 6.67e-8
-    om = np.pi * f
-    M_sec = M_msun * 2e33 * G_cgs / c_cgs**3
-    mom = M_sec * om
-    m1 = 1 / (1+q)
-    m2 = q / (1+q)
-    eta = m1*m2
-    ct1 = np.cos(theta1)
-    ct2 = np.cos(theta2)
-    ct12 = np.sin(theta1) * np.sin(theta2) * np.cos(deltaphi) + ct1 * ct2
-    # Eq. 4.13, Kidder 1995. gr-qc/9506022
-    r = (mom)**(-2./3.)*(1. \
-                    - (1./3.)*(3.-eta)*mom**(2./3.)  \
-                    - (1./3.)* ( chi1*ct1*(2.*m1**2.+3.*eta) + chi2*ct2*(2.*m2**2.+3.*eta))*mom \
-                    + ( eta*(19./4. + eta/9.) -eta*chi1*chi2/2. * (ct12 - 3.*ct1*ct2 ))*mom**(4./3.)\
-                    )
-    return r
+
+
+    tildeomega = r**(-3/2) * (
+        (0 in PNorder) * 1 
+        - (1 in PNorder) * r**(-1) *(3- q/(1+q)**2)
+        - (1.5 in PNorder) * r**(3/2) * 1/(1+q)**2 *( (2+3*q)*chi1*np.cos(theta1) + q*(3+2*q)*chi2*np.cos(theta2) )
+        + (2 in PNorder) * r**(-2) * (6 + 41*q/(4*(1+q)**2) + q**2/(1+q)**4) +3*q/(2*(1+q)**2) *chi1*chi2*(2*np.cos(theta1)*np.cos(theta2) - np.cos(deltaphi)*np.sin(theta1)*np.sin(theta2))
+        )**(1/2)
+
+
+    fGW = tildeomega / (1.548e-5  * M_msun)
+
+    print(fGW)
+
+    return fGW
+
+
 
 
 ################ Remnant properties ################
@@ -4916,10 +4908,10 @@ def remnantmass(theta1, theta2, q, chi1, chi2):
         Mass of the black-hole remnant.
     """
 
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-    eta = eval_eta(q)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
+    eta = eval_eta(q).astype(float)
 
     chit_par =  ( chi2*q**2 * np.cos(theta2) + chi1*np.cos(theta1) ) / (1+q)**2
 
@@ -4976,10 +4968,10 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
     """
 
 
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
-    eta = eval_eta(q)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
+    eta = eval_eta(q).astype(float)
 
     if which in ['HBR16_12', 'HBR16_12corr', 'HBR16_33', 'HBR16_33corr', 'HBR16_34', 'HBR16_34corr']:
 
@@ -5106,9 +5098,9 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
     """
 
 
-    q = np.atleast_1d(q)
-    chi1 = np.atleast_1d(chi1)
-    chi2 = np.atleast_1d(chi2)
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
     eta = eval_eta(q)
 
     Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, 1, q, chi1, chi2)
@@ -5743,7 +5735,7 @@ if __name__ == '__main__':
     # print(vectors_to_conserved(Lvec, S1vec, S2vec, q,full_output=True))
 
 
+    #gwfrequency_to_pnseparation(0.56, 0.34, 1.3, 23, 0.7, 0.3, 0.67, 46, PNorder = [0,1,1.5,2])
 
-
-
+    pnseparation_to_gwfrequency(0.56, 0.34, 1.3, 23, 0.7, 0.3, 0.67, 46, PNorder=[0,1,1.5,2])
 
