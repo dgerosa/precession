@@ -1,7 +1,7 @@
 precession's documentation: index
 ======================================
 
-. mdinclude:: README.md
+.. mdinclude:: README.md
 
 .. toctree::
    :maxdepth: 2
