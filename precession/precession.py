@@ -3632,9 +3632,9 @@ def eval_delta_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
         deltachimin, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     else:
         deltachimin, deltachiplus, _ = precomputedroots[:-1]
-    Omega_minus = eval_OmegaL(deltachimin, kappa, r, chieff, q, chi1, chi2)
-    Omega_plus = eval_OmegaL(deltachiplus, kappa, r, chieff, q, chi1, chi2)
-    delta_omega = Omega_plus - Omega_minus
+    Omega_minus = eval_OmegaL(deltachiplus, kappa, r, chieff, q, chi1, chi2)
+    Omega_plus = eval_OmegaL(deltachimin, kappa, r, chieff, q, chi1, chi2)
+    delta_omega = (Omega_plus - Omega_minus)/2
     return delta_omega
 
 
@@ -3672,9 +3672,9 @@ def eval_delta_theta(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
         deltachimin, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     else:
         deltachimin, deltachiplus, _ = precomputedroots[:-1]
-    theta_minus = eval_thetaL(deltachimin, kappa, r, chieff, q)
-    theta_plus = eval_thetaL(deltachiplus, kappa, r, chieff, q)
-    delta_theta = theta_plus - theta_minus
+    theta_minus = eval_thetaL(deltachiplus, kappa, r, chieff, q)
+    theta_plus = eval_thetaL(deltachimin, kappa, r, chieff, q)
+    delta_theta = (theta_plus - theta_minus)/2
     return delta_theta
 
 
@@ -5246,14 +5246,40 @@ if __name__ == '__main__':
     import time
     np.set_printoptions(threshold=sys.maxsize)
 
-    # q=0.9
+    # q=0.1
     # chi1=1
     # chi2=1
-    # r=10
+    # r=20
     # J=1
+    # print(chiefflimits_definition(q, chi1, chi2))
     # chieff=0.3
-    # kappa = eval_kappa(J, r, q)
+    # kappa = eval_kappa(J=J, r=r, q=q)
+    # print(kappa, kappalimits(r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2))
     # u = eval_u(r, q)
+    #
+    # del_theta = eval_delta_theta(kappa, r, chieff, q, chi1, chi2)
+    # del_ome = eval_delta_omega(kappa, r, chieff, q, chi1, chi2)
+    #
+    # print(del_theta, del_ome)
+
+    # theta1, theta2, and deltaphi(but note that deltaphi is not necessary if integrating from infinite separation).
+    # r_arr = np.array([np.inf, 10])
+    # print(r_arr)
+    # t1 = np.pi*0.9
+    # t2 = np.pi*0.7
+    # chi1 = 0.3
+    # chi2 = 0.3
+    # q = 0.4
+    # M = 1
+    # m1 = M / (1. + q)  # Primary mass
+    # m2 = q * M / (1. + q)
+    # S1 = chi1 * m1 ** 2  # Primary spin magnitude
+    # S2 = chi2 * m2 ** 2
+    # xi_inf = ((1. + q) * S1 * np.cos(t1) + (1. + q ** -1) * S2 * np.cos(t2))*M**-2
+    # kappa_inf = (S1 * np.cos(t1) + S2 * np.cos(t2))*M**-2
+    #
+    # outputs = inspiral_precav(chi1 = chi1, chi2 = chi2, q = q, r = r_arr, chieff = xi_inf, kappa= kappa_inf)
+    # print(outputs)
 
     # print(Ssroots(J, r, chieff, q, chi1, chi2)**(1/2))
     # #print(Slimits_plusminus(J, r, chieff, q, chi1, chi2))
