@@ -4778,7 +4778,6 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_
     chi2 = np.atleast_1d(chi2).astype(float)
     M_msun = np.atleast_1d(M_msun).astype(float)
 
-    # Convert GW frequency in hz to orbital velocity in natural units.
     # Prefactor is pi*Msun*G/c^3/s. It's pi and not 2pi because f is the GW frequency while Kidder's omega is the orbital angular velocity
     tildeomega = M_msun * fGW * 1.548e-5 
 
@@ -4832,43 +4831,15 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     chi2 = np.atleast_1d(chi2).astype(float)
     M_msun = np.atleast_1d(M_msun).astype(float)
 
-    m1, m2 = masses(q)
-    eta = eval_eta(q)
-    ct1 = np.cos(theta1)
-    ct2 = np.cos(theta2)
-    ct12 = eval_costheta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi)
-
-    omegasquared = (1/r**3)*(
-        1
-        - (3-eta)/r
-        - (chi1*ct1*(2*m1**2+3*eta) + chi2*ct2*(2*m2**2+3*eta))/r**(3/2)
-        + (6 + 41/4*eta + eta**2 - 3/2*eta*chi1*chi2*(ct12-3*ct1*ct2))/r**(2))
-
-    # Convert orbital velocity in natural units to GW frequency in Hz.
-    # Prefactor is Msun*G/c^3/s with values of the constants as given by Mathematica:
-    # https://www.wolframalpha.com/input/?i=Msun+*+G+%2Fc%5E3
-    # Factor of pi and not 2pi because of f is the GW frequency while omega is the orbital angular velocity
-    #f = np.sqrt(omegasquared) / (4.93e-6 * M_msun * np.pi)
-
-    f = np.sqrt(omegasquared) / (1.548e-5  * M_msun)
-
-
-
-    print(f)
-
-
-
     tildeomega = r**(-3/2) * (
         (0 in PNorder) * 1 
         - (1 in PNorder) * r**(-1) *(3- q/(1+q)**2)
-        - (1.5 in PNorder) * r**(3/2) * 1/(1+q)**2 *( (2+3*q)*chi1*np.cos(theta1) + q*(3+2*q)*chi2*np.cos(theta2) )
-        + (2 in PNorder) * r**(-2) * (6 + 41*q/(4*(1+q)**2) + q**2/(1+q)**4) +3*q/(2*(1+q)**2) *chi1*chi2*(2*np.cos(theta1)*np.cos(theta2) - np.cos(deltaphi)*np.sin(theta1)*np.sin(theta2))
+        - (1.5 in PNorder) * r**(-3/2) * 1/(1+q)**2 *( (2+3*q)*chi1*np.cos(theta1) + q*(3+2*q)*chi2*np.cos(theta2) )
+        + (2 in PNorder) * r**(-2) * (6 + 41*q/(4*(1+q)**2) + q**2/(1+q)**4 +3*q/(2*(1+q)**2) *chi1*chi2*(2*np.cos(theta1)*np.cos(theta2) - np.cos(deltaphi)*np.sin(theta1)*np.sin(theta2)))
         )**(1/2)
 
-
+    # Prefactor is pi*Msun*G/c^3/s. It's pi and not 2pi because f is the GW frequency while Kidder's omega is the orbital angular velocity
     fGW = tildeomega / (1.548e-5  * M_msun)
-
-    print(fGW)
 
     return fGW
 
@@ -5037,6 +5008,19 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
 
     return np.minimum(chifin,1)
 
+
+def reminantspindirection(theta1, theta2, deltaphi, rplunge, q, chi1, chi2):
+    ''' Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentu 'at plunge' '''
+
+    Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, rplunge, q, chi1, chi2)
+    Jvec = Lvec + S1vec + S2vec
+    hatL = normalize_nested(Lvec)
+    hatJ = normalize_nested(Jvec)
+    thetaremnant = np.arccos(dot_nested(hatL,hatJ))
+
+    return thetaremnant
+
+    
 
 def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=False, superkick=True, hangupkick=True, crosskick=True, full_output=False):
     """
@@ -5763,5 +5747,7 @@ if __name__ == '__main__':
 
     #gwfrequency_to_pnseparation(0.56, 0.34, 1.3, 23, 0.7, 0.3, 0.67, 46, PNorder = [0,1,1.5,2])
 
-    pnseparation_to_gwfrequency(0.56, 0.34, 1.3, 23, 0.7, 0.3, 0.67, 46, PNorder=[0,1,1.5,2])
+    #pnseparation_to_gwfrequency(0.56, 0.34, 1.3, 23, 0.7, 0.3, 0.67, 46)
+
+    reminantspindirection(0.56, 1.2, 0.65, 10, 0.8, 0.3, 0.7)
 
