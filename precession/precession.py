@@ -18,8 +18,8 @@ def roots_vec(p): #, enforce=False):
     Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
     Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977
 
-    Call
-    ----
+    Examples
+    --------
     roots = roots_vec(p)
 
     Parameters
@@ -76,8 +76,8 @@ def norm_nested(x):
     """
     Norm of 2D array of shape (N,3) along last axis.
 
-    Call
-    ----
+    Examples
+    --------
     n = norm_nested(x)
 
     Parameters
@@ -98,8 +98,8 @@ def normalize_nested(x):
     """
     Normalize 2D array of shape (N,3) along last axis.
 
-    Call
-    ----
+    Examples
+    --------
     y = normalize_nested(x)
 
     Parameters
@@ -120,8 +120,8 @@ def dot_nested(x, y):
     """
     Dot product between 2D arrays along last axis.
 
-    Call
-    ----
+    Examples
+    --------
     z = dot_nested(x, y)
 
     Parameters
@@ -144,8 +144,8 @@ def scalar_nested(k, x):
     """
     Nested scalar product between a 1D and a 2D array.
 
-    Call
-    ----
+    Examples
+    --------
     y = scalar_nested(k, x)
 
     Parameters
@@ -197,8 +197,8 @@ def sample_unitsphere(N=1):
     """
     Sample points uniformly on a sphere of unit radius. Returns array of shape (N,3).
 
-    Call
-    ----
+    Examples
+    --------
     vec = sample_unitsphere(N = 1)
 
     Parameters
@@ -260,8 +260,8 @@ def wraproots(coefficientfunction, *args, **kwargs):
     """
     Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is essentially a wrapper of numpy.roots.
 
-    Call
-    ----
+    Examples
+    --------
     sols = precession.wraproots(coefficientfunction, *args, **kwargs)
 
     Parameters
@@ -288,8 +288,8 @@ def ellippi(n, phi, m):
     """
     Incomplete elliptic integral of the third kind. This is reconstructed using scipy's implementation of Carlson's R integrals (arxiv:math/9409227).
 
-    Call
-    ----
+    Examples
+    --------
     piintegral = precession.ellippi(n, phi, m)
 
     Parameters
@@ -338,8 +338,8 @@ def ismonotonic(vec, which):
     - `>` check array is strictly decreasing.
     - `>=` check array is decreasing.
 
-    Call
-    ----
+    Examples
+    --------
         check = ismonotonic(vec, which):
 
     Parameters
@@ -375,8 +375,8 @@ def eval_m1(q):
     """
     Mass of the heavier black hole in units of the total mass.
 
-    Call
-    ----
+    Examples
+    --------
     m1 = eval_m1(q)
 
     Parameters
@@ -400,8 +400,8 @@ def eval_m2(q):
     """
     Mass of the lighter black hole in units of the total mass.
 
-    Call
-    ----
+    Examples
+    --------
     m2 = eval_m2(q)
 
     Parameters
@@ -425,8 +425,8 @@ def masses(q):
     """
     Masses of the two black holes in units of the total mass.
 
-    Call
-    ----
+    Examples
+    --------
     m1,m2 = masses(q)
 
     Parameters
@@ -452,8 +452,8 @@ def eval_q(m1, m2):
     """
     Mass ratio, 0 < q = m2/m1 < 1.
 
-    Call
-    ----
+    Examples
+    --------
     q = eval_q(m1,m2)
 
     Parameters
@@ -481,8 +481,8 @@ def eval_eta(q):
     """
     Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2.
 
-    Call
-    ----
+    Examples
+    --------
     eta = eval_eta(q)
 
     Parameters
@@ -506,8 +506,8 @@ def eval_S1(q, chi1):
     """
     Spin angular momentum of the heavier black hole.
 
-    Call
-    ----
+    Examples
+    --------
     S1 = eval_S1(q,chi1)
 
     Parameters
@@ -532,8 +532,8 @@ def eval_S2(q, chi2):
     """
     Spin angular momentum of the lighter black hole.
 
-    Call
-    ----
+    Examples
+    --------
     S2 = eval_S2(q,chi2)
 
     Parameters
@@ -559,8 +559,8 @@ def eval_chi1(q, S1):
     """
     Spin angular momentum of the heavier black hole.
 
-    Call
-    ----
+    Examples
+    --------
     S1 = eval_S1(q,chi1)
 
     Parameters
@@ -586,8 +586,8 @@ def eval_chi2(q, S2):
     """
     Spin angular momentum of the heavier black hole.
 
-    Call
-    ----
+    Examples
+    --------
     S1 = eval_S1(q,chi1)
 
     Parameters
@@ -615,8 +615,8 @@ def spinmags(q, chi1, chi2):
     """
     Spins of the black holes in units of the total mass.
 
-    Call
-    ----
+    Examples
+    --------
     S1,S2 = spinmags(q,chi1,chi2)
 
     Parameters
@@ -646,8 +646,8 @@ def eval_L(r, q):
     """
     Newtonian angular momentum of the binary.
 
-    Call
-    ----
+    Examples
+    --------
     L = eval_L(r,q)
 
     Parameters
@@ -675,8 +675,8 @@ def eval_v(r):
     """
     Newtonian orbital velocity of the binary.
 
-    Call
-    ----
+    Examples
+    --------
     v = eval_v(r)
 
     Parameters
@@ -700,8 +700,8 @@ def eval_r(L=None,u=None,q=None):
     """
     Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).
 
-    Call
-    ----
+    Examples
+    --------
     r = eval_r(L=None,u=None,q=None)
 
     Parameters
@@ -742,8 +742,8 @@ def eval_u(r, q):
     Change of independent variable to regularize the infinite orbital separation
     limit of the precession-averaged evolution equation.
 
-    Call
-    ----
+    Examples
+    --------
     u = eval_u(r,q)
 
     Parameters
@@ -769,8 +769,8 @@ def eval_chieff(theta1, theta2, q, chi1, chi2):
     """
     Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
 
-    Call
-    ----
+    Examples
+    --------
     chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
 
     Parameters
@@ -816,8 +816,8 @@ def eval_deltachi(theta1, theta2, q, chi1, chi2):
     """
     Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
 
-    Call
-    ----
+    Examples
+    --------
     chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
 
     Parameters
@@ -876,8 +876,8 @@ def eval_costheta1(deltachi, chieff, q, chi1):
     """
     Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
-    Call
-    ----
+    Examples
+    --------
     costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
@@ -925,8 +925,8 @@ def eval_costheta2(deltachi, chieff, q, chi2):
     """
     Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
 
-    Call
-    ----
+    Examples
+    --------
     costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
@@ -974,8 +974,8 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     """
     Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
 
-    Call
-    ----
+    Examples
+    --------
     costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)
 
     Parameters
@@ -1041,8 +1041,8 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
     """
     Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
 
-    Call
-    ----
+    Examples
+    --------
     cosdeltaphi = eval_cosdeltaphi(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
@@ -1101,8 +1101,8 @@ def eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1):
     """
     Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=-1 returns the other half of the  precession cycle [-pi,0].
 
-    Call
-    ----
+    Examples
+    --------
     deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
 
     Parameters
@@ -1141,8 +1141,8 @@ def eval_costhetaL(deltachi, kappa, r, chieff, q):
     """
     Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
 
-    Call
-    ----
+    Examples
+    --------
     costhetaL = eval_costhetaL(S,J,r,q,chi1,chi2)
 
     Parameters
@@ -1183,8 +1183,8 @@ def eval_thetaL(deltachi, kappa, r, chieff, q):
     """
     Angle thetaL betwen orbital angular momentum and total angular momentum.
 
-    Call
-    ----
+    Examples
+    --------
     thetaL = eval_thetaL(S,J,r,q,chi1,chi2)
 
     Parameters
@@ -1218,8 +1218,8 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
     """
     Magnitude of the total angular momentum. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).
 
-    Call
-    ----
+    Examples
+    --------
     J = eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None)
 
     Parameters
@@ -1278,8 +1278,8 @@ def eval_kappa(theta1=None, theta2=None, deltaphi=None, J=None, r=None, q=None, 
     Change of dependent variable to regularize the infinite orbital separation
     limit of the precession-averaged evolution equation.
 
-    Call
-    ----
+    Examples
+    --------
     kappa = eval_kappa(J,r,q)
 
     Parameters
@@ -1342,8 +1342,8 @@ def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
     """
     Magnitude of the total spin from the spin angles.
 
-    Call
-    ----
+    Examples
+    --------
     S = eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
 
     Parameters
@@ -1391,8 +1391,8 @@ def eval_cyclesign(ddeltachidt=None, deltaphi=None, Lvec=None, S1vec=None, S2vec
     - varphi
     - Lvec, S1vec, S2vec.
 
-    Call
-    ----
+    Examples
+    --------
     cyclesign = eval_cyclesign(dSdt=None,deltaphi=None,varphi=None,Lvec=None,S1vec=None,S2vec=None)
 
     Parameters
@@ -1440,8 +1440,8 @@ def conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
     """
     Convert conserved quantities (S,J,chieff) into angles (theta1,theta2,deltaphi).
 
-    Call
-    ----
+    Examples
+    --------
     theta1,theta2,deltaphi = conserved_to_angles(S,J,r,chieff,q,chi1,chi2,cyclesign=+1)
 
     Parameters
@@ -1484,8 +1484,8 @@ def angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2, full_output=
     """
     Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,chieff).
 
-    Call
-    ----
+    Examples
+    --------
     S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False)
     S,J,chieff,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)
 
@@ -1539,8 +1539,8 @@ def vectors_to_angles(Lvec, S1vec, S2vec):
     """
     Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi). The convention for the sign of deltaphi is given in Eq. (2d) of arxiv:1506.03492.
 
-    Call
-    ----
+    Examples
+    --------
     theta1,theta2,deltaphi = vectors_to_angles(Lvec,S1vec,S2vec)
 
     Parameters
@@ -1612,8 +1612,8 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
     Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
 
-    Call
-    ----
+    Examples
+    --------
     Lvec,S1vec,S2vec = angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
 
     Parameters
@@ -1669,8 +1669,8 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame
     aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
 
-    Call
-    ----
+    Examples
+    --------
     Lvec,S1vec,S2vec = angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)
 
     Parameters
@@ -1752,8 +1752,8 @@ def kappadiscriminant_coefficients(u, chieff, q, chi1, chi2):
     """
     Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.
 
-    Call
-    ----
+    Examples
+    --------
     coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = kappadiscriminant_coefficients(u,chieff,q,chi1,chi2)
 
     Parameters
@@ -2103,8 +2103,8 @@ def kappalimits_geometrical(r , q, chi1, chi2):
 def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     """
     Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
-    Call
-    ----
+    Examples
+    --------
     kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)
     Parameters
     ----------
@@ -2295,8 +2295,8 @@ def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False
     - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
     The boolean flag enforce allows raising an error in case the inputs are not compatible.
 
-    Call
-    ----
+    Examples
+    --------
     Jmin,Jmax = Jlimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
@@ -2348,8 +2348,8 @@ def chiefflimits_definition(q, chi1, chi2):
     """
     Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.
 
-    Call
-    ----
+    Examples
+    --------
     chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)
 
     Parameters
@@ -2381,8 +2381,8 @@ def deltachilimits_definition(q, chi1, chi2):
     """
     Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.
 
-    Call
-    ----
+    Examples
+    --------
     chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)
 
     Parameters
@@ -2414,8 +2414,8 @@ def anglesresonances(r, chieff, q, chi1, chi2):
     """
     Compute the values of the angles corresponding to the two spin-orbit resonances.
 
-    Call
-    ----
+    Examples
+    --------
     theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = anglesresonances(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None)
 
     Parameters
@@ -2524,8 +2524,8 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
     """
     Roots of the cubic equation in S^2 that identifies the effective potentials.
 
-    Call
-    ----
+    Examples
+    --------
     Sminuss,Spluss,S3s = Ssroots(J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
@@ -2580,8 +2580,8 @@ def deltachilimits_rectangle(chieff, q, chi1, chi2):
     - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
     The boolean flag enforce allows raising an error in case the inputs are not compatible.
 
-    Call
-    ----
+    Examples
+    --------
         kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
 
     Parameters
@@ -2654,8 +2654,8 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
     """
     Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user. Provide either J or kappa and either r or u.
 
-    Call
-    ----
+    Examples
+    --------
     S = Satresonance(J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None)
 
     Parameters
@@ -2703,8 +2703,8 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Parameter m entering elliptic functions for the evolution of S.
 
-    Call
-    ----
+    Examples
+    --------
     m = elliptic_parameter(Sminuss,Spluss,S3s)
 
     Parameters
@@ -2735,8 +2735,8 @@ def deltachitildeav(m,tol=1e-7):
     """
     Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
 
-    Call
-    ----
+    Examples
+    --------
     coeff = deltachitildeav(m)
 
     Parameters
@@ -2764,8 +2764,8 @@ def deltachitildeav2(m,tol=1e-7):
     """
     Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
 
-    Call
-    ----
+    Examples
+    --------
     coeff = deltachitildeav(m)
 
     Parameters
@@ -2794,8 +2794,8 @@ def ddchidt_prefactor(r, chieff, q):
     """
     Numerical prefactor to the S derivative.
 
-    Call
-    ----
+    Examples
+    --------
     mathcalA = derS_prefactor(r,chieff,q)
 
     Parameters
@@ -2872,8 +2872,8 @@ def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
     Evolution of S on the precessional timescale (without radiation reaction).
     The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
 
-    Call
-    ----
+    Examples
+    --------
     S = Soft(t,J,r,chieff,q,chi1,chi2,precomputedroots=None)
 
     Parameters
@@ -2942,8 +2942,8 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
     - (M,) if N=1;
     - (N,) if M=1.
 
-    Call
-    ----
+    Examples
+    --------
     S = Ssampling(J,r,chieff,q,chi1,chi2,N = 1)
 
     Parameters
@@ -3005,8 +3005,8 @@ def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
     """
     Numerical prefactors entering the precession frequency.
 
-    Call
-    ----
+    Examples
+    --------
     mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor_old(J,r,chieff,q,chi1,chi2)
 
     Parameters
@@ -3079,8 +3079,8 @@ def eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2):
     """
     Compute the precession frequency OmegaL along the precession cycle.
 
-    Call
-    ----
+    Examples
+    --------
     OmegaL = eval_OmegaL(S,J,r,chieff,q,chi1,chi2)
 
     Parameters
@@ -3188,8 +3188,8 @@ def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=
     """
     Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
 
-    Call
-    ----
+    Examples
+    --------
     morph = morphology(J,r,chieff,q,chi1,chi2,simpler = False)
 
     Parameters
@@ -3235,8 +3235,8 @@ def chip_terms(theta1, theta2, q, chi1, chi2):
     """
     Compute the two terms entering the effective precessing spin chip.
 
-    Call
-    ----
+    Examples
+    --------
     chipterm1,chipterm2 = chip_terms(theta1,theta2,q,chi1,chi2)
 
     Parameters
@@ -3275,8 +3275,8 @@ def eval_chip_heuristic(theta1, theta2, q, chi1, chi2):
     """
     Heuristic definition of the effective precessing spin chip (Schmidt et al 2015), see arxiv:2011.11948. This definition inconsistently averages over some, but not all, variations on the precession timescale.
 
-    Call
-    ----
+    Examples
+    --------
     chip = eval_chip_heuristic(theta1,theta2,q,chi1,chi2)
 
     Parameters
@@ -3307,8 +3307,8 @@ def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
     """
     Generalized definition of the effective precessing spin chip, see arxiv:2011.11948. This definition retains all variations on the precession timescale.
 
-    Call
-    ----
+    Examples
+    --------
     chip = eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)
 
     Parameters
@@ -3344,8 +3344,8 @@ def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs):
     - J, chieff
     The parameters r, q, chi1, and chi2 should always be provided. The keywords arguments method and Nsamples are passed directly to `precession_average`.
 
-    Call
-    ----
+    Examples
+    --------
     chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4)
 
     Parameters
@@ -3444,8 +3444,8 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
     - `asymptotic`, large-separation limit. Required inputs: theta1,theta2,q,chi1,chi2
     - `averaged` (default), averages over all precession-timescale variations. Required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (J,r,chieff,q,chi1,chi2). The additional keywords `methods` and `Nsamples` are passed to `precession_average`.
 
-    Call
-    ----
+    Examples
+    --------
     chip = eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,which="averaged",method='quadrature',Nsamples=1e4)
 
     Parameters
@@ -3530,8 +3530,8 @@ def eval_nutation_freq(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Nutation frequency of S as it oscillates from S- to S+ back to S-
 
-    Call
-    ----
+    Examples
+    --------
     little_omega = eval_little_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
@@ -3566,8 +3566,8 @@ def eval_bracket_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Precession average of the precession frequency of S as it oscillates from S- to S+ back to S-
 
-    Call
-    ----
+    Examples
+    --------
     bracket_omega = eval_bracket_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
@@ -3602,8 +3602,8 @@ def eval_delta_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Variation of the precession frequency of S as it oscillates from S- to S+ back to S- due to nutational effects
 
-    Call
-    ----
+    Examples
+    --------
     delta_omega = eval_delta_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
@@ -3642,8 +3642,8 @@ def eval_delta_theta(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
     Nutation amplitude of S as it oscillates from S- to S+ back to S-
 
-    Call
-    ----
+    Examples
+    --------
     delta_theta = eval_delta_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
@@ -3682,8 +3682,8 @@ def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, **kwargs):
     """
     Precession average of precession amplitude of S as it oscillates from S- to S+ back to S-
 
-    Call
-    ----
+    Examples
+    --------
     bracket_theta = eval_bracket_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)
 
     Parameters
@@ -3719,8 +3719,8 @@ def rupdown(q, chi1, chi2):
     """
     The critical separations r_ud+/- marking the region of the up-down precessional instability.
 
-    Call
-    ----
+    Examples
+    --------
     rudp,rudm = rupdown(q,chi1,chi2)
 
     Parameters
@@ -3773,8 +3773,8 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     """
     Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
 
-    Call
-    ----
+    Examples
+    --------
     omegasq = omegasq_aligned(r,q,chi1,chi2,which)
 
     Parameters
@@ -3827,8 +3827,8 @@ def widenutation_separation(q, chi1, chi2):
     The critical separation r_wide below which the binary component with
     smaller dimensionless spin may undergo wide nutations.
 
-    Call
-    ----
+    Examples
+    --------
     r_wide = widenutation(q,chi1,chi2)
 
     Parameters
@@ -3884,8 +3884,8 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     """
     Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
 
-    Call
-    ----
+    Examples
+    --------
     RHS = rhs_precav(kappa,u,chieff,q,chi1,chi2)
 
     Parameters
@@ -3944,8 +3944,8 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     """
     Integration of ODE dkappa/du describing precession-averaged inspirals.
 
-    Call
-    ----
+    Examples
+    --------
     kappa = integrator_precav(kappainitial,uinitial,ufinal,chieff,q,chi1,chi2)
 
     Parameters
@@ -4017,8 +4017,8 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     - kappa, chieff.
     The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'].
 
-    Call
-    ----
+    Examples
+    --------
     outputs = inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)
 
     Parameters
@@ -4168,8 +4168,8 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
     - method='quadrature' uses scipy.integrate.quad. This is set by default and should be preferred.
     - method='montecarlo' samples t(S) and approximate the integral with a Monte Carlo sum. The number of samples can be specifed by Nsamples.
 
-    Call
-    ----
+    Examples
+    --------
     func_av = precession_average(J,r,chieff,q,chi1,chi2,func,*args,method='quadrature',Nsamples=1e4)
 
     Parameters
@@ -4249,8 +4249,8 @@ def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, PNorderpre=[0,0.5]
     """
     Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unite vectors, v is the orbital velocity, and t is time. This is an internal function used by the ODE integrator and is not array-compatible.
 
-    Call
-    ----
+    Examples
+    --------
     RHS = rhs_orbav(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula=False)
 
     Parameters
@@ -4345,8 +4345,8 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorde
     Integration of the systems of ODEs describing orbit-averaged inspirals. Integration is performed in a reference frame
     where the z axis is along J and L lies in the x-z plane at the initial separation.
 
-    Call
-    ----
+    Examples
+    --------
     ODEsolution = integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2,quadrupole_formula=False)
 
     Parameters
@@ -4432,8 +4432,8 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
     - kappa, chieff, and S.
     The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['t', 'theta1', 'theta2', 'deltaphi', 'S', 'Lh', 'S1h', 'S2h', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2']
 
-    Call
-    ----
+    Examples
+    --------
     outputs = inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None)
 
     Parameters
@@ -4595,8 +4595,8 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     - kappa, chieff.
     The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'].
 
-    Call
-    ----
+    Examples
+    --------
     outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)
 
     Parameters
@@ -4742,8 +4742,8 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_
     """
     Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.
 
-    Call
-    ----
+    Examples
+    --------
     r = gwfrequency_to_pnseparation(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)
 
     Parameters
@@ -4795,8 +4795,8 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     """
     Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.
 
-    Call
-    ----
+    Examples
+    --------
     r = pnseparation_to_gwfrequency(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)
 
     Parameters
@@ -4856,8 +4856,8 @@ def remnantmass(theta1, theta2, q, chi1, chi2):
     relativity simulations are available. You should do a PN evolution to
     transfer binaries to r~10M.
 
-    Call
-    ----
+    Examples
+    --------
     mfin = remnantmass(theta1,theta2,q,chi1,chi2)
 
     Parameters
@@ -4911,8 +4911,8 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
     where numerical relativity simulations are available. You should do a PN
     evolution to transfer binaries at r~10M.
 
-    Call
-    ----
+    Examples
+    --------
     chifin = remnantspin(theta1,theta2,deltaphi,q,chi1,chi2,which='HBR16_34corr')
 
     Parameters
@@ -5038,8 +5038,8 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
     numerical relativity simulations are available. You should do a PN evolution
     to transfer binaries at r~10M.
 
-    Call
-    ----
+    Examples
+    --------
     vk = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)
     vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)
 
