@@ -1,4 +1,4 @@
-sphinx
+sphinx>=1.8.2
 sphinx-book-theme
 numpydoc
 recommonmark

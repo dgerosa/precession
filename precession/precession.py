@@ -12,15 +12,18 @@ from itertools import repeat
 
 ################ Utilities ################
 
+
 # TODO: new algorithm! Needs to be documented!
 def roots_vec(p): #, enforce=False):
     """
     Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
     Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977
 
-    Methods
+
+    Examples
     --------
-    ``roots = roots_vec(p)``
+    ``roots = precession.roots_vec(p)``
+
 
     Parameters
     ----------
@@ -31,6 +34,7 @@ def roots_vec(p): #, enforce=False):
     -------
     roots: array
         Polynomial roots.
+
     """
 
     p = np.atleast_1d(p).astype(float)
@@ -5040,7 +5044,8 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
 
     Examples
     --------
-    vk = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)
+    ``vk = remnantkick(theta1, theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)``
+    
     vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)
 
     Parameters
