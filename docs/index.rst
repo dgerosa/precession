@@ -1,9 +1,6 @@
 precession's documentation: index
 ======================================
 
-README.md
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -18,3 +15,4 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+README.md
