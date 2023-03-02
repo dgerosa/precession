@@ -232,7 +232,7 @@ def isotropic_angles(N=1):
 
 def tiler(thing,shaper):
 
-    thing =np.atleast_1d(thing).astype(float)
+    thing =np.atleast_1d(thing)
     shaper =np.atleast_1d(shaper)
     assert thing.ndim == 1 and shaper.ndim==1
 
@@ -4084,6 +4084,8 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         if q is None or chi1 is None or chi2 is None:
             raise TypeError("Please provide q, chi1, and chi2.")
 
+        print(r,u)
+
         # Make sure you have either r or u.
         if r is not None and u is None:
             assert np.logical_or(ismonotonic(r, '<='), ismonotonic(r, '>=')), 'r must be monotonic'
@@ -5758,5 +5760,22 @@ if __name__ == '__main__':
 
     #pnseparation_to_gwfrequency(0.56, 0.34, 1.3, 23, 0.7, 0.3, 0.67, 46)
 
-    reminantspindirection(0.56, 1.2, 0.65, 10, 0.8, 0.3, 0.7)
+    #reminantspindirection(0.56, 1.2, 0.65, 10, 0.8, 0.3, 0.7)
+
+
+    # LIGO gives me posterior samples
+    q=[0.4,0.5]
+    chi1=[0.5,0.6]
+    chi2=[0.7,0.8]
+    theta1=[1.2,1.3]
+    theta2=[1.4,1.5]
+    deltaphi=[1.6,1.7]
+    fGW=20*np.ones(len(q)) #f_ref in Hz
+    M_msun=[23,25] # in solar masses
+
+    r = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_msun)
+    r = np.array([r,np.repeat(np.inf,len(r))]).T
+
+    evol = inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2, requested_outputs=['theta1','theta2'])
+
 
