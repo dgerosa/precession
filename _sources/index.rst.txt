@@ -8,8 +8,13 @@ precession's documentation: index
    :caption: Contents:
 
    README.md
-   modules
-      
+
+   .. autosummary::
+      :toctree: _autosummary
+
+      precession
+
+
 Indices and tables
 ==================
 
