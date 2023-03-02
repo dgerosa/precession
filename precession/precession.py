@@ -20,7 +20,7 @@ def roots_vec(p): #, enforce=False):
 
     Examples
     --------
-    roots = roots_vec(p)
+    `roots = roots_vec(p)`
 
     Parameters
     ----------
