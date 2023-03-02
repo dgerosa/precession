@@ -107,7 +107,7 @@ pygments_style = None
 #
 #import sphinx_rtd_theme
 #html_theme = 'sphinx_rtd_theme'
-import sphinx-book-theme
+import sphinx_book_theme
 html_theme = 'sphinx_book_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
