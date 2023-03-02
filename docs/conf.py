@@ -47,7 +47,7 @@ extensions = [
     # 'sphinx.ext.todo',
     # 'sphinx.ext.coverage',
     # 'sphinx.ext.mathjax',
-    # 'sphinx.ext.viewcode',
+    'sphinx.ext.viewcode',
     #'sphinx.ext.githubpages',
     #'recommonmark',
     "sphinx_mdinclude"
@@ -211,5 +211,7 @@ epub_title = project
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
 
+
+html_show_sourcelink = False
 
 # -- Extension configuration -------------------------------------------------
