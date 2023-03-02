@@ -2,4 +2,5 @@ Package documentation
 =====================
 
 .. autosummary::
-   precession
+   :toctree: _autosummary      
+
