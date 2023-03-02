@@ -1,11 +1,11 @@
+Examples
+=====================
+
+ciao ciao ciao
+
+
 Package documentation
 =====================
 
-.. autosummary::
-   :toctree: _autosummary      
-
-   precession
-
-
-.. autosummary::
-   precession
+.. automodule:: precession
+   :members:
