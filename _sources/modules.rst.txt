@@ -3,6 +3,6 @@ Package documentation
 
 .. autosummary::
    :toctree: _autosummary
-       :maxdepth: 1
+       :maxdepth: 2
    
    precession
