@@ -4777,7 +4777,9 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_
 
     theta1 = np.atleast_1d(theta1).astype(float)
     theta2 = np.atleast_1d(theta2).astype(float)
+    deltaphi = np.atleast_1d(deltaphi).astype(float)
     fGW = np.atleast_1d(fGW).astype(float)
+    q = np.atleast_1d(q).astype(float)
     chi1 = np.atleast_1d(chi1).astype(float)
     chi2 = np.atleast_1d(chi2).astype(float)
     M_msun = np.atleast_1d(M_msun).astype(float)
@@ -4830,7 +4832,9 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
 
     theta1 = np.atleast_1d(theta1).astype(float)
     theta2 = np.atleast_1d(theta2).astype(float)
+    deltaphi = np.atleast_1d(deltaphi).astype(float)
     r = np.atleast_1d(r).astype(float)
+    q = np.atleast_1d(q).astype(float)
     chi1 = np.atleast_1d(chi1).astype(float)
     chi2 = np.atleast_1d(chi2).astype(float)
     M_msun = np.atleast_1d(M_msun).astype(float)
@@ -5045,7 +5049,7 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
     Examples
     --------
     ``vk = remnantkick(theta1, theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)``
-    
+
     vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)
 
     Parameters
