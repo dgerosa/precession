@@ -4,8 +4,7 @@ precession's documentation: index
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   
-   README.md
+
    modules
       
 Indices and tables
