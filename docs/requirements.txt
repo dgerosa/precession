@@ -1,4 +1,5 @@
 sphinx
+sphinx-book-theme
 numpydoc
 recommonmark
 sphinx_rtd_theme
