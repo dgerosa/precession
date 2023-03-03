@@ -3717,7 +3717,6 @@ def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, **kwargs):
     return bracket_theta
 
 
-# TODO Add updown endpoint.
 # TODO Add limits of the resonances at small separations from the endpoint paper
 def rupdown(q, chi1, chi2):
     """
@@ -3772,7 +3771,6 @@ def updown_endpoint(q, chi1, chi2):
     return theta1, theta2, deltaphi
 
 
-# TODO: check
 def omegasq_aligned(r, q, chi1, chi2, which):
     """
     Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
@@ -3800,7 +3798,10 @@ def omegasq_aligned(r, q, chi1, chi2, which):
         Squared frequency.
     """
 
+    r = np.atleast_1d(r).astype(float)
     q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
 
     # These are all the valid input flags
     uulabels = np.array(['uu', 'up-up', 'upup', '++'])
@@ -3815,13 +3816,22 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     # +1 if secondary is co-aligned, -1 if secondary is counter-aligned
     alpha2 = np.where(np.isin(which, np.concatenate([uulabels, dulabels])), 1, -1)
 
-    L = eval_L(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
-    # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1
-    omegasq = (3 * q**5 / (2 * (1 + q)**11 * L**7))**2 * (L - (q *
-        alpha1 * S1 + alpha2 * S2) / (1 + q))**2 * (L**2 * (1 - q)**2 -
-        2 * L * (q * alpha1 * S1 - alpha2 * S2) * (1 - q) + (q * alpha1 *
-        S1 + alpha2 * S2)**2)
+    # L = eval_L(r, q)
+    # S1, S2 = spinmags(q, chi1, chi2)
+    # # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1
+    # omegasq = (3 * q**5 / (2 * (1 + q)**11 * L**7))**2 * (L - (q *
+    #     alpha1 * S1 + alpha2 * S2) / (1 + q))**2 * (L**2 * (1 - q)**2 -
+    #     2 * L * (q * alpha1 * S1 - alpha2 * S2) * (1 - q) + (q * alpha1 *
+    #     S1 + alpha2 * S2)**2)
+    
+    theta1 = np.arccos(alpha1)
+    theta2 = np.arccos(alpha2)
+    deltachi = eval_deltachi(theta1, theta2, q, chi1, chi2)
+    chieff = eval_chieff(theta1, theta2, q, chi1, chi2)
+    
+    omegasq = (9/4) * (1/r)**7 * (r**0.5-chieff)**2 * (
+        ((1-q)/(1+q))**2*r - 2*((1-q)/(1+q))*deltachi*r**0.5 + chieff**2
+        )
 
     return omegasq
 
