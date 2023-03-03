@@ -3792,7 +3792,6 @@
     <span class="k">return</span> <span class="n">bracket_theta</span></div>
 
 
-<span class="c1"># TODO Add updown endpoint.</span>
 <span class="c1"># TODO Add limits of the resonances at small separations from the endpoint paper</span>
 <div class="viewcode-block" id="rupdown"><a class="viewcode-back" href="../auto.html#precession.rupdown">[docs]</a><span class="k">def</span> <span class="nf">rupdown</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -3847,7 +3846,6 @@
     <span class="k">return</span> <span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span></div>
 
 
-<span class="c1"># TODO: check</span>
 <div class="viewcode-block" id="omegasq_aligned"><a class="viewcode-back" href="../auto.html#precession.omegasq_aligned">[docs]</a><span class="k">def</span> <span class="nf">omegasq_aligned</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">which</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.</span>
@@ -3875,7 +3873,10 @@
 <span class="sd">        Squared frequency.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">chi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">chi2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="c1"># These are all the valid input flags</span>
     <span class="n">uulabels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;uu&#39;</span><span class="p">,</span> <span class="s1">&#39;up-up&#39;</span><span class="p">,</span> <span class="s1">&#39;upup&#39;</span><span class="p">,</span> <span class="s1">&#39;++&#39;</span><span class="p">])</span>
@@ -3890,13 +3891,22 @@
     <span class="c1"># +1 if secondary is co-aligned, -1 if secondary is counter-aligned</span>
     <span class="n">alpha2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">which</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">uulabels</span><span class="p">,</span> <span class="n">dulabels</span><span class="p">])),</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">L</span> <span class="o">=</span> <span class="n">eval_L</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
-    <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span> <span class="o">=</span> <span class="n">spinmags</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
-    <span class="c1"># Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1</span>
-    <span class="n">omegasq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">q</span><span class="o">**</span><span class="mi">5</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">11</span> <span class="o">*</span> <span class="n">L</span><span class="o">**</span><span class="mi">7</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span> <span class="o">-</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span>
-        <span class="n">alpha1</span> <span class="o">*</span> <span class="n">S1</span> <span class="o">+</span> <span class="n">alpha2</span> <span class="o">*</span> <span class="n">S2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span>
-        <span class="mi">2</span> <span class="o">*</span> <span class="n">L</span> <span class="o">*</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">alpha1</span> <span class="o">*</span> <span class="n">S1</span> <span class="o">-</span> <span class="n">alpha2</span> <span class="o">*</span> <span class="n">S2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">alpha1</span> <span class="o">*</span>
-        <span class="n">S1</span> <span class="o">+</span> <span class="n">alpha2</span> <span class="o">*</span> <span class="n">S2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># L = eval_L(r, q)</span>
+    <span class="c1"># S1, S2 = spinmags(q, chi1, chi2)</span>
+    <span class="c1"># # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1</span>
+    <span class="c1"># omegasq = (3 * q**5 / (2 * (1 + q)**11 * L**7))**2 * (L - (q *</span>
+    <span class="c1">#     alpha1 * S1 + alpha2 * S2) / (1 + q))**2 * (L**2 * (1 - q)**2 -</span>
+    <span class="c1">#     2 * L * (q * alpha1 * S1 - alpha2 * S2) * (1 - q) + (q * alpha1 *</span>
+    <span class="c1">#     S1 + alpha2 * S2)**2)</span>
+    
+    <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">alpha1</span><span class="p">)</span>
+    <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">alpha2</span><span class="p">)</span>
+    <span class="n">deltachi</span> <span class="o">=</span> <span class="n">eval_deltachi</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+    <span class="n">chieff</span> <span class="o">=</span> <span class="n">eval_chieff</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+    
+    <span class="n">omegasq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">r</span><span class="p">)</span><span class="o">**</span><span class="mi">7</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mf">0.5</span><span class="o">-</span><span class="n">chieff</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span>
+        <span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">))</span><span class="o">*</span><span class="n">deltachi</span><span class="o">*</span><span class="n">r</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">chieff</span><span class="o">**</span><span class="mi">2</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">omegasq</span></div>
 
