@@ -3717,7 +3717,6 @@ def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, **kwargs):
     return bracket_theta
 
 
-# TODO Add limits of the resonances at small separations from the endpoint paper
 def rupdown(q, chi1, chi2):
     """
     The critical separations r_ud+/- marking the region of the up-down precessional instability.
@@ -3771,6 +3770,7 @@ def updown_endpoint(q, chi1, chi2):
     return theta1, theta2, deltaphi
 
 
+## TODO: format output how you want
 def resonances_endpoint(q, chi1, chi2, chieff):
     
     q = np.atleast_1d(q).astype(float)
