@@ -3771,6 +3771,35 @@ def updown_endpoint(q, chi1, chi2):
     return theta1, theta2, deltaphi
 
 
+def resonances_endpoint(q, chi1, chi2, chieff):
+    
+    q = np.atleast_1d(q).astype(float)
+    chi1 = np.atleast_1d(chi1).astype(float)
+    chi2 = np.atleast_1d(chi2).astype(float)
+    chieff = np.atleast_1d(chieff).astype(float)
+    
+    chieff_uu = eval_chieff(0, 0, q, chi1, chi2)
+    chieff_ud = eval_chieff(0, -np.pi, q, chi1, chi2)
+    
+    theta0 = np.arccos(chieff / chieff_uu)
+    deltaphi0 = np.zeros_like(theta0)
+    res0 = theta0, theta0, deltaphi0
+    
+    condition = np.abs(chieff) <= np.abs(chieff_ud)
+    costheta1pi_less = chieff / chieff_ud
+    costheta1pi_gtr = (1+q) * (chieff**2+chieff_ud*chieff_uu) / (2*chi1*chieff)
+    costheta1pi = np.where(condition, costheta1pi_less, costheta1pi_gtr)
+    theta1pi = np.arccos(costheta1pi)
+    costheta2pi_less = -costheta1pi_less
+    costheta2pi_gtr = (1+q) * (chieff**2-chieff_ud*chieff_uu) / (2*q*chi2*chieff)
+    costheta2pi = np.where(condition, costheta2pi_less, costheta2pi_gtr)
+    theta2pi = np.arccos(costheta2pi)
+    deltaphipi = np.ones_like(condition) * np.pi
+    respi = theta1pi, theta2pi, deltaphipi
+    
+    return res0, respi
+
+
 def omegasq_aligned(r, q, chi1, chi2, which):
     """
     Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
