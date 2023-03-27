@@ -2159,6 +2159,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
 
         upup,updown,downup,downdown=eval_chieff([0,0,np.pi,np.pi], [0,np.pi,0,np.pi], np.repeat(q,4), np.repeat(chi1,4), np.repeat(chi2,4))
 
+
         # If too close to perfect alignment, return the analytical result.
         if np.isclose(np.repeat(chieff,2),np.squeeze([upup,downdown])).any():
             warnings.warn("Close to either up-up or down-down configuration. Using analytical results.", Warning)
@@ -2167,6 +2168,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
             L=1/(2*u)
             kappar = ((L+np.sign(chieff)*(S1+S2))**2 - L**2) / (2*L)
             kappares=np.squeeze([kappar,kappar])
+
 
 
         # In this case, the spurious solution is always the smaller one. Just leave it out.
@@ -2222,6 +2224,7 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
 
             # 5 complex solutions correspond to 3 real parts (i.e. thare are two conjugate pairs)
             kapparoots = np.unique(np.real(kapparootscomplex))
+
             deltachires = deltachiresonance(kappa=kapparoots, u=tiler(u,kapparoots), chieff=tiler(chieff,kapparoots), q=tiler(q,kapparoots), chi1=tiler(chi1,kapparoots), chi2=tiler(chi2,kapparoots))
 
             deltachimin,deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
@@ -2234,13 +2237,34 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
 
             # In case that also fails, returns the closest two
             else:
-                warnings.warn("Resonances not detected, best guess returned (aggressive sanitizing)", Warning)
+
 
                 diffmin = np.abs(deltachires-deltachimin)
                 diffmax = np.abs(deltachires-deltachimax)
 
-                kappares = np.sort(np.squeeze([kapparoots[diffmin==min(diffmin)], kapparoots[diffmax==min(diffmax)]]))
+                try:
+                    kappares = np.sort(np.squeeze([kapparoots[diffmin==min(diffmin)], kapparoots[diffmax==min(diffmax)]]))
             
+                except:
+                    # If that also fails and you're close to q=1, return the analytic result
+                    if np.isclose(q,1):
+
+                        r=float(eval_r(u=u,q=q))
+                        kappamin = np.maximum((chi1-chi2)**2 / 8 , chieff**2 /2) /r**0.5 + chieff/2
+                        kappamax = (chi1+chi2)**2 / 8 /r**0.5 + chieff/2
+
+                        kappares=np.array([kappamin,kappamax])
+                        warnings.warn("Resonances not detected, best guess returned (using analytic result for q=1)", Warning)
+
+                else:
+                    warnings.warn("Resonances not detected, best guess returned (aggressive sanitizing)", Warning)
+
+# \\
+# \label{kappaplusqone}
+# \lim_{q\to 1} \kappa_+ &=  \frac{(\chi_1+\chi_2)^2}{8}  \sqrt\frac{M}{r} + \frac{\chi_{\rm eff}}{2}
+# \end{align}
+
+
 
         # Up-down and down-up are challenging. 
         # Evaluate the resonances outside of those points and interpolate linearly.
@@ -2506,12 +2530,16 @@ def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
-def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2):
+def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2, precomputedcoefficients=None):
     
     u = np.atleast_1d(u).astype(float)
     q = np.atleast_1d(q).astype(float)
 
-    _, coeff2, coeff1, coeff0 = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
+    if precomputedcoefficients is None:
+        _, coeff2, coeff1, coeff0 = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
+    else:
+        assert precomputedcoefficients.shape[0] == 4, "Shape of precomputedroots must be (3,N), i.e. deltachiminus, deltachiplus, deltachi3. [deltachiroots]"
+        _, coeff2, coeff1, coeff0=np.array(precomputedcoefficients)
 
     # Careful! Do not divide coeff3 by (1-q) but recompute explicitely
     coeff3r = u 
@@ -3922,10 +3950,10 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
 
     else:
         # I don't use deltachiroots here because I want to keep complex numbers. This is needed to sanitize the output in some tricky cases
-        coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)
+        coeffs = deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2)        
+        coeffsr = deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2, precomputedcoefficients=coeffs)
         deltachiminus, deltachiplus, _ = np.squeeze(np.sort_complex(roots_vec(coeffs.T)))
-        coeffs = deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2)
-        _, _, deltachi3 = np.squeeze(np.sort_complex(roots_vec(coeffs.T)))
+        _, _, deltachi3 = np.squeeze(np.sort_complex(roots_vec(coeffsr.T)))
 
         # deltachiminus, deltachiplus are complex. This can happen if the binary is very close to a spin-orbit resonance
         if np.iscomplex(deltachiminus) and np.iscomplex(deltachiplus):
@@ -4012,7 +4040,7 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     return ODEsolution
 
 
-def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, **odeint_kwargs):
+def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, enforce=False, **odeint_kwargs):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. In addition, integration can be done between finite separations, forward from infinite to finite separation, or backward from finite to infinite separation. For infinity, use r=np.inf or u=0.
     The initial conditions must be specified in terms of one an only one of the following:
@@ -4061,16 +4089,16 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     """
 
     # Substitute None inputs with arrays of Nones
-    inputs = [theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2]
+    inputs = [theta1, theta2, deltaphi, kappa, r, u, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(tiler(None, np.atleast_1d(q))))
         else:
-            if k == 5 or k == 6:  # Either u or r
+            if k == 4 or k == 5:  # Either u or r
                 inputs[k] = np.atleast_2d(inputs[k])
             else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
-    theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2 = inputs
+    theta1, theta2, deltaphi, kappa, r, u, chieff, q, chi1, chi2 = inputs
 
     # This array has to match the outputs of _compute (in the right order!)
     alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'])
@@ -4078,13 +4106,11 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     if requested_outputs is None:
         requested_outputs = alloutputs
 
-    def _compute(theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2):
+    def _compute(theta1, theta2, deltaphi, kappa, r, u, chieff, q, chi1, chi2):
 
         # Make sure you have q, chi1, and chi2.
         if q is None or chi1 is None or chi2 is None:
             raise TypeError("Please provide q, chi1, and chi2.")
-
-        print(r,u)
 
         # Make sure you have either r or u.
         if r is not None and u is None:
@@ -4099,25 +4125,33 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         assert np.sum(u == 0) <= 1 and np.sum(u[1:-1] == 0) == 0, "There can only be one r=np.inf location, either at the beginning or at the end."
 
         # User provided theta1,theta2, and deltaphi. Get chieff and kappa.
-        if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None:
+        if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and chieff is None:
             deltachi, kappa, chieff = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
 
         # User provides kappa, chieff, and maybe deltachi.
-        elif theta1 is None and theta2 is None and deltaphi is None and kappa is None and chieff is not None:
+        elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and chieff is not None:
             pass
 
         else:
-            raise TypeError("Integrating from finite separations. Please provide one and not more of the following: (theta1,theta2,deltaphi), (J,chieff), (S,J,chieff), (kappa,chieff), (S,kappa,chieff).")
+            raise TypeError("Please provide one and not more of the following: (theta1,theta2,deltaphi), (kappa,chieff).")
 
-        # Enforce limits
-        chieffmin, chieffmax = chiefflimits_definition(q, chi1, chi2)
-        assert chieff >= chieffmin and chieff <= chieffmax, "Unphysical initial conditions [inspiral_precav]."
-
-        kappamin,kappamax = kappalimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2)
-        assert kappa >= kappamin and kappa <= kappamax, "Unphysical initial conditions [inspiral_precav]."
+        # Enforce limits. Uncomment if you want to be more restrictive (though some integrations are going to fail for roundoff errors in the resonant finder)
+        if enforce:
+            chieffmin, chieffmax = chiefflimits_definition(q, chi1, chi2)
+            assert chieff >= chieffmin and chieff <= chieffmax, "Unphysical initial conditions [inspiral_precav]."+str(theta1)+" "+str(theta2)+" "+str(deltaphi)+" "+str(kappa)+" "+str(r)+" "+str(u)+" "+str(chieff)+" "+str(q)+" "+str(chi1)+" "+str(chi2)
+            kappamin,kappamax = kappalimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+            assert kappa >= kappamin and kappa <= kappamax, "Unphysical initial conditions [inspiral_precav]."+str(theta1)+" "+str(theta2)+" "+str(deltaphi)+" "+str(kappa)+" "+str(r)+" "+str(u)+" "+str(chieff)+" "+str(q)+" "+str(chi1)+" "+str(chi2)
 
         # Actual integration.
         kappa = np.squeeze(integrator_precav(kappa, u, chieff, q, chi1, chi2,**odeint_kwargs))
+
+        deltachiminus = None
+        deltachiplus = None
+        deltachi3 = None
+        deltachi=None
+        theta1=None
+        theta2=None
+        deltaphi=None
 
         # Roots along the evolution
         if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'deltachiminus', 'deltachiplus', 'deltachi3']):
@@ -4131,21 +4165,10 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
                 if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi']):
                     theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r), cyclesign = np.random.choice([-1, 1], r.shape))
 
-                else:
-                    theta1=None
-                    theta2=None
-                    deltaphi=None
-            else:
-                deltachi=None
-        else:
-            deltachiminus = None
-            deltachiplus = None
-            deltachi3 = None
-
         return theta1, theta2, deltaphi, deltachi, kappa, r, u, deltachiminus, deltachiplus, deltachi3, chieff, q, chi1, chi2
 
     # Here I force dtype=object because the outputs have different shapes
-    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, deltachi, kappa, r, u, chieff, q, chi1, chi2)), dtype=object).T
+    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, kappa, r, u, chieff, q, chi1, chi2)), dtype=object).T
 
     # Return only requested outputs (in1d return boolean array)
     wantoutputs = np.in1d(alloutputs, requested_outputs)
@@ -5763,19 +5786,33 @@ if __name__ == '__main__':
     #reminantspindirection(0.56, 1.2, 0.65, 10, 0.8, 0.3, 0.7)
 
 
-    # LIGO gives me posterior samples
-    q=[0.4,0.5]
-    chi1=[0.5,0.6]
-    chi2=[0.7,0.8]
-    theta1=[1.2,1.3]
-    theta2=[1.4,1.5]
-    deltaphi=[1.6,1.7]
-    fGW=20*np.ones(len(q)) #f_ref in Hz
-    M_msun=[23,25] # in solar masses
+    # # LIGO gives me posterior samples
+    # q=[0.4,0.5]
+    # chi1=[0.5,0.6]
+    # chi2=[0.7,0.8]
+    # theta1=[1.2,1.3]
+    # theta2=[1.4,1.5]
+    # deltaphi=[1.6,1.7]
+    # fGW=20*np.ones(len(q)) #f_ref in Hz
+    # M_msun=[23,25] # in solar masses
 
-    r = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_msun)
-    r = np.array([r,np.repeat(np.inf,len(r))]).T
+    # r = gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_msun)
+    # r = np.array([r,np.repeat(np.inf,len(r))]).T
 
-    evol = inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2, requested_outputs=['theta1','theta2'])
+    # evol = inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2, requested_outputs=['theta1','theta2'])
 
+
+     #   assert kappa >= kappamin and kappa <= kappamax, "Unphysical initial conditions [inspiral_precav]."+str(theta1)+" "+str(theta2)+" "+str(deltaphi)+" "+str(kappa)+" "+str(r)+" "+str(u)+" "+str(chieff)+" "+str(q)+" "+str(chi1)+" "+str(chi2)
+
+    theta1=1.1089074192834159
+    theta2=2.6952858896368017
+    deltaphi=-0.5244390912531154
+    r= [10000,10]
+    q= 0.9922882802330715
+    chi1=0.12048230079280116
+    chi2 = 0.5685605440813272
+
+
+    res = inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
+    print(res)
 
