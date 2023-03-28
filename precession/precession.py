@@ -5525,8 +5525,6 @@ if __name__ == '__main__':
 
     #alphaq1 = 1/6 * np.pi * r**(1/4) * (7  -6 * chieff * (r)**(-1/2))  * (1 - chieff * (r)**(-1/2))**(-1) * ((1 + 8 * (r)**(-1/2) * kappa))**(1/2) * (2 * kappa - chieff)**(-1/2)
 #    %((1 + 8 * (r)**(-1/2) * kappa))**(1/2) \
-#* *  (1 - chieff * (r)**(-1/2))**(-1)  * (-2 * kappa + chieff)**(-1/2)
-
     #print(alphaq1)
 
 
@@ -5843,15 +5841,18 @@ if __name__ == '__main__':
 
      #   assert kappa >= kappamin and kappa <= kappamax, "Unphysical initial conditions [inspiral_precav]."+str(theta1)+" "+str(theta2)+" "+str(deltaphi)+" "+str(kappa)+" "+str(r)+" "+str(u)+" "+str(chieff)+" "+str(q)+" "+str(chi1)+" "+str(chi2)
 
-    theta1=1.1089074192834159
-    theta2=2.6952858896368017
-    deltaphi=-0.5244390912531154
-    r= [10000,10]
-    q= 0.9922882802330715
-    chi1=0.12048230079280116
-    chi2 = 0.5685605440813272
+    # theta1=1.1089074192834159
+    # theta2=2.6952858896368017
+    # deltaphi=-0.5244390912531154
+    # r= [10000,10]
+    # q= 0.9922882802330715
+    # chi1=0.12048230079280116
+    # chi2 = 0.5685605440813272
 
 
-    res = inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
-    print(res)
+    # res = inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
+    # print(res)
+
+    print(angles_to_conserved([0.1,0.1], [0.1,0.1], [0.1,0.1], [10,10], [0.1,0.1], [0.1,0.1], [0.1,0.1]).shape)
+
 
