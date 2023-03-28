@@ -5599,8 +5599,6 @@
 
     <span class="c1">#alphaq1 = 1/6 * np.pi * r**(1/4) * (7  -6 * chieff * (r)**(-1/2))  * (1 - chieff * (r)**(-1/2))**(-1) * ((1 + 8 * (r)**(-1/2) * kappa))**(1/2) * (2 * kappa - chieff)**(-1/2)</span>
 <span class="c1">#    %((1 + 8 * (r)**(-1/2) * kappa))**(1/2) \</span>
-<span class="c1">#* *  (1 - chieff * (r)**(-1/2))**(-1)  * (-2 * kappa + chieff)**(-1/2)</span>
-
     <span class="c1">#print(alphaq1)</span>
 
 
@@ -5917,17 +5915,20 @@
 
      <span class="c1">#   assert kappa &gt;= kappamin and kappa &lt;= kappamax, &quot;Unphysical initial conditions [inspiral_precav].&quot;+str(theta1)+&quot; &quot;+str(theta2)+&quot; &quot;+str(deltaphi)+&quot; &quot;+str(kappa)+&quot; &quot;+str(r)+&quot; &quot;+str(u)+&quot; &quot;+str(chieff)+&quot; &quot;+str(q)+&quot; &quot;+str(chi1)+&quot; &quot;+str(chi2)</span>
 
-    <span class="n">theta1</span><span class="o">=</span><span class="mf">1.1089074192834159</span>
-    <span class="n">theta2</span><span class="o">=</span><span class="mf">2.6952858896368017</span>
-    <span class="n">deltaphi</span><span class="o">=-</span><span class="mf">0.5244390912531154</span>
-    <span class="n">r</span><span class="o">=</span> <span class="p">[</span><span class="mi">10000</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
-    <span class="n">q</span><span class="o">=</span> <span class="mf">0.9922882802330715</span>
-    <span class="n">chi1</span><span class="o">=</span><span class="mf">0.12048230079280116</span>
-    <span class="n">chi2</span> <span class="o">=</span> <span class="mf">0.5685605440813272</span>
+    <span class="c1"># theta1=1.1089074192834159</span>
+    <span class="c1"># theta2=2.6952858896368017</span>
+    <span class="c1"># deltaphi=-0.5244390912531154</span>
+    <span class="c1"># r= [10000,10]</span>
+    <span class="c1"># q= 0.9922882802330715</span>
+    <span class="c1"># chi1=0.12048230079280116</span>
+    <span class="c1"># chi2 = 0.5685605440813272</span>
 
 
-    <span class="n">res</span> <span class="o">=</span> <span class="n">inspiral_precav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="c1"># res = inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)</span>
+    <span class="c1"># print(res)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">angles_to_conserved</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
 
 </pre></div>
 
