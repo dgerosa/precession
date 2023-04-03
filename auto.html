@@ -324,45 +324,43 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>J: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
 </dd>
-<dt><strong>r: float, optional (default: None)</strong></dt><dd><p>Binary separation.</p>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
 </dd>
-<dt><strong>chieff: float, optional (default: None)</strong></dt><dd><p>Effective spin.</p>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
-<dt><strong>q: float, optional (default: None)</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
 </dd>
-<dt><strong>chi1: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
-</dd>
-<dt><strong>chi2: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>theta1atmin: float</dt><dd><p>Value of the angle theta1 at the resonance that minimizes either J or chieff, depending on the input.</p>
+<dt>deltaphiatmax: float</dt><dd><p>Value of the angle deltaphi at the resonance that maximizes kappa.</p>
 </dd>
-<dt>theta2atmin: float</dt><dd><p>Value of the angle theta2 at the resonance that minimizes either J or chieff, depending on the input.</p>
+<dt>deltaphiatmin: float</dt><dd><p>Value of the angle deltaphi at the resonance that minimizes kappa.</p>
 </dd>
-<dt>deltaphiatmin: float</dt><dd><p>Value of the angle deltaphi at the resonance that minimizes either J or chieff, depending on the input.</p>
+<dt>theta1atmax: float</dt><dd><p>Value of the angle theta1 at the resonance that maximizes kappa.</p>
 </dd>
-<dt>theta1atmax: float</dt><dd><p>Value of the angle theta1 at the resonance that maximizes either J or chieff, depending on the input.</p>
+<dt>theta1atmin: float</dt><dd><p>Value of the angle theta1 at the resonance that minimizes kappa.</p>
 </dd>
-<dt>theta2atmax: float</dt><dd><p>Value of the angle theta2 at the resonance that maximizes either J or chieff, depending on the input.</p>
+<dt>theta2atmax: float</dt><dd><p>Value of the angle theta2 at the resonance that maximizes kappa.</p>
 </dd>
-<dt>deltaphiatmax: float</dt><dd><p>Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input.</p>
+<dt>theta2atmin: float</dt><dd><p>Value of the angle theta2 at the resonance that minimizes kappa.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = anglesresonances(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax</span> <span class="pre">=</span> <span class="pre">precession.anglesresonances(r,chieff,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.chiefflimits_definition">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">chiefflimits_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#chiefflimits_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.chiefflimits_definition" title="Permalink to this definition"></a></dt>
-<dd><p>Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.</p>
+<dd><p>Limits on the effective spin based only on its definition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -376,15 +374,15 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>chieffmin: float</dt><dd><p>Minimum value of the effective spin chieff.</p>
+<dt>chieffmax: float</dt><dd><p>Maximum value of the effective spin.</p>
 </dd>
-<dt>chieffmax: float</dt><dd><p>Maximum value of the effective spin chieff.</p>
+<dt>chieffmin: float</dt><dd><p>Minimum value of the effective spin.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">chieffmin,chieffmax</span> <span class="pre">=</span> <span class="pre">precession.chiefflimits_definition(q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -575,17 +573,85 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.deltachicubic_coefficients">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachicubic_coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachicubic_coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachicubic_coefficients" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Coefficients of the cubic equation in deltachi for its time evolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>u: float</strong></dt><dd><p>Compactified separation 1/(2L).</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>coeff0: float</dt><dd><p>Coefficient to the x^0 term in polynomial.</p>
+</dd>
+<dt>coeff1: float</dt><dd><p>Coefficient to the x^1 term in polynomial.</p>
+</dd>
+<dt>coeff2: float</dt><dd><p>Coefficient to the x^2 term in polynomial.</p>
+</dd>
+<dt>coeff3: float</dt><dd><p>Coefficient to the x^3 term in polynomial.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">coeff3,coeff2,coeff1,coeff0</span> <span class="pre">=</span> <span class="pre">precession.deltachicubic_coefficients(kappa,u,chieff,q,chi1,chi2)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.deltachicubic_rescaled_coefficients">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachicubic_rescaled_coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedcoefficients</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachicubic_rescaled_coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachicubic_rescaled_coefficients" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Rescaled coefficients of the cubic equation in deltachi for its time evolution. This is necessary to avoid dividing by (1-q).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>u: float</strong></dt><dd><p>Compactified separation 1/(2L).</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>precomputedcoefficients: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachicubic_coefficients for computational efficiency.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>coeff0: float</dt><dd><p>Coefficient to the x^0 term in polynomial.</p>
+</dd>
+<dt>coeff1: float</dt><dd><p>Coefficient to the x^1 term in polynomial.</p>
+</dd>
+<dt>coeff2: float</dt><dd><p>Coefficient to the x^2 term in polynomial.</p>
+</dd>
+<dt>coeff3: float</dt><dd><p>Coefficient to the x^3 term in polynomial.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">coeff3,coeff2,coeff1,coeff0</span> <span class="pre">=</span> <span class="pre">precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.deltachilimits_definition">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachilimits_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachilimits_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachilimits_definition" title="Permalink to this definition"></a></dt>
-<dd><p>Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.</p>
+<dd><p>Limits on the weighted spin difference based only on its definition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -599,15 +665,15 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>chieffmin: float</dt><dd><p>Minimum value of the effective spin chieff.</p>
+<dt>deltachimax: float</dt><dd><p>Maximum value of the effective spin chieff.</p>
 </dd>
-<dt>chieffmax: float</dt><dd><p>Maximum value of the effective spin chieff.</p>
+<dt>deltachimin: float</dt><dd><p>Minimum value of the effective spin chieff.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachimin,deltachimax</span> <span class="pre">=</span> <span class="pre">precession.deltachilimits_definition(q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -2526,10 +2592,10 @@ where the z axis is along J and L lies in the x-z plane at the initial separatio
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.kappalimits">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">kappalimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#kappalimits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.kappalimits" title="Permalink to this definition"></a></dt>
-<dd><p>Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
-- If r, q, chi1, and chi2 are provided, the limits are given by J=L+S1+S2.
-- If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
-The boolean flag enforce allows raising an error in case the inputs are not compatible.</p>
+<dd><p>Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
+- If r, q, chi1, chi2 are provided, returns the geometrical limits.
+- If r, chieff, q, chi1, and chi2 are provided, returns the spin-orbit resonances.
+The boolean flag enforce raises an error in case the inputs are not compatible. Additional kwargs are passed to kapparesonances.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -2545,19 +2611,23 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 </dd>
 <dt><strong>enforce: boolean, optional (default: False)</strong></dt><dd><p>If True raise errors, if False raise warnings.</p>
 </dd>
+<dt><strong>**kwargs: unpacked dictionary, optional</strong></dt><dd><p>Additional keyword arguments.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>Jmin: float</dt><dd><p>Minimum value of the total angular momentum J.</p>
+<dt>kappamax: float</dt><dd><p>Maximum value of the asymptotic angular momentum kappa.</p>
 </dd>
-<dt>Jmax: float</dt><dd><p>Maximum value of the total angular momentum J.</p>
+<dt>kappamin: float</dt><dd><p>Minimum value of the asymptotic angular momentum kappa.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Jmin,Jmax = Jlimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)</p>
+<p><code class="docutils literal notranslate"><span class="pre">kappamin,kappamax</span> <span class="pre">=</span> <span class="pre">precession.kappalimits(r=r,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">kappamin,kappamax</span> <span class="pre">=</span> <span class="pre">precession.kappalimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">kappamin,kappamax</span> <span class="pre">=</span> <span class="pre">precession.kappalimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,enforce=True)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -2579,9 +2649,9 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>kappamax: float</dt><dd><p>Maximum value of the regularized angular momentum kappa.</p>
+<dt>kappamax: float</dt><dd><p>Maximum value of the asymptotic angular momentum kappa.</p>
 </dd>
-<dt>kappamin: float</dt><dd><p>Minimum value of the regularized angular momentum kappa.</p>
+<dt>kappamin: float</dt><dd><p>Minimum value of the asymptotic angular momentum kappa.</p>
 </dd>
 </dl>
 </dd>
@@ -2593,12 +2663,39 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.kapparescaling">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">kapparescaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappatilde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#kapparescaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.kapparescaling" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Compute kappa from the rescaled parameter 0&lt;=kappatilde&lt;=1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappatilde: float</strong></dt><dd><p>Rescaled version of the asymptotic angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>kappa: float</dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">kappa</span> <span class="pre">=</span> <span class="pre">precession.kapparescaling(kappatilde,r,chieff,q,chi1,chi2)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.kapparesonances">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">kapparesonances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#kapparesonances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.kapparesonances" title="Permalink to this definition"></a></dt>
-<dd><p>Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for given values of r, chieff, q, chi1, chi2. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.</p>
+<dd><p>asymptotic angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for given values of r, chieff, q, chi1, chi2. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -2618,9 +2715,9 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>kappamax: float</dt><dd><p>Maximum value of the regularized angular momentum kappa.</p>
+<dt>kappamax: float</dt><dd><p>Maximum value of the asymptotic angular momentum kappa.</p>
 </dd>
-<dt>kappamin: float</dt><dd><p>Minimum value of the regularized angular momentum kappa.</p>
+<dt>kappamin: float</dt><dd><p>Minimum value of the asymptotic angular momentum kappa.</p>
 </dd>
 </dl>
 </dd>

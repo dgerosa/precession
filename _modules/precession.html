@@ -2328,9 +2328,9 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    kappamax: float</span>
-<span class="sd">        Maximum value of the regularized angular momentum kappa.</span>
+<span class="sd">        Maximum value of the asymptotic angular momentum kappa.</span>
 <span class="sd">    kappamin: float</span>
-<span class="sd">        Minimum value of the regularized angular momentum kappa.</span>
+<span class="sd">        Minimum value of the asymptotic angular momentum kappa.</span>
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -2371,7 +2371,7 @@
 
 <div class="viewcode-block" id="kapparesonances"><a class="viewcode-back" href="../auto.html#precession.kapparesonances">[docs]</a><span class="k">def</span> <span class="nf">kapparesonances</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for given values of r, chieff, q, chi1, chi2. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.</span>
+<span class="sd">    asymptotic angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for given values of r, chieff, q, chi1, chi2. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2391,9 +2391,9 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    kappamax: float</span>
-<span class="sd">        Maximum value of the regularized angular momentum kappa.</span>
+<span class="sd">        Maximum value of the asymptotic angular momentum kappa.</span>
 <span class="sd">    kappamin: float</span>
-<span class="sd">        Minimum value of the regularized angular momentum kappa.</span>
+<span class="sd">        Minimum value of the asymptotic angular momentum kappa.</span>
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -2574,6 +2574,33 @@
 
 
 <div class="viewcode-block" id="kapparescaling"><a class="viewcode-back" href="../auto.html#precession.kapparescaling">[docs]</a><span class="k">def</span> <span class="nf">kapparescaling</span><span class="p">(</span><span class="n">kappatilde</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute kappa from the rescaled parameter 0&lt;=kappatilde&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kappatilde: float</span>
+<span class="sd">        Rescaled version of the asymptotic angular momentum.</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``kappa = precession.kapparescaling(kappatilde,r,chieff,q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">kappatilde</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappatilde</span><span class="p">)</span>
     <span class="n">kappaminus</span><span class="p">,</span> <span class="n">kappaplus</span> <span class="o">=</span> <span class="n">kapparesonances</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
@@ -2583,15 +2610,11 @@
 
 <div class="viewcode-block" id="kappalimits"><a class="viewcode-back" href="../auto.html#precession.kappalimits">[docs]</a><span class="k">def</span> <span class="nf">kappalimits</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">enforce</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.</span>
-<span class="sd">    - If r, q, chi1, and chi2 are provided, the limits are given by J=L+S1+S2.</span>
-<span class="sd">    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.</span>
-<span class="sd">    The boolean flag enforce allows raising an error in case the inputs are not compatible.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    Jmin,Jmax = Jlimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)</span>
-
+<span class="sd">    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.</span>
+<span class="sd">    - If r, q, chi1, chi2 are provided, returns the geometrical limits.</span>
+<span class="sd">    - If r, chieff, q, chi1, and chi2 are provided, returns the spin-orbit resonances.</span>
+<span class="sd">    The boolean flag enforce raises an error in case the inputs are not compatible. Additional kwargs are passed to kapparesonances.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    r: float, optional (default: None)</span>
@@ -2606,17 +2629,25 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    enforce: boolean, optional (default: False)</span>
 <span class="sd">        If True raise errors, if False raise warnings.</span>
-
+<span class="sd">    **kwargs: unpacked dictionary, optional</span>
+<span class="sd">        Additional keyword arguments.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Jmin: float</span>
-<span class="sd">        Minimum value of the total angular momentum J.</span>
-<span class="sd">    Jmax: float</span>
-<span class="sd">        Maximum value of the total angular momentum J.</span>
+<span class="sd">    kappamax: float</span>
+<span class="sd">        Maximum value of the asymptotic angular momentum kappa.</span>
+<span class="sd">    kappamin: float</span>
+<span class="sd">        Minimum value of the asymptotic angular momentum kappa.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``kappamin,kappamax = precession.kappalimits(r=r,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``kappamin,kappamax = precession.kappalimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``kappamin,kappamax = precession.kappalimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,enforce=True)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kappamin</span><span class="p">,</span> <span class="n">kappamax</span> <span class="o">=</span> <span class="n">kappalimits_geometrical</span><span class="p">(</span><span class="n">r</span> <span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+        <span class="n">kappamin</span><span class="p">,</span> <span class="n">kappamax</span> <span class="o">=</span> <span class="n">kappalimits_geometrical</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">kappamin</span><span class="p">,</span> <span class="n">kappamax</span> <span class="o">=</span> <span class="n">kapparesonances</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -2639,12 +2670,8 @@
 
 <div class="viewcode-block" id="chiefflimits_definition"><a class="viewcode-back" href="../auto.html#precession.chiefflimits_definition">[docs]</a><span class="k">def</span> <span class="nf">chiefflimits_definition</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)</span>
-
+<span class="sd">    Limits on the effective spin based only on its definition.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
@@ -2653,14 +2680,19 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    chieffmin: float</span>
-<span class="sd">        Minimum value of the effective spin chieff.</span>
 <span class="sd">    chieffmax: float</span>
-<span class="sd">        Maximum value of the effective spin chieff.</span>
+<span class="sd">        Maximum value of the effective spin.</span>
+<span class="sd">    chieffmin: float</span>
+<span class="sd">        Minimum value of the effective spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chieffmin,chieffmax = precession.chiefflimits_definition(q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">chi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -2672,12 +2704,8 @@
 
 <div class="viewcode-block" id="deltachilimits_definition"><a class="viewcode-back" href="../auto.html#precession.deltachilimits_definition">[docs]</a><span class="k">def</span> <span class="nf">deltachilimits_definition</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)</span>
-
+<span class="sd">    Limits on the weighted spin difference based only on its definition.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
@@ -2686,13 +2714,17 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    chieffmin: float</span>
-<span class="sd">        Minimum value of the effective spin chieff.</span>
-<span class="sd">    chieffmax: float</span>
+<span class="sd">    deltachimax: float</span>
 <span class="sd">        Maximum value of the effective spin chieff.</span>
+<span class="sd">    deltachimin: float</span>
+<span class="sd">        Minimum value of the effective spin chieff.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``deltachimin,deltachimax = precession.deltachilimits_definition(q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -2706,40 +2738,38 @@
 <div class="viewcode-block" id="anglesresonances"><a class="viewcode-back" href="../auto.html#precession.anglesresonances">[docs]</a><span class="k">def</span> <span class="nf">anglesresonances</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the values of the angles corresponding to the two spin-orbit resonances.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = anglesresonances(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
-<span class="sd">    r: float, optional (default: None)</span>
+<span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
-<span class="sd">    chieff: float, optional (default: None)</span>
+<span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
-<span class="sd">    q: float, optional (default: None)</span>
+<span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-<span class="sd">    chi1: float, optional (default: None)</span>
+<span class="sd">    chi1: float</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-<span class="sd">    chi2: float, optional (default: None)</span>
+<span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    theta1atmin: float</span>
-<span class="sd">        Value of the angle theta1 at the resonance that minimizes either J or chieff, depending on the input.</span>
-<span class="sd">    theta2atmin: float</span>
-<span class="sd">        Value of the angle theta2 at the resonance that minimizes either J or chieff, depending on the input.</span>
-<span class="sd">    deltaphiatmin: float</span>
-<span class="sd">        Value of the angle deltaphi at the resonance that minimizes either J or chieff, depending on the input.</span>
-<span class="sd">    theta1atmax: float</span>
-<span class="sd">        Value of the angle theta1 at the resonance that maximizes either J or chieff, depending on the input.</span>
-<span class="sd">    theta2atmax: float</span>
-<span class="sd">        Value of the angle theta2 at the resonance that maximizes either J or chieff, depending on the input.</span>
 <span class="sd">    deltaphiatmax: float</span>
-<span class="sd">        Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input.</span>
+<span class="sd">        Value of the angle deltaphi at the resonance that maximizes kappa.</span>
+<span class="sd">    deltaphiatmin: float</span>
+<span class="sd">        Value of the angle deltaphi at the resonance that minimizes kappa.</span>
+<span class="sd">    theta1atmax: float</span>
+<span class="sd">        Value of the angle theta1 at the resonance that maximizes kappa.</span>
+<span class="sd">    theta1atmin: float</span>
+<span class="sd">        Value of the angle theta1 at the resonance that minimizes kappa.</span>
+<span class="sd">    theta2atmax: float</span>
+<span class="sd">        Value of the angle theta2 at the resonance that maximizes kappa.</span>
+<span class="sd">    theta2atmin: float</span>
+<span class="sd">        Value of the angle theta2 at the resonance that minimizes kappa.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = precession.anglesresonances(r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -2763,6 +2793,40 @@
 
 
 <div class="viewcode-block" id="deltachicubic_coefficients"><a class="viewcode-back" href="../auto.html#precession.deltachicubic_coefficients">[docs]</a><span class="k">def</span> <span class="nf">deltachicubic_coefficients</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Coefficients of the cubic equation in deltachi for its time evolution.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    u: float</span>
+<span class="sd">        Compactified separation 1/(2L).</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    coeff0: float</span>
+<span class="sd">        Coefficient to the x^0 term in polynomial.</span>
+<span class="sd">    coeff1: float</span>
+<span class="sd">        Coefficient to the x^1 term in polynomial.</span>
+<span class="sd">    coeff2: float</span>
+<span class="sd">        Coefficient to the x^2 term in polynomial.</span>
+<span class="sd">    coeff3: float</span>
+<span class="sd">        Coefficient to the x^3 term in polynomial.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``coeff3,coeff2,coeff1,coeff0 = precession.deltachicubic_coefficients(kappa,u,chieff,q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">chieff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -2798,7 +2862,42 @@
 
 
 <div class="viewcode-block" id="deltachicubic_rescaled_coefficients"><a class="viewcode-back" href="../auto.html#precession.deltachicubic_rescaled_coefficients">[docs]</a><span class="k">def</span> <span class="nf">deltachicubic_rescaled_coefficients</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedcoefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rescaled coefficients of the cubic equation in deltachi for its time evolution. This is necessary to avoid dividing by (1-q).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    u: float</span>
+<span class="sd">        Compactified separation 1/(2L).</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    precomputedcoefficients: array, optional (default: None)</span>
+<span class="sd">        Pre-computed output of deltachicubic_coefficients for computational efficiency.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    coeff0: float</span>
+<span class="sd">        Coefficient to the x^0 term in polynomial.</span>
+<span class="sd">    coeff1: float</span>
+<span class="sd">        Coefficient to the x^1 term in polynomial.</span>
+<span class="sd">    coeff2: float</span>
+<span class="sd">        Coefficient to the x^2 term in polynomial.</span>
+<span class="sd">    coeff3: float</span>
+<span class="sd">        Coefficient to the x^3 term in polynomial.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``coeff3,coeff2,coeff1,coeff0 = precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
