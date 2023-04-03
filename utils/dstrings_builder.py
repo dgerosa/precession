@@ -4,7 +4,7 @@ This is a semi-automatic docstrings builder for the precession code.
 Usage:
 python dstrings_builder.py <name of function>
 
-For each function docstrings, the developer needs to provide the intro blurb and the "Call" line. This code will then try to fill the "Parameters" and "Returns" description.
+For each function docstrings, the developer needs to provide the intro blurb and the "Examples" line. This code will then try to fill the "Parameters" and "Returns" description.
 '''
 
 
@@ -214,14 +214,11 @@ for i,line in enumerate(sourcecode):
 
             # Remove all the space
             line= line.replace(' ','').replace('\t','')
-            docs+="Call\n----\n"
-            docs+=line.replace('=',' = ',1)
-            docs+='\n'
 
             # Select string in between parentheses
             inputs = line.split('(')[1].split(')')[0].split(',')
 
-            docs+="\nParameters\n----------\n"
+            docs+="Parameters\n----------\n"
 
             # Loop over inputs
             for var in inputs:
@@ -234,12 +231,17 @@ for i,line in enumerate(sourcecode):
                 docs+=descr(varname,vardef)
 
             # Select before equal sign
-            outputs = line.split('=')[0].split(',')
+            outputs = line.replace("`","").split('=')[0].split(',')
 
             docs+="\nReturns\n-------\n"
             # Loop over inputs
             for var in outputs:
                 docs+=descr(var)
+
+            docs+="\nExamples\n--------\n``"
+            docs+=line.replace('precession.',"").replace('=',' = precession.',1).replace("`","")
+            docs+='``\n'
+
 
             foundone=True
 

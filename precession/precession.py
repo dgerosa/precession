@@ -14,12 +14,6 @@ def roots_vec(p): #, enforce=False):
     Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
     Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977
 
-
-    Examples
-    --------
-    ``roots = precession.roots_vec(p)``
-
-
     Parameters
     ----------
     p: array
@@ -30,6 +24,9 @@ def roots_vec(p): #, enforce=False):
     roots: array
         Polynomial roots.
 
+    Examples
+    --------
+    ``roots = precession.roots_vec(p)``
     """
 
     p = np.atleast_1d(p).astype(float)
@@ -70,7 +67,7 @@ def roots_vec(p): #, enforce=False):
 
     return resind
 
-
+#TODO docstrings
 def norm_nested(x):
     """
     Norm of 2D array of shape (N,3) along last axis.
@@ -92,7 +89,7 @@ def norm_nested(x):
 
     return np.linalg.norm(x, axis=1)
 
-
+#TODO docstrings
 def normalize_nested(x):
     """
     Normalize 2D array of shape (N,3) along last axis.
@@ -114,7 +111,7 @@ def normalize_nested(x):
 
     return x/norm_nested(x)[:, None]
 
-
+#TODO docstrings
 def dot_nested(x, y):
     """
     Dot product between 2D arrays along last axis.
@@ -138,7 +135,7 @@ def dot_nested(x, y):
 
     return np.einsum('ij, ij->i', x, y)
 
-
+#TODO docstrings
 def scalar_nested(k, x):
     """
     Nested scalar product between a 1D and a 2D array.
@@ -162,7 +159,7 @@ def scalar_nested(k, x):
 
     return k[:,np.newaxis]*x
 
-
+#TODO docstrings
 def rotate_nested(vec, align_zaxis, align_xzplane):
     
     '''Rotate a given vector vec to a frame such that the vector align_zaxis lies along z and the vector align_xzplane lies in the xz plane.'''
@@ -191,7 +188,7 @@ def rotate_nested(vec, align_zaxis, align_xzplane):
 
     return vecrot
 
-
+#TODO docstrings
 def sample_unitsphere(N=1):
     """
     Sample points uniformly on a sphere of unit radius. Returns array of shape (N,3).
@@ -215,7 +212,7 @@ def sample_unitsphere(N=1):
     vec /= np.linalg.norm(vec, axis=0)
     return vec.T
 
-
+#TODO docstrings
 def isotropic_angles(N=1):
 
     theta1=np.arccos(np.random.uniform(-1,1,N))
@@ -224,7 +221,7 @@ def isotropic_angles(N=1):
 
     return theta1,theta2,deltaphi
 
-
+#TODO docstrings
 def tiler(thing,shaper):
 
     thing =np.atleast_1d(thing)
@@ -233,7 +230,7 @@ def tiler(thing,shaper):
 
     return np.squeeze(np.tile(thing, np.shape(shaper)).reshape(len(shaper),len(thing)))
 
-
+#TODO docstrings
 def affine(vec, low, up):
     vec = np.atleast_1d(vec).astype(float)
     up = np.atleast_1d(up).astype(float)
@@ -243,7 +240,7 @@ def affine(vec, low, up):
 
     return rescaled
 
-
+#TODO docstrings
 def inverseaffine(rescaled, low, up):
     
     rescaled = np.atleast_1d(rescaled).astype(float)
@@ -254,7 +251,7 @@ def inverseaffine(rescaled, low, up):
 
     return vec
 
-
+#TODO docstrings
 def wraproots(coefficientfunction, *args, **kwargs):
     """
     Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is essentially a wrapper of numpy.roots.
@@ -282,7 +279,7 @@ def wraproots(coefficientfunction, *args, **kwargs):
 
     return sols
 
-
+#TODO docstrings
 def ellippi(n, phi, m):
     """
     Incomplete elliptic integral of the third kind. This is reconstructed using scipy's implementation of Carlson's R integrals (arxiv:math/9409227).
@@ -328,7 +325,7 @@ def ellippi(n, phi, m):
     c = (1/np.sin(phi))**2
     return scipy.special.elliprf(c-1,c-m,c) +(np.array(n)/3)*scipy.special.elliprj(c-1,c-m,c,c-n)
 
-
+#TODO docstrings
 def ismonotonic(vec, which):
     """
     Check if an array is monotonic. The parameter `which` can takes the following values:
@@ -373,20 +370,20 @@ def ismonotonic(vec, which):
 def eval_m1(q):
     """
     Mass of the heavier black hole in units of the total mass.
-
-    Examples
-    --------
-    m1 = eval_m1(q)
-
+    
     Parameters
     ----------
     q: float
         Mass ratio: 0<=q<=1.
-
+    
     Returns
     -------
     m1: float
         Mass of the primary (heavier) black hole.
+    
+    Examples
+    --------
+    ``m1 = precession.eval_m1(q)``
     """
 
     q = np.atleast_1d(q).astype(float)
@@ -398,20 +395,20 @@ def eval_m1(q):
 def eval_m2(q):
     """
     Mass of the lighter black hole in units of the total mass.
-
-    Examples
-    --------
-    m2 = eval_m2(q)
-
+    
     Parameters
     ----------
     q: float
         Mass ratio: 0<=q<=1.
-
+    
     Returns
     -------
     m2: float
         Mass of the secondary (lighter) black hole.
+    
+    Examples
+    --------
+    ``m2 = precession.eval_m2(q)``
     """
 
     q = np.atleast_1d(q).astype(float)
@@ -420,52 +417,25 @@ def eval_m2(q):
     return m2
 
 
-def masses(q):
-    """
-    Masses of the two black holes in units of the total mass.
-
-    Examples
-    --------
-    m1,m2 = masses(q)
-
-    Parameters
-    ----------
-    q: float
-        Mass ratio: 0<=q<=1.
-
-    Returns
-    -------
-    m1: float
-        Mass of the primary (heavier) black hole.
-    m2: float
-        Mass of the secondary (lighter) black hole.
-    """
-
-    m1 = eval_m1(q)
-    m2 = eval_m2(q)
-
-    return np.stack([m1, m2])
-
-
 def eval_q(m1, m2):
     """
     Mass ratio, 0 < q = m2/m1 < 1.
-
-    Examples
-    --------
-    q = eval_q(m1,m2)
-
+    
     Parameters
     ----------
     m1: float
         Mass of the primary (heavier) black hole.
     m2: float
         Mass of the secondary (lighter) black hole.
-
+    
     Returns
     -------
     q: float
         Mass ratio: 0<=q<=1.
+    
+    Examples
+    --------
+    ``q = precession.eval_q(m1,m2)``
     """
 
     m1 = np.atleast_1d(m1).astype(float)
@@ -479,20 +449,20 @@ def eval_q(m1, m2):
 def eval_eta(q):
     """
     Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2.
-
-    Examples
-    --------
-    eta = eval_eta(q)
-
+    
     Parameters
     ----------
     q: float
         Mass ratio: 0<=q<=1.
-
+    
     Returns
     -------
     eta: float
         Symmetric mass ratio 0<=eta<=1/4.
+    
+    Examples
+    --------
+    ``eta = precession.eval_eta(q)``
     """
 
     q = np.atleast_1d(q).astype(float)
@@ -504,22 +474,22 @@ def eval_eta(q):
 def eval_S1(q, chi1):
     """
     Spin angular momentum of the heavier black hole.
-
-    Examples
-    --------
-    S1 = eval_S1(q,chi1)
-
+    
     Parameters
     ----------
     q: float
         Mass ratio: 0<=q<=1.
     chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-
+    
     Returns
     -------
     S1: float
         Magnitude of the primary spin.
+    
+    Examples
+    --------
+    ``S1 = precession.eval_S1(q,chi1)``
     """
 
     chi1 = np.atleast_1d(chi1).astype(float)
@@ -527,25 +497,26 @@ def eval_S1(q, chi1):
 
     return S1
 
+
 def eval_S2(q, chi2):
     """
     Spin angular momentum of the lighter black hole.
-
-    Examples
-    --------
-    S2 = eval_S2(q,chi2)
-
+    
     Parameters
     ----------
     q: float
         Mass ratio: 0<=q<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     S2: float
         Magnitude of the secondary spin.
+    
+    Examples
+    --------
+    ``S2 = precession.eval_S2(q,chi2)``
     """
 
     chi2 = np.atleast_1d(chi2).astype(float)
@@ -556,23 +527,23 @@ def eval_S2(q, chi2):
 
 def eval_chi1(q, S1):
     """
-    Spin angular momentum of the heavier black hole.
-
-    Examples
-    --------
-    S1 = eval_S1(q,chi1)
-
+    Dimensionless spin of the heavier black hole.
+    
     Parameters
     ----------
     q: float
         Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-
-    Returns
-    -------
     S1: float
         Magnitude of the primary spin.
+    
+    Returns
+    -------
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    
+    Examples
+    --------
+    ``chi1 = precession.eval_chi1(q,S1)``
     """
 
     S1 = np.atleast_1d(S1).astype(float)
@@ -583,23 +554,23 @@ def eval_chi1(q, S1):
 
 def eval_chi2(q, S2):
     """
-    Spin angular momentum of the heavier black hole.
-
-    Examples
-    --------
-    S1 = eval_S1(q,chi1)
-
+    Dimensionless spin of the lighter black hole.
+    
     Parameters
     ----------
     q: float
         Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-
+    S2: float
+        Magnitude of the secondary spin.
+    
     Returns
     -------
-    S1: float
-        Magnitude of the primary spin.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Examples
+    --------
+    ``chi2 = precession.eval_chi2(q,S2)``
     """
 
     S2 = np.atleast_1d(S2).astype(float)
