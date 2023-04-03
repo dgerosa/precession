@@ -198,6 +198,16 @@ sourcecode = [line.strip() for line in sourcecode]
 if sourcecode[0]=='':
     sourcecode=sourcecode[1:]
 
+
+# examples =""
+# for i,line in enumerate(sourcecode):
+#     if fun in line and "=" in line and "(" in line and ")" in line:
+#         print(line)
+#         examples+="line.replace(" ","").replace('precession.',"").replace('=',' = precession.',1).replace("`","")+"\n"
+
+# print(examples)
+examples=""
+
 intro=None
 for i,line in enumerate(sourcecode):
     if line =='' and intro is None:
@@ -208,7 +218,6 @@ for i,line in enumerate(sourcecode):
         docs+='\n\n'
 
     if fun in line and "=" in line and "(" in line and ")" in line:
-
         # This is the first occurrence
         if not foundone:
 
@@ -238,12 +247,14 @@ for i,line in enumerate(sourcecode):
             for var in outputs:
                 docs+=descr(var)
 
-            docs+="\nExamples\n--------\n``"
-            docs+=line.replace('precession.',"").replace('=',' = precession.',1).replace("`","")
-            docs+='``\n'
 
+
+            docs+="\nExamples\n--------\n``"
 
             foundone=True
+
+            docs+=line.replace('precession.',"").replace('=',' = precession.',1).replace("`","")
+            docs+='``\n'
 
 
         else:
@@ -256,19 +267,19 @@ for i,line in enumerate(sourcecode):
                     newdocs+=dline+"\n"
 
                     line= line.replace(' ','').replace('\t','')
-                    line = line.replace('=',' = ',1)
+                    line = "``"+line.replace('precession.',"").replace('=',' = precession.',1).replace("`","")+"``"
                     newdocs+=line+"\n"
 
-                newoutputs = line.replace(' ','').split('=')[0].split(',')
+            #     newoutputs = line.replace(' ','').split('=')[0].split(',')
 
-            firstnewoutput=True
-            for newoutput in newoutputs:
-                if newoutput not in outputs:
-                    if firstnewoutput:
-                        newdocs+="Other parameters\n-------\n"
-                        firstnewoutput=False
-                    #print(newoutput)
-                    newdocs+=descr(newoutput)
+            # firstnewoutput=True
+            # for newoutput in newoutputs:
+            #     if newoutput not in outputs:
+            #         if firstnewoutput:
+            #             newdocs+="Other parameters\n-------\n"
+            #             firstnewoutput=False
+            #         #print(newoutput)
+            #         newdocs+=descr(newoutput)
 
                 #for var in outputs:
                 #    docs+=descr(var)
@@ -276,10 +287,12 @@ for i,line in enumerate(sourcecode):
 
             foundone=True
 
+
             docs=newdocs
 
 # Remove last new line
-#docs=docs.rstrip()
+docs=docs.rstrip()
+docs+='\n'
 # Indent everything
 
 docs=realtab+docs.replace('\n','\n'+realtab).replace('\t',realtab)

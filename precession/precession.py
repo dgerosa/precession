@@ -577,27 +577,27 @@ def eval_chi2(q, S2):
     chi2 = S2/(eval_m2(q))**2
 
     return chi2
-    
+
 
 def eval_L(r, q):
     """
     Newtonian angular momentum of the binary.
-
-    Examples
-    --------
-    L = eval_L(r,q)
-
+    
     Parameters
     ----------
     r: float
         Binary separation.
     q: float
         Mass ratio: 0<=q<=1.
-
+    
     Returns
     -------
     L: float
         Magnitude of the Newtonian orbital angular momentum.
+    
+    Examples
+    --------
+    ``L = precession.eval_L(r,q)``
     """
 
     r = np.atleast_1d(r).astype(float)
@@ -611,20 +611,20 @@ def eval_L(r, q):
 def eval_v(r):
     """
     Newtonian orbital velocity of the binary.
-
-    Examples
-    --------
-    v = eval_v(r)
-
+    
     Parameters
     ----------
     r: float
         Binary separation.
-
+    
     Returns
     -------
     v: float
         Newtonian orbital velocity.
+    
+    Examples
+    --------
+    ``v = precession.eval_v(r)``
     """
 
     r = np.atleast_1d(r).astype(float)
@@ -635,25 +635,24 @@ def eval_v(r):
 
 def eval_r(L=None,u=None,q=None):
     """
-    Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).
-
-    Examples
-    --------
-    r = eval_r(L=None,u=None,q=None)
-
+    Orbital separation of the binary. Provide either (L,q) or (u,q).
+    
     Parameters
     ----------
-    L: float, optional (default: None)
+    L: float, optional (default: L)
         Magnitude of the Newtonian orbital angular momentum.
-    u: float, optional (default: None)
-        Compactified separation 1/(2L).
-    q: float, optional (default: None)
+    q: float, optional (default: q)
         Mass ratio: 0<=q<=1.
-
+    
     Returns
     -------
     r: float
         Binary separation.
+    
+    Examples
+    --------
+    ``r = precession.eval_r(L=L,q=q)``
+    ``r = precession.eval_r(u=u,q=q)``
     """
 
     q = np.atleast_1d(q).astype(float)
@@ -676,24 +675,23 @@ def eval_r(L=None,u=None,q=None):
 
 def eval_u(r, q):
     """
-    Change of independent variable to regularize the infinite orbital separation
-    limit of the precession-averaged evolution equation.
-
-    Examples
-    --------
-    u = eval_u(r,q)
-
+    Compactified orbital separation.
+    
     Parameters
     ----------
     r: float
         Binary separation.
     q: float
         Mass ratio: 0<=q<=1.
-
+    
     Returns
     -------
     u: float
         Compactified separation 1/(2L).
+    
+    Examples
+    --------
+    ``u = precession.eval_u(r,q)``
     """
 
     L = eval_L(r, q)
@@ -704,37 +702,29 @@ def eval_u(r, q):
 
 def eval_chieff(theta1, theta2, q, chi1, chi2):
     """
-    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
-
-    Examples
-    --------
-    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
-
+    Eftective spin.
+    
     Parameters
     ----------
-    theta1: float, optional (default: None)
+    theta1: float
         Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
+    theta2: float
         Angle between orbital angular momentum and secondary spin.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
-    varphi: float, optional (default: None)
-        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
-    r: float, optional (default: None)
-        Binary separation.
-    q: float, optional (default: None)
+    q: float
         Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
+    chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
+    chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     chieff: float
         Effective spin.
+    
+    Examples
+    --------
+    ``chieff = precession.eval_chieff(theta1,theta2,q,chi1,chi2)``
     """
 
     theta1 = np.atleast_1d(theta1).astype(float)
