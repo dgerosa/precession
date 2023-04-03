@@ -1081,7 +1081,7 @@
         <span class="n">chieff</span><span class="p">))))</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Provide either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Provide either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">costheta12</span></div>
 
@@ -1356,7 +1356,7 @@
         <span class="n">J</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">L</span><span class="o">*</span><span class="n">kappa</span> <span class="o">+</span> <span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Provide either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (kappa,r,q,chi1,chi2).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">J</span></div>
 
@@ -1415,68 +1415,59 @@
                 <span class="p">(</span><span class="n">chi1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">q</span><span class="o">**</span><span class="mi">4</span> <span class="o">*</span><span class="n">chi2</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">chi1</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">q</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide provide iether (J,r,q) or (theta1,theta2,deltaphi,q,chi1,chi2).&quot;</span><span class="p">)</span>
+        <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (J,r,q).&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">kappa</span></div>
 
-<span class="c1">#TODO: I got to here</span>
-<span class="c1"># TODO: This function and the next one needs to be merged together</span>
-<div class="viewcode-block" id="eval_S_from_deltachi"><a class="viewcode-back" href="../auto.html#precession.eval_S_from_deltachi">[docs]</a><span class="k">def</span> <span class="nf">eval_S_from_deltachi</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 
-    <span class="n">deltachi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">deltachi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">chieff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-
-    <span class="c1">#print(&quot;thisguy&quot;, (2*kappa - chieff - deltachi * (1 - q)/(1 + q)))</span>
-
-    <span class="n">S</span> <span class="o">=</span> <span class="p">(</span> <span class="n">q</span> <span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">kappa</span> <span class="o">-</span> <span class="n">chieff</span> <span class="o">-</span> <span class="n">deltachi</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span> <span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">S</span></div>
-
-
-<div class="viewcode-block" id="eval_S"><a class="viewcode-back" href="../auto.html#precession.eval_S">[docs]</a><span class="k">def</span> <span class="nf">eval_S</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<div class="viewcode-block" id="eval_S"><a class="viewcode-back" href="../auto.html#precession.eval_S">[docs]</a><span class="k">def</span> <span class="nf">eval_S</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Magnitude of the total spin from the spin angles.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    S = eval_S(theta1,theta2,deltaphi,q,chi1,chi2)</span>
-
+<span class="sd">    Magnitude of the total spin. Valid inputs are either (theta1, theta2, deltaphi, q, chi1, chi2) or (deltachi, kappa, r, chieff, q).</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    theta1: float</span>
-<span class="sd">        Angle between orbital angular momentum and primary spin.</span>
-<span class="sd">    theta2: float</span>
-<span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
-<span class="sd">    deltaphi: float</span>
-<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
 <span class="sd">    chi1: float</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-<span class="sd">    chi2: float</span>
-<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    S: float</span>
 <span class="sd">        Magnitude of the total spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``S = precession.eval_S(theta1,theta2,deltaphi,q,chi1,chi2)``</span>
+<span class="sd">    ``S = precession.eval_S(deltachi,kappa,r,chieff,q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">deltaphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltachi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 
-    <span class="n">S1</span> <span class="o">=</span> <span class="n">eval_S1</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">)</span>
-    <span class="n">S2</span> <span class="o">=</span> <span class="n">eval_S2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+        <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">deltaphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
-    <span class="n">S</span> <span class="o">=</span> <span class="p">(</span><span class="n">S1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">S2</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">S1</span><span class="o">*</span><span class="n">S2</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)))</span><span class="o">**</span><span class="mf">0.5</span>
+        <span class="n">S1</span> <span class="o">=</span> <span class="n">eval_S1</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">)</span>
+        <span class="n">S2</span> <span class="o">=</span> <span class="n">eval_S2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+
+        <span class="n">S</span> <span class="o">=</span> <span class="p">(</span><span class="n">S1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">S2</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">S1</span><span class="o">*</span><span class="n">S2</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)))</span><span class="o">**</span><span class="mf">0.5</span>
+
+    <span class="k">if</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltachi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="n">deltachi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">deltachi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">chieff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="n">S</span> <span class="o">=</span> <span class="p">(</span> <span class="n">q</span> <span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">kappa</span> <span class="o">-</span> <span class="n">chieff</span> <span class="o">-</span> <span class="n">deltachi</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span> <span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (J,r,q).&quot;</span><span class="p">)</span>
+
 
     <span class="k">return</span> <span class="n">S</span></div>
-
-
 
 
 <span class="c1">################ Conversions ################</span>

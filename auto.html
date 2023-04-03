@@ -80,7 +80,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#precession.eval_S"><code class="docutils literal notranslate"><span class="pre">eval_S()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.eval_S1"><code class="docutils literal notranslate"><span class="pre">eval_S1()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.eval_S2"><code class="docutils literal notranslate"><span class="pre">eval_S2()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#precession.eval_S_from_deltachi"><code class="docutils literal notranslate"><span class="pre">eval_S_from_deltachi()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.eval_alpha"><code class="docutils literal notranslate"><span class="pre">eval_alpha()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.eval_bracket_omega"><code class="docutils literal notranslate"><span class="pre">eval_bracket_omega()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.eval_bracket_theta"><code class="docutils literal notranslate"><span class="pre">eval_bracket_theta()</span></code></a></li>
@@ -956,22 +955,14 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_S">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_S"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_S" title="Permalink to this definition"></a></dt>
-<dd><p>Magnitude of the total spin from the spin angles.</p>
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltachi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_S"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_S" title="Permalink to this definition"></a></dt>
+<dd><p>Magnitude of the total spin. Valid inputs are either (theta1, theta2, deltaphi, q, chi1, chi2) or (deltachi, kappa, r, chieff, q).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
-</dd>
-<dt><strong>theta2: float</strong></dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
-</dd>
-<dt><strong>deltaphi: float</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
-</dd>
 <dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
 <dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
-</dd>
-<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
 </dl>
 </dd>
@@ -983,7 +974,8 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>S = eval_S(theta1,theta2,deltaphi,q,chi1,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">S</span> <span class="pre">=</span> <span class="pre">precession.eval_S(theta1,theta2,deltaphi,q,chi1,chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">S</span> <span class="pre">=</span> <span class="pre">precession.eval_S(deltachi,kappa,r,chieff,q)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1033,11 +1025,6 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 <p class="rubric">Examples</p>
 <p><code class="docutils literal notranslate"><span class="pre">S2</span> <span class="pre">=</span> <span class="pre">precession.eval_S2(q,chi2)</span></code></p>
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.eval_S_from_deltachi">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_S_from_deltachi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_S_from_deltachi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_S_from_deltachi" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_alpha">
