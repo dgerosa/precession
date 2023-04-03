@@ -40,6 +40,7 @@ def descr(varname,vardef=None):
     lookup['S']=["float","Magnitude of the total spin"]
     lookup['Ssq']=["float","Squared magnitude of the total spin"]
     lookup['kappa']=["float","Regularized angular momentum (J^2-L^2)/(2L)"]
+    lookup['deltachi']=["float","Weighted spin difference"]
     lookup['u']=["float","Compactified separation 1/(2L)"]
     lookup['varphi']=["float","Generalized nutation coordinate (Eq 9 in arxiv:1506.03492)."]
     lookup['sign']=["integer","Sign, either +1 or -1"]

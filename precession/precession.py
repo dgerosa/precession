@@ -738,42 +738,32 @@ def eval_chieff(theta1, theta2, q, chi1, chi2):
     return chieff
 
 
-# TODO: update this function to evaluate from S
 def eval_deltachi(theta1, theta2, q, chi1, chi2):
     """
-    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).
-
-    Examples
-    --------
-    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)
-
+    Weighted spin difference.
+    
     Parameters
     ----------
-    theta1: float, optional (default: None)
+    theta1: float
         Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
+    theta2: float
         Angle between orbital angular momentum and secondary spin.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
-    varphi: float, optional (default: None)
-        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
-    r: float, optional (default: None)
-        Binary separation.
-    q: float, optional (default: None)
+    q: float
         Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
+    chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
+    chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
-    chieff: float
-        Effective spin.
+    deltachi: float
+        Weighted spin difference.
+    
+    Examples
+    --------
+    ``deltachi = precession.eval_deltachi(theta1,theta2,q,chi1,chi2)``
     """
-
 
     theta1 = np.atleast_1d(theta1).astype(float)
     theta2 = np.atleast_1d(theta2).astype(float)
@@ -787,6 +777,31 @@ def eval_deltachi(theta1, theta2, q, chi1, chi2):
 
 
 def eval_deltachiinf(kappa, chieff, q, chi1, chi2):
+    """
+    Large-separation limit of the weighted spin difference.
+    
+    Parameters
+    ----------
+    kappa: float
+        Regularized angular momentum (J^2-L^2)/(2L).
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Returns
+    -------
+    deltachi: float
+        Weighted spin difference.
+    
+    Examples
+    --------
+    ``deltachi = precession.eval_deltachiinf(kappa,chieff,q,chi1,chi2)``
+    """
 
     kappa = np.atleast_1d(kappa).astype(float)
     chieff = np.atleast_1d(chieff).astype(float)
@@ -801,33 +816,27 @@ def eval_deltachiinf(kappa, chieff, q, chi1, chi2):
 
 def eval_costheta1(deltachi, chieff, q, chi1):
     """
-    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
-
-    Examples
-    --------
-    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
-
+    Cosine of the angle between the orbital angular momentum and the spin of the primary black hole.
+    
     Parameters
     ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
+    deltachi: float
+        Weighted spin difference.
     chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
     chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     costheta1: float
         Cosine of the angle between orbital angular momentum and primary spin.
+    
+    Examples
+    --------
+    ``costheta1 = precession.eval_costheta1(deltachi,chieff,q,chi1)``
     """
 
     deltachi = np.atleast_1d(deltachi).astype(float)
@@ -841,6 +850,29 @@ def eval_costheta1(deltachi, chieff, q, chi1):
 
 
 def eval_theta1(deltachi, chieff, q, chi1):
+    """
+    Angle between the orbital angular momentum and the spin of the primary black hole.
+    
+    Parameters
+    ----------
+    deltachi: float
+        Weighted spin difference.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    
+    Returns
+    -------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    
+    Examples
+    --------
+    ``theta1 = precession.eval_theta1(deltachi,chieff,q,chi1)``
+    """
 
     costheta1 = eval_costheta1(deltachi, chieff, q, chi1)
     theta1 = np.arccos(costheta1)
@@ -850,33 +882,27 @@ def eval_theta1(deltachi, chieff, q, chi1):
 
 def eval_costheta2(deltachi, chieff, q, chi2):
     """
-    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.
-
-    Examples
-    --------
-    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)
-
+    Cosine of the angle between the orbital angular momentum and the spin of the secondary black hole.
+    
     Parameters
     ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
+    deltachi: float
+        Weighted spin difference.
     chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
-    costheta1: float
-        Cosine of the angle between orbital angular momentum and primary spin.
+    costheta2: float
+        Cosine of the angle between orbital angular momentum and secondary spin.
+    
+    Examples
+    --------
+    ``costheta2 = precession.eval_costheta2(deltachi,chieff,q,chi2)``
     """
 
     deltachi = np.atleast_1d(deltachi).astype(float)
@@ -890,6 +916,29 @@ def eval_costheta2(deltachi, chieff, q, chi2):
 
 
 def eval_theta2(deltachi, chieff, q, chi2):
+    """
+    Angle between the orbital angular momentum and the spin of the secondary black hole.
+    
+    Parameters
+    ----------
+    deltachi: float
+        Weighted spin difference.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Returns
+    -------
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    
+    Examples
+    --------
+    ``theta2 = precession.eval_theta2(deltachi,chieff,q,chi2)``
+    """
 
     costheta2 = eval_costheta2(deltachi, chieff, q, chi2)
     theta2 = np.arccos(costheta2)
