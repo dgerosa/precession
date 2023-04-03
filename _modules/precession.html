@@ -2896,7 +2896,9 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ``coeff3,coeff2,coeff1,coeff0 = precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2)``</span>
+<span class="sd">    ``coeff3,coeff2,coeff1,coeff0 = precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2,precomputedcoefficients=coeffs)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -2916,22 +2918,16 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">coeff3r</span><span class="p">,</span> <span class="n">coeff2r</span><span class="p">,</span> <span class="n">coeff1r</span><span class="p">,</span> <span class="n">coeff0r</span><span class="p">])</span></div>
 
 
-<span class="c1"># TODO: precomputedroots is not implemented consistently. Check that all functions that can use it have the option to do it</span>
-<span class="c1"># TODO: Docstrings must be changed for kappa and deltachi everywhere</span>
 <div class="viewcode-block" id="deltachiroots"><a class="viewcode-back" href="../auto.html#precession.deltachiroots">[docs]</a><span class="k">def</span> <span class="nf">deltachiroots</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Roots of the cubic equation in S^2 that identifies the effective potentials.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    Sminuss,Spluss,S3s = Ssroots(J,r,chieff,q,chi1,chi2,precomputedroots=None)</span>
-
+<span class="sd">    Roots of the cubic equation in deltachi that describes the dynamics on the precession timescale.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
-<span class="sd">    r: float</span>
-<span class="sd">        Binary separation.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    u: float</span>
+<span class="sd">        Compactified separation 1/(2L).</span>
 <span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
@@ -2940,17 +2936,25 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    full_output: boolean, optional (default: True)</span>
+<span class="sd">        Return additional outputs.</span>
 <span class="sd">    precomputedroots: array, optional (default: None)</span>
-<span class="sd">        Pre-computed output of Ssroots for computational efficiency.</span>
-
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Sminuss: float</span>
-<span class="sd">        Lowest physical root, if present, of the effective potential equation.</span>
-<span class="sd">    Spluss: float</span>
-<span class="sd">        Largest physical root, if present, of the effective potential equation.</span>
-<span class="sd">    S3s: float</span>
-<span class="sd">        Spurious root of the effective potential equation.</span>
+<span class="sd">    deltachi3: float, optional</span>
+<span class="sd">        Spurious root of the deltachi evolution.</span>
+<span class="sd">    deltachiminus: float</span>
+<span class="sd">        Lowest physical root of the deltachi evolution.</span>
+<span class="sd">    deltachiplus: float</span>
+<span class="sd">        Lowest physical root of the deltachi evolution.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``deltachiminus,deltachiplus,deltachi3 = precession.deltachiroots(kappa,u,chieff,q,chi1,chi2)``</span>
+<span class="sd">    ``deltachiminus,deltachiplus,deltachi3 = precession.deltachiroots(kappa,u,chieff,q,chi1,chi2,precomputedroots=roots)``</span>
+<span class="sd">    ``deltachiminus,deltachiplus = precession.deltachiroots(kappa,u,chieff,q,chi1,chi2,full_output=False)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">precomputedroots</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2970,7 +2974,7 @@
         <span class="k">assert</span> <span class="n">precomputedroots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Shape of precomputedroots must be (3,N), i.e. deltachiminus, deltachiplus, deltachi3. [deltachiroots]&quot;</span>
         <span class="k">return</span> <span class="n">precomputedroots</span></div>
 
-
+<span class="c1">#TODO: I stopped here</span>
 <div class="viewcode-block" id="deltachilimits_rectangle"><a class="viewcode-back" href="../auto.html#precession.deltachilimits_rectangle">[docs]</a><span class="k">def</span> <span class="nf">deltachilimits_rectangle</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.</span>

@@ -645,7 +645,8 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p><code class="docutils literal notranslate"><span class="pre">coeff3,coeff2,coeff1,coeff0</span> <span class="pre">=</span> <span class="pre">precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">coeff3,coeff2,coeff1,coeff0</span> <span class="pre">=</span> <span class="pre">precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">coeff3,coeff2,coeff1,coeff0</span> <span class="pre">=</span> <span class="pre">precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2,precomputedcoefficients=coeffs)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -799,13 +800,13 @@ The broadcasting rules for this function are more general than those of the rest
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.deltachiroots">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachiroots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachiroots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachiroots" title="Permalink to this definition"></a></dt>
-<dd><p>Roots of the cubic equation in S^2 that identifies the effective potentials.</p>
+<dd><p>Roots of the cubic equation in deltachi that describes the dynamics on the precession timescale.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
 </dd>
-<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+<dt><strong>u: float</strong></dt><dd><p>Compactified separation 1/(2L).</p>
 </dd>
 <dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
 </dd>
@@ -815,23 +816,27 @@ The broadcasting rules for this function are more general than those of the rest
 </dd>
 <dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
-<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of Ssroots for computational efficiency.</p>
+<dt><strong>full_output: boolean, optional (default: True)</strong></dt><dd><p>Return additional outputs.</p>
+</dd>
+<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachiroots for computational efficiency.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>Sminuss: float</dt><dd><p>Lowest physical root, if present, of the effective potential equation.</p>
+<dt>deltachi3: float, optional</dt><dd><p>Spurious root of the deltachi evolution.</p>
 </dd>
-<dt>Spluss: float</dt><dd><p>Largest physical root, if present, of the effective potential equation.</p>
+<dt>deltachiminus: float</dt><dd><p>Lowest physical root of the deltachi evolution.</p>
 </dd>
-<dt>S3s: float</dt><dd><p>Spurious root of the effective potential equation.</p>
+<dt>deltachiplus: float</dt><dd><p>Lowest physical root of the deltachi evolution.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Sminuss,Spluss,S3s = Ssroots(J,r,chieff,q,chi1,chi2,precomputedroots=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachiminus,deltachiplus,deltachi3</span> <span class="pre">=</span> <span class="pre">precession.deltachiroots(kappa,u,chieff,q,chi1,chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">deltachiminus,deltachiplus,deltachi3</span> <span class="pre">=</span> <span class="pre">precession.deltachiroots(kappa,u,chieff,q,chi1,chi2,precomputedroots=roots)</span></code>
+<code class="docutils literal notranslate"><span class="pre">deltachiminus,deltachiplus</span> <span class="pre">=</span> <span class="pre">precession.deltachiroots(kappa,u,chieff,q,chi1,chi2,full_output=False)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
