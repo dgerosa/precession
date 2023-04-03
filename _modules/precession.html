@@ -1475,36 +1475,37 @@
 
 <div class="viewcode-block" id="eval_cyclesign"><a class="viewcode-back" href="../auto.html#precession.eval_cyclesign">[docs]</a><span class="k">def</span> <span class="nf">eval_cyclesign</span><span class="p">(</span><span class="n">ddeltachidt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Lvec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S1vec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S2vec</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the &#39;sign&#39; of a precession cycle, defined as +1 if S is increasing and -1 S is decreasing. Valid inputs are one and not more of the following:</span>
+<span class="sd">    Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the &#39;sign&#39; of a precession cycle, defined as +1 if deltachi is increasing and -1 deltachi is decreasing. Valid inputs are one and not more of the following:</span>
 <span class="sd">    - dSdt</span>
 <span class="sd">    - deltaphi</span>
-<span class="sd">    - varphi</span>
 <span class="sd">    - Lvec, S1vec, S2vec.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    cyclesign = eval_cyclesign(dSdt=None,deltaphi=None,varphi=None,Lvec=None,S1vec=None,S2vec=None)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    dSdt: float, optional (default: None)</span>
+<span class="sd">    ddeltachidt: float, optional (default: None)</span>
 <span class="sd">        Time derivative of the total spin.</span>
 <span class="sd">    deltaphi: float, optional (default: None)</span>
 <span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
-<span class="sd">    varphi: float, optional (default: None)</span>
-<span class="sd">        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).</span>
 <span class="sd">    Lvec: array, optional (default: None)</span>
 <span class="sd">        Cartesian vector of the orbital angular momentum.</span>
 <span class="sd">    S1vec: array, optional (default: None)</span>
 <span class="sd">        Cartesian vector of the primary spin.</span>
 <span class="sd">    S2vec: array, optional (default: None)</span>
 <span class="sd">        Cartesian vector of the secondary spin.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    cyclesign: integer</span>
 <span class="sd">        Sign (either +1 or -1) to cover the two halves of a precesion cycle.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``cyclesign = precession.eval_cyclesign(ddeltachidt=ddeltachidt)``</span>
+<span class="sd">    ``cyclesign = precession.eval_cyclesign(deltaphi=deltaphi)``</span>
+<span class="sd">    ``cyclesign = precession.eval_cyclesign(Lvec=Lvec,S1vec=S1vec,S2vec=S2vec)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+
 
     <span class="k">if</span> <span class="n">ddeltachidt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">Lvec</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">S1vec</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">S2vec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ddeltachidt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ddeltachidt</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1528,18 +1529,14 @@
 
 <div class="viewcode-block" id="conserved_to_angles"><a class="viewcode-back" href="../auto.html#precession.conserved_to_angles">[docs]</a><span class="k">def</span> <span class="nf">conserved_to_angles</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=+</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert conserved quantities (S,J,chieff) into angles (theta1,theta2,deltaphi).</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    theta1,theta2,deltaphi = conserved_to_angles(S,J,r,chieff,q,chi1,chi2,cyclesign=+1)</span>
-
+<span class="sd">    Convert conserved quantities (deltachi,kappa,chieff) into angles (theta1,theta2,deltaphi).</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float</span>
@@ -1552,16 +1549,21 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    cyclesign: integer, optional (default: +1)</span>
 <span class="sd">        Sign (either +1 or -1) to cover the two halves of a precesion cycle.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
+<span class="sd">    deltaphi: float</span>
+<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
 <span class="sd">    theta1: float</span>
 <span class="sd">        Angle between orbital angular momentum and primary spin.</span>
 <span class="sd">    theta2: float</span>
 <span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
-<span class="sd">    deltaphi: float</span>
-<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``theta1,theta2,deltaphi = precession.conserved_to_angles(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=+1)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="n">theta1</span><span class="o">=</span> <span class="n">eval_theta1</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">)</span>
     <span class="n">theta2</span> <span class="o">=</span> <span class="n">eval_theta2</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
@@ -1572,13 +1574,8 @@
 
 <div class="viewcode-block" id="angles_to_conserved"><a class="viewcode-back" href="../auto.html#precession.angles_to_conserved">[docs]</a><span class="k">def</span> <span class="nf">angles_to_conserved</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,chieff).</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False)</span>
-<span class="sd">    S,J,chieff,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)</span>
-
+<span class="sd">    Convert angles (theta1,theta2,deltaphi) into conserved quantities (deltachi,kappa,chieff).</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float</span>
@@ -1597,21 +1594,24 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    full_output: boolean, optional (default: False)</span>
 <span class="sd">        Return additional outputs.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
 <span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
-
-<span class="sd">    Other parameters</span>
-<span class="sd">    -------</span>
-<span class="sd">    cyclesign: integer</span>
+<span class="sd">    cyclesign: integer, optional</span>
 <span class="sd">        Sign (either +1 or -1) to cover the two halves of a precesion cycle.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``deltachi,kappa,chieff = precession.angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)``</span>
+<span class="sd">    ``deltachi,kappa,chieff,cyclesign = precession.angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="n">deltachi</span> <span class="o">=</span> <span class="n">eval_deltachi</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
     <span class="n">kappa</span> <span class="o">=</span> <span class="n">eval_kappa</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
@@ -1627,12 +1627,8 @@
 
 <div class="viewcode-block" id="vectors_to_angles"><a class="viewcode-back" href="../auto.html#precession.vectors_to_angles">[docs]</a><span class="k">def</span> <span class="nf">vectors_to_angles</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi). The convention for the sign of deltaphi is given in Eq. (2d) of arxiv:1506.03492.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    theta1,theta2,deltaphi = vectors_to_angles(Lvec,S1vec,S2vec)</span>
-
+<span class="sd">    Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi).</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    Lvec: array</span>
@@ -1641,15 +1637,19 @@
 <span class="sd">        Cartesian vector of the primary spin.</span>
 <span class="sd">    S2vec: array</span>
 <span class="sd">        Cartesian vector of the secondary spin.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
+<span class="sd">    deltaphi: float</span>
+<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
 <span class="sd">    theta1: float</span>
 <span class="sd">        Angle between orbital angular momentum and primary spin.</span>
 <span class="sd">    theta2: float</span>
 <span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
-<span class="sd">    deltaphi: float</span>
-<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``theta1,theta2,deltaphi = precession.vectors_to_angles(Lvec,S1vec,S2vec)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Lvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">Lvec</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1673,6 +1673,31 @@
 
 
 <div class="viewcode-block" id="vectors_to_Jframe"><a class="viewcode-back" href="../auto.html#precession.vectors_to_Jframe">[docs]</a><span class="k">def</span> <span class="nf">vectors_to_Jframe</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rotate vectors of the three momenta onto a frame where J is along z and L lies in the x-z plane.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Lvec: array</span>
+<span class="sd">        Cartesian vector of the orbital angular momentum.</span>
+<span class="sd">    S1vec: array</span>
+<span class="sd">        Cartesian vector of the primary spin.</span>
+<span class="sd">    S2vec: array</span>
+<span class="sd">        Cartesian vector of the secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Lvec: array</span>
+<span class="sd">        Cartesian vector of the orbital angular momentum.</span>
+<span class="sd">    S1vec: array</span>
+<span class="sd">        Cartesian vector of the primary spin.</span>
+<span class="sd">    S2vec: array</span>
+<span class="sd">        Cartesian vector of the secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``Lvec,S1vec,S2vec = precession.vectors_to_Jframe(Lvec,S1vec,S2vec)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Jvec</span> <span class="o">=</span> <span class="n">Lvec</span> <span class="o">+</span> <span class="n">S1vec</span> <span class="o">+</span> <span class="n">S2vec</span>
 
@@ -1686,6 +1711,31 @@
 
 
 <div class="viewcode-block" id="vectors_to_Lframe"><a class="viewcode-back" href="../auto.html#precession.vectors_to_Lframe">[docs]</a><span class="k">def</span> <span class="nf">vectors_to_Lframe</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rotate vectors of the three momenta onto a frame where L is along z and S1 lies in the x-z plane.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Lvec: array</span>
+<span class="sd">        Cartesian vector of the orbital angular momentum.</span>
+<span class="sd">    S1vec: array</span>
+<span class="sd">        Cartesian vector of the primary spin.</span>
+<span class="sd">    S2vec: array</span>
+<span class="sd">        Cartesian vector of the secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Lvec: array</span>
+<span class="sd">        Cartesian vector of the orbital angular momentum.</span>
+<span class="sd">    S1vec: array</span>
+<span class="sd">        Cartesian vector of the primary spin.</span>
+<span class="sd">    S2vec: array</span>
+<span class="sd">        Cartesian vector of the secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``Lvec,S1vec,S2vec = precession.vectors_to_Lframe(Lvec,S1vec,S2vec)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Jvec</span> <span class="o">=</span> <span class="n">Lvec</span> <span class="o">+</span> <span class="n">S1vec</span> <span class="o">+</span> <span class="n">S2vec</span>
 
@@ -1700,12 +1750,9 @@
 
 <div class="viewcode-block" id="angles_to_Lframe"><a class="viewcode-back" href="../auto.html#precession.angles_to_Lframe">[docs]</a><span class="k">def</span> <span class="nf">angles_to_Lframe</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    Lvec,S1vec,S2vec = angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)</span>
-
+<span class="sd">    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame</span>
+<span class="sd">    aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float</span>
@@ -1722,7 +1769,7 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Lvec: array</span>
@@ -1731,6 +1778,10 @@
 <span class="sd">        Cartesian vector of the primary spin.</span>
 <span class="sd">    S2vec: array</span>
 <span class="sd">        Cartesian vector of the secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``Lvec,S1vec,S2vec = precession.angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">L</span> <span class="o">=</span> <span class="n">eval_L</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
@@ -1759,11 +1810,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame</span>
 <span class="sd">    aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    Lvec,S1vec,S2vec = angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float</span>
@@ -1780,7 +1827,7 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Lvec: array</span>
@@ -1789,6 +1836,10 @@
 <span class="sd">        Cartesian vector of the primary spin.</span>
 <span class="sd">    S2vec: array</span>
 <span class="sd">        Cartesian vector of the secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``Lvec,S1vec,S2vec = precession.angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span> <span class="o">=</span> <span class="n">angles_to_Lframe</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
@@ -1798,24 +1849,126 @@
 
 
 <div class="viewcode-block" id="conserved_to_Lframe"><a class="viewcode-back" href="../auto.html#precession.conserved_to_Lframe">[docs]</a><span class="k">def</span> <span class="nf">conserved_to_Lframe</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=+</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert the conserved quanties (deltachi,kappa,chieff) to angular momentum vectors (L,S1,S2) in the frame</span>
+<span class="sd">    aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    cyclesign: integer, optional (default: +1)</span>
+<span class="sd">        Sign (either +1 or -1) to cover the two halves of a precesion cycle.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Lvec: array</span>
+<span class="sd">        Cartesian vector of the orbital angular momentum.</span>
+<span class="sd">    S1vec: array</span>
+<span class="sd">        Cartesian vector of the primary spin.</span>
+<span class="sd">    S2vec: array</span>
+<span class="sd">        Cartesian vector of the secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``Lvec,S1vec,S2vec = precession.conserved_to_Lframe(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=+1)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span> <span class="o">=</span> <span class="n">conserved_to_angles</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=</span><span class="n">cyclesign</span><span class="p">)</span>
-
     <span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span> <span class="o">=</span> <span class="n">angles_to_Lframe</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="conserved_to_Jframe"><a class="viewcode-back" href="../auto.html#precession.conserved_to_Jframe">[docs]</a><span class="k">def</span> <span class="nf">conserved_to_Jframe</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=+</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert the conserved quanties (deltachi,kappa,chieff) to angular momentum vectors (L,S1,S2) in the frame</span>
+<span class="sd">    aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    cyclesign: integer, optional (default: +1)</span>
+<span class="sd">        Sign (either +1 or -1) to cover the two halves of a precesion cycle.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Lvec: array</span>
+<span class="sd">        Cartesian vector of the orbital angular momentum.</span>
+<span class="sd">    S1vec: array</span>
+<span class="sd">        Cartesian vector of the primary spin.</span>
+<span class="sd">    S2vec: array</span>
+<span class="sd">        Cartesian vector of the secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``Lvec,S1vec,S2vec = precession.conserved_to_Jframe(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=+1)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span> <span class="o">=</span> <span class="n">conserved_to_angles</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=</span><span class="n">cyclesign</span><span class="p">)</span>
-
     <span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span> <span class="o">=</span> <span class="n">angles_to_Jframe</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="vectors_to_conserved"><a class="viewcode-back" href="../auto.html#precession.vectors_to_conserved">[docs]</a><span class="k">def</span> <span class="nf">vectors_to_conserved</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span><span class="n">full_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert vectors (L,S1,S2) to conserved quanties (deltachi,kappa,chieff).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Lvec: array</span>
+<span class="sd">        Cartesian vector of the orbital angular momentum.</span>
+<span class="sd">    S1vec: array</span>
+<span class="sd">        Cartesian vector of the primary spin.</span>
+<span class="sd">    S2vec: array</span>
+<span class="sd">        Cartesian vector of the secondary spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    full_output: boolean, optional (default: False)</span>
+<span class="sd">        Return additional outputs.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    cyclesign: integer, optional</span>
+<span class="sd">        Sign (either +1 or -1) to cover the two halves of a precesion cycle.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``deltachi,kappa,chieff = precession.vectors_to_conserved(Lvec,S1vec,S2vec,q)``</span>
+<span class="sd">    ``deltachi,kappa,chieff,cyclesign = precession.vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=True)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">L</span> <span class="o">=</span> <span class="n">norm_nested</span><span class="p">(</span><span class="n">Lvec</span><span class="p">)</span>
     <span class="n">S1</span> <span class="o">=</span> <span class="n">norm_nested</span><span class="p">(</span><span class="n">S1vec</span><span class="p">)</span>
@@ -1842,11 +1995,7 @@
 <div class="viewcode-block" id="kappadiscriminant_coefficients"><a class="viewcode-back" href="../auto.html#precession.kappadiscriminant_coefficients">[docs]</a><span class="k">def</span> <span class="nf">kappadiscriminant_coefficients</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = kappadiscriminant_coefficients(u,chieff,q,chi1,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    u: float</span>
@@ -1859,21 +2008,25 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    coeff5: float</span>
-<span class="sd">        Coefficient to the x^5 term in polynomial.</span>
-<span class="sd">    coeff4: float</span>
-<span class="sd">        Coefficient to the x^4 term in polynomial.</span>
-<span class="sd">    coeff3: float</span>
-<span class="sd">        Coefficient to the x^3 term in polynomial.</span>
-<span class="sd">    coeff2: float</span>
-<span class="sd">        Coefficient to the x^2 term in polynomial.</span>
-<span class="sd">    coeff1: float</span>
-<span class="sd">        Coefficient to the x^1 term in polynomial.</span>
 <span class="sd">    coeff0: float</span>
 <span class="sd">        Coefficient to the x^0 term in polynomial.</span>
+<span class="sd">    coeff1: float</span>
+<span class="sd">        Coefficient to the x^1 term in polynomial.</span>
+<span class="sd">    coeff2: float</span>
+<span class="sd">        Coefficient to the x^2 term in polynomial.</span>
+<span class="sd">    coeff3: float</span>
+<span class="sd">        Coefficient to the x^3 term in polynomial.</span>
+<span class="sd">    coeff4: float</span>
+<span class="sd">        Coefficient to the x^4 term in polynomial.</span>
+<span class="sd">    coeff5: float</span>
+<span class="sd">        Coefficient to the x^5 term in polynomial.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = precession.kappadiscriminant_coefficients(u,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -2158,6 +2311,31 @@
 
 
 <div class="viewcode-block" id="kappalimits_geometrical"><a class="viewcode-back" href="../auto.html#precession.kappalimits_geometrical">[docs]</a><span class="k">def</span> <span class="nf">kappalimits_geometrical</span><span class="p">(</span><span class="n">r</span> <span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Limits in kappa conditioned on r, q, chi1, chi2.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    kappamax: float</span>
+<span class="sd">        Maximum value of the regularized angular momentum kappa.</span>
+<span class="sd">    kappamin: float</span>
+<span class="sd">        Minimum value of the regularized angular momentum kappa.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``kappamin,kappamax = precession.kappalimits_geometrical(r,q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -2193,14 +2371,12 @@
 
 <div class="viewcode-block" id="kapparesonances"><a class="viewcode-back" href="../auto.html#precession.kapparesonances">[docs]</a><span class="k">def</span> <span class="nf">kapparesonances</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.</span>
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)</span>
+<span class="sd">    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for given values of r, chieff, q, chi1, chi2. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    u: float</span>
-<span class="sd">        Compactified separation 1/(2L).</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
@@ -2209,13 +2385,19 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-<span class="sd">    tol: FIX ME</span>
+<span class="sd">    tol: float, optional (default: 1e-4)</span>
+<span class="sd">        Numerical tolerance, see source code for details.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    kappamin: float</span>
-<span class="sd">        Minimum value of the regularized angular momentum kappa.</span>
 <span class="sd">    kappamax: float</span>
 <span class="sd">        Maximum value of the regularized angular momentum kappa.</span>
+<span class="sd">    kappamin: float</span>
+<span class="sd">        Minimum value of the regularized angular momentum kappa.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``kappamin,kappamax = precession.kapparesonances(u,chieff,q,chi1,chi2,tol=1e-4)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">chieff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -2346,13 +2528,6 @@
 
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Resonances not detected, best guess returned (aggressive sanitizing)&quot;</span><span class="p">,</span> <span class="ne">Warning</span><span class="p">)</span>
-
-<span class="c1"># \\</span>
-<span class="c1"># \label{kappaplusqone}</span>
-<span class="c1"># \lim_{q\to 1} \kappa_+ &amp;=  \frac{(\chi_1+\chi_2)^2}{8}  \sqrt\frac{M}{r} + \frac{\chi_{\rm eff}}{2}</span>
-<span class="c1"># \end{align}</span>
-
-
 
         <span class="c1"># Up-down and down-up are challenging. </span>
         <span class="c1"># Evaluate the resonances outside of those points and interpolate linearly.</span>

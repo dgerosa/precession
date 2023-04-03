@@ -232,13 +232,14 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Lvec,S1vec,S2vec = angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">Lvec,S1vec,S2vec</span> <span class="pre">=</span> <span class="pre">precession.angles_to_Jframe(theta1,theta2,deltaphi,r,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.angles_to_Lframe">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">angles_to_Lframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#angles_to_Lframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.angles_to_Lframe" title="Permalink to this definition"></a></dt>
-<dd><p>Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p>
+<dd><p>Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame
+aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -270,14 +271,14 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Lvec,S1vec,S2vec = angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">Lvec,S1vec,S2vec</span> <span class="pre">=</span> <span class="pre">precession.angles_to_Lframe(theta1,theta2,deltaphi,r,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.angles_to_conserved">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">angles_to_conserved</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#angles_to_conserved"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.angles_to_conserved" title="Permalink to this definition"></a></dt>
-<dd><p>Convert angles (theta1,theta2,deltaphi) into conserved quantities (S,J,chieff).</p>
-<dl class="field-list">
+<dd><p>Convert angles (theta1,theta2,deltaphi) into conserved quantities (deltachi,kappa,chieff).</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
@@ -300,25 +301,20 @@ aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>S: float</dt><dd><p>Magnitude of the total spin.</p>
-</dd>
-<dt>J: float</dt><dd><p>Magnitude of the total angular momentum.</p>
-</dd>
 <dt>chieff: float</dt><dd><p>Effective spin.</p>
 </dd>
-<dt>Other parameters</dt><dd></dd>
-</dl>
-<blockquote>
-<div></div></blockquote>
-<dl class="simple">
-<dt>cyclesign: integer</dt><dd><p>Sign (either +1 or -1) to cover the two halves of a precesion cycle.</p>
+<dt>cyclesign: integer, optional</dt><dd><p>Sign (either +1 or -1) to cover the two halves of a precesion cycle.</p>
+</dd>
+<dt>deltachi: float</dt><dd><p>Weighted spin difference.</p>
+</dd>
+<dt>kappa: float</dt><dd><p>Asymptotic angular momentum.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>S,J,chieff = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=False)
-S,J,chieff,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachi,kappa,chieff</span> <span class="pre">=</span> <span class="pre">precession.angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">deltachi,kappa,chieff,cyclesign</span> <span class="pre">=</span> <span class="pre">precession.angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,full_output=True)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -426,23 +422,14 @@ S,J,chieff,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.conserved_to_Jframe">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">conserved_to_Jframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclesign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#conserved_to_Jframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.conserved_to_Jframe" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.conserved_to_Lframe">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">conserved_to_Lframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclesign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#conserved_to_Lframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.conserved_to_Lframe" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.conserved_to_angles">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">conserved_to_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclesign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#conserved_to_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.conserved_to_angles" title="Permalink to this definition"></a></dt>
-<dd><p>Convert conserved quantities (S,J,chieff) into angles (theta1,theta2,deltaphi).</p>
+<dd><p>Convert the conserved quanties (deltachi,kappa,chieff) to angular momentum vectors (L,S1,S2) in the frame
+aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
+<dt><strong>deltachi: float</strong></dt><dd><p>Weighted spin difference.</p>
 </dd>
-<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
 </dd>
 <dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
 </dd>
@@ -460,17 +447,98 @@ S,J,chieff,cyclesign = angles_to_conserved(theta1,theta2,deltaphi,r,q,chi1,chi2,
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>theta1: float</dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+<dt>Lvec: array</dt><dd><p>Cartesian vector of the orbital angular momentum.</p>
 </dd>
-<dt>theta2: float</dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+<dt>S1vec: array</dt><dd><p>Cartesian vector of the primary spin.</p>
 </dd>
-<dt>deltaphi: float</dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+<dt>S2vec: array</dt><dd><p>Cartesian vector of the secondary spin.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>theta1,theta2,deltaphi = conserved_to_angles(S,J,r,chieff,q,chi1,chi2,cyclesign=+1)</p>
+<p><code class="docutils literal notranslate"><span class="pre">Lvec,S1vec,S2vec</span> <span class="pre">=</span> <span class="pre">precession.conserved_to_Jframe(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=+1)</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="precession.conserved_to_Lframe">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">conserved_to_Lframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclesign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#conserved_to_Lframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.conserved_to_Lframe" title="Permalink to this definition"></a></dt>
+<dd><p>Convert the conserved quanties (deltachi,kappa,chieff) to angular momentum vectors (L,S1,S2) in the frame
+aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deltachi: float</strong></dt><dd><p>Weighted spin difference.</p>
+</dd>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>cyclesign: integer, optional (default: +1)</strong></dt><dd><p>Sign (either +1 or -1) to cover the two halves of a precesion cycle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Lvec: array</dt><dd><p>Cartesian vector of the orbital angular momentum.</p>
+</dd>
+<dt>S1vec: array</dt><dd><p>Cartesian vector of the primary spin.</p>
+</dd>
+<dt>S2vec: array</dt><dd><p>Cartesian vector of the secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">Lvec,S1vec,S2vec</span> <span class="pre">=</span> <span class="pre">precession.conserved_to_Lframe(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=+1)</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="precession.conserved_to_angles">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">conserved_to_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclesign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#conserved_to_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.conserved_to_angles" title="Permalink to this definition"></a></dt>
+<dd><p>Convert conserved quantities (deltachi,kappa,chieff) into angles (theta1,theta2,deltaphi).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deltachi: float</strong></dt><dd><p>Weighted spin difference.</p>
+</dd>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>cyclesign: integer, optional (default: +1)</strong></dt><dd><p>Sign (either +1 or -1) to cover the two halves of a precesion cycle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>deltaphi: float</dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+<dt>theta1: float</dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt>theta2: float</dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">theta1,theta2,deltaphi</span> <span class="pre">=</span> <span class="pre">precession.conserved_to_angles(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=+1)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1495,19 +1563,16 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_cyclesign">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_cyclesign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ddeltachidt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lvec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1vec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2vec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_cyclesign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_cyclesign" title="Permalink to this definition"></a></dt>
-<dd><p>Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the ‘sign’ of a precession cycle, defined as +1 if S is increasing and -1 S is decreasing. Valid inputs are one and not more of the following:
+<dd><p>Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the ‘sign’ of a precession cycle, defined as +1 if deltachi is increasing and -1 deltachi is decreasing. Valid inputs are one and not more of the following:
 - dSdt
 - deltaphi
-- varphi
 - Lvec, S1vec, S2vec.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>dSdt: float, optional (default: None)</strong></dt><dd><p>Time derivative of the total spin.</p>
+<dt><strong>ddeltachidt: float, optional (default: None)</strong></dt><dd><p>Time derivative of the total spin.</p>
 </dd>
 <dt><strong>deltaphi: float, optional (default: None)</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
-</dd>
-<dt><strong>varphi: float, optional (default: None)</strong></dt><dd><p>Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).</p>
 </dd>
 <dt><strong>Lvec: array, optional (default: None)</strong></dt><dd><p>Cartesian vector of the orbital angular momentum.</p>
 </dd>
@@ -1525,7 +1590,9 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>cyclesign = eval_cyclesign(dSdt=None,deltaphi=None,varphi=None,Lvec=None,S1vec=None,S2vec=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">cyclesign</span> <span class="pre">=</span> <span class="pre">precession.eval_cyclesign(ddeltachidt=ddeltachidt)</span></code>
+<code class="docutils literal notranslate"><span class="pre">cyclesign</span> <span class="pre">=</span> <span class="pre">precession.eval_cyclesign(deltaphi=deltaphi)</span></code>
+<code class="docutils literal notranslate"><span class="pre">cyclesign</span> <span class="pre">=</span> <span class="pre">precession.eval_cyclesign(Lvec=Lvec,S1vec=S1vec,S2vec=S2vec)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -2437,23 +2504,23 @@ where the z axis is along J and L lies in the x-z plane at the initial separatio
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>coeff5: float</dt><dd><p>Coefficient to the x^5 term in polynomial.</p>
-</dd>
-<dt>coeff4: float</dt><dd><p>Coefficient to the x^4 term in polynomial.</p>
-</dd>
-<dt>coeff3: float</dt><dd><p>Coefficient to the x^3 term in polynomial.</p>
-</dd>
-<dt>coeff2: float</dt><dd><p>Coefficient to the x^2 term in polynomial.</p>
+<dt>coeff0: float</dt><dd><p>Coefficient to the x^0 term in polynomial.</p>
 </dd>
 <dt>coeff1: float</dt><dd><p>Coefficient to the x^1 term in polynomial.</p>
 </dd>
-<dt>coeff0: float</dt><dd><p>Coefficient to the x^0 term in polynomial.</p>
+<dt>coeff2: float</dt><dd><p>Coefficient to the x^2 term in polynomial.</p>
+</dd>
+<dt>coeff3: float</dt><dd><p>Coefficient to the x^3 term in polynomial.</p>
+</dd>
+<dt>coeff4: float</dt><dd><p>Coefficient to the x^4 term in polynomial.</p>
+</dd>
+<dt>coeff5: float</dt><dd><p>Coefficient to the x^5 term in polynomial.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>coeff5,coeff4,coeff3,coeff2,coeff1,coeff0 = kappadiscriminant_coefficients(u,chieff,q,chi1,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">coeff5,coeff4,coeff3,coeff2,coeff1,coeff0</span> <span class="pre">=</span> <span class="pre">precession.kappadiscriminant_coefficients(u,chieff,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -2496,7 +2563,32 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.kappalimits_geometrical">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">kappalimits_geometrical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#kappalimits_geometrical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.kappalimits_geometrical" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Limits in kappa conditioned on r, q, chi1, chi2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>kappamax: float</dt><dd><p>Maximum value of the regularized angular momentum kappa.</p>
+</dd>
+<dt>kappamin: float</dt><dd><p>Minimum value of the regularized angular momentum kappa.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">kappamin,kappamax</span> <span class="pre">=</span> <span class="pre">precession.kappalimits_geometrical(r,q,chi1,chi2)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.kapparescaling">
@@ -2506,28 +2598,35 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.kapparesonances">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">kapparesonances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#kapparesonances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.kapparesonances" title="Permalink to this definition"></a></dt>
-<dd><p>Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for a given value of chieff. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
-.. rubric:: Examples</p>
-<p>kappamin,kappamax = kapparesonances(u,chieff,q,chi1,chi2)</p>
+<dd><p>Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for given values of r, chieff, q, chi1, chi2. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> (<em>float</em>) – Compactified separation 1/(2L).</p></li>
-<li><p><strong>chieff</strong> (<em>float</em>) – Effective spin.</p></li>
-<li><p><strong>q</strong> (<em>float</em>) – Mass ratio: 0&lt;=q&lt;=1.</p></li>
-<li><p><strong>chi1</strong> (<em>float</em>) – Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p></li>
-<li><p><strong>chi2</strong> (<em>float</em>) – Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p></li>
-<li><p><strong>tol</strong> (<em>FIX ME</em>) – </p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>kappamin</strong> (<em>float</em>) – Minimum value of the regularized angular momentum kappa.</p></li>
-<li><p><strong>kappamax</strong> (<em>float</em>) – Maximum value of the regularized angular momentum kappa.</p></li>
-</ul>
-</p>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>tol: float, optional (default: 1e-4)</strong></dt><dd><p>Numerical tolerance, see source code for details.</p>
 </dd>
 </dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>kappamax: float</dt><dd><p>Maximum value of the regularized angular momentum kappa.</p>
+</dd>
+<dt>kappamin: float</dt><dd><p>Minimum value of the regularized angular momentum kappa.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">kappamin,kappamax</span> <span class="pre">=</span> <span class="pre">precession.kapparesonances(u,chieff,q,chi1,chi2,tol=1e-4)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3094,17 +3193,7 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.vectors_to_Jframe">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">vectors_to_Jframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Lvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#vectors_to_Jframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.vectors_to_Jframe" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.vectors_to_Lframe">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">vectors_to_Lframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Lvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#vectors_to_Lframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.vectors_to_Lframe" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.vectors_to_angles">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">vectors_to_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Lvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#vectors_to_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.vectors_to_angles" title="Permalink to this definition"></a></dt>
-<dd><p>Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi). The convention for the sign of deltaphi is given in Eq. (2d) of arxiv:1506.03492.</p>
+<dd><p>Rotate vectors of the three momenta onto a frame where J is along z and L lies in the x-z plane.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -3118,23 +3207,115 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>theta1: float</dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+<dt>Lvec: array</dt><dd><p>Cartesian vector of the orbital angular momentum.</p>
 </dd>
-<dt>theta2: float</dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+<dt>S1vec: array</dt><dd><p>Cartesian vector of the primary spin.</p>
 </dd>
-<dt>deltaphi: float</dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+<dt>S2vec: array</dt><dd><p>Cartesian vector of the secondary spin.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>theta1,theta2,deltaphi = vectors_to_angles(Lvec,S1vec,S2vec)</p>
+<p><code class="docutils literal notranslate"><span class="pre">Lvec,S1vec,S2vec</span> <span class="pre">=</span> <span class="pre">precession.vectors_to_Jframe(Lvec,S1vec,S2vec)</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="precession.vectors_to_Lframe">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">vectors_to_Lframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Lvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#vectors_to_Lframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.vectors_to_Lframe" title="Permalink to this definition"></a></dt>
+<dd><p>Rotate vectors of the three momenta onto a frame where L is along z and S1 lies in the x-z plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Lvec: array</strong></dt><dd><p>Cartesian vector of the orbital angular momentum.</p>
+</dd>
+<dt><strong>S1vec: array</strong></dt><dd><p>Cartesian vector of the primary spin.</p>
+</dd>
+<dt><strong>S2vec: array</strong></dt><dd><p>Cartesian vector of the secondary spin.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Lvec: array</dt><dd><p>Cartesian vector of the orbital angular momentum.</p>
+</dd>
+<dt>S1vec: array</dt><dd><p>Cartesian vector of the primary spin.</p>
+</dd>
+<dt>S2vec: array</dt><dd><p>Cartesian vector of the secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">Lvec,S1vec,S2vec</span> <span class="pre">=</span> <span class="pre">precession.vectors_to_Lframe(Lvec,S1vec,S2vec)</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="precession.vectors_to_angles">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">vectors_to_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Lvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2vec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#vectors_to_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.vectors_to_angles" title="Permalink to this definition"></a></dt>
+<dd><p>Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Lvec: array</strong></dt><dd><p>Cartesian vector of the orbital angular momentum.</p>
+</dd>
+<dt><strong>S1vec: array</strong></dt><dd><p>Cartesian vector of the primary spin.</p>
+</dd>
+<dt><strong>S2vec: array</strong></dt><dd><p>Cartesian vector of the secondary spin.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>deltaphi: float</dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+<dt>theta1: float</dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt>theta2: float</dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">theta1,theta2,deltaphi</span> <span class="pre">=</span> <span class="pre">precession.vectors_to_angles(Lvec,S1vec,S2vec)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.vectors_to_conserved">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">vectors_to_conserved</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Lvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#vectors_to_conserved"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.vectors_to_conserved" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Convert vectors (L,S1,S2) to conserved quanties (deltachi,kappa,chieff).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Lvec: array</strong></dt><dd><p>Cartesian vector of the orbital angular momentum.</p>
+</dd>
+<dt><strong>S1vec: array</strong></dt><dd><p>Cartesian vector of the primary spin.</p>
+</dd>
+<dt><strong>S2vec: array</strong></dt><dd><p>Cartesian vector of the secondary spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>full_output: boolean, optional (default: False)</strong></dt><dd><p>Return additional outputs.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>chieff: float</dt><dd><p>Effective spin.</p>
+</dd>
+<dt>cyclesign: integer, optional</dt><dd><p>Sign (either +1 or -1) to cover the two halves of a precesion cycle.</p>
+</dd>
+<dt>deltachi: float</dt><dd><p>Weighted spin difference.</p>
+</dd>
+<dt>kappa: float</dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachi,kappa,chieff</span> <span class="pre">=</span> <span class="pre">precession.vectors_to_conserved(Lvec,S1vec,S2vec,q)</span></code>
+<code class="docutils literal notranslate"><span class="pre">deltachi,kappa,chieff,cyclesign</span> <span class="pre">=</span> <span class="pre">precession.vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=True)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.widenutation_condition">
