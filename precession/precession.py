@@ -577,40 +577,7 @@ def eval_chi2(q, S2):
     chi2 = S2/(eval_m2(q))**2
 
     return chi2
-
-
-# TODO: remove
-# TODO: check all places where I use spinmags and rewrite using chi1 chi2 directly
-def spinmags(q, chi1, chi2):
-    """
-    Spins of the black holes in units of the total mass.
-
-    Examples
-    --------
-    S1,S2 = spinmags(q,chi1,chi2)
-
-    Parameters
-    ----------
-    q: float
-        Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
-    Returns
-    -------
-    S1: float
-        Magnitude of the primary spin.
-    S2: float
-        Magnitude of the secondary spin.
-    """
-
-    S1 = eval_S1(q, chi1)
-    S2 = eval_S2(q, chi2)
-
-    return np.stack([S1, S2])
-
+    
 
 def eval_L(r, q):
     """
@@ -1341,7 +1308,8 @@ def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
     theta2 = np.atleast_1d(theta2).astype(float)
     deltaphi = np.atleast_1d(deltaphi).astype(float)
 
-    S1, S2 = spinmags(q, chi1, chi2)
+    S1 = eval_S1(q, chi1)
+    S2 = eval_S2(q, chi2)
 
     S = (S1**2 + S2**2 + 2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
 
@@ -1614,7 +1582,8 @@ def angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     """
 
     L = eval_L(r, q)
-    S1, S2 = spinmags(q, chi1, chi2)
+    S1 = eval_S1(q, chi1)
+    S2 = eval_S2(q, chi2)
 
     Lx = np.zeros(L.shape)
     Ly = np.zeros(L.shape)
@@ -2130,7 +2099,8 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
         if np.isclose(np.repeat(chieff,2),np.squeeze([upup,downdown])).any():
             warnings.warn("Close to either up-up or down-down configuration. Using analytical results.", Warning)
 
-            S1,S2 = spinmags(q,chi1,chi2)
+            S1 = eval_S1(q, chi1)
+            S2 = eval_S2(q, chi2)
             L=1/(2*u)
             kappar = ((L+np.sign(chieff)*(S1+S2))**2 - L**2) / (2*L)
             kappares=np.squeeze([kappar,kappar])
@@ -2253,11 +2223,13 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
         rudplus = rupdown(q, chi1, chi2)[0]
 
         if np.isclose(chieff,updown) and u<eval_u(r=rudplus,q=q):
-            S1,S2 = spinmags(q,chi1,chi2)
+            S1 = eval_S1(q, chi1)
+            S2 = eval_S2(q, chi2)
             L=1/(2*u)
             kappares[1]= ((L+S1-S2)**2 - L**2) / (2*L)
         if np.isclose(chieff,downup):
-            S1,S2 = spinmags(q,chi1,chi2)
+            S1 = eval_S1(q, chi1)
+            S2 = eval_S2(q, chi2)
             L=1/(2*u)
             kappares[0]= ((L-S1+S2)**2 - L**2) / (2*L)
 
@@ -3841,14 +3813,6 @@ def omegasq_aligned(r, q, chi1, chi2, which):
     # +1 if secondary is co-aligned, -1 if secondary is counter-aligned
     alpha2 = np.where(np.isin(which, np.concatenate([uulabels, dulabels])), 1, -1)
 
-    # L = eval_L(r, q)
-    # S1, S2 = spinmags(q, chi1, chi2)
-    # # Slightly rewritten from Eq. 18 in arXiv:2003.02281, regularized for q=1
-    # omegasq = (3 * q**5 / (2 * (1 + q)**11 * L**7))**2 * (L - (q *
-    #     alpha1 * S1 + alpha2 * S2) / (1 + q))**2 * (L**2 * (1 - q)**2 -
-    #     2 * L * (q * alpha1 * S1 - alpha2 * S2) * (1 - q) + (q * alpha1 *
-    #     S1 + alpha2 * S2)**2)
-    
     theta1 = np.arccos(alpha1)
     theta2 = np.arccos(alpha2)
     deltachi = eval_deltachi(theta1, theta2, q, chi1, chi2)
