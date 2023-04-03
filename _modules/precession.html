@@ -713,9 +713,11 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    L: float, optional (default: L)</span>
+<span class="sd">    L: float, optional (default: None)</span>
 <span class="sd">        Magnitude of the Newtonian orbital angular momentum.</span>
-<span class="sd">    q: float, optional (default: q)</span>
+<span class="sd">    u: float, optional (default: None)</span>
+<span class="sd">        Compactified separation 1/(2L).</span>
+<span class="sd">    q: float, optional (default: None)</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
@@ -857,7 +859,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    kappa: float</span>
-<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
@@ -1022,13 +1024,8 @@
 
 <div class="viewcode-block" id="eval_costheta12"><a class="viewcode-back" href="../auto.html#precession.eval_costheta12">[docs]</a><span class="k">def</span> <span class="nf">eval_costheta12</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    costheta12 = eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)</span>
-<span class="sd">    costheta12 = eval_costheta12(deltachi=None,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span>
-
+<span class="sd">    Cosine of the angle between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float, optional (default: None)</span>
@@ -1037,19 +1034,28 @@
 <span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
 <span class="sd">    deltaphi: float, optional (default: None)</span>
 <span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
-<span class="sd">    S: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total spin.</span>
+<span class="sd">    deltachi: float, optional (default: None)</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float, optional (default: None)</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    chieff: float, optional (default: None)</span>
+<span class="sd">        Effective spin.</span>
 <span class="sd">    q: float, optional (default: None)</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
 <span class="sd">    chi1: float, optional (default: None)</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float, optional (default: None)</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    costheta12: float</span>
 <span class="sd">        Cosine of the angle between the two spins.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``costheta12 = precession.eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)``</span>
+<span class="sd">    ``costheta12 = precession.eval_costheta12(deltachi=deltachi,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltachi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1081,6 +1087,40 @@
 
 
 <div class="viewcode-block" id="eval_theta12"><a class="viewcode-back" href="../auto.html#precession.eval_theta12">[docs]</a><span class="k">def</span> <span class="nf">eval_theta12</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Angle between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta1: float, optional (default: None)</span>
+<span class="sd">        Angle between orbital angular momentum and primary spin.</span>
+<span class="sd">    theta2: float, optional (default: None)</span>
+<span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
+<span class="sd">    deltaphi: float, optional (default: None)</span>
+<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    deltachi: float, optional (default: None)</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float, optional (default: None)</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    chieff: float, optional (default: None)</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float, optional (default: None)</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float, optional (default: None)</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float, optional (default: None)</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    theta12: float</span>
+<span class="sd">        Angle between the two spins.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``theta12 = precession.eval_theta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)``</span>
+<span class="sd">    ``theta12 = precession.eval_theta12(deltachi=deltachi,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">costheta12</span> <span class="o">=</span> <span class="n">eval_costheta1</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="n">deltaphi</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
     <span class="n">theta12</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">costheta12</span><span class="p">)</span>
@@ -1090,18 +1130,14 @@
 
 <div class="viewcode-block" id="eval_cosdeltaphi"><a class="viewcode-back" href="../auto.html#precession.eval_cosdeltaphi">[docs]</a><span class="k">def</span> <span class="nf">eval_cosdeltaphi</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    cosdeltaphi = eval_cosdeltaphi(S,J,r,chieff,q,chi1,chi2)</span>
-
+<span class="sd">    Cosine of the angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float</span>
@@ -1112,11 +1148,15 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    cosdeltaphi: float</span>
 <span class="sd">        Cosine of the angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``cosdeltaphi = precession.eval_cosdeltaphi(deltachi,kappa,r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">deltachi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">deltachi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1150,18 +1190,14 @@
 
 <div class="viewcode-block" id="eval_deltaphi"><a class="viewcode-back" href="../auto.html#precession.eval_deltaphi">[docs]</a><span class="k">def</span> <span class="nf">eval_deltaphi</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=-1 returns the other half of the  precession cycle [-pi,0].</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)</span>
-
+<span class="sd">    Angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float</span>
@@ -1172,13 +1208,17 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-<span class="sd">    cyclesign: integer, optional (default: -1)</span>
+<span class="sd">    cyclesign: integer, optional (default: 1)</span>
 <span class="sd">        Sign (either +1 or -1) to cover the two halves of a precesion cycle.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    deltaphi: float</span>
 <span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``deltaphi = precession.eval_deltaphi(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=1)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">cyclesign</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">cyclesign</span><span class="p">)</span>
@@ -1190,31 +1230,29 @@
 
 <div class="viewcode-block" id="eval_costhetaL"><a class="viewcode-back" href="../auto.html#precession.eval_costhetaL">[docs]</a><span class="k">def</span> <span class="nf">eval_costhetaL</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    costhetaL = eval_costhetaL(S,J,r,q,chi1,chi2)</span>
-
+<span class="sd">    Cosine of the angle betwen the orbital angular momentum and the total angular momentum.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-<span class="sd">    chi1: float</span>
-<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-<span class="sd">    chi2: float</span>
-<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    costhetaL: float</span>
 <span class="sd">        Cosine of the angle betwen orbital angular momentum and total angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``costhetaL = precession.eval_costhetaL(deltachi,kappa,r,chieff,q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">deltachi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">deltachi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1232,31 +1270,29 @@
 
 <div class="viewcode-block" id="eval_thetaL"><a class="viewcode-back" href="../auto.html#precession.eval_thetaL">[docs]</a><span class="k">def</span> <span class="nf">eval_thetaL</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Angle thetaL betwen orbital angular momentum and total angular momentum.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    thetaL = eval_thetaL(S,J,r,q,chi1,chi2)</span>
-
+<span class="sd">    Angle betwen the orbital angular momentum and the total angular momentum.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-<span class="sd">    chi1: float</span>
-<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-<span class="sd">    chi2: float</span>
-<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    thetaL: float</span>
 <span class="sd">        Angle betwen orbital angular momentum and total angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``thetaL = precession.eval_thetaL(deltachi,kappa,r,chieff,q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">costhetaL</span> <span class="o">=</span> <span class="n">eval_costhetaL</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span><span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
@@ -1267,12 +1303,8 @@
 
 <div class="viewcode-block" id="eval_J"><a class="viewcode-back" href="../auto.html#precession.eval_J">[docs]</a><span class="k">def</span> <span class="nf">eval_J</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Magnitude of the total angular momentum. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    J = eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None)</span>
-
+<span class="sd">    Magnitude of the total angular momentum. Provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float, optional (default: None)</span>
@@ -1282,7 +1314,7 @@
 <span class="sd">    deltaphi: float, optional (default: None)</span>
 <span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
 <span class="sd">    kappa: float, optional (default: None)</span>
-<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float, optional (default: None)</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    q: float, optional (default: None)</span>
@@ -1291,11 +1323,16 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float, optional (default: None)</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    J: float</span>
 <span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``J = precession.eval_J(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``J = precession.eval_J(kappa=kappa,r=r,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1326,26 +1363,36 @@
 
 <div class="viewcode-block" id="eval_kappa"><a class="viewcode-back" href="../auto.html#precession.eval_kappa">[docs]</a><span class="k">def</span> <span class="nf">eval_kappa</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Change of dependent variable to regularize the infinite orbital separation</span>
-<span class="sd">    limit of the precession-averaged evolution equation.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    kappa = eval_kappa(J,r,q)</span>
-
+<span class="sd">    Asymptotic angular momentum. Provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (J,r,q).</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
+<span class="sd">    theta1: float, optional (default: None)</span>
+<span class="sd">        Angle between orbital angular momentum and primary spin.</span>
+<span class="sd">    theta2: float, optional (default: None)</span>
+<span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
+<span class="sd">    deltaphi: float, optional (default: None)</span>
+<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    J: float, optional (default: None)</span>
 <span class="sd">        Magnitude of the total angular momentum.</span>
-<span class="sd">    r: float</span>
+<span class="sd">    r: float, optional (default: None)</span>
 <span class="sd">        Binary separation.</span>
-<span class="sd">    q: float</span>
+<span class="sd">    q: float, optional (default: None)</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-
+<span class="sd">    chi1: float, optional (default: None)</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float, optional (default: None)</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    kappa: float</span>
-<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``kappa = precession.eval_kappa(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``kappa = precession.eval_kappa(J=J,r=r,q=q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">J</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1372,7 +1419,7 @@
 
     <span class="k">return</span> <span class="n">kappa</span></div>
 
-
+<span class="c1">#TODO: I got to here</span>
 <span class="c1"># TODO: This function and the next one needs to be merged together</span>
 <div class="viewcode-block" id="eval_S_from_deltachi"><a class="viewcode-back" href="../auto.html#precession.eval_S_from_deltachi">[docs]</a><span class="k">def</span> <span class="nf">eval_S_from_deltachi</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 
@@ -2749,7 +2796,7 @@
 <span class="sd">    J: float, optional (default: None)</span>
 <span class="sd">        Magnitude of the total angular momentum.</span>
 <span class="sd">    kappa: float, optional (default: None)</span>
-<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float, optional (default: None)</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    u: float, optional (default: None)</span>
@@ -4008,7 +4055,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    kappa: float</span>
-<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    u: float</span>
 <span class="sd">        Compactified separation 1/(2L).</span>
 <span class="sd">    chieff: float</span>
@@ -4085,7 +4132,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    kappa: float</span>
-<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">kappainitial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappainitial</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -4151,7 +4198,7 @@
 <span class="sd">    J: float, optional (default: None)</span>
 <span class="sd">        Magnitude of the total angular momentum.</span>
 <span class="sd">    kappa: float, optional (default: None)</span>
-<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float, optional (default: None)</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    u: float, optional (default: None)</span>
@@ -4569,7 +4616,7 @@
 <span class="sd">    J: float, optional (default: None)</span>
 <span class="sd">        Magnitude of the total angular momentum.</span>
 <span class="sd">    kappa: float, optional (default: None)</span>
-<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float, optional (default: None)</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    u: float, optional (default: None)</span>
@@ -4726,7 +4773,7 @@
 <span class="sd">    J: float, optional (default: None)</span>
 <span class="sd">        Magnitude of the total angular momentum.</span>
 <span class="sd">    kappa: float, optional (default: None)</span>
-<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float, optional (default: None)</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    rswitch: float, optional (default: None)</span>
