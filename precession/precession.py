@@ -1007,7 +1007,7 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         chieff))))
 
     else:
-        raise TypeError("Provide either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).")
+        raise TypeError("Provide either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).")
 
     return costheta12
 
@@ -1282,7 +1282,7 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
         J = (2*L*kappa + L**2)**0.5
 
     else:
-        raise TypeError("Provide either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (kappa,r,q,chi1,chi2).")
+        raise TypeError("Provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).")
 
     return J
 
@@ -1341,68 +1341,59 @@ def eval_kappa(theta1=None, theta2=None, deltaphi=None, J=None, r=None, q=None, 
                 (chi1**2 + q**4 *chi2**2 + 2*chi1*chi2*q**2 * (np.cos(theta1)*np.cos(theta2) + np.cos(deltaphi)*np.sin(theta1)*np.sin(theta2))) / (2*q*(1+q)**2*r**(1/2))
 
     else:
-        TypeError("Please provide provide iether (J,r,q) or (theta1,theta2,deltaphi,q,chi1,chi2).")
+        TypeError("Please provide provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (J,r,q).")
 
     return kappa
 
-#TODO: I got to here
-# TODO: This function and the next one needs to be merged together
-def eval_S_from_deltachi(deltachi, kappa, r, chieff, q):
 
-    deltachi = np.atleast_1d(deltachi).astype(float)
-    kappa = np.atleast_1d(kappa).astype(float)
-    r = np.atleast_1d(r).astype(float)
-    chieff = np.atleast_1d(chieff).astype(float)
-    q = np.atleast_1d(q).astype(float)
-
-    #print("thisguy", (2*kappa - chieff - deltachi * (1 - q)/(1 + q)))
-
-    S = ( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi * (1 - q)/(1 + q)) )**(1/2)
-
-    return S
-
-
-def eval_S(theta1, theta2, deltaphi, q, chi1, chi2):
+def eval_S(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
     """
-    Magnitude of the total spin from the spin angles.
-
-    Examples
-    --------
-    S = eval_S(theta1,theta2,deltaphi,q,chi1,chi2)
-
+    Magnitude of the total spin. Valid inputs are either (theta1, theta2, deltaphi, q, chi1, chi2) or (deltachi, kappa, r, chieff, q).
+    
     Parameters
     ----------
-    theta1: float
-        Angle between orbital angular momentum and primary spin.
-    theta2: float
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float
-        Angle between the projections of the two spins onto the orbital plane.
     q: float
         Mass ratio: 0<=q<=1.
     chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     S: float
         Magnitude of the total spin.
+    
+    Examples
+    --------
+    ``S = precession.eval_S(theta1,theta2,deltaphi,q,chi1,chi2)``
+    ``S = precession.eval_S(deltachi,kappa,r,chieff,q)``
     """
 
-    theta1 = np.atleast_1d(theta1).astype(float)
-    theta2 = np.atleast_1d(theta2).astype(float)
-    deltaphi = np.atleast_1d(deltaphi).astype(float)
+    if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and r is None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
 
-    S1 = eval_S1(q, chi1)
-    S2 = eval_S2(q, chi2)
+        theta1 = np.atleast_1d(theta1).astype(float)
+        theta2 = np.atleast_1d(theta2).astype(float)
+        deltaphi = np.atleast_1d(deltaphi).astype(float)
 
-    S = (S1**2 + S2**2 + 2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
+        S1 = eval_S1(q, chi1)
+        S2 = eval_S2(q, chi2)
+
+        S = (S1**2 + S2**2 + 2*S1*S2*(np.sin(theta1)*np.sin(theta2)*np.cos(deltaphi)+np.cos(theta1)*np.cos(theta2)))**0.5
+
+    if theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and r is not None and chieff is not None and q is not None and chi1 is None and chi2 is None:
+
+        deltachi = np.atleast_1d(deltachi).astype(float)
+        kappa = np.atleast_1d(kappa).astype(float)
+        r = np.atleast_1d(r).astype(float)
+        chieff = np.atleast_1d(chieff).astype(float)
+        q = np.atleast_1d(q).astype(float)
+
+        S = ( q /(1+q)**2 * r**(1/2) * (2*kappa - chieff - deltachi * (1 - q)/(1 + q)) )**(1/2)
+
+    else:
+        TypeError("Please provide provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (J,r,q).")
+
 
     return S
-
-
 
 
 ################ Conversions ################
