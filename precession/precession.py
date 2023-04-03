@@ -2254,9 +2254,9 @@ def kappalimits_geometrical(r , q, chi1, chi2):
     Returns
     -------
     kappamax: float
-        Maximum value of the regularized angular momentum kappa.
+        Maximum value of the asymptotic angular momentum kappa.
     kappamin: float
-        Minimum value of the regularized angular momentum kappa.
+        Minimum value of the asymptotic angular momentum kappa.
     
     Examples
     --------
@@ -2297,7 +2297,7 @@ def kappalimits_geometrical(r , q, chi1, chi2):
 
 def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     """
-    Regularized angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for given values of r, chieff, q, chi1, chi2. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
+    asymptotic angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for given values of r, chieff, q, chi1, chi2. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.
     
     Parameters
     ----------
@@ -2317,9 +2317,9 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
     Returns
     -------
     kappamax: float
-        Maximum value of the regularized angular momentum kappa.
+        Maximum value of the asymptotic angular momentum kappa.
     kappamin: float
-        Minimum value of the regularized angular momentum kappa.
+        Minimum value of the asymptotic angular momentum kappa.
     
     Examples
     --------
@@ -2500,6 +2500,33 @@ def kapparesonances(r, chieff, q, chi1, chi2,tol=1e-4):
 
 
 def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
+    """
+    Compute kappa from the rescaled parameter 0<=kappatilde<=1.
+    
+    Parameters
+    ----------
+    kappatilde: float
+        Rescaled version of the asymptotic angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Returns
+    -------
+    kappa: float
+        Asymptotic angular momentum.
+    
+    Examples
+    --------
+    ``kappa = precession.kapparescaling(kappatilde,r,chieff,q,chi1,chi2)``
+    """
 
     kappatilde = np.atleast_1d(kappatilde)
     kappaminus, kappaplus = kapparesonances(r, chieff, q, chi1, chi2)
@@ -2509,15 +2536,11 @@ def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
 
 def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False, **kwargs):
     """
-    Limits on the magnitude of the total angular momentum. The contraints considered depend on the inputs provided.
-    - If r, q, chi1, and chi2 are provided, the limits are given by J=L+S1+S2.
-    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
-    The boolean flag enforce allows raising an error in case the inputs are not compatible.
-
-    Examples
-    --------
-    Jmin,Jmax = Jlimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
-
+    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
+    - If r, q, chi1, chi2 are provided, returns the geometrical limits.
+    - If r, chieff, q, chi1, and chi2 are provided, returns the spin-orbit resonances.
+    The boolean flag enforce raises an error in case the inputs are not compatible. Additional kwargs are passed to kapparesonances.
+    
     Parameters
     ----------
     r: float, optional (default: None)
@@ -2532,17 +2555,25 @@ def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     enforce: boolean, optional (default: False)
         If True raise errors, if False raise warnings.
-
+    **kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
     Returns
     -------
-    Jmin: float
-        Minimum value of the total angular momentum J.
-    Jmax: float
-        Maximum value of the total angular momentum J.
+    kappamax: float
+        Maximum value of the asymptotic angular momentum kappa.
+    kappamin: float
+        Minimum value of the asymptotic angular momentum kappa.
+    
+    Examples
+    --------
+    ``kappamin,kappamax = precession.kappalimits(r=r,q=q,chi1=chi1,chi2=chi2)``
+    ``kappamin,kappamax = precession.kappalimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
+    ``kappamin,kappamax = precession.kappalimits(r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,enforce=True)``
     """
 
     if r is not None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
-        kappamin, kappamax = kappalimits_geometrical(r , q, chi1, chi2)
+        kappamin, kappamax = kappalimits_geometrical(r, q, chi1, chi2)
 
     elif r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
         kappamin, kappamax = kapparesonances(r, chieff, q, chi1, chi2, **kwargs)
@@ -2565,12 +2596,8 @@ def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False
 
 def chiefflimits_definition(q, chi1, chi2):
     """
-    Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.
-
-    Examples
-    --------
-    chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)
-
+    Limits on the effective spin based only on its definition.
+    
     Parameters
     ----------
     q: float
@@ -2579,14 +2606,19 @@ def chiefflimits_definition(q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
-    chieffmin: float
-        Minimum value of the effective spin chieff.
     chieffmax: float
-        Maximum value of the effective spin chieff.
+        Maximum value of the effective spin.
+    chieffmin: float
+        Minimum value of the effective spin.
+    
+    Examples
+    --------
+    ``chieffmin,chieffmax = precession.chiefflimits_definition(q,chi1,chi2)``
     """
+
 
     q = np.atleast_1d(q).astype(float)
     chi1 = np.atleast_1d(chi1).astype(float)
@@ -2598,12 +2630,8 @@ def chiefflimits_definition(q, chi1, chi2):
 
 def deltachilimits_definition(q, chi1, chi2):
     """
-    Limits on the effective spin based only on the definition chieff = (1+q)S1.L + (1+1/q)S2.L.
-
-    Examples
-    --------
-    chieffmin,chieffmax = chiefflimits_definition(q,chi1,chi2)
-
+    Limits on the weighted spin difference based only on its definition.
+    
     Parameters
     ----------
     q: float
@@ -2612,13 +2640,17 @@ def deltachilimits_definition(q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
-    chieffmin: float
-        Minimum value of the effective spin chieff.
-    chieffmax: float
+    deltachimax: float
         Maximum value of the effective spin chieff.
+    deltachimin: float
+        Minimum value of the effective spin chieff.
+    
+    Examples
+    --------
+    ``deltachimin,deltachimax = precession.deltachilimits_definition(q,chi1,chi2)``
     """
 
     q = np.atleast_1d(q).astype(float)
@@ -2632,40 +2664,38 @@ def deltachilimits_definition(q, chi1, chi2):
 def anglesresonances(r, chieff, q, chi1, chi2):
     """
     Compute the values of the angles corresponding to the two spin-orbit resonances.
-
-    Examples
-    --------
-    theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = anglesresonances(J=None,r=None,chieff=None,q=None,chi1=None,chi2=None)
-
+    
     Parameters
     ----------
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
-    r: float, optional (default: None)
+    r: float
         Binary separation.
-    chieff: float, optional (default: None)
+    chieff: float
         Effective spin.
-    q: float, optional (default: None)
+    q: float
         Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
+    chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
+    chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
-    theta1atmin: float
-        Value of the angle theta1 at the resonance that minimizes either J or chieff, depending on the input.
-    theta2atmin: float
-        Value of the angle theta2 at the resonance that minimizes either J or chieff, depending on the input.
-    deltaphiatmin: float
-        Value of the angle deltaphi at the resonance that minimizes either J or chieff, depending on the input.
-    theta1atmax: float
-        Value of the angle theta1 at the resonance that maximizes either J or chieff, depending on the input.
-    theta2atmax: float
-        Value of the angle theta2 at the resonance that maximizes either J or chieff, depending on the input.
     deltaphiatmax: float
-        Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input.
+        Value of the angle deltaphi at the resonance that maximizes kappa.
+    deltaphiatmin: float
+        Value of the angle deltaphi at the resonance that minimizes kappa.
+    theta1atmax: float
+        Value of the angle theta1 at the resonance that maximizes kappa.
+    theta1atmin: float
+        Value of the angle theta1 at the resonance that minimizes kappa.
+    theta2atmax: float
+        Value of the angle theta2 at the resonance that maximizes kappa.
+    theta2atmin: float
+        Value of the angle theta2 at the resonance that minimizes kappa.
+    
+    Examples
+    --------
+    ``theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = precession.anglesresonances(r,chieff,q,chi1,chi2)``
     """
 
     q = np.atleast_1d(q).astype(float)
@@ -2689,6 +2719,40 @@ def anglesresonances(r, chieff, q, chi1, chi2):
 
 
 def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
+    """
+    Coefficients of the cubic equation in deltachi for its time evolution.
+    
+    Parameters
+    ----------
+    kappa: float
+        Asymptotic angular momentum.
+    u: float
+        Compactified separation 1/(2L).
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Returns
+    -------
+    coeff0: float
+        Coefficient to the x^0 term in polynomial.
+    coeff1: float
+        Coefficient to the x^1 term in polynomial.
+    coeff2: float
+        Coefficient to the x^2 term in polynomial.
+    coeff3: float
+        Coefficient to the x^3 term in polynomial.
+    
+    Examples
+    --------
+    ``coeff3,coeff2,coeff1,coeff0 = precession.deltachicubic_coefficients(kappa,u,chieff,q,chi1,chi2)``
+    """
+
     kappa = np.atleast_1d(kappa).astype(float)
     u = np.atleast_1d(u).astype(float)
     chieff = np.atleast_1d(chieff).astype(float)
@@ -2724,7 +2788,42 @@ def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
 
 
 def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2, precomputedcoefficients=None):
+    """
+    Rescaled coefficients of the cubic equation in deltachi for its time evolution. This is necessary to avoid dividing by (1-q).
     
+    Parameters
+    ----------
+    kappa: float
+        Asymptotic angular momentum.
+    u: float
+        Compactified separation 1/(2L).
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedcoefficients: array, optional (default: None)
+        Pre-computed output of deltachicubic_coefficients for computational efficiency.
+    
+    Returns
+    -------
+    coeff0: float
+        Coefficient to the x^0 term in polynomial.
+    coeff1: float
+        Coefficient to the x^1 term in polynomial.
+    coeff2: float
+        Coefficient to the x^2 term in polynomial.
+    coeff3: float
+        Coefficient to the x^3 term in polynomial.
+    
+    Examples
+    --------
+    ``coeff3,coeff2,coeff1,coeff0 = precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2)``
+    """
+
     u = np.atleast_1d(u).astype(float)
     q = np.atleast_1d(q).astype(float)
 

@@ -73,12 +73,15 @@ def descr(varname,vardef=None,optional=False):
     lookup['v']=["float","Newtonian orbital velocity"]
     lookup['Jmin']=["float","Minimum value of the total angular momentum J"]
     lookup['Jmax']=["float","Maximum value of the total angular momentum J"]
-    lookup['kappamin']=["float","Minimum value of the regularized angular momentum kappa"]
-    lookup['kappamax']=["float","Maximum value of the regularized angular momentum kappa"]
+    lookup['kappamin']=["float","Minimum value of the asymptotic angular momentum kappa"]
+    lookup['kappamax']=["float","Maximum value of the asymptotic angular momentum kappa"]
     lookup['kappainfmin']=["float","Minimum value of the asymptotic angular momentum kappainf"]
     lookup['kappainfmax']=["float","Maximum value of the asymptotic angular momentum kappainf"]
-    lookup['chieffmin']=["float","Minimum value of the effective spin chieff"]
-    lookup['chieffmax']=["float","Maximum value of the effective spin chieff"]
+    lookup['chieffmin']=["float","Minimum value of the effective spin"]
+    lookup['chieffmax']=["float","Maximum value of the effective spin"]
+    lookup['deltachimin']=["float","Minimum value of the weighted spin difference"]
+    lookup['deltachimax']=["float","Maximum value of the weighted spin difference"]
+ 
     lookup['Smin']=["float","Minimum value of the total spin S"]
     lookup['Smax']=["float","Maximum value of the total spin S"]
     lookup['coeff6']=["float","Coefficient to the x^6 term in polynomial"]
@@ -145,14 +148,15 @@ def descr(varname,vardef=None,optional=False):
     lookup['uswitch']=["float","Matching compactified separation between the precession- and orbit-averaged chunks"]
     lookup['M_msun']=["float","Total mass of the binary in solar masses"]
     lookup['f']=["float","Gravitational-wave frequency in Hz"]
-    lookup['theta1atmin']=["float","Value of the angle theta1 at the resonance that minimizes either J or chieff, depending on the input"]
-    lookup['theta1atmax']=["float","Value of the angle theta1 at the resonance that maximizes either J or chieff, depending on the input"]
-    lookup['theta2atmin']=["float","Value of the angle theta2 at the resonance that minimizes either J or chieff, depending on the input"]
-    lookup['theta2atmax']=["float","Value of the angle theta2 at the resonance that maximizes either J or chieff, depending on the input"]
-    lookup['deltaphiatmin']=["float","Value of the angle deltaphi at the resonance that minimizes either J or chieff, depending on the input"]
-    lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input"]
-    lookup['precomputedroots']=["array","Pre-computed output of Ssroots for computational efficiency"]
-    lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes either J or chieff, depending on the input"]
+    lookup['theta1atmin']=["float","Value of the angle theta1 at the resonance that minimizes kappa"]
+    lookup['theta1atmax']=["float","Value of the angle theta1 at the resonance that maximizes kappa"]
+    lookup['theta2atmin']=["float","Value of the angle theta2 at the resonance that minimizes kappa"]
+    lookup['theta2atmax']=["float","Value of the angle theta2 at the resonance that maximizes kappa"]
+    lookup['deltaphiatmin']=["float","Value of the angle deltaphi at the resonance that minimizes kappa"]
+    lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes kappa"]
+    lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes kappa"]
+    lookup['precomputedroots']=["array","Pre-computed output of deltachiroots for computational efficiency"]
+    lookup['precomputedcoefficients']=["array","Pre-computed output of deltachicubic_coefficients for computational efficiency"]
 
     lookup['mfin']=["float","Mass of the black-hole remnant"]
     lookup['chifin']=["float","Spin of the black-hole remnant"]
@@ -164,6 +168,8 @@ def descr(varname,vardef=None,optional=False):
     lookup['kms']=['boolean', "Return velocities in km/s"]
     lookup['maxphase']=['boolean', "Maximize over orbital phase at merger"]
     lookup['tol']=['float', "Numerical tolerance, see source code for details"]
+    lookup['kappatilde']=['float', "Rescaled version of the asymptotic angular momentum"]
+    lookup['**kwargs']=['unpacked dictionary, optional', "Additional keyword arguments"]
 
     if varname in lookup:
         pass
@@ -218,8 +224,9 @@ for i,line in enumerate(sourcecode):
 with open(parentdir+"/precession/precession.py") as file:
    alllines=file.readlines()
 for line in alllines:
-    if "def "+fun in line:
+    if "def "+fun+"(" in line:
         break
+
 inputs = line.replace(" ","").split("(")[1].split(")")[0].split(",")
 varname=[]
 vardef=[]
