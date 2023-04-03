@@ -2822,7 +2822,9 @@ def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2, precomp
     Examples
     --------
     ``coeff3,coeff2,coeff1,coeff0 = precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2)``
+    ``coeff3,coeff2,coeff1,coeff0 = precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2,precomputedcoefficients=coeffs)``
     """
+
 
     u = np.atleast_1d(u).astype(float)
     q = np.atleast_1d(q).astype(float)
@@ -2842,22 +2844,16 @@ def deltachicubic_rescaled_coefficients(kappa, u, chieff, q, chi1, chi2, precomp
     return np.stack([coeff3r, coeff2r, coeff1r, coeff0r])
 
 
-# TODO: precomputedroots is not implemented consistently. Check that all functions that can use it have the option to do it
-# TODO: Docstrings must be changed for kappa and deltachi everywhere
 def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputedroots=None):
     """
-    Roots of the cubic equation in S^2 that identifies the effective potentials.
-
-    Examples
-    --------
-    Sminuss,Spluss,S3s = Ssroots(J,r,chieff,q,chi1,chi2,precomputedroots=None)
-
+    Roots of the cubic equation in deltachi that describes the dynamics on the precession timescale.
+    
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
-    r: float
-        Binary separation.
+    kappa: float
+        Asymptotic angular momentum.
+    u: float
+        Compactified separation 1/(2L).
     chieff: float
         Effective spin.
     q: float
@@ -2866,17 +2862,25 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    full_output: boolean, optional (default: True)
+        Return additional outputs.
     precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
+        Pre-computed output of deltachiroots for computational efficiency.
+    
     Returns
     -------
-    Sminuss: float
-        Lowest physical root, if present, of the effective potential equation.
-    Spluss: float
-        Largest physical root, if present, of the effective potential equation.
-    S3s: float
-        Spurious root of the effective potential equation.
+    deltachi3: float, optional
+        Spurious root of the deltachi evolution.
+    deltachiminus: float
+        Lowest physical root of the deltachi evolution.
+    deltachiplus: float
+        Lowest physical root of the deltachi evolution.
+    
+    Examples
+    --------
+    ``deltachiminus,deltachiplus,deltachi3 = precession.deltachiroots(kappa,u,chieff,q,chi1,chi2)``
+    ``deltachiminus,deltachiplus,deltachi3 = precession.deltachiroots(kappa,u,chieff,q,chi1,chi2,precomputedroots=roots)``
+    ``deltachiminus,deltachiplus = precession.deltachiroots(kappa,u,chieff,q,chi1,chi2,full_output=False)``
     """
 
     if precomputedroots is None:
@@ -2896,7 +2900,7 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
         assert precomputedroots.shape[0] == 3, "Shape of precomputedroots must be (3,N), i.e. deltachiminus, deltachiplus, deltachi3. [deltachiroots]"
         return precomputedroots
 
-
+#TODO: I stopped here
 def deltachilimits_rectangle(chieff, q, chi1, chi2):
     """
     Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.

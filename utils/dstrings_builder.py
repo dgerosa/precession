@@ -62,7 +62,6 @@ def descr(varname,vardef=None,optional=False):
     lookup['m']=["float","Parameter of elliptic function(s)"]
     lookup['phi']=["float","Amplitude of elliptic function(s)"]
     lookup['n']=["float","Characheristic of elliptic function(s)"]
-
     lookup['Lvec']=["array","Cartesian vector of the orbital angular momentum"]
     lookup['S1vec']=["array","Cartesian vector of the primary spin"]
     lookup['S2vec']=["array","Cartesian vector of the secondary spin"]
@@ -81,7 +80,6 @@ def descr(varname,vardef=None,optional=False):
     lookup['chieffmax']=["float","Maximum value of the effective spin"]
     lookup['deltachimin']=["float","Minimum value of the weighted spin difference"]
     lookup['deltachimax']=["float","Maximum value of the weighted spin difference"]
- 
     lookup['Smin']=["float","Minimum value of the total spin S"]
     lookup['Smax']=["float","Maximum value of the total spin S"]
     lookup['coeff6']=["float","Coefficient to the x^6 term in polynomial"]
@@ -106,6 +104,10 @@ def descr(varname,vardef=None,optional=False):
     lookup['Sminuss']=["float","Lowest physical root, if present, of the effective potential equation"]
     lookup['Spluss']=["float","Largest physical root, if present, of the effective potential equation"]
     lookup['S3s']=["float","Spurious root of the effective potential equation"]
+    lookup['deltachiminus']=["float","Lowest physical root of the deltachi evolution"]
+    lookup['deltachiplus']=["float","Lowest physical root of the deltachi evolution"]
+    lookup['deltachi3']=["float","Spurious root of the deltachi evolution"]
+ 
     lookup['tau']=["float","Nutation period"]
     lookup['Sminussinf']=["float","Asymptotic value of the lowest physical root, if present, of the effective potential equation"]
     lookup['Splussinf']=["float","Asymptotic value of the largest physical root, if present, of the effective potential equation"]
@@ -135,7 +137,6 @@ def descr(varname,vardef=None,optional=False):
     lookup['mathcalCplusprime']=["float","Prefactor in the PhiL equation"]
     lookup['mathcalCminusprime']=["float","Prefactor in the PhiL equation"]
     lookup['mathcalT']=["float","Prefactor in the tau equation"]
-
     lookup['alpha']=['float', "Azimuthal angle spanned by L about J during an entire cycle"]
     lookup['phiL']=['float', "Azimuthal angle spanned by L about J"]
     lookup['OmegaL']=['float', "Precession frequency of L about J"]
@@ -157,7 +158,6 @@ def descr(varname,vardef=None,optional=False):
     lookup['deltaphiatmax']=["float","Value of the angle deltaphi at the resonance that maximizes kappa"]
     lookup['precomputedroots']=["array","Pre-computed output of deltachiroots for computational efficiency"]
     lookup['precomputedcoefficients']=["array","Pre-computed output of deltachicubic_coefficients for computational efficiency"]
-
     lookup['mfin']=["float","Mass of the black-hole remnant"]
     lookup['chifin']=["float","Spin of the black-hole remnant"]
     lookup['vk']=["float","Kick of the black-hole remnant (magnitude)"]
