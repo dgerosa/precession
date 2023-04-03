@@ -88,12 +88,6 @@
 <span class="sd">    Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].</span>
 <span class="sd">    Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977</span>
 
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    ``roots = precession.roots_vec(p)``</span>
-
-
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    p: array</span>
@@ -104,6 +98,9 @@
 <span class="sd">    roots: array</span>
 <span class="sd">        Polynomial roots.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``roots = precession.roots_vec(p)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -144,7 +141,7 @@
 
     <span class="k">return</span> <span class="n">resind</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="norm_nested"><a class="viewcode-back" href="../auto.html#precession.norm_nested">[docs]</a><span class="k">def</span> <span class="nf">norm_nested</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Norm of 2D array of shape (N,3) along last axis.</span>
@@ -166,7 +163,7 @@
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="normalize_nested"><a class="viewcode-back" href="../auto.html#precession.normalize_nested">[docs]</a><span class="k">def</span> <span class="nf">normalize_nested</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalize 2D array of shape (N,3) along last axis.</span>
@@ -188,7 +185,7 @@
 
     <span class="k">return</span> <span class="n">x</span><span class="o">/</span><span class="n">norm_nested</span><span class="p">(</span><span class="n">x</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="dot_nested"><a class="viewcode-back" href="../auto.html#precession.dot_nested">[docs]</a><span class="k">def</span> <span class="nf">dot_nested</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dot product between 2D arrays along last axis.</span>
@@ -212,7 +209,7 @@
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;ij, ij-&gt;i&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="scalar_nested"><a class="viewcode-back" href="../auto.html#precession.scalar_nested">[docs]</a><span class="k">def</span> <span class="nf">scalar_nested</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Nested scalar product between a 1D and a 2D array.</span>
@@ -236,7 +233,7 @@
 
     <span class="k">return</span> <span class="n">k</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">*</span><span class="n">x</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="rotate_nested"><a class="viewcode-back" href="../auto.html#precession.rotate_nested">[docs]</a><span class="k">def</span> <span class="nf">rotate_nested</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">align_zaxis</span><span class="p">,</span> <span class="n">align_xzplane</span><span class="p">):</span>
 <span class="w">    </span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;Rotate a given vector vec to a frame such that the vector align_zaxis lies along z and the vector align_xzplane lies in the xz plane.&#39;&#39;&#39;</span>
@@ -265,7 +262,7 @@
 
     <span class="k">return</span> <span class="n">vecrot</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="sample_unitsphere"><a class="viewcode-back" href="../auto.html#precession.sample_unitsphere">[docs]</a><span class="k">def</span> <span class="nf">sample_unitsphere</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sample points uniformly on a sphere of unit radius. Returns array of shape (N,3).</span>
@@ -289,7 +286,7 @@
     <span class="n">vec</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vec</span><span class="o">.</span><span class="n">T</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="isotropic_angles"><a class="viewcode-back" href="../auto.html#precession.isotropic_angles">[docs]</a><span class="k">def</span> <span class="nf">isotropic_angles</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
     <span class="n">theta1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
@@ -298,7 +295,7 @@
 
     <span class="k">return</span> <span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="tiler"><a class="viewcode-back" href="../auto.html#precession.tiler">[docs]</a><span class="k">def</span> <span class="nf">tiler</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span><span class="n">shaper</span><span class="p">):</span>
 
     <span class="n">thing</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">thing</span><span class="p">)</span>
@@ -307,7 +304,7 @@
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">shaper</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shaper</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">thing</span><span class="p">)))</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="affine"><a class="viewcode-back" href="../auto.html#precession.affine">[docs]</a><span class="k">def</span> <span class="nf">affine</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">up</span><span class="p">):</span>
     <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">up</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">up</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -317,7 +314,7 @@
 
     <span class="k">return</span> <span class="n">rescaled</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="inverseaffine"><a class="viewcode-back" href="../auto.html#precession.inverseaffine">[docs]</a><span class="k">def</span> <span class="nf">inverseaffine</span><span class="p">(</span><span class="n">rescaled</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">up</span><span class="p">):</span>
     
     <span class="n">rescaled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">rescaled</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -328,7 +325,7 @@
 
     <span class="k">return</span> <span class="n">vec</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="wraproots"><a class="viewcode-back" href="../auto.html#precession.wraproots">[docs]</a><span class="k">def</span> <span class="nf">wraproots</span><span class="p">(</span><span class="n">coefficientfunction</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is essentially a wrapper of numpy.roots.</span>
@@ -356,7 +353,7 @@
 
     <span class="k">return</span> <span class="n">sols</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="ellippi"><a class="viewcode-back" href="../auto.html#precession.ellippi">[docs]</a><span class="k">def</span> <span class="nf">ellippi</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Incomplete elliptic integral of the third kind. This is reconstructed using scipy&#39;s implementation of Carlson&#39;s R integrals (arxiv:math/9409227).</span>
@@ -402,7 +399,7 @@
     <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
     <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">elliprf</span><span class="p">(</span><span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">c</span><span class="o">-</span><span class="n">m</span><span class="p">,</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">elliprj</span><span class="p">(</span><span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">c</span><span class="o">-</span><span class="n">m</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">c</span><span class="o">-</span><span class="n">n</span><span class="p">)</span></div>
 
-
+<span class="c1">#TODO docstrings</span>
 <div class="viewcode-block" id="ismonotonic"><a class="viewcode-back" href="../auto.html#precession.ismonotonic">[docs]</a><span class="k">def</span> <span class="nf">ismonotonic</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">which</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if an array is monotonic. The parameter `which` can takes the following values:</span>
@@ -447,20 +444,20 @@
 <div class="viewcode-block" id="eval_m1"><a class="viewcode-back" href="../auto.html#precession.eval_m1">[docs]</a><span class="k">def</span> <span class="nf">eval_m1</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Mass of the heavier black hole in units of the total mass.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    m1 = eval_m1(q)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    m1: float</span>
 <span class="sd">        Mass of the primary (heavier) black hole.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``m1 = precession.eval_m1(q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -472,20 +469,20 @@
 <div class="viewcode-block" id="eval_m2"><a class="viewcode-back" href="../auto.html#precession.eval_m2">[docs]</a><span class="k">def</span> <span class="nf">eval_m2</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Mass of the lighter black hole in units of the total mass.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    m2 = eval_m2(q)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    m2: float</span>
 <span class="sd">        Mass of the secondary (lighter) black hole.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``m2 = precession.eval_m2(q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -494,52 +491,25 @@
     <span class="k">return</span> <span class="n">m2</span></div>
 
 
-<div class="viewcode-block" id="masses"><a class="viewcode-back" href="../auto.html#precession.masses">[docs]</a><span class="k">def</span> <span class="nf">masses</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Masses of the two black holes in units of the total mass.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    m1,m2 = masses(q)</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    q: float</span>
-<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    m1: float</span>
-<span class="sd">        Mass of the primary (heavier) black hole.</span>
-<span class="sd">    m2: float</span>
-<span class="sd">        Mass of the secondary (lighter) black hole.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">m1</span> <span class="o">=</span> <span class="n">eval_m1</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
-    <span class="n">m2</span> <span class="o">=</span> <span class="n">eval_m2</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">])</span></div>
-
-
 <div class="viewcode-block" id="eval_q"><a class="viewcode-back" href="../auto.html#precession.eval_q">[docs]</a><span class="k">def</span> <span class="nf">eval_q</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Mass ratio, 0 &lt; q = m2/m1 &lt; 1.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    q = eval_q(m1,m2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    m1: float</span>
 <span class="sd">        Mass of the primary (heavier) black hole.</span>
 <span class="sd">    m2: float</span>
 <span class="sd">        Mass of the secondary (lighter) black hole.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``q = precession.eval_q(m1,m2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">m1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -553,20 +523,20 @@
 <div class="viewcode-block" id="eval_eta"><a class="viewcode-back" href="../auto.html#precession.eval_eta">[docs]</a><span class="k">def</span> <span class="nf">eval_eta</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    eta = eval_eta(q)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    eta: float</span>
 <span class="sd">        Symmetric mass ratio 0&lt;=eta&lt;=1/4.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``eta = precession.eval_eta(q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -578,22 +548,22 @@
 <div class="viewcode-block" id="eval_S1"><a class="viewcode-back" href="../auto.html#precession.eval_S1">[docs]</a><span class="k">def</span> <span class="nf">eval_S1</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Spin angular momentum of the heavier black hole.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    S1 = eval_S1(q,chi1)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
 <span class="sd">    chi1: float</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    S1: float</span>
 <span class="sd">        Magnitude of the primary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``S1 = precession.eval_S1(q,chi1)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">chi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -601,25 +571,26 @@
 
     <span class="k">return</span> <span class="n">S1</span></div>
 
+
 <div class="viewcode-block" id="eval_S2"><a class="viewcode-back" href="../auto.html#precession.eval_S2">[docs]</a><span class="k">def</span> <span class="nf">eval_S2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Spin angular momentum of the lighter black hole.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    S2 = eval_S2(q,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    S2: float</span>
 <span class="sd">        Magnitude of the secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``S2 = precession.eval_S2(q,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">chi2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -630,23 +601,23 @@
 
 <div class="viewcode-block" id="eval_chi1"><a class="viewcode-back" href="../auto.html#precession.eval_chi1">[docs]</a><span class="k">def</span> <span class="nf">eval_chi1</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">S1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Spin angular momentum of the heavier black hole.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    S1 = eval_S1(q,chi1)</span>
-
+<span class="sd">    Dimensionless spin of the heavier black hole.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-<span class="sd">    chi1: float</span>
-<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    S1: float</span>
 <span class="sd">        Magnitude of the primary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chi1 = precession.eval_chi1(q,S1)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">S1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">S1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -657,23 +628,23 @@
 
 <div class="viewcode-block" id="eval_chi2"><a class="viewcode-back" href="../auto.html#precession.eval_chi2">[docs]</a><span class="k">def</span> <span class="nf">eval_chi2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">S2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Spin angular momentum of the heavier black hole.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    S1 = eval_S1(q,chi1)</span>
-
+<span class="sd">    Dimensionless spin of the lighter black hole.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-<span class="sd">    chi1: float</span>
-<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-
+<span class="sd">    S2: float</span>
+<span class="sd">        Magnitude of the secondary spin.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    S1: float</span>
-<span class="sd">        Magnitude of the primary spin.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chi2 = precession.eval_chi2(q,S2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">S2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">S2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>

@@ -135,7 +135,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#precession.kapparescaling"><code class="docutils literal notranslate"><span class="pre">kapparescaling()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.kapparesonances"><code class="docutils literal notranslate"><span class="pre">kapparesonances()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.limits_check"><code class="docutils literal notranslate"><span class="pre">limits_check()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#precession.masses"><code class="docutils literal notranslate"><span class="pre">masses()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.morphology"><code class="docutils literal notranslate"><span class="pre">morphology()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.norm_nested"><code class="docutils literal notranslate"><span class="pre">norm_nested()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.normalize_nested"><code class="docutils literal notranslate"><span class="pre">normalize_nested()</span></code></a></li>
@@ -1008,7 +1007,7 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>S1 = eval_S1(q,chi1)</p>
+<p><code class="docutils literal notranslate"><span class="pre">S1</span> <span class="pre">=</span> <span class="pre">precession.eval_S1(q,chi1)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1032,7 +1031,7 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>S2 = eval_S2(q,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">S2</span> <span class="pre">=</span> <span class="pre">precession.eval_S2(q,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1112,49 +1111,49 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_chi1">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_chi1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_chi1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_chi1" title="Permalink to this definition"></a></dt>
-<dd><p>Spin angular momentum of the heavier black hole.</p>
+<dd><p>Dimensionless spin of the heavier black hole.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
-<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+<dt><strong>S1: float</strong></dt><dd><p>Magnitude of the primary spin.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>S1: float</dt><dd><p>Magnitude of the primary spin.</p>
+<dt>chi1: float</dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>S1 = eval_S1(q,chi1)</p>
+<p><code class="docutils literal notranslate"><span class="pre">chi1</span> <span class="pre">=</span> <span class="pre">precession.eval_chi1(q,S1)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_chi2">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_chi2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_chi2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_chi2" title="Permalink to this definition"></a></dt>
-<dd><p>Spin angular momentum of the heavier black hole.</p>
+<dd><p>Dimensionless spin of the lighter black hole.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
-<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+<dt><strong>S2: float</strong></dt><dd><p>Magnitude of the secondary spin.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>S1: float</dt><dd><p>Magnitude of the primary spin.</p>
+<dt>chi2: float</dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>S1 = eval_S1(q,chi1)</p>
+<p><code class="docutils literal notranslate"><span class="pre">chi2</span> <span class="pre">=</span> <span class="pre">precession.eval_chi2(q,S2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1725,7 +1724,7 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>eta = eval_eta(q)</p>
+<p><code class="docutils literal notranslate"><span class="pre">eta</span> <span class="pre">=</span> <span class="pre">precession.eval_eta(q)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1774,7 +1773,7 @@ limit of the precession-averaged evolution equation.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>m1 = eval_m1(q)</p>
+<p><code class="docutils literal notranslate"><span class="pre">m1</span> <span class="pre">=</span> <span class="pre">precession.eval_m1(q)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1796,7 +1795,7 @@ limit of the precession-averaged evolution equation.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>m2 = eval_m2(q)</p>
+<p><code class="docutils literal notranslate"><span class="pre">m2</span> <span class="pre">=</span> <span class="pre">precession.eval_m2(q)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1859,7 +1858,7 @@ limit of the precession-averaged evolution equation.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>q = eval_q(m1,m2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">q</span> <span class="pre">=</span> <span class="pre">precession.eval_q(m1,m2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -2486,30 +2485,6 @@ The boolean flag enforce allows raising an error in case the inputs are not comp
 </dl>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.masses">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">masses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#masses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.masses" title="Permalink to this definition"></a></dt>
-<dd><p>Masses of the two black holes in units of the total mass.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>m1: float</dt><dd><p>Mass of the primary (heavier) black hole.</p>
-</dd>
-<dt>m2: float</dt><dd><p>Mass of the secondary (lighter) black hole.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>m1,m2 = masses(q)</p>
 </dd></dl>
 
 <dl class="py function">
