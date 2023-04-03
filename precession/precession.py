@@ -635,7 +635,7 @@ def eval_v(r):
 
 def eval_r(L=None,u=None,q=None):
     """
-    Orbital separation of the binary. Provide either (L,q) or (u,q).
+    Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).
     
     Parameters
     ----------
@@ -948,11 +948,12 @@ def eval_theta2(deltachi, chieff, q, chi2):
 
 def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
     """
-    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).
+    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).
 
     Examples
     --------
-    costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)
+    costheta12 = eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)
+    costheta12 = eval_costheta12(deltachi=None,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
 
     Parameters
     ----------
