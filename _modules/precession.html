@@ -651,27 +651,27 @@
     <span class="n">chi2</span> <span class="o">=</span> <span class="n">S2</span><span class="o">/</span><span class="p">(</span><span class="n">eval_m2</span><span class="p">(</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="k">return</span> <span class="n">chi2</span></div>
-    
+
 
 <div class="viewcode-block" id="eval_L"><a class="viewcode-back" href="../auto.html#precession.eval_L">[docs]</a><span class="k">def</span> <span class="nf">eval_L</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Newtonian angular momentum of the binary.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    L = eval_L(r,q)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    L: float</span>
 <span class="sd">        Magnitude of the Newtonian orbital angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``L = precession.eval_L(r,q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -685,20 +685,20 @@
 <div class="viewcode-block" id="eval_v"><a class="viewcode-back" href="../auto.html#precession.eval_v">[docs]</a><span class="k">def</span> <span class="nf">eval_v</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Newtonian orbital velocity of the binary.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    v = eval_v(r)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    v: float</span>
 <span class="sd">        Newtonian orbital velocity.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``v = precession.eval_v(r)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -709,25 +709,24 @@
 
 <div class="viewcode-block" id="eval_r"><a class="viewcode-back" href="../auto.html#precession.eval_r">[docs]</a><span class="k">def</span> <span class="nf">eval_r</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    r = eval_r(L=None,u=None,q=None)</span>
-
+<span class="sd">    Orbital separation of the binary. Provide either (L,q) or (u,q).</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    L: float, optional (default: None)</span>
+<span class="sd">    L: float, optional (default: L)</span>
 <span class="sd">        Magnitude of the Newtonian orbital angular momentum.</span>
-<span class="sd">    u: float, optional (default: None)</span>
-<span class="sd">        Compactified separation 1/(2L).</span>
-<span class="sd">    q: float, optional (default: None)</span>
+<span class="sd">    q: float, optional (default: q)</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``r = precession.eval_r(L=L,q=q)``</span>
+<span class="sd">    ``r = precession.eval_r(u=u,q=q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -750,24 +749,23 @@
 
 <div class="viewcode-block" id="eval_u"><a class="viewcode-back" href="../auto.html#precession.eval_u">[docs]</a><span class="k">def</span> <span class="nf">eval_u</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Change of independent variable to regularize the infinite orbital separation</span>
-<span class="sd">    limit of the precession-averaged evolution equation.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    u = eval_u(r,q)</span>
-
+<span class="sd">    Compactified orbital separation.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    u: float</span>
 <span class="sd">        Compactified separation 1/(2L).</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``u = precession.eval_u(r,q)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">L</span> <span class="o">=</span> <span class="n">eval_L</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
@@ -778,37 +776,29 @@
 
 <div class="viewcode-block" id="eval_chieff"><a class="viewcode-back" href="../auto.html#precession.eval_chieff">[docs]</a><span class="k">def</span> <span class="nf">eval_chieff</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)</span>
-
+<span class="sd">    Eftective spin.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    theta1: float, optional (default: None)</span>
+<span class="sd">    theta1: float</span>
 <span class="sd">        Angle between orbital angular momentum and primary spin.</span>
-<span class="sd">    theta2: float, optional (default: None)</span>
+<span class="sd">    theta2: float</span>
 <span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
-<span class="sd">    S: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    varphi: float, optional (default: None)</span>
-<span class="sd">        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).</span>
-<span class="sd">    J: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
-<span class="sd">    r: float, optional (default: None)</span>
-<span class="sd">        Binary separation.</span>
-<span class="sd">    q: float, optional (default: None)</span>
+<span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-<span class="sd">    chi1: float, optional (default: None)</span>
+<span class="sd">    chi1: float</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-<span class="sd">    chi2: float, optional (default: None)</span>
+<span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chieff = precession.eval_chieff(theta1,theta2,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>

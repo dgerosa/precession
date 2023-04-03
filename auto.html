@@ -916,7 +916,7 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>L = eval_L(r,q)</p>
+<p><code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">=</span> <span class="pre">precession.eval_L(r,q)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1158,27 +1158,19 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_chieff">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_chieff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_chieff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_chieff" title="Permalink to this definition"></a></dt>
-<dd><p>Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).</p>
+<dd><p>Eftective spin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>theta1: float, optional (default: None)</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
 </dd>
-<dt><strong>theta2: float, optional (default: None)</strong></dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+<dt><strong>theta2: float</strong></dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
 </dd>
-<dt><strong>S: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total spin.</p>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
-<dt><strong>varphi: float, optional (default: None)</strong></dt><dd><p>Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).</p>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
 </dd>
-<dt><strong>J: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
-</dd>
-<dt><strong>r: float, optional (default: None)</strong></dt><dd><p>Binary separation.</p>
-</dd>
-<dt><strong>q: float, optional (default: None)</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
-</dd>
-<dt><strong>chi1: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
-</dd>
-<dt><strong>chi2: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
 </dl>
 </dd>
@@ -1190,7 +1182,7 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">chieff</span> <span class="pre">=</span> <span class="pre">precession.eval_chieff(theta1,theta2,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1863,15 +1855,13 @@ limit of the precession-averaged evolution equation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_r">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_r" title="Permalink to this definition"></a></dt>
-<dd><p>Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).</p>
+<dd><p>Orbital separation of the binary. Provide either (L,q) or (u,q).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>L: float, optional (default: None)</strong></dt><dd><p>Magnitude of the Newtonian orbital angular momentum.</p>
+<dt><strong>L: float, optional (default: L)</strong></dt><dd><p>Magnitude of the Newtonian orbital angular momentum.</p>
 </dd>
-<dt><strong>u: float, optional (default: None)</strong></dt><dd><p>Compactified separation 1/(2L).</p>
-</dd>
-<dt><strong>q: float, optional (default: None)</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+<dt><strong>q: float, optional (default: q)</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
 </dl>
 </dd>
@@ -1883,7 +1873,8 @@ limit of the precession-averaged evolution equation.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>r = eval_r(L=None,u=None,q=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">precession.eval_r(L=L,q=q)</span></code>
+<code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">precession.eval_r(u=u,q=q)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1941,8 +1932,7 @@ limit of the precession-averaged evolution equation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_u">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_u</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_u"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_u" title="Permalink to this definition"></a></dt>
-<dd><p>Change of independent variable to regularize the infinite orbital separation
-limit of the precession-averaged evolution equation.</p>
+<dd><p>Compactified orbital separation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1960,7 +1950,7 @@ limit of the precession-averaged evolution equation.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>u = eval_u(r,q)</p>
+<p><code class="docutils literal notranslate"><span class="pre">u</span> <span class="pre">=</span> <span class="pre">precession.eval_u(r,q)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1982,7 +1972,7 @@ limit of the precession-averaged evolution equation.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>v = eval_v(r)</p>
+<p><code class="docutils literal notranslate"><span class="pre">v</span> <span class="pre">=</span> <span class="pre">precession.eval_v(r)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
