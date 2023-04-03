@@ -11,7 +11,7 @@ For each function docstrings, the developer needs to provide the intro blurb and
 
 import sys,os
 import pyperclip
-
+import numpy as np
 # Load package from path, not the pip installation (if any)
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
@@ -21,7 +21,7 @@ import precession
 
 fun = sys.argv[1]
 
-def descr(varname,vardef=None):
+def descr(varname,vardef=None,optional=False):
 
     # This is a lookup table
     lookup={}
@@ -39,7 +39,7 @@ def descr(varname,vardef=None):
     lookup['J']=["float","Magnitude of the total angular momentum"]
     lookup['S']=["float","Magnitude of the total spin"]
     lookup['Ssq']=["float","Squared magnitude of the total spin"]
-    lookup['kappa']=["float","Regularized angular momentum (J^2-L^2)/(2L)"]
+    lookup['kappa']=["float","Asymptotic angular momentum"]
     lookup['deltachi']=["float","Weighted spin difference"]
     lookup['u']=["float","Compactified separation 1/(2L)"]
     lookup['varphi']=["float","Generalized nutation coordinate (Eq 9 in arxiv:1506.03492)."]
@@ -170,8 +170,12 @@ def descr(varname,vardef=None):
 
     dstrings=varname+": "
     dstrings+=lookup[varname][0]
+    if vardef=="_":
+        vardef=None
     if vardef is not None:
         dstrings+=', optional (default: '+vardef+')'
+    if optional:
+        dstrings+=', optional'
 
     dstrings+="\n\t"
     dstrings+=lookup[varname][1]
@@ -189,26 +193,15 @@ realtab='    '
 foundone=False
 
 docs='\"\"\"\n'
-#with open("precession/precession.py") as file:
-#    sourcecode=file.readlines()
-#
 
-# Grab the current docstrings
+
+# Grab the current docstrings and keep the beginning
 sourcecode = eval("precession."+fun+".__doc__").split('\n')
 sourcecode = [line.strip() for line in sourcecode]
 if sourcecode[0]=='':
     sourcecode=sourcecode[1:]
 
-
-# examples =""
-# for i,line in enumerate(sourcecode):
-#     if fun in line and "=" in line and "(" in line and ")" in line:
-#         print(line)
-#         examples+="line.replace(" ","").replace('precession.',"").replace('=',' = precession.',1).replace("`","")+"\n"
-
-# print(examples)
-examples=""
-
+# Add beginning
 intro=None
 for i,line in enumerate(sourcecode):
     if line =='' and intro is None:
@@ -218,83 +211,51 @@ for i,line in enumerate(sourcecode):
             docs+="."
         docs+='\n\n'
 
+
+# Input parameters
+with open(parentdir+"/precession/precession.py") as file:
+   alllines=file.readlines()
+for line in alllines:
+    if "def "+fun in line:
+        break
+inputs = line.replace(" ","").split("(")[1].split(")")[0].split(",")
+varname=[]
+vardef=[]
+for inp in inputs:
+    if "=" in inp:
+        varname.append(inp.split("=")[0])
+        vardef.append(inp.split("=")[1])
+    else:
+        varname.append(inp)
+        vardef.append("_")
+
+docs+="Parameters\n----------\n"
+for varname_,vardef_ in zip(varname,vardef):
+    docs+=descr(varname_,vardef_)
+
+#Outputs
+outputs=[]
+counter=0
+for i,line in enumerate(sourcecode):
     if fun in line and "=" in line and "(" in line and ")" in line:
-        # This is the first occurrence
-        if not foundone:
+        thisout =line.replace('`',"").replace(' ',"").split("=")[0].split(',')
+        for this in thisout: 
+            outputs.append(this)
+        counter+=1
 
-            # Remove all the space
-            line= line.replace(' ','').replace('\t','')
+outputs,counts = np.unique(outputs,return_counts=True)
 
-            # Select string in between parentheses
-            inputs = line.split('(')[1].split(')')[0].split(',')
+docs+="\nReturns\n-------\n"
+for out,coun in zip(outputs,counts):
+    optional = coun!=counter
+    docs+=descr(out,optional=optional)
 
-            docs+="Parameters\n----------\n"
+#Examples
+docs+="\nExamples\n--------\n"
+for i,line in enumerate(sourcecode):
+    if fun in line and "=" in line and "(" in line and ")" in line:
+        docs+="``"+line.replace("`","").replace(" ","").replace('precession.',"").replace('=',' = precession.',1)+'``\n'
 
-            # Loop over inputs
-            for var in inputs:
-                varname = var.split('=')[0]
-                try:
-                    vardef = var.split('=')[1]
-                except:
-                    vardef= None
-                #print(varname,vardef)
-                docs+=descr(varname,vardef)
-
-            # Select before equal sign
-            outputs = line.replace("`","").split('=')[0].split(',')
-
-            docs+="\nReturns\n-------\n"
-            # Loop over inputs
-            for var in outputs:
-                docs+=descr(var)
-
-
-
-            docs+="\nExamples\n--------\n``"
-
-            foundone=True
-
-            docs+=line.replace('precession.',"").replace('=',' = precession.',1).replace("`","")
-            docs+='``\n'
-
-
-        else:
-            newdocs =''
-            for j, dline in enumerate(docs.split('\n')):
-                if fun not in dline:
-                    newdocs+=dline+"\n"
-
-                if fun in dline:
-                    newdocs+=dline+"\n"
-
-                    line= line.replace(' ','').replace('\t','')
-                    line = "``"+line.replace('precession.',"").replace('=',' = precession.',1).replace("`","")+"``"
-                    newdocs+=line+"\n"
-
-            #     newoutputs = line.replace(' ','').split('=')[0].split(',')
-
-            # firstnewoutput=True
-            # for newoutput in newoutputs:
-            #     if newoutput not in outputs:
-            #         if firstnewoutput:
-            #             newdocs+="Other parameters\n-------\n"
-            #             firstnewoutput=False
-            #         #print(newoutput)
-            #         newdocs+=descr(newoutput)
-
-                #for var in outputs:
-                #    docs+=descr(var)
-
-
-            foundone=True
-
-
-            docs=newdocs
-
-# Remove last new line
-docs=docs.rstrip()
-docs+='\n'
-# Indent everything
 
 docs=realtab+docs.replace('\n','\n'+realtab).replace('\t',realtab)
 docs+='\"\"\"\n'
