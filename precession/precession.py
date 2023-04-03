@@ -1,10 +1,5 @@
-"""
-precession. TODO: write me here
-"""
-
 import warnings
 import numpy as np
-# TODO: remember to require scipy>=1.8.0
 import scipy.special
 import scipy.integrate
 import scipy.spatial.transform
@@ -2527,6 +2522,8 @@ def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     * q**4 * chi2**2))**2 + q * ((1 + q))**3 * (chi1**2 + q**3 * chi2**2) \
     * chieff**2)))
 
+    print(coeff3, coeff2, coeff1, coeff0)
+
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
 
@@ -4195,7 +4192,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
         # Roots along the evolution
         if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'deltachiminus', 'deltachiplus', 'deltachi3']):
             deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
-        
+
             # Resample deltachi
             if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi']):
                 deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
@@ -5399,44 +5396,49 @@ if __name__ == '__main__':
     # import sys
     # sys.exit()
 
-    # q=1
+    # q=0.5
     # chi1=0.6
     # chi2=0.9
     # chieff=0.
     # r=np.geomspace(10,100000000,10)
     # r[-1]=np.inf
     # #r=r[::-1]
-    # kappatilde = 0.8
-    # deltachitilde = 0.7
-    # kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
+    # #kappatilde = 0.8
+    # #deltachitilde = 0.7
+    # #kappa = float(kapparescaling(kappatilde, r[0], chieff, q, chi1, chi2))
     # #print(kappa)
     # #kappa=0.19702426300035386
-    # u=eval_u(r=r,q=tiler(q,r))
+    # #u=eval_u(r=r,q=tiler(q,r))
     # #u = eval_u([r,1000,100,10], [q,q,q,q])
     # #kappa = integrator_precav(kappa, u, chieff, q, chi1, chi2)[0]
 
-    # #print("k", kappa)
+    # # #print("k", kappa)
 
-    # #deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r),N=2)
-
-
-    # #print("deltachi", deltachi)
+    # # #deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r),N=2)
 
 
-    # #print(inspiral_precav(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2))
+    # # #print("deltachi", deltachi)
 
-    # theta1=0.3
+
+    # # #print(inspiral_precav(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2))
+
+    # theta1=0.5
     # theta2=0.5
     # deltaphi=1.
 
-    # #print(inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2,requested_outputs=["theta1",'chieff']))
+    # d = inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
 
+
+    # print( (1+q)*(-d['kappa'][0,-1]*(1+q) + d['chieff'][0])  / ((1-q)*q*chi2) )
+    # print(np.cos(d['theta2'][0,-1]))
+
+    # print(d)
 
     # print(inspiral_precav(theta1=[theta1,theta1], theta2=[theta2,theta2], deltaphi=[deltaphi,deltaphi], r=[r,r], q=[q,q], chi1=[chi1,chi1], chi2=[chi2,chi2],requested_outputs=["theta1",'chieff']))
 
 
-    # theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
-
+    #theta1,theta2,deltaphi = conserved_to_angles(0, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r))
+    #print(theta1)
 
     # q=np.random.uniform(0.99,1,100)
     # chi1=np.random.uniform(0.1,1,100)
@@ -5853,6 +5855,27 @@ if __name__ == '__main__':
     # res = inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
     # print(res)
 
-    print(angles_to_conserved([0.1,0.1], [0.1,0.1], [0.1,0.1], [10,10], [0.1,0.1], [0.1,0.1], [0.1,0.1]).shape)
+    #print(angles_to_conserved([0.1,0.1], [0.1,0.1], [0.1,0.1], [10,10], [0.1,0.1], [0.1,0.1], [0.1,0.1]).shape)
+
+    # N=1000
 
 
+    # q=0.999*np.ones(N)
+    # chi1=0.8*np.ones(N)
+    # chi2=0.8*np.ones(N)
+
+
+    # #q,chi1,chi2 = np.random.uniform(0.1,1,3*N).reshape((3,N))
+    # theta1,theta2,deltaphi = isotropic_angles(N)
+    # r=100000000000000*np.ones(N)
+    # _,kappa,chieff= angles_to_conserved(theta1, theta2, deltaphi, r, q, chi1, chi2)
+    # morph = morphology(kappa, r, chieff, q, chi1, chi2)
+    # print(np.unique(morph,return_counts=True))
+
+    q=1
+    chi1=0.8
+    chi2=0.4
+    theta1,theta2,deltaphi = isotropic_angles(1)
+    r=[10,np.inf]
+
+    print( inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2))
