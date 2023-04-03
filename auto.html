@@ -153,7 +153,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#precession.rupdown"><code class="docutils literal notranslate"><span class="pre">rupdown()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.sample_unitsphere"><code class="docutils literal notranslate"><span class="pre">sample_unitsphere()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.scalar_nested"><code class="docutils literal notranslate"><span class="pre">scalar_nested()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#precession.spinmags"><code class="docutils literal notranslate"><span class="pre">spinmags()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.tiler"><code class="docutils literal notranslate"><span class="pre">tiler()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.tofdeltachi"><code class="docutils literal notranslate"><span class="pre">tofdeltachi()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.updown_endpoint"><code class="docutils literal notranslate"><span class="pre">updown_endpoint()</span></code></a></li>
@@ -2999,34 +2998,6 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dl>
 <p class="rubric">Examples</p>
 <p>y = scalar_nested(k, x)</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.spinmags">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">spinmags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#spinmags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.spinmags" title="Permalink to this definition"></a></dt>
-<dd><p>Spins of the black holes in units of the total mass.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
-</dd>
-<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
-</dd>
-<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>S1: float</dt><dd><p>Magnitude of the primary spin.</p>
-</dd>
-<dt>S2: float</dt><dd><p>Magnitude of the secondary spin.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>S1,S2 = spinmags(q,chi1,chi2)</p>
 </dd></dl>
 
 <dl class="py function">
