@@ -639,9 +639,11 @@ def eval_r(L=None,u=None,q=None):
     
     Parameters
     ----------
-    L: float, optional (default: L)
+    L: float, optional (default: None)
         Magnitude of the Newtonian orbital angular momentum.
-    q: float, optional (default: q)
+    u: float, optional (default: None)
+        Compactified separation 1/(2L).
+    q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
     
     Returns
@@ -783,7 +785,7 @@ def eval_deltachiinf(kappa, chieff, q, chi1, chi2):
     Parameters
     ----------
     kappa: float
-        Regularized angular momentum (J^2-L^2)/(2L).
+        Asymptotic angular momentum.
     chieff: float
         Effective spin.
     q: float
@@ -948,13 +950,8 @@ def eval_theta2(deltachi, chieff, q, chi2):
 
 def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
     """
-    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).
-
-    Examples
-    --------
-    costheta12 = eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)
-    costheta12 = eval_costheta12(deltachi=None,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
-
+    Cosine of the angle between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).
+    
     Parameters
     ----------
     theta1: float, optional (default: None)
@@ -963,19 +960,28 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         Angle between orbital angular momentum and secondary spin.
     deltaphi: float, optional (default: None)
         Angle between the projections of the two spins onto the orbital plane.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
+    deltachi: float, optional (default: None)
+        Weighted spin difference.
+    kappa: float, optional (default: None)
+        Asymptotic angular momentum.
+    chieff: float, optional (default: None)
+        Effective spin.
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
     chi1: float, optional (default: None)
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     costheta12: float
         Cosine of the angle between the two spins.
+    
+    Examples
+    --------
+    ``costheta12 = precession.eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)``
+    ``costheta12 = precession.eval_costheta12(deltachi=deltachi,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
     """
 
     if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and chieff is None and q is None and chi1 is None and chi2 is None:
@@ -1007,6 +1013,40 @@ def eval_costheta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
 
 
 def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, chieff=None, q=None, chi1=None, chi2=None):
+    """
+    Angle between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).
+    
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+        Angle between the projections of the two spins onto the orbital plane.
+    deltachi: float, optional (default: None)
+        Weighted spin difference.
+    kappa: float, optional (default: None)
+        Asymptotic angular momentum.
+    chieff: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Returns
+    -------
+    theta12: float
+        Angle between the two spins.
+    
+    Examples
+    --------
+    ``theta12 = precession.eval_theta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)``
+    ``theta12 = precession.eval_theta12(deltachi=deltachi,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
+    """
 
     costheta12 = eval_costheta1(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
     theta12 = np.arccos(costheta12)
@@ -1016,18 +1056,14 @@ def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=N
 
 def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
     """
-    Cosine of the angle deltaphi between the projections of the two spins onto the orbital plane.
-
-    Examples
-    --------
-    cosdeltaphi = eval_cosdeltaphi(S,J,r,chieff,q,chi1,chi2)
-
+    Cosine of the angle between the projections of the two spins onto the orbital plane.
+    
     Parameters
     ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
+    deltachi: float
+        Weighted spin difference.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
     chieff: float
@@ -1038,11 +1074,15 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     cosdeltaphi: float
         Cosine of the angle between the projections of the two spins onto the orbital plane.
+    
+    Examples
+    --------
+    ``cosdeltaphi = precession.eval_cosdeltaphi(deltachi,kappa,r,chieff,q,chi1,chi2)``
     """
 
     deltachi = np.atleast_1d(deltachi).astype(float)
@@ -1076,18 +1116,14 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
 
 def eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1):
     """
-    Angle deltaphi between the projections of the two spins onto the orbital plane. By default this is returned in [0,pi]. Setting cyclesign=-1 returns the other half of the  precession cycle [-pi,0].
-
-    Examples
-    --------
-    deltaphi = eval_deltaphi(S,J,r,chieff,q,chi1,chi2,cyclesign=-1)
-
+    Angle between the projections of the two spins onto the orbital plane.
+    
     Parameters
     ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
+    deltachi: float
+        Weighted spin difference.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
     chieff: float
@@ -1098,13 +1134,17 @@ def eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    cyclesign: integer, optional (default: -1)
+    cyclesign: integer, optional (default: 1)
         Sign (either +1 or -1) to cover the two halves of a precesion cycle.
-
+    
     Returns
     -------
     deltaphi: float
         Angle between the projections of the two spins onto the orbital plane.
+    
+    Examples
+    --------
+    ``deltaphi = precession.eval_deltaphi(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=1)``
     """
 
     cyclesign = np.atleast_1d(cyclesign)
@@ -1116,31 +1156,29 @@ def eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1):
 
 def eval_costhetaL(deltachi, kappa, r, chieff, q):
     """
-    Cosine of the angle thetaL betwen orbital angular momentum and total angular momentum.
-
-    Examples
-    --------
-    costhetaL = eval_costhetaL(S,J,r,q,chi1,chi2)
-
+    Cosine of the angle betwen the orbital angular momentum and the total angular momentum.
+    
     Parameters
     ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
+    deltachi: float
+        Weighted spin difference.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
+    chieff: float
+        Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     costhetaL: float
         Cosine of the angle betwen orbital angular momentum and total angular momentum.
+    
+    Examples
+    --------
+    ``costhetaL = precession.eval_costhetaL(deltachi,kappa,r,chieff,q)``
     """
 
     deltachi = np.atleast_1d(deltachi).astype(float)
@@ -1158,31 +1196,29 @@ def eval_costhetaL(deltachi, kappa, r, chieff, q):
 
 def eval_thetaL(deltachi, kappa, r, chieff, q):
     """
-    Angle thetaL betwen orbital angular momentum and total angular momentum.
-
-    Examples
-    --------
-    thetaL = eval_thetaL(S,J,r,q,chi1,chi2)
-
+    Angle betwen the orbital angular momentum and the total angular momentum.
+    
     Parameters
     ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
+    deltachi: float
+        Weighted spin difference.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
+    chieff: float
+        Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
-    chi1: float
-        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float
-        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     thetaL: float
         Angle betwen orbital angular momentum and total angular momentum.
+    
+    Examples
+    --------
+    ``thetaL = precession.eval_thetaL(deltachi,kappa,r,chieff,q)``
     """
 
     costhetaL = eval_costhetaL(deltachi, kappa, r,chieff, q)
@@ -1193,12 +1229,8 @@ def eval_thetaL(deltachi, kappa, r, chieff, q):
 
 def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, chi1=None, chi2=None):
     """
-    Magnitude of the total angular momentum. Provide either (theta1,theta,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).
-
-    Examples
-    --------
-    J = eval_J(theta1=None,theta2=None,deltaphi=None,kappa=None,r=None,q=None,chi1=None,chi2=None)
-
+    Magnitude of the total angular momentum. Provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).
+    
     Parameters
     ----------
     theta1: float, optional (default: None)
@@ -1208,7 +1240,7 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
     deltaphi: float, optional (default: None)
         Angle between the projections of the two spins onto the orbital plane.
     kappa: float, optional (default: None)
-        Regularized angular momentum (J^2-L^2)/(2L).
+        Asymptotic angular momentum.
     r: float, optional (default: None)
         Binary separation.
     q: float, optional (default: None)
@@ -1217,11 +1249,16 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     J: float
         Magnitude of the total angular momentum.
+    
+    Examples
+    --------
+    ``J = precession.eval_J(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)``
+    ``J = precession.eval_J(kappa=kappa,r=r,q=q,chi1=chi1,chi2=chi2)``
     """
 
     if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and r is not None and q is not None and chi1 is not None and chi2 is not None:
@@ -1252,26 +1289,36 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
 
 def eval_kappa(theta1=None, theta2=None, deltaphi=None, J=None, r=None, q=None, chi1=None, chi2=None):
     """
-    Change of dependent variable to regularize the infinite orbital separation
-    limit of the precession-averaged evolution equation.
-
-    Examples
-    --------
-    kappa = eval_kappa(J,r,q)
-
+    Asymptotic angular momentum. Provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (J,r,q).
+    
     Parameters
     ----------
-    J: float
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+        Angle between the projections of the two spins onto the orbital plane.
+    J: float, optional (default: None)
         Magnitude of the total angular momentum.
-    r: float
+    r: float, optional (default: None)
         Binary separation.
-    q: float
+    q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
-
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
     Returns
     -------
     kappa: float
-        Regularized angular momentum (J^2-L^2)/(2L).
+        Asymptotic angular momentum.
+    
+    Examples
+    --------
+    ``kappa = precession.eval_kappa(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)``
+    ``kappa = precession.eval_kappa(J=J,r=r,q=q)``
     """
 
     if theta1 is None and theta2 is None and deltaphi is None and J is not None and r is not None and q is not None and chi1 is None and chi2 is None:
@@ -1298,7 +1345,7 @@ def eval_kappa(theta1=None, theta2=None, deltaphi=None, J=None, r=None, q=None, 
 
     return kappa
 
-
+#TODO: I got to here
 # TODO: This function and the next one needs to be merged together
 def eval_S_from_deltachi(deltachi, kappa, r, chieff, q):
 
@@ -2675,7 +2722,7 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
     J: float, optional (default: None)
         Magnitude of the total angular momentum.
     kappa: float, optional (default: None)
-        Regularized angular momentum (J^2-L^2)/(2L).
+        Asymptotic angular momentum.
     r: float, optional (default: None)
         Binary separation.
     u: float, optional (default: None)
@@ -3934,7 +3981,7 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     Parameters
     ----------
     kappa: float
-        Regularized angular momentum (J^2-L^2)/(2L).
+        Asymptotic angular momentum.
     u: float
         Compactified separation 1/(2L).
     chieff: float
@@ -4011,7 +4058,7 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     Returns
     -------
     kappa: float
-        Regularized angular momentum (J^2-L^2)/(2L).
+        Asymptotic angular momentum.
     """
 
     kappainitial = np.atleast_1d(kappainitial).astype(float)
@@ -4077,7 +4124,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
     J: float, optional (default: None)
         Magnitude of the total angular momentum.
     kappa: float, optional (default: None)
-        Regularized angular momentum (J^2-L^2)/(2L).
+        Asymptotic angular momentum.
     r: float, optional (default: None)
         Binary separation.
     u: float, optional (default: None)
@@ -4495,7 +4542,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
     J: float, optional (default: None)
         Magnitude of the total angular momentum.
     kappa: float, optional (default: None)
-        Regularized angular momentum (J^2-L^2)/(2L).
+        Asymptotic angular momentum.
     r: float, optional (default: None)
         Binary separation.
     u: float, optional (default: None)
@@ -4652,7 +4699,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     J: float, optional (default: None)
         Magnitude of the total angular momentum.
     kappa: float, optional (default: None)
-        Regularized angular momentum (J^2-L^2)/(2L).
+        Asymptotic angular momentum.
     r: float, optional (default: None)
         Binary separation.
     rswitch: float, optional (default: None)
