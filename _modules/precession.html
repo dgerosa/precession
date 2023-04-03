@@ -812,42 +812,32 @@
     <span class="k">return</span> <span class="n">chieff</span></div>
 
 
-<span class="c1"># TODO: update this function to evaluate from S</span>
 <div class="viewcode-block" id="eval_deltachi"><a class="viewcode-back" href="../auto.html#precession.eval_deltachi">[docs]</a><span class="k">def</span> <span class="nf">eval_deltachi</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)</span>
-
+<span class="sd">    Weighted spin difference.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    theta1: float, optional (default: None)</span>
+<span class="sd">    theta1: float</span>
 <span class="sd">        Angle between orbital angular momentum and primary spin.</span>
-<span class="sd">    theta2: float, optional (default: None)</span>
+<span class="sd">    theta2: float</span>
 <span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
-<span class="sd">    S: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    varphi: float, optional (default: None)</span>
-<span class="sd">        Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).</span>
-<span class="sd">    J: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
-<span class="sd">    r: float, optional (default: None)</span>
-<span class="sd">        Binary separation.</span>
-<span class="sd">    q: float, optional (default: None)</span>
+<span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-<span class="sd">    chi1: float, optional (default: None)</span>
+<span class="sd">    chi1: float</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-<span class="sd">    chi2: float, optional (default: None)</span>
+<span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    chieff: float</span>
-<span class="sd">        Effective spin.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``deltachi = precession.eval_deltachi(theta1,theta2,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
 
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -861,6 +851,31 @@
 
 
 <div class="viewcode-block" id="eval_deltachiinf"><a class="viewcode-back" href="../auto.html#precession.eval_deltachiinf">[docs]</a><span class="k">def</span> <span class="nf">eval_deltachiinf</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Large-separation limit of the weighted spin difference.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Regularized angular momentum (J^2-L^2)/(2L).</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``deltachi = precession.eval_deltachiinf(kappa,chieff,q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">chieff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -875,33 +890,27 @@
 
 <div class="viewcode-block" id="eval_costheta1"><a class="viewcode-back" href="../auto.html#precession.eval_costheta1">[docs]</a><span class="k">def</span> <span class="nf">eval_costheta1</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)</span>
-
+<span class="sd">    Cosine of the angle between the orbital angular momentum and the spin of the primary black hole.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
-<span class="sd">    r: float</span>
-<span class="sd">        Binary separation.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
 <span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
 <span class="sd">    chi1: float</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-<span class="sd">    chi2: float</span>
-<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    costheta1: float</span>
 <span class="sd">        Cosine of the angle between orbital angular momentum and primary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``costheta1 = precession.eval_costheta1(deltachi,chieff,q,chi1)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">deltachi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">deltachi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -915,6 +924,29 @@
 
 
 <div class="viewcode-block" id="eval_theta1"><a class="viewcode-back" href="../auto.html#precession.eval_theta1">[docs]</a><span class="k">def</span> <span class="nf">eval_theta1</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Angle between the orbital angular momentum and the spin of the primary black hole.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    theta1: float</span>
+<span class="sd">        Angle between orbital angular momentum and primary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``theta1 = precession.eval_theta1(deltachi,chieff,q,chi1)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">costheta1</span> <span class="o">=</span> <span class="n">eval_costheta1</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">)</span>
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">costheta1</span><span class="p">)</span>
@@ -924,33 +956,27 @@
 
 <div class="viewcode-block" id="eval_costheta2"><a class="viewcode-back" href="../auto.html#precession.eval_costheta2">[docs]</a><span class="k">def</span> <span class="nf">eval_costheta2</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)</span>
-
+<span class="sd">    Cosine of the angle between the orbital angular momentum and the spin of the secondary black hole.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
-<span class="sd">    r: float</span>
-<span class="sd">        Binary separation.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
 <span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-<span class="sd">    chi1: float</span>
-<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    costheta1: float</span>
-<span class="sd">        Cosine of the angle between orbital angular momentum and primary spin.</span>
+<span class="sd">    costheta2: float</span>
+<span class="sd">        Cosine of the angle between orbital angular momentum and secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``costheta2 = precession.eval_costheta2(deltachi,chieff,q,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">deltachi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">deltachi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -964,6 +990,29 @@
 
 
 <div class="viewcode-block" id="eval_theta2"><a class="viewcode-back" href="../auto.html#precession.eval_theta2">[docs]</a><span class="k">def</span> <span class="nf">eval_theta2</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Angle between the orbital angular momentum and the spin of the secondary black hole.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    theta2: float</span>
+<span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``theta2 = precession.eval_theta2(deltachi,chieff,q,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">costheta2</span> <span class="o">=</span> <span class="n">eval_costheta2</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
     <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">costheta2</span><span class="p">)</span>

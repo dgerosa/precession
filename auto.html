@@ -1382,23 +1382,17 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_costheta1">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_costheta1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_costheta1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_costheta1" title="Permalink to this definition"></a></dt>
-<dd><p>Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.</p>
+<dd><p>Cosine of the angle between the orbital angular momentum and the spin of the primary black hole.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
-</dd>
-<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
-</dd>
-<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+<dt><strong>deltachi: float</strong></dt><dd><p>Weighted spin difference.</p>
 </dd>
 <dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
 </dd>
 <dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
 <dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
-</dd>
-<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
 </dl>
 </dd>
@@ -1410,7 +1404,7 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">costheta1</span> <span class="pre">=</span> <span class="pre">precession.eval_costheta1(deltachi,chieff,q,chi1)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1450,21 +1444,15 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_costheta2">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_costheta2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_costheta2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_costheta2" title="Permalink to this definition"></a></dt>
-<dd><p>Cosine of the angle theta1 between the orbital angular momentum and the spin of the primary black hole.</p>
+<dd><p>Cosine of the angle between the orbital angular momentum and the spin of the secondary black hole.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
-</dd>
-<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
-</dd>
-<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+<dt><strong>deltachi: float</strong></dt><dd><p>Weighted spin difference.</p>
 </dd>
 <dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
 </dd>
 <dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
-</dd>
-<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
 </dd>
 <dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
@@ -1472,13 +1460,13 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>costheta1: float</dt><dd><p>Cosine of the angle between orbital angular momentum and primary spin.</p>
+<dt>costheta2: float</dt><dd><p>Cosine of the angle between orbital angular momentum and secondary spin.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>costheta1 = eval_costheta1(S,J,r,chieff,q,chi1,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">costheta2</span> <span class="pre">=</span> <span class="pre">precession.eval_costheta2(deltachi,chieff,q,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1620,45 +1608,62 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_deltachi">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_deltachi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_deltachi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_deltachi" title="Permalink to this definition"></a></dt>
-<dd><p>Eftective spin. Provide either (theta1,theta2,q,chi1,chi2) or (S,varphi,J,r,q,chi1,chi2).</p>
+<dd><p>Weighted spin difference.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>theta1: float, optional (default: None)</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
 </dd>
-<dt><strong>theta2: float, optional (default: None)</strong></dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+<dt><strong>theta2: float</strong></dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
 </dd>
-<dt><strong>S: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total spin.</p>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
-<dt><strong>varphi: float, optional (default: None)</strong></dt><dd><p>Generalized nutation coordinate (Eq 9 in arxiv:1506.03492).</p>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
 </dd>
-<dt><strong>J: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
-</dd>
-<dt><strong>r: float, optional (default: None)</strong></dt><dd><p>Binary separation.</p>
-</dd>
-<dt><strong>q: float, optional (default: None)</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
-</dd>
-<dt><strong>chi1: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
-</dd>
-<dt><strong>chi2: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>chieff: float</dt><dd><p>Effective spin.</p>
+<dt>deltachi: float</dt><dd><p>Weighted spin difference.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>chieff = eval_chieff(theta1=None,theta2=None,S=None,varphi=None,J=None,r=None,q=None,chi1=None,chi2=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachi</span> <span class="pre">=</span> <span class="pre">precession.eval_deltachi(theta1,theta2,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_deltachiinf">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_deltachiinf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_deltachiinf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_deltachiinf" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Large-separation limit of the weighted spin difference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappa: float</strong></dt><dd><p>Regularized angular momentum (J^2-L^2)/(2L).</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>deltachi: float</dt><dd><p>Weighted spin difference.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachi</span> <span class="pre">=</span> <span class="pre">precession.eval_deltachiinf(kappa,chieff,q,chi1,chi2)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_deltaphi">
@@ -1885,7 +1890,30 @@ limit of the precession-averaged evolution equation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_theta1">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_theta1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_theta1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_theta1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Angle between the orbital angular momentum and the spin of the primary black hole.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deltachi: float</strong></dt><dd><p>Weighted spin difference.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>theta1: float</dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">theta1</span> <span class="pre">=</span> <span class="pre">precession.eval_theta1(deltachi,chieff,q,chi1)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_theta12">
@@ -1895,7 +1923,30 @@ limit of the precession-averaged evolution equation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_theta2">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_theta2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_theta2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_theta2" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Angle between the orbital angular momentum and the spin of the secondary black hole.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deltachi: float</strong></dt><dd><p>Weighted spin difference.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>theta2: float</dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">theta2</span> <span class="pre">=</span> <span class="pre">precession.eval_theta2(deltachi,chieff,q,chi2)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_thetaL">
