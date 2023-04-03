@@ -98,7 +98,8 @@ def descr(varname,vardef=None,optional=False):
     lookup['vec']=["array","Vector in Cartesian coomponents"]
     lookup['dSsdts']=["float","Squared time derivative of the squared total spin."]
     lookup['dSsdt']=["float","Time derivative of the squared total spin"]
-    lookup['dSdt']=["float","Time derivative of the total spin"]
+    lookup['dSdt']=["float","Time derivative of the weighted spin difference"]
+    lookup['ddeltachidt']=["float","Time derivative of the total spin"]
     lookup['Sminuss']=["float","Lowest physical root, if present, of the effective potential equation"]
     lookup['Spluss']=["float","Largest physical root, if present, of the effective potential equation"]
     lookup['S3s']=["float","Spurious root of the effective potential equation"]
@@ -162,6 +163,7 @@ def descr(varname,vardef=None,optional=False):
     lookup['crosskick']=['boolean', "Switch kick terms on and off"]
     lookup['kms']=['boolean', "Return velocities in km/s"]
     lookup['maxphase']=['boolean', "Maximize over orbital phase at merger"]
+    lookup['tol']=['float', "Numerical tolerance, see source code for details"]
 
     if varname in lookup:
         pass
