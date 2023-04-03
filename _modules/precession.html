@@ -709,7 +709,7 @@
 
 <div class="viewcode-block" id="eval_r"><a class="viewcode-back" href="../auto.html#precession.eval_r">[docs]</a><span class="k">def</span> <span class="nf">eval_r</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Orbital separation of the binary. Provide either (L,q) or (u,q).</span>
+<span class="sd">    Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1022,11 +1022,12 @@
 
 <div class="viewcode-block" id="eval_costheta12"><a class="viewcode-back" href="../auto.html#precession.eval_costheta12">[docs]</a><span class="k">def</span> <span class="nf">eval_costheta12</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).</span>
+<span class="sd">    Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)</span>
+<span class="sd">    costheta12 = eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)</span>
+<span class="sd">    costheta12 = eval_costheta12(deltachi=None,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

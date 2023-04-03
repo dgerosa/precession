@@ -1410,7 +1410,7 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_costheta12">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_costheta12</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltachi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_costheta12"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_costheta12" title="Permalink to this definition"></a></dt>
-<dd><p>Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (S,q,chi1,chi2).</p>
+<dd><p>Cosine of the angle theta12 between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -1438,7 +1438,8 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>costheta12 = eval_costheta12(theta1=None,theta2=None,deltaphi=None,S=None,q=None,chi1=None,chi2=None)</p>
+<p>costheta12 = eval_costheta12(theta1=theta1,theta2=theta2,deltaphi=deltaphi)
+costheta12 = eval_costheta12(deltachi=None,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1860,7 +1861,7 @@ limit of the precession-averaged evolution equation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_r">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_r" title="Permalink to this definition"></a></dt>
-<dd><p>Orbital separation of the binary. Provide either (L,q) or (u,q).</p>
+<dd><p>Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
