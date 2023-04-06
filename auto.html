@@ -2461,7 +2461,7 @@ Setting donotnormalize=True is equivalent to mathcalA=1.</p>
 </dd>
 <dt><strong>deltaphi: float</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
 </dd>
-<dt><strong>f: float</strong></dt><dd><p>Gravitational-wave frequency in Hz.</p>
+<dt><strong>fGW: float</strong></dt><dd><p>Gravitational-wave frequency.</p>
 </dd>
 <dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
@@ -2470,6 +2470,8 @@ Setting donotnormalize=True is equivalent to mathcalA=1.</p>
 <dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
 <dt><strong>M_msun: float</strong></dt><dd><p>Total mass of the binary in solar masses.</p>
+</dd>
+<dt><strong>PNorder: array (default: [0,1,1.5,2])</strong></dt><dd><p>PN orders considered.</p>
 </dd>
 </dl>
 </dd>
@@ -2481,7 +2483,7 @@ Setting donotnormalize=True is equivalent to mathcalA=1.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>r = gwfrequency_to_pnseparation(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)</p>
+<p><code class="docutils literal notranslate"><span class="pre">r</span> <span class="pre">=</span> <span class="pre">precession.gwfrequency_to_pnseparation(theta1,theta2,deltaphi,fGW,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -2548,13 +2550,20 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.inspiral_orbav">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">inspiral_orbav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltachi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclesign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PNorderpre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PNorderrad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">1.5,</span> <span class="pre">2,</span> <span class="pre">2.5,</span> <span class="pre">3,</span> <span class="pre">3.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requested_outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">odeint_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#inspiral_orbav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.inspiral_orbav" title="Permalink to this definition"></a></dt>
-<dd><p>Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. Orbit-averaged integration can only be done between finite separations.
-The initial conditions must be specified in terms of one an only one of the following:
-- Lh, S1h, and S2h
-- theta1,theta2, and deltaphi.
-- J, chieff, and S.
-- kappa, chieff, and S.
-The desired outputs can be specified with a list e.g. requested_outputs=[‘theta1’,’theta2’,’deltaphi’]. All the available variables are returned by default. These are: [‘t’, ‘theta1’, ‘theta2’, ‘deltaphi’, ‘S’, ‘Lh’, ‘S1h’, ‘S2h’, ‘J’, ‘kappa’, ‘r’, ‘u’, ‘chieff’, ‘q’, ‘chi1’, ‘chi2’]</p>
+<dd><p>Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
+The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned.
+The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
+The initial conditions must be specified in terms of one an only one of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Lh, S1h, and S2h</p></li>
+<li><p>theta1,theta2, and deltaphi.</p></li>
+<li><p>deltachi, kappa, chieff, cyclesign.</p></li>
+</ul>
+</div></blockquote>
+<p>The desired outputs can be specified with a list e.g. requested_outputs=[‘theta1’,’theta2’,’deltaphi’]. All the available variables are returned by default. These are: [‘theta1’, ‘theta2’, ‘deltaphi’, ‘deltachi’, ‘kappa’, ‘r’, ‘u’, ‘deltachiminus’, ‘deltachiplus’, ‘deltachi3’, ‘chieff’, ‘q’, ‘chi1’, ‘chi2’].
+The flag enforce allows checking the consistency of the input variables.
+Additional keywords arguments are passed to <cite>scipy.integrate.odeint</cite> after some custom-made default settings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -2564,15 +2573,13 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 </dd>
 <dt><strong>deltaphi: float, optional (default: None)</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
 </dd>
-<dt><strong>S: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total spin.</p>
-</dd>
 <dt><strong>Lh: array, optional (default: None)</strong></dt><dd><p>Direction of the orbital angular momentum, unit vector.</p>
 </dd>
 <dt><strong>S1h: array, optional (default: None)</strong></dt><dd><p>Direction of the primary spin, unit vector.</p>
 </dd>
 <dt><strong>S2h: array, optional (default: None)</strong></dt><dd><p>Direction of the secondary spin, unit vector.</p>
 </dd>
-<dt><strong>J: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+<dt><strong>deltachi: float, optional (default: None)</strong></dt><dd><p>Weighted spin difference.</p>
 </dd>
 <dt><strong>kappa: float, optional (default: None)</strong></dt><dd><p>Asymptotic angular momentum.</p>
 </dd>
@@ -2588,9 +2595,15 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 </dd>
 <dt><strong>chi2: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
-<dt><strong>MISSING: COULD NOT BUILD, optional (default: False)</strong></dt><dd><p>FILL MANUALLY.</p>
+<dt><strong>cyclesign: integer, optional (default: +1)</strong></dt><dd><p>Sign (either +1 or -1) to cover the two halves of a precesion cycle.</p>
+</dd>
+<dt><strong>PNorderpre: array (default: [0,0.5])</strong></dt><dd><p>PN orders considered in the spin-precession equations.</p>
+</dd>
+<dt><strong>PNorderrad: array (default: [0,0.5])</strong></dt><dd><p>PN orders considered in the radiation-reaction equation.</p>
 </dd>
 <dt><strong>requested_outputs: list, optional (default: None)</strong></dt><dd><p>Set of outputs.</p>
+</dd>
+<dt><strong>**odeint_kwargs: unpacked dictionary, optional</strong></dt><dd><p>Additional keyword arguments.</p>
 </dd>
 </dl>
 </dd>
@@ -2602,7 +2615,11 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>outputs = inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,u=u,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,u=u,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral_orbav(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3139,7 +3156,7 @@ The flag which needs to be set to <cite>uu</cite> for up-up, <cite>ud</cite> for
 </dd>
 <dt><strong>deltaphi: float</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
 </dd>
-<dt><strong>f: float</strong></dt><dd><p>Gravitational-wave frequency in Hz.</p>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
 </dd>
 <dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
 </dd>
@@ -3149,17 +3166,19 @@ The flag which needs to be set to <cite>uu</cite> for up-up, <cite>ud</cite> for
 </dd>
 <dt><strong>M_msun: float</strong></dt><dd><p>Total mass of the binary in solar masses.</p>
 </dd>
+<dt><strong>PNorder: array (default: [0,1,1.5,2])</strong></dt><dd><p>PN orders considered.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>r: float</dt><dd><p>Binary separation.</p>
+<dt>fGW: float</dt><dd><p>Gravitational-wave frequency.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>r = pnseparation_to_gwfrequency(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)</p>
+<p><code class="docutils literal notranslate"><span class="pre">fGW</span> <span class="pre">=</span> <span class="pre">precession.pnseparation_to_gwfrequency(theta1,theta2,deltaphi,r,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])</span></code></p>
 </dd></dl>
 
 <dl class="py function">
