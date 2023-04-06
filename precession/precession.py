@@ -2554,7 +2554,7 @@ def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False
     chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     enforce: boolean, optional (default: False)
-        If True raise errors, if False raise warnings.
+        Perform additional checks.
     **kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -4568,12 +4568,9 @@ def widenutation_condition(r, q, chi1, chi2):
 
 def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     """
-    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.
-
-    Examples
-    --------
-    RHS = rhs_precav(kappa,u,chieff,q,chi1,chi2)
-
+    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral.
+    This is an internal function used by the ODE integrator and is not array-compatible.
+    
     Parameters
     ----------
     kappa: float
@@ -4588,13 +4585,17 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     RHS: float
         Right-hand side.
-    """
     
+    Examples
+    --------
+    ``RHS = precession.rhs_precav(kappa,u,chieff,q,chi1,chi2)``
+    """
+
     if u <= 0:
        # In this case use analytic result
         if q==1: # TODO: think about this again
@@ -4625,23 +4626,18 @@ def rhs_precav(kappa, u, chieff, q, chi1, chi2):
     return float(Ssav)
 
 
-# TODO: docstings Careful that here u needs to be an array
 def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     """
-    Integration of ODE dkappa/du describing precession-averaged inspirals.
-
-    Examples
-    --------
-    kappa = integrator_precav(kappainitial,uinitial,ufinal,chieff,q,chi1,chi2)
-
+    Integration of ODE dkappa/du describing precession-averaged inspirals. Here u needs to be an array with lenght >=1, where u[0] corresponds to the initial condition and u[1:] corresponds to the location where outputs are returned. For past time infinity use u=0.
+    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
+    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.
+    
     Parameters
     ----------
     kappainitial: float
         Initial value of the regularized momentum kappa.
-    uinitial: float
-        Initial value of the compactified separation 1/(2L).
-    ufinal: float
-        Final value of the compactified separation 1/(2L).
+    u: float
+        Compactified separation 1/(2L).
     chieff: float
         Effective spin.
     q: float
@@ -4650,11 +4646,17 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    **odeint_kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
     Returns
     -------
     kappa: float
         Asymptotic angular momentum.
+    
+    Examples
+    --------
+    ``kappa = precession.integrator_precav(kappainitial,u,chieff,q,chi1,chi2)``
     """
 
     kappainitial = np.atleast_1d(kappainitial).astype(float)
@@ -4696,17 +4698,16 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
 
 def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, enforce=False, **odeint_kwargs):
     """
-    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. In addition, integration can be done between finite separations, forward from infinite to finite separation, or backward from finite to infinite separation. For infinity, use r=np.inf or u=0.
+    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
+    The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.
+    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
     The initial conditions must be specified in terms of one an only one of the following:
-    - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
-    - J, chieff (only if integrating from finite separations because J otherwise diverges).
-    - kappa, chieff.
-    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'].
-
-    Examples
-    --------
-    outputs = inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)
-
+        - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
+        - kappa, chieff.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].
+    The flag enforce allows checking the consistency of the input variables.
+    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.
+    
     Parameters
     ----------
     theta1: float, optional (default: None)
@@ -4715,10 +4716,6 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
         Angle between orbital angular momentum and secondary spin.
     deltaphi: float, optional (default: None)
         Angle between the projections of the two spins onto the orbital plane.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
     kappa: float, optional (default: None)
         Asymptotic angular momentum.
     r: float, optional (default: None)
@@ -4735,11 +4732,22 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     requested_outputs: list, optional (default: None)
         Set of outputs.
-
+    enforce: boolean, optional (default: False)
+        If True raise errors, if False raise warnings.
+    **odeint_kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
     Returns
     -------
     outputs: dictionary
         Set of outputs.
+    
+    Examples
+    --------
+    ``outputs = precession.inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,u=u,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_precav(kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_precav(kappa,u=u,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
     """
 
     # Substitute None inputs with arrays of Nones
@@ -4782,7 +4790,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
         if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and chieff is None:
             deltachi, kappa, chieff = angles_to_conserved(theta1, theta2, deltaphi, r[0], q, chi1, chi2)
 
-        # User provides kappa, chieff, and maybe deltachi.
+        # User provides kappa, chieff
         elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and chieff is not None:
             pass
 
@@ -4845,20 +4853,16 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
 
 def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4):
     """
-    Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported.
-
+    Average a generic function over a precession cycle. The function needs to have call: func(deltachi, *args). Keywords arguments are not supported.
     There are integration methods implemented:
-    - method='quadrature' uses scipy.integrate.quad. This is set by default and should be preferred.
-    - method='montecarlo' samples t(S) and approximate the integral with a Monte Carlo sum. The number of samples can be specifed by Nsamples.
-
-    Examples
-    --------
-    func_av = precession_average(J,r,chieff,q,chi1,chi2,func,*args,method='quadrature',Nsamples=1e4)
-
+        - method='quadrature' uses scipy.integrate.quad. This is set by default and should be preferred.
+        - method='montecarlo' samples t(deltachi) and approximate the integral with a Monte Carlo sum. The number of samples can be specifed by Nsamples.
+    Additional keyword arguments are passed to scipy.integrate.quad.
+    
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
     chieff: float
@@ -4875,13 +4879,17 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
         Extra arguments to pass to func.
     method: string (default: 'quadrature')
         Either 'quadrature' or 'montecarlo'
-    Nsamples: integer (default: 1e4)
+    Nsamples: integer, optional (default: 1e4)
         Number of Monte Carlo samples.
-
+    
     Returns
     -------
     func_av: float
-        Precession averaged value of func.
+        Precession average of func.
+    
+    Examples
+    --------
+    ``func_av = precession.precession_average(kappa,r,chieff,q,chi1,chi2,func,*args,method='quadrature',Nsamples=1e4)``
     """
 
     kappa=np.atleast_1d(kappa).astype(float)
@@ -4895,7 +4903,6 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2)
 
     if method == 'quadrature':
-
 
         tau = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), donotnormalize=True)
 
@@ -4930,18 +4937,15 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
 
 def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5]):
     """
-    Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unite vectors, v is the orbital velocity, and t is time. This is an internal function used by the ODE integrator and is not array-compatible.
-
-    Examples
-    --------
-    RHS = rhs_orbav(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula=False)
-
+    Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unit vectors, v is the orbital velocity, and t is time.
+    This is an internal function used by the ODE integrator and is not array-compatible.
+    
     Parameters
     ----------
-    v: float
-        Newtonian orbital velocity.
     allvars: array
         Packed ODE input variables.
+    v: float
+        Newtonian orbital velocity.
     q: float
         Mass ratio: 0<=q<=1.
     m1: float
@@ -4958,13 +4962,19 @@ def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, PNorderpre=[0,0.5]
         Magnitude of the primary spin.
     S2: float
         Magnitude of the secondary spin.
-    MISSING: COULD NOT BUILD, optional (default: False)
-        FILL MANUALLY.
-
+    PNorderpre: array (default: [0,0.5])
+        PN orders considered in the spin-precession equations.
+    PNorderrad: array (default: [0,0.5])
+        PN orders considered in the radiation-reaction equation.
+    
     Returns
     -------
     RHS: float
         Right-hand side.
+    
+    Examples
+    --------
+    ``RHS = precession.rhs_orbav(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,PNorderpre=[0,0.5],PNorderrad=[0,1,1.5,2,2.5,3,3.5])``
     """
 
     # Unpack inputs
@@ -5025,13 +5035,9 @@ def rhs_orbav(allvars, v, q, m1, m2, eta, chi1, chi2, S1, S2, PNorderpre=[0,0.5]
 
 def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], **odeint_kwargs):
     """
-    Integration of the systems of ODEs describing orbit-averaged inspirals. Integration is performed in a reference frame
-    where the z axis is along J and L lies in the x-z plane at the initial separation.
-
-    Examples
-    --------
-    ODEsolution = integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2,quadrupole_formula=False)
-
+    Integration of the systems of ODEs describing orbit-averaged inspirals.
+    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.
+    
     Parameters
     ----------
     Lhinitial: array
@@ -5040,23 +5046,29 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorde
         Initial direction of the primary spin, unit vector.
     S2hinitial: array
         Initial direction of the secondary spin, unit vector.
-    vinitial: float
-        Initial value of the newtonian orbital velocity.
-    vfinal: float
-        Final value of the newtonian orbital velocity.
+    v: float
+        Newtonian orbital velocity.
     q: float
         Mass ratio: 0<=q<=1.
     chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    MISSING: COULD NOT BUILD, optional (default: False)
-        FILL MANUALLY.
-
+    PNorderpre: array (default: [0,0.5])
+        PN orders considered in the spin-precession equations.
+    PNorderrad: array (default: [0,0.5])
+        PN orders considered in the radiation-reaction equation.
+    **odeint_kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
     Returns
     -------
-    ODEsolution: array of scipy OdeSolution objects
-        Solution of the ODE. Key method is .sol(t).
+    ODEsolution: array
+        Solution of the ODE.
+    
+    Examples
+    --------
+    ``ODEsolution = precession.integrator_orbavintegrator_orbav(Lhinitial,S1hinitial,S2hinitial,v,q,chi1,chi2)``
     """
 
     Lhinitial = np.atleast_2d(Lhinitial).astype(float)

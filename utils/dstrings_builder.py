@@ -94,7 +94,7 @@ def descr(varname,vardef=None,optional=False):
     lookup['costhetaL']=["float","Cosine of the angle betwen orbital angular momentum and total angular momentum"]
     lookup['morph']=["string","Spin morphology"]
     lookup['simpler']=["boolean","If True simplifies output"]
-    lookup['enforce']=["boolean","If True raise errors, if False raise warnings"]
+    lookup['enforce']=["boolean","Perform additional checks."]
     lookup['N']=["integer","Number of samples"]
     lookup['vec']=["array","Vector in Cartesian coomponents"]
     lookup['dSsdts']=["float","Squared time derivative of the squared total spin."]
@@ -121,7 +121,7 @@ def descr(varname,vardef=None,optional=False):
     lookup['omegasq']=["float","Squared frequency."]
     lookup['which']=["string","Select function behavior."]
     lookup['allvars']=["array","Packed ODE input variables."]
-    lookup['ODEsolution']=["array of scipy OdeSolution objects", "Solution of the ODE. Key method is .sol(t)"]
+    lookup['ODEsolution']=["array", "Solution of the ODE."]
     lookup['kappainitial']=["float","Initial value of the regularized momentum kappa"]
     lookup['uinitial']=["float","Initial value of the compactified separation 1/(2L)"]
     lookup['ufinal']=["float","Final value of the compactified separation 1/(2L)"]
@@ -181,8 +181,10 @@ def descr(varname,vardef=None,optional=False):
     lookup['rudp']=['float', "Outer orbital separation in the up-down instability"]
     lookup['rudm']=['float', "Inner orbital separation in the up-down instability."]
     lookup['omegasq']=['float', "Squared frequency."]
+    lookup['func_av']=['float', "Precession average of func."]
 
     lookup['**kwargs']=['unpacked dictionary, optional', "Additional keyword arguments"]
+    lookup['**odeint_kwargs']=['unpacked dictionary, optional', "Additional keyword arguments"]
 
     if varname in lookup:
         pass
