@@ -193,7 +193,28 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.affine">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">affine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">up</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#affine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.affine" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Perform an affine trasformation to scale a vector given upper and lower limits: rescaled = ( vec - low ) / (up - low). If these are outside the domain of the vector, the result will be in [0,1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>vec: array</strong></dt><dd><p>Vector in Cartesian coomponents.</p>
+</dd>
+<dt><strong>low: float</strong></dt><dd><p>Lower limit.</p>
+</dd>
+<dt><strong>up: float</strong></dt><dd><p>Upper limit.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>rescaled: float, optional</dt><dd><p>Rescaled vector.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">rescaled</span> <span class="pre">=</span> <span class="pre">precession.affine(vec,low,up)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.angles_to_Jframe">
@@ -1041,7 +1062,7 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>z = dot_nested(x, y)</p>
+<p><code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">dot_nested(x,</span> <span class="pre">y)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -1067,7 +1088,7 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>piintegral = precession.ellippi(n, phi, m)</p>
+<p><code class="docutils literal notranslate"><span class="pre">piintegral</span> <span class="pre">=</span> <span class="pre">precession.ellippi(n,</span> <span class="pre">phi,</span> <span class="pre">m)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -2843,7 +2864,28 @@ Additional keywords arguments are passed to <cite>scipy.integrate.odeint</cite> 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.inverseaffine">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">inverseaffine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rescaled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">up</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#inverseaffine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.inverseaffine" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Perform an inferse affine trasformation to scale a vector from some upper and lower limits: vec = low + rescaled*(up-low). If rescaled is defined in [0,1], the result will be defined in [low,up].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>rescaled: float</strong></dt><dd><p>Rescaled vector.</p>
+</dd>
+<dt><strong>low: float</strong></dt><dd><p>Lower limit.</p>
+</dd>
+<dt><strong>up: float</strong></dt><dd><p>Upper limit.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>vec: array</dt><dd><p>Vector in Cartesian coomponents.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">=</span> <span class="pre">precession.inverseaffine(rescaled,low,up)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.ismonotonic">
@@ -2874,13 +2916,30 @@ Additional keywords arguments are passed to <cite>scipy.integrate.odeint</cite> 
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>check = ismonotonic(vec, which):</p>
+<p><code class="docutils literal notranslate"><span class="pre">check</span> <span class="pre">=</span> <span class="pre">ismonotonic(vec,</span> <span class="pre">which)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.isotropic_angles">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">isotropic_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#isotropic_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.isotropic_angles" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Sample the angles theta1, theta2, and deltaphi from an isotropic distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>N: integer, optional (default: 1)</strong></dt><dd><p>Number of samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>vec: array</dt><dd><p>Vector in Cartesian coomponents.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">=</span> <span class="pre">precession.isotropic_angles(N=1)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.kappadiscriminant_coefficients">
@@ -3127,7 +3186,7 @@ Additional keywords arguments are passed to <cite>scipy.integrate.odeint</cite> 
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>n = norm_nested(x)</p>
+<p><code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">=</span> <span class="pre">norm_nested(x)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3149,7 +3208,7 @@ Additional keywords arguments are passed to <cite>scipy.integrate.odeint</cite> 
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>y = normalize_nested(x)</p>
+<p><code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">normalize_nested(x)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3523,18 +3582,18 @@ This is an internal function used by the ODE integrator and is not array-compati
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.roots_vec">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">roots_vec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#roots_vec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.roots_vec" title="Permalink to this definition"></a></dt>
-<dd><p>Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
-Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" href="https://stackoverflow.com/a/35853977">https://stackoverflow.com/a/35853977</a></p>
+<dd><p>Locate roots of polynomial using a vectorized version of numpy.roots.
+Credit to stackoverflow user ‘pv’ (<a class="reference external" href="https://stackoverflow.com/a/35853977">https://stackoverflow.com/a/35853977</a>) for some of this code, which we generalize to accomodate equations of different degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>p: array</strong></dt><dd><p>Polynomial coefficients.</p>
+<dt><strong>p: float</strong></dt><dd><p>Polynomial coefficients.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>roots: array</dt><dd><p>Polynomial roots.</p>
+<dt>roots: float</dt><dd><p>Polynomial roots.</p>
 </dd>
 </dl>
 </dd>
@@ -3547,6 +3606,26 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 <dt class="sig sig-object py" id="precession.rotate_nested">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">rotate_nested</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align_zaxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">align_xzplane</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#rotate_nested"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.rotate_nested" title="Permalink to this definition"></a></dt>
 <dd><p>Rotate a given vector vec to a frame such that the vector align_zaxis lies along z and the vector align_xzplane lies in the xz plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>vec</strong><span class="classifier">array</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>align_zaxis</strong><span class="classifier">array</span></dt><dd><p>Reference array.</p>
+</dd>
+<dt><strong>align_xzplane</strong><span class="classifier">array</span></dt><dd><p>Reference array.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>vecrot</strong><span class="classifier">array</span></dt><dd><p>Rotated array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">vecrot</span> <span class="pre">=</span> <span class="pre">rotate_nested(vec,</span> <span class="pre">align_zaxis,</span> <span class="pre">align_xzplane)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3596,7 +3675,7 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>vec = sample_unitsphere(N = 1)</p>
+<p><code class="docutils literal notranslate"><span class="pre">vec</span> <span class="pre">=</span> <span class="pre">sample_unitsphere(N=1)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3620,13 +3699,32 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>y = scalar_nested(k, x)</p>
+<p><code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">scalar_nested(k,</span> <span class="pre">x)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.tiler">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">tiler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shaper</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#tiler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.tiler" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Repeat the quantity thing a numer of times give by the shape of shaper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>thing: float</strong></dt><dd><p>Quantity to be repeated</p>
+</dd>
+<dt><strong>shaper: array</strong></dt><dd><p>Quantity providing the shape.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>thing: float</dt><dd><p>Quantity to be repeated</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">thing</span> <span class="pre">=</span> <span class="pre">precession.tiler(thing,shaper)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.tofdeltachi">
@@ -3910,7 +4008,7 @@ smaller dimensionless spin may undergo wide nutations.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>sols = precession.wraproots(coefficientfunction, <a href="#id3"><span class="problematic" id="id4">*</span></a>args, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs)</p>
+<p><code class="docutils literal notranslate"><span class="pre">sols</span> <span class="pre">=</span> <span class="pre">precession.wraproots(coefficientfunction,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code></p>
 </dd></dl>
 
 </section>
