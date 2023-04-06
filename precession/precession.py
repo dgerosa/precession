@@ -5570,11 +5570,7 @@ def remnantmass(theta1, theta2, q, chi1, chi2):
     2012. This formula has to be applied *close to merger*, where numerical
     relativity simulations are available. You should do a PN evolution to
     transfer binaries to r~10M.
-
-    Examples
-    --------
-    mfin = remnantmass(theta1,theta2,q,chi1,chi2)
-
+    
     Parameters
     ----------
     theta1: float
@@ -5587,11 +5583,15 @@ def remnantmass(theta1, theta2, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     mfin: float
         Mass of the black-hole remnant.
+    
+    Examples
+    --------
+    ``mfin = precession.remnantmass(theta1,theta2,q,chi1,chi2)``
     """
 
     q = np.atleast_1d(q).astype(float)
@@ -5625,11 +5625,7 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
     angles (HBR16_34corr). This formula has to be applied *close to merger*,
     where numerical relativity simulations are available. You should do a PN
     evolution to transfer binaries at r~10M.
-
-    Examples
-    --------
-    chifin = remnantspin(theta1,theta2,deltaphi,q,chi1,chi2,which='HBR16_34corr')
-
+    
     Parameters
     ----------
     theta1: float
@@ -5646,11 +5642,15 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     which: string, optional (default: 'HBR16_34corr')
         Select function behavior.
-
+    
     Returns
     -------
     chifin: float
         Spin of the black-hole remnant.
+    
+    Examples
+    --------
+    ``chifin = precession.remnantspin(theta1,theta2,deltaphi,q,chi1,chi2)``
     """
 
 
@@ -5724,16 +5724,44 @@ def remnantspin(theta1, theta2, deltaphi, q, chi1, chi2, which='HBR16_34corr'):
     return np.minimum(chifin,1)
 
 
-def reminantspindirection(theta1, theta2, deltaphi, rplunge, q, chi1, chi2):
-    ''' Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentu 'at plunge' '''
+def reminantspindirection(theta1, theta2, deltaphi, r, q, chi1, chi2):
+    """
+    Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentum 'at plunge'.
+    
+    Parameters
+    ----------
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Returns
+    -------
+    thetaL: float
+        Angle betwen orbital angular momentum and total angular momentum.
+    
+    Examples
+    --------
+    ``thetaL = precession.reminantspindirection(theta1,theta2,deltaphi,r,q,chi1,chi2)``
+    """
 
-    Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, rplunge, q, chi1, chi2)
+    Lvec,S1vec,S2vec = angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
     Jvec = Lvec + S1vec + S2vec
     hatL = normalize_nested(Lvec)
     hatJ = normalize_nested(Jvec)
-    thetaremnant = np.arccos(dot_nested(hatL,hatJ))
+    thetaL = np.arccos(dot_nested(hatL,hatJ))
 
-    return thetaremnant
+    return thetaL
 
     
 
@@ -5752,13 +5780,7 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
     kms=True. This formula has to be applied *close to merger*, where
     numerical relativity simulations are available. You should do a PN evolution
     to transfer binaries at r~10M.
-
-    Examples
-    --------
-    ``vk = remnantkick(theta1, theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)``
-
-    vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)
-
+    
     Parameters
     ----------
     theta1: float
@@ -5785,18 +5807,19 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
         Switch kick terms on and off.
     full_output: boolean, optional (default: False)
         Return additional outputs.
-
+    
     Returns
     -------
     vk: float
         Kick of the black-hole remnant (magnitude).
-
-    Other parameters
-    -------
-    vk_array: array
+    vk_array: array, optional
         Kick of the black-hole remnant (in a frame aligned with L).
+    
+    Examples
+    --------
+    ``vk = precession.remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,full_output=False)``
+    ``vk,vk_array = precession.remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,full_output=True)``
     """
-
 
     q = np.atleast_1d(q).astype(float)
     chi1 = np.atleast_1d(chi1).astype(float)
