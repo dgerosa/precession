@@ -2900,39 +2900,32 @@ def deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=True, precomputed
         assert precomputedroots.shape[0] == 3, "Shape of precomputedroots must be (3,N), i.e. deltachiminus, deltachiplus, deltachi3. [deltachiroots]"
         return precomputedroots
 
-#TODO: I stopped here
+
 def deltachilimits_rectangle(chieff, q, chi1, chi2):
     """
-    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
-    - If r, q, chi1, and chi2 are provided, the limits are given by kappa=S1+S2.
-    - If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
-    The boolean flag enforce allows raising an error in case the inputs are not compatible.
-
-    Examples
-    --------
-        kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)
-
+    Limits on the weighted spin difference for given (chieff, q, chi1, chi2). This is a rectangle in the (chieff,deltachi) plane.
+    
     Parameters
     ----------
-    r: float, optional (default: None)
-        Binary separation.
-    chieff: float, optional (default: None)
+    chieff: float
         Effective spin.
-    q: float, optional (default: None)
+    q: float
         Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
+    chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
+    chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    enforce: boolean, optional (default: False)
-        If True raise errors, if False raise warnings.
-
+    
     Returns
     -------
-    kappainfmin: float
-        Minimum value of the asymptotic angular momentum kappainf.
-    kappainfmin: float
-        Minimum value of the asymptotic angular momentum kappainf.
+    deltachimax: float
+        Maximum value of the weighted spin difference.
+    deltachimin: float
+        Minimum value of the weighted spin difference.
+    
+    Examples
+    --------
+    ``deltachimin,deltachimax = precession.deltachilimits_rectangle(chieff,q,chi1,chi2)``
     """
 
     chieff = np.atleast_1d(chieff).astype(float)
@@ -2948,7 +2941,37 @@ def deltachilimits_rectangle(chieff, q, chi1, chi2):
 
 
 def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
-
+    """
+    Limits on the weighted spin difference for given (kappa, r, chieff, q, chi1, chi2). These are two of the solutions of the underlying cubic polynomial.
+    
+    Parameters
+    ----------
+    kappa: float
+        Asymptotic angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    
+    Returns
+    -------
+    deltachimax: float
+        Maximum value of the weighted spin difference.
+    deltachimin: float
+        Minimum value of the weighted spin difference.
+    
+    Examples
+    --------
+    ``deltachimin,deltachimax = precession.deltachilimits_plusminus(kappa,r,chieff,q,chi1,chi2)``
+    """
 
     u = eval_u(r,q)
     deltachiminus, deltachiplus, _ = deltachiroots(kappa, u, chieff, q, chi1, chi2, full_output=False, precomputedroots=precomputedroots)
@@ -2971,6 +2994,37 @@ def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=N
 
 
 def deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2,precomputedroots=None):
+    """
+    Compute deltachi from the rescaled parameter 0<=deltachitilde<=1.
+    
+    Parameters
+    ----------
+    deltachitilde: float
+        Rescaled version of the weighted spin difference.
+    kappa: float
+        Asymptotic angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    
+    Returns
+    -------
+    deltachi: float
+        Weighted spin difference.
+    
+    Examples
+    --------
+    ``deltachi = precession.deltachirescaling(deltachitilde,kappa,r,chieff,q,chi1,chi2)``
+    """
 
     deltachiminus, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2,precomputedroots=precomputedroots)
     deltachi =  inverseaffine(deltachitilde, deltachiminus, deltachiplus)
@@ -2980,16 +3034,12 @@ def deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2,precomputed
 
 def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None):
     """
-    Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user. Provide either J or kappa and either r or u.
-
-    Examples
-    --------
-    S = Satresonance(J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None)
-
+    Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of deltachi. There will be two roots that are coincident if not for numerical errors: for concreteness, return the mean of the real part.
+    This function is dangerous: we do not check that the input is a resonance, that's up to the user (so use at your own risk).
+    Valid inputs are either (kappa,r,chieff,q,chi1,chi2) or (kappa,u,chieff,q,chi1,chi2).
+    
     Parameters
     ----------
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
     kappa: float, optional (default: None)
         Asymptotic angular momentum.
     r: float, optional (default: None)
@@ -3004,11 +3054,16 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
-    S: float
-        Magnitude of the total spin.
+    deltachi: float
+        Weighted spin difference.
+    
+    Examples
+    --------
+    ``deltachi = precession.deltachiresonance(kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
+    ``deltachi = precession.deltachiresonance(kappa=kappa,u=u,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
     """
 
     if q is None or chi1 is None or chi2 is None or kappa is None:
@@ -3029,31 +3084,38 @@ def deltachiresonance(kappa=None, r=None, u=None, chieff=None, q=None, chi1=None
 
 def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
     """
-    Parameter m entering elliptic functions for the evolution of S.
-
-    Examples
-    --------
-    m = elliptic_parameter(Sminuss,Spluss,S3s)
-
+    Parameter m entering elliptic functions for the evolution of deltachi.
+    
     Parameters
     ----------
-    Sminuss: float
-        Lowest physical root, if present, of the effective potential equation.
-    Spluss: float
-        Largest physical root, if present, of the effective potential equation.
-    S3s: float
-        Spurious root of the effective potential equation.
-
+    kappa: float
+        Asymptotic angular momentum.
+    u: float
+        Compactified separation 1/(2L).
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    
     Returns
     -------
     m: float
         Parameter of elliptic function(s).
+    
+    Examples
+    --------
+    ``m = precession.elliptic_parameter(kappa,u,chieff,q,chi1,chi2)``
     """
 
     q=np.atleast_1d(q).astype(float)
 
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    
     m = (1-q)*(deltachiplus-deltachiminus)/(deltachi3-(1-q)*deltachiminus)
 
     return m
@@ -3061,21 +3123,23 @@ def elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=None):
 
 def deltachitildeav(m,tol=1e-7):
     """
-    Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
-
-    Examples
-    --------
-    coeff = deltachitildeav(m)
-
+    Precession average of the rescaled weighted spin difference.
+    
     Parameters
     ----------
     m: float
         Parameter of elliptic function(s).
-
+    tol: float, optional (default: 1e-7)
+        Numerical tolerance, see source code for details.
+    
     Returns
     -------
     coeff: float
         Coefficient.
+    
+    Examples
+    --------
+    ``coeff = precession.deltachitildeav(m,tol=1e-7)``
     """
 
     m = np.atleast_1d(m).astype(float)
@@ -3090,21 +3154,23 @@ def deltachitildeav(m,tol=1e-7):
 
 def deltachitildeav2(m,tol=1e-7):
     """
-    Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.
-
-    Examples
-    --------
-    coeff = deltachitildeav(m)
-
+    Precession average of the rescaled weighted spin difference squared.
+    
     Parameters
     ----------
     m: float
         Parameter of elliptic function(s).
-
+    tol: float, optional (default: 1e-7)
+        Numerical tolerance, see source code for details.
+    
     Returns
     -------
     coeff: float
         Coefficient.
+    
+    Examples
+    --------
+    ``coeff = precession.deltachitildeav2(m,tol=1e-7)``
     """
 
     m = np.atleast_1d(m).astype(float)
@@ -3120,12 +3186,8 @@ def deltachitildeav2(m,tol=1e-7):
 
 def ddchidt_prefactor(r, chieff, q):
     """
-    Numerical prefactor to the S derivative.
-
-    Examples
-    --------
-    mathcalA = derS_prefactor(r,chieff,q)
-
+    Numerical prefactor to the ddeltachi/dt derivative.
+    
     Parameters
     ----------
     r: float
@@ -3134,13 +3196,16 @@ def ddchidt_prefactor(r, chieff, q):
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
-
+    
     Returns
     -------
     mathcalA: float
-        Prefactor in the dSdt equation.
+        Prefactor in the ddeltachi/dt equation.
+    
+    Examples
+    --------
+    ``mathcalA = precession.ddchidt_prefactor(r,chieff,q)``
     """
-
 
     r = np.atleast_1d(r).astype(float)
     chieff = np.atleast_1d(chieff).astype(float)
@@ -3152,6 +3217,40 @@ def ddchidt_prefactor(r, chieff, q):
 
 
 def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None, donotnormalize=False):
+    """
+    Right-hand side of the (ddeltachi/dt)^2 equation. 
+    Setting donotnormalize=True is equivalent to mathcalA=1.
+    
+    Parameters
+    ----------
+    deltachi: float
+        Weighted spin difference.
+    kappa: float
+        Asymptotic angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    donotnormalize: boolean, optional (default: False)
+        If True omit the numerical prefactor.
+    
+    Returns
+    -------
+    dchidt2: float
+        Squared time derivative of the weighted spin difference.
+    
+    Examples
+    --------
+    ``dchidt2 = precession.dchidt2_RHS(r,chieff,q)``
+    """
 
     q=np.atleast_1d(q).astype(float)
 
@@ -3169,19 +3268,51 @@ def dchidt2_RHS(deltachi, kappa, r, chieff, q, chi1, chi2, precomputedroots=None
 
 
 def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psiperiod=False, donotnormalize=False):
-
+    """
+    Evaluate the nutation period.
+    Setting return_psiperiod=True return the phase-period instead of the time period (i.e. returns tau/2K(m) insteaf of tau). This is useful to avoid the evaluation of an elliptic integral when it's not needed.
+    Setting donotnormalize=True is equivalent to mathcalA=1.
+    
+    Parameters
+    ----------
+    kappa: float
+        Asymptotic angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    MISSING: COULD NOT BUILD, optional (default: False)
+        FILL MANUALLY.
+    donotnormalize: boolean, optional (default: False)
+        If True omit the numerical prefactor.
+    
+    Returns
+    -------
+    tau: float
+        Nutation period.
+    
+    Examples
+    --------
+    ``tau = precession.eval_tau(kappa,r,chieff,q,chi1,chi2)``
+    ``tau = precession.eval_tau(kappa,r,chieff,q,chi1,chi2,return_psiperiod=True)``
+    """
 
     q=np.atleast_1d(q).astype(float)
 
-
-    # if psiperiod=True return tau/2K(m). Useful to avoid the evaluation of an elliptic integral when it's not needed
     u = eval_u(r,q)
 
     if donotnormalize:
         mathcalA = 1
     else:
         mathcalA = ddchidt_prefactor(r, chieff, q)
-
 
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
@@ -3197,19 +3328,15 @@ def eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=None, return_psip
 
 def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
     """
-    Evolution of S on the precessional timescale (without radiation reaction).
+    Evolution of deltachi on the precessional timescale (without radiation reaction).
     The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.
-
-    Examples
-    --------
-    S = Soft(t,J,r,chieff,q,chi1,chi2,precomputedroots=None)
-
+    
     Parameters
     ----------
     t: float
         Time.
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
     chieff: float
@@ -3221,12 +3348,16 @@ def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
+        Pre-computed output of deltachiroots for computational efficiency.
+    
     Returns
     -------
-    S: float
-        Magnitude of the total spin.
+    deltachi: float
+        Weighted spin difference.
+    
+    Examples
+    --------
+    ``deltachi = precession.deltachioft(t,kappa,r,chieff,q,chi1,chi2)``
     """
 
     t = np.atleast_1d(t).astype(float)
@@ -3250,6 +3381,39 @@ def deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=None):
 
 
 def tofdeltachi(deltachi, kappa , r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
+    """
+    Time as a function of deltachi on the precessional timescale (without radiation reaction).
+    
+    Parameters
+    ----------
+    deltachi: float
+        Weighted spin difference.
+    kappa: float
+        Asymptotic angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: 1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    
+    Returns
+    -------
+    t: float
+        Time.
+    
+    Examples
+    --------
+    ``t = precession.tofdeltachi(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=1)``
+    """
 
     u= eval_u(r=r,q=q)
     deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
@@ -5495,90 +5659,6 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
         return vk
 
 
-##### TODO
-
-
-# TODO: Check inter-compatibility of Slimits, Jlimits, chiefflimits
-# TODO: check docstrings
-# Tags for each limit check that fails?
-# Davide: Does this function uses only Jlimits and chiefflimits or also Slimits? Move later?
-def limits_check(S=None, J=None, r=None, chieff=None, q=None, chi1=None, chi2=None):
-    """
-    Check if the inputs are consistent with the geometrical constraints.
-
-    Parameters
-    ----------
-    S: float
-        Magnitude of the total spin.
-    J: float, optional
-        Magnitude of the total angular momentum.
-    r: float, optional
-        Binary separation.
-    chieff: float, optional
-        Effective spin
-    q: float
-        Mass ratio: 0 <= q <= 1.
-    chi1: float, optional
-        Dimensionless spin of the primary black hole: 0 <= chi1 <= 1.
-    chi2: float, optional
-        Dimensionless spin of the secondary black hole: 0 <= chi1 <= 1.
-
-    Returns
-    -------
-    check: bool
-        True if the given parameters are compatible with each other, false if not.
-    """
-    # q, ch1, chi2
-    # 0, 1
-
-    # J: r, chieff, q, chi1, chi2
-    # r, q, chi1, chi2 -> Jlimits_LS1S2
-    # r, chieff, q, chi1, chi2 -> Jresonances
-
-    # chieff: J, r, q, chi1, chi2
-    # q, chi1, chi2 -> chiefflimits_definition
-    # J, r, q, chi1, chi2 -> chieffresonances
-
-    # S: J, r, chieff, q, chi1, chi2
-    # q, chi1, chi2 -> Slimits_S1S2
-    # J, r, q -> Slimits_LJ
-    # J, r, q, chi1, chi2 -> Slimits_LJS1S2
-    # J, r, chieff, q, chi1, chi2 -> Slimits_plusminus
-
-    def _limits_check(testvalue, interval):
-        """Check if a value is within a given interval"""
-        return np.logical_and(testvalue >= interval[0], testvalue <= interval[1])
-
-    Slim = Slimits(J, r, chieff, q, chi1, chi2)
-    Sbool = _limits_check(S, Slim)
-
-    Jlim = Jlimits(r, chieff, q, chi1, chi2)
-    Jbool = _limits_check(J, Jlim)
-
-    chiefflim = chiefflimits(J, r, q, chi1, chi2)
-    chieffbool = _limits_check(chieff, chiefflim)
-
-    check = all((Sbool, Jbool, chieffbool))
-
-    if r is not None:
-        rbool = _limits_check(r, [10.0, np.inf])
-        check = all((check, rbool))
-
-    if q is not None:
-        qbool = _limits_check(q, [0.0, 1.0])
-        check = all((check, qbool))
-
-    if chi1 is not None:
-        chi1bool = _limits_check(chi1, [0.0, 1.0])
-        check = all((check, chi1bool))
-
-    if chi2 is not None:
-        chi2bool = _limits_check(chi2, [0.0, 1.0])
-        check = all((check, chi2bool))
-
-    return check
-
-
 
 
 ################ Main ################
@@ -6163,10 +6243,10 @@ if __name__ == '__main__':
     # morph = morphology(kappa, r, chieff, q, chi1, chi2)
     # print(np.unique(morph,return_counts=True))
 
-    q=1
-    chi1=0.8
-    chi2=0.4
-    theta1,theta2,deltaphi = isotropic_angles(1)
-    r=[10,np.inf]
+    # q=1
+    # chi1=0.8
+    # chi2=0.4
+    # theta1,theta2,deltaphi = isotropic_angles(1)
+    # r=[10,np.inf]
 
-    print( inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2))
+    # print( inspiral_precav(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2))

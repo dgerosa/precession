@@ -130,6 +130,8 @@ def descr(varname,vardef=None,optional=False):
     lookup['S2hinitial']=["array","Initial direction of the secondary spin, unit vector"]
     lookup['vinitial']=["float","Initial value of the newtonian orbital velocity"]
     lookup['vfinal']=["float","Final value of the newtonian orbital velocity"]
+    lookup['mathcalA']=["float","Prefactor in the ddeltachi/dt equation"]
+
     lookup['mathcalC0']=["float","Prefactor in the OmegaL equation"]
     lookup['mathcalCplus']=["float","Prefactor in the OmegaL equation"]
     lookup['mathcalCminus']=["float","Prefactor in the OmegaL equation"]
@@ -169,6 +171,11 @@ def descr(varname,vardef=None,optional=False):
     lookup['maxphase']=['boolean', "Maximize over orbital phase at merger"]
     lookup['tol']=['float', "Numerical tolerance, see source code for details"]
     lookup['kappatilde']=['float', "Rescaled version of the asymptotic angular momentum"]
+    lookup['deltachitilde']=['float', "Rescaled version of the weighted spin difference"]
+    lookup['dchidt2']=['float', "Squared time derivative of the weighted spin difference"]
+    lookup['donotnormalize']=['boolean', "If True omit the numerical prefactor"]
+    lookup['returnpsiperiod']=['boolean', "Use phase instead of time"]
+
     lookup['**kwargs']=['unpacked dictionary, optional', "Additional keyword arguments"]
 
     if varname in lookup:
