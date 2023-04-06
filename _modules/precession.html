@@ -403,10 +403,10 @@
 <div class="viewcode-block" id="ismonotonic"><a class="viewcode-back" href="../auto.html#precession.ismonotonic">[docs]</a><span class="k">def</span> <span class="nf">ismonotonic</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">which</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if an array is monotonic. The parameter `which` can takes the following values:</span>
-<span class="sd">    - `&lt;` check array is strictly increasing.</span>
-<span class="sd">    - `&lt;=` check array is increasing.</span>
-<span class="sd">    - `&gt;` check array is strictly decreasing.</span>
-<span class="sd">    - `&gt;=` check array is decreasing.</span>
+<span class="sd">        - `&lt;` check array is strictly increasing.</span>
+<span class="sd">        - `&lt;=` check array is increasing.</span>
+<span class="sd">        - `&gt;` check array is strictly decreasing.</span>
+<span class="sd">        - `&gt;=` check array is decreasing.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -1476,9 +1476,9 @@
 <div class="viewcode-block" id="eval_cyclesign"><a class="viewcode-back" href="../auto.html#precession.eval_cyclesign">[docs]</a><span class="k">def</span> <span class="nf">eval_cyclesign</span><span class="p">(</span><span class="n">ddeltachidt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Lvec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S1vec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S2vec</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the &#39;sign&#39; of a precession cycle, defined as +1 if deltachi is increasing and -1 deltachi is decreasing. Valid inputs are one and not more of the following:</span>
-<span class="sd">    - dSdt</span>
-<span class="sd">    - deltaphi</span>
-<span class="sd">    - Lvec, S1vec, S2vec.</span>
+<span class="sd">        - dSdt</span>
+<span class="sd">        - deltaphi</span>
+<span class="sd">        - Lvec, S1vec, S2vec.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -2611,8 +2611,8 @@
 <div class="viewcode-block" id="kappalimits"><a class="viewcode-back" href="../auto.html#precession.kappalimits">[docs]</a><span class="k">def</span> <span class="nf">kappalimits</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">enforce</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.</span>
-<span class="sd">    - If r, q, chi1, chi2 are provided, returns the geometrical limits.</span>
-<span class="sd">    - If r, chieff, q, chi1, and chi2 are provided, returns the spin-orbit resonances.</span>
+<span class="sd">        - If r, q, chi1, chi2 are provided, returns the geometrical limits.</span>
+<span class="sd">        - If r, chieff, q, chi1, and chi2 are provided, returns the spin-orbit resonances.</span>
 <span class="sd">    The boolean flag enforce raises an error in case the inputs are not compatible. Additional kwargs are passed to kapparesonances.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -2855,8 +2855,6 @@
     <span class="n">chieff</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">q</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(((</span><span class="n">chi1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span> \
     <span class="o">*</span> <span class="n">q</span><span class="o">**</span><span class="mi">4</span> <span class="o">*</span> <span class="n">chi2</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">q</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">q</span><span class="o">**</span><span class="mi">3</span> <span class="o">*</span> <span class="n">chi2</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> \
     <span class="o">*</span> <span class="n">chieff</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">coeff3</span><span class="p">,</span> <span class="n">coeff2</span><span class="p">,</span> <span class="n">coeff1</span><span class="p">,</span> <span class="n">coeff0</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">coeff3</span><span class="p">,</span> <span class="n">coeff2</span><span class="p">,</span> <span class="n">coeff1</span><span class="p">,</span> <span class="n">coeff0</span><span class="p">])</span></div>
 
@@ -3502,20 +3500,16 @@
 
 <div class="viewcode-block" id="deltachisampling"><a class="viewcode-back" href="../auto.html#precession.deltachisampling">[docs]</a><span class="k">def</span> <span class="nf">deltachisampling</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Sample N values of S at fixed separation accoring to its PN-weighted distribution function.</span>
-<span class="sd">    Can only be used to sample the *same* number of configuration for each binary. If the inputs J,r,chieff,q,chi1, and chi2 have shape (M,) the output will have shape</span>
-<span class="sd">    - (M,N) if M&gt;1 and N&gt;1;</span>
-<span class="sd">    - (M,) if N=1;</span>
-<span class="sd">    - (N,) if M=1.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    S = Ssampling(J,r,chieff,q,chi1,chi2,N = 1)</span>
-
+<span class="sd">    Sample N values of deltachi at fixed separation accoring to its PN-weighted distribution function.</span>
+<span class="sd">    Can only be used to sample the *same* number of configuration for each binary. If the inputs have shape (M,) the output will have shape</span>
+<span class="sd">        - (M,N) if M&gt;1 and N&gt;1;</span>
+<span class="sd">        - (M,) if N=1;</span>
+<span class="sd">        - (N,) if M=1.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float</span>
@@ -3528,11 +3522,17 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    N: integer, optional (default: 1)</span>
 <span class="sd">        Number of samples.</span>
-
+<span class="sd">    precomputedroots: array, optional (default: None)</span>
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``deltachi = precession.deltachisampling(kappa,r,chieff,q,chi1,chi2,N=1)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">u</span><span class="o">=</span> <span class="n">eval_u</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
@@ -3546,18 +3546,19 @@
     <span class="c1"># For r=infinity use a simple placeholder</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tau</span><span class="p">)),</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">u</span><span class="o">!=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">tau</span><span class="p">)))</span>
 
+
     <span class="c1"># np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1</span>
-    <span class="c1"># np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1</span>
+    <span class="c1"># np.atleast_1d is necessary to return shape (1,) instead of (,) if M=N=1</span>
     <span class="n">t</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
 
-    <span class="c1"># Note the special broadcasting rules of deltachioft, see Soft.__docs__</span>
+    <span class="c1"># Note the special broadcasting rules of deltachioft, see deltachioft.__docs__</span>
     <span class="c1"># deltachi has shape (M, N).</span>
     <span class="n">deltachi</span> <span class="o">=</span> <span class="n">deltachioft</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">kappa</span> <span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">,</span><span class="n">deltachi3</span><span class="p">]))</span>
 
     <span class="c1"># For infinity use the analytic result. Ignore q=1 &quot;divide by zero&quot; warning:</span>
     <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">)</span>
-        <span class="n">deltachiinf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span> <span class="n">eval_deltachiinf</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">),</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">deltachiinf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span> <span class="n">eval_deltachiinf</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">),</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="p">))</span>
 
     <span class="n">deltachi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">u</span><span class="o">!=</span><span class="mi">0</span><span class="p">,</span> <span class="n">deltachi</span><span class="p">,</span><span class="n">deltachiinf</span><span class="p">)</span>
 
@@ -3570,15 +3571,11 @@
 <div class="viewcode-block" id="intertial_ingredients"><a class="viewcode-back" href="../auto.html#precession.intertial_ingredients">[docs]</a><span class="k">def</span> <span class="nf">intertial_ingredients</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Numerical prefactors entering the precession frequency.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor_old(J,r,chieff,q,chi1,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float</span>
@@ -3589,15 +3586,23 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    mathcalC0: float</span>
+<span class="sd">    bigC0: float</span>
 <span class="sd">        Prefactor in the OmegaL equation.</span>
-<span class="sd">    mathcalCplus: float</span>
+<span class="sd">    bigCminus: float</span>
 <span class="sd">        Prefactor in the OmegaL equation.</span>
-<span class="sd">    mathcalCminus: float</span>
+<span class="sd">    bigCplus: float</span>
 <span class="sd">        Prefactor in the OmegaL equation.</span>
+<span class="sd">    bigRminus: float</span>
+<span class="sd">        Prefactor in the PhiL equation.</span>
+<span class="sd">    bigRplus: float</span>
+<span class="sd">        Prefactor in the PhiL equation.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``bigC0,bigCplus,bigCminus,bigRplus,bigRminus = precession.intertial_ingredients(kappa,r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -3643,18 +3648,14 @@
 
 <div class="viewcode-block" id="eval_OmegaL"><a class="viewcode-back" href="../auto.html#precession.eval_OmegaL">[docs]</a><span class="k">def</span> <span class="nf">eval_OmegaL</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the precession frequency OmegaL along the precession cycle.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    OmegaL = eval_OmegaL(S,J,r,chieff,q,chi1,chi2)</span>
-
+<span class="sd">    Evaluate the precession frequency OmegaL along the precession cycle.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    S: float</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float</span>
@@ -3665,11 +3666,15 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    OmegaL: float</span>
 <span class="sd">        Precession frequency of L about J.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``OmegaL = precession.eval_OmegaL(deltachi,kappa,r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">deltachi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">deltachi</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -3685,6 +3690,39 @@
 
 
 <div class="viewcode-block" id="eval_phiL"><a class="viewcode-back" href="../auto.html#precession.eval_phiL">[docs]</a><span class="k">def</span> <span class="nf">eval_phiL</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate the azimuthal angle of L in a plane orthogonal to J along the precession cycle.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    deltachi: float</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    cyclesign: integer, optional (default: 1)</span>
+<span class="sd">        Sign (either +1 or -1) to cover the two halves of a precesion cycle.</span>
+<span class="sd">    precomputedroots: array, optional (default: None)</span>
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    phiL: float</span>
+<span class="sd">        Azimuthal angle spanned by L about J.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``phiL = precession.eval_phiL(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=1)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -3698,9 +3736,6 @@
     <span class="n">deltachitilde</span> <span class="o">=</span> <span class="n">affine</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span><span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">)</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">elliptic_parameter</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">,</span><span class="n">deltachi3</span><span class="p">]))</span>
 
-
-
-
     <span class="n">phiL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">cyclesign</span><span class="p">)</span> <span class="o">*</span> <span class="n">bigC0</span> <span class="o">*</span> <span class="n">psiperiod</span> <span class="o">*</span> <span class="p">(</span> <span class="n">scipy</span><span class="o">.</span><span class="n">special</span><span class="o">.</span><span class="n">ellipkinc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">deltachitilde</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)),</span> <span class="n">m</span><span class="p">)</span>
         <span class="o">-</span> <span class="n">bigCplus</span> <span class="o">/</span> <span class="p">(</span><span class="n">bigRplus</span> <span class="o">-</span> <span class="n">deltachiminus</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
         <span class="o">*</span> <span class="n">ellippi</span><span class="p">(</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">deltachiplus</span><span class="o">-</span><span class="n">deltachiminus</span><span class="p">)</span> <span class="o">/</span>  <span class="p">(</span><span class="n">bigRplus</span> <span class="o">-</span> <span class="n">deltachiminus</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">deltachitilde</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)),</span> <span class="n">m</span><span class="p">)</span>
@@ -3711,7 +3746,36 @@
 
 
 <div class="viewcode-block" id="eval_alpha"><a class="viewcode-back" href="../auto.html#precession.eval_alpha">[docs]</a><span class="k">def</span> <span class="nf">eval_alpha</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate the precession angle spanned by L during an entire cycle.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    precomputedroots: array, optional (default: None)</span>
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    alpha: float</span>
+<span class="sd">        Azimuthal angle spanned by L about J during an entire cycle.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``alpha = precession.eval_alpha(kappa,r,chieff,q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
@@ -3723,7 +3787,6 @@
         <span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">u</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">Warning</span><span class="p">)</span>
  
-
         <span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">,</span><span class="n">deltachi3</span> <span class="o">=</span> <span class="n">deltachiroots</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">precomputedroots</span><span class="p">)</span>
         <span class="n">bigC0</span><span class="p">,</span> <span class="n">bigCplus</span><span class="p">,</span> <span class="n">bigCminus</span><span class="p">,</span><span class="n">bigRplus</span><span class="p">,</span><span class="n">bigRminus</span> <span class="o">=</span> <span class="n">intertial_ingredients</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
         <span class="n">psiperiod</span> <span class="o">=</span> <span class="n">eval_tau</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">,</span><span class="n">deltachi3</span><span class="p">]),</span><span class="n">return_psiperiod</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3752,16 +3815,17 @@
 
 <div class="viewcode-block" id="morphology"><a class="viewcode-back" href="../auto.html#precession.morphology">[docs]</a><span class="k">def</span> <span class="nf">morphology</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">simpler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    morph = morphology(J,r,chieff,q,chi1,chi2,simpler = False)</span>
-
+<span class="sd">    Evaluate the spin morphology. Returns:</span>
+<span class="sd">        - L0 for librating about deltaphi=0,</span>
+<span class="sd">        - Lpi for librating about deltaphi=pi</span>
+<span class="sd">        - C- for circulating from deltaphi=pi to deltaphi=0,</span>
+<span class="sd">        - C+ for circulating from deltaphi=0 to deltaphi=pi.</span>
+<span class="sd">    If simpler=True, do not distinguish between the two circulating morphologies and return C for both.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float</span>
@@ -3774,12 +3838,19 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    simpler: boolean, optional (default: False)</span>
 <span class="sd">        If True simplifies output.</span>
-
+<span class="sd">    precomputedroots: array, optional (default: None)</span>
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    morph: string</span>
 <span class="sd">        Spin morphology.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``morph = precession.morphology(kappa,r,chieff,q,chi1,chi2,simpler=False)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span> <span class="o">=</span> <span class="n">deltachilimits_plusminus</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
     <span class="c1"># Pairs of booleans based on the values of deltaphi at S- and S+</span>
@@ -3800,11 +3871,7 @@
 <div class="viewcode-block" id="chip_terms"><a class="viewcode-back" href="../auto.html#precession.chip_terms">[docs]</a><span class="k">def</span> <span class="nf">chip_terms</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the two terms entering the effective precessing spin chip.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chipterm1,chipterm2 = chip_terms(theta1,theta2,q,chi1,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float</span>
@@ -3817,13 +3884,17 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    chipterm1: float</span>
-<span class="sd">        Term in effective precessing spin chip.</span>
+<span class="sd">        Term in effective precessing spin.</span>
 <span class="sd">    chipterm2: float</span>
-<span class="sd">        Term in effective precessing spin chip.</span>
+<span class="sd">        Term in effective precessing spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chipterm1,chipterm2 = precession.chip_terms(theta1,theta2,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -3840,11 +3911,7 @@
 <div class="viewcode-block" id="eval_chip_heuristic"><a class="viewcode-back" href="../auto.html#precession.eval_chip_heuristic">[docs]</a><span class="k">def</span> <span class="nf">eval_chip_heuristic</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Heuristic definition of the effective precessing spin chip (Schmidt et al 2015), see arxiv:2011.11948. This definition inconsistently averages over some, but not all, variations on the precession timescale.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chip = eval_chip_heuristic(theta1,theta2,q,chi1,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float</span>
@@ -3857,11 +3924,15 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    chip: float</span>
-<span class="sd">        Effective precessing spin chip.</span>
+<span class="sd">        Effective precessing spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chip = precession.eval_chip_heuristic(theta1,theta2,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">term1</span><span class="p">,</span> <span class="n">term2</span> <span class="o">=</span> <span class="n">chip_terms</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
@@ -3872,11 +3943,7 @@
 <div class="viewcode-block" id="eval_chip_generalized"><a class="viewcode-back" href="../auto.html#precession.eval_chip_generalized">[docs]</a><span class="k">def</span> <span class="nf">eval_chip_generalized</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generalized definition of the effective precessing spin chip, see arxiv:2011.11948. This definition retains all variations on the precession timescale.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chip = eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float</span>
@@ -3891,11 +3958,15 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    chip: float</span>
-<span class="sd">        Effective precessing spin chip.</span>
+<span class="sd">        Effective precessing spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chip = precession.eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">term1</span><span class="p">,</span> <span class="n">term2</span> <span class="o">=</span> <span class="n">chip_terms</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
@@ -3905,44 +3976,34 @@
 
 <div class="viewcode-block" id="eval_chip_averaged"><a class="viewcode-back" href="../auto.html#precession.eval_chip_averaged">[docs]</a><span class="k">def</span> <span class="nf">eval_chip_averaged</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Averaged definition of the effective precessing spin chip, see arxiv:2011.11948. This definition consistently averages over all variations on the precession timescale. Valid inputs are one of the following (but not both)</span>
-<span class="sd">    - theta1, theta2, deltaphi</span>
-<span class="sd">    - J, chieff</span>
-<span class="sd">    The parameters r, q, chi1, and chi2 should always be provided. The keywords arguments method and Nsamples are passed directly to `precession_average`.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,method=&#39;quadrature&#39;,Nsamples=1e4)</span>
-
+<span class="sd">    Averaged definition of the effective precessing spin, see arxiv:2011.11948.</span>
+<span class="sd">    Additional keywords arguments are passed to `precession_average`.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    theta1: float, optional (default: None)</span>
-<span class="sd">        Angle between orbital angular momentum and primary spin.</span>
-<span class="sd">    theta2: float, optional (default: None)</span>
-<span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
-<span class="sd">    deltaphi: float, optional (default: None)</span>
-<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
-<span class="sd">    J: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
-<span class="sd">    r: float, optional (default: None)</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
-<span class="sd">    chieff: float, optional (default: None)</span>
+<span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
-<span class="sd">    q: float, optional (default: None)</span>
+<span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
-<span class="sd">    chi1: float, optional (default: None)</span>
+<span class="sd">    chi1: float</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
-<span class="sd">    chi2: float, optional (default: None)</span>
+<span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-<span class="sd">    method: string (default: &#39;quadrature&#39;)</span>
-<span class="sd">        Either &#39;quadrature&#39; or &#39;montecarlo&#39;</span>
-<span class="sd">    Nsamples: integer (default: 1e4)</span>
-<span class="sd">        Number of Monte Carlo samples.</span>
-
+<span class="sd">    **kwargs: unpacked dictionary, optional</span>
+<span class="sd">        Additional keyword arguments.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    chip: float</span>
-<span class="sd">        Effective precessing spin chip.</span>
+<span class="sd">        Effective precessing spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chip = precession.eval_chip_averaged(kappa,r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_integrand</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
@@ -3956,7 +4017,33 @@
 
 
 <div class="viewcode-block" id="eval_chip_rms"><a class="viewcode-back" href="../auto.html#precession.eval_chip_rms">[docs]</a><span class="k">def</span> <span class="nf">eval_chip_rms</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
-
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Root-mean-square definition of the effective precessing spin. This is much faster to evaluate than the plain average.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    chip: float</span>
+<span class="sd">        Effective precessing spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chip = precession.eval_chip_rms(kappa,r,chieff,q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -3996,7 +4083,6 @@
     <span class="c1">#     theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2)</span>
     <span class="c1">#     chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)**2</span>
     <span class="c1">#     return chip_integrand</span>
-
     <span class="c1"># chip = precession_average(kappa, r, chieff, q, chi1, chi2, _integrand, kappa, r, chieff, q, chi1, chi2, **kwargs)**0.5</span>
 
     <span class="k">return</span> <span class="n">chip</span></div>
@@ -4004,16 +4090,15 @@
 
 <div class="viewcode-block" id="eval_chip"><a class="viewcode-back" href="../auto.html#precession.eval_chip">[docs]</a><span class="k">def</span> <span class="nf">eval_chip</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;averaged&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the effective precessing spin chip, see arxiv:2011.11948. The keyword `which` one of the following definitions:</span>
-<span class="sd">    - `heuristic`, as in Schmidt et al 2015. Required inputs: theta1,theta2,q,chi1,chi2</span>
-<span class="sd">    - `generalized`, retail all precession-timescale variations. Required inputs: theta1,theta2,deltaphi,q,chi1,chi2</span>
-<span class="sd">    - `asymptotic`, large-separation limit. Required inputs: theta1,theta2,q,chi1,chi2</span>
-<span class="sd">    - `averaged` (default), averages over all precession-timescale variations. Required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (J,r,chieff,q,chi1,chi2). The additional keywords `methods` and `Nsamples` are passed to `precession_average`.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chip = eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,which=&quot;averaged&quot;,method=&#39;quadrature&#39;,Nsamples=1e4)</span>
-
+<span class="sd">    Compute the effective precessing spin. The keyword `which` one of the following definitions:</span>
+<span class="sd">        - `heuristic`, as in Schmidt et al 2015. Required inputs are either</span>
+<span class="sd">        - `generalized`, retail all precession-timescale variations,</span>
+<span class="sd">        - `averaged` (default), averages over precession-timescale variations,</span>
+<span class="sd">        - `rms`, compute the root-mean-square average, which is faster to evaluate.</span>
+<span class="sd">    The required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (deltachi,kappa,chieff,r,q,chi1,chi2). In the latter case, deltachi can be omitted and will be resampled from its PN-weighted distribution.</span>
+<span class="sd">    Some inputs will be ignored for some of the chip definitions (for instance the heuristic chip does not depend on either r or deltaphi), but dummy values are still requested for code consistency.</span>
+<span class="sd">    The keywords arguments are only used for the `averaged` formulation and are passed to `precession_average`.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float, optional (default: None)</span>
@@ -4022,8 +4107,10 @@
 <span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
 <span class="sd">    deltaphi: float, optional (default: None)</span>
 <span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
-<span class="sd">    J: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    deltachi: float, optional (default: None)</span>
+<span class="sd">        Weighted spin difference.</span>
+<span class="sd">    kappa: float, optional (default: None)</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float, optional (default: None)</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float, optional (default: None)</span>
@@ -4036,18 +4123,26 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    which: string, optional (default: &quot;averaged&quot;)</span>
 <span class="sd">        Select function behavior.</span>
-<span class="sd">    method: string (default: &#39;quadrature&#39;)</span>
-<span class="sd">        Either &#39;quadrature&#39; or &#39;montecarlo&#39;</span>
-<span class="sd">    Nsamples: integer (default: 1e4)</span>
-<span class="sd">        Number of Monte Carlo samples.</span>
-
+<span class="sd">    **kwargs: unpacked dictionary, optional</span>
+<span class="sd">        Additional keyword arguments.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    chip: float</span>
-<span class="sd">        Effective precessing spin chip.</span>
+<span class="sd">        Effective precessing spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chip = precession.eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,which=&quot;heuristic&quot;)``</span>
+<span class="sd">    ``chip = precession.eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,which=&quot;generalized&quot;)``</span>
+<span class="sd">    ``chip = precession.eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,which=&quot;averaged&quot;)``</span>
+<span class="sd">    ``chip = precession.eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,which=&quot;rms&quot;)``</span>
+<span class="sd">    ``chip = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which=&quot;heuristic&quot;)``</span>
+<span class="sd">    ``chip = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which=&quot;generalized&quot;)``</span>
+<span class="sd">    ``chip = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which=&quot;averaged&quot;)``</span>
+<span class="sd">    ``chip = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which=&quot;rms&quot;)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># TODO: first convert the inputs. deltachi can be resampled if not provided </span>
 
     <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">q</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Provide r, q, chi1, and chi2.&quot;</span><span class="p">)</span>
@@ -4057,8 +4152,8 @@
     
     <span class="k">elif</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">deltachi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
-            <span class="c1"># TODO: this operation might not be needed in some cases, could optimize a bit here.</span>
-            <span class="n">deltachi</span> <span class="o">=</span> <span class="n">deltachisampling</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">which</span> <span class="o">==</span> <span class="s1">&#39;heuristic&#39;</span> <span class="ow">or</span> <span class="n">which</span> <span class="o">==</span> <span class="s1">&#39;generalized&#39;</span><span class="p">:</span>
+                <span class="n">deltachi</span> <span class="o">=</span> <span class="n">deltachisampling</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
         <span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span> <span class="o">=</span> <span class="n">conserved_to_angles</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
      
     <span class="k">else</span><span class="p">:</span>
@@ -4091,22 +4186,18 @@
     <span class="k">return</span> <span class="n">chip</span></div>
 
 
-<span class="c1">### Daria&#39;s five parameters should go here</span>
 <div class="viewcode-block" id="eval_nutation_freq"><a class="viewcode-back" href="../auto.html#precession.eval_nutation_freq">[docs]</a><span class="k">def</span> <span class="nf">eval_nutation_freq</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Nutation frequency of S as it oscillates from S- to S+ back to S-</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    little_omega = eval_little_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)</span>
-
+<span class="sd">    Nutation frequency of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-. </span>
+<span class="sd">    This of the five phenomenological parameters from arxiv:2103.03894.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
-<span class="sd">    xi: float</span>
+<span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
@@ -4115,34 +4206,35 @@
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    precomputedroots: array, optional (default: None)</span>
-<span class="sd">        Pre-computed output of Ssroots for computational efficiency.</span>
-
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    little_omega: float</span>
-<span class="sd">        Nutation frequency.</span>
+<span class="sd">    littleomega: float</span>
+<span class="sd">        Squared time derivative of the weighted spin difference.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``littleomega = precession.eval_nutation_freq(kappa,r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">tau</span> <span class="o">=</span> <span class="n">eval_tau</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">precomputedroots</span><span class="p">)</span>
-    <span class="n">omega</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">/</span> <span class="n">tau</span>
-    <span class="k">return</span> <span class="n">omega</span></div>
+    <span class="n">littleomega</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">/</span> <span class="n">tau</span>
+    <span class="k">return</span> <span class="n">littleomega</span></div>
 
 
 <div class="viewcode-block" id="eval_bracket_omega"><a class="viewcode-back" href="../auto.html#precession.eval_bracket_omega">[docs]</a><span class="k">def</span> <span class="nf">eval_bracket_omega</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Precession average of the precession frequency of S as it oscillates from S- to S+ back to S-</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    bracket_omega = eval_bracket_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)</span>
+<span class="sd">    Precession average of the precession frequency deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.</span>
+<span class="sd">    This of the five phenomenological parameters from arxiv:2103.03894.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
-<span class="sd">    xi: float</span>
+<span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
@@ -4151,13 +4243,18 @@
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    precomputedroots: array, optional (default: None)</span>
-<span class="sd">        Pre-computed output of Ssroots for computational efficiency.</span>
-
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    bracket_omega: float</span>
-<span class="sd">        Precession averaged precession frequency.</span>
+<span class="sd">        Precession-averaged precession frequency.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``bracket_omega = precession.eval_bracket_omega(kappa,r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">alpha</span> <span class="o">=</span> <span class="n">eval_alpha</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">precomputedroots</span><span class="p">)</span>
     <span class="n">tau</span> <span class="o">=</span> <span class="n">eval_tau</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">precomputedroots</span><span class="p">)</span>
     <span class="n">bracket_omega</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">/</span> <span class="n">tau</span>
@@ -4166,19 +4263,16 @@
 
 <div class="viewcode-block" id="eval_delta_omega"><a class="viewcode-back" href="../auto.html#precession.eval_delta_omega">[docs]</a><span class="k">def</span> <span class="nf">eval_delta_omega</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Variation of the precession frequency of S as it oscillates from S- to S+ back to S- due to nutational effects</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    delta_omega = eval_delta_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)</span>
+<span class="sd">    Variation of the precession frequency of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.</span>
+<span class="sd">    This of the five phenomenological parameters from arxiv:2103.03894.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
-<span class="sd">    xi: float</span>
+<span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
@@ -4187,13 +4281,18 @@
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    precomputedroots: array, optional (default: None)</span>
-<span class="sd">        Pre-computed output of Ssroots for computational efficiency.</span>
-
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    delta_omega: float</span>
 <span class="sd">        Precession frequency variation due to nutation.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``delta_omega = precession.eval_delta_omega(kappa,r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">precomputedroots</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">deltachimin</span><span class="p">,</span> <span class="n">deltachiplus</span> <span class="o">=</span> <span class="n">deltachilimits_plusminus</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -4206,19 +4305,16 @@
 
 <div class="viewcode-block" id="eval_delta_theta"><a class="viewcode-back" href="../auto.html#precession.eval_delta_theta">[docs]</a><span class="k">def</span> <span class="nf">eval_delta_theta</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Nutation amplitude of S as it oscillates from S- to S+ back to S-</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    delta_theta = eval_delta_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)</span>
-
+<span class="sd">    Nutation amplitude of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.</span>
+<span class="sd">    This of the five phenomenological parameters from arxiv:2103.03894.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
-<span class="sd">    xi: float</span>
+<span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
@@ -4227,13 +4323,18 @@
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    precomputedroots: array, optional (default: None)</span>
-<span class="sd">        Pre-computed output of Ssroots for computational efficiency.</span>
-
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    delta_theta: float</span>
 <span class="sd">        Nutation amplitude.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``delta_theta = precession.eval_delta_theta(kappa,r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">precomputedroots</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">deltachimin</span><span class="p">,</span> <span class="n">deltachiplus</span> <span class="o">=</span> <span class="n">deltachilimits_plusminus</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -4246,29 +4347,35 @@
 
 <div class="viewcode-block" id="eval_bracket_theta"><a class="viewcode-back" href="../auto.html#precession.eval_bracket_theta">[docs]</a><span class="k">def</span> <span class="nf">eval_bracket_theta</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Precession average of precession amplitude of S as it oscillates from S- to S+ back to S-</span>
+<span class="sd">    Precession average of precession amplitude of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.</span>
+<span class="sd">    This of the five phenomenological parameters from arxiv:2103.03894. Additional keywords arguments are passed to `precession_average`.</span>
 
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    bracket_theta = eval_bracket_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
 <span class="sd">    chi1: float</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    **kwargs: unpacked dictionary, optional</span>
+<span class="sd">        Additional keyword arguments.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    bracket_theta: float</span>
 <span class="sd">        Precession-averaged precession amplitude.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``bracket_theta = precession.eval_bracket_theta(kappa,r,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_integrand</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
@@ -4282,11 +4389,7 @@
 <div class="viewcode-block" id="rupdown"><a class="viewcode-back" href="../auto.html#precession.rupdown">[docs]</a><span class="k">def</span> <span class="nf">rupdown</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The critical separations r_ud+/- marking the region of the up-down precessional instability.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    rudp,rudm = rupdown(q,chi1,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
@@ -4295,13 +4398,17 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    rudp: float</span>
-<span class="sd">        Outer orbital separation in the up-down instability.</span>
 <span class="sd">    rudm: float</span>
 <span class="sd">        Inner orbital separation in the up-down instability.</span>
+<span class="sd">    rudp: float</span>
+<span class="sd">        Outer orbital separation in the up-down instability.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``rudp,rudm = precession.rupdown(q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -4318,7 +4425,32 @@
 
 
 <div class="viewcode-block" id="updown_endpoint"><a class="viewcode-back" href="../auto.html#precession.updown_endpoint">[docs]</a><span class="k">def</span> <span class="nf">updown_endpoint</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
-    
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Endpoint of the up-down precessional instability.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    deltaphi: float</span>
+<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    theta1: float</span>
+<span class="sd">        Angle between orbital angular momentum and primary spin.</span>
+<span class="sd">    theta2: float</span>
+<span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``theta1,theta2,deltaphi = precession.updown_endpoint(q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">chi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">chi2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -4332,7 +4464,7 @@
     <span class="k">return</span> <span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span></div>
 
 
-<span class="c1">## TODO: format output how you want</span>
+<span class="c1">## TODO: CHECK THIS!! Matt: format output how you want</span>
 <div class="viewcode-block" id="resonances_endpoint"><a class="viewcode-back" href="../auto.html#precession.resonances_endpoint">[docs]</a><span class="k">def</span> <span class="nf">resonances_endpoint</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">chieff</span><span class="p">):</span>
     
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -4364,12 +4496,9 @@
 
 <div class="viewcode-block" id="omegasq_aligned"><a class="viewcode-back" href="../auto.html#precession.omegasq_aligned">[docs]</a><span class="k">def</span> <span class="nf">omegasq_aligned</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">which</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    omegasq = omegasq_aligned(r,q,chi1,chi2,which)</span>
-
+<span class="sd">    Squared oscillation frequency of a given perturbed aligned-spin binary.</span>
+<span class="sd">    The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    r: float</span>
@@ -4382,11 +4511,15 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    which: string</span>
 <span class="sd">        Select function behavior.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    omegasq: float</span>
 <span class="sd">        Squared frequency.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``omegasq = precession.omegasq_aligned(r,q,chi1,chi2,which)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -4423,11 +4556,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The critical separation r_wide below which the binary component with</span>
 <span class="sd">    smaller dimensionless spin may undergo wide nutations.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    r_wide = widenutation(q,chi1,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    q: float</span>
@@ -4436,11 +4565,15 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    r_wide: float</span>
 <span class="sd">        Orbital separation where wide nutations becomes possible.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``r_wide = precession.widenutation_separation(q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -4453,6 +4586,36 @@
 
 
 <div class="viewcode-block" id="widenutation_condition"><a class="viewcode-back" href="../auto.html#precession.widenutation_condition">[docs]</a><span class="k">def</span> <span class="nf">widenutation_condition</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Conditions for wide nutation to take place. The returned flag which is</span>
+<span class="sd">        - `wide1` if wide nutation is allowed for the primary BH.</span>
+<span class="sd">        - `wide2` if wide nutation is allowed for the secondary BH.</span>
+<span class="sd">        - `nowide` if wide nutation is not allowed.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    which: string</span>
+<span class="sd">        Select function behavior.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``which,kappa,chieff = precession.widenutation_condition(r,q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
