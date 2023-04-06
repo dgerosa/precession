@@ -8,22 +8,21 @@ from itertools import repeat
 ################ Utilities ################
 
 
-# TODO: new algorithm! Needs to be documented!
 def roots_vec(p): #, enforce=False):
     """
-    Locate roots of polynomial using a vectorized version of numpy.roots. Equivalent to [np.roots(x) for x in p].
-    Credits: stackoverflow user `pv`, see https://stackoverflow.com/a/35853977
-
+    Locate roots of polynomial using a vectorized version of numpy.roots.
+    Credit to stackoverflow user 'pv' (https://stackoverflow.com/a/35853977) for some of this code, which we generalize to accomodate equations of different degrees.
+    
     Parameters
     ----------
-    p: array
+    p: float
         Polynomial coefficients.
-
+    
     Returns
     -------
-    roots: array
+    roots: float
         Polynomial roots.
-
+    
     Examples
     --------
     ``roots = precession.roots_vec(p)``
@@ -67,14 +66,10 @@ def roots_vec(p): #, enforce=False):
 
     return resind
 
-#TODO docstrings
+
 def norm_nested(x):
     """
     Norm of 2D array of shape (N,3) along last axis.
-
-    Examples
-    --------
-    n = norm_nested(x)
 
     Parameters
     ----------
@@ -85,18 +80,18 @@ def norm_nested(x):
     -------
     n : array
         Norm of the input arrays.
+
+    Examples
+    --------
+    ``n = norm_nested(x)``
     """
 
     return np.linalg.norm(x, axis=1)
 
-#TODO docstrings
+
 def normalize_nested(x):
     """
     Normalize 2D array of shape (N,3) along last axis.
-
-    Examples
-    --------
-    y = normalize_nested(x)
 
     Parameters
     ----------
@@ -107,18 +102,18 @@ def normalize_nested(x):
     -------
     y : array
         Normalized array.
+
+    Examples
+    --------
+    ``y = normalize_nested(x)``
     """
 
     return x/norm_nested(x)[:, None]
 
-#TODO docstrings
+
 def dot_nested(x, y):
     """
     Dot product between 2D arrays along last axis.
-
-    Examples
-    --------
-    z = dot_nested(x, y)
 
     Parameters
     ----------
@@ -131,18 +126,18 @@ def dot_nested(x, y):
     -------
     z : array
         Dot product array.
+
+    Examples
+    --------
+    ``z = dot_nested(x, y)``
     """
 
     return np.einsum('ij, ij->i', x, y)
 
-#TODO docstrings
+
 def scalar_nested(k, x):
     """
     Nested scalar product between a 1D and a 2D array.
-
-    Examples
-    --------
-    y = scalar_nested(k, x)
 
     Parameters
     ----------
@@ -155,14 +150,37 @@ def scalar_nested(k, x):
     -------
     y : array
         Scalar product array.
+
+    Examples
+    --------
+    ``y = scalar_nested(k, x)``
     """
 
     return k[:,np.newaxis]*x
 
-#TODO docstrings
+
 def rotate_nested(vec, align_zaxis, align_xzplane):
-    
-    '''Rotate a given vector vec to a frame such that the vector align_zaxis lies along z and the vector align_xzplane lies in the xz plane.'''
+    """
+    Rotate a given vector vec to a frame such that the vector align_zaxis lies along z and the vector align_xzplane lies in the xz plane.
+
+    Parameters
+    ----------
+    vec : array
+        Input array.
+    align_zaxis : array
+        Reference array.
+    align_xzplane : array
+        Reference array.
+
+    Returns
+    -------
+    vecrot : array
+        Rotated array.
+ 
+    Examples
+    --------
+    ``vecrot = rotate_nested(vec, align_zaxis, align_xzplane)``
+    """
 
     vec = np.atleast_2d(vec)
     align_zaxis = np.atleast_2d(align_zaxis)
@@ -188,14 +206,10 @@ def rotate_nested(vec, align_zaxis, align_xzplane):
 
     return vecrot
 
-#TODO docstrings
+
 def sample_unitsphere(N=1):
     """
     Sample points uniformly on a sphere of unit radius. Returns array of shape (N,3).
-
-    Examples
-    --------
-    vec = sample_unitsphere(N = 1)
 
     Parameters
     ----------
@@ -206,14 +220,35 @@ def sample_unitsphere(N=1):
     -------
     vec: array
         Vector in Cartesian coomponents.
+
+    Examples
+    --------
+    ``vec = sample_unitsphere(N=1)``
     """
 
     vec = np.random.randn(3, N)
     vec /= np.linalg.norm(vec, axis=0)
     return vec.T
 
-#TODO docstrings
+
 def isotropic_angles(N=1):
+    """
+    Sample the angles theta1, theta2, and deltaphi from an isotropic distribution.
+    
+    Parameters
+    ----------
+    N: integer, optional (default: 1)
+        Number of samples.
+    
+    Returns
+    -------
+    vec: array
+        Vector in Cartesian coomponents.
+    
+    Examples
+    --------
+    ``vec = precession.isotropic_angles(N=1)``
+    """
 
     theta1=np.arccos(np.random.uniform(-1,1,N))
     theta2=np.arccos(np.random.uniform(-1,1,N))
@@ -221,8 +256,27 @@ def isotropic_angles(N=1):
 
     return theta1,theta2,deltaphi
 
-#TODO docstrings
+
 def tiler(thing,shaper):
+    """
+    Repeat the quantity thing a numer of times give by the shape of shaper.
+    
+    Parameters
+    ----------
+    thing: float  
+        Quantity to be repeated
+    shaper: array
+        Quantity providing the shape.
+    
+    Returns
+    -------
+    thing: float  
+        Quantity to be repeated
+    
+    Examples
+    --------
+    ``thing = precession.tiler(thing,shaper)``
+    """
 
     thing =np.atleast_1d(thing)
     shaper =np.atleast_1d(shaper)
@@ -230,8 +284,30 @@ def tiler(thing,shaper):
 
     return np.squeeze(np.tile(thing, np.shape(shaper)).reshape(len(shaper),len(thing)))
 
-#TODO docstrings
+
 def affine(vec, low, up):
+    """
+    Perform an affine trasformation to scale a vector given upper and lower limits: rescaled = ( vec - low ) / (up - low). If these are outside the domain of the vector, the result will be in [0,1].
+    
+    Parameters
+    ----------
+    vec: array
+        Vector in Cartesian coomponents.
+    low: float
+        Lower limit.
+    up: float
+        Upper limit.
+    
+    Returns
+    -------
+    rescaled: float, optional
+        Rescaled vector.
+    
+    Examples
+    --------
+    ``rescaled = precession.affine(vec,low,up)``
+    """
+
     vec = np.atleast_1d(vec).astype(float)
     up = np.atleast_1d(up).astype(float)
     low = np.atleast_1d(low).astype(float)
@@ -240,9 +316,29 @@ def affine(vec, low, up):
 
     return rescaled
 
-#TODO docstrings
 def inverseaffine(rescaled, low, up):
+    """
+    Perform an inferse affine trasformation to scale a vector from some upper and lower limits: vec = low + rescaled*(up-low). If rescaled is defined in [0,1], the result will be defined in [low,up].
     
+    Parameters
+    ----------
+    rescaled: float
+        Rescaled vector.
+    low: float
+        Lower limit.
+    up: float
+        Upper limit.
+    
+    Returns
+    -------
+    vec: array
+        Vector in Cartesian coomponents.
+    
+    Examples
+    --------
+    ``vec = precession.inverseaffine(rescaled,low,up)``
+    """
+
     rescaled = np.atleast_1d(rescaled).astype(float)
     up = np.atleast_1d(up).astype(float)
     low = np.atleast_1d(low).astype(float)
@@ -251,14 +347,10 @@ def inverseaffine(rescaled, low, up):
 
     return vec
 
-#TODO docstrings
+
 def wraproots(coefficientfunction, *args, **kwargs):
     """
     Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is essentially a wrapper of numpy.roots.
-
-    Examples
-    --------
-    sols = precession.wraproots(coefficientfunction, *args, **kwargs)
 
     Parameters
     ----------
@@ -271,6 +363,10 @@ def wraproots(coefficientfunction, *args, **kwargs):
     -------
     sols: array
         Roots of the polynomial.
+
+    Examples
+    --------
+    ``sols = precession.wraproots(coefficientfunction, *args, **kwargs)``
     """
 
     coeffs = coefficientfunction(*args, **kwargs)
@@ -279,15 +375,11 @@ def wraproots(coefficientfunction, *args, **kwargs):
 
     return sols
 
-#TODO docstrings
+
 def ellippi(n, phi, m):
     """
     Incomplete elliptic integral of the third kind. This is reconstructed using scipy's implementation of Carlson's R integrals (arxiv:math/9409227).
-
-    Examples
-    --------
-    piintegral = precession.ellippi(n, phi, m)
-
+ 
     Parameters
     ----------
     n: foat
@@ -301,6 +393,10 @@ def ellippi(n, phi, m):
     -------
     piintegral: float
         Incomplete elliptic integral of the third kind
+
+    Examples
+    --------
+    ``piintegral = precession.ellippi(n, phi, m)``
     """
 
     # Important: this requires scipy>=1.8.0
@@ -325,7 +421,7 @@ def ellippi(n, phi, m):
     c = (1/np.sin(phi))**2
     return scipy.special.elliprf(c-1,c-m,c) +(np.array(n)/3)*scipy.special.elliprj(c-1,c-m,c,c-n)
 
-#TODO docstrings
+
 def ismonotonic(vec, which):
     """
     Check if an array is monotonic. The parameter `which` can takes the following values:
@@ -333,10 +429,6 @@ def ismonotonic(vec, which):
         - `<=` check array is increasing.
         - `>` check array is strictly decreasing.
         - `>=` check array is decreasing.
-
-    Examples
-    --------
-        check = ismonotonic(vec, which):
 
     Parameters
     ----------
@@ -349,6 +441,10 @@ def ismonotonic(vec, which):
     -------
     check: boolean
         Result
+
+    Examples
+    --------
+    ``check = ismonotonic(vec, which)``
     """
 
     if which == '<':

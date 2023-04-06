@@ -183,6 +183,12 @@ def descr(varname,vardef=None,optional=False):
     lookup['omegasq']=['float', "Squared frequency."]
     lookup['func_av']=['float', "Precession average of func."]
     lookup['fGW']=['float', "Gravitational-wave frequency."]
+    lookup['p']=['float', "Polynomial coefficients."]
+    lookup['roots']=['float', "Polynomial roots."]
+    lookup['low']=['float', "Lower limit."]
+    lookup['up']=['float', "Upper limit."]
+    lookup['rescaled']=['float', "Rescaled vector."]
+
 
     lookup['**kwargs']=['unpacked dictionary, optional', "Additional keyword arguments"]
     lookup['**odeint_kwargs']=['unpacked dictionary, optional', "Additional keyword arguments"]
