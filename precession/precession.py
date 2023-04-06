@@ -5119,18 +5119,17 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorde
 
 def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, **odeint_kwargs):
     """
-    Perform orbit-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. Orbit-averaged integration can only be done between finite separations.
+    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
+    The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned.
+    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
     The initial conditions must be specified in terms of one an only one of the following:
-    - Lh, S1h, and S2h
-    - theta1,theta2, and deltaphi.
-    - J, chieff, and S.
-    - kappa, chieff, and S.
-    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['t', 'theta1', 'theta2', 'deltaphi', 'S', 'Lh', 'S1h', 'S2h', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2']
-
-    Examples
-    --------
-    outputs = inspiral_orbav(theta1=None,theta2=None,deltaphi=None,S=None,Lh=None,S1h=None,S2h=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,quadrupole_formula=False,requested_outputs=None)
-
+        - Lh, S1h, and S2h
+        - theta1,theta2, and deltaphi.
+        - deltachi, kappa, chieff, cyclesign.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].
+    The flag enforce allows checking the consistency of the input variables.
+    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.
+    
     Parameters
     ----------
     theta1: float, optional (default: None)
@@ -5139,16 +5138,14 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         Angle between orbital angular momentum and secondary spin.
     deltaphi: float, optional (default: None)
         Angle between the projections of the two spins onto the orbital plane.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
     Lh: array, optional (default: None)
         Direction of the orbital angular momentum, unit vector.
     S1h: array, optional (default: None)
         Direction of the primary spin, unit vector.
     S2h: array, optional (default: None)
         Direction of the secondary spin, unit vector.
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
+    deltachi: float, optional (default: None)
+        Weighted spin difference.
     kappa: float, optional (default: None)
         Asymptotic angular momentum.
     r: float, optional (default: None)
@@ -5163,16 +5160,31 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float, optional (default: None)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    MISSING: COULD NOT BUILD, optional (default: False)
-        FILL MANUALLY.
+    cyclesign: integer, optional (default: +1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    PNorderpre: array (default: [0,0.5])
+        PN orders considered in the spin-precession equations.
+    PNorderrad: array (default: [0,0.5])
+        PN orders considered in the radiation-reaction equation.
     requested_outputs: list, optional (default: None)
         Set of outputs.
-
+    **odeint_kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
     Returns
     -------
     outputs: dictionary
         Set of outputs.
+    
+    Examples
+    --------
+    ``outputs = precession.inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,r=r,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_orbav(Lh=Lh,S1h=S1h,S2h=S2h,u=u,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,u=u,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_orbav(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
     """
+
 
     # Substitute None inputs with arrays of Nones
     inputs = [theta1, theta2, deltaphi, Lh, S1h, S2h, deltachi, kappa, r, u, chieff, q, chi1, chi2]
@@ -5280,7 +5292,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
 
     return outcome
 
-
+#TODO docs
 def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, rswitch=None, u=None, uswitch=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,**odeint_kwargs):
     """
     Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. If integrating forward in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backward in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.
@@ -5412,7 +5424,7 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
 
     return evolution_full
 
-
+#TODO docs
 def inspiral(*args, which=None, **kwargs):
     """
     TODO write docstings. This is the ultimate wrapper the user should call.
@@ -5432,15 +5444,10 @@ def inspiral(*args, which=None, **kwargs):
         raise ValueError("`which` needs to be `precav`, `orbav` or `hybrid`.")
 
 
-# TODO: insert flag to select PN order
 def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_msun, PNorder=[0,1,1.5,2]):
     """
     Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.
-
-    Examples
-    --------
-    r = gwfrequency_to_pnseparation(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)
-
+    
     Parameters
     ----------
     theta1: float
@@ -5449,8 +5456,8 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_
         Angle between orbital angular momentum and secondary spin.
     deltaphi: float
         Angle between the projections of the two spins onto the orbital plane.
-    f: float
-        Gravitational-wave frequency in Hz.
+    fGW: float
+        Gravitational-wave frequency.
     q: float
         Mass ratio: 0<=q<=1.
     chi1: float
@@ -5459,11 +5466,17 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     M_msun: float
         Total mass of the binary in solar masses.
-
+    PNorder: array (default: [0,1,1.5,2])
+        PN orders considered.
+    
     Returns
     -------
     r: float
         Binary separation.
+    
+    Examples
+    --------
+    ``r = precession.gwfrequency_to_pnseparation(theta1,theta2,deltaphi,fGW,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``
     """
 
     theta1 = np.atleast_1d(theta1).astype(float)
@@ -5491,11 +5504,7 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_
 def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_msun, PNorder=[0,1,1.5,2]):
     """
     Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.
-
-    Examples
-    --------
-    r = pnseparation_to_gwfrequency(theta1,theta2,deltaphi,f,q,chi1,chi2,M_msun)
-
+    
     Parameters
     ----------
     theta1: float
@@ -5504,8 +5513,8 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
         Angle between orbital angular momentum and secondary spin.
     deltaphi: float
         Angle between the projections of the two spins onto the orbital plane.
-    f: float
-        Gravitational-wave frequency in Hz.
+    r: float
+        Binary separation.
     q: float
         Mass ratio: 0<=q<=1.
     chi1: float
@@ -5514,12 +5523,19 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     M_msun: float
         Total mass of the binary in solar masses.
-
+    PNorder: array (default: [0,1,1.5,2])
+        PN orders considered.
+    
     Returns
     -------
-    r: float
-        Binary separation.
+    fGW: float
+        Gravitational-wave frequency.
+    
+    Examples
+    --------
+    ``fGW = precession.pnseparation_to_gwfrequency(theta1,theta2,deltaphi,r,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``
     """
+
 
     theta1 = np.atleast_1d(theta1).astype(float)
     theta2 = np.atleast_1d(theta2).astype(float)

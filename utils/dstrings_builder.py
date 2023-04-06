@@ -182,6 +182,7 @@ def descr(varname,vardef=None,optional=False):
     lookup['rudm']=['float', "Inner orbital separation in the up-down instability."]
     lookup['omegasq']=['float', "Squared frequency."]
     lookup['func_av']=['float', "Precession average of func."]
+    lookup['fGW']=['float', "Gravitational-wave frequency."]
 
     lookup['**kwargs']=['unpacked dictionary, optional', "Additional keyword arguments"]
     lookup['**odeint_kwargs']=['unpacked dictionary, optional', "Additional keyword arguments"]
