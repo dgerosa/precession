@@ -4699,7 +4699,7 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
 def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, enforce=False, **odeint_kwargs):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
-    The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.
+    The integration range must be specified using either r or u (and not both). These need to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.
     The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
     The initial conditions must be specified in terms of one an only one of the following:
         - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
@@ -5120,7 +5120,7 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorde
 def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, **odeint_kwargs):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
-    The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned.
+    The integration range must be specified using either r or u (and not both). These need to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned.
     The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
     The initial conditions must be specified in terms of one an only one of the following:
         - Lh, S1h, and S2h
@@ -5292,20 +5292,19 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
 
     return outcome
 
-#TODO docs
+
 def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, rswitch=None, u=None, uswitch=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,**odeint_kwargs):
     """
-    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. If integrating forward in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backward in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.
+    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently.
+    Either r of u needs to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.
+    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
     The initial conditions must be specified in terms of one an only one of the following:
-    - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
-    - J, chieff (only if integrating from finite separations because J otherwise diverges).
-    - kappa, chieff.
-    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'S', 'J', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'].
-
-    Examples
-    --------
-    outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)
-
+        - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
+        - kappa, chieff.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].
+    The flag enforce allows checking the consistency of the input variables.
+    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.
+    
     Parameters
     ----------
     theta1: float, optional (default: None)
@@ -5314,10 +5313,8 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         Angle between orbital angular momentum and secondary spin.
     deltaphi: float, optional (default: None)
         Angle between the projections of the two spins onto the orbital plane.
-    S: float, optional (default: None)
-        Magnitude of the total spin.
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
+    deltachi: float, optional (default: None)
+        Weighted spin difference.
     kappa: float, optional (default: None)
         Asymptotic angular momentum.
     r: float, optional (default: None)
@@ -5338,11 +5335,20 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     requested_outputs: list, optional (default: None)
         Set of outputs.
-
+    **odeint_kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
     Returns
     -------
     outputs: dictionary
         Set of outputs.
+    
+    Examples
+    --------
+    ``outputs = precession.inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,u=u,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_hybrid(kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_hybrid(kappa,u=u,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
     """
 
     # Outputs available in both orbit-averaged and precession-averaged evolutions
@@ -5424,11 +5430,38 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
 
     return evolution_full
 
-#TODO docs
+
 def inspiral(*args, which=None, **kwargs):
     """
-    TODO write docstings. This is the ultimate wrapper the user should call.
+    Generic wrapper for binary inspirals. The keyword which selects between the different approximation:
+        - If which=precession use precession-averaged inspiral (i.e. run `inspiral_precav`)
+        - If which=orbit use orbit-averaged inspiral (i.e. run `inspiral_orbav`)
+        - If which=hybrid use hybrid inspiral (i.e. run `inspiral_hybrid`)
+    All other aguments and keyword arguments are passed on to the relevant inspiral function; see their docs for details.
+
+    Parameters
+    ----------
+    **args: unpacked dictionary, optional
+        Additional arguments.
+    which: string, optional (default: None)
+        Select function behavior.
+    **kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
+    Returns
+    -------
+    outputs: dictionary, optional
+        Set of outputs.
+    
+    Examples
+    --------
+    ``outputs = precession.inspiral(*args,which='precession',**kwargs)``
+    ``outputs = precession.inspiral(*args,which='orbit',**kwargs)``
+    ``outputs = precession.inspiral(*args,which='hybrid',**kwargs)``
     """
+
+
+
 
     # Precession-averaged integrations
     if which in ['precession', 'precav', 'precessionaveraged', 'precessionaverage', 'precession-averaged', 'precession-average', 'precessionav']:
