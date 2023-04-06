@@ -2489,18 +2489,55 @@ Setting donotnormalize=True is equivalent to mathcalA=1.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.inspiral">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">inspiral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#inspiral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.inspiral" title="Permalink to this definition"></a></dt>
-<dd><p>TODO write docstings. This is the ultimate wrapper the user should call.</p>
+<dd><dl class="simple">
+<dt>Generic wrapper for binary inspirals. The keyword which selects between the different approximation:</dt><dd><ul class="simple">
+<li><p>If which=precession use precession-averaged inspiral (i.e. run <cite>inspiral_precav</cite>)</p></li>
+<li><p>If which=orbit use orbit-averaged inspiral (i.e. run <cite>inspiral_orbav</cite>)</p></li>
+<li><p>If which=hybrid use hybrid inspiral (i.e. run <cite>inspiral_hybrid</cite>)</p></li>
+</ul>
+</dd>
+</dl>
+<p>All other aguments and keyword arguments are passed on to the relevant inspiral function; see their docs for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**args: unpacked dictionary, optional</strong></dt><dd><p>Additional arguments.</p>
+</dd>
+<dt><strong>which: string, optional (default: None)</strong></dt><dd><p>Select function behavior.</p>
+</dd>
+<dt><strong>**kwargs: unpacked dictionary, optional</strong></dt><dd><p>Additional keyword arguments.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>outputs: dictionary, optional</dt><dd><p>Set of outputs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral(*args,which='precession',**kwargs)</span></code>
+<code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral(*args,which='orbit',**kwargs)</span></code>
+<code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral(*args,which='hybrid',**kwargs)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.inspiral_hybrid">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">inspiral_hybrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltachi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rswitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uswitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requested_outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">odeint_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#inspiral_hybrid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.inspiral_hybrid" title="Permalink to this definition"></a></dt>
-<dd><p>Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. If integrating forward in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backward in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.
-The initial conditions must be specified in terms of one an only one of the following:
-- theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
-- J, chieff (only if integrating from finite separations because J otherwise diverges).
-- kappa, chieff.
-The desired outputs can be specified with a list e.g. requested_outputs=[‘theta1’,’theta2’,’deltaphi’]. All the available variables are returned by default. These are: [‘theta1’, ‘theta2’, ‘deltaphi’, ‘S’, ‘J’, ‘kappa’, ‘r’, ‘u’, ‘chieff’, ‘q’, ‘chi1’, ‘chi2’].</p>
+<dd><p>Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently.
+Either r of u needs to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.
+The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
+The initial conditions must be specified in terms of one an only one of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).</p></li>
+<li><p>kappa, chieff.</p></li>
+</ul>
+</div></blockquote>
+<p>The desired outputs can be specified with a list e.g. requested_outputs=[‘theta1’,’theta2’,’deltaphi’]. All the available variables are returned by default. These are: [‘theta1’, ‘theta2’, ‘deltaphi’, ‘deltachi’, ‘kappa’, ‘r’, ‘u’, ‘deltachiminus’, ‘deltachiplus’, ‘deltachi3’, ‘chieff’, ‘q’, ‘chi1’, ‘chi2’].
+The flag enforce allows checking the consistency of the input variables.
+Additional keywords arguments are passed to <cite>scipy.integrate.odeint</cite> after some custom-made default settings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -2510,9 +2547,7 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 </dd>
 <dt><strong>deltaphi: float, optional (default: None)</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
 </dd>
-<dt><strong>S: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total spin.</p>
-</dd>
-<dt><strong>J: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+<dt><strong>deltachi: float, optional (default: None)</strong></dt><dd><p>Weighted spin difference.</p>
 </dd>
 <dt><strong>kappa: float, optional (default: None)</strong></dt><dd><p>Asymptotic angular momentum.</p>
 </dd>
@@ -2534,6 +2569,8 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 </dd>
 <dt><strong>requested_outputs: list, optional (default: None)</strong></dt><dd><p>Set of outputs.</p>
 </dd>
+<dt><strong>**odeint_kwargs: unpacked dictionary, optional</strong></dt><dd><p>Additional keyword arguments.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -2544,14 +2581,17 @@ The desired outputs can be specified with a list e.g. requested_outputs=[‘thet
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,u=u,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral_hybrid(kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">outputs</span> <span class="pre">=</span> <span class="pre">precession.inspiral_hybrid(kappa,u=u,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.inspiral_orbav">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">inspiral_orbav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S2h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltachi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclesign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PNorderpre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PNorderrad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">1.5,</span> <span class="pre">2,</span> <span class="pre">2.5,</span> <span class="pre">3,</span> <span class="pre">3.5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requested_outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">odeint_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#inspiral_orbav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.inspiral_orbav" title="Permalink to this definition"></a></dt>
 <dd><p>Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
-The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned.
+The integration range must be specified using either r or u (and not both). These need to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned.
 The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
 The initial conditions must be specified in terms of one an only one of the following:</p>
 <blockquote>
@@ -2626,7 +2666,7 @@ Additional keywords arguments are passed to <cite>scipy.integrate.odeint</cite> 
 <dt class="sig sig-object py" id="precession.inspiral_precav">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">inspiral_precav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requested_outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforce</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">odeint_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#inspiral_precav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.inspiral_precav" title="Permalink to this definition"></a></dt>
 <dd><p>Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
-The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.
+The integration range must be specified using either r or u (and not both). These need to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.
 The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
 The initial conditions must be specified in terms of one an only one of the following:</p>
 <blockquote>

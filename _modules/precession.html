@@ -4773,7 +4773,7 @@
 <div class="viewcode-block" id="inspiral_precav"><a class="viewcode-back" href="../auto.html#precession.inspiral_precav">[docs]</a><span class="k">def</span> <span class="nf">inspiral_precav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">enforce</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.</span>
-<span class="sd">    The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.</span>
+<span class="sd">    The integration range must be specified using either r or u (and not both). These need to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.</span>
 <span class="sd">    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).</span>
 <span class="sd">    The initial conditions must be specified in terms of one an only one of the following:</span>
 <span class="sd">        - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).</span>
@@ -5194,7 +5194,7 @@
 <div class="viewcode-block" id="inspiral_orbav"><a class="viewcode-back" href="../auto.html#precession.inspiral_orbav">[docs]</a><span class="k">def</span> <span class="nf">inspiral_orbav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Lh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S1h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S2h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=+</span><span class="mi">1</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">PNorderrad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">3.5</span><span class="p">],</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.</span>
-<span class="sd">    The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned.</span>
+<span class="sd">    The integration range must be specified using either r or u (and not both). These need to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned.</span>
 <span class="sd">    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).</span>
 <span class="sd">    The initial conditions must be specified in terms of one an only one of the following:</span>
 <span class="sd">        - Lh, S1h, and S2h</span>
@@ -5366,20 +5366,19 @@
 
     <span class="k">return</span> <span class="n">outcome</span></div>
 
-<span class="c1">#TODO docs</span>
+
 <div class="viewcode-block" id="inspiral_hybrid"><a class="viewcode-back" href="../auto.html#precession.inspiral_hybrid">[docs]</a><span class="k">def</span> <span class="nf">inspiral_hybrid</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rswitch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uswitch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, properly matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently. The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. If integrating forward in time, perform the precession-average evolution first and then swith to orbit averaging.  If integrating backward in time, perform the orbit-average evolution first and then swith to precession averaging. For infinitely large separation in the precession-averaged case, use r=np.inf or u=0. The switch value will not part of the output unless it is also present in the r/u array.</span>
+<span class="sd">    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently.</span>
+<span class="sd">    Either r of u needs to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.</span>
+<span class="sd">    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).</span>
 <span class="sd">    The initial conditions must be specified in terms of one an only one of the following:</span>
-<span class="sd">    - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).</span>
-<span class="sd">    - J, chieff (only if integrating from finite separations because J otherwise diverges).</span>
-<span class="sd">    - kappa, chieff.</span>
-<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=[&#39;theta1&#39;,&#39;theta2&#39;,&#39;deltaphi&#39;]. All the available variables are returned by default. These are: [&#39;theta1&#39;, &#39;theta2&#39;, &#39;deltaphi&#39;, &#39;S&#39;, &#39;J&#39;, &#39;kappa&#39;, &#39;r&#39;, &#39;u&#39;, &#39;chieff&#39;, &#39;q&#39;, &#39;chi1&#39;, &#39;chi2&#39;].</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    outputs = inspiral_hybrid(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,rswitch=None,u=None,uswitch=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)</span>
-
+<span class="sd">        - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).</span>
+<span class="sd">        - kappa, chieff.</span>
+<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=[&#39;theta1&#39;,&#39;theta2&#39;,&#39;deltaphi&#39;]. All the available variables are returned by default. These are: [&#39;theta1&#39;, &#39;theta2&#39;, &#39;deltaphi&#39;, &#39;deltachi&#39;, &#39;kappa&#39;, &#39;r&#39;, &#39;u&#39;, &#39;deltachiminus&#39;, &#39;deltachiplus&#39;, &#39;deltachi3&#39;, &#39;chieff&#39;, &#39;q&#39;, &#39;chi1&#39;, &#39;chi2&#39;].</span>
+<span class="sd">    The flag enforce allows checking the consistency of the input variables.</span>
+<span class="sd">    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float, optional (default: None)</span>
@@ -5388,10 +5387,8 @@
 <span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
 <span class="sd">    deltaphi: float, optional (default: None)</span>
 <span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
-<span class="sd">    S: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    deltachi: float, optional (default: None)</span>
+<span class="sd">        Weighted spin difference.</span>
 <span class="sd">    kappa: float, optional (default: None)</span>
 <span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float, optional (default: None)</span>
@@ -5412,11 +5409,20 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    requested_outputs: list, optional (default: None)</span>
 <span class="sd">        Set of outputs.</span>
-
+<span class="sd">    **odeint_kwargs: unpacked dictionary, optional</span>
+<span class="sd">        Additional keyword arguments.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    outputs: dictionary</span>
 <span class="sd">        Set of outputs.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``outputs = precession.inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``outputs = precession.inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,u=u,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``outputs = precession.inspiral_hybrid(kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``outputs = precession.inspiral_hybrid(kappa,u=u,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Outputs available in both orbit-averaged and precession-averaged evolutions</span>
@@ -5498,11 +5504,38 @@
 
     <span class="k">return</span> <span class="n">evolution_full</span></div>
 
-<span class="c1">#TODO docs</span>
+
 <div class="viewcode-block" id="inspiral"><a class="viewcode-back" href="../auto.html#precession.inspiral">[docs]</a><span class="k">def</span> <span class="nf">inspiral</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    TODO write docstings. This is the ultimate wrapper the user should call.</span>
+<span class="sd">    Generic wrapper for binary inspirals. The keyword which selects between the different approximation:</span>
+<span class="sd">        - If which=precession use precession-averaged inspiral (i.e. run `inspiral_precav`)</span>
+<span class="sd">        - If which=orbit use orbit-averaged inspiral (i.e. run `inspiral_orbav`)</span>
+<span class="sd">        - If which=hybrid use hybrid inspiral (i.e. run `inspiral_hybrid`)</span>
+<span class="sd">    All other aguments and keyword arguments are passed on to the relevant inspiral function; see their docs for details.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    **args: unpacked dictionary, optional</span>
+<span class="sd">        Additional arguments.</span>
+<span class="sd">    which: string, optional (default: None)</span>
+<span class="sd">        Select function behavior.</span>
+<span class="sd">    **kwargs: unpacked dictionary, optional</span>
+<span class="sd">        Additional keyword arguments.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    outputs: dictionary, optional</span>
+<span class="sd">        Set of outputs.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``outputs = precession.inspiral(*args,which=&#39;precession&#39;,**kwargs)``</span>
+<span class="sd">    ``outputs = precession.inspiral(*args,which=&#39;orbit&#39;,**kwargs)``</span>
+<span class="sd">    ``outputs = precession.inspiral(*args,which=&#39;hybrid&#39;,**kwargs)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+
+
 
     <span class="c1"># Precession-averaged integrations</span>
     <span class="k">if</span> <span class="n">which</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;precession&#39;</span><span class="p">,</span> <span class="s1">&#39;precav&#39;</span><span class="p">,</span> <span class="s1">&#39;precessionaveraged&#39;</span><span class="p">,</span> <span class="s1">&#39;precessionaverage&#39;</span><span class="p">,</span> <span class="s1">&#39;precession-averaged&#39;</span><span class="p">,</span> <span class="s1">&#39;precession-average&#39;</span><span class="p">,</span> <span class="s1">&#39;precessionav&#39;</span><span class="p">]:</span>
