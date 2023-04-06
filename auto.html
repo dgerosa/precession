@@ -3231,8 +3231,36 @@ There are integration methods implemented:</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.reminantspindirection">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">reminantspindirection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rplunge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#reminantspindirection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.reminantspindirection" title="Permalink to this definition"></a></dt>
-<dd><p>Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentu ‘at plunge’</p>
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">reminantspindirection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#reminantspindirection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.reminantspindirection" title="Permalink to this definition"></a></dt>
+<dd><p>Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentum ‘at plunge’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>theta2: float</strong></dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+</dd>
+<dt><strong>deltaphi: float</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>thetaL: float</dt><dd><p>Angle betwen orbital angular momentum and total angular momentum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">thetaL</span> <span class="pre">=</span> <span class="pre">precession.reminantspindirection(theta1,theta2,deltaphi,r,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3251,7 +3279,7 @@ geometrical units (i.e. vkick/c) by default, and converted to km/s if
 kms=True. This formula has to be applied <em>close to merger</em>, where
 numerical relativity simulations are available. You should do a PN evolution
 to transfer binaries at r~10M.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
@@ -3284,19 +3312,14 @@ to transfer binaries at r~10M.</p>
 <dd class="field-even"><dl class="simple">
 <dt>vk: float</dt><dd><p>Kick of the black-hole remnant (magnitude).</p>
 </dd>
-<dt>Other parameters</dt><dd></dd>
-</dl>
-<blockquote>
-<div></div></blockquote>
-<dl class="simple">
-<dt>vk_array: array</dt><dd><p>Kick of the black-hole remnant (in a frame aligned with L).</p>
+<dt>vk_array: array, optional</dt><dd><p>Kick of the black-hole remnant (in a frame aligned with L).</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p><code class="docutils literal notranslate"><span class="pre">vk</span> <span class="pre">=</span> <span class="pre">remnantkick(theta1,</span> <span class="pre">theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)</span></code></p>
-<p>vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)</p>
+<p><code class="docutils literal notranslate"><span class="pre">vk</span> <span class="pre">=</span> <span class="pre">precession.remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,full_output=False)</span></code>
+<code class="docutils literal notranslate"><span class="pre">vk,vk_array</span> <span class="pre">=</span> <span class="pre">precession.remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,full_output=True)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3330,7 +3353,7 @@ transfer binaries to r~10M.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>mfin = remnantmass(theta1,theta2,q,chi1,chi2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">mfin</span> <span class="pre">=</span> <span class="pre">precession.remnantmass(theta1,theta2,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3371,7 +3394,7 @@ evolution to transfer binaries at r~10M.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>chifin = remnantspin(theta1,theta2,deltaphi,q,chi1,chi2,which=’HBR16_34corr’)</p>
+<p><code class="docutils literal notranslate"><span class="pre">chifin</span> <span class="pre">=</span> <span class="pre">precession.remnantspin(theta1,theta2,deltaphi,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">

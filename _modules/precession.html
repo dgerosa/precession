@@ -5644,11 +5644,7 @@
 <span class="sd">    2012. This formula has to be applied *close to merger*, where numerical</span>
 <span class="sd">    relativity simulations are available. You should do a PN evolution to</span>
 <span class="sd">    transfer binaries to r~10M.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    mfin = remnantmass(theta1,theta2,q,chi1,chi2)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float</span>
@@ -5661,11 +5657,15 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    mfin: float</span>
 <span class="sd">        Mass of the black-hole remnant.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``mfin = precession.remnantmass(theta1,theta2,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -5699,11 +5699,7 @@
 <span class="sd">    angles (HBR16_34corr). This formula has to be applied *close to merger*,</span>
 <span class="sd">    where numerical relativity simulations are available. You should do a PN</span>
 <span class="sd">    evolution to transfer binaries at r~10M.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    chifin = remnantspin(theta1,theta2,deltaphi,q,chi1,chi2,which=&#39;HBR16_34corr&#39;)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float</span>
@@ -5720,11 +5716,15 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    which: string, optional (default: &#39;HBR16_34corr&#39;)</span>
 <span class="sd">        Select function behavior.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    chifin: float</span>
 <span class="sd">        Spin of the black-hole remnant.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``chifin = precession.remnantspin(theta1,theta2,deltaphi,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -5798,16 +5798,44 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">chifin</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="reminantspindirection"><a class="viewcode-back" href="../auto.html#precession.reminantspindirection">[docs]</a><span class="k">def</span> <span class="nf">reminantspindirection</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">rplunge</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39; Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentu &#39;at plunge&#39; &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="reminantspindirection"><a class="viewcode-back" href="../auto.html#precession.reminantspindirection">[docs]</a><span class="k">def</span> <span class="nf">reminantspindirection</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentum &#39;at plunge&#39;.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta1: float</span>
+<span class="sd">        Angle between orbital angular momentum and primary spin.</span>
+<span class="sd">    theta2: float</span>
+<span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
+<span class="sd">    deltaphi: float</span>
+<span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
+<span class="sd">    r: float</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    thetaL: float</span>
+<span class="sd">        Angle betwen orbital angular momentum and total angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``thetaL = precession.reminantspindirection(theta1,theta2,deltaphi,r,q,chi1,chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">Lvec</span><span class="p">,</span><span class="n">S1vec</span><span class="p">,</span><span class="n">S2vec</span> <span class="o">=</span> <span class="n">angles_to_Lframe</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">rplunge</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+    <span class="n">Lvec</span><span class="p">,</span><span class="n">S1vec</span><span class="p">,</span><span class="n">S2vec</span> <span class="o">=</span> <span class="n">angles_to_Lframe</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
     <span class="n">Jvec</span> <span class="o">=</span> <span class="n">Lvec</span> <span class="o">+</span> <span class="n">S1vec</span> <span class="o">+</span> <span class="n">S2vec</span>
     <span class="n">hatL</span> <span class="o">=</span> <span class="n">normalize_nested</span><span class="p">(</span><span class="n">Lvec</span><span class="p">)</span>
     <span class="n">hatJ</span> <span class="o">=</span> <span class="n">normalize_nested</span><span class="p">(</span><span class="n">Jvec</span><span class="p">)</span>
-    <span class="n">thetaremnant</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">dot_nested</span><span class="p">(</span><span class="n">hatL</span><span class="p">,</span><span class="n">hatJ</span><span class="p">))</span>
+    <span class="n">thetaL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">dot_nested</span><span class="p">(</span><span class="n">hatL</span><span class="p">,</span><span class="n">hatJ</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">thetaremnant</span></div>
+    <span class="k">return</span> <span class="n">thetaL</span></div>
 
     
 
@@ -5826,13 +5854,7 @@
 <span class="sd">    kms=True. This formula has to be applied *close to merger*, where</span>
 <span class="sd">    numerical relativity simulations are available. You should do a PN evolution</span>
 <span class="sd">    to transfer binaries at r~10M.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    ``vk = remnantkick(theta1, theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=False)``</span>
-
-<span class="sd">    vk,vk_array = remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,kms=False,maxphase=False,superkick=True,hangupkick=True,crosskick=True,full_output=True)</span>
-
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float</span>
@@ -5859,18 +5881,19 @@
 <span class="sd">        Switch kick terms on and off.</span>
 <span class="sd">    full_output: boolean, optional (default: False)</span>
 <span class="sd">        Return additional outputs.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    vk: float</span>
 <span class="sd">        Kick of the black-hole remnant (magnitude).</span>
-
-<span class="sd">    Other parameters</span>
-<span class="sd">    -------</span>
-<span class="sd">    vk_array: array</span>
+<span class="sd">    vk_array: array, optional</span>
 <span class="sd">        Kick of the black-hole remnant (in a frame aligned with L).</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``vk = precession.remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,full_output=False)``</span>
+<span class="sd">    ``vk,vk_array = precession.remnantkick(theta1,theta2,deltaphi,q,chi1,chi2,full_output=True)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
 
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">chi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
