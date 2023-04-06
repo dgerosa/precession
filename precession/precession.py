@@ -459,7 +459,6 @@ def ismonotonic(vec, which):
         raise ValueError("`which` needs to be one of the following: `>`, `>=`, `<`, `<=`.")
 
 
-
 ################ Some definitions ################
 
 
