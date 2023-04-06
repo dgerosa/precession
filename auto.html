@@ -133,7 +133,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#precession.kappalimits_geometrical"><code class="docutils literal notranslate"><span class="pre">kappalimits_geometrical()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.kapparescaling"><code class="docutils literal notranslate"><span class="pre">kapparescaling()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.kapparesonances"><code class="docutils literal notranslate"><span class="pre">kapparesonances()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#precession.limits_check"><code class="docutils literal notranslate"><span class="pre">limits_check()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.morphology"><code class="docutils literal notranslate"><span class="pre">morphology()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.norm_nested"><code class="docutils literal notranslate"><span class="pre">norm_nested()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.normalize_nested"><code class="docutils literal notranslate"><span class="pre">normalize_nested()</span></code></a></li>
@@ -542,12 +541,46 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.dchidt2_RHS">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">dchidt2_RHS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">donotnormalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#dchidt2_RHS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.dchidt2_RHS" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Right-hand side of the (ddeltachi/dt)^2 equation.
+Setting donotnormalize=True is equivalent to mathcalA=1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deltachi: float</strong></dt><dd><p>Weighted spin difference.</p>
+</dd>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachiroots for computational efficiency.</p>
+</dd>
+<dt><strong>donotnormalize: boolean, optional (default: False)</strong></dt><dd><p>If True omit the numerical prefactor.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dchidt2: float</dt><dd><p>Squared time derivative of the weighted spin difference.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">dchidt2</span> <span class="pre">=</span> <span class="pre">precession.dchidt2_RHS(r,chieff,q)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.ddchidt_prefactor">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">ddchidt_prefactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#ddchidt_prefactor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.ddchidt_prefactor" title="Permalink to this definition"></a></dt>
-<dd><p>Numerical prefactor to the S derivative.</p>
+<dd><p>Numerical prefactor to the ddeltachi/dt derivative.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -561,13 +594,13 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>mathcalA: float</dt><dd><p>Prefactor in the dSdt equation.</p>
+<dt>mathcalA: float</dt><dd><p>Prefactor in the ddeltachi/dt equation.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>mathcalA = derS_prefactor(r,chieff,q)</p>
+<p><code class="docutils literal notranslate"><span class="pre">mathcalA</span> <span class="pre">=</span> <span class="pre">precession.ddchidt_prefactor(r,chieff,q)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -680,56 +713,11 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.deltachilimits_plusminus">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachilimits_plusminus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachilimits_plusminus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachilimits_plusminus" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.deltachilimits_rectangle">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachilimits_rectangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachilimits_rectangle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachilimits_rectangle" title="Permalink to this definition"></a></dt>
-<dd><p>Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
-- If r, q, chi1, and chi2 are provided, the limits are given by kappa=S1+S2.
-- If r, chieff, q, chi1, and chi2 are provided, the limits are given by the two spin-orbit resonances.
-The boolean flag enforce allows raising an error in case the inputs are not compatible.</p>
+<dd><p>Limits on the weighted spin difference for given (kappa, r, chieff, q, chi1, chi2). These are two of the solutions of the underlying cubic polynomial.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>r: float, optional (default: None)</strong></dt><dd><p>Binary separation.</p>
-</dd>
-<dt><strong>chieff: float, optional (default: None)</strong></dt><dd><p>Effective spin.</p>
-</dd>
-<dt><strong>q: float, optional (default: None)</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
-</dd>
-<dt><strong>chi1: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
-</dd>
-<dt><strong>chi2: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
-</dd>
-<dt><strong>enforce: boolean, optional (default: False)</strong></dt><dd><p>If True raise errors, if False raise warnings.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>kappainfmin: float</dt><dd><p>Minimum value of the asymptotic angular momentum kappainf.</p>
-</dd>
-<dt>kappainfmin: float</dt><dd><p>Minimum value of the asymptotic angular momentum kappainf.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p>kappainfmin,kappainfmin = kappainflimits(r=None,chieff=None,q=None,chi1=None,chi2=None,enforce=False)</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.deltachioft">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachioft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachioft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachioft" title="Permalink to this definition"></a></dt>
-<dd><p>Evolution of S on the precessional timescale (without radiation reaction).
-The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>t: float</strong></dt><dd><p>Time.</p>
-</dd>
-<dt><strong>J: float</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
 </dd>
 <dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
 </dd>
@@ -741,35 +729,135 @@ The broadcasting rules for this function are more general than those of the rest
 </dd>
 <dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
 </dd>
-<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of Ssroots for computational efficiency.</p>
+<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachiroots for computational efficiency.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>S: float</dt><dd><p>Magnitude of the total spin.</p>
+<dt>deltachimax: float</dt><dd><p>Maximum value of the weighted spin difference.</p>
+</dd>
+<dt>deltachimin: float</dt><dd><p>Minimum value of the weighted spin difference.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>S = Soft(t,J,r,chieff,q,chi1,chi2,precomputedroots=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachimin,deltachimax</span> <span class="pre">=</span> <span class="pre">precession.deltachilimits_plusminus(kappa,r,chieff,q,chi1,chi2)</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="precession.deltachilimits_rectangle">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachilimits_rectangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachilimits_rectangle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachilimits_rectangle" title="Permalink to this definition"></a></dt>
+<dd><p>Limits on the weighted spin difference for given (chieff, q, chi1, chi2). This is a rectangle in the (chieff,deltachi) plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>deltachimax: float</dt><dd><p>Maximum value of the weighted spin difference.</p>
+</dd>
+<dt>deltachimin: float</dt><dd><p>Minimum value of the weighted spin difference.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachimin,deltachimax</span> <span class="pre">=</span> <span class="pre">precession.deltachilimits_rectangle(chieff,q,chi1,chi2)</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="precession.deltachioft">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachioft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachioft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachioft" title="Permalink to this definition"></a></dt>
+<dd><p>Evolution of deltachi on the precessional timescale (without radiation reaction).
+The broadcasting rules for this function are more general than those of the rest of the code. The variable t is allowed to have shapes (N,M) while all the other variables have shape (N,). This is useful to sample M precession configuration for each of the N binaries specified as inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>t: float</strong></dt><dd><p>Time.</p>
+</dd>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachiroots for computational efficiency.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>deltachi: float</dt><dd><p>Weighted spin difference.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachi</span> <span class="pre">=</span> <span class="pre">precession.deltachioft(t,kappa,r,chieff,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.deltachirescaling">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachirescaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachitilde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachirescaling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachirescaling" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Compute deltachi from the rescaled parameter 0&lt;=deltachitilde&lt;=1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deltachitilde: float</strong></dt><dd><p>Rescaled version of the weighted spin difference.</p>
+</dd>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachiroots for computational efficiency.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>deltachi: float</dt><dd><p>Weighted spin difference.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachi</span> <span class="pre">=</span> <span class="pre">precession.deltachirescaling(deltachitilde,kappa,r,chieff,q,chi1,chi2)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.deltachiresonance">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachiresonance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachiresonance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachiresonance" title="Permalink to this definition"></a></dt>
-<dd><p>Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of S. There will be two roots that are conincident if not for numerical errors: for concreteness, return the mean of the real part. This function does not check that the input is a resonance; it is up to the user. Provide either J or kappa and either r or u.</p>
+<dd><p>Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of deltachi. There will be two roots that are coincident if not for numerical errors: for concreteness, return the mean of the real part.
+This function is dangerous: we do not check that the input is a resonance, that’s up to the user (so use at your own risk).
+Valid inputs are either (kappa,r,chieff,q,chi1,chi2) or (kappa,u,chieff,q,chi1,chi2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>J: float, optional (default: None)</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
-</dd>
 <dt><strong>kappa: float, optional (default: None)</strong></dt><dd><p>Asymptotic angular momentum.</p>
 </dd>
 <dt><strong>r: float, optional (default: None)</strong></dt><dd><p>Binary separation.</p>
@@ -788,13 +876,14 @@ The broadcasting rules for this function are more general than those of the rest
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>S: float</dt><dd><p>Magnitude of the total spin.</p>
+<dt>deltachi: float</dt><dd><p>Weighted spin difference.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>S = Satresonance(J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None)</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachi</span> <span class="pre">=</span> <span class="pre">precession.deltachiresonance(kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">deltachi</span> <span class="pre">=</span> <span class="pre">precession.deltachiresonance(kappa=kappa,u=u,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -880,11 +969,13 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.deltachitildeav">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachitildeav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachitildeav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachitildeav" title="Permalink to this definition"></a></dt>
-<dd><p>Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.</p>
+<dd><p>Precession average of the rescaled weighted spin difference.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>m: float</strong></dt><dd><p>Parameter of elliptic function(s).</p>
+</dd>
+<dt><strong>tol: float, optional (default: 1e-7)</strong></dt><dd><p>Numerical tolerance, see source code for details.</p>
 </dd>
 </dl>
 </dd>
@@ -896,17 +987,19 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>coeff = deltachitildeav(m)</p>
+<p><code class="docutils literal notranslate"><span class="pre">coeff</span> <span class="pre">=</span> <span class="pre">precession.deltachitildeav(m,tol=1e-7)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.deltachitildeav2">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachitildeav2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachitildeav2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachitildeav2" title="Permalink to this definition"></a></dt>
-<dd><p>Factor depending on the elliptic parameter in the precession averaged squared total spin. This is (1 - E(m)/K(m)) / m.</p>
+<dd><p>Precession average of the rescaled weighted spin difference squared.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>m: float</strong></dt><dd><p>Parameter of elliptic function(s).</p>
+</dd>
+<dt><strong>tol: float, optional (default: 1e-7)</strong></dt><dd><p>Numerical tolerance, see source code for details.</p>
 </dd>
 </dl>
 </dd>
@@ -918,7 +1011,7 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>coeff = deltachitildeav(m)</p>
+<p><code class="docutils literal notranslate"><span class="pre">coeff</span> <span class="pre">=</span> <span class="pre">precession.deltachitildeav2(m,tol=1e-7)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -974,15 +1067,23 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.elliptic_parameter">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">elliptic_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#elliptic_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.elliptic_parameter" title="Permalink to this definition"></a></dt>
-<dd><p>Parameter m entering elliptic functions for the evolution of S.</p>
+<dd><p>Parameter m entering elliptic functions for the evolution of deltachi.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>Sminuss: float</strong></dt><dd><p>Lowest physical root, if present, of the effective potential equation.</p>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
 </dd>
-<dt><strong>Spluss: float</strong></dt><dd><p>Largest physical root, if present, of the effective potential equation.</p>
+<dt><strong>u: float</strong></dt><dd><p>Compactified separation 1/(2L).</p>
 </dd>
-<dt><strong>S3s: float</strong></dt><dd><p>Spurious root of the effective potential equation.</p>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachiroots for computational efficiency.</p>
 </dd>
 </dl>
 </dd>
@@ -994,7 +1095,7 @@ Can only be used to sample the <em>same</em> number of configuration for each bi
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>m = elliptic_parameter(Sminuss,Spluss,S3s)</p>
+<p><code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">=</span> <span class="pre">precession.elliptic_parameter(kappa,u,chieff,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -2026,7 +2127,43 @@ The parameters r, q, chi1, and chi2 should always be provided. The keywords argu
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_tau">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">eval_tau</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_psiperiod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">donotnormalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#eval_tau"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.eval_tau" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Evaluate the nutation period.
+Setting return_psiperiod=True return the phase-period instead of the time period (i.e. returns tau/2K(m) insteaf of tau). This is useful to avoid the evaluation of an elliptic integral when it’s not needed.
+Setting donotnormalize=True is equivalent to mathcalA=1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachiroots for computational efficiency.</p>
+</dd>
+<dt><strong>MISSING: COULD NOT BUILD, optional (default: False)</strong></dt><dd><p>FILL MANUALLY.</p>
+</dd>
+<dt><strong>donotnormalize: boolean, optional (default: False)</strong></dt><dd><p>If True omit the numerical prefactor.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tau: float</dt><dd><p>Nutation period.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">tau</span> <span class="pre">=</span> <span class="pre">precession.eval_tau(kappa,r,chieff,q,chi1,chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">tau</span> <span class="pre">=</span> <span class="pre">precession.eval_tau(kappa,r,chieff,q,chi1,chi2,return_psiperiod=True)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.eval_theta1">
@@ -2732,38 +2869,6 @@ The boolean flag enforce raises an error in case the inputs are not compatible. 
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="precession.limits_check">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">limits_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#limits_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.limits_check" title="Permalink to this definition"></a></dt>
-<dd><p>Check if the inputs are consistent with the geometrical constraints.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>S: float</strong></dt><dd><p>Magnitude of the total spin.</p>
-</dd>
-<dt><strong>J: float, optional</strong></dt><dd><p>Magnitude of the total angular momentum.</p>
-</dd>
-<dt><strong>r: float, optional</strong></dt><dd><p>Binary separation.</p>
-</dd>
-<dt><strong>chieff: float, optional</strong></dt><dd><p>Effective spin</p>
-</dd>
-<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0 &lt;= q &lt;= 1.</p>
-</dd>
-<dt><strong>chi1: float, optional</strong></dt><dd><p>Dimensionless spin of the primary black hole: 0 &lt;= chi1 &lt;= 1.</p>
-</dd>
-<dt><strong>chi2: float, optional</strong></dt><dd><p>Dimensionless spin of the secondary black hole: 0 &lt;= chi1 &lt;= 1.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>check: bool</dt><dd><p>True if the given parameters are compatible with each other, false if not.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="precession.morphology">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">morphology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simpler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#morphology"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.morphology" title="Permalink to this definition"></a></dt>
 <dd><p>Evaluate the spin morphology and return <cite>L0</cite> for librating about deltaphi=0, <cite>Lpi</cite> for librating about deltaphi=pi, <cite>C-</cite> for circulating from deltaphi=pi to deltaphi=0, and <cite>C+</cite> for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return <cite>C</cite> for both.</p>
@@ -3285,7 +3390,40 @@ Credits: stackoverflow user <cite>pv</cite>, see <a class="reference external" h
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.tofdeltachi">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">tofdeltachi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deltachi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclesign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#tofdeltachi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.tofdeltachi" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Time as a function of deltachi on the precessional timescale (without radiation reaction).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deltachi: float</strong></dt><dd><p>Weighted spin difference.</p>
+</dd>
+<dt><strong>kappa: float</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>cyclesign: integer, optional (default: 1)</strong></dt><dd><p>Sign (either +1 or -1) to cover the two halves of a precesion cycle.</p>
+</dd>
+<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachiroots for computational efficiency.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>t: float</dt><dd><p>Time.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">precession.tofdeltachi(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=1)</span></code></p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.updown_endpoint">
