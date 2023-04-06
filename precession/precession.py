@@ -329,10 +329,10 @@ def ellippi(n, phi, m):
 def ismonotonic(vec, which):
     """
     Check if an array is monotonic. The parameter `which` can takes the following values:
-    - `<` check array is strictly increasing.
-    - `<=` check array is increasing.
-    - `>` check array is strictly decreasing.
-    - `>=` check array is decreasing.
+        - `<` check array is strictly increasing.
+        - `<=` check array is increasing.
+        - `>` check array is strictly decreasing.
+        - `>=` check array is decreasing.
 
     Examples
     --------
@@ -1402,9 +1402,9 @@ def eval_S(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r
 def eval_cyclesign(ddeltachidt=None, deltaphi=None, Lvec=None, S1vec=None, S2vec=None):
     """
     Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the 'sign' of a precession cycle, defined as +1 if deltachi is increasing and -1 deltachi is decreasing. Valid inputs are one and not more of the following:
-    - dSdt
-    - deltaphi
-    - Lvec, S1vec, S2vec.
+        - dSdt
+        - deltaphi
+        - Lvec, S1vec, S2vec.
     
     Parameters
     ----------
@@ -2537,8 +2537,8 @@ def kapparescaling(kappatilde, r, chieff, q, chi1, chi2):
 def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False, **kwargs):
     """
     Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.
-    - If r, q, chi1, chi2 are provided, returns the geometrical limits.
-    - If r, chieff, q, chi1, and chi2 are provided, returns the spin-orbit resonances.
+        - If r, q, chi1, chi2 are provided, returns the geometrical limits.
+        - If r, chieff, q, chi1, and chi2 are provided, returns the spin-orbit resonances.
     The boolean flag enforce raises an error in case the inputs are not compatible. Additional kwargs are passed to kapparesonances.
     
     Parameters
@@ -2781,8 +2781,6 @@ def deltachicubic_coefficients(kappa, u, chieff, q, chi1, chi2):
     chieff**2) + -2 * q**(-1) * ((1 + q))**(-5) * u**2 * (((chi1**2 + -1 \
     * q**4 * chi2**2))**2 + q * ((1 + q))**3 * (chi1**2 + q**3 * chi2**2) \
     * chieff**2)))
-
-    print(coeff3, coeff2, coeff1, coeff0)
 
     return np.stack([coeff3, coeff2, coeff1, coeff0])
 
@@ -3428,20 +3426,16 @@ def tofdeltachi(deltachi, kappa , r, chieff, q, chi1, chi2, cyclesign=1, precomp
 
 def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None):
     """
-    Sample N values of S at fixed separation accoring to its PN-weighted distribution function.
-    Can only be used to sample the *same* number of configuration for each binary. If the inputs J,r,chieff,q,chi1, and chi2 have shape (M,) the output will have shape
-    - (M,N) if M>1 and N>1;
-    - (M,) if N=1;
-    - (N,) if M=1.
-
-    Examples
-    --------
-    S = Ssampling(J,r,chieff,q,chi1,chi2,N = 1)
-
+    Sample N values of deltachi at fixed separation accoring to its PN-weighted distribution function.
+    Can only be used to sample the *same* number of configuration for each binary. If the inputs have shape (M,) the output will have shape
+        - (M,N) if M>1 and N>1;
+        - (M,) if N=1;
+        - (N,) if M=1.
+    
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
     chieff: float
@@ -3454,11 +3448,17 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     N: integer, optional (default: 1)
         Number of samples.
-
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    
     Returns
     -------
-    S: float
-        Magnitude of the total spin.
+    deltachi: float
+        Weighted spin difference.
+    
+    Examples
+    --------
+    ``deltachi = precession.deltachisampling(kappa,r,chieff,q,chi1,chi2,N=1)``
     """
 
     u= eval_u(r=r,q=q)
@@ -3472,18 +3472,19 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
     # For r=infinity use a simple placeholder
     t = np.random.uniform(np.zeros(len(tau)),np.where(u!=0, tau, 0),size=(N,len(tau)))
 
+
     # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
-    # np.atleast_1d is necessary to retun shape (1,) instead of (,) if M=N=1
+    # np.atleast_1d is necessary to return shape (1,) instead of (,) if M=N=1
     t= np.atleast_1d(np.squeeze(t))
 
-    # Note the special broadcasting rules of deltachioft, see Soft.__docs__
+    # Note the special broadcasting rules of deltachioft, see deltachioft.__docs__
     # deltachi has shape (M, N).
     deltachi = deltachioft(t, kappa , r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
 
     # For infinity use the analytic result. Ignore q=1 "divide by zero" warning:
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=RuntimeWarning)
-        deltachiinf = np.tile( eval_deltachiinf(kappa, chieff, q, chi1, chi2), (N,1) )
+        deltachiinf = np.squeeze(np.tile( eval_deltachiinf(kappa, chieff, q, chi1, chi2), (N,1) ))
 
     deltachi=np.where(u!=0, deltachi,deltachiinf)
 
@@ -3496,15 +3497,11 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
 def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
     """
     Numerical prefactors entering the precession frequency.
-
-    Examples
-    --------
-    mathcalC0,mathcalCplus,mathcalCminus = frequency_prefactor_old(J,r,chieff,q,chi1,chi2)
-
+    
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
     chieff: float
@@ -3515,15 +3512,23 @@ def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
-    mathcalC0: float
+    bigC0: float
         Prefactor in the OmegaL equation.
-    mathcalCplus: float
+    bigCminus: float
         Prefactor in the OmegaL equation.
-    mathcalCminus: float
+    bigCplus: float
         Prefactor in the OmegaL equation.
+    bigRminus: float
+        Prefactor in the PhiL equation.
+    bigRplus: float
+        Prefactor in the PhiL equation.
+    
+    Examples
+    --------
+    ``bigC0,bigCplus,bigCminus,bigRplus,bigRminus = precession.intertial_ingredients(kappa,r,chieff,q,chi1,chi2)``
     """
 
     kappa = np.atleast_1d(kappa).astype(float)
@@ -3569,18 +3574,14 @@ def intertial_ingredients(kappa, r, chieff, q, chi1, chi2):
 
 def eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2):
     """
-    Compute the precession frequency OmegaL along the precession cycle.
-
-    Examples
-    --------
-    OmegaL = eval_OmegaL(S,J,r,chieff,q,chi1,chi2)
-
+    Evaluate the precession frequency OmegaL along the precession cycle.
+    
     Parameters
     ----------
-    S: float
-        Magnitude of the total spin.
-    J: float
-        Magnitude of the total angular momentum.
+    deltachi: float
+        Weighted spin difference.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
     chieff: float
@@ -3591,11 +3592,15 @@ def eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     OmegaL: float
         Precession frequency of L about J.
+    
+    Examples
+    --------
+    ``OmegaL = precession.eval_OmegaL(deltachi,kappa,r,chieff,q,chi1,chi2)``
     """
 
     deltachi = np.atleast_1d(deltachi).astype(float)
@@ -3611,6 +3616,39 @@ def eval_OmegaL(deltachi, kappa, r, chieff, q, chi1, chi2):
 
 
 def eval_phiL(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1, precomputedroots=None):
+    """
+    Evaluate the azimuthal angle of L in a plane orthogonal to J along the precession cycle.
+    
+    Parameters
+    ----------
+    deltachi: float
+        Weighted spin difference.
+    kappa: float
+        Asymptotic angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    cyclesign: integer, optional (default: 1)
+        Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    
+    Returns
+    -------
+    phiL: float
+        Azimuthal angle spanned by L about J.
+    
+    Examples
+    --------
+    ``phiL = precession.eval_phiL(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=1)``
+    """
 
     q = np.atleast_1d(q).astype(float)
     r = np.atleast_1d(r).astype(float)
@@ -3624,9 +3662,6 @@ def eval_phiL(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1, precompute
     deltachitilde = affine(deltachi,deltachiminus,deltachiplus)
     m = elliptic_parameter(kappa, u, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
 
-
-
-
     phiL = np.sign(cyclesign) * bigC0 * psiperiod * ( scipy.special.ellipkinc(np.arcsin(deltachitilde**(1/2)), m)
         - bigCplus / (bigRplus - deltachiminus*(1-q)*r**(-1/2))
         * ellippi( (1-q)*r**(-1/2)*(deltachiplus-deltachiminus) /  (bigRplus - deltachiminus*(1-q)*r**(-1/2)), np.arcsin(deltachitilde**(1/2)), m)
@@ -3637,7 +3672,36 @@ def eval_phiL(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1, precompute
 
 
 def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
+    """
+    Evaluate the precession angle spanned by L during an entire cycle.
     
+    Parameters
+    ----------
+    kappa: float
+        Asymptotic angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    
+    Returns
+    -------
+    alpha: float
+        Azimuthal angle spanned by L about J during an entire cycle.
+    
+    Examples
+    --------
+    ``alpha = precession.eval_alpha(kappa,r,chieff,q,chi1,chi2)``
+    """
+
     q = np.atleast_1d(q).astype(float)
     r = np.atleast_1d(r).astype(float)
 
@@ -3649,7 +3713,6 @@ def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
         if 0 in u:
             warnings.filterwarnings("ignore", category=Warning)
  
-
         deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
         bigC0, bigCplus, bigCminus,bigRplus,bigRminus = intertial_ingredients(kappa, r, chieff, q, chi1, chi2)
         psiperiod = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]),return_psiperiod=True)
@@ -3678,16 +3741,17 @@ def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
 def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None):
     """
-    Evaluate the spin morphology and return `L0` for librating about deltaphi=0, `Lpi` for librating about deltaphi=pi, `C-` for circulating from deltaphi=pi to deltaphi=0, and `C+` for circulating from deltaphi=0 to deltaphi=pi. If simpler=True, do not distinguish between the two circulating morphologies and return `C` for both.
-
-    Examples
-    --------
-    morph = morphology(J,r,chieff,q,chi1,chi2,simpler = False)
-
+    Evaluate the spin morphology. Returns:
+        - L0 for librating about deltaphi=0,
+        - Lpi for librating about deltaphi=pi
+        - C- for circulating from deltaphi=pi to deltaphi=0,
+        - C+ for circulating from deltaphi=0 to deltaphi=pi.
+    If simpler=True, do not distinguish between the two circulating morphologies and return C for both.
+    
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
     chieff: float
@@ -3700,12 +3764,19 @@ def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     simpler: boolean, optional (default: False)
         If True simplifies output.
-
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    
     Returns
     -------
     morph: string
         Spin morphology.
+    
+    Examples
+    --------
+    ``morph = precession.morphology(kappa,r,chieff,q,chi1,chi2,simpler=False)``
     """
+
 
     deltachiminus,deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     # Pairs of booleans based on the values of deltaphi at S- and S+
@@ -3726,11 +3797,7 @@ def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=
 def chip_terms(theta1, theta2, q, chi1, chi2):
     """
     Compute the two terms entering the effective precessing spin chip.
-
-    Examples
-    --------
-    chipterm1,chipterm2 = chip_terms(theta1,theta2,q,chi1,chi2)
-
+    
     Parameters
     ----------
     theta1: float
@@ -3743,13 +3810,17 @@ def chip_terms(theta1, theta2, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     chipterm1: float
-        Term in effective precessing spin chip.
+        Term in effective precessing spin.
     chipterm2: float
-        Term in effective precessing spin chip.
+        Term in effective precessing spin.
+    
+    Examples
+    --------
+    ``chipterm1,chipterm2 = precession.chip_terms(theta1,theta2,q,chi1,chi2)``
     """
 
     theta1 = np.atleast_1d(theta1).astype(float)
@@ -3766,11 +3837,7 @@ def chip_terms(theta1, theta2, q, chi1, chi2):
 def eval_chip_heuristic(theta1, theta2, q, chi1, chi2):
     """
     Heuristic definition of the effective precessing spin chip (Schmidt et al 2015), see arxiv:2011.11948. This definition inconsistently averages over some, but not all, variations on the precession timescale.
-
-    Examples
-    --------
-    chip = eval_chip_heuristic(theta1,theta2,q,chi1,chi2)
-
+    
     Parameters
     ----------
     theta1: float
@@ -3783,11 +3850,15 @@ def eval_chip_heuristic(theta1, theta2, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     chip: float
-        Effective precessing spin chip.
+        Effective precessing spin.
+    
+    Examples
+    --------
+    ``chip = precession.eval_chip_heuristic(theta1,theta2,q,chi1,chi2)``
     """
 
     term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
@@ -3798,11 +3869,7 @@ def eval_chip_heuristic(theta1, theta2, q, chi1, chi2):
 def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
     """
     Generalized definition of the effective precessing spin chip, see arxiv:2011.11948. This definition retains all variations on the precession timescale.
-
-    Examples
-    --------
-    chip = eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)
-
+    
     Parameters
     ----------
     theta1: float
@@ -3817,11 +3884,15 @@ def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     chip: float
-        Effective precessing spin chip.
+        Effective precessing spin.
+    
+    Examples
+    --------
+    ``chip = precession.eval_chip_generalized(theta1,theta2,deltaphi,q,chi1,chi2)``
     """
 
     term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
@@ -3831,44 +3902,34 @@ def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
 
 def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs):
     """
-    Averaged definition of the effective precessing spin chip, see arxiv:2011.11948. This definition consistently averages over all variations on the precession timescale. Valid inputs are one of the following (but not both)
-    - theta1, theta2, deltaphi
-    - J, chieff
-    The parameters r, q, chi1, and chi2 should always be provided. The keywords arguments method and Nsamples are passed directly to `precession_average`.
-
-    Examples
-    --------
-    chip = eval_chip_averaged(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,method='quadrature',Nsamples=1e4)
-
+    Averaged definition of the effective precessing spin, see arxiv:2011.11948.
+    Additional keywords arguments are passed to `precession_average`.
+    
     Parameters
     ----------
-    theta1: float, optional (default: None)
-        Angle between orbital angular momentum and primary spin.
-    theta2: float, optional (default: None)
-        Angle between orbital angular momentum and secondary spin.
-    deltaphi: float, optional (default: None)
-        Angle between the projections of the two spins onto the orbital plane.
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
-    r: float, optional (default: None)
+    kappa: float
+        Asymptotic angular momentum.
+    r: float
         Binary separation.
-    chieff: float, optional (default: None)
+    chieff: float
         Effective spin.
-    q: float, optional (default: None)
+    q: float
         Mass ratio: 0<=q<=1.
-    chi1: float, optional (default: None)
+    chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
-    chi2: float, optional (default: None)
+    chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-    method: string (default: 'quadrature')
-        Either 'quadrature' or 'montecarlo'
-    Nsamples: integer (default: 1e4)
-        Number of Monte Carlo samples.
-
+    **kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
     Returns
     -------
     chip: float
-        Effective precessing spin chip.
+        Effective precessing spin.
+    
+    Examples
+    --------
+    ``chip = precession.eval_chip_averaged(kappa,r,chieff,q,chi1,chi2)``
     """
 
     def _integrand(deltachi, kappa, r, chieff, q, chi1, chi2):
@@ -3882,7 +3943,33 @@ def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs):
 
 
 def eval_chip_rms(kappa, r, chieff, q, chi1, chi2):
-
+    """
+    Root-mean-square definition of the effective precessing spin. This is much faster to evaluate than the plain average.
+    
+    Parameters
+    ----------
+    kappa: float
+        Asymptotic angular momentum.
+    r: float
+        Binary separation.
+    chieff: float
+        Effective spin.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Returns
+    -------
+    chip: float
+        Effective precessing spin.
+    
+    Examples
+    --------
+    ``chip = precession.eval_chip_rms(kappa,r,chieff,q,chi1,chi2)``
+    """
 
     kappa = np.atleast_1d(kappa).astype(float)
     r = np.atleast_1d(r).astype(float)
@@ -3922,7 +4009,6 @@ def eval_chip_rms(kappa, r, chieff, q, chi1, chi2):
     #     theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2)
     #     chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)**2
     #     return chip_integrand
-
     # chip = precession_average(kappa, r, chieff, q, chi1, chi2, _integrand, kappa, r, chieff, q, chi1, chi2, **kwargs)**0.5
 
     return chip
@@ -3930,16 +4016,15 @@ def eval_chip_rms(kappa, r, chieff, q, chi1, chi2):
 
 def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", **kwargs):
     """
-    Compute the effective precessing spin chip, see arxiv:2011.11948. The keyword `which` one of the following definitions:
-    - `heuristic`, as in Schmidt et al 2015. Required inputs: theta1,theta2,q,chi1,chi2
-    - `generalized`, retail all precession-timescale variations. Required inputs: theta1,theta2,deltaphi,q,chi1,chi2
-    - `asymptotic`, large-separation limit. Required inputs: theta1,theta2,q,chi1,chi2
-    - `averaged` (default), averages over all precession-timescale variations. Required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (J,r,chieff,q,chi1,chi2). The additional keywords `methods` and `Nsamples` are passed to `precession_average`.
-
-    Examples
-    --------
-    chip = eval_chip(theta1=None,theta2=None,deltaphi=None,J=None,r=None,chieff=None,q=None,chi1=None,chi2=None,which="averaged",method='quadrature',Nsamples=1e4)
-
+    Compute the effective precessing spin. The keyword `which` one of the following definitions:
+        - `heuristic`, as in Schmidt et al 2015. Required inputs are either
+        - `generalized`, retail all precession-timescale variations,
+        - `averaged` (default), averages over precession-timescale variations,
+        - `rms`, compute the root-mean-square average, which is faster to evaluate.
+    The required inputs are either (theta1,theta2,deltaphi,r,q,chi1,chi2) or (deltachi,kappa,chieff,r,q,chi1,chi2). In the latter case, deltachi can be omitted and will be resampled from its PN-weighted distribution.
+    Some inputs will be ignored for some of the chip definitions (for instance the heuristic chip does not depend on either r or deltaphi), but dummy values are still requested for code consistency.
+    The keywords arguments are only used for the `averaged` formulation and are passed to `precession_average`.
+    
     Parameters
     ----------
     theta1: float, optional (default: None)
@@ -3948,8 +4033,10 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
         Angle between orbital angular momentum and secondary spin.
     deltaphi: float, optional (default: None)
         Angle between the projections of the two spins onto the orbital plane.
-    J: float, optional (default: None)
-        Magnitude of the total angular momentum.
+    deltachi: float, optional (default: None)
+        Weighted spin difference.
+    kappa: float, optional (default: None)
+        Asymptotic angular momentum.
     r: float, optional (default: None)
         Binary separation.
     chieff: float, optional (default: None)
@@ -3962,18 +4049,26 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     which: string, optional (default: "averaged")
         Select function behavior.
-    method: string (default: 'quadrature')
-        Either 'quadrature' or 'montecarlo'
-    Nsamples: integer (default: 1e4)
-        Number of Monte Carlo samples.
-
+    **kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
     Returns
     -------
     chip: float
-        Effective precessing spin chip.
+        Effective precessing spin.
+    
+    Examples
+    --------
+    ``chip = precession.eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,which="heuristic")``
+    ``chip = precession.eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,which="generalized")``
+    ``chip = precession.eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,which="averaged")``
+    ``chip = precession.eval_chip(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2,which="rms")``
+    ``chip = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which="heuristic")``
+    ``chip = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which="generalized")``
+    ``chip = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which="averaged")``
+    ``chip = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which="rms")``
     """
 
-    # TODO: first convert the inputs. deltachi can be resampled if not provided 
 
     if r is None or q is None or chi1 is None or chi2 is None:
         raise ValueError("Provide r, q, chi1, and chi2.")
@@ -3983,8 +4078,8 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
     
     elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and chieff is not None:
         if deltachi is None: 
-            # TODO: this operation might not be needed in some cases, could optimize a bit here.
-            deltachi = deltachisampling(kappa, r, chieff, q, chi1, chi2)
+            if which == 'heuristic' or which == 'generalized':
+                deltachi = deltachisampling(kappa, r, chieff, q, chi1, chi2)
         theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2)
      
     else:
@@ -4017,22 +4112,18 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
     return chip
 
 
-### Daria's five parameters should go here
 def eval_nutation_freq(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
-    Nutation frequency of S as it oscillates from S- to S+ back to S-
-
-    Examples
-    --------
-    little_omega = eval_little_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)
-
+    Nutation frequency of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-. 
+    This of the five phenomenological parameters from arxiv:2103.03894.
+    
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -4041,34 +4132,35 @@ def eval_nutation_freq(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
+        Pre-computed output of deltachiroots for computational efficiency.
+    
     Returns
     -------
-    little_omega: float
-        Nutation frequency.
+    littleomega: float
+        Squared time derivative of the weighted spin difference.
+    
+    Examples
+    --------
+    ``littleomega = precession.eval_nutation_freq(kappa,r,chieff,q,chi1,chi2)``
     """
 
     tau = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
-    omega = (2 * np.pi) / tau
-    return omega
+    littleomega = (2 * np.pi) / tau
+    return littleomega
 
 
 def eval_bracket_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
-    Precession average of the precession frequency of S as it oscillates from S- to S+ back to S-
-
-    Examples
-    --------
-    bracket_omega = eval_bracket_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    Precession average of the precession frequency deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.
+    This of the five phenomenological parameters from arxiv:2103.03894.
 
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -4077,13 +4169,18 @@ def eval_bracket_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
+        Pre-computed output of deltachiroots for computational efficiency.
+    
     Returns
     -------
     bracket_omega: float
-        Precession averaged precession frequency.
+        Precession-averaged precession frequency.
+    
+    Examples
+    --------
+    ``bracket_omega = precession.eval_bracket_omega(kappa,r,chieff,q,chi1,chi2)``
     """
+
     alpha = eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     tau = eval_tau(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
     bracket_omega = alpha / tau
@@ -4092,19 +4189,16 @@ def eval_bracket_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
 def eval_delta_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
-    Variation of the precession frequency of S as it oscillates from S- to S+ back to S- due to nutational effects
-
-    Examples
-    --------
-    delta_omega = eval_delta_omega(J,r,xi,q,chi1,chi2,precomputedroots=None)
+    Variation of the precession frequency of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.
+    This of the five phenomenological parameters from arxiv:2103.03894.
 
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -4113,13 +4207,18 @@ def eval_delta_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
+        Pre-computed output of deltachiroots for computational efficiency.
+    
     Returns
     -------
     delta_omega: float
         Precession frequency variation due to nutation.
+    
+    Examples
+    --------
+    ``delta_omega = precession.eval_delta_omega(kappa,r,chieff,q,chi1,chi2)``
     """
+
     if precomputedroots is None:
         deltachimin, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     else:
@@ -4132,19 +4231,16 @@ def eval_delta_omega(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
 def eval_delta_theta(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     """
-    Nutation amplitude of S as it oscillates from S- to S+ back to S-
-
-    Examples
-    --------
-    delta_theta = eval_delta_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)
-
+    Nutation amplitude of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.
+    This of the five phenomenological parameters from arxiv:2103.03894.
+    
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
-    xi: float
+    chieff: float
         Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
@@ -4153,13 +4249,18 @@ def eval_delta_theta(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     precomputedroots: array, optional (default: None)
-        Pre-computed output of Ssroots for computational efficiency.
-
+        Pre-computed output of deltachiroots for computational efficiency.
+    
     Returns
     -------
     delta_theta: float
         Nutation amplitude.
+    
+    Examples
+    --------
+    ``delta_theta = precession.eval_delta_theta(kappa,r,chieff,q,chi1,chi2)``
     """
+
     if precomputedroots is None:
         deltachimin, deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     else:
@@ -4172,29 +4273,35 @@ def eval_delta_theta(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
 def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, **kwargs):
     """
-    Precession average of precession amplitude of S as it oscillates from S- to S+ back to S-
+    Precession average of precession amplitude of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.
+    This of the five phenomenological parameters from arxiv:2103.03894. Additional keywords arguments are passed to `precession_average`.
 
-    Examples
-    --------
-    bracket_theta = eval_bracket_theta(J,r,xi,q,chi1,chi2,precomputedroots=None)
-
+    
     Parameters
     ----------
-    J: float
-        Magnitude of the total angular momentum.
+    kappa: float
+        Asymptotic angular momentum.
     r: float
         Binary separation.
+    chieff: float
+        Effective spin.
     q: float
         Mass ratio: 0<=q<=1.
     chi1: float
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    **kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
     Returns
     -------
     bracket_theta: float
         Precession-averaged precession amplitude.
+    
+    Examples
+    --------
+    ``bracket_theta = precession.eval_bracket_theta(kappa,r,chieff,q,chi1,chi2)``
     """
 
     def _integrand(deltachi, kappa, r, chieff, q):
@@ -4208,11 +4315,7 @@ def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, **kwargs):
 def rupdown(q, chi1, chi2):
     """
     The critical separations r_ud+/- marking the region of the up-down precessional instability.
-
-    Examples
-    --------
-    rudp,rudm = rupdown(q,chi1,chi2)
-
+    
     Parameters
     ----------
     q: float
@@ -4221,13 +4324,17 @@ def rupdown(q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
-    rudp: float
-        Outer orbital separation in the up-down instability.
     rudm: float
         Inner orbital separation in the up-down instability.
+    rudp: float
+        Outer orbital separation in the up-down instability.
+    
+    Examples
+    --------
+    ``rudp,rudm = precession.rupdown(q,chi1,chi2)``
     """
 
     q = np.atleast_1d(q).astype(float)
@@ -4244,7 +4351,32 @@ def rupdown(q, chi1, chi2):
 
 
 def updown_endpoint(q, chi1, chi2):
+    """
+    Endpoint of the up-down precessional instability.
     
+    Parameters
+    ----------
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Returns
+    -------
+    deltaphi: float
+        Angle between the projections of the two spins onto the orbital plane.
+    theta1: float
+        Angle between orbital angular momentum and primary spin.
+    theta2: float
+        Angle between orbital angular momentum and secondary spin.
+    
+    Examples
+    --------
+    ``theta1,theta2,deltaphi = precession.updown_endpoint(q,chi1,chi2)``
+    """
+
     q = np.atleast_1d(q).astype(float)
     chi1 = np.atleast_1d(chi1).astype(float)
     chi2 = np.atleast_1d(chi2).astype(float)
@@ -4258,7 +4390,7 @@ def updown_endpoint(q, chi1, chi2):
     return theta1, theta2, deltaphi
 
 
-## TODO: format output how you want
+## TODO: CHECK THIS!! Matt: format output how you want
 def resonances_endpoint(q, chi1, chi2, chieff):
     
     q = np.atleast_1d(q).astype(float)
@@ -4290,12 +4422,9 @@ def resonances_endpoint(q, chi1, chi2, chieff):
 
 def omegasq_aligned(r, q, chi1, chi2, which):
     """
-    Squared oscillation frequency of a given perturbed aligned-spin binary. The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
-
-    Examples
-    --------
-    omegasq = omegasq_aligned(r,q,chi1,chi2,which)
-
+    Squared oscillation frequency of a given perturbed aligned-spin binary.
+    The flag which needs to be set to `uu` for up-up, `ud` for up-down, `du` for down-up or `dd` for down-down where the term before (after) the hyphen refers to the spin of the heavier (lighter) black hole.
+    
     Parameters
     ----------
     r: float
@@ -4308,11 +4437,15 @@ def omegasq_aligned(r, q, chi1, chi2, which):
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     which: string
         Select function behavior.
-
+    
     Returns
     -------
     omegasq: float
         Squared frequency.
+    
+    Examples
+    --------
+    ``omegasq = precession.omegasq_aligned(r,q,chi1,chi2,which)``
     """
 
     r = np.atleast_1d(r).astype(float)
@@ -4349,11 +4482,7 @@ def widenutation_separation(q, chi1, chi2):
     """
     The critical separation r_wide below which the binary component with
     smaller dimensionless spin may undergo wide nutations.
-
-    Examples
-    --------
-    r_wide = widenutation(q,chi1,chi2)
-
+    
     Parameters
     ----------
     q: float
@@ -4362,11 +4491,15 @@ def widenutation_separation(q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
-
+    
     Returns
     -------
     r_wide: float
         Orbital separation where wide nutations becomes possible.
+    
+    Examples
+    --------
+    ``r_wide = precession.widenutation_separation(q,chi1,chi2)``
     """
 
     q = np.atleast_1d(q).astype(float)
@@ -4379,6 +4512,36 @@ def widenutation_separation(q, chi1, chi2):
 
 
 def widenutation_condition(r, q, chi1, chi2):
+    """
+    Conditions for wide nutation to take place. The returned flag which is
+        - `wide1` if wide nutation is allowed for the primary BH.
+        - `wide2` if wide nutation is allowed for the secondary BH.
+        - `nowide` if wide nutation is not allowed.
+    
+    Parameters
+    ----------
+    r: float
+        Binary separation.
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    
+    Returns
+    -------
+    chieff: float
+        Effective spin.
+    kappa: float
+        Asymptotic angular momentum.
+    which: string
+        Select function behavior.
+    
+    Examples
+    --------
+    ``which,kappa,chieff = precession.widenutation_condition(r,q,chi1,chi2)``
+    """
 
     r = np.atleast_1d(r).astype(float)
     q = np.atleast_1d(q).astype(float)

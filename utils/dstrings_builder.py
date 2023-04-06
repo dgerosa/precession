@@ -131,21 +131,20 @@ def descr(varname,vardef=None,optional=False):
     lookup['vinitial']=["float","Initial value of the newtonian orbital velocity"]
     lookup['vfinal']=["float","Final value of the newtonian orbital velocity"]
     lookup['mathcalA']=["float","Prefactor in the ddeltachi/dt equation"]
-
-    lookup['mathcalC0']=["float","Prefactor in the OmegaL equation"]
-    lookup['mathcalCplus']=["float","Prefactor in the OmegaL equation"]
-    lookup['mathcalCminus']=["float","Prefactor in the OmegaL equation"]
+    lookup['bigC0']=["float","Prefactor in the OmegaL equation"]
+    lookup['bigCplus']=["float","Prefactor in the OmegaL equation"]
+    lookup['bigCminus']=["float","Prefactor in the OmegaL equation"]
     lookup['mathcalC0prime']=["float","Prefactor in the PhiL equation"]
-    lookup['mathcalCplusprime']=["float","Prefactor in the PhiL equation"]
-    lookup['mathcalCminusprime']=["float","Prefactor in the PhiL equation"]
+    lookup['bigRplus']=["float","Prefactor in the PhiL equation"]
+    lookup['bigRminus']=["float","Prefactor in the PhiL equation"]
     lookup['mathcalT']=["float","Prefactor in the tau equation"]
     lookup['alpha']=['float', "Azimuthal angle spanned by L about J during an entire cycle"]
     lookup['phiL']=['float', "Azimuthal angle spanned by L about J"]
     lookup['OmegaL']=['float', "Precession frequency of L about J"]
     lookup['full_output']=['boolean', "Return additional outputs"]
-    lookup['chipterm1']=['float', "Term in effective precessing spin chip"]
-    lookup['chipterm2']=['float', "Term in effective precessing spin chip"]
-    lookup['chip']=['float', "Effective precessing spin chip"]
+    lookup['chipterm1']=['float', "Term in effective precessing spin"]
+    lookup['chipterm2']=['float', "Term in effective precessing spin"]
+    lookup['chip']=['float', "Effective precessing spin"]
     lookup['Nsamples']=['integer', "Number of Monte Carlo samples"]
     lookup['rswitch']=["float","Matching separation between the precession- and orbit-averaged chunks"]
     lookup['uswitch']=["float","Matching compactified separation between the precession- and orbit-averaged chunks"]
@@ -175,6 +174,13 @@ def descr(varname,vardef=None,optional=False):
     lookup['dchidt2']=['float', "Squared time derivative of the weighted spin difference"]
     lookup['donotnormalize']=['boolean', "If True omit the numerical prefactor"]
     lookup['returnpsiperiod']=['boolean', "Use phase instead of time"]
+    lookup['littleomega']=['float', "Squared time derivative of the weighted spin difference"]
+    lookup['bracket_omega']=['float', "Precession-averaged precession frequency"]
+    lookup['delta_omega']=['float', "Precession frequency variation due to nutation"]
+    lookup['delta_theta']=['float', "Nutation amplitude"]
+    lookup['rudp']=['float', "Outer orbital separation in the up-down instability"]
+    lookup['rudm']=['float', "Inner orbital separation in the up-down instability."]
+    lookup['omegasq']=['float', "Squared frequency."]
 
     lookup['**kwargs']=['unpacked dictionary, optional', "Additional keyword arguments"]
 
@@ -273,7 +279,7 @@ for i,line in enumerate(sourcecode):
         docs+="``"+line.replace("`","").replace(" ","").replace('precession.',"").replace('=',' = precession.',1)+'``\n'
 
 
-docs=realtab+docs.replace('\n','\n'+realtab).replace('\t',realtab)
+docs=realtab+docs.replace('\n','\n'+realtab).replace('\t',realtab).replace(realtab+"- ",realtab+realtab+"- ")
 docs+='\"\"\"\n'
 
 print(docs) # To screen
