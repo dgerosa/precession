@@ -2628,7 +2628,7 @@
 <span class="sd">    chi2: float, optional (default: None)</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    enforce: boolean, optional (default: False)</span>
-<span class="sd">        If True raise errors, if False raise warnings.</span>
+<span class="sd">        Perform additional checks.</span>
 <span class="sd">    **kwargs: unpacked dictionary, optional</span>
 <span class="sd">        Additional keyword arguments.</span>
 <span class="sd">    </span>
@@ -4642,12 +4642,9 @@
 
 <div class="viewcode-block" id="rhs_precav"><a class="viewcode-back" href="../auto.html#precession.rhs_precav">[docs]</a><span class="k">def</span> <span class="nf">rhs_precav</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral. This is an internal function used by the ODE integrator and is not array-compatible. It is equivalent to Ssav and Ssavinf and it has been re-written for optimization purposes.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    RHS = rhs_precav(kappa,u,chieff,q,chi1,chi2)</span>
-
+<span class="sd">    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral.</span>
+<span class="sd">    This is an internal function used by the ODE integrator and is not array-compatible.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    kappa: float</span>
@@ -4662,13 +4659,17 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    RHS: float</span>
 <span class="sd">        Right-hand side.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``RHS = precession.rhs_precav(kappa,u,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+
     <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
        <span class="c1"># In this case use analytic result</span>
         <span class="k">if</span> <span class="n">q</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># TODO: think about this again</span>
@@ -4699,23 +4700,18 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">Ssav</span><span class="p">)</span></div>
 
 
-<span class="c1"># TODO: docstings Careful that here u needs to be an array</span>
 <div class="viewcode-block" id="integrator_precav"><a class="viewcode-back" href="../auto.html#precession.integrator_precav">[docs]</a><span class="k">def</span> <span class="nf">integrator_precav</span><span class="p">(</span><span class="n">kappainitial</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Integration of ODE dkappa/du describing precession-averaged inspirals.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    kappa = integrator_precav(kappainitial,uinitial,ufinal,chieff,q,chi1,chi2)</span>
-
+<span class="sd">    Integration of ODE dkappa/du describing precession-averaged inspirals. Here u needs to be an array with lenght &gt;=1, where u[0] corresponds to the initial condition and u[1:] corresponds to the location where outputs are returned. For past time infinity use u=0.</span>
+<span class="sd">    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).</span>
+<span class="sd">    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    kappainitial: float</span>
 <span class="sd">        Initial value of the regularized momentum kappa.</span>
-<span class="sd">    uinitial: float</span>
-<span class="sd">        Initial value of the compactified separation 1/(2L).</span>
-<span class="sd">    ufinal: float</span>
-<span class="sd">        Final value of the compactified separation 1/(2L).</span>
+<span class="sd">    u: float</span>
+<span class="sd">        Compactified separation 1/(2L).</span>
 <span class="sd">    chieff: float</span>
 <span class="sd">        Effective spin.</span>
 <span class="sd">    q: float</span>
@@ -4724,11 +4720,17 @@
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-
+<span class="sd">    **odeint_kwargs: unpacked dictionary, optional</span>
+<span class="sd">        Additional keyword arguments.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    kappa: float</span>
 <span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``kappa = precession.integrator_precav(kappainitial,u,chieff,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">kappainitial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappainitial</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -4770,17 +4772,16 @@
 
 <div class="viewcode-block" id="inspiral_precav"><a class="viewcode-back" href="../auto.html#precession.inspiral_precav">[docs]</a><span class="k">def</span> <span class="nf">inspiral_precav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">enforce</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both). The initial conditions correspond to the binary at either r[0] or u[0]. The vector r or u needs to monotonic increasing or decreasing, allowing to integrate forward and backward in time. In addition, integration can be done between finite separations, forward from infinite to finite separation, or backward from finite to infinite separation. For infinity, use r=np.inf or u=0.</span>
+<span class="sd">    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.</span>
+<span class="sd">    The integration range must be specified using either r or u (and not both). These needs to be arrays with lenght &gt;=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.</span>
+<span class="sd">    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).</span>
 <span class="sd">    The initial conditions must be specified in terms of one an only one of the following:</span>
-<span class="sd">    - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).</span>
-<span class="sd">    - J, chieff (only if integrating from finite separations because J otherwise diverges).</span>
-<span class="sd">    - kappa, chieff.</span>
-<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=[&#39;theta1&#39;,&#39;theta2&#39;,&#39;deltaphi&#39;]. All the available variables are returned by default. These are: [&#39;theta1&#39;, &#39;theta2&#39;, &#39;deltaphi&#39;, &#39;S&#39;, &#39;J&#39;, &#39;kappa&#39;, &#39;r&#39;, &#39;u&#39;, &#39;chieff&#39;, &#39;q&#39;, &#39;chi1&#39;, &#39;chi2&#39;].</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    outputs = inspiral_precav(theta1=None,theta2=None,deltaphi=None,S=None,J=None,kappa=None,r=None,u=None,chieff=None,q=None,chi1=None,chi2=None,requested_outputs=None)</span>
-
+<span class="sd">        - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).</span>
+<span class="sd">        - kappa, chieff.</span>
+<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=[&#39;theta1&#39;,&#39;theta2&#39;,&#39;deltaphi&#39;]. All the available variables are returned by default. These are: [&#39;theta1&#39;, &#39;theta2&#39;, &#39;deltaphi&#39;, &#39;deltachi&#39;, &#39;kappa&#39;, &#39;r&#39;, &#39;u&#39;, &#39;deltachiminus&#39;, &#39;deltachiplus&#39;, &#39;deltachi3&#39;, &#39;chieff&#39;, &#39;q&#39;, &#39;chi1&#39;, &#39;chi2&#39;].</span>
+<span class="sd">    The flag enforce allows checking the consistency of the input variables.</span>
+<span class="sd">    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    theta1: float, optional (default: None)</span>
@@ -4789,10 +4790,6 @@
 <span class="sd">        Angle between orbital angular momentum and secondary spin.</span>
 <span class="sd">    deltaphi: float, optional (default: None)</span>
 <span class="sd">        Angle between the projections of the two spins onto the orbital plane.</span>
-<span class="sd">    S: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total spin.</span>
-<span class="sd">    J: float, optional (default: None)</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
 <span class="sd">    kappa: float, optional (default: None)</span>
 <span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float, optional (default: None)</span>
@@ -4809,11 +4806,22 @@
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
 <span class="sd">    requested_outputs: list, optional (default: None)</span>
 <span class="sd">        Set of outputs.</span>
-
+<span class="sd">    enforce: boolean, optional (default: False)</span>
+<span class="sd">        If True raise errors, if False raise warnings.</span>
+<span class="sd">    **odeint_kwargs: unpacked dictionary, optional</span>
+<span class="sd">        Additional keyword arguments.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    outputs: dictionary</span>
 <span class="sd">        Set of outputs.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``outputs = precession.inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,r=r,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``outputs = precession.inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,u=u,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``outputs = precession.inspiral_precav(kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``outputs = precession.inspiral_precav(kappa,u=u,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Substitute None inputs with arrays of Nones</span>
@@ -4856,7 +4864,7 @@
         <span class="k">if</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">chieff</span> <span class="o">=</span> <span class="n">angles_to_conserved</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
 
-        <span class="c1"># User provides kappa, chieff, and maybe deltachi.</span>
+        <span class="c1"># User provides kappa, chieff</span>
         <span class="k">elif</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">pass</span>
 
@@ -4919,20 +4927,16 @@
 
 <div class="viewcode-block" id="precession_average"><a class="viewcode-back" href="../auto.html#precession.precession_average">[docs]</a><span class="k">def</span> <span class="nf">precession_average</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;quadrature&#39;</span><span class="p">,</span> <span class="n">Nsamples</span><span class="o">=</span><span class="mf">1e4</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Average a generic function over a precession cycle. The function needs to have call: func(S, *args). Keywords arguments are not supported.</span>
-
+<span class="sd">    Average a generic function over a precession cycle. The function needs to have call: func(deltachi, *args). Keywords arguments are not supported.</span>
 <span class="sd">    There are integration methods implemented:</span>
-<span class="sd">    - method=&#39;quadrature&#39; uses scipy.integrate.quad. This is set by default and should be preferred.</span>
-<span class="sd">    - method=&#39;montecarlo&#39; samples t(S) and approximate the integral with a Monte Carlo sum. The number of samples can be specifed by Nsamples.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    func_av = precession_average(J,r,chieff,q,chi1,chi2,func,*args,method=&#39;quadrature&#39;,Nsamples=1e4)</span>
-
+<span class="sd">        - method=&#39;quadrature&#39; uses scipy.integrate.quad. This is set by default and should be preferred.</span>
+<span class="sd">        - method=&#39;montecarlo&#39; samples t(deltachi) and approximate the integral with a Monte Carlo sum. The number of samples can be specifed by Nsamples.</span>
+<span class="sd">    Additional keyword arguments are passed to scipy.integrate.quad.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    J: float</span>
-<span class="sd">        Magnitude of the total angular momentum.</span>
+<span class="sd">    kappa: float</span>
+<span class="sd">        Asymptotic angular momentum.</span>
 <span class="sd">    r: float</span>
 <span class="sd">        Binary separation.</span>
 <span class="sd">    chieff: float</span>
@@ -4949,13 +4953,17 @@
 <span class="sd">        Extra arguments to pass to func.</span>
 <span class="sd">    method: string (default: &#39;quadrature&#39;)</span>
 <span class="sd">        Either &#39;quadrature&#39; or &#39;montecarlo&#39;</span>
-<span class="sd">    Nsamples: integer (default: 1e4)</span>
+<span class="sd">    Nsamples: integer, optional (default: 1e4)</span>
 <span class="sd">        Number of Monte Carlo samples.</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    func_av: float</span>
-<span class="sd">        Precession averaged value of func.</span>
+<span class="sd">        Precession average of func.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``func_av = precession.precession_average(kappa,r,chieff,q,chi1,chi2,func,*args,method=&#39;quadrature&#39;,Nsamples=1e4)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">kappa</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -4969,7 +4977,6 @@
     <span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">,</span><span class="n">deltachi3</span> <span class="o">=</span> <span class="n">deltachiroots</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;quadrature&#39;</span><span class="p">:</span>
-
 
         <span class="n">tau</span> <span class="o">=</span> <span class="n">eval_tau</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">,</span><span class="n">deltachi3</span><span class="p">]),</span> <span class="n">donotnormalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -5004,18 +5011,15 @@
 
 <div class="viewcode-block" id="rhs_orbav"><a class="viewcode-back" href="../auto.html#precession.rhs_orbav">[docs]</a><span class="k">def</span> <span class="nf">rhs_orbav</span><span class="p">(</span><span class="n">allvars</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">PNorderrad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">3.5</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unite vectors, v is the orbital velocity, and t is time. This is an internal function used by the ODE integrator and is not array-compatible.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    RHS = rhs_orbav(v,allvars,q,m1,m2,eta,chi1,chi2,S1,S2,quadrupole_formula=False)</span>
-
+<span class="sd">    Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unit vectors, v is the orbital velocity, and t is time.</span>
+<span class="sd">    This is an internal function used by the ODE integrator and is not array-compatible.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    v: float</span>
-<span class="sd">        Newtonian orbital velocity.</span>
 <span class="sd">    allvars: array</span>
 <span class="sd">        Packed ODE input variables.</span>
+<span class="sd">    v: float</span>
+<span class="sd">        Newtonian orbital velocity.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
 <span class="sd">    m1: float</span>
@@ -5032,13 +5036,19 @@
 <span class="sd">        Magnitude of the primary spin.</span>
 <span class="sd">    S2: float</span>
 <span class="sd">        Magnitude of the secondary spin.</span>
-<span class="sd">    MISSING: COULD NOT BUILD, optional (default: False)</span>
-<span class="sd">        FILL MANUALLY.</span>
-
+<span class="sd">    PNorderpre: array (default: [0,0.5])</span>
+<span class="sd">        PN orders considered in the spin-precession equations.</span>
+<span class="sd">    PNorderrad: array (default: [0,0.5])</span>
+<span class="sd">        PN orders considered in the radiation-reaction equation.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    RHS: float</span>
 <span class="sd">        Right-hand side.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``RHS = precession.rhs_orbav(allvars,v,q,m1,m2,eta,chi1,chi2,S1,S2,PNorderpre=[0,0.5],PNorderrad=[0,1,1.5,2,2.5,3,3.5])``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Unpack inputs</span>
@@ -5099,13 +5109,9 @@
 
 <div class="viewcode-block" id="integrator_orbav"><a class="viewcode-back" href="../auto.html#precession.integrator_orbav">[docs]</a><span class="k">def</span> <span class="nf">integrator_orbav</span><span class="p">(</span><span class="n">Lhinitial</span><span class="p">,</span> <span class="n">S1hinitial</span><span class="p">,</span> <span class="n">S2hinitial</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">PNorderrad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">3.5</span><span class="p">],</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Integration of the systems of ODEs describing orbit-averaged inspirals. Integration is performed in a reference frame</span>
-<span class="sd">    where the z axis is along J and L lies in the x-z plane at the initial separation.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    ODEsolution = integrator_orbav(Lhinitial,S1hinitial,S2hinitial,vinitial,vfinal,q,chi1,chi2,quadrupole_formula=False)</span>
-
+<span class="sd">    Integration of the systems of ODEs describing orbit-averaged inspirals.</span>
+<span class="sd">    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    Lhinitial: array</span>
@@ -5114,23 +5120,29 @@
 <span class="sd">        Initial direction of the primary spin, unit vector.</span>
 <span class="sd">    S2hinitial: array</span>
 <span class="sd">        Initial direction of the secondary spin, unit vector.</span>
-<span class="sd">    vinitial: float</span>
-<span class="sd">        Initial value of the newtonian orbital velocity.</span>
-<span class="sd">    vfinal: float</span>
-<span class="sd">        Final value of the newtonian orbital velocity.</span>
+<span class="sd">    v: float</span>
+<span class="sd">        Newtonian orbital velocity.</span>
 <span class="sd">    q: float</span>
 <span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
 <span class="sd">    chi1: float</span>
 <span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
 <span class="sd">    chi2: float</span>
 <span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
-<span class="sd">    MISSING: COULD NOT BUILD, optional (default: False)</span>
-<span class="sd">        FILL MANUALLY.</span>
-
+<span class="sd">    PNorderpre: array (default: [0,0.5])</span>
+<span class="sd">        PN orders considered in the spin-precession equations.</span>
+<span class="sd">    PNorderrad: array (default: [0,0.5])</span>
+<span class="sd">        PN orders considered in the radiation-reaction equation.</span>
+<span class="sd">    **odeint_kwargs: unpacked dictionary, optional</span>
+<span class="sd">        Additional keyword arguments.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    ODEsolution: array of scipy OdeSolution objects</span>
-<span class="sd">        Solution of the ODE. Key method is .sol(t).</span>
+<span class="sd">    ODEsolution: array</span>
+<span class="sd">        Solution of the ODE.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``ODEsolution = precession.integrator_orbavintegrator_orbav(Lhinitial,S1hinitial,S2hinitial,v,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Lhinitial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">Lhinitial</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
