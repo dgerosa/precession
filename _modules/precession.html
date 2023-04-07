@@ -480,8 +480,7 @@
     <span class="c1"># https://reference.wolfram.com/language/ref/EllipticPi.html</span>
 
     <span class="c1"># A much slower implementation using simpy</span>
-    <span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">elliptic_pi</span>
-
+    <span class="c1"># from sympy import elliptic_pi</span>
     <span class="c1">#return float(elliptic_pi(float(n), float(phi), float(m)))</span>
 
     <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -3158,8 +3157,6 @@
     <span class="n">deltachiplus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span><span class="n">chieffdowndown</span><span class="p">),</span> <span class="n">deltachidowndown</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">deltachiminus</span><span class="p">,</span> <span class="n">deltachiplus</span><span class="p">])</span></div>
-
-
 
 
 <div class="viewcode-block" id="deltachilimits"><a class="viewcode-back" href="../auto.html#precession.deltachilimits">[docs]</a><span class="k">def</span> <span class="nf">deltachilimits</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

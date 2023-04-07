@@ -78,7 +78,7 @@
 hopefully this is a good starting point.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">importlib.machinery</span> <span class="kn">import</span> <span class="n">SourceFileLoader</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">precession</span> <span class="o">=</span> <span class="n">SourceFileLoader</span><span class="p">(</span><span class="s2">&quot;precession&quot;</span><span class="p">,</span> <span class="s2">&quot;../codes/precession.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load_module</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">precession</span> <span class="o">=</span> <span class="n">SourceFileLoader</span><span class="p">(</span><span class="s2">&quot;precession&quot;</span><span class="p">,</span> <span class="s2">&quot;../precession/precession.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load_module</span><span class="p">()</span>
 </pre></div>
 </div>
 <section id="select-a-binary-configuration">
@@ -200,10 +200,10 @@ function</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[1.53821471, 2.19456888]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[1.34141214, 0.85578498]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[ 3.00584269, -0.14004177]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.0819023 , -0.42450079]]),</span>
+<span class="go">{&#39;theta1&#39;: array([[1.54317814, 1.51208298]]),</span>
+<span class="go"> &#39;theta2&#39;: array([[1.33787274, 1.35998814]]),</span>
+<span class="go"> &#39;deltaphi&#39;: array([[ 2.81025976, -1.94076026]]),</span>
+<span class="go"> &#39;deltachi&#39;: array([[-0.08465851, -0.06740021]]),</span>
 <span class="go"> &#39;kappa&#39;: array([[0.04563644, 0.06977371]]),</span>
 <span class="go"> &#39;r&#39;: array([[1000,   10]]),</span>
 <span class="go"> &#39;u&#39;: array([[0.06403612, 0.64036123]]),</span>
@@ -223,13 +223,13 @@ that now you have to specify deltachi as well). This is slow:</p>
 <span class="go">{&#39;t&#39;: array([[0.000000e+00, 7.935974e+10]]),</span>
 <span class="go"> &#39;theta1&#39;: array([[1.66141316, 0.88395959]]),</span>
 <span class="go"> &#39;theta2&#39;: array([[1.25261228, 1.76230812]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[1.4089439 , 3.07301953]]),</span>
+<span class="go"> &#39;deltaphi&#39;: array([[1.4089439 , 3.07301966]]),</span>
 <span class="go"> &#39;Lh&#39;: array([[ 3.13179178e-02,  5.33207833e-18,  9.99509474e-01],</span>
-<span class="go">        [ 1.24542216e-03, -6.64332678e-02,  9.97790094e-01]]),</span>
+<span class="go">        [ 1.24544160e-03, -6.64332657e-02,  9.97790094e-01]]),</span>
 <span class="go"> &#39;S1h&#39;: array([[-0.73494006,  0.67476338, -0.06750919],</span>
-<span class="go">        [ 0.1569423 , -0.79776376,  0.58218746]]),</span>
+<span class="go">        [ 0.15694222, -0.79776377,  0.58218746]]),</span>
 <span class="go"> &#39;S2h&#39;: array([[-0.73753054, -0.5857321 ,  0.33610506],</span>
-<span class="go">        [-0.13214013,  0.98330162, -0.12513137]]),</span>
+<span class="go">        [-0.13214016,  0.98330163, -0.12513138]]),</span>
 <span class="go"> &#39;deltachi&#39;: array([[-0.15027382,  0.25227467]]),</span>
 <span class="go"> &#39;kappa&#39;: array([[0.04563644, 0.06865318]]),</span>
 <span class="go"> &#39;r&#39;: array([[1000,   10]]),</span>
@@ -246,15 +246,15 @@ infinity:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[2.15582199, 1.66496014]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[0.88474523, 1.25002889]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[-0.64915237, -3.0311064 ]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.40678932, -0.15223596]]),</span>
+<span class="go">{&#39;theta1&#39;: array([[0.95235371, 1.66496015]]),</span>
+<span class="go"> &#39;theta2&#39;: array([[1.724011  , 1.25002889]]),</span>
+<span class="go"> &#39;deltaphi&#39;: array([[2.74208334, 1.52709789]]),</span>
+<span class="go"> &#39;deltachi&#39;: array([[ 0.22209274, -0.15223596]]),</span>
 <span class="go"> &#39;kappa&#39;: array([[0.06865318, 0.04154245]]),</span>
 <span class="go"> &#39;r&#39;: array([[10., inf]]),</span>
 <span class="go"> &#39;u&#39;: array([[0.64036123, 0.        ]]),</span>
-<span class="go"> &#39;deltachiminus&#39;: array([[-0.43153997, -0.15223596]]),</span>
-<span class="go"> &#39;deltachiplus&#39;: array([[ 0.25313089, -0.15223596]]),</span>
+<span class="go"> &#39;deltachiminus&#39;: array([[-0.43153997,         nan]]),</span>
+<span class="go"> &#39;deltachiplus&#39;: array([[0.25313088,        nan]]),</span>
 <span class="go"> &#39;deltachi3&#39;: array([[0.18034069,        nan]]),</span>
 <span class="go"> &#39;chieff&#39;: array([0.1]),</span>
 <span class="go"> &#39;q&#39;: array([0.8]),</span>
