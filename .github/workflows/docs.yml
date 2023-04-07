@@ -15,7 +15,8 @@ jobs:
       with:
         python-version: '3.9'
     - run: pip install nb2plots
-    - run: nb2plots utils/examples.ipynb > docs/examples.rst
+    - run: jupyter nbconvert --to notebook --execute utils/examples.ipynb
+    - run: nb2plots utils/examples.nbconvert.ipynb > docs/examples.rst
     - uses: actions/upload-artifact@v3
       with:
         name: examples.rst
