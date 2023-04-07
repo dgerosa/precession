@@ -8,7 +8,7 @@ jobs:
   jupyter:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     # Example of using a custom build-command.
     - run: brew install pandoc
     - uses: actions/setup-python@v4
@@ -16,7 +16,7 @@ jobs:
         python-version: '3.9'
     - run: pip install nb2plots
     - run: nb2plots utils/examples.ipynb > docs/examples.rst
-    - uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@v3
       with:
         name: examples.rst
         path: docs/examples.rst
@@ -25,6 +25,11 @@ jobs:
   builddocs:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: examples.rst
+        path: docs/examples.rst
     - uses: BrianJKoopman/sphinx-action@master
       with:
         build-command: "make html"
