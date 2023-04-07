@@ -1,8 +1,8 @@
 name: docs
 
 on:
-  pull_request:
-    branches: [ master ]
+  push:
+    branches: [ dev ]
 
 jobs:
   build:
@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     # Example of using a custom build-command.
-    - uses: ammaraskar/sphinx-action@master
+    - uses: BrianJKoopman/sphinx-action@master
       with:
         build-command: "make html"
         docs-folder: "docs/"

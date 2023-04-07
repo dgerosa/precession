@@ -1,17 +1,18 @@
 precession's documentation: index
 ======================================
 
+
+.. mdinclude:: README.md
+
+
 .. toctree::
+   :hidden:
    :maxdepth: 2
    :caption: Contents:
    
-   README.md
-   modules
-      
-Indices and tables
-==================
+   self
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   examples
+
+   auto
 

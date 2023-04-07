@@ -4,9 +4,9 @@ Information about the current version of the precession package.
 
 __title__ = 'precession'
 __description__ = 'precession - description'
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 __author__ = 'Davide Gerosa'
-__author_email__ = 'd.gerosa@bham.ac.uk'
+__author_email__ = 'davide.gerosa@unimib.it'
 __license__ = 'MIT'
 __url__ = 'https://github.com/dgerosa/precession'
 

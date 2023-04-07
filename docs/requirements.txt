@@ -1,6 +1,9 @@
-sphinx
+sphinx>=1.8.2
+sphinx-book-theme
 numpydoc
 recommonmark
 sphinx_rtd_theme
 numpy
 scipy
+myst-parser
+sphinx-mdinclude
