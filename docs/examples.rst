@@ -1,4 +1,0 @@
-Examples
-=====================
-
-ciao ciao ciao

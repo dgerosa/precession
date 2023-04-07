@@ -51,7 +51,8 @@ extensions = [
     #'sphinx.ext.githubpages',
     #'recommonmark',
     "sphinx_mdinclude",
-    'sphinx.ext.napoleon']
+    'sphinx.ext.napoleon',
+    'nbsphinx','nb2plots']
 
 
 napoleon_custom_sections = ("Call","params_style")
