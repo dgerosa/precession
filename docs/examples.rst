@@ -1,4 +1,265 @@
 Examples
-=====================
+========
 
-ciao ciao ciao
+This is a short notebook to illustrate some of the key features of the
+``precession`` module. There much more than this in the code but
+hopefully this is a good starting point.
+
+.. nbplot::
+
+    >>> import numpy as np
+    >>> from importlib.machinery import SourceFileLoader
+    >>> precession = SourceFileLoader("precession", "../codes/precession.py").load_module()
+
+1. Select a binary configuration.
+---------------------------------
+
+First, set the constants of motion. These include mass ratio and spin
+magnitudes:
+
+.. nbplot::
+
+    >>> q = 0.8
+    >>> q
+    0.8
+
+.. nbplot::
+
+    >>> chi1 = 0.5
+    >>> chi1
+    0.5
+
+.. nbplot::
+
+    >>> chi2 = 0.9
+    >>> chi2
+    0.9
+
+From these, find a suitable value of the effective spin within its
+geometrical limits
+
+.. nbplot::
+
+    >>> chieff_minus,chieff_plus=precession.chiefflimits(q=q, chi1=chi1, chi2=chi2)
+    >>> chieff = 0.1
+    >>> assert chieff>=chieff_minus and chieff<=chieff_plus
+    >>> chieff
+    0.1
+
+Now the quantities that vary on the radiation-reaction timescale.
+Specify the orbital separation
+
+.. nbplot::
+
+    >>> r = 1000
+    >>> r
+    1000
+
+Find a suitable value of the asymptotic angular momentum (its boundaries
+are the spin-orbit resonances):
+
+.. nbplot::
+
+    >>> kappa_minus,kappa_plus=precession.kappalimits(r=r,chieff=chieff, q=q, chi1=chi1, chi2=chi2)  
+    >>> kappa = 0.02
+    >>> assert kappa>=kappa_minus and kappa<=kappa_plus
+
+This is more conventiently done by specifying a dimensionless number,
+e.g.
+
+.. nbplot::
+
+    >>> kappa = precession.kapparescaling(kappatilde=0.5, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    >>> kappa
+    array([0.04563644])
+
+Finally, the precession-timescale variation is encoded in the weighted
+spin difference. Its limits are given by the solutions of a cubic
+polynomial:
+
+.. nbplot::
+
+    >>> deltachi_minus,deltachi_plus = precession.deltachilimits(kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
+    >>> deltachi=-0.1
+    >>> assert deltachi>=deltachi_minus and deltachi<=deltachi_plus
+
+You can also sample deltachi from its PN-weighted porability density
+function
+
+.. nbplot::
+
+    >>> deltachi = precession.deltachisampling(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi1, N=1)
+
+Or, as before, specify a dimensionless number, e.g.
+
+.. nbplot::
+
+    >>> deltachi = precession.deltachirescaling(deltachitilde=0.4, kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    >>> deltachi
+    array([-0.15027382])
+
+From these quantities, one can compute the spin angles
+
+.. nbplot::
+
+    >>> theta1, theta2, deltaphi = precession.conserved_to_angles(deltachi=deltachi, kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    >>> theta1,theta2,deltaphi
+    (array([1.66141316]), array([1.25261228]), array([1.4089439]))
+
+The inverse operation is
+
+.. nbplot::
+
+    >>> deltachi_, kappa_, chieff_ = precession.angles_to_conserved(theta1=theta1, theta2=theta2, deltaphi=deltaphi, r=r, q=q, chi1=chi1, chi2=chi2)
+    >>> assert np.isclose(deltachi_,deltachi) and np.isclose(kappa_,kappa) and np.isclose(chieff_,chieff)
+
+One can now compute various derived quantities including:
+
+-  The precession period
+-  The total precession angle
+-  Two flavors of the precession estimator chip
+-  The spin morphology
+-  … and many more!
+
+.. nbplot::
+
+    >>> tau = precession.eval_tau(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    >>> tau
+    array([1.14179292e+09])
+
+.. nbplot::
+
+    >>> alpha = precession.eval_alpha(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    >>> alpha
+    array([34.7076951])
+
+.. nbplot::
+
+    >>> chip_averaged = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which="averaged")
+    >>> chip_averaged
+    array([0.74912589])
+
+.. nbplot::
+
+    >>> chip_rms = precession.eval_chip(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2,which="rms")
+    >>> chip_rms
+    array([0.81485269])
+
+.. nbplot::
+
+    >>> morph = precession.morphology(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2 )
+    >>> morph
+    array(['C+'], dtype='<U32')
+
+2. Inspiral
+-----------
+
+Let’s now evolve that binary configuration down to r=10M. 
+
+.. nbplot::
+
+    >>> rvals = [r, 10] # Specify all the outputs you want here
+    >>> outputs = precession.inspiral_precav(kappa=kappa,r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
+    >>> outputs
+    {'theta1': array([[1.53821471, 2.19456888]]),
+     'theta2': array([[1.34141214, 0.85578498]]),
+     'deltaphi': array([[ 3.00584269, -0.14004177]]),
+     'deltachi': array([[-0.0819023 , -0.42450079]]),
+     'kappa': array([[0.04563644, 0.06977371]]),
+     'r': array([[1000,   10]]),
+     'u': array([[0.06403612, 0.64036123]]),
+     'deltachiminus': array([[-0.19622919, -0.42562113]]),
+     'deltachiplus': array([[-0.08134075,  0.26825594]]),
+     'deltachi3': array([[0.74325701, 0.1801658 ]]),
+     'chieff': array([0.1]),
+     'q': array([0.8]),
+     'chi1': array([0.5]),
+     'chi2': array([0.9])}
+
+The same evolution can also be done with an orbit-averaged scheme (note
+that now you have to specify deltachi as well). This is slow:
+
+.. nbplot::
+
+    >>> outputs = precession.inspiral_orbav(deltachi=deltachi, kappa=kappa,r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
+    >>> outputs
+    {'t': array([[0.000000e+00, 7.935974e+10]]),
+     'theta1': array([[1.66141316, 0.88395959]]),
+     'theta2': array([[1.25261228, 1.76230812]]),
+     'deltaphi': array([[1.4089439 , 3.07301953]]),
+     'Lh': array([[ 3.13179178e-02,  5.33207833e-18,  9.99509474e-01],
+            [ 1.24542216e-03, -6.64332678e-02,  9.97790094e-01]]),
+     'S1h': array([[-0.73494006,  0.67476338, -0.06750919],
+            [ 0.1569423 , -0.79776376,  0.58218746]]),
+     'S2h': array([[-0.73753054, -0.5857321 ,  0.33610506],
+            [-0.13214013,  0.98330162, -0.12513137]]),
+     'deltachi': array([[-0.15027382,  0.25227467]]),
+     'kappa': array([[0.04563644, 0.06865318]]),
+     'r': array([[1000,   10]]),
+     'u': array([[0.06403612, 0.64036123]]),
+     'chieff': array([[0.1       , 0.09999999]]),
+     'q': array([0.8]),
+     'chi1': array([0.5]),
+     'chi2': array([0.9]),
+     'cyclesign': array([[1., 1.]])}
+
+Let’s now take this binary at r=10M, and propagate it back to past time
+infinity:
+
+.. nbplot::
+
+    >>> rvals = [outputs['r'][0,-1], np.inf] # Specify all the outputs you want here
+    >>> outputs = precession.inspiral_precav(kappa=outputs['kappa'][0,-1],r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
+    >>> outputs
+    {'theta1': array([[2.15582199, 1.66496014]]),
+     'theta2': array([[0.88474523, 1.25002889]]),
+     'deltaphi': array([[-0.64915237, -3.0311064 ]]),
+     'deltachi': array([[-0.40678932, -0.15223596]]),
+     'kappa': array([[0.06865318, 0.04154245]]),
+     'r': array([[10., inf]]),
+     'u': array([[0.64036123, 0.        ]]),
+     'deltachiminus': array([[-0.43153997, -0.15223596]]),
+     'deltachiplus': array([[ 0.25313089, -0.15223596]]),
+     'deltachi3': array([[0.18034069,        nan]]),
+     'chieff': array([0.1]),
+     'q': array([0.8]),
+     'chi1': array([0.5]),
+     'chi2': array([0.9])}
+
+3. Precession average what you like
+-----------------------------------
+
+The code also allow you to precession-average quantities specified by
+the users. For instance, let’s compute the average of deltachi.
+
+.. nbplot::
+
+    >>> def func(deltachi):
+    ...     return deltachi
+    ...
+    >>> deltachiav_ = precession.precession_average(kappa=kappa, r=r, chieff=chieff, q=q, chi1=chi1, chi2=chi2, func=func)
+    >>> deltachiav_
+    array([-0.13857097])
+
+For this specific case, the averaged can also be done semi-analytically
+in terms of elliptic integrals (though in general this is not possible).
+Let’s check we get the same result:
+
+.. nbplot::
+
+    >>> u = precession.eval_u(r, q)
+    >>> deltachiminus,deltachiplus,deltachi3 = precession.deltachiroots(kappa=kappa, u=u, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    >>> m = precession.elliptic_parameter(kappa=kappa, u=u, chieff=chieff, q=q, chi1=chi1, chi2=chi2,
+    ...                                   precomputedroots=np.stack([deltachiminus, deltachiplus, deltachi3]))
+    >>> deltachiav = precession.inverseaffine( precession.deltachitildeav(m),  deltachiminus, deltachiplus)
+    >>> deltachiav
+    array([-0.13857097])
+
+.. nbplot::
+
+    >>> (deltachiav_-deltachiav)/deltachiav
+    array([-8.99340873e-14])
+
+This is also an example of how providing the optional quantity
+``precomputedroots`` speeds up the computation.
+

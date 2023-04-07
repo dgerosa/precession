@@ -2689,7 +2689,7 @@ def kappalimits(r=None, chieff=None, q=None, chi1=None, chi2=None, enforce=False
     return np.stack([kappamin, kappamax])
 
 
-def chiefflimits_definition(q, chi1, chi2):
+def chiefflimits(q, chi1, chi2):
     """
     Limits on the effective spin based only on its definition.
     
@@ -2711,7 +2711,7 @@ def chiefflimits_definition(q, chi1, chi2):
     
     Examples
     --------
-    ``chieffmin,chieffmax = precession.chiefflimits_definition(q,chi1,chi2)``
+    ``chieffmin,chieffmax = precession.chiefflimits(q,chi1,chi2)``
     """
 
 
@@ -3084,6 +3084,62 @@ def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=N
     deltachiplus = np.where(np.isclose(chieff,chieffdowndown), deltachidowndown,deltachiplus)
 
     return np.stack([deltachiminus, deltachiplus])
+
+
+
+
+def deltachilimits(kappa=None, r=None, chieff=None, q=None, chi1=None, chi2=None,precomputedroots=None):
+    """
+    Limits on the weighted spin difference. The contraints considered depend on the inputs provided.
+        - If q, chi1, chi2 are provided, returns the geometrical limits.
+        - If chieff, q, chi1, and chi2 are provided, returns the  joint 'rectagle' limits.
+        - If kappa, r, chieff, q, chi1, and chi2 are provided, returns the  solution of the cubic that sets the precession-timescale evolution.
+    
+    Parameters
+    ----------
+    kappa: float, optional (default: None)
+        Asymptotic angular momentum.
+    r: float, optional (default: None)
+        Binary separation.
+    chieff: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    precomputedroots: array, optional (default: None)
+        Pre-computed output of deltachiroots for computational efficiency.
+    
+    Returns
+    -------
+    deltachimax: float
+        Maximum value of the weighted spin difference.
+    deltachimin: float
+        Minimum value of the weighted spin difference.
+    
+    Examples
+    --------
+    ``deltachimin,deltachimax = precession.deltachilimits(q=q,chi1=chi1,chi2=chi2)``
+    ``deltachimin,deltachimax = precession.deltachilimits(chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
+    ``deltachimin,deltachimax = precession.deltachilimits(kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
+    """
+
+    if kappa is None and r is None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
+        deltachimin, deltachimax = deltachilimits_definition(q, chi1, chi2)
+
+
+    elif kappa is None and r is None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
+        deltachimin, deltachimax = deltachilimits_rectangle(chieff, q, chi1, chi2)
+
+    elif kappa is not None and r is not None and chieff is not None and q is not None and chi1 is not None and chi2 is not None:
+        deltachimin, deltachimax = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=precomputedroots)
+
+    else:
+        raise TypeError("Provide either (q, chi1, chi2), (chieff, q, chi1, chi2), or (kappa, r, chieff, q, chi1, chi2).")
+
+    return np.stack([deltachimin, deltachimax])
 
 
 def deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2,precomputedroots=None):
@@ -4925,7 +4981,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
 
         # Enforce limits. Uncomment if you want to be more restrictive (though some integrations are going to fail for roundoff errors in the resonant finder)
         if enforce:
-            chieffmin, chieffmax = chiefflimits_definition(q, chi1, chi2)
+            chieffmin, chieffmax = chiefflimits(q, chi1, chi2)
             assert chieff >= chieffmin and chieff <= chieffmax, "Unphysical initial conditions [inspiral_precav]."+str(theta1)+" "+str(theta2)+" "+str(deltaphi)+" "+str(kappa)+" "+str(r)+" "+str(u)+" "+str(chieff)+" "+str(q)+" "+str(chi1)+" "+str(chi2)
             kappamin,kappamax = kappalimits(r=r[0], chieff=chieff, q=q, chi1=chi1, chi2=chi2)
             assert kappa >= kappamin and kappa <= kappamax, "Unphysical initial conditions [inspiral_precav]."+str(theta1)+" "+str(theta2)+" "+str(deltaphi)+" "+str(kappa)+" "+str(r)+" "+str(u)+" "+str(chieff)+" "+str(q)+" "+str(chi1)+" "+str(chi2)
