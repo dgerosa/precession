@@ -12,12 +12,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     # Example of using a custom build-command.
-    - name: Install packages
-      run: |
-        brew install pandoc
-        pip install nb2plots
-        echo "/Library/Frameworks/Python.framework/Versions/2.7/bin" >> $GITHUB_PATH
-        nb2plots utils/examples.ipynb > docs/examples.rst
+    - run: brew install pandoc
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - run: pip install nb2plots
+    - run: nb2plots utils/examples.ipynb > docs/examples.rst
     - uses: BrianJKoopman/sphinx-action@master
       with:
         build-command: "make html"
