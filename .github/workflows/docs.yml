@@ -34,7 +34,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: examples.rst
-        path: docs/examples.rst
+        path: docs
     - uses: BrianJKoopman/sphinx-action@master
       with:
         build-command: "make html"
