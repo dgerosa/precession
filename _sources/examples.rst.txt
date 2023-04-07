@@ -1,9 +1,11 @@
 Examples
 ========
 
-This is a short notebook to illustrate some of the key features of the
-``precession`` module. There much more than this in the code but
-hopefully this is a good starting point.
+This is a `short
+notebook <https://github.com/dgerosa/precession/blob/master/utils/examples.ipynb>`__
+to illustrate some of the key features of the ``precession`` module.
+There much more than this in the code but hopefully this is a good
+starting point.
 
 .. nbplot::
 
@@ -161,10 +163,10 @@ Let’s now evolve that binary configuration down to r=10M. 
     >>> rvals = [r, 10] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=kappa,r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {'theta1': array([[1.539428  , 0.84620562]]),
-     'theta2': array([[1.34054727, 1.78267603]]),
-     'deltaphi': array([[-2.94005338, -3.13146693]]),
-     'deltachi': array([[-0.08257601,  0.26823835]]),
+    {'theta1': array([[1.58503875, 1.10252067]]),
+     'theta2': array([[1.3078878 , 1.63427523]]),
+     'deltaphi': array([[ 2.16677351, -2.40049074]]),
+     'deltachi': array([[-0.10791219,  0.15074902]]),
      'kappa': array([[0.04563644, 0.06977371]]),
      'r': array([[1000,   10]]),
      'u': array([[0.06403612, 0.64036123]]),
@@ -211,10 +213,10 @@ infinity:
     >>> rvals = [outputs['r'][0,-1], np.inf] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=outputs['kappa'][0,-1],r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {'theta1': array([[1.31100924, 1.66496015]]),
-     'theta2': array([[1.49912024, 1.25002889]]),
-     'deltaphi': array([[-2.19715341,  2.75259605]]),
-     'deltachi': array([[ 0.04270821, -0.15223596]]),
+    {'theta1': array([[1.08465922, 1.66496015]]),
+     'theta2': array([[1.64531947, 1.25002889]]),
+     'deltaphi': array([[-2.48182633, -0.08768737]]),
+     'deltachi': array([[ 0.15956335, -0.15223596]]),
      'kappa': array([[0.06865318, 0.04154245]]),
      'r': array([[10., inf]]),
      'u': array([[0.64036123, 0.        ]]),
