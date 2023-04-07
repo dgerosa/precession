@@ -15,6 +15,7 @@ jobs:
     - name: Install packages
       run : |
         pip install nb2plots
+        nb2plots utils/examples.ipynb > docs/examples.rst
     - uses: BrianJKoopman/sphinx-action@master
       with:
         build-command: "make html"
