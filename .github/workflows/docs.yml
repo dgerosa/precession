@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     # Example of using a custom build-command.
     - name: Install packages
-        run: |
+      run: |
         brew update
         brew install pandoc
         brew upgrade
