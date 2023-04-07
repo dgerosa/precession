@@ -7,14 +7,17 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
     # Example of using a custom build-command.
     - name: Install packages
-      uses: docker://pandoc/latex:2.9
-      run : |
+        run: |
+        brew update
+        brew install pandoc
+        brew upgrade
+
         pip install nb2plots
         nb2plots utils/examples.ipynb > docs/examples.rst
     - uses: BrianJKoopman/sphinx-action@master
