@@ -4546,8 +4546,6 @@ def angleresonances_endpoint(q, chi1, chi2, chieff):
     return np.stack([theta1kappaminus, theta2kappaminus, deltaphikappaminus, thetakappaplus, thetakappaplus, deltaphikappaplus])
 
 
-print(angleresonances_endpoint(0.8, 0.8, 0.9, 0.4))
-
 def omegasq_aligned(r, q, chi1, chi2, which):
     """
     Squared oscillation frequency of a given perturbed aligned-spin binary.
