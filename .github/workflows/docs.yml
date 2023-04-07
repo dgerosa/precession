@@ -56,7 +56,7 @@ jobs:
         branch: gh-pages
         directory: gh-pages
         github_token: ${{ secrets.GITHUB_TOKEN }}
-    - uses: geekyeggo/delete-artifact@v2
-      with:
-        name: examples.rst
+#    - uses: geekyeggo/delete-artifact@v2
+#      with:
+#        name: examples.rst
     # ===============================
