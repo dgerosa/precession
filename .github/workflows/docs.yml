@@ -14,10 +14,7 @@ jobs:
     # Example of using a custom build-command.
     - name: Install packages
       run: |
-        brew update
         brew install pandoc
-        brew upgrade
-
         pip install nb2plots
         nb2plots utils/examples.ipynb > docs/examples.rst
     - uses: BrianJKoopman/sphinx-action@master
