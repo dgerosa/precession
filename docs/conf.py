@@ -52,7 +52,7 @@ extensions = [
     #'recommonmark',
     "sphinx_mdinclude",
     'sphinx.ext.napoleon',
-    'nb2plots']
+    'nbsphinx','nb2plots']
 
 
 napoleon_custom_sections = ("Call","params_style")

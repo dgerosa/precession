@@ -7,3 +7,5 @@ numpy
 scipy
 myst-parser
 sphinx-mdinclude
+nbsphinx
+nb2plots
