@@ -406,8 +406,7 @@ def ellippi(n, phi, m):
     # https://reference.wolfram.com/language/ref/EllipticPi.html
 
     # A much slower implementation using simpy
-    from sympy import elliptic_pi
-
+    # from sympy import elliptic_pi
     #return float(elliptic_pi(float(n), float(phi), float(m)))
 
     n = np.array(n)
@@ -3084,8 +3083,6 @@ def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=N
     deltachiplus = np.where(np.isclose(chieff,chieffdowndown), deltachidowndown,deltachiplus)
 
     return np.stack([deltachiminus, deltachiplus])
-
-
 
 
 def deltachilimits(kappa=None, r=None, chieff=None, q=None, chi1=None, chi2=None,precomputedroots=None):
