@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -53,7 +54,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#precession.angles_to_Lframe"><code class="docutils literal notranslate"><span class="pre">angles_to_Lframe()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.angles_to_conserved"><code class="docutils literal notranslate"><span class="pre">angles_to_conserved()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.anglesresonances"><code class="docutils literal notranslate"><span class="pre">anglesresonances()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#precession.chiefflimits_definition"><code class="docutils literal notranslate"><span class="pre">chiefflimits_definition()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.chiefflimits"><code class="docutils literal notranslate"><span class="pre">chiefflimits()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.chip_terms"><code class="docutils literal notranslate"><span class="pre">chip_terms()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.conserved_to_Jframe"><code class="docutils literal notranslate"><span class="pre">conserved_to_Jframe()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.conserved_to_Lframe"><code class="docutils literal notranslate"><span class="pre">conserved_to_Lframe()</span></code></a></li>
@@ -62,6 +63,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#precession.ddchidt_prefactor"><code class="docutils literal notranslate"><span class="pre">ddchidt_prefactor()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.deltachicubic_coefficients"><code class="docutils literal notranslate"><span class="pre">deltachicubic_coefficients()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.deltachicubic_rescaled_coefficients"><code class="docutils literal notranslate"><span class="pre">deltachicubic_rescaled_coefficients()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachilimits"><code class="docutils literal notranslate"><span class="pre">deltachilimits()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.deltachilimits_definition"><code class="docutils literal notranslate"><span class="pre">deltachilimits_definition()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.deltachilimits_plusminus"><code class="docutils literal notranslate"><span class="pre">deltachilimits_plusminus()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.deltachilimits_rectangle"><code class="docutils literal notranslate"><span class="pre">deltachilimits_rectangle()</span></code></a></li>
@@ -416,8 +418,8 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="precession.chiefflimits_definition">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">chiefflimits_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#chiefflimits_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.chiefflimits_definition" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="precession.chiefflimits">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">chiefflimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#chiefflimits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.chiefflimits" title="Permalink to this definition"></a></dt>
 <dd><p>Limits on the effective spin based only on its definition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -440,7 +442,7 @@ aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.</p
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p><code class="docutils literal notranslate"><span class="pre">chieffmin,chieffmax</span> <span class="pre">=</span> <span class="pre">precession.chiefflimits_definition(q,chi1,chi2)</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">chieffmin,chieffmax</span> <span class="pre">=</span> <span class="pre">precession.chiefflimits(q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -739,6 +741,51 @@ Setting donotnormalize=True is equivalent to mathcalA=1.</p>
 <p class="rubric">Examples</p>
 <p><code class="docutils literal notranslate"><span class="pre">coeff3,coeff2,coeff1,coeff0</span> <span class="pre">=</span> <span class="pre">precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2)</span></code>
 <code class="docutils literal notranslate"><span class="pre">coeff3,coeff2,coeff1,coeff0</span> <span class="pre">=</span> <span class="pre">precession.deltachicubic_rescaled_coefficients(kappa,u,chieff,q,chi1,chi2,precomputedcoefficients=coeffs)</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="precession.deltachilimits">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">deltachilimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precomputedroots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#deltachilimits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.deltachilimits" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Limits on the weighted spin difference. The contraints considered depend on the inputs provided.</dt><dd><ul class="simple">
+<li><p>If q, chi1, chi2 are provided, returns the geometrical limits.</p></li>
+<li><p>If chieff, q, chi1, and chi2 are provided, returns the  joint ‘rectagle’ limits.</p></li>
+<li><p>If kappa, r, chieff, q, chi1, and chi2 are provided, returns the  solution of the cubic that sets the precession-timescale evolution.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kappa: float, optional (default: None)</strong></dt><dd><p>Asymptotic angular momentum.</p>
+</dd>
+<dt><strong>r: float, optional (default: None)</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>chieff: float, optional (default: None)</strong></dt><dd><p>Effective spin.</p>
+</dd>
+<dt><strong>q: float, optional (default: None)</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float, optional (default: None)</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>precomputedroots: array, optional (default: None)</strong></dt><dd><p>Pre-computed output of deltachiroots for computational efficiency.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>deltachimax: float</dt><dd><p>Maximum value of the weighted spin difference.</p>
+</dd>
+<dt>deltachimin: float</dt><dd><p>Minimum value of the weighted spin difference.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">deltachimin,deltachimax</span> <span class="pre">=</span> <span class="pre">precession.deltachilimits(q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">deltachimin,deltachimax</span> <span class="pre">=</span> <span class="pre">precession.deltachilimits(chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span></code>
+<code class="docutils literal notranslate"><span class="pre">deltachimin,deltachimax</span> <span class="pre">=</span> <span class="pre">precession.deltachilimits(kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">

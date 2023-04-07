@@ -13,6 +13,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -2763,7 +2764,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">kappamin</span><span class="p">,</span> <span class="n">kappamax</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="chiefflimits_definition"><a class="viewcode-back" href="../auto.html#precession.chiefflimits_definition">[docs]</a><span class="k">def</span> <span class="nf">chiefflimits_definition</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<div class="viewcode-block" id="chiefflimits"><a class="viewcode-back" href="../auto.html#precession.chiefflimits">[docs]</a><span class="k">def</span> <span class="nf">chiefflimits</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits on the effective spin based only on its definition.</span>
 <span class="sd">    </span>
@@ -2785,7 +2786,7 @@
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    ``chieffmin,chieffmax = precession.chiefflimits_definition(q,chi1,chi2)``</span>
+<span class="sd">    ``chieffmin,chieffmax = precession.chiefflimits(q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -3158,6 +3159,62 @@
     <span class="n">deltachiplus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span><span class="n">chieffdowndown</span><span class="p">),</span> <span class="n">deltachidowndown</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">deltachiminus</span><span class="p">,</span> <span class="n">deltachiplus</span><span class="p">])</span></div>
+
+
+
+
+<div class="viewcode-block" id="deltachilimits"><a class="viewcode-back" href="../auto.html#precession.deltachilimits">[docs]</a><span class="k">def</span> <span class="nf">deltachilimits</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Limits on the weighted spin difference. The contraints considered depend on the inputs provided.</span>
+<span class="sd">        - If q, chi1, chi2 are provided, returns the geometrical limits.</span>
+<span class="sd">        - If chieff, q, chi1, and chi2 are provided, returns the  joint &#39;rectagle&#39; limits.</span>
+<span class="sd">        - If kappa, r, chieff, q, chi1, and chi2 are provided, returns the  solution of the cubic that sets the precession-timescale evolution.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kappa: float, optional (default: None)</span>
+<span class="sd">        Asymptotic angular momentum.</span>
+<span class="sd">    r: float, optional (default: None)</span>
+<span class="sd">        Binary separation.</span>
+<span class="sd">    chieff: float, optional (default: None)</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    q: float, optional (default: None)</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float, optional (default: None)</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float, optional (default: None)</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    precomputedroots: array, optional (default: None)</span>
+<span class="sd">        Pre-computed output of deltachiroots for computational efficiency.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    deltachimax: float</span>
+<span class="sd">        Maximum value of the weighted spin difference.</span>
+<span class="sd">    deltachimin: float</span>
+<span class="sd">        Minimum value of the weighted spin difference.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``deltachimin,deltachimax = precession.deltachilimits(q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``deltachimin,deltachimax = precession.deltachilimits(chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    ``deltachimin,deltachimax = precession.deltachilimits(kappa=kappa,r=r,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">deltachimin</span><span class="p">,</span> <span class="n">deltachimax</span> <span class="o">=</span> <span class="n">deltachilimits_definition</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+
+
+    <span class="k">elif</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">deltachimin</span><span class="p">,</span> <span class="n">deltachimax</span> <span class="o">=</span> <span class="n">deltachilimits_rectangle</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">deltachimin</span><span class="p">,</span> <span class="n">deltachimax</span> <span class="o">=</span> <span class="n">deltachilimits_plusminus</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">precomputedroots</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Provide either (q, chi1, chi2), (chieff, q, chi1, chi2), or (kappa, r, chieff, q, chi1, chi2).&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">deltachimin</span><span class="p">,</span> <span class="n">deltachimax</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="deltachirescaling"><a class="viewcode-back" href="../auto.html#precession.deltachirescaling">[docs]</a><span class="k">def</span> <span class="nf">deltachirescaling</span><span class="p">(</span><span class="n">deltachitilde</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span><span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -4999,7 +5056,7 @@
 
         <span class="c1"># Enforce limits. Uncomment if you want to be more restrictive (though some integrations are going to fail for roundoff errors in the resonant finder)</span>
         <span class="k">if</span> <span class="n">enforce</span><span class="p">:</span>
-            <span class="n">chieffmin</span><span class="p">,</span> <span class="n">chieffmax</span> <span class="o">=</span> <span class="n">chiefflimits_definition</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
+            <span class="n">chieffmin</span><span class="p">,</span> <span class="n">chieffmax</span> <span class="o">=</span> <span class="n">chiefflimits</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
             <span class="k">assert</span> <span class="n">chieff</span> <span class="o">&gt;=</span> <span class="n">chieffmin</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="o">&lt;=</span> <span class="n">chieffmax</span><span class="p">,</span> <span class="s2">&quot;Unphysical initial conditions [inspiral_precav].&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span>
             <span class="n">kappamin</span><span class="p">,</span><span class="n">kappamax</span> <span class="o">=</span> <span class="n">kappalimits</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
             <span class="k">assert</span> <span class="n">kappa</span> <span class="o">&gt;=</span> <span class="n">kappamin</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="o">&lt;=</span> <span class="n">kappamax</span><span class="p">,</span> <span class="s2">&quot;Unphysical initial conditions [inspiral_precav].&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span>
