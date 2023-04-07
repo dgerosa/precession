@@ -12,6 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     # Example of using a custom build-command.
+    - name: Install packages
+      run : |
+        pip install nbsphinx
     - uses: BrianJKoopman/sphinx-action@master
       with:
         build-command: "make html"
