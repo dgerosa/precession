@@ -23,7 +23,7 @@ jobs:
 
 
   builddocs:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: BrianJKoopman/sphinx-action@master
       with:
