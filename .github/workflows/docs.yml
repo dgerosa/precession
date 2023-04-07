@@ -15,12 +15,15 @@ jobs:
       with:
         python-version: '3.9'
     - run: pip install nb2plots
-    - run: jupyter nbconvert --to notebook --execute utils/examples.ipynb
-    - run: nb2plots utils/examples.nbconvert.ipynb > docs/examples.rst
+    - name: convert
+      run: |
+        cd utils
+        jupyter nbconvert --to notebook --execute examples.ipynb
+        nb2plots examples.nbconvert.ipynb > examples.rst
     - uses: actions/upload-artifact@v3
       with:
         name: examples.rst
-        path: docs/examples.rst
+        path: utils/examples.rst
 
 
   builddocs:
@@ -53,4 +56,7 @@ jobs:
         branch: gh-pages
         directory: gh-pages
         github_token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: geekyeggo/delete-artifact@v2
+      with:
+        name: examples.rst
     # ===============================
