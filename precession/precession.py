@@ -254,7 +254,7 @@ def isotropic_angles(N=1):
     theta2=np.arccos(np.random.uniform(-1,1,N))
     deltaphi=np.random.uniform(-np.pi,np.pi,N)
 
-    return theta1,theta2,deltaphi
+    return np.stack([theta1,theta2,deltaphi])
 
 
 def tiler(thing,shaper):
@@ -3083,7 +3083,7 @@ def deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2, precomputedroots=N
     deltachiminus = np.where(np.isclose(chieff,chieffdowndown), deltachidowndown,deltachiminus)
     deltachiplus = np.where(np.isclose(chieff,chieffdowndown), deltachidowndown,deltachiplus)
 
-    return deltachiminus, deltachiplus
+    return np.stack([deltachiminus, deltachiplus])
 
 
 def deltachirescaling(deltachitilde, kappa, r, chieff, q, chi1, chi2,precomputedroots=None):
@@ -4482,12 +4482,44 @@ def updown_endpoint(q, chi1, chi2):
     theta2 = np.arccos(costhetaupdown)
     deltaphi = np.zeros(len(theta1))
 
-    return theta1, theta2, deltaphi
+    return np.stack([theta1, theta2, deltaphi])
 
 
-## TODO: CHECK THIS!! Matt: format output how you want
-def resonances_endpoint(q, chi1, chi2, chieff):
+def angleresonances_endpoint(q, chi1, chi2, chieff):
+    """
+    Small-separation limit of the spin-orbit resonances.
     
+    Parameters
+    ----------
+    q: float
+        Mass ratio: 0<=q<=1.
+    chi1: float
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    chieff: float
+        Effective spin.
+    
+    Returns
+    -------
+    deltaphiatmax: float
+        Value of the angle deltaphi at the resonance that maximizes kappa.
+    deltaphiatmin: float
+        Value of the angle deltaphi at the resonance that minimizes kappa.
+    theta1atmax: float
+        Value of the angle theta1 at the resonance that maximizes kappa.
+    theta1atmin: float
+        Value of the angle theta1 at the resonance that minimizes kappa.
+    theta2atmax: float
+        Value of the angle theta2 at the resonance that maximizes kappa.
+    theta2atmin: float
+        Value of the angle theta2 at the resonance that minimizes kappa.
+    
+    Examples
+    --------
+    ``theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = precession.angleresonances_endpoint(q,chi1,chi2,chieff)``
+    """
+
     q = np.atleast_1d(q).astype(float)
     chi1 = np.atleast_1d(chi1).astype(float)
     chi2 = np.atleast_1d(chi2).astype(float)
@@ -4496,24 +4528,25 @@ def resonances_endpoint(q, chi1, chi2, chieff):
     chieff_uu = eval_chieff(0, 0, q, chi1, chi2)
     chieff_ud = eval_chieff(0, -np.pi, q, chi1, chi2)
     
-    theta0 = np.arccos(chieff / chieff_uu)
-    deltaphi0 = np.zeros_like(theta0)
-    res0 = theta0, theta0, deltaphi0
+    thetakappaplus = np.arccos(chieff / chieff_uu)
+    deltaphikappaplus = np.zeros_like(thetakappaplus)
+    
     
     condition = np.abs(chieff) <= np.abs(chieff_ud)
-    costheta1pi_less = chieff / chieff_ud
-    costheta1pi_gtr = (1+q) * (chieff**2+chieff_ud*chieff_uu) / (2*chi1*chieff)
-    costheta1pi = np.where(condition, costheta1pi_less, costheta1pi_gtr)
-    theta1pi = np.arccos(costheta1pi)
-    costheta2pi_less = -costheta1pi_less
-    costheta2pi_gtr = (1+q) * (chieff**2-chieff_ud*chieff_uu) / (2*q*chi2*chieff)
-    costheta2pi = np.where(condition, costheta2pi_less, costheta2pi_gtr)
-    theta2pi = np.arccos(costheta2pi)
-    deltaphipi = np.ones_like(condition) * np.pi
-    respi = theta1pi, theta2pi, deltaphipi
+    costheta1kappaminus_less = chieff / chieff_ud
+    costheta1kappaminus_gtr = (1+q) * (chieff**2+chieff_ud*chieff_uu) / (2*chi1*chieff)
+    costheta1kappaminus = np.where(condition, costheta1kappaminus_less, costheta1kappaminus_gtr)
+    theta1kappaminus = np.arccos(costheta1kappaminus)
+    costheta2kappaminus_less = -costheta1kappaminus_less
+    costheta2kappaminus_gtr = (1+q) * (chieff**2-chieff_ud*chieff_uu) / (2*q*chi2*chieff)
+    costheta2kappaminus = np.where(condition, costheta2kappaminus_less, costheta2kappaminus_gtr)
+    theta2kappaminus = np.arccos(costheta2kappaminus)
+    deltaphikappaminus = np.ones_like(condition) * np.pi
     
-    return res0, respi
+    return np.stack([theta1kappaminus, theta2kappaminus, deltaphikappaminus, thetakappaplus, thetakappaplus, deltaphikappaplus])
 
+
+print(angleresonances_endpoint(0.8, 0.8, 0.9, 0.4))
 
 def omegasq_aligned(r, q, chi1, chi2, which):
     """
@@ -4655,7 +4688,7 @@ def widenutation_condition(r, q, chi1, chi2):
     kappa = np.where(r<=rwide, np.where(chi1<=chi2,kappawide1,kappawide2), np.nan)
     chieff = np.where(r<=rwide, np.where(chi1<=chi2,chieffwide1,chieffwide2), np.nan)
 
-    return which, kappa, chieff
+    return np.stack[(which, kappa, chieff)]
 
 
 ################ Precession-averaged evolution ################
@@ -5996,7 +6029,7 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
     vk = norm_nested(kick)
 
     if full_output:
-        return vk, kick
+        return np.stack([vk, kick])
     else:
         return vk
 
