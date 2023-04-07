@@ -39,8 +39,6 @@ jobs:
       with:
         build-command: "make html"
         docs-folder: "docs/"
-    # Publish built docs to gh-pages branch.
-    # ===============================
     - name: Commit documentation changes
       run: |
         git clone https://github.com/dgerosa/precession.git --branch gh-pages --single-branch gh-pages
@@ -56,7 +54,6 @@ jobs:
         branch: gh-pages
         directory: gh-pages
         github_token: ${{ secrets.GITHUB_TOKEN }}
-#    - uses: geekyeggo/delete-artifact@v2
-#      with:
-#        name: examples.rst
-    # ===============================
+     - uses: geekyeggo/delete-artifact@v2
+       with:
+         name: examples.rst
