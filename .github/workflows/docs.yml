@@ -5,8 +5,8 @@ on:
     branches: [ dev ]
 
 jobs:
-  
-  jupyter:
+
+  convertjupyter:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
