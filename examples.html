@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Package documentation" href="auto.html" />
-    <link rel="prev" title="precession’s documentation: index" href="index.html" /> 
+    <link rel="prev" title="Readme" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,7 +46,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">precession’s documentation: index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Readme</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#select-a-binary-configuration">1. Select a binary configuration.</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#inspiral">2. Inspiral</a></li>
@@ -210,10 +210,10 @@ function</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[1.58094556, 1.46632955]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[1.31083005, 1.39226391]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[ 2.21327636, -1.99098514]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.10563837, -0.04206841]]),</span>
+<span class="go">{&#39;theta1&#39;: array([[1.70687241, 1.86626321]]),</span>
+<span class="go"> &#39;theta2&#39;: array([[1.21940343, 1.1015515 ]]),</span>
+<span class="go"> &#39;deltaphi&#39;: array([[ 0.91459346, -1.45531683]]),</span>
+<span class="go"> &#39;deltachi&#39;: array([[-0.17536474, -0.26177029]]),</span>
 <span class="go"> &#39;kappa&#39;: array([[0.04563644, 0.06977371]]),</span>
 <span class="go"> &#39;r&#39;: array([[1000,   10]]),</span>
 <span class="go"> &#39;u&#39;: array([[0.06403612, 0.64036123]]),</span>
@@ -256,10 +256,10 @@ infinity:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[2.04293728, 1.66496015]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[0.96935774, 1.25002889]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[1.0958497 , 2.52973848]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.35266336, -0.15223596]]),</span>
+<span class="go">{&#39;theta1&#39;: array([[1.65594549, 1.66496015]]),</span>
+<span class="go"> &#39;theta2&#39;: array([[1.25659191, 1.25002889]]),</span>
+<span class="go"> &#39;deltaphi&#39;: array([[ 1.80514946, -0.74872767]]),</span>
+<span class="go"> &#39;deltachi&#39;: array([[-0.14724795, -0.15223596]]),</span>
 <span class="go"> &#39;kappa&#39;: array([[0.06865318, 0.04154245]]),</span>
 <span class="go"> &#39;r&#39;: array([[10., inf]]),</span>
 <span class="go"> &#39;u&#39;: array([[0.64036123, 0.        ]]),</span>
@@ -310,7 +310,7 @@ Let’s check we get the same result:</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="precession’s documentation: index" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Readme" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="auto.html" class="btn btn-neutral float-right" title="Package documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
