@@ -13,6 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     # Example of using a custom build-command.
     - name: Install packages
+      uses: docker://pandoc/latex:2.9
       run : |
         pip install nb2plots
         nb2plots utils/examples.ipynb > docs/examples.rst
