@@ -328,7 +328,7 @@
     <span class="n">theta2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
     <span class="n">deltaphi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="tiler"><a class="viewcode-back" href="../auto.html#precession.tiler">[docs]</a><span class="k">def</span> <span class="nf">tiler</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span><span class="n">shaper</span><span class="p">):</span>
@@ -3157,7 +3157,7 @@
     <span class="n">deltachiminus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span><span class="n">chieffdowndown</span><span class="p">),</span> <span class="n">deltachidowndown</span><span class="p">,</span><span class="n">deltachiminus</span><span class="p">)</span>
     <span class="n">deltachiplus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span><span class="n">chieffdowndown</span><span class="p">),</span> <span class="n">deltachidowndown</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">deltachiminus</span><span class="p">,</span> <span class="n">deltachiplus</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">deltachiminus</span><span class="p">,</span> <span class="n">deltachiplus</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="deltachirescaling"><a class="viewcode-back" href="../auto.html#precession.deltachirescaling">[docs]</a><span class="k">def</span> <span class="nf">deltachirescaling</span><span class="p">(</span><span class="n">deltachitilde</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span><span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -4556,12 +4556,44 @@
     <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">costhetaupdown</span><span class="p">)</span>
     <span class="n">deltaphi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">theta1</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">])</span></div>
 
 
-<span class="c1">## TODO: CHECK THIS!! Matt: format output how you want</span>
-<div class="viewcode-block" id="resonances_endpoint"><a class="viewcode-back" href="../auto.html#precession.resonances_endpoint">[docs]</a><span class="k">def</span> <span class="nf">resonances_endpoint</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">chieff</span><span class="p">):</span>
-    
+<div class="viewcode-block" id="angleresonances_endpoint"><a class="viewcode-back" href="../auto.html#precession.angleresonances_endpoint">[docs]</a><span class="k">def</span> <span class="nf">angleresonances_endpoint</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">chieff</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Small-separation limit of the spin-orbit resonances.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    q: float</span>
+<span class="sd">        Mass ratio: 0&lt;=q&lt;=1.</span>
+<span class="sd">    chi1: float</span>
+<span class="sd">        Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</span>
+<span class="sd">    chi2: float</span>
+<span class="sd">        Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</span>
+<span class="sd">    chieff: float</span>
+<span class="sd">        Effective spin.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    deltaphiatmax: float</span>
+<span class="sd">        Value of the angle deltaphi at the resonance that maximizes kappa.</span>
+<span class="sd">    deltaphiatmin: float</span>
+<span class="sd">        Value of the angle deltaphi at the resonance that minimizes kappa.</span>
+<span class="sd">    theta1atmax: float</span>
+<span class="sd">        Value of the angle theta1 at the resonance that maximizes kappa.</span>
+<span class="sd">    theta1atmin: float</span>
+<span class="sd">        Value of the angle theta1 at the resonance that minimizes kappa.</span>
+<span class="sd">    theta2atmax: float</span>
+<span class="sd">        Value of the angle theta2 at the resonance that maximizes kappa.</span>
+<span class="sd">    theta2atmin: float</span>
+<span class="sd">        Value of the angle theta2 at the resonance that minimizes kappa.</span>
+<span class="sd">    </span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax = precession.angleresonances_endpoint(q,chi1,chi2,chieff)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">chi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">chi2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -4570,24 +4602,25 @@
     <span class="n">chieff_uu</span> <span class="o">=</span> <span class="n">eval_chieff</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
     <span class="n">chieff_ud</span> <span class="o">=</span> <span class="n">eval_chieff</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
     
-    <span class="n">theta0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">chieff</span> <span class="o">/</span> <span class="n">chieff_uu</span><span class="p">)</span>
-    <span class="n">deltaphi0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">theta0</span><span class="p">)</span>
-    <span class="n">res0</span> <span class="o">=</span> <span class="n">theta0</span><span class="p">,</span> <span class="n">theta0</span><span class="p">,</span> <span class="n">deltaphi0</span>
+    <span class="n">thetakappaplus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">chieff</span> <span class="o">/</span> <span class="n">chieff_uu</span><span class="p">)</span>
+    <span class="n">deltaphikappaplus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">thetakappaplus</span><span class="p">)</span>
+    
     
     <span class="n">condition</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">chieff_ud</span><span class="p">)</span>
-    <span class="n">costheta1pi_less</span> <span class="o">=</span> <span class="n">chieff</span> <span class="o">/</span> <span class="n">chieff_ud</span>
-    <span class="n">costheta1pi_gtr</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">chieff</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">chieff_ud</span><span class="o">*</span><span class="n">chieff_uu</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">chi1</span><span class="o">*</span><span class="n">chieff</span><span class="p">)</span>
-    <span class="n">costheta1pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">costheta1pi_less</span><span class="p">,</span> <span class="n">costheta1pi_gtr</span><span class="p">)</span>
-    <span class="n">theta1pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">costheta1pi</span><span class="p">)</span>
-    <span class="n">costheta2pi_less</span> <span class="o">=</span> <span class="o">-</span><span class="n">costheta1pi_less</span>
-    <span class="n">costheta2pi_gtr</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">chieff</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">chieff_ud</span><span class="o">*</span><span class="n">chieff_uu</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">chieff</span><span class="p">)</span>
-    <span class="n">costheta2pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">costheta2pi_less</span><span class="p">,</span> <span class="n">costheta2pi_gtr</span><span class="p">)</span>
-    <span class="n">theta2pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">costheta2pi</span><span class="p">)</span>
-    <span class="n">deltaphipi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-    <span class="n">respi</span> <span class="o">=</span> <span class="n">theta1pi</span><span class="p">,</span> <span class="n">theta2pi</span><span class="p">,</span> <span class="n">deltaphipi</span>
+    <span class="n">costheta1kappaminus_less</span> <span class="o">=</span> <span class="n">chieff</span> <span class="o">/</span> <span class="n">chieff_ud</span>
+    <span class="n">costheta1kappaminus_gtr</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">chieff</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">chieff_ud</span><span class="o">*</span><span class="n">chieff_uu</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">chi1</span><span class="o">*</span><span class="n">chieff</span><span class="p">)</span>
+    <span class="n">costheta1kappaminus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">costheta1kappaminus_less</span><span class="p">,</span> <span class="n">costheta1kappaminus_gtr</span><span class="p">)</span>
+    <span class="n">theta1kappaminus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">costheta1kappaminus</span><span class="p">)</span>
+    <span class="n">costheta2kappaminus_less</span> <span class="o">=</span> <span class="o">-</span><span class="n">costheta1kappaminus_less</span>
+    <span class="n">costheta2kappaminus_gtr</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">chieff</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">chieff_ud</span><span class="o">*</span><span class="n">chieff_uu</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">chieff</span><span class="p">)</span>
+    <span class="n">costheta2kappaminus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">costheta2kappaminus_less</span><span class="p">,</span> <span class="n">costheta2kappaminus_gtr</span><span class="p">)</span>
+    <span class="n">theta2kappaminus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">costheta2kappaminus</span><span class="p">)</span>
+    <span class="n">deltaphikappaminus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
     
-    <span class="k">return</span> <span class="n">res0</span><span class="p">,</span> <span class="n">respi</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">theta1kappaminus</span><span class="p">,</span> <span class="n">theta2kappaminus</span><span class="p">,</span> <span class="n">deltaphikappaminus</span><span class="p">,</span> <span class="n">thetakappaplus</span><span class="p">,</span> <span class="n">thetakappaplus</span><span class="p">,</span> <span class="n">deltaphikappaplus</span><span class="p">])</span></div>
 
+
+<span class="nb">print</span><span class="p">(</span><span class="n">angleresonances_endpoint</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">))</span>
 
 <div class="viewcode-block" id="omegasq_aligned"><a class="viewcode-back" href="../auto.html#precession.omegasq_aligned">[docs]</a><span class="k">def</span> <span class="nf">omegasq_aligned</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">which</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -4729,7 +4762,7 @@
     <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">r</span><span class="o">&lt;=</span><span class="n">rwide</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">chi1</span><span class="o">&lt;=</span><span class="n">chi2</span><span class="p">,</span><span class="n">kappawide1</span><span class="p">,</span><span class="n">kappawide2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     <span class="n">chieff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">r</span><span class="o">&lt;=</span><span class="n">rwide</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">chi1</span><span class="o">&lt;=</span><span class="n">chi2</span><span class="p">,</span><span class="n">chieffwide1</span><span class="p">,</span><span class="n">chieffwide2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">which</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">chieff</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">[(</span><span class="n">which</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">chieff</span><span class="p">)]</span></div>
 
 
 <span class="c1">################ Precession-averaged evolution ################</span>
@@ -6070,7 +6103,7 @@
     <span class="n">vk</span> <span class="o">=</span> <span class="n">norm_nested</span><span class="p">(</span><span class="n">kick</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">full_output</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">vk</span><span class="p">,</span> <span class="n">kick</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">vk</span><span class="p">,</span> <span class="n">kick</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">vk</span></div>
 

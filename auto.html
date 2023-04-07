@@ -48,6 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Package documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#precession.affine"><code class="docutils literal notranslate"><span class="pre">affine()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.angleresonances_endpoint"><code class="docutils literal notranslate"><span class="pre">angleresonances_endpoint()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.angles_to_Jframe"><code class="docutils literal notranslate"><span class="pre">angles_to_Jframe()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.angles_to_Lframe"><code class="docutils literal notranslate"><span class="pre">angles_to_Lframe()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.angles_to_conserved"><code class="docutils literal notranslate"><span class="pre">angles_to_conserved()</span></code></a></li>
@@ -143,7 +144,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#precession.remnantkick"><code class="docutils literal notranslate"><span class="pre">remnantkick()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.remnantmass"><code class="docutils literal notranslate"><span class="pre">remnantmass()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.remnantspin"><code class="docutils literal notranslate"><span class="pre">remnantspin()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#precession.resonances_endpoint"><code class="docutils literal notranslate"><span class="pre">resonances_endpoint()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.rhs_orbav"><code class="docutils literal notranslate"><span class="pre">rhs_orbav()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.rhs_precav"><code class="docutils literal notranslate"><span class="pre">rhs_precav()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.roots_vec"><code class="docutils literal notranslate"><span class="pre">roots_vec()</span></code></a></li>
@@ -214,6 +214,44 @@
 </dl>
 <p class="rubric">Examples</p>
 <p><code class="docutils literal notranslate"><span class="pre">rescaled</span> <span class="pre">=</span> <span class="pre">precession.affine(vec,low,up)</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="precession.angleresonances_endpoint">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">angleresonances_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#angleresonances_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.angleresonances_endpoint" title="Permalink to this definition"></a></dt>
+<dd><p>Small-separation limit of the spin-orbit resonances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+<dt><strong>chieff: float</strong></dt><dd><p>Effective spin.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>deltaphiatmax: float</dt><dd><p>Value of the angle deltaphi at the resonance that maximizes kappa.</p>
+</dd>
+<dt>deltaphiatmin: float</dt><dd><p>Value of the angle deltaphi at the resonance that minimizes kappa.</p>
+</dd>
+<dt>theta1atmax: float</dt><dd><p>Value of the angle theta1 at the resonance that maximizes kappa.</p>
+</dd>
+<dt>theta1atmin: float</dt><dd><p>Value of the angle theta1 at the resonance that minimizes kappa.</p>
+</dd>
+<dt>theta2atmax: float</dt><dd><p>Value of the angle theta2 at the resonance that maximizes kappa.</p>
+</dd>
+<dt>theta2atmin: float</dt><dd><p>Value of the angle theta2 at the resonance that minimizes kappa.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">theta1atmin,theta2atmin,deltaphiatmin,theta1atmax,theta2atmax,deltaphiatmax</span> <span class="pre">=</span> <span class="pre">precession.angleresonances_endpoint(q,chi1,chi2,chieff)</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -3495,11 +3533,6 @@ evolution to transfer binaries at r~10M.</p>
 <p class="rubric">Examples</p>
 <p><code class="docutils literal notranslate"><span class="pre">chifin</span> <span class="pre">=</span> <span class="pre">precession.remnantspin(theta1,theta2,deltaphi,q,chi1,chi2)</span></code></p>
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="precession.resonances_endpoint">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">resonances_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chieff</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#resonances_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.resonances_endpoint" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="precession.rhs_orbav">
