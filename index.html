@@ -78,128 +78,42 @@
 </section>
 <section id="precession">
 <h1>precession<a class="headerlink" href="#precession" title="Permalink to this heading"></a></h1>
-<hr class="docutils" />
-<hr class="docutils" />
-<blockquote>
-<div><p><strong>WARNING</strong>: We are currently developing a new, awesome version of <code class="docutils literal notranslate"><span class="pre">precession</span></code>. You can check out our progess on the <code class="docutils literal notranslate"><span class="pre">master</span></code> and <code class="docutils literal notranslate"><span class="pre">dev</span></code> branches. <code class="docutils literal notranslate"><span class="pre">precession_v1</span></code>, as described in <a class="reference external" href="https://arxiv.org/abs/1605.01067">arXiv:1605.01067</a> is still fully functional, and we reccommend you to use it for now. You can install it via pip (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">precession</span></code>, see below). The source code is available in a <a class="reference external" href="https://github.com/dgerosa/precession/tree/precession_v1">dedicated branch</a> of this repository called <code class="docutils literal notranslate"><span class="pre">precession_v1</span></code>. The documentation can be browsed at <a class="reference external" href="https://htmlpreview.github.io/?https://github.com/dgerosa/precession/blob/precession_v1/docs/index.html">this link</a>. Sorry for the inconvenience, we hope v2 will be out soon! Stay tuned.</p>
-</div></blockquote>
-<hr class="docutils" />
-</section>
-<hr class="docutils" />
-<section id="dynamics-of-spinning-black-hole-binaries-with-python">
-<h1>DYNAMICS OF SPINNING BLACK-HOLE BINARIES WITH PYTHON<a class="headerlink" href="#dynamics-of-spinning-black-hole-binaries-with-python" title="Permalink to this heading"></a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">precession</span></code> is an open-source Python module to study the dynamics of precessing
-black-hole binaries in the post-Newtonian regime.  The code provides a
-comprehensive toolbox to (i) study the evolution of the black-hole spins  along
-their precession cycles, (ii) perform gravitational-wave driven binary inspirals
-using both orbit-averaged and precession-averaged integrations, and (iii)
-predict the properties of the merger remnant through fitting formulae obtained
-from numerical relativity simulations. <code class="docutils literal notranslate"><span class="pre">precession</span></code> is a ready-to-use tool to
-add  the black-hole spin dynamics to larger-scale numerical studies such as
-gravitational-wave parameter estimation codes, population synthesis models to
-predict gravitational-wave event rates, galaxy merger trees and  cosmological
-simulations of structure formation. <code class="docutils literal notranslate"><span class="pre">precession</span></code> provides fast and reliable
-integration methods to propagate statistical samples of black-hole binaries
-from/to large separations where they form to/from small separations where they
-become detectable, thus linking gravitational-wave observations of spinning
-black-hole binaries to their astrophysical formation history. The code is also a
-useful tool to compute initial parameters for numerical relativity simulations
-targeting specific precessing systems.</p>
-<p>This code is released to the community under the <a class="reference external" href="http://creativecommons.org/licenses/by/4.0">Creative Commons Attribution
-International license</a>.
-Essentially, you may use <code class="docutils literal notranslate"><span class="pre">precession</span></code> as you like but must make reference to
-our work. When using <code class="docutils literal notranslate"><span class="pre">precession</span></code> in any published work, please cite the paper
-describing its implementation:</p>
+<a class="reference external image-reference" href="https://zenodo.org/badge/latestdoi/46057982"><img alt="DOI" src="https://zenodo.org/badge/46057982.svg" /></a>
+<p><code class="docutils literal notranslate"><span class="pre">precession</span></code> is an Python module to study the dynamics of precessing black-hole binaries using multi-timescale methids.  The code provides a comprehensive toolbox to (i) capture the black-hole dynamics on the spin-precession timescale in closed form, (ii) average generic quantities over a precession period, (iii) numerically integrate the binary inspiral using both orbit- and precession-averaged approximations, (v) evaluate spin-precession estimators to be used in gravitational-wave astronomy, and (vi) estimate the remnant properties. Key applications include propagating gravitational-wave posterior samples as well as population-synthesis predictions of astrophysical nature.</p>
+<p>The current version (v2) of <code class="docutils literal notranslate"><span class="pre">precession</span></code> is described in</p>
+<ul class="simple">
+<li><p><em>Efficient multi-timescale dynamics of precessing black-hole binaries</em></p></li>
+</ul>
+<p>The previous implementation (v1) is described in</p>
 <ul class="simple">
 <li><p><em>PRECESSION: Dynamics of spinning black-hole binaries with python.</em></p></li>
 </ul>
 <p>D. Gerosa, M. Kesden. PRD 93 (2016)
 <a class="reference external" href="http://journals.aps.org/prd/abstract/10.1103/PhysRevD.93.124066">124066</a>.
 <a class="reference external" href="https://arxiv.org/abs/1605.01067">arXiv:1605.01067</a></p>
-<p><code class="docutils literal notranslate"><span class="pre">precession</span></code> is an open-source code distributed under git version-control system on</p>
+<p>Note that v2 and v1 are <em>not</em> backward compatible; they are different codes. Unless you are maintainng a legacy pipeline, we hihgly reccommend using the new code. It is faster, more accurate, and provides more functionalities.</p>
+<p><code class="docutils literal notranslate"><span class="pre">precession</span></code> is released under the MIT licence. You may use <code class="docutils literal notranslate"><span class="pre">precession</span></code> as you like but should acknowledge our work. When using the code in any published work, please cite the papers above. The code has been used in a variety of studies in gravitational-wave and astronomy black-hole binary dynamics, follow the citations to those papers for more.</p>
+<p>The code distributed under git version-control system at</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/dgerosa/precession">github.com/dgerosa/precession</a></p></li>
 </ul>
-<p>API documentation can be generated automatically in html format from the code
-docstrings using <code class="docutils literal notranslate"><span class="pre">pdoc</span></code>, and is uplodad to a dedicated branch of the git
-repository</p>
+<p>The documentation (v2) is available</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://dgerosa.github.io/precession">dgerosa.github.io/precession</a></p></li>
 </ul>
-<p>Further information and scientific results are available at:</p>
-<ul class="simple">
-<li><p><a class="reference external" href="http://www.tapir.caltech.edu/~dgerosa/precession">www.tapir.caltech.edu/~dgerosa/precession</a></p></li>
-<li><p><a class="reference external" href="http://www.davidegerosa.com/precession">www.davidegerosa.com/precession</a></p></li>
-</ul>
-<section id="installation">
-<h2>INSTALLATION<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">precession</span></code> works in python 2.x and has been tested on 2.7.10. It can be
-installed through <a class="reference external" href="https://pypi.python.org/pypi/precession">pip</a>:</p>
+<p>The v1 documentation is archived at <a class="reference external" href="https://htmlpreview.github.io/?https://github.com/dgerosa/precession/blob/precession_v1/docs/index.html">this link</a></p>
+<p>Installing the code is as easy as</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">precession</span>
 </pre></div>
 </div>
-<p>Prerequisites are <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy</span></code> and <code class="docutils literal notranslate"><span class="pre">parmap</span></code>, which can be all installed
-through pip. Information on all code functions are available through Pyhton’s
-built-in help system</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">precession</span>
-<span class="n">help</span><span class="p">(</span><span class="n">precession</span><span class="o">.</span><span class="n">function</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Several tests and tutorial are available in the submodule <code class="docutils literal notranslate"><span class="pre">precession.test</span></code>. A
-detailed description of the functionalies of the code is provided in the
-scientific paper <a class="reference external" href="https://arxiv.org/abs/1605.01067">arXiv:1605.01067</a>, where
-examples are also presented.</p>
-</section>
-<section id="results">
-<h2>RESULTS<a class="headerlink" href="#results" title="Permalink to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">precession</span></code> has been used in the following published papers:</p>
-<ul class="simple">
-<li><p>Gerosa and Sesana. MNRAS 446 (2015) 38-55. <a class="reference external" href="https://arxiv.org/abs/1405.2072">arXiv:1405.2072</a></p></li>
-<li><p>Kesden et al. PRL 114 (2015) 081103. <a class="reference external" href="https://arxiv.org/abs/1411.0674">arXiv:1411.0674</a></p></li>
-<li><p>Gerosa et al. MNRAS 451 (2015) 3941-3954. <a class="reference external" href="https://arxiv.org/abs/1503.06807">arXiv:1503.06807</a></p></li>
-<li><p>Gerosa et al. PRD 92 (2015) 064016. <a class="reference external" href="https://arxiv.org/abs/1506.03492">arXiv:1506.03492</a></p></li>
-<li><p>Gerosa et al. PRL 115 (2015) 141102. <a class="reference external" href="https://arxiv.org/abs/1506.09116">arXiv:1506.09116</a></p></li>
-<li><p>Trifiro’ et al. PRD 93 (2016) 044071. <a class="reference external" href="https://arxiv.org/abs/1507.05587">arXiv:1507.05587</a></p></li>
-<li><p>Gerosa and Kesden. PRD 93 (2016) 124066. <a class="reference external" href="https://arxiv.org/abs/1605.01067">arXiv:1605.01067</a></p></li>
-<li><p>Gerosa and Moore. PRL 117 (2016) 011101. <a class="reference external" href="https://arxiv.org/abs/1606.04226">arXiv:1606.04226</a></p></li>
-<li><p>Rodriguez et al. APJL 832 (2016) L2 <a class="reference external" href="https://arxiv.org/abs/1609.05916">arXiv:1609.05916</a></p></li>
-<li><p>Gerosa et al. CQG 34 (2017) 6, 064004 <a class="reference external" href="https://arxiv.org/abs/1612.05263">arXiv:1612.05263</a></p></li>
-<li><p>Gerosa and Berti. PRD 95 (2017) 124046. <a class="reference external" href="https://arxiv.org/abs/1703.06223">arXiv:1703.06223</a></p></li>
-<li><p>Zhao et al. PRD 96 (2017) 024007. <a class="reference external" href="https://arxiv.org/abs/1705.02369">arXiv:1705.02369</a></p></li>
-<li><p>Wysocki et al. PRD 97 (2018) 043014 <a class="reference external" href="https://arxiv.org/abs/1709.01943">arXiv:1709.01943</a></p></li>
-<li><p>Gerosa J.Phys.Conf.Ser. 957 (2018) 012014. <a class="reference external" href="https://arxiv.org/abs/1711.1003">arXiv:1711.1003</a></p></li>
-<li><p>Rodriguez et al. PRL 120 (2018) 151101. <a class="reference external" href="https://arxiv.org/abs/1712.0493">arXiv:1712.0493</a></p></li>
-<li><p>Gerosa et al. PRD 97 (2018) 104049. <a class="reference external" href="https://arxiv.org/abs/1802.04276">arXiv:1802.04276</a></p></li>
-<li><p>Gerosa et al. PRD 98 (2018) 084036. <a class="reference external" href="https://arxiv.org/abs/1808.02491">arXiv:1808.02491</a></p></li>
-<li><p>Varma et al. PRL 122 (2019) 011101. <a class="reference external" href="https://arxiv.org/abs/1809.09125">arXiv:1809.09125</a></p></li>
-<li><p>Gerosa et al. PRD 99 (2019) 103004. <a class="reference external" href="https://arxiv.org/abs/1902.00021">arXiv:1902.00021</a></p></li>
-<li><p>Gerosa et al. CQG 36 (2019) 105003. <a class="reference external" href="https://arxiv.org/abs/1811.05979">arXiv:1811.05979</a></p></li>
-<li><p>Tso et al. PRD 99 (2019) 124043 <a class="reference external" href="https://arxiv.org/abs/1807.00075">arXiv:1807.00075</a></p></li>
-<li><p>Gerosa and Berti. PRD 100 (2019) 041301. <a class="reference external" href="https://arxiv.org/abs/1906.05295">arXiv:1906.05295</a></p></li>
-<li><p>Varma et al. PRR 1 (2019) 033015. <a class="reference external" href="https://arxiv.org/abs/1905.09300">arXiv:1905.09300</a></p></li>
-<li><p>Wong and Gerosa. PRD 100 (2019) 083015. <a class="reference external" href="https://arxiv.org/abs/1909.06373">arXiv:1909.06373</a></p></li>
-<li><p>Phukon et al. PRD 100 (2019) 124008. <a class="reference external" href="https://arxiv.org/abs/1904.03985">arXiv:1904.03985</a></p></li>
-<li><p>Varma et al. <a class="reference external" href="https://arxiv.org/abs/2002.00296">arXiv:2002.00296</a></p></li>
-<li><p>Mould and Gerosa <a class="reference external" href="https://arxiv.org/abs/2003.02281">arXiv:2003.02281</a></p></li>
-</ul>
-</section>
-<section id="releases">
-<h2>RELEASES<a class="headerlink" href="#releases" title="Permalink to this heading"></a></h2>
-<a class="reference external image-reference" href="https://zenodo.org/badge/latestdoi/46057982"><img alt="DOI" src="https://zenodo.org/badge/46057982.svg" /></a>
-<p><em>v1.0.0</em> Stable version released together with the first arxiv submission of <a class="reference external" href="https://arxiv.org/abs/1605.01067">arXiv:1605.01067</a>.</p>
-<p><em>v1.0.2</em> Clarifications on typos in Eq. (36) and (37) of <a class="reference external" href="https://arxiv.org/abs/1605.01067">arXiv:1605.01067</a>. See help(precession) for more information.</p>
-<p><em>v1.0.3</em> Python 3 now supported (hurray!). By default, <code class="docutils literal notranslate"><span class="pre">finalspin</span></code> now returns more updated result by Hofmann, Barausse and Rezzolla 2016.</p>
-</section>
-<section id="credits">
-<h2>CREDITS<a class="headerlink" href="#credits" title="Permalink to this heading"></a></h2>
-<p>The code is developed and maintained by <a class="reference external" href="www.davidegerosa.com">Davide Gerosa</a>.
-Please, report bugs to</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dgerosa</span><span class="nd">@caltech</span><span class="o">.</span><span class="n">edu</span>
-</pre></div>
-</div>
-<p>I am happy to help you out!</p>
-<p><strong>Thanks</strong>: M. Kesden, U. Sperhake, E. Berti, R. O’Shaughnessy, A. Sesana, D.
-Trifiro’, A. Klein, J. Vosmera and X. Zhao.</p>
+<p>A short tutorial is provided in <a class="reference external" href="https://dgerosa.github.io/precession">the documentation</a> together with a detailed list of all functions.</p>
+<p>The code is developed and maintained by <a class="reference external" href="www.davidegerosa.com">Davide Gerosa</a>. Please, report bugs using github.</p>
+<section id="change-log">
+<h2>Change log<a class="headerlink" href="#change-log" title="Permalink to this heading"></a></h2>
+<p><em>v2.0.0</em> New code, not backward compatible.</p>
+<p><em>v1.0.3</em> Python 3 support. Updated final-spin formula.</p>
+<p><em>v1.0.2</em> Typos final-mass formula.</p>
+<p><em>v1.0.0</em> First release as described in <a class="reference external" href="https://arxiv.org/abs/1605.01067">arXiv:1605.01067</a>.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
