@@ -3,8 +3,8 @@ Information about the current version of the precession package.
 """
 
 __title__ = 'precession'
-__description__ = 'precession - description'
-__version__ = '0.0.2'
+__description__ = 'Dynamics of precessing black-hole binaries'
+__version__ = '2.0.0'
 __author__ = 'Davide Gerosa'
 __author_email__ = 'davide.gerosa@unimib.it'
 __license__ = 'MIT'
