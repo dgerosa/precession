@@ -39,13 +39,10 @@ The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). P
 
 ### Change log
 
-*v2.0.0* New code, not backward compatible.
-
-*v1.0.3* Python 3 support. Updated final-spin formula.
-
-*v1.0.2* Typos final-mass formula.
-
-*v1.0.0* First release as described in [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
+- *v2.0.0* New code, not backward compatible.
+- *v1.0.3* Python 3 support. Updated final-spin formula.
+- *v1.0.2* Typos final-mass formula.
+- *v1.0.0* First public release. See [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
 
 
 
