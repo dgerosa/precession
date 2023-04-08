@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples &mdash; precession 0.0.2 documentation</title>
+  <title>Examples &mdash; precession 2.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
             precession
           </a>
               <div class="version">
-                0.0.2
+                2.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -210,10 +210,10 @@ function</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[1.74272919, 0.8475903 ]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[1.19306741, 1.78193916]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[0.2126779 , 3.08280279]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.19504835,  0.26766199]]),</span>
+<span class="go">{&#39;theta1&#39;: array([[1.66988293, 0.94566219]]),</span>
+<span class="go"> &#39;theta2&#39;: array([[1.24644121, 1.72783407]]),</span>
+<span class="go"> &#39;deltaphi&#39;: array([[-1.32477897,  2.66504671]]),</span>
+<span class="go"> &#39;deltachi&#39;: array([[-0.15495808,  0.22511447]]),</span>
 <span class="go"> &#39;kappa&#39;: array([[0.04563644, 0.06977371]]),</span>
 <span class="go"> &#39;r&#39;: array([[1000,   10]]),</span>
 <span class="go"> &#39;u&#39;: array([[0.06403612, 0.64036123]]),</span>
@@ -256,10 +256,10 @@ infinity:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[1.87912644, 1.66496015]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[1.09196572, 1.25002889]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[ 1.46969399, -0.96895181]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.26859329, -0.15223596]]),</span>
+<span class="go">{&#39;theta1&#39;: array([[1.83539263, 1.66496015]]),</span>
+<span class="go"> &#39;theta2&#39;: array([[1.12451855, 1.25002889]]),</span>
+<span class="go"> &#39;deltaphi&#39;: array([[1.54602977, 1.95450661]]),</span>
+<span class="go"> &#39;deltachi&#39;: array([[-0.24528869, -0.15223596]]),</span>
 <span class="go"> &#39;kappa&#39;: array([[0.06865318, 0.04154245]]),</span>
 <span class="go"> &#39;r&#39;: array([[10., inf]]),</span>
 <span class="go"> &#39;u&#39;: array([[0.64036123, 0.        ]]),</span>
