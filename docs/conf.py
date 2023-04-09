@@ -26,7 +26,7 @@ from __version__ import __title__, __version__, __author__
 
 project = __title__
 author = __author__
-copyright = 'Copyright (c) 2020 '+author
+copyright = 'Copyright (c) '+author
 
 # The short X.Y version
 version = __version__
