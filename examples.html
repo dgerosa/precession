@@ -210,10 +210,10 @@ function</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[1.58612903, 2.12602271]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[1.30710372, 0.90705719]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[2.15462181, 0.73033127]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.10851783, -0.39285316]]),</span>
+<span class="go">{&#39;theta1&#39;: array([[1.66849695, 1.39114928]]),</span>
+<span class="go"> &#39;theta2&#39;: array([[1.24745156, 1.44454615]]),</span>
+<span class="go"> &#39;deltaphi&#39;: array([[-1.33869462,  2.07154813]]),</span>
+<span class="go"> &#39;deltachi&#39;: array([[-0.15419182, -0.00073205]]),</span>
 <span class="go"> &#39;kappa&#39;: array([[0.04563644, 0.06977371]]),</span>
 <span class="go"> &#39;r&#39;: array([[1000,   10]]),</span>
 <span class="go"> &#39;u&#39;: array([[0.06403612, 0.64036123]]),</span>
@@ -256,10 +256,10 @@ infinity:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[1.57653807, 1.66496015]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[1.3139958 , 1.25002889]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[1.90202226, 0.73669113]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.10318984, -0.15223596]]),</span>
+<span class="go">{&#39;theta1&#39;: array([[0.95533372, 1.66496015]]),</span>
+<span class="go"> &#39;theta2&#39;: array([[1.72230327, 1.25002889]]),</span>
+<span class="go"> &#39;deltaphi&#39;: array([[2.73402426, 0.82039439]]),</span>
+<span class="go"> &#39;deltachi&#39;: array([[ 0.22074239, -0.15223596]]),</span>
 <span class="go"> &#39;kappa&#39;: array([[0.06865318, 0.04154245]]),</span>
 <span class="go"> &#39;r&#39;: array([[10., inf]]),</span>
 <span class="go"> &#39;u&#39;: array([[0.64036123, 0.        ]]),</span>
