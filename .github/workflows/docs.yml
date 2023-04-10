@@ -3,7 +3,6 @@ name: docs
 on:
   push:
     branches:
-      - dev
       - master
   pull_request:
     branches:
