@@ -3,10 +3,12 @@
 
 ## precession
 
-`precession` is an Python module to study the dynamics of precessing black-hole binaries using multi-timescale methids.  The code provides a comprehensive toolbox to (i) capture the black-hole dynamics on the spin-precession timescale in closed form, (ii) average generic quantities over a precession period, (iii) numerically integrate the binary inspiral using both orbit- and precession-averaged approximations, (v) evaluate spin-precession estimators to be used in gravitational-wave astronomy, and (vi) estimate the remnant properties. Key applications include propagating gravitational-wave posterior samples as well as population-synthesis predictions of astrophysical nature.
+`precession` is an Python module to study the dynamics of precessing black-hole binaries using multi-timescale methods. The code provides a comprehensive toolbox to (i) capture the black-hole dynamics on the spin-precession timescale in closed form, (ii) average generic quantities over a precession period, (iii) numerically integrate the binary inspiral using both orbit- and precession-averaged approximations, (v) evaluate spin-precession estimators to be used in gravitational-wave astronomy, and (vi) estimate the remnant properties. Key applications include propagating gravitational-wave posterior samples as well as population-synthesis predictions of astrophysical nature.
 
 The current version (v2) of `precession` is described in 
-- *Efficient multi-timescale dynamics of precessing black-hole binaries*
+- *Efficient multi-timescale dynamics of precessing black-hole binaries.*
+D. Gerosa, G. Fumagalli, M. Mould, G. Cavallotto, D. Padilla Monroy, D. Gangardt, V. De Renzis.
+[arXiv:2304.04801](https://arxiv.org/abs/2304.04801)
 
 The previous implementation (v1) is described in
 - *PRECESSION: Dynamics of spinning black-hole binaries with python.*
@@ -33,7 +35,7 @@ Installing the code is as easy as
 
 A short tutorial is provided in [the documentation](https://dgerosa.github.io/precession) together with a detailed list of all functions.
 
-The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). Please, report bugs using github.
+The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). Please report bugs and suggestions using github.
 
 
 #### Change log
