@@ -1142,7 +1142,7 @@ def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=N
     ``theta12 = precession.eval_theta12(deltachi=deltachi,kappa=kappa,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
     """
 
-    costheta12 = eval_costheta1(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
+    costheta12 = eval_costheta12(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, chieff=chieff, q=q, chi1=chi1, chi2=chi2)
     theta12 = np.arccos(costheta12)
 
     return theta12
