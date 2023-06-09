@@ -1365,7 +1365,7 @@ def eval_J(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, q=None, 
         S1 = eval_S1(q, chi1)
         S2 = eval_S2(q, chi2)
         L = eval_L(r, q)
-        S = eval_S(theta1, theta2, deltaphi, q, chi1, chi2)
+        S = eval_S(theta1=theta1, theta2=theta2, deltaphi=deltaphi, q=q, chi1=chi1, chi2=chi2)
         J = (L**2+S**2+2*L*(S1*np.cos(theta1)+S2*np.cos(theta2)))**0.5
 
     elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and r is not None and q is not None and chi1 is None and chi2 is None:
@@ -1458,8 +1458,8 @@ def eval_S(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r
     
     Examples
     --------
-    ``S = precession.eval_S(theta1,theta2,deltaphi,q,chi1,chi2)``
-    ``S = precession.eval_S(deltachi,kappa,r,chieff,q)``
+    ``S = precession.eval_S(theta1=theta1,theta2=theta2,deltaphi=deltaphi,q=q,chi1=chi1,chi2=chi2)``
+    ``S = precession.eval_S(deltachi=deltachi,kappa=kappa,r=r,chieff=chieff,q=q)``
     """
 
     if theta1 is not None and theta2 is not None and deltaphi is not None and deltachi is None and kappa is None and r is None and chieff is None and q is not None and chi1 is not None and chi2 is not None:
