@@ -5286,7 +5286,7 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorde
         #ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula))
 
         # Make sure the first step is large enough. This is to avoid LSODA to propose a tiny step which causes the integration to stall
-        if 'h0' not in odeint_kwargs: odeint_kwargs['h0']=v[0]/1e6
+        if 'h0' not in odeint_kwargs: odeint_kwargs['h0']=  np.sign(v[-1]-v[0]) *  v[0]/1e6
 
         ODEsolution = scipy.integrate.odeint(rhs_orbav, ic, v, args=(q, m1, m2, eta, chi1, chi2, S1, S2, PNorderpre, PNorderrad), **odeint_kwargs)#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)
         return ODEsolution
