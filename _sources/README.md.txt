@@ -16,18 +16,17 @@ D. Gerosa, M. Kesden. PRD 93 (2016)
 [124066](http://journals.aps.org/prd/abstract/10.1103/PhysRevD.93.124066).
 [arXiv:1605.01067](https://arxiv.org/abs/1605.01067)
 
-Note that v2 and v1 are *not* backward compatible; they are different codes. Unless you are maintainng a legacy pipeline, we hihgly reccommend using the new code. It is faster, more accurate, and provides more functionalities.
+Note that v2 and v1 are *not* backward compatible; they are different codes. Unless you are maintaining a legacy pipeline, we highly reccommend using the new code. It is faster, more accurate, and provides more functionalities.
 
 `precession` is released under the MIT licence. You may use `precession` as you like but should acknowledge our work. When using the code in any published work, please cite the papers above. The code has been used in a variety of studies in gravitational-wave and astronomy black-hole binary dynamics, follow the citations to those papers for more. 
 
-The code distributed under git version-control system at
-
+The code is distributed under git version control at
 - [github.com/dgerosa/precession](https://github.com/dgerosa/precession)
 
 The documentation (v2) is available 
 - [dgerosa.github.io/precession](https://dgerosa.github.io/precession)
 
-The v1 documentation is archived at [this link](https://htmlpreview.github.io/?https://github.com/dgerosa/precession/blob/precession_v1/docs/index.html)
+The v1 documentation is archived at [this link](https://htmlpreview.github.io/?https://github.com/dgerosa/precession/blob/precession_v1/docs/index.html).
 
 Installing the code is as easy as
 
@@ -45,7 +44,7 @@ The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). P
 - *v1.0.2* Typos in final-mass formula.
 - *v1.0.0* First public release. See [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
 
-
+(thrid-level versions not explicitly indicated refer to patches for minor typos/bug fixes) 
 
 
 
