@@ -6091,3 +6091,6 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
 
 if __name__ == '__main__':
     pass
+
+
+    print ( remnantkick([1.,1.], [1.,1.], [1.,1.], [1.,1.], [1.,1.], [1.,1.], maxphase = True, full_output=True) )
