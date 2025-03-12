@@ -3,7 +3,7 @@
 
 ## precession
 
-`precession` is an Python module to study the dynamics of precessing black-hole binaries using multi-timescale methods. The code provides a comprehensive toolbox to (i) capture the black-hole dynamics on the spin-precession timescale in closed form, (ii) average generic quantities over a precession period, (iii) numerically integrate the binary inspiral using both orbit- and precession-averaged approximations, (v) evaluate spin-precession estimators to be used in gravitational-wave astronomy, and (vi) estimate the remnant properties. Key applications include propagating gravitational-wave posterior samples as well as population-synthesis predictions of astrophysical nature.
+`precession` is a Python module to study the dynamics of precessing black-hole binaries using multi-timescale methods. The code provides a comprehensive toolbox to (i) capture the black-hole dynamics on the spin-precession timescale in closed form, (ii) average generic quantities over a precession period, (iii) numerically integrate the binary inspiral using both orbit- and precession-averaged approximations, (v) evaluate spin-precession estimators to be used in gravitational-wave astronomy, and (vi) estimate the remnant properties. Key applications include propagating gravitational-wave posterior samples as well as population-synthesis predictions of astrophysical nature.
 
 The current version (v2) of `precession` is described in 
 - *Efficient multi-timescale dynamics of precessing black-hole binaries.*
