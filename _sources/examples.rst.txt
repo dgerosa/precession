@@ -120,11 +120,11 @@ The inverse operation is
 
 One can now compute various derived quantities including:
 
--  The precession period
--  The total precession angle
--  Two flavors of the precession estimator chip
--  The spin morphology
--  … and many more!
+- The precession period
+- The total precession angle
+- Two flavors of the precession estimator chip
+- The spin morphology
+- … and many more!
 
 .. nbplot::
 
@@ -166,20 +166,20 @@ Let’s now evolve that binary configuration down to r=10M. 
     >>> rvals = [r, 10] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=kappa,r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {'theta1': array([[1.54408963, 2.16297419]]),
-     'theta2': array([[1.33722239, 0.87939461]]),
-     'deltaphi': array([[2.78560692, 0.51251691]]),
-     'deltachi': array([[-0.08516471, -0.4100941 ]]),
-     'kappa': array([[0.04563644, 0.06977371]]),
-     'r': array([[1000,   10]]),
-     'u': array([[0.06403612, 0.64036123]]),
-     'deltachiminus': array([[-0.19622919, -0.42562113]]),
-     'deltachiplus': array([[-0.08134075,  0.26825594]]),
-     'deltachi3': array([[0.74325701, 0.1801658 ]]),
-     'chieff': array([0.1]),
-     'q': array([0.8]),
-     'chi1': array([0.5]),
-     'chi2': array([0.9])}
+    {np.str_('theta1'): array([[1.74473038, 0.87850083]]),
+     np.str_('theta2'): array([[1.19159417, 1.76528817]]),
+     np.str_('deltaphi'): array([[-0.05721486, -2.86457452]]),
+     np.str_('deltachi'): array([[-0.19614354,  0.25461439]]),
+     np.str_('kappa'): array([[0.04563644, 0.06977371]]),
+     np.str_('r'): array([[1000,   10]]),
+     np.str_('u'): array([[0.06403612, 0.64036123]]),
+     np.str_('deltachiminus'): array([[-0.19622919, -0.42562113]]),
+     np.str_('deltachiplus'): array([[-0.08134075,  0.26825594]]),
+     np.str_('deltachi3'): array([[0.74325701, 0.1801658 ]]),
+     np.str_('chieff'): array([0.1]),
+     np.str_('q'): array([0.8]),
+     np.str_('chi1'): array([0.5]),
+     np.str_('chi2'): array([0.9])}
 
 The same evolution can also be done with an orbit-averaged scheme (note
 that now you have to specify deltachi as well). This is slow:
@@ -188,25 +188,25 @@ that now you have to specify deltachi as well). This is slow:
 
     >>> outputs = precession.inspiral_orbav(deltachi=deltachi, kappa=kappa,r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {'t': array([[0.000000e+00, 7.935974e+10]]),
-     'theta1': array([[1.66141316, 0.88395959]]),
-     'theta2': array([[1.25261228, 1.76230812]]),
-     'deltaphi': array([[1.4089439 , 3.07301953]]),
-     'Lh': array([[ 3.13179178e-02,  5.33207833e-18,  9.99509474e-01],
-            [ 1.24542216e-03, -6.64332678e-02,  9.97790094e-01]]),
-     'S1h': array([[-0.73494006,  0.67476338, -0.06750919],
-            [ 0.1569423 , -0.79776376,  0.58218746]]),
-     'S2h': array([[-0.73753054, -0.5857321 ,  0.33610506],
-            [-0.13214013,  0.98330162, -0.12513137]]),
-     'deltachi': array([[-0.15027382,  0.25227467]]),
-     'kappa': array([[0.04563644, 0.06865318]]),
-     'r': array([[1000,   10]]),
-     'u': array([[0.06403612, 0.64036123]]),
-     'chieff': array([[0.1       , 0.09999999]]),
-     'q': array([0.8]),
-     'chi1': array([0.5]),
-     'chi2': array([0.9]),
-     'cyclesign': array([[1., 1.]])}
+    {np.str_('t'): array([[0.000000e+00, 7.935974e+10]]),
+     np.str_('theta1'): array([[1.66141316, 0.88395959]]),
+     np.str_('theta2'): array([[1.25261228, 1.76230812]]),
+     np.str_('deltaphi'): array([[1.4089439, 3.0730197]]),
+     np.str_('Lh'): array([[ 0.03131792,  0.        ,  0.99950947],
+            [ 0.00124545, -0.06643326,  0.99779009]]),
+     np.str_('S1h'): array([[-0.73494006,  0.67476338, -0.06750919],
+            [ 0.1569422 , -0.79776378,  0.58218745]]),
+     np.str_('S2h'): array([[-0.73753054, -0.5857321 ,  0.33610506],
+            [-0.13214016,  0.98330163, -0.12513137]]),
+     np.str_('deltachi'): array([[-0.15027382,  0.25227467]]),
+     np.str_('kappa'): array([[0.04563644, 0.06865318]]),
+     np.str_('r'): array([[1000,   10]]),
+     np.str_('u'): array([[0.06403612, 0.64036123]]),
+     np.str_('chieff'): array([[0.1       , 0.09999999]]),
+     np.str_('q'): array([0.8]),
+     np.str_('chi1'): array([0.5]),
+     np.str_('chi2'): array([0.9]),
+     np.str_('cyclesign'): array([[1., 1.]])}
 
 Let’s now take this binary at r=10M, and propagate it back to past time
 infinity:
@@ -216,20 +216,20 @@ infinity:
     >>> rvals = [outputs['r'][0,-1], np.inf] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=outputs['kappa'][0,-1],r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {'theta1': array([[1.48961071, 1.66496014]]),
-     'theta2': array([[1.37588146, 1.25002889]]),
-     'deltaphi': array([[-2.00118805, -2.58471431]]),
-     'deltachi': array([[-0.05494641, -0.15223596]]),
-     'kappa': array([[0.06865318, 0.04154245]]),
-     'r': array([[10., inf]]),
-     'u': array([[0.64036123, 0.        ]]),
-     'deltachiminus': array([[-0.43153997, -0.15223596]]),
-     'deltachiplus': array([[ 0.25313089, -0.15223596]]),
-     'deltachi3': array([[0.18034069,        nan]]),
-     'chieff': array([0.1]),
-     'q': array([0.8]),
-     'chi1': array([0.5]),
-     'chi2': array([0.9])}
+    {np.str_('theta1'): array([[1.94650778, 1.66496015]]),
+     np.str_('theta2'): array([[1.04162801, 1.25002889]]),
+     np.str_('deltaphi'): array([[ 1.33638286, -0.73557307]]),
+     np.str_('deltachi'): array([[-0.30385247, -0.15223596]]),
+     np.str_('kappa'): array([[0.06865318, 0.04154245]]),
+     np.str_('r'): array([[10., inf]]),
+     np.str_('u'): array([[0.64036123, 0.        ]]),
+     np.str_('deltachiminus'): array([[-0.43153997, -0.15223596]]),
+     np.str_('deltachiplus'): array([[ 0.25313088, -0.15223596]]),
+     np.str_('deltachi3'): array([[0.18034069,        nan]]),
+     np.str_('chieff'): array([0.1]),
+     np.str_('q'): array([0.8]),
+     np.str_('chi1'): array([0.5]),
+     np.str_('chi2'): array([0.9])}
 
 3. Precession average what you like
 -----------------------------------
@@ -263,7 +263,7 @@ Let’s check we get the same result:
 .. nbplot::
 
     >>> (deltachiav_-deltachiav)/deltachiav
-    array([-8.99340873e-14])
+    array([-5.72653799e-13])
 
 This is also an example of how providing the optional quantity
 ``precomputedroots`` speeds up the computation.

@@ -1,24 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Examples &mdash; precession 2.0.4 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=adc66a14"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -37,9 +35,6 @@
           <a href="index.html" class="icon icon-home">
             precession
           </a>
-              <div class="version">
-                2.0.4
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -84,21 +79,21 @@
            <div itemprop="articleBody">
              
   <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h1>
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
 <p>This is a <a class="reference external" href="https://github.com/dgerosa/precession/blob/master/utils/examples.ipynb">short
 notebook</a>
 to illustrate some of the key features of the <code class="docutils literal notranslate"><span class="pre">precession</span></code> module.
 There much more than this in the code but hopefully this is a good
 starting point.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">importlib.machinery</span> <span class="kn">import</span> <span class="n">SourceFileLoader</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">importlib.machinery</span><span class="w"> </span><span class="kn">import</span> <span class="n">SourceFileLoader</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">precession</span> <span class="o">=</span> <span class="n">SourceFileLoader</span><span class="p">(</span><span class="s2">&quot;precession&quot;</span><span class="p">,</span> <span class="s2">&quot;../precession/precession.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load_module</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>(The import syntax above is to make sure the online documentation grabs
 the latest version. For you it should just be <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">precession</span></code> )</p>
 <section id="select-a-binary-configuration">
-<h2>1. Select a binary configuration.<a class="headerlink" href="#select-a-binary-configuration" title="Permalink to this heading"></a></h2>
+<h2>1. Select a binary configuration.<a class="headerlink" href="#select-a-binary-configuration" title="Link to this heading"></a></h2>
 <p>First, set the constants of motion. These include mass ratio and spin
 magnitudes:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="mf">0.8</span>
@@ -211,50 +206,50 @@ function</p>
 </div>
 </section>
 <section id="inspiral">
-<h2>2. Inspiral<a class="headerlink" href="#inspiral" title="Permalink to this heading"></a></h2>
+<h2>2. Inspiral<a class="headerlink" href="#inspiral" title="Link to this heading"></a></h2>
 <p>Let’s now evolve that binary configuration down to r=10M.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[1.54408963, 2.16297419]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[1.33722239, 0.87939461]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[2.78560692, 0.51251691]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.08516471, -0.4100941 ]]),</span>
-<span class="go"> &#39;kappa&#39;: array([[0.04563644, 0.06977371]]),</span>
-<span class="go"> &#39;r&#39;: array([[1000,   10]]),</span>
-<span class="go"> &#39;u&#39;: array([[0.06403612, 0.64036123]]),</span>
-<span class="go"> &#39;deltachiminus&#39;: array([[-0.19622919, -0.42562113]]),</span>
-<span class="go"> &#39;deltachiplus&#39;: array([[-0.08134075,  0.26825594]]),</span>
-<span class="go"> &#39;deltachi3&#39;: array([[0.74325701, 0.1801658 ]]),</span>
-<span class="go"> &#39;chieff&#39;: array([0.1]),</span>
-<span class="go"> &#39;q&#39;: array([0.8]),</span>
-<span class="go"> &#39;chi1&#39;: array([0.5]),</span>
-<span class="go"> &#39;chi2&#39;: array([0.9])}</span>
+<span class="go">{np.str_(&#39;theta1&#39;): array([[1.74473038, 0.87850083]]),</span>
+<span class="go"> np.str_(&#39;theta2&#39;): array([[1.19159417, 1.76528817]]),</span>
+<span class="go"> np.str_(&#39;deltaphi&#39;): array([[-0.05721486, -2.86457452]]),</span>
+<span class="go"> np.str_(&#39;deltachi&#39;): array([[-0.19614354,  0.25461439]]),</span>
+<span class="go"> np.str_(&#39;kappa&#39;): array([[0.04563644, 0.06977371]]),</span>
+<span class="go"> np.str_(&#39;r&#39;): array([[1000,   10]]),</span>
+<span class="go"> np.str_(&#39;u&#39;): array([[0.06403612, 0.64036123]]),</span>
+<span class="go"> np.str_(&#39;deltachiminus&#39;): array([[-0.19622919, -0.42562113]]),</span>
+<span class="go"> np.str_(&#39;deltachiplus&#39;): array([[-0.08134075,  0.26825594]]),</span>
+<span class="go"> np.str_(&#39;deltachi3&#39;): array([[0.74325701, 0.1801658 ]]),</span>
+<span class="go"> np.str_(&#39;chieff&#39;): array([0.1]),</span>
+<span class="go"> np.str_(&#39;q&#39;): array([0.8]),</span>
+<span class="go"> np.str_(&#39;chi1&#39;): array([0.5]),</span>
+<span class="go"> np.str_(&#39;chi2&#39;): array([0.9])}</span>
 </pre></div>
 </div>
 <p>The same evolution can also be done with an orbit-averaged scheme (note
 that now you have to specify deltachi as well). This is slow:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_orbav</span><span class="p">(</span><span class="n">deltachi</span><span class="o">=</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;t&#39;: array([[0.000000e+00, 7.935974e+10]]),</span>
-<span class="go"> &#39;theta1&#39;: array([[1.66141316, 0.88395959]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[1.25261228, 1.76230812]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[1.4089439 , 3.07301953]]),</span>
-<span class="go"> &#39;Lh&#39;: array([[ 3.13179178e-02,  5.33207833e-18,  9.99509474e-01],</span>
-<span class="go">        [ 1.24542216e-03, -6.64332678e-02,  9.97790094e-01]]),</span>
-<span class="go"> &#39;S1h&#39;: array([[-0.73494006,  0.67476338, -0.06750919],</span>
-<span class="go">        [ 0.1569423 , -0.79776376,  0.58218746]]),</span>
-<span class="go"> &#39;S2h&#39;: array([[-0.73753054, -0.5857321 ,  0.33610506],</span>
-<span class="go">        [-0.13214013,  0.98330162, -0.12513137]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.15027382,  0.25227467]]),</span>
-<span class="go"> &#39;kappa&#39;: array([[0.04563644, 0.06865318]]),</span>
-<span class="go"> &#39;r&#39;: array([[1000,   10]]),</span>
-<span class="go"> &#39;u&#39;: array([[0.06403612, 0.64036123]]),</span>
-<span class="go"> &#39;chieff&#39;: array([[0.1       , 0.09999999]]),</span>
-<span class="go"> &#39;q&#39;: array([0.8]),</span>
-<span class="go"> &#39;chi1&#39;: array([0.5]),</span>
-<span class="go"> &#39;chi2&#39;: array([0.9]),</span>
-<span class="go"> &#39;cyclesign&#39;: array([[1., 1.]])}</span>
+<span class="go">{np.str_(&#39;t&#39;): array([[0.000000e+00, 7.935974e+10]]),</span>
+<span class="go"> np.str_(&#39;theta1&#39;): array([[1.66141316, 0.88395959]]),</span>
+<span class="go"> np.str_(&#39;theta2&#39;): array([[1.25261228, 1.76230812]]),</span>
+<span class="go"> np.str_(&#39;deltaphi&#39;): array([[1.4089439, 3.0730197]]),</span>
+<span class="go"> np.str_(&#39;Lh&#39;): array([[ 0.03131792,  0.        ,  0.99950947],</span>
+<span class="go">        [ 0.00124545, -0.06643326,  0.99779009]]),</span>
+<span class="go"> np.str_(&#39;S1h&#39;): array([[-0.73494006,  0.67476338, -0.06750919],</span>
+<span class="go">        [ 0.1569422 , -0.79776378,  0.58218745]]),</span>
+<span class="go"> np.str_(&#39;S2h&#39;): array([[-0.73753054, -0.5857321 ,  0.33610506],</span>
+<span class="go">        [-0.13214016,  0.98330163, -0.12513137]]),</span>
+<span class="go"> np.str_(&#39;deltachi&#39;): array([[-0.15027382,  0.25227467]]),</span>
+<span class="go"> np.str_(&#39;kappa&#39;): array([[0.04563644, 0.06865318]]),</span>
+<span class="go"> np.str_(&#39;r&#39;): array([[1000,   10]]),</span>
+<span class="go"> np.str_(&#39;u&#39;): array([[0.06403612, 0.64036123]]),</span>
+<span class="go"> np.str_(&#39;chieff&#39;): array([[0.1       , 0.09999999]]),</span>
+<span class="go"> np.str_(&#39;q&#39;): array([0.8]),</span>
+<span class="go"> np.str_(&#39;chi1&#39;): array([0.5]),</span>
+<span class="go"> np.str_(&#39;chi2&#39;): array([0.9]),</span>
+<span class="go"> np.str_(&#39;cyclesign&#39;): array([[1., 1.]])}</span>
 </pre></div>
 </div>
 <p>Let’s now take this binary at r=10M, and propagate it back to past time
@@ -262,28 +257,28 @@ infinity:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{&#39;theta1&#39;: array([[1.48961071, 1.66496014]]),</span>
-<span class="go"> &#39;theta2&#39;: array([[1.37588146, 1.25002889]]),</span>
-<span class="go"> &#39;deltaphi&#39;: array([[-2.00118805, -2.58471431]]),</span>
-<span class="go"> &#39;deltachi&#39;: array([[-0.05494641, -0.15223596]]),</span>
-<span class="go"> &#39;kappa&#39;: array([[0.06865318, 0.04154245]]),</span>
-<span class="go"> &#39;r&#39;: array([[10., inf]]),</span>
-<span class="go"> &#39;u&#39;: array([[0.64036123, 0.        ]]),</span>
-<span class="go"> &#39;deltachiminus&#39;: array([[-0.43153997, -0.15223596]]),</span>
-<span class="go"> &#39;deltachiplus&#39;: array([[ 0.25313089, -0.15223596]]),</span>
-<span class="go"> &#39;deltachi3&#39;: array([[0.18034069,        nan]]),</span>
-<span class="go"> &#39;chieff&#39;: array([0.1]),</span>
-<span class="go"> &#39;q&#39;: array([0.8]),</span>
-<span class="go"> &#39;chi1&#39;: array([0.5]),</span>
-<span class="go"> &#39;chi2&#39;: array([0.9])}</span>
+<span class="go">{np.str_(&#39;theta1&#39;): array([[1.94650778, 1.66496015]]),</span>
+<span class="go"> np.str_(&#39;theta2&#39;): array([[1.04162801, 1.25002889]]),</span>
+<span class="go"> np.str_(&#39;deltaphi&#39;): array([[ 1.33638286, -0.73557307]]),</span>
+<span class="go"> np.str_(&#39;deltachi&#39;): array([[-0.30385247, -0.15223596]]),</span>
+<span class="go"> np.str_(&#39;kappa&#39;): array([[0.06865318, 0.04154245]]),</span>
+<span class="go"> np.str_(&#39;r&#39;): array([[10., inf]]),</span>
+<span class="go"> np.str_(&#39;u&#39;): array([[0.64036123, 0.        ]]),</span>
+<span class="go"> np.str_(&#39;deltachiminus&#39;): array([[-0.43153997, -0.15223596]]),</span>
+<span class="go"> np.str_(&#39;deltachiplus&#39;): array([[ 0.25313088, -0.15223596]]),</span>
+<span class="go"> np.str_(&#39;deltachi3&#39;): array([[0.18034069,        nan]]),</span>
+<span class="go"> np.str_(&#39;chieff&#39;): array([0.1]),</span>
+<span class="go"> np.str_(&#39;q&#39;): array([0.8]),</span>
+<span class="go"> np.str_(&#39;chi1&#39;): array([0.5]),</span>
+<span class="go"> np.str_(&#39;chi2&#39;): array([0.9])}</span>
 </pre></div>
 </div>
 </section>
 <section id="precession-average-what-you-like">
-<h2>3. Precession average what you like<a class="headerlink" href="#precession-average-what-you-like" title="Permalink to this heading"></a></h2>
+<h2>3. Precession average what you like<a class="headerlink" href="#precession-average-what-you-like" title="Link to this heading"></a></h2>
 <p>The code also allow you to precession-average quantities specified by
 the users. For instance, let’s compute the average of deltachi.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">deltachi</span><span class="p">):</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span><span class="n">deltachi</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">deltachi</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">deltachiav_</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">precession_average</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">func</span><span class="p">)</span>
@@ -304,7 +299,7 @@ Let’s check we get the same result:</p>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">deltachiav_</span><span class="o">-</span><span class="n">deltachiav</span><span class="p">)</span><span class="o">/</span><span class="n">deltachiav</span>
-<span class="go">array([-8.99340873e-14])</span>
+<span class="go">array([-5.72653799e-13])</span>
 </pre></div>
 </div>
 <p>This is also an example of how providing the optional quantity
