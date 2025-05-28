@@ -4,7 +4,7 @@ Information about the current version of the precession package.
 
 __title__ = 'precession'
 __description__ = 'Dynamics of precessing black-hole binaries'
-__version__ = '2.0.4'
+__version__ = '2.0.5'
 __author__ = 'Davide Gerosa'
 __author_email__ = 'davide.gerosa@unimib.it'
 __license__ = 'MIT'

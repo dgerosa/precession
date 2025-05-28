@@ -1,5 +1,5 @@
-# python setup.py sdist
-# twine upload --repository pypitest dist/*
+# rm -rf dist/ build/ *.egg-info
+# python -m build
 # twine upload dist/*
 
 import os
@@ -10,6 +10,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'precession', '__version__.py'), 'r') as _:
     exec(_.read(), about)
 
+print(about)
 with open ('requirements.txt', 'r') as _:
     requires = [line.split()[0] for line in _]
 
