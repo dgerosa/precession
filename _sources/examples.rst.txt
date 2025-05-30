@@ -166,10 +166,10 @@ Let’s now evolve that binary configuration down to r=10M. 
     >>> rvals = [r, 10] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=kappa,r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {np.str_('theta1'): array([[1.60324078, 1.46919324]]),
-     np.str_('theta2'): array([[1.29477794, 1.39025347]]),
-     np.str_('deltaphi'): array([[1.97363412, 1.98787616]]),
-     np.str_('deltachi'): array([[-0.11802153, -0.04365091]]),
+    {np.str_('theta1'): array([[1.5372807 , 1.67930007]]),
+     np.str_('theta2'): array([[1.34207779, 1.23957094]]),
+     np.str_('deltaphi'): array([[ 3.10408346, -1.74053567]]),
+     np.str_('deltachi'): array([[-0.08138369, -0.16016165]]),
      np.str_('kappa'): array([[0.04563644, 0.06977371]]),
      np.str_('r'): array([[1000,   10]]),
      np.str_('u'): array([[0.06403612, 0.64036123]]),
@@ -216,10 +216,10 @@ infinity:
     >>> rvals = [outputs['r'][0,-1], np.inf] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=outputs['kappa'][0,-1],r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {np.str_('theta1'): array([[1.38499062, 1.66496015]]),
-     np.str_('theta2'): array([[1.4487844 , 1.25002889]]),
-     np.str_('deltaphi'): array([[2.11590237, 0.54734021]]),
-     np.str_('deltachi'): array([[ 0.00263246, -0.15223596]]),
+    {np.str_('theta1'): array([[1.45235006, 1.66496015]]),
+     np.str_('theta2'): array([[1.4020589 , 1.25002889]]),
+     np.str_('deltaphi'): array([[ 2.04235005, -0.57399675]]),
+     np.str_('deltachi'): array([[-0.03435027, -0.15223596]]),
      np.str_('kappa'): array([[0.06865318, 0.04154245]]),
      np.str_('r'): array([[10., inf]]),
      np.str_('u'): array([[0.64036123, 0.        ]]),
