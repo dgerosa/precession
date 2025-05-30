@@ -41,10 +41,9 @@ The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). P
 
 - *v2.0.0* New code, not backward compatible. See [arXiv:2304.04801](https://arxiv.org/abs/2304.04801)
 - *v1.0.3* Python 3 support. Updated final-spin formula.
-- *v1.0.2* Typos in final-mass formula.
 - *v1.0.0* First public release. See [arXiv:1605.01067](https://arxiv.org/abs/1605.01067).
 
-(thrid-level versions not explicitly indicated refer to patches for minor typos/bug fixes) 
+(Third-level versions not explicitly indicated refer to patches for minor typos/bug fixes) 
 
 
 
