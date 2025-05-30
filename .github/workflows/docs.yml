@@ -8,6 +8,9 @@ on:
     branches:
       - master
 
+permissions:
+  actions: read
+
 jobs:
   jupyter:
     runs-on: macos-latest
