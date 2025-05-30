@@ -9,7 +9,7 @@ on:
       - master
 
 permissions:
-  contents: write  # Needed to push to gh-pages
+  contents: write
   actions: read
 
 jobs:
