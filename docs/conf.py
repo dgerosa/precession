@@ -17,9 +17,15 @@ import sphinx
 
 from recommonmark.parser import CommonMarkParser
 
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../'))
 sys.path.insert(0, os.path.abspath('../precession'))
 from __version__ import __title__, __version__, __author__
+
+sys.path.insert(0, os.path.abspath('../precession/ecc'))
+#print(sys.executable, sys.version, sys.path)
+
+for x in os.walk('../precession'):
+  sys.path.insert(0, x[0])
 
 
 # -- Project information -----------------------------------------------------
