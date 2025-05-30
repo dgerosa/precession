@@ -10,7 +10,7 @@ on:
 
 permissions:
   contents: write
-  actions: read
+  actions: write
 
 jobs:
   jupyter:
@@ -61,5 +61,6 @@ jobs:
         publish_branch: gh-pages
 
     - uses: geekyeggo/delete-artifact@v2
+      continue-on-error: true
       with:
         name: examples.rst
