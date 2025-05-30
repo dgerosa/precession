@@ -8,56 +8,59 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+  actions: write
+
 jobs:
   jupyter:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
+
     - run: brew install pandoc
+
     - uses: actions/setup-python@v4
       with:
         python-version: '3.9'
+
     - run: pip install -r requirements.txt
     - run: pip install nb2plots
-    - name: convert
+
+    - name: Convert notebook
       run: |
         cd utils
         jupyter nbconvert --to notebook --execute examples.ipynb
         nb2plots examples.nbconvert.ipynb > examples.rst
+
     - uses: actions/upload-artifact@v4
       with:
         name: examples.rst
         path: utils/examples.rst
-
 
   builddocs:
     needs: jupyter
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
     - uses: actions/download-artifact@v4
       with:
         name: examples.rst
         path: docs
+
     - uses: BrianJKoopman/sphinx-action@master
       with:
         build-command: "make html"
         docs-folder: "docs/"
-    - name: Commit documentation changes
-      run: |
-        git clone https://github.com/dgerosa/precession.git --branch gh-pages --single-branch gh-pages
-        cp -r docs/_build/html/* gh-pages/
-        cd gh-pages
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add .
-        git commit -m "Update documentation" -a || true
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+
+    - uses: peaceiris/actions-gh-pages@v3
       with:
-        branch: gh-pages
-        directory: gh-pages
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/_build/html
+        publish_branch: gh-pages
+
     - uses: geekyeggo/delete-artifact@v2
+      continue-on-error: true
       with:
         name: examples.rst
