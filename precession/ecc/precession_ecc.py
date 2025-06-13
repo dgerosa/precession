@@ -10,6 +10,7 @@ import scipy.integrate
 import scipy.spatial.transform
 from itertools import repeat
 import precession
+from precession import *
 
 """
 This module dynamically wraps functions from `precession.py`, replacing the `r` parameter
@@ -229,7 +230,7 @@ def eval_e(L=None,u=None,uc=None,a=None,q=None):
     e: float
         Binary eccentricity.
     """
-
+   
     if L is not None and u is None and q is not None:
         q = np.atleast_1d(q)
         L = np.atleast_1d(L)
@@ -240,12 +241,17 @@ def eval_e(L=None,u=None,uc=None,a=None,q=None):
 
     elif L is None and u is not None and q is not None and uc is not None:
         u= np.atleast_1d(u)
-        uc= np.atleast_1d(u)
-        e =(u)**(-1) * ((-1 * (uc)**(2) + (u)**(2)))**(1/2)
+        uc= np.atleast_1d(uc)
+        e =np.sqrt(1-np.float64(uc)**2/np.float64(u)**2)
+
+    elif L is None and u is not None and q is not None and a is not None:
+        u= np.atleast_1d(u)
+        a= np.atleast_1d(a)
+        e =np.sqrt(-1-4*q-4*q**3-q**4+q**2*(-6+4*a*u**2))/(2*np.sqrt(a)*q*u)
 
     else:
         raise TypeError("Provide either (L,a,q) or (u, uc,q).")    
-        
+    
     return e
 
 
@@ -282,6 +288,7 @@ def ddchidt_prefactor(a, e, chieff, q):
     mathcalA = (3/2)*((1+q)**(-1/2))*(r**(-11/4))*(1-(chieff/r**0.5))*(1 - e**2)**(3/2)
 
     return mathcalA        
+
 
 def vectors_to_conserved(Lvec, S1vec, S2vec, a, e , q,full_output=False):
     """
@@ -339,16 +346,36 @@ def vectors_to_conserved(Lvec, S1vec, S2vec, a, e , q,full_output=False):
     else:
         return np.stack([deltachi, kappa, chieff])
 
+def implicit_rev(uc,u):
+    """ inverse of LHS of eq. (28) in Fumagalli & Gerosa, arXiv:2310.16893. This is used to compute the inverse of the implicit function u(uc) [i.e. uc(u)] in the inspiral_precav function.
 
-
-def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, a=None, e=0, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,  enforce=False, **odeint_kwargs):
+    Parameters 
+    ----------
+    uc: float
+        Circular compactified separation 1/(2L(e=0)).
+    u: float
+        Compactified separation 1/(2L).
     """
-    The integration range must be specified using either (a,e) or u (and not both). These need to be arrays with lenght >=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned. Do not go to past time infinity with e!=0.
+    return u**(121/84)*(1-uc**2/u**2)**(121/532)*(425/121-uc**2/u**2)**(145/532)
+def implicit(u,uc):
+    """LHS of eq. (28) in Fumagalli & Gerosa, arXiv:2310.16893. This is used to compute the implicit function u(uc) in the inspiral_precav function.
+    Parameters 
+    ----------
+    u: float
+        Compactified separation 1/(2L).
+    uc: float
+        Circular compactified separation 1/(2L(e=0)).
+    """
+    return uc * u**(37/84) * (u**2 / uc**2 - 1 )**(121/532) * (u**2 / uc**2 -(121/425))**(145/532)
+
+def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa=None, a=None, e=None, u=None, uc=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,  enforce=False, **odeint_kwargs):
+    """
+    The integration range must be specified using either (a,e) or (u, uc), (and not both). These need to be arrays with lenght >=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned. Do not go to past time infinity with e!=0.
     The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
     The initial conditions must be specified in terms of one an only one of the following:
         - theta1,theta2, and deltaphi.
         - kappa, chieff.
-    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'a', 'e', 'u', 'deltachimietas', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'a', 'e', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].
     The flag enforce allows checking the consistency of the input variables.
     Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.
 
@@ -395,38 +422,37 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, a=None,
     """
 
     # Substitute None inputs with arrays of Nones
-    inputs = [theta1, theta2, deltaphi, kappa, a, e, u, chieff, q, chi1, chi2]
+    inputs = [theta1, theta2, deltaphi, kappa, a, e, u, uc, chieff, q, chi1, chi2]
     for k, v in enumerate(inputs):
         if v is None:
             inputs[k] = np.atleast_1d(np.squeeze(tiler(None, np.atleast_1d(q))))
         else:
-            if   k == 4 or k == 6:  # Either u or (a,e)
+            if   k == 4 or k == 6 or  k==7:  # Either (u, uc) or (a,e)
                     inputs[k] = np.atleast_2d(inputs[k])
             else:  # Any of the others
                 inputs[k] = np.atleast_1d(inputs[k])
                 
-    theta1, theta2, deltaphi,  kappa, a, e, u, chieff, q, chi1, chi2 = inputs
-    #print(theta1, theta2, deltaphi,  kappa, a, e, u, chieff, q, chi1, chi2)
+    theta1, theta2, deltaphi,  kappa, a, e, u, uc, chieff, q, chi1, chi2 = inputs
     # This array has to match the outputs of _compute (in the right order!)
-    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'a', 'e', 'u', 'deltachimietas', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'])
+    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'a', 'e', 'u','uc', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'])
     # If in doubt, return everything
     if requested_outputs is None:
         requested_outputs = alloutputs
     
-    def _compute(theta1, theta2, deltaphi, kappa, a, e, u, chieff, q, chi1, chi2):
-        #print(a,e)
+    def _compute(theta1, theta2, deltaphi, kappa, a, e, u, uc, chieff, q, chi1, chi2):
+        
         # Make sure you have q, chi1, and chi2.
         if q is None or chi1 is None or chi2 is None:
             raise TypeError("Please provide q, chi1, and chi2.")
-       
+        ## User pass (a, e0) -> return u and uc [from u recover e]
         if a is not None and e is not None and u is None:
-            #print("a,e,u")
+
+            #print('questo')
             assert np.logical_or(ismonotonic(a, '<='), ismonotonic(a, '>=')), 'a must be monotonic'
             if e !=0:
                 def solve(uc, c0, e):
-                     return scipy.optimize.brentq(lambda u : implicit(u,uc) - c0, 100*uc/(1-e**2)**0.5,uc, xtol=1e-15)
-                def implicit(u,uc):
-                    return uc * u**(37/84) * (u**2 / uc**2 - 1 )**(121/532) * (u**2 / uc**2 -(121/425))**(145/532)
+                     return scipy.optimize.brentq(lambda u : implicit(u,uc) - c0, 100*uc/(1-e**2)**0.5, uc, xtol=1e-15)
+
                 uc_vals =eval_u(a, tiler(0, a), tiler(q, a))
                 u0 = eval_u(a[0], e,q)
                 c0 = implicit(u0,uc_vals[0]) 
@@ -437,19 +463,62 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, a=None,
                    eb=np.sqrt(1-np.float64(uc)**2/np.float64(u)**2)
                    us.append(u)
                 u=np.asarray(us)
+                uc = eval_u(a, tiler(0, a), tiler(q, a))
             else:
                 u = eval_u(a,tiler(e, a), tiler(q, a))
-        elif a is None and e is None and u is not None:
+                uc=u
+         ## User pass (u, uc0) -> return a, e0, uc [from u recover e]        
+        elif a is None and e is None and u is not None and uc is not None and np.shape(u) > np.shape(uc):
+            #print('sbagliato')
             assert np.logical_or(ismonotonic(u, '<='), ismonotonic(u, '>=')), 'u must be monotonic'
-            p = eval_p(u=u, q=tiler(q, u))
+            if uc != u[0]:
+                def solve_rev(u, d0,e):  
+                     return scipy.optimize.brentq(lambda uc : implicit_rev(uc, u) - d0,   u*np.sqrt(1-e**2),u, xtol=1e-15)
+                d0 = implicit_rev(uc, u[0]) 
+                eb= np.sqrt(1-np.float64(uc)**2/np.float64(u[0])**2)
+          
+                usc=[]
+                for ud in u: 
+                   uc_piece=solve_rev(ud,d0,eb)
+                   eb=np.sqrt(1-np.float64(uc_piece)**2/np.float64(ud)**2)
+                   usc.append(uc_piece)
+                uc_vec=np.asarray(usc)
+                a=eval_a(uc=uc_vec, q=tiler(q, uc_vec)) 
+                e=eval_e(u=u[0], a=a[0], q=q)[0]
+                uc=eval_u(a=a, e=tiler(0, a), q=tiler(q, a))
+            else:
+               u=uc
+               a=eval_a(uc=uc, q=tiler(q, uc)) 
+               e=0
+         ## User pass (uc, u0) -> return a, e0, u [from u recover e]   
+        elif a is None and e is None and u is not None and uc is not None and  np.shape(uc) >  np.shape(u):
+           # print('dentro')
+            assert np.logical_or(ismonotonic(uc, '<='), ismonotonic(uc, '>=')), 'uc must be monotonic'
+            if uc[0] != u:
+                def solve(uc, c0, e):
+                     return scipy.optimize.brentq(lambda u : implicit(u,uc) - c0, 100*uc/(1-e**2)**0.5, uc, xtol=1e-15)
+                c0 = implicit(u,uc[0]) 
+                us=[]
+                eb=eval_e(u=u, uc=uc[0], q=q)
+                for ucs in uc: 
+                   u=solve(ucs,c0,eb)
+                   eb=np.sqrt(1-np.float64(ucs)**2/np.float64(u)**2)
+                   us.append(u)
+                u=np.asarray(us)
+                a=eval_a(uc=uc, q=tiler(q, uc))
+                e=eval_e(u=u[0], uc=uc[0], q=q)
+            else:
+               u=uc
+               a=eval_a(uc=uc, q=tiler(q, uc)) 
+               e=0
+
         else:
-            raise TypeError("Please provide either (a,e) or u.  Do not work at infinity.")
+            raise TypeError("Please provide either (a,e0) or (u, uc0) or (uc, u0).  Do not work at infinity.")
      
         assert np.sum(u == 0) <= 1 and np.sum(u[1:-1] == 0) == 0, "There can only be one r=np.inf location, either at the beginning or at the end."
-
+       
         if theta1 is not None and theta2 is not None and deltaphi is not None and kappa is None and chieff is None:
                  deltachi, kappa, chieff = angles_to_conserved(theta1=theta1, theta2=theta2, deltaphi=deltaphi,a=a[0],e=e, q=q,chi1=chi1, chi2=chi2)
-                 #print(kappa)
         # User provides kappa, chieff, and maybe deltachi.
         elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and chieff is not None:
             pass
@@ -466,29 +535,31 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, a=None,
         # Actual integration.
         
         kappa = np.squeeze(integrator_precav(kappa, u, chieff, q, chi1, chi2,**odeint_kwargs))
-        deltachimietas = None
+        deltachiminus = None
         deltachiplus = None
         deltachi3 = None
         deltachi=None
         theta1=None
         theta2=None
         deltaphi=None
+        
         e=eval_e(a=a, u=u, q=tiler(q, a))  
         # Roots along the evolution
-        if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'deltachimietas', 'deltachiplus', 'deltachi3']):
-            deltachimietas,deltachiplus,deltachi3 = deltachiroots(kappa, u, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u))
+        if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'deltachiminus', 'deltachiplus', 'deltachi3']):
+            deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u))
                     
             if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi']):
-                deltachi = deltachisampling(kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), precomputedroots=np.stack([deltachimietas,deltachiplus,deltachi3]))
+                #print(kappa, a,e,u)
+                deltachi = deltachisampling(kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
                 # Compute the angles. Assign random cyclesign
                 if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi']):
                     theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), cyclesign = np.random.choice([-1, 1], u.shape))
+       # print('alla fine', theta1, theta2, deltaphi, deltachi, kappa, a, e, u,uc, deltachiminus, deltachiplus, deltachi3, chieff, q, chi1, chi2)
 
-        return theta1, theta2, deltaphi, deltachi, kappa, a, e, u, deltachimietas, deltachiplus, deltachi3, chieff, q, chi1, chi2
+        return theta1, theta2, deltaphi, deltachi, kappa, a, e, u,uc, deltachiminus, deltachiplus, deltachi3, chieff, q, chi1, chi2
     # Here I force dtype=object buse the outputs have different shapes
-    
-    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, kappa, a,e, u, chieff, q, chi1, chi2)), dtype=object).T
-
+    allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, kappa, a,e, u, uc, chieff, q, chi1, chi2)), dtype=object).T
+   
     # Return only requested outputs (in1d return boolean array)
     wantoutputs = np.in1d(alloutputs, requested_outputs)
 
@@ -814,8 +885,10 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, delta_lambda, a ,e, q, c
         Initial direction of the primary spin, unit vector.
     S2hinitial: array
         Initial direction of the secondary spin, unit vector.
-    v: float
-        Newtonian orbital velocity.
+    a: float
+       Bianary semi-major axis.
+    e : float
+       Eccentricty: 0<=e<1. .
     q: float
         Mass ratio: 0<=q<=1.
     chi1: float
@@ -895,7 +968,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         - Lh, S1h, and S2h
         - theta1,theta2, and deltaphi.
         - deltachi, kappa, chieff, cyclesign.
-    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'deltachimietas', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].
     The flag enforce allows checking the consistency of the input variables.
     Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.
     
@@ -977,7 +1050,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
             
         elif a is None and uc is not None:
             assert np.logical_or(ismonotonic(uc, '<='), ismonotonic(uc, '>=')), 'uc must be monotonic'
-            a = eval_a(uc, tiler(q, uc))  # Convert uc in a to a using the tiler function
+            a = eval_a(uc=uc, q=tiler(q, uc))  # Convert uc in a to a using the tiler function
         else:
             raise TypeError("Please provide either a or uc.")
 
@@ -1069,5 +1142,202 @@ def test():
     """
     print("Precession module is working correctly.")
     # You can add more tests here if needed.
+
+# Ensure tiler, eval_u, and ismonotonic are imported or defined
+
+def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, a=None,aswitch=None, e=None, eswitch=None, u=None, uswitch=None, uc=None, ucswitch=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,**odeint_kwargs):
+    """
+    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently.
+    Either r of u needs to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.
+    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
+    The initial conditions must be specified in terms of one an only one of the following:
+        - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).
+        - kappa, chieff.
+    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].
+    The flag enforce allows checking the consistency of the input variables.
+    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.
+    
+    Parameters
+    ----------
+    theta1: float, optional (default: None)
+        Angle between orbital angular momentum and primary spin.
+    theta2: float, optional (default: None)
+        Angle between orbital angular momentum and secondary spin.
+    deltaphi: float, optional (default: None)
+        Angle between the projections of the two spins onto the orbital plane.
+    deltachi: float, optional (default: None)
+        Weighted spin difference.
+    kappa: float, optional (default: None)
+        Asymptotic angular momentum.
+    a: float, optional (default: None)
+        Binary semi-major axis.
+    e: float, optional (default: None)
+        Binary eccentricity.
+    aswitch: float, optional (default: None)
+        Matching separation between the precession- and orbit-averaged chunks.
+    eswitch: float, optional (default: None)
+        Matching separation between the precession- and orbit-averaged chunks.    
+    u: float, optional (default: None)
+        Compactified separation 1/(2L).
+    uc: float, optional (default: None)
+        Compactified circular separation 1/(2L).    
+    uswitch: float, optional (default: None)
+        Matching compactified separation between the precession- and orbit-averaged chunks.
+    chieff: float, optional (default: None)
+        Effective spin.
+    q: float, optional (default: None)
+        Mass ratio: 0<=q<=1.
+    chi1: float, optional (default: None)
+        Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
+    chi2: float, optional (default: None)
+        Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    requested_outputs: list, optional (default: None)
+        Set of outputs.
+    **odeint_kwargs: unpacked dictionary, optional
+        Additional keyword arguments.
+    
+    Returns
+    -------
+    outputs: dictionary
+        Set of outputs.
+    
+    Examples
+    --------
+    ``outputs = precession.inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,a=a,e=e,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,u=u,uc=uc,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_hybrid(kappa,a=a,e=e,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
+    ``outputs = precession.inspiral_hybrid(kappa,u=u,uc=uc,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``
+    """
+
+    # Outputs available in both orbit-averaged and precession-averaged evolutions
+    alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'a','e', 'u','uc','chieff', 'q', 'chi1', 'chi2'])
+    if requested_outputs is None:
+        requested_outputs = alloutputs
+        # Return only those requested (in1d return boolean array)
+    wantoutputs = np.intersect1d(alloutputs, requested_outputs)
+
+    # Substitute None inputs with arrays of Nones
+    inputs = [theta1, theta2, deltaphi, deltachi, kappa, a, aswitch, e, eswitch, u, uswitch, uc, ucswitch, chieff, q, chi1, chi2]
+    for k, v in enumerate(inputs):
+        if v is None:
+            inputs[k] = np.atleast_1d(np.squeeze(tiler(None, np.atleast_1d(q))))
+        else:
+            if k == 5 or k ==9  or k==11:  # Either u or r
+                inputs[k] = np.atleast_2d(inputs[k])
+            else:  # Any of the others
+                inputs[k] = np.atleast_1d(inputs[k])
+    theta1, theta2, deltaphi, deltachi, kappa, a, aswitch, e, eswitch, u, uswitch, uc, ucswitch, chieff, q, chi1, chi2 = inputs
+
+    def _compute(theta1, theta2, deltaphi, deltachi, kappa, a, aswitch, e, eswitch, u,uswitch, uc, ucswitch, chieff, q, chi1, chi2):
+        estart = None  # Ensure estart is always defined
+        ## User pass (uc, u0, ucswitch) -> return a,eswictch, uswitch
+        
+        if a is None and aswitch is None and uc is not None and ucswitch is not None and u is not None and uswitch is None:
+            #print('almeno')
+            a = eval_a(uc=uc, q=tiler(q, uc))
+            
+            e0= eval_e(u=u[0],uc=uc[0], q=q)
+            e02= np.sqrt(1-np.float64(uc[0])**2/np.float64(u[0])**2)
+          #  print('e0,', uc[0], u[0], e0,e02)
+            estart=np.copy(e0)
+            aswitch = eval_a(uc=ucswitch, q=tiler(q, ucswitch))
+            def solve(uc, c0, e):
+                     return scipy.optimize.brentq(lambda u : implicit(u,uc) - c0, 100*uc/(1-e**2)**0.5, uc, xtol=1e-15)
+            c0 = implicit(u,uc[0]) 
+            uswitch=solve(ucswitch,c0,e0)
+            eswitch=np.sqrt(1-np.float64(ucswitch)**2/np.float64(uswitch)**2)
+          #  print('mmm',eswitch, estart)
+
+        ## User pass (a, e0, aswitch) -> return eswitch uswitch and  ucswitch
+        elif a is not None and aswitch is not None and e is not None and uc is None and uswitch is None and u is None:
+          #  print('non')
+            ucswitch= eval_u(a=aswitch, e=0, q=q)
+            estart=np.copy(e)
+            u0 = eval_u(a=a[0], e=e,q=q)
+            uc=eval_u(a=a[0],e=0, q=q)
+            def solve(uc, c0, e):
+                     return scipy.optimize.brentq(lambda u : implicit(u,uc) - c0, 100*uc/(1-e**2)**0.5, uc, xtol=1e-15)
+            c0 = implicit(u0,uc[0]) 
+            uswitch=solve(ucswitch,c0,e)
+            print(uswitch)
+            eswitch=np.sqrt(1-np.float64(ucswitch)**2/np.float64(uswitch)**2)
+
+        ## User pass (u, uc0, uswitch) -> return eswitch ucswitch and aswitch
+        elif a is None and aswitch is None and  uc is not None and ucswitch is None and u is not None and uswitch is not None:
+            #print('qui')
+            def solve_rev(u, d0, e):
+                return scipy.optimize.brentq(lambda uc: implicit_rev(uc, u) - d0, u*np.sqrt(1-e**2), u, xtol=1e-15)
+            d0 = implicit_rev(uc, u[0])
+            e0 = np.sqrt(1-np.float64(uc)**2/np.float64(u[0])**2)
+            aswitch = eval_a(uc=uswitch, q=q)
+            usc = []
+            for ud in u:
+                uc_piece = solve_rev(ud, d0, e0)
+                e0 = np.sqrt(1-np.float64(uc_piece)**2/np.float64(ud)**2)
+                usc.append(uc_piece)
+            uc_vec = np.asarray(usc)
+            a = eval_a(uc=uc_vec, q=tiler(q, uc_vec))
+            estart = eval_e(u=u[0], uc=uc, q=q)
+            eswitch = eval_e(u=uswitch,uc=eval_u(a=aswitch,e=0, q=q), q=q)  # Assign a default value to estart for this branch
+        else:
+            print('something')
+        forward = ismonotonic(a, ">=")
+        backward = ismonotonic(a, "<=")
+
+        assert np.logical_or(forward, backward), "a must be monotonic"
+        assert aswitch > np.min(a) and aswitch < np.max(a), "The switching condition must to be within the range spanned by a."
+
+        alarge = a[a >= aswitch]
+        asmall = a[a < aswitch]
+
+
+        # Integrating forward: precession-averaged first, then orbit-averaged
+        if forward:
+            inspiral_first = inspiral_precav
+            afirst = np.append(alarge, aswitch)
+            inspiral_second = inspiral_orbav
+            asecond = np.append(aswitch, asmall)
+
+        # Integrating backward: orbit-averaged first, then precession-averaged
+        elif backward:
+            inspiral_first = inspiral_orbav
+            afirst = np.append(asmall, aswitch)
+            inspiral_second = inspiral_precav
+            asecond = np.append(aswitch, alarge)
+
+        # First chunk of the evolution
+        evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, a=afirst,e=estart, chieff=chieff, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs,**odeint_kwargs)
+
+        # Second chunk of the evolution
+        evolution_second = inspiral_second(theta1=np.squeeze(evolution_first['theta1'])[-1], theta2=np.squeeze(evolution_first['theta2'])[-1], deltaphi=np.squeeze(evolution_first['deltaphi'])[-1], a=asecond,e=eswitch, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs,**odeint_kwargs)
+
+        # Store outputs
+        evolution_full = {}
+        for k in wantoutputs:
+            # Quantities that vary in both the precession-averaged and the orbit-averaged evolution
+            if k in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'a', 'e','u']:
+                evolution_full[k] = np.atleast_2d(np.append(evolution_first[k][:, :-1], evolution_second[k][:, 1:]))
+            # Quantities that vary only on the orbit-averaged evolution
+            if k in ['chieff']:
+                if forward:
+                    evolution_full[k] = np.atleast_2d(np.append(tiler(evolution_first[k][:], afirst[:-1]), evolution_second[k][:, 1:]))
+                elif backward:
+                    evolution_full[k] = np.atleast_2d(np.append(evolution_first[k][:, :-1], tiler(evolution_second[k][:], asecond[1:])))
+            # Quanties that do not vary
+            if k in ['q', 'chi1', 'chi2']:
+                evolution_full[k] = evolution_second[k]
+
+        return evolution_full
+
+    allresults = list(map(_compute, theta1, theta2, deltaphi, deltachi, kappa, a, aswitch, e, eswitch, u,uswitch, uc, ucswitch, chieff, q, chi1, chi2))
+    evolution_full = {}
+    for k in allresults[0].keys():
+        evolution_full[k] = np.concatenate(list(evolution_full[k] for evolution_full in allresults))
+
+    return evolution_full
+
+
+
+
 all_fun=functions+['eval_a', 'eval_e', 'ddchidt_prefactor', 'vectors_to_conserved', 'inspiral_precav','rhs_orbav', 'integrator_orbav', 'inspiral_orbav','tesat0' ]
 __all__ = all_fun
