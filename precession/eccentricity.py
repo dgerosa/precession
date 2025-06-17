@@ -18,7 +18,6 @@ with `a` (semi-major axis) and `e` (eccentricity). All functions listed in `__al
 are available for use and are documented below.
 """
 
-
 def eccentricize(func):
     sig = inspect.signature(func)
 
@@ -95,11 +94,8 @@ def eccentricize(func):
     wrapper.__doc__ = new_doc
     return wrapper
 
-
-
 # Load the original functions from precession.py
 circ = precession 
-#functions = ['roots_vec', 'norm_nested', 'normalize_nested', 'dot_nested', 'scalar_nested', 'rotate_nested', 'sample_unitsphere', 'isotropic_angles', 'tiler', 'affine', 'inverseaffine', 'wraproots', 'ellippi', 'ismonotonic', 'eval_m1', 'eval_m2', 'eval_q', 'eval_eta', 'eval_S1', 'eval_S2', 'eval_chi1', 'eval_chi2', 'eval_L', 'eval_v', 'eval_r', 'eval_u', 'eval_chieff', 'eval_deltachi', 'eval_deltachiinf', 'eval_costheta1', 'eval_theta1', 'eval_costheta2', 'eval_theta2', 'eval_costheta12', 'eval_theta12', 'eval_cosdeltaphi', 'eval_deltaphi', 'eval_costhetaL', 'eval_thetaL', 'eval_J', 'eval_kappa', 'eval_S', 'eval_cyclesign', 'conserved_to_angles', 'angles_to_conserved', 'vectors_to_angles', 'vectors_to_Jframe', 'vectors_to_Lframe', 'angles_to_Lframe', 'angles_to_Jframe', 'conserved_to_Lframe', 'conserved_to_Jframe', 'vectors_to_conserved', 'kappadiscriminant_coefficients', 'kappalimits_geometrical', 'kapparesonances', 'kapparescaling', 'kappalimits', 'chiefflimits', 'deltachilimits_definition', 'anglesresonances', 'deltachicubic_coefficients', 'deltachicubic_rescaled_coefficients', 'deltachiroots', 'deltachilimits_rectangle', 'deltachilimits_plusminus', 'deltachilimits', 'deltachirescaling', 'deltachiresonance', 'elliptic_parameter', 'deltachitildeav', 'deltachitildeav2',  'dchidt2_RHS', 'eval_tau', 'deltachioft', 'tofdeltachi', 'deltachisampling', 'intertial_ingredients', 'eval_OmegaL', 'eval_phiL', 'eval_alpha', 'morphology', 'chip_terms', 'eval_chip_heuristic', 'eval_chip_generalized', 'eval_chip_averaged', 'eval_chip_rms', 'eval_chip', 'eval_nutation_freq', 'eval_bracket_omega', 'eval_delta_omega', 'eval_delta_theta', 'eval_bracket_theta', 'rupdown', 'updown_endpoint', 'angleresonances_endpoint', 'omegasq_aligned', 'widenutation_separation', 'widenutation_condition', 'rhs_precav', 'integrator_precav', 'inspiral_precav', 'precession_average', 'rhs_orbav', 'integrator_orbav', 'inspiral_orbav', 'inspiral_hybrid', 'inspiral', 'gwfrequency_to_pnseparation', 'pnseparation_to_gwfrequency', 'remnantmass', 'remnantspin', 'reminantspindirection', 'remnantkick']
 functions = ['eval_L',
  'eval_v',
  'eval_u',
@@ -157,7 +153,6 @@ for name in functions:
         # No 'r' param, keep original function as is
         globals()[name] = func
 
-
 def eval_a(L=None,u=None,uc=None,e=None,q=None):
     """
     Semi-major axis of the binary. Valid inputs are either  (L,e,q) or (u,e,q) or (uc,q).
@@ -200,7 +195,6 @@ def eval_a(L=None,u=None,uc=None,e=None,q=None):
     else:
         raise TypeError("Provide either  (L,e,q) or (u,e,q) or (uc, q)")
     return a
-
 
 def eval_e(L=None,u=None,uc=None,a=None,q=None):
     """
@@ -254,7 +248,6 @@ def eval_e(L=None,u=None,uc=None,a=None,q=None):
     
     return e
 
-
 def ddchidt_prefactor(a, e, chieff, q):
     """
     etamerical prefactor to the ddeltachi/dt derivative.
@@ -288,7 +281,6 @@ def ddchidt_prefactor(a, e, chieff, q):
     mathcalA = (3/2)*((1+q)**(-1/2))*(r**(-11/4))*(1-(chieff/r**0.5))*(1 - e**2)**(3/2)
 
     return mathcalA        
-
 
 def vectors_to_conserved(Lvec, S1vec, S2vec, a, e , q,full_output=False):
     """
@@ -540,8 +532,6 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa
             outcome[k] = np.atleast_2d(outcome[k])
 
     return outcome
-
-
 
 def rhs_orbav(allvars, a, q, m1, m2, eta, chi1, chi2, S1, S2, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3]):
     """
@@ -834,7 +824,6 @@ def rhs_orbav(allvars, a, q, m1, m2, eta, chi1, chi2, S1, S2, PNorderpre=[0,0.5]
     
     return np.concatenate([dLhda, dS1hda, dS2hda,  [ddelta_lambdada], [de2da], [dtda]])
 
-
 def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, delta_lambda, a ,e, q, chi1, chi2, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3], **odeint_kwargs):
     """
     Integration of the systems of ODEs describing orbit-averaged inspirals.
@@ -1104,14 +1093,6 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
             outcome[k] = np.atleast_2d(outcome[k])
 
     return outcome
-def test():
-    """
-    Test function to check if the module is working correctly.e
-    """
-    print("Precession module is working correctly.")
-    # You can add more tests here if needed.
-
-# Ensure tiler, eval_u, and ismonotonic are imported or defined
 
 def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, a=None, aswitch=None, e=None, uc=None, ucswitch=None,u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,**odeint_kwargs):
     """
@@ -1291,7 +1272,5 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     return evolution_full
 
 
-
-
-all_fun=functions+['eval_a', 'eval_e', 'ddchidt_prefactor', 'vectors_to_conserved', 'inspiral_precav','rhs_orbav', 'integrator_orbav', 'inspiral_orbav','tesat0' ,'inspiral_hybrid','implicit']
+all_fun=functions+['eval_a', 'eval_e', 'ddchidt_prefactor', 'vectors_to_conserved','inspiral_precav','rhs_orbav', 'integrator_orbav', 'inspiral_orbav' ,'inspiral_hybrid','implicit']
 __all__ = all_fun
