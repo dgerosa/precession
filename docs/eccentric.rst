@@ -1,7 +1,7 @@
-precession.ecc: package documentation
+precession.eccentricity: package documentation
 ==============================
 
-.. automodule:: ecc
+.. automodule:: eccentricity
    :members:
    :undoc-members:
    :show-inheritance:
