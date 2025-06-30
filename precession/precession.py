@@ -5701,13 +5701,17 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_
     M_msun = np.atleast_1d(M_msun).astype(float)
 
     # Prefactor is pi*Msun*G/c^3/s. It's pi and not 2pi because f is the GW frequency while Kidder's omega is the orbital angular velocity
-    tildeomega = M_msun * fGW * 1.548e-5 
+    tildeomega = M_msun * fGW * 1.5473886176432832e-05 
 
     r =  tildeomega**(-2/3) * (
         (0 in PNorder) * 1 
-        - (1 in PNorder) * tildeomega**(2/3) * ( 1- q/(3*(1+q)**2) ) 
-        - (1.5 in PNorder) * tildeomega / (3*(1+q)**2) * ( (2+3*q)*chi1*np.cos(theta1) + q*(3+2*q)*chi2*np.cos(theta2) )
-        + (2 in PNorder) * tildeomega**(4/3) * q/(2*(1+q)**2) * (19/2 +  (2*q)/(9*(1+q)**2)+ chi1*chi2*(2*np.cos(theta1)*np.cos(theta2) - np.cos(deltaphi)*np.sin(theta1)*np.sin(theta2)) ) 
+        + (1 in PNorder) * tildeomega**(2/3) * (-1/3 * ((1 + q))**(-2) * (3 + q * (5 + 3 * q)) ) 
+        + (1.5 in PNorder) * tildeomega *(-1/3 * ((1 + q))**(-2) * (np.cos(theta1) * (2 + 3 * q) * chi1 + np.cos(theta2)* q * (3 + 2 * q) * chi2))
+        + (2 in PNorder) * tildeomega**(4/3) * (1/36 * ((1 + q))**(-4) * (9 * (-1 + 3 * (np.cos(theta1))**(2)) * (chi1)**(2) + q \
+        * (171 + (18 * (-1 + 3 * (np.cos(theta1))**(2)) * (chi1)**(2) + (q * (346 + (171 \
+        * q + 9 * (-1 + 3 * (np.cos(theta1))**(2)) * (chi1)**(2))) + (18 * ((1 + q))**(2) \
+        * (2 * np.cos(theta1) * np.cos(theta2) + -1 * np.cos(deltaphi) * np.sin(theta1) * np.sin(theta2)) * chi1 * chi2 + 9 * \
+        (-1 + 3 * (np.cos(theta2))**(2)) * q * ((1 + q))**(2) * (chi2)**(2))))))) 
         )
 
     return r
@@ -5757,16 +5761,20 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_ms
     chi1 = np.atleast_1d(chi1).astype(float)
     chi2 = np.atleast_1d(chi2).astype(float)
     M_msun = np.atleast_1d(M_msun).astype(float)
-
+   
     tildeomega = r**(-3/2) * (
         (0 in PNorder) * 1 
-        - (1 in PNorder) * r**(-1) *(3- q/(1+q)**2)
-        - (1.5 in PNorder) * r**(-3/2) * 1/(1+q)**2 *( (2+3*q)*chi1*np.cos(theta1) + q*(3+2*q)*chi2*np.cos(theta2) )
-        + (2 in PNorder) * r**(-2) * (6 + 41*q/(4*(1+q)**2) + q**2/(1+q)**4 +3*q/(2*(1+q)**2) *chi1*chi2*(2*np.cos(theta1)*np.cos(theta2) - np.cos(deltaphi)*np.sin(theta1)*np.sin(theta2)))
-        )**(1/2)
+        + (1 in PNorder) * r**(-1) *(-1/2 * ((1 + q))**(-2) * (3 + q * (5 + 3 * q)))
+        + (1.5 in PNorder) * r**(-3/2) * (-1/2 * ((1 + q))**(-2) * (np.cos(theta1) * (2 + 3 * q) * chi1 + np.cos(theta2) * q * (3 + 2 * q) * chi2))
+        + (2 in PNorder) * r**(-2) * (1/8 * ((1 + q))**(-4) * (15 + ((-3 + 9 * (np.cos(theta1))**(2)) * (chi1)**(2) + \
+        q * (107 + (6 * (-1 + 3 * (np.cos(theta1))**(2)) * (chi1)**(2) + (q * (187 + (q * \
+        (107 + 15 * q) + (-3 + 9 * (np.cos(theta1))**(2)) * (chi1)**(2))) + (6 * ((1 + \
+        q))**(2) * (2 * np.cos(theta1) * np.cos(theta2) + -1 * np.cos(deltaphi) * np.sin(theta1) * np.sin(theta2)) * chi1 * \
+        chi2 + 3 * (-1 + 3 * (np.cos(theta2))**(2)) * q * ((1 + q))**(2) * (chi2)**(2)))))))))
+
 
     # Prefactor is pi*Msun*G/c^3/s. It's pi and not 2pi because f is the GW frequency while Kidder's omega is the orbital angular velocity
-    fGW = tildeomega / (1.548e-5  * M_msun)
+    fGW = tildeomega / (1.5473886176432832e-05  * M_msun)
 
     return fGW
 
