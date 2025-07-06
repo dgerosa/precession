@@ -1,16 +1,9 @@
-from importlib.machinery import SourceFileLoader
 import ast
 import inspect
 import functools
 import re
-import warnings
-import numpy as np
-import scipy.special
-import scipy.integrate
-import scipy.spatial.transform
-from itertools import repeat
 import precession
-from precession import *
+#from precession import *
 
 """
 This module dynamically wraps functions from `precession.py`, replacing the `r` parameter
@@ -95,7 +88,7 @@ def eccentricize(func):
     return wrapper
 
 # Load the original functions from precession.py
-circ = precession 
+#circ = precession 
 functions = ['eval_L',
  'eval_v',
  'eval_u',
@@ -145,7 +138,7 @@ functions = ['eval_L',
  ]
 # Apply eccentricize and expose the new functions
 for name in functions:
-    func = getattr(circ, name)
+    func = getattr(precession , name)
     sig = inspect.signature(func)
     if 'r' in sig.parameters:
         globals()[name] = eccentricize(func)
@@ -1625,14 +1618,6 @@ def gwfrequency_to_a(theta1, theta2, deltaphi, fgw,e, q, chi1, chi2, M_msun, har
     a = a_geom
 
     return a
-
-
-
-
-
-
-
-
 
 all_fun=functions+['eval_a', 'eval_e', 'ddchidt_prefactor', 'vectors_to_conserved','inspiral_precav','rhs_orbav', 'integrator_orbav', 'inspiral_orbav' ,'inspiral_hybrid','implicit']
 __all__ = all_fun
