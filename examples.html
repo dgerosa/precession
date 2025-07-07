@@ -94,18 +94,10 @@ starting point.</p>
 </pre></div>
 </div>
 <p>The import syntax above ensures that the online documentation grabs the
-latest version. For you, it should just be <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">precession</span></code>, and in
-case you want to use the eccentric version, import
-<code class="docutils literal notranslate"><span class="pre">precession.eccentricity</span></code>. <em>Note for the usage of the eccentric
-version of</em> <code class="docutils literal notranslate"><span class="pre">precession</span></code>: The code is implemented such that almost all
-the functions available in <code class="docutils literal notranslate"><span class="pre">precession</span></code> can be accessed by just
-importing its eccentric extension. Some of them are exactly the same as
-for the circular counterpart; others, specifically those directly
-involving time or orbital separation, require a different input
-(briefly, all <code class="docutils literal notranslate"><span class="pre">r</span></code> parameters have been substituted with <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">e)</span></code>).
-The functions that are specific only to the circular case (like
-<code class="docutils literal notranslate"><span class="pre">eval_r</span></code> or those related to the remnant properties) cannot be
-accessed via <code class="docutils literal notranslate"><span class="pre">precession.eccentricity</span></code>.</p>
+latest version. For you, it should just be <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">precession</span></code> for the
+main code that deals with quasi-circular binaries. If you’re using the
+eccentric version, we reccommend importin with
+<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">precession.eccentricity</span> <span class="pre">as</span> <span class="pre">precession</span></code>.</p>
 <section id="select-a-binary-configuration">
 <h2>1. Select a binary configuration.<a class="headerlink" href="#select-a-binary-configuration" title="Link to this heading"></a></h2>
 <p>First, set the constants of motion. These include mass ratio and spin
@@ -225,10 +217,10 @@ function</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{np.str_(&#39;theta1&#39;): array([[1.66860187, 1.85794712]]),</span>
-<span class="go"> np.str_(&#39;theta2&#39;): array([[1.24737508, 1.10774394]]),</span>
-<span class="go"> np.str_(&#39;deltaphi&#39;): array([[1.33764342, 1.47022691]]),</span>
-<span class="go"> np.str_(&#39;deltachi&#39;): array([[-0.15424982, -0.25734491]]),</span>
+<span class="go">{np.str_(&#39;theta1&#39;): array([[1.54381624, 2.08110679]]),</span>
+<span class="go"> np.str_(&#39;theta2&#39;): array([[1.33741746, 0.9407278 ]]),</span>
+<span class="go"> np.str_(&#39;deltaphi&#39;): array([[-2.79282617, -0.91896992]]),</span>
+<span class="go"> np.str_(&#39;deltachi&#39;): array([[-0.08501288, -0.3713601 ]]),</span>
 <span class="go"> np.str_(&#39;kappa&#39;): array([[0.04563644, 0.06977371]]),</span>
 <span class="go"> np.str_(&#39;r&#39;): array([[1000,   10]]),</span>
 <span class="go"> np.str_(&#39;u&#39;): array([[0.06403612, 0.64036123]]),</span>
@@ -271,10 +263,10 @@ infinity:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{np.str_(&#39;theta1&#39;): array([[0.88236089, 1.66496015]]),</span>
-<span class="go"> np.str_(&#39;theta2&#39;): array([[1.76318212, 1.25002889]]),</span>
-<span class="go"> np.str_(&#39;deltaphi&#39;): array([[ 3.11102011, -0.49613035]]),</span>
-<span class="go"> np.str_(&#39;deltachi&#39;): array([[ 0.25296097, -0.15223596]]),</span>
+<span class="go">{np.str_(&#39;theta1&#39;): array([[1.99009577, 1.66496015]]),</span>
+<span class="go"> np.str_(&#39;theta2&#39;): array([[1.00898179, 1.25002889]]),</span>
+<span class="go"> np.str_(&#39;deltaphi&#39;): array([[-1.23670772,  2.75245345]]),</span>
+<span class="go"> np.str_(&#39;deltachi&#39;): array([[-0.32617816, -0.15223596]]),</span>
 <span class="go"> np.str_(&#39;kappa&#39;): array([[0.06865318, 0.04154245]]),</span>
 <span class="go"> np.str_(&#39;r&#39;): array([[10., inf]]),</span>
 <span class="go"> np.str_(&#39;u&#39;): array([[0.64036123, 0.        ]]),</span>
@@ -321,6 +313,15 @@ Let’s check we get the same result:</p>
 </section>
 <section id="evolution-of-an-eccentric-and-precessing-binary">
 <h2>4. Evolution of an eccentric and precessing binary<a class="headerlink" href="#evolution-of-an-eccentric-and-precessing-binary" title="Link to this heading"></a></h2>
+<p><em>Note when using the eccentric version of</em> <code class="docutils literal notranslate"><span class="pre">precession</span></code>: The code is
+implemented such that almost all functions available in <code class="docutils literal notranslate"><span class="pre">precession</span></code>
+can be accessed by simply importing its eccentric extension. Some of
+them are exactly the same as in the circular counterpart;
+others—specifically those directly involving time or orbital
+separation—require different inputs (briefly: all <code class="docutils literal notranslate"><span class="pre">r</span></code> parameters have
+been replaced with <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">e)</span></code>). Functions that are specific to the
+circular case only (such as <code class="docutils literal notranslate"><span class="pre">eval_r</span></code> or those related to remnant
+properties) cannot be accessed via <code class="docutils literal notranslate"><span class="pre">precession.eccentricity</span></code>.</p>
 <p>To evolve an eccentric and spin-precessing black hole binary from a
 larger semi-major axis (which can be thought of as a proxy for the
 orbital separation) to a smaller one, it is necessary to also state the

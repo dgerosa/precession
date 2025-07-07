@@ -15,18 +15,10 @@ starting point.
     >>> precession_eccentricity = SourceFileLoader("eccentricity", "../precession/eccentricity.py").load_module()
 
 The import syntax above ensures that the online documentation grabs the
-latest version. For you, it should just be ``import precession``, and in
-case you want to use the eccentric version, import
-``precession.eccentricity``. *Note for the usage of the eccentric
-version of* ``precession``: The code is implemented such that almost all
-the functions available in ``precession`` can be accessed by just
-importing its eccentric extension. Some of them are exactly the same as
-for the circular counterpart; others, specifically those directly
-involving time or orbital separation, require a different input
-(briefly, all ``r`` parameters have been substituted with ``(a, e)``).
-The functions that are specific only to the circular case (like
-``eval_r`` or those related to the remnant properties) cannot be
-accessed via ``precession.eccentricity``.
+latest version. For you, it should just be ``import precession`` for the
+main code that deals with quasi-circular binaries. If you’re using the
+eccentric version, we reccommend importin with
+``import precession.eccentricity as precession``.
 
 1. Select a binary configuration.
 ---------------------------------
@@ -178,10 +170,10 @@ Let’s now evolve that binary configuration down to r=10M. 
     >>> rvals = [r, 10] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=kappa,r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {np.str_('theta1'): array([[1.66860187, 1.85794712]]),
-     np.str_('theta2'): array([[1.24737508, 1.10774394]]),
-     np.str_('deltaphi'): array([[1.33764342, 1.47022691]]),
-     np.str_('deltachi'): array([[-0.15424982, -0.25734491]]),
+    {np.str_('theta1'): array([[1.54381624, 2.08110679]]),
+     np.str_('theta2'): array([[1.33741746, 0.9407278 ]]),
+     np.str_('deltaphi'): array([[-2.79282617, -0.91896992]]),
+     np.str_('deltachi'): array([[-0.08501288, -0.3713601 ]]),
      np.str_('kappa'): array([[0.04563644, 0.06977371]]),
      np.str_('r'): array([[1000,   10]]),
      np.str_('u'): array([[0.06403612, 0.64036123]]),
@@ -228,10 +220,10 @@ infinity:
     >>> rvals = [outputs['r'][0,-1], np.inf] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=outputs['kappa'][0,-1],r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {np.str_('theta1'): array([[0.88236089, 1.66496015]]),
-     np.str_('theta2'): array([[1.76318212, 1.25002889]]),
-     np.str_('deltaphi'): array([[ 3.11102011, -0.49613035]]),
-     np.str_('deltachi'): array([[ 0.25296097, -0.15223596]]),
+    {np.str_('theta1'): array([[1.99009577, 1.66496015]]),
+     np.str_('theta2'): array([[1.00898179, 1.25002889]]),
+     np.str_('deltaphi'): array([[-1.23670772,  2.75245345]]),
+     np.str_('deltachi'): array([[-0.32617816, -0.15223596]]),
      np.str_('kappa'): array([[0.06865318, 0.04154245]]),
      np.str_('r'): array([[10., inf]]),
      np.str_('u'): array([[0.64036123, 0.        ]]),
@@ -283,7 +275,15 @@ This is also an example of how providing the optional quantity
 4. Evolution of an eccentric and precessing binary
 --------------------------------------------------
 
-
+*Note when using the eccentric version of* ``precession``: The code is
+implemented such that almost all functions available in ``precession``
+can be accessed by simply importing its eccentric extension. Some of
+them are exactly the same as in the circular counterpart;
+others—specifically those directly involving time or orbital
+separation—require different inputs (briefly: all ``r`` parameters have
+been replaced with ``(a, e)``). Functions that are specific to the
+circular case only (such as ``eval_r`` or those related to remnant
+properties) cannot be accessed via ``precession.eccentricity``.
 
 To evolve an eccentric and spin-precessing black hole binary from a
 larger semi-major axis (which can be thought of as a proxy for the
