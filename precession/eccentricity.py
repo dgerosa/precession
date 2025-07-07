@@ -3,12 +3,10 @@ import inspect
 import functools
 import re
 import precession
-#from precession import *
 
 """
 This module dynamically wraps functions from `precession.py`, replacing the `r` parameter
-with `a` (semi-major axis) and `e` (eccentricity). All functions listed in `__all__`
-are available for use and are documented below.
+with `a` (semi-major axis) and `e` (eccentricity). 
 """
 
 def eccentricize(func):
@@ -41,7 +39,7 @@ def eccentricize(func):
                 new_lines.append(f"{indent}a: float, optional (default: None)")
                 new_lines.append(f"{indent}    Semi-major axis.")
                 new_lines.append(f"{indent}e: float, optional (default: None)")
-                new_lines.append(f"{indent}    Eccentricity: 0<=e<=1")
+                new_lines.append(f"{indent}    Eccentricity: 0<=e<1")
                 skip_next = True 
                 continue
             elif stripped.startswith('r: '):
@@ -49,7 +47,7 @@ def eccentricize(func):
                 new_lines.append(f"{indent}a: float")
                 new_lines.append(f"{indent}    Semi-major axis.")
                 new_lines.append(f"{indent}e: float")
-                new_lines.append(f"{indent}    Eccentricity: 0<=e<=1")
+                new_lines.append(f"{indent}    Eccentricity: 0<=e<1")
                 skip_next = True
                 continue
             if skip_next:
@@ -88,10 +86,40 @@ def eccentricize(func):
     return wrapper
 
 # Load the original functions from precession.py
-#circ = precession 
-functions = ['eval_L',
+functions = ['roots_vec',
+ 'norm_nested',
+ 'normalize_nested',
+ 'dot_nested',
+ 'scalar_nested',
+ 'rotate_nested',
+ 'sample_unitsphere',
+ 'isotropic_angles',
+ 'tiler',
+ 'affine',
+ 'inverseaffine',
+ 'wraproots',
+ 'ellippi',
+ 'ismonotonic',
+ 'eval_m1',
+ 'eval_m2',
+ 'eval_q',
+ 'eval_eta',
+ 'eval_S1',
+ 'eval_S2',
+ 'eval_chi1',
+ 'eval_chi2',
+ 'eval_L',
  'eval_v',
  'eval_u',
+ 'eval_chieff',
+ 'eval_deltachi',
+ 'eval_deltachiinf',
+ 'eval_costheta1',
+ 'eval_theta1',
+ 'eval_costheta2',
+ 'eval_theta2',
+ 'eval_costheta12',
+ 'eval_theta12',
  'eval_cosdeltaphi',
  'eval_deltaphi',
  'eval_costhetaL',
@@ -99,21 +127,35 @@ functions = ['eval_L',
  'eval_J',
  'eval_kappa',
  'eval_S',
+ 'eval_cyclesign',
  'conserved_to_angles',
  'angles_to_conserved',
+ 'vectors_to_angles',
+ 'vectors_to_Jframe',
+ 'vectors_to_Lframe',
  'angles_to_Lframe',
  'angles_to_Jframe',
  'conserved_to_Lframe',
  'conserved_to_Jframe',
+ 'kappadiscriminant_coefficients',
  'kappalimits_geometrical',
  'kapparesonances',
  'kapparescaling',
  'kappalimits',
+ 'chiefflimits',
+ 'deltachilimits_definition',
  'anglesresonances',
+ 'deltachicubic_coefficients',
+ 'deltachicubic_rescaled_coefficients',
+ 'deltachiroots',
+ 'deltachilimits_rectangle',
  'deltachilimits_plusminus',
  'deltachilimits',
  'deltachirescaling',
  'deltachiresonance',
+ 'elliptic_parameter',
+ 'deltachitildeav',
+ 'deltachitildeav2',
  'dchidt2_RHS',
  'eval_tau',
  'deltachioft',
@@ -124,6 +166,9 @@ functions = ['eval_L',
  'eval_phiL',
  'eval_alpha',
  'morphology',
+ 'chip_terms',
+ 'eval_chip_heuristic',
+ 'eval_chip_generalized',
  'eval_chip_averaged',
  'eval_chip_rms',
  'eval_chip',
@@ -132,10 +177,17 @@ functions = ['eval_L',
  'eval_delta_omega',
  'eval_delta_theta',
  'eval_bracket_theta',
+ 'rupdown',
+ 'updown_endpoint',
+ 'angleresonances_endpoint',
  'omegasq_aligned',
+ 'widenutation_separation',
  'widenutation_condition',
+ 'rhs_precav',
+ 'integrator_precav',
  'precession_average',
- ]
+ 'inspiral',
+]
 # Apply eccentricize and expose the new functions
 for name in functions:
     func = getattr(precession , name)
@@ -164,7 +216,7 @@ def eval_a(L=None,u=None,uc=None,e=None,q=None):
     uc: float, optional (default: None)
         Circular compactified separation uc=u(e=0).    
     e: float (default: 0)
-        Binary eccentricity: 0<=e<=1.     
+        Binary eccentricity: 0<=e<1.     
     q: float, optional (default: None)
         Mass ratio: 0<=q<=1.
 
@@ -250,7 +302,7 @@ def ddchidt_prefactor(a, e, chieff, q):
     a: float
         Semi-major axis.
     e: float
-        Eccentricity: 0<=e<=1.    
+        Eccentricity: 0<=e<1.    
     chieff: float
         Effective spin.
     q: float
@@ -491,8 +543,9 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa
         theta1=None
         theta2=None
         deltaphi=None
-        
-        e=eval_e(a=a, u=u, q=tiler(q, a))  
+        if e!= 0:  # If e=0, the evolution is trivial
+            e=eval_e(a=a, u=u, q=tiler(q, a))  
+
         # Roots along the evolution
         if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi', 'deltachiminus', 'deltachiplus', 'deltachi3']):
             deltachiminus,deltachiplus,deltachi3 = deltachiroots(kappa, u, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u))
