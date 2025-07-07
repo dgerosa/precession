@@ -3,6 +3,7 @@ import inspect
 import functools
 import re
 import precession
+import numpy as np
 
 """
 This module dynamically wraps functions from `precession.py`, replacing the `r` parameter
