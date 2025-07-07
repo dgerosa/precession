@@ -41,10 +41,9 @@ Installing the code is as easy as
 
 A short tutorial is provided in [the documentation](https://dgerosa.github.io/precession) together with a detailed list of all functions.
 
-The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). Please report bugs and suggestions using github.
-
-
 The main code deals with quasi-circular black-hole binaries and is accessible via `import precession`. The functionalities to study eccentric binaries are in the `eccentricity` submodule, which we reccommend importing as `import precession.eccentricity as precession`.   
+
+The code is developed and maintained by [Davide Gerosa](www.davidegerosa.com). Please report bugs and suggestions using github.
 
 #### Change log
 - *v2.1.0* Extension to eccentric orbits. See [arXiv:2508.04801](https://arxiv.org/abs/2304.04801)
