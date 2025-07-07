@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Readme &mdash; precession 2.0.5 documentation</title>
+  <title>Readme &mdash; precession 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=09beee0d"></script>
+      <script src="_static/documentation_options.js?v=20623aea"></script>
       <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -46,7 +46,8 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Readme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto.html">Package documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="circular.html">precession: package documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eccentric.html">precession.eccentricity: package documentation</a></li>
 </ul>
 
         </div>
@@ -93,12 +94,28 @@ D. Gerosa, M. Kesden. PRD 93 (2016)
 <a class="reference external" href="https://arxiv.org/abs/1605.01067">arXiv:1605.01067</a></p></li>
 </ul>
 <p>Note that v2 and v1 are <em>not</em> backward compatible; they are different codes. Unless you are maintaining a legacy pipeline, we highly reccommend using the new code. It is faster, more accurate, and provides more functionalities.</p>
-<p><code class="docutils literal notranslate"><span class="pre">precession</span></code> is released under the MIT licence. You may use <code class="docutils literal notranslate"><span class="pre">precession</span></code> as you like but should acknowledge our work. When using the code in any published work, please cite the papers above. The code has been used in a variety of studies in gravitational-wave and astronomy black-hole binary dynamics, follow the citations to those papers for more.</p>
+<section id="precession-eccentricity">
+<h3>precession.eccentricity<a class="headerlink" href="#precession-eccentricity" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">precession</span></code> package models the dynamics of circular precessing black hole binaries. To evolve binaries on eccentric orbits, we provide an extension: <code class="docutils literal notranslate"><span class="pre">precession.eccentricity</span></code>. This module is designed to mirror the functionality of the main <code class="docutils literal notranslate"><span class="pre">precession</span></code> package while accounting for orbital eccentricity.</p>
+<p>The eccentric extension is described in:</p>
+<ul class="simple">
+<li><p><em>Eccentric extension: Amaldi proceeding.</em>
+G. Fumagalli &amp;  D. Gerosa
+<a class="reference external" href="https://arxiv.org/abs/2304.04801">arXiv:2508.????</a></p></li>
+</ul>
+<p>and is based on</p>
+<ul class="simple">
+<li><p><em>Spin-eccentricity interplay in merging binary black holes</em>
+G. Fumagalli &amp;   D. Gerosa
+<a class="reference external" href="https://arxiv.org/abs/2310.16893">arXiv:2310.16893</a></p></li>
+</ul>
+<p><span class="raw-html-md"><br /></span></p>
+<p><code class="docutils literal notranslate"><span class="pre">precession</span></code> and <code class="docutils literal notranslate"><span class="pre">precession.eccentricity</span></code> are released under the MIT licence. You may use <code class="docutils literal notranslate"><span class="pre">precession</span></code> and <code class="docutils literal notranslate"><span class="pre">precession.eccentricity</span></code> as you like but should acknowledge our work. When using the code in any published work, please cite the papers above. The codes have been used in a variety of studies in gravitational-wave and astronomy black-hole binary dynamics, follow the citations to those papers for more.</p>
 <p>The code is distributed under git version control at</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/dgerosa/precession">github.com/dgerosa/precession</a></p></li>
 </ul>
-<p>The documentation (v2) is available</p>
+<p>The documentation (v2 and eccentric extension) is available</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://dgerosa.github.io/precession">dgerosa.github.io/precession</a></p></li>
 </ul>
@@ -110,8 +127,9 @@ D. Gerosa, M. Kesden. PRD 93 (2016)
 <p>A short tutorial is provided in <a class="reference external" href="https://dgerosa.github.io/precession">the documentation</a> together with a detailed list of all functions.</p>
 <p>The code is developed and maintained by <a class="reference external" href="www.davidegerosa.com">Davide Gerosa</a>. Please report bugs and suggestions using github.</p>
 <section id="change-log">
-<h3>Change log<a class="headerlink" href="#change-log" title="Link to this heading"></a></h3>
+<h4>Change log<a class="headerlink" href="#change-log" title="Link to this heading"></a></h4>
 <ul class="simple">
+<li><p><em>v2.0.1</em> Extension of the code to work with eccentric orbits. See <a class="reference external" href="https://arxiv.org/abs/2304.04801">arXiv:2508.????</a></p></li>
 <li><p><em>v2.0.0</em> New code, not backward compatible. See <a class="reference external" href="https://arxiv.org/abs/2304.04801">arXiv:2304.04801</a></p></li>
 <li><p><em>v1.0.3</em> Python 3 support. Updated final-spin formula.</p></li>
 <li><p><em>v1.0.0</em> First public release. See <a class="reference external" href="https://arxiv.org/abs/1605.01067">arXiv:1605.01067</a>.</p></li>
@@ -119,6 +137,7 @@ D. Gerosa, M. Kesden. PRD 93 (2016)
 <p>(Third-level versions not explicitly indicated refer to patches for minor typos/bug fixes)</p>
 <div class="toctree-wrapper compound">
 </div>
+</section>
 </section>
 </section>
 </section>

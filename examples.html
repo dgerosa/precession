@@ -6,21 +6,21 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples &mdash; precession 2.0.5 documentation</title>
+  <title>Examples &mdash; precession 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=09beee0d"></script>
+      <script src="_static/documentation_options.js?v=20623aea"></script>
       <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Package documentation" href="auto.html" />
+    <link rel="next" title="precession: package documentation" href="circular.html" />
     <link rel="prev" title="Readme" href="index.html" /> 
 </head>
 
@@ -50,9 +50,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#select-a-binary-configuration">1. Select a binary configuration.</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#inspiral">2. Inspiral</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession-average-what-you-like">3. Precession average what you like</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#evolution-of-an-eccentric-and-precessing-binary">4. Evolution of an eccentric and precessing binary</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="auto.html">Package documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="circular.html">precession: package documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eccentric.html">precession.eccentricity: package documentation</a></li>
 </ul>
 
         </div>
@@ -88,10 +90,22 @@ starting point.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">importlib.machinery</span><span class="w"> </span><span class="kn">import</span> <span class="n">SourceFileLoader</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">precession</span> <span class="o">=</span> <span class="n">SourceFileLoader</span><span class="p">(</span><span class="s2">&quot;precession&quot;</span><span class="p">,</span> <span class="s2">&quot;../precession/precession.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load_module</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">precession_eccentricity</span> <span class="o">=</span> <span class="n">SourceFileLoader</span><span class="p">(</span><span class="s2">&quot;eccentricity&quot;</span><span class="p">,</span> <span class="s2">&quot;../precession/eccentricity.py&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load_module</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>(The import syntax above is to make sure the online documentation grabs
-the latest version. For you it should just be <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">precession</span></code> )</p>
+<p>The import syntax above ensures that the online documentation grabs the
+latest version. For you, it should just be <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">precession</span></code>, and in
+case you want to use the eccentric version, import
+<code class="docutils literal notranslate"><span class="pre">precession.eccentricity</span></code>. <em>Note for the usage of the eccentric
+version of</em> <code class="docutils literal notranslate"><span class="pre">precession</span></code>: The code is implemented such that almost all
+the functions available in <code class="docutils literal notranslate"><span class="pre">precession</span></code> can be accessed by just
+importing its eccentric extension. Some of them are exactly the same as
+for the circular counterpart; others, specifically those directly
+involving time or orbital separation, require a different input
+(briefly, all <code class="docutils literal notranslate"><span class="pre">r</span></code> parameters have been substituted with <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">e)</span></code>).
+The functions that are specific only to the circular case (like
+<code class="docutils literal notranslate"><span class="pre">eval_r</span></code> or those related to the remnant properties) cannot be
+accessed via <code class="docutils literal notranslate"><span class="pre">precession.eccentricity</span></code>.</p>
 <section id="select-a-binary-configuration">
 <h2>1. Select a binary configuration.<a class="headerlink" href="#select-a-binary-configuration" title="Link to this heading"></a></h2>
 <p>First, set the constants of motion. These include mass ratio and spin
@@ -211,10 +225,10 @@ function</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{np.str_(&#39;theta1&#39;): array([[1.5372807 , 1.67930007]]),</span>
-<span class="go"> np.str_(&#39;theta2&#39;): array([[1.34207779, 1.23957094]]),</span>
-<span class="go"> np.str_(&#39;deltaphi&#39;): array([[ 3.10408346, -1.74053567]]),</span>
-<span class="go"> np.str_(&#39;deltachi&#39;): array([[-0.08138369, -0.16016165]]),</span>
+<span class="go">{np.str_(&#39;theta1&#39;): array([[1.66860187, 1.85794712]]),</span>
+<span class="go"> np.str_(&#39;theta2&#39;): array([[1.24737508, 1.10774394]]),</span>
+<span class="go"> np.str_(&#39;deltaphi&#39;): array([[1.33764342, 1.47022691]]),</span>
+<span class="go"> np.str_(&#39;deltachi&#39;): array([[-0.15424982, -0.25734491]]),</span>
 <span class="go"> np.str_(&#39;kappa&#39;): array([[0.04563644, 0.06977371]]),</span>
 <span class="go"> np.str_(&#39;r&#39;): array([[1000,   10]]),</span>
 <span class="go"> np.str_(&#39;u&#39;): array([[0.06403612, 0.64036123]]),</span>
@@ -257,10 +271,10 @@ infinity:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span> <span class="c1"># Specify all the outputs you want here</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="n">precession</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;kappa&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">r</span><span class="o">=</span><span class="n">rvals</span><span class="p">,</span><span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span>
-<span class="go">{np.str_(&#39;theta1&#39;): array([[1.45235006, 1.66496015]]),</span>
-<span class="go"> np.str_(&#39;theta2&#39;): array([[1.4020589 , 1.25002889]]),</span>
-<span class="go"> np.str_(&#39;deltaphi&#39;): array([[ 2.04235005, -0.57399675]]),</span>
-<span class="go"> np.str_(&#39;deltachi&#39;): array([[-0.03435027, -0.15223596]]),</span>
+<span class="go">{np.str_(&#39;theta1&#39;): array([[0.88236089, 1.66496015]]),</span>
+<span class="go"> np.str_(&#39;theta2&#39;): array([[1.76318212, 1.25002889]]),</span>
+<span class="go"> np.str_(&#39;deltaphi&#39;): array([[ 3.11102011, -0.49613035]]),</span>
+<span class="go"> np.str_(&#39;deltachi&#39;): array([[ 0.25296097, -0.15223596]]),</span>
 <span class="go"> np.str_(&#39;kappa&#39;): array([[0.06865318, 0.04154245]]),</span>
 <span class="go"> np.str_(&#39;r&#39;): array([[10., inf]]),</span>
 <span class="go"> np.str_(&#39;u&#39;): array([[0.64036123, 0.        ]]),</span>
@@ -305,6 +319,82 @@ Let’s check we get the same result:</p>
 <p>This is also an example of how providing the optional quantity
 <code class="docutils literal notranslate"><span class="pre">precomputedroots</span></code> speeds up the computation.</p>
 </section>
+<section id="evolution-of-an-eccentric-and-precessing-binary">
+<h2>4. Evolution of an eccentric and precessing binary<a class="headerlink" href="#evolution-of-an-eccentric-and-precessing-binary" title="Link to this heading"></a></h2>
+<p>To evolve an eccentric and spin-precessing black hole binary from a
+larger semi-major axis (which can be thought of as a proxy for the
+orbital separation) to a smaller one, it is necessary to also state the
+initial eccentricity along with information about the masses and spins
+of the system.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#intial semi major axis ( in geometric units)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a0</span><span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#final semi major axis</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">af</span><span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a_array</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">a0</span><span class="p">,</span> <span class="n">af</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1">#array of semi-major axis values for the inspiral</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#initial eccentricity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e0</span> <span class="o">=</span> <span class="mf">0.6</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#spin parameters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chi1</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">chi2</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span> <span class="o">=</span> <span class="n">precession_eccentricity</span><span class="o">.</span><span class="n">isotropic_angles</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#mass parameters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output_ecc</span><span class="o">=</span><span class="n">precession_eccentricity</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="o">=</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span><span class="o">=</span><span class="n">deltaphi</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">a_array</span><span class="p">,</span><span class="n">e</span><span class="o">=</span><span class="n">e0</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let’s compare it with a circular evolution (setting e=0)</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output_circ</span><span class="o">=</span><span class="n">precession_eccentricity</span><span class="o">.</span><span class="n">inspiral_precav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="o">=</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span><span class="o">=</span><span class="n">deltaphi</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">a_array</span><span class="p">,</span><span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span><span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The spin angles evolve differently!</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pylab</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">output_ecc</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">output_ecc</span><span class="p">[</span><span class="s1">&#39;deltachiminus&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">output_ecc</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">output_ecc</span><span class="p">[</span><span class="s1">&#39;deltachiplus&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">output_circ</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">output_circ</span><span class="p">[</span><span class="s1">&#39;deltachiminus&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">output_circ</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">output_circ</span><span class="p">[</span><span class="s1">&#39;deltachiplus&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">output_ecc</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">output_ecc</span><span class="p">[</span><span class="s1">&#39;deltachiminus&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">output_ecc</span><span class="p">[</span><span class="s1">&#39;deltachiplus&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Eccentric evolution&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">output_circ</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">output_circ</span><span class="p">[</span><span class="s1">&#39;deltachiminus&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">output_circ</span><span class="p">[</span><span class="s1">&#39;deltachiplus&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Circular evolution&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;a/M&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$\delta \chi$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">invert_xaxis</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>Matplotlib is building the font cache; this may take a moment.</p>
+<p>(<a class="reference external" href=".//examples-29.png">png</a>, <a class="reference external" href=".//examples-29.hires.png">hires.png</a>, <a class="reference external" href=".//examples-29.pdf">pdf</a>)</p>
+<figure class="align-default">
+<img alt="_images/examples-29.png" src="_images/examples-29.png" />
+</figure>
+</section>
 </section>
 
 
@@ -312,7 +402,7 @@ Let’s check we get the same result:</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Readme" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="auto.html" class="btn btn-neutral float-right" title="Package documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="circular.html" class="btn btn-neutral float-right" title="precession: package documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

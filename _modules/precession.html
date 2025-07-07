@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>precession &mdash; precession 2.0.5 documentation</title>
+  <title>precession &mdash; precession 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=09beee0d"></script>
+      <script src="../_static/documentation_options.js?v=20623aea"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -44,7 +44,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Readme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../auto.html">Package documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../circular.html">precession: package documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../eccentric.html">precession.eccentricity: package documentation</a></li>
 </ul>
 
         </div>
@@ -83,7 +84,7 @@
 
 
 <div class="viewcode-block" id="roots_vec">
-<a class="viewcode-back" href="../auto.html#precession.roots_vec">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.roots_vec">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">roots_vec</span><span class="p">(</span><span class="n">p</span><span class="p">):</span> <span class="c1">#, enforce=False):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Locate roots of polynomial using a vectorized version of numpy.roots.</span>
@@ -145,7 +146,7 @@
 
 
 <div class="viewcode-block" id="norm_nested">
-<a class="viewcode-back" href="../auto.html#precession.norm_nested">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.norm_nested">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">norm_nested</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Norm of 2D array of shape (N,3) along last axis.</span>
@@ -170,7 +171,7 @@
 
 
 <div class="viewcode-block" id="normalize_nested">
-<a class="viewcode-back" href="../auto.html#precession.normalize_nested">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.normalize_nested">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">normalize_nested</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalize 2D array of shape (N,3) along last axis.</span>
@@ -195,7 +196,7 @@
 
 
 <div class="viewcode-block" id="dot_nested">
-<a class="viewcode-back" href="../auto.html#precession.dot_nested">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.dot_nested">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dot_nested</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dot product between 2D arrays along last axis.</span>
@@ -222,7 +223,7 @@
 
 
 <div class="viewcode-block" id="scalar_nested">
-<a class="viewcode-back" href="../auto.html#precession.scalar_nested">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.scalar_nested">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">scalar_nested</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Nested scalar product between a 1D and a 2D array.</span>
@@ -249,7 +250,7 @@
 
 
 <div class="viewcode-block" id="rotate_nested">
-<a class="viewcode-back" href="../auto.html#precession.rotate_nested">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.rotate_nested">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rotate_nested</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">align_zaxis</span><span class="p">,</span> <span class="n">align_xzplane</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rotate a given vector vec to a frame such that the vector align_zaxis lies along z and the vector align_xzplane lies in the xz plane.</span>
@@ -300,7 +301,7 @@
 
 
 <div class="viewcode-block" id="sample_unitsphere">
-<a class="viewcode-back" href="../auto.html#precession.sample_unitsphere">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.sample_unitsphere">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">sample_unitsphere</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sample points uniformly on a sphere of unit radius. Returns array of shape (N,3).</span>
@@ -327,7 +328,7 @@
 
 
 <div class="viewcode-block" id="isotropic_angles">
-<a class="viewcode-back" href="../auto.html#precession.isotropic_angles">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.isotropic_angles">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">isotropic_angles</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sample the angles theta1, theta2, and deltaphi from an isotropic distribution.</span>
@@ -356,7 +357,7 @@
 
 
 <div class="viewcode-block" id="tiler">
-<a class="viewcode-back" href="../auto.html#precession.tiler">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.tiler">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">tiler</span><span class="p">(</span><span class="n">thing</span><span class="p">,</span><span class="n">shaper</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Repeat the quantity thing a numer of times give by the shape of shaper.</span>
@@ -387,7 +388,7 @@
 
 
 <div class="viewcode-block" id="affine">
-<a class="viewcode-back" href="../auto.html#precession.affine">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.affine">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">affine</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">up</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform an affine trasformation to scale a vector given upper and lower limits: rescaled = ( vec - low ) / (up - low). If these are outside the domain of the vector, the result will be in [0,1].</span>
@@ -421,7 +422,7 @@
 
 
 <div class="viewcode-block" id="inverseaffine">
-<a class="viewcode-back" href="../auto.html#precession.inverseaffine">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.inverseaffine">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">inverseaffine</span><span class="p">(</span><span class="n">rescaled</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">up</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform an inferse affine trasformation to scale a vector from some upper and lower limits: vec = low + rescaled*(up-low). If rescaled is defined in [0,1], the result will be defined in [low,up].</span>
@@ -456,7 +457,7 @@
 
 
 <div class="viewcode-block" id="wraproots">
-<a class="viewcode-back" href="../auto.html#precession.wraproots">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.wraproots">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">wraproots</span><span class="p">(</span><span class="n">coefficientfunction</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find roots of a polynomial given coefficients, ordered according to their real part. Complex roots are masked with nans. This is essentially a wrapper of numpy.roots.</span>
@@ -487,7 +488,7 @@
 
 
 <div class="viewcode-block" id="ellippi">
-<a class="viewcode-back" href="../auto.html#precession.ellippi">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.ellippi">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ellippi</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Incomplete elliptic integral of the third kind. This is reconstructed using scipy&#39;s implementation of Carlson&#39;s R integrals (arxiv:math/9409227).</span>
@@ -535,7 +536,7 @@
 
 
 <div class="viewcode-block" id="ismonotonic">
-<a class="viewcode-back" href="../auto.html#precession.ismonotonic">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.ismonotonic">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ismonotonic</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">which</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if an array is monotonic. The parameter `which` can takes the following values:</span>
@@ -578,7 +579,7 @@
 
 
 <div class="viewcode-block" id="eval_m1">
-<a class="viewcode-back" href="../auto.html#precession.eval_m1">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_m1">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_m1</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Mass of the heavier black hole in units of the total mass.</span>
@@ -606,7 +607,7 @@
 
 
 <div class="viewcode-block" id="eval_m2">
-<a class="viewcode-back" href="../auto.html#precession.eval_m2">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_m2">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_m2</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Mass of the lighter black hole in units of the total mass.</span>
@@ -634,7 +635,7 @@
 
 
 <div class="viewcode-block" id="eval_q">
-<a class="viewcode-back" href="../auto.html#precession.eval_q">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_q">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_q</span><span class="p">(</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Mass ratio, 0 &lt; q = m2/m1 &lt; 1.</span>
@@ -666,7 +667,7 @@
 
 
 <div class="viewcode-block" id="eval_eta">
-<a class="viewcode-back" href="../auto.html#precession.eval_eta">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_eta">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_eta</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Symmetric mass ratio eta = m1*m2/(m1+m2)^2 = q/(1+q)^2.</span>
@@ -694,7 +695,7 @@
 
 
 <div class="viewcode-block" id="eval_S1">
-<a class="viewcode-back" href="../auto.html#precession.eval_S1">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_S1">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_S1</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Spin angular momentum of the heavier black hole.</span>
@@ -724,7 +725,7 @@
 
 
 <div class="viewcode-block" id="eval_S2">
-<a class="viewcode-back" href="../auto.html#precession.eval_S2">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_S2">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_S2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Spin angular momentum of the lighter black hole.</span>
@@ -754,7 +755,7 @@
 
 
 <div class="viewcode-block" id="eval_chi1">
-<a class="viewcode-back" href="../auto.html#precession.eval_chi1">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_chi1">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_chi1</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">S1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dimensionless spin of the heavier black hole.</span>
@@ -784,7 +785,7 @@
 
 
 <div class="viewcode-block" id="eval_chi2">
-<a class="viewcode-back" href="../auto.html#precession.eval_chi2">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_chi2">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_chi2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">S2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dimensionless spin of the lighter black hole.</span>
@@ -814,7 +815,7 @@
 
 
 <div class="viewcode-block" id="eval_L">
-<a class="viewcode-back" href="../auto.html#precession.eval_L">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_L">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_L</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Newtonian angular momentum of the binary.</span>
@@ -846,7 +847,7 @@
 
 
 <div class="viewcode-block" id="eval_v">
-<a class="viewcode-back" href="../auto.html#precession.eval_v">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_v">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_v</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Newtonian orbital velocity of the binary.</span>
@@ -874,7 +875,7 @@
 
 
 <div class="viewcode-block" id="eval_r">
-<a class="viewcode-back" href="../auto.html#precession.eval_r">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.eval_r">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_r</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Orbital separation of the binary. Valid inputs are either (L,q) or (u,q).</span>
@@ -919,7 +920,7 @@
 
 
 <div class="viewcode-block" id="eval_u">
-<a class="viewcode-back" href="../auto.html#precession.eval_u">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_u">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_u</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compactified orbital separation.</span>
@@ -949,7 +950,7 @@
 
 
 <div class="viewcode-block" id="eval_chieff">
-<a class="viewcode-back" href="../auto.html#precession.eval_chieff">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_chieff">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_chieff</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Eftective spin.</span>
@@ -990,7 +991,7 @@
 
 
 <div class="viewcode-block" id="eval_deltachi">
-<a class="viewcode-back" href="../auto.html#precession.eval_deltachi">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_deltachi">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_deltachi</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Weighted spin difference.</span>
@@ -1031,7 +1032,7 @@
 
 
 <div class="viewcode-block" id="eval_deltachiinf">
-<a class="viewcode-back" href="../auto.html#precession.eval_deltachiinf">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_deltachiinf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_deltachiinf</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Large-separation limit of the weighted spin difference.</span>
@@ -1072,7 +1073,7 @@
 
 
 <div class="viewcode-block" id="eval_costheta1">
-<a class="viewcode-back" href="../auto.html#precession.eval_costheta1">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_costheta1">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_costheta1</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cosine of the angle between the orbital angular momentum and the spin of the primary black hole.</span>
@@ -1110,7 +1111,7 @@
 
 
 <div class="viewcode-block" id="eval_theta1">
-<a class="viewcode-back" href="../auto.html#precession.eval_theta1">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_theta1">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_theta1</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Angle between the orbital angular momentum and the spin of the primary black hole.</span>
@@ -1144,7 +1145,7 @@
 
 
 <div class="viewcode-block" id="eval_costheta2">
-<a class="viewcode-back" href="../auto.html#precession.eval_costheta2">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_costheta2">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_costheta2</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cosine of the angle between the orbital angular momentum and the spin of the secondary black hole.</span>
@@ -1182,7 +1183,7 @@
 
 
 <div class="viewcode-block" id="eval_theta2">
-<a class="viewcode-back" href="../auto.html#precession.eval_theta2">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_theta2">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_theta2</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Angle between the orbital angular momentum and the spin of the secondary black hole.</span>
@@ -1216,7 +1217,7 @@
 
 
 <div class="viewcode-block" id="eval_costheta12">
-<a class="viewcode-back" href="../auto.html#precession.eval_costheta12">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_costheta12">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_costheta12</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cosine of the angle between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).</span>
@@ -1283,7 +1284,7 @@
 
 
 <div class="viewcode-block" id="eval_theta12">
-<a class="viewcode-back" href="../auto.html#precession.eval_theta12">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_theta12">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_theta12</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Angle between the two spins. Valid inputs are either (theta1,theta2,deltaphi) or (deltachi,kappa,chieff,q,chi1,chi2).</span>
@@ -1328,7 +1329,7 @@
 
 
 <div class="viewcode-block" id="eval_cosdeltaphi">
-<a class="viewcode-back" href="../auto.html#precession.eval_cosdeltaphi">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_cosdeltaphi">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_cosdeltaphi</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cosine of the angle between the projections of the two spins onto the orbital plane.</span>
@@ -1391,7 +1392,7 @@
 
 
 <div class="viewcode-block" id="eval_deltaphi">
-<a class="viewcode-back" href="../auto.html#precession.eval_deltaphi">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_deltaphi">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_deltaphi</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Angle between the projections of the two spins onto the orbital plane.</span>
@@ -1434,7 +1435,7 @@
 
 
 <div class="viewcode-block" id="eval_costhetaL">
-<a class="viewcode-back" href="../auto.html#precession.eval_costhetaL">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_costhetaL">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_costhetaL</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cosine of the angle betwen the orbital angular momentum and the total angular momentum.</span>
@@ -1477,7 +1478,7 @@
 
 
 <div class="viewcode-block" id="eval_thetaL">
-<a class="viewcode-back" href="../auto.html#precession.eval_thetaL">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_thetaL">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_thetaL</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Angle betwen the orbital angular momentum and the total angular momentum.</span>
@@ -1513,7 +1514,7 @@
 
 
 <div class="viewcode-block" id="eval_J">
-<a class="viewcode-back" href="../auto.html#precession.eval_J">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_J">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_J</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Magnitude of the total angular momentum. Provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (kappa,r,q).</span>
@@ -1576,7 +1577,7 @@
 
 
 <div class="viewcode-block" id="eval_kappa">
-<a class="viewcode-back" href="../auto.html#precession.eval_kappa">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_kappa">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_kappa</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Asymptotic angular momentum. Provide either (theta1,theta2,deltaphi,r,q,chi1,chhi2) or (J,r,q).</span>
@@ -1638,7 +1639,7 @@
 
 
 <div class="viewcode-block" id="eval_S">
-<a class="viewcode-back" href="../auto.html#precession.eval_S">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_S">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_S</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Magnitude of the total spin. Valid inputs are either (theta1, theta2, deltaphi, q, chi1, chi2) or (deltachi, kappa, r, chieff, q).</span>
@@ -1694,7 +1695,7 @@
 
 
 <div class="viewcode-block" id="eval_cyclesign">
-<a class="viewcode-back" href="../auto.html#precession.eval_cyclesign">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_cyclesign">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_cyclesign</span><span class="p">(</span><span class="n">ddeltachidt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Lvec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S1vec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S2vec</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evaluate if the input parameters are in the first of the second half of a precession cycle. We refer to this as the &#39;sign&#39; of a precession cycle, defined as +1 if deltachi is increasing and -1 deltachi is decreasing. Valid inputs are one and not more of the following:</span>
@@ -1751,7 +1752,7 @@
 
 
 <div class="viewcode-block" id="conserved_to_angles">
-<a class="viewcode-back" href="../auto.html#precession.conserved_to_angles">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.conserved_to_angles">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">conserved_to_angles</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=+</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert conserved quantities (deltachi,kappa,chieff) into angles (theta1,theta2,deltaphi).</span>
@@ -1799,7 +1800,7 @@
 
 
 <div class="viewcode-block" id="angles_to_conserved">
-<a class="viewcode-back" href="../auto.html#precession.angles_to_conserved">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.angles_to_conserved">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">angles_to_conserved</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert angles (theta1,theta2,deltaphi) into conserved quantities (deltachi,kappa,chieff).</span>
@@ -1855,7 +1856,7 @@
 
 
 <div class="viewcode-block" id="vectors_to_angles">
-<a class="viewcode-back" href="../auto.html#precession.vectors_to_angles">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.vectors_to_angles">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">vectors_to_angles</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert cartesian vectors (L,S1,S2) into angles (theta1,theta2,deltaphi).</span>
@@ -1905,7 +1906,7 @@
 
 
 <div class="viewcode-block" id="vectors_to_Jframe">
-<a class="viewcode-back" href="../auto.html#precession.vectors_to_Jframe">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.vectors_to_Jframe">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">vectors_to_Jframe</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rotate vectors of the three momenta onto a frame where J is along z and L lies in the x-z plane.</span>
@@ -1946,7 +1947,7 @@
 
 
 <div class="viewcode-block" id="vectors_to_Lframe">
-<a class="viewcode-back" href="../auto.html#precession.vectors_to_Lframe">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.vectors_to_Lframe">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">vectors_to_Lframe</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rotate vectors of the three momenta onto a frame where L is along z and S1 lies in the x-z plane.</span>
@@ -1987,7 +1988,7 @@
 
 
 <div class="viewcode-block" id="angles_to_Lframe">
-<a class="viewcode-back" href="../auto.html#precession.angles_to_Lframe">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.angles_to_Lframe">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">angles_to_Lframe</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame</span>
@@ -2048,7 +2049,7 @@
 
 
 <div class="viewcode-block" id="angles_to_Jframe">
-<a class="viewcode-back" href="../auto.html#precession.angles_to_Jframe">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.angles_to_Jframe">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">angles_to_Jframe</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert the angles (theta1,theta2,deltaphi) to angular momentum vectors (L,S1,S2) in the frame</span>
@@ -2093,7 +2094,7 @@
 
 
 <div class="viewcode-block" id="conserved_to_Lframe">
-<a class="viewcode-back" href="../auto.html#precession.conserved_to_Lframe">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.conserved_to_Lframe">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">conserved_to_Lframe</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=+</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert the conserved quanties (deltachi,kappa,chieff) to angular momentum vectors (L,S1,S2) in the frame</span>
@@ -2140,7 +2141,7 @@
 
 
 <div class="viewcode-block" id="conserved_to_Jframe">
-<a class="viewcode-back" href="../auto.html#precession.conserved_to_Jframe">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.conserved_to_Jframe">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">conserved_to_Jframe</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=+</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert the conserved quanties (deltachi,kappa,chieff) to angular momentum vectors (L,S1,S2) in the frame</span>
@@ -2187,7 +2188,7 @@
 
 
 <div class="viewcode-block" id="vectors_to_conserved">
-<a class="viewcode-back" href="../auto.html#precession.vectors_to_conserved">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.vectors_to_conserved">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">vectors_to_conserved</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span><span class="n">full_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert vectors (L,S1,S2) to conserved quanties (deltachi,kappa,chieff).</span>
@@ -2246,7 +2247,7 @@
 
 
 <div class="viewcode-block" id="kappadiscriminant_coefficients">
-<a class="viewcode-back" href="../auto.html#precession.kappadiscriminant_coefficients">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.kappadiscriminant_coefficients">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">kappadiscriminant_coefficients</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Coefficients of the quintic equation in kappa that defines the spin-orbit resonances.</span>
@@ -2567,7 +2568,7 @@
 
 
 <div class="viewcode-block" id="kappalimits_geometrical">
-<a class="viewcode-back" href="../auto.html#precession.kappalimits_geometrical">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.kappalimits_geometrical">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">kappalimits_geometrical</span><span class="p">(</span><span class="n">r</span> <span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits in kappa conditioned on r, q, chi1, chi2.</span>
@@ -2629,7 +2630,7 @@
 
 
 <div class="viewcode-block" id="kapparesonances">
-<a class="viewcode-back" href="../auto.html#precession.kapparesonances">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.kapparesonances">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">kapparesonances</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    asymptotic angular momentum of the two spin-orbit resonances. The resonances minimizes and maximizes kappa for given values of r, chieff, q, chi1, chi2. The minimum corresponds to deltaphi=pi and the maximum corresponds to deltaphi=0.</span>
@@ -2836,7 +2837,7 @@
 
 
 <div class="viewcode-block" id="kapparescaling">
-<a class="viewcode-back" href="../auto.html#precession.kapparescaling">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.kapparescaling">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">kapparescaling</span><span class="p">(</span><span class="n">kappatilde</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute kappa from the rescaled parameter 0&lt;=kappatilde&lt;=1.</span>
@@ -2874,7 +2875,7 @@
 
 
 <div class="viewcode-block" id="kappalimits">
-<a class="viewcode-back" href="../auto.html#precession.kappalimits">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.kappalimits">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">kappalimits</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">enforce</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits on the asymptotic angular momentum. The contraints considered depend on the inputs provided.</span>
@@ -2937,7 +2938,7 @@
 
 
 <div class="viewcode-block" id="chiefflimits">
-<a class="viewcode-back" href="../auto.html#precession.chiefflimits">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.chiefflimits">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">chiefflimits</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits on the effective spin based only on its definition.</span>
@@ -2974,7 +2975,7 @@
 
 
 <div class="viewcode-block" id="deltachilimits_definition">
-<a class="viewcode-back" href="../auto.html#precession.deltachilimits_definition">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachilimits_definition">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachilimits_definition</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits on the weighted spin difference based only on its definition.</span>
@@ -3010,7 +3011,7 @@
 
 
 <div class="viewcode-block" id="anglesresonances">
-<a class="viewcode-back" href="../auto.html#precession.anglesresonances">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.anglesresonances">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">anglesresonances</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the values of the angles corresponding to the two spin-orbit resonances.</span>
@@ -3070,7 +3071,7 @@
 
 
 <div class="viewcode-block" id="deltachicubic_coefficients">
-<a class="viewcode-back" href="../auto.html#precession.deltachicubic_coefficients">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachicubic_coefficients">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachicubic_coefficients</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Coefficients of the cubic equation in deltachi for its time evolution.</span>
@@ -3140,7 +3141,7 @@
 
 
 <div class="viewcode-block" id="deltachicubic_rescaled_coefficients">
-<a class="viewcode-back" href="../auto.html#precession.deltachicubic_rescaled_coefficients">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachicubic_rescaled_coefficients">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachicubic_rescaled_coefficients</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedcoefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Rescaled coefficients of the cubic equation in deltachi for its time evolution. This is necessary to avoid dividing by (1-q).</span>
@@ -3200,7 +3201,7 @@
 
 
 <div class="viewcode-block" id="deltachiroots">
-<a class="viewcode-back" href="../auto.html#precession.deltachiroots">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachiroots">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachiroots</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Roots of the cubic equation in deltachi that describes the dynamics on the precession timescale.</span>
@@ -3260,7 +3261,7 @@
 
 
 <div class="viewcode-block" id="deltachilimits_rectangle">
-<a class="viewcode-back" href="../auto.html#precession.deltachilimits_rectangle">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachilimits_rectangle">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachilimits_rectangle</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits on the weighted spin difference for given (chieff, q, chi1, chi2). This is a rectangle in the (chieff,deltachi) plane.</span>
@@ -3302,7 +3303,7 @@
 
 
 <div class="viewcode-block" id="deltachilimits_plusminus">
-<a class="viewcode-back" href="../auto.html#precession.deltachilimits_plusminus">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachilimits_plusminus">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachilimits_plusminus</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits on the weighted spin difference for given (kappa, r, chieff, q, chi1, chi2). These are two of the solutions of the underlying cubic polynomial.</span>
@@ -3358,7 +3359,7 @@
 
 
 <div class="viewcode-block" id="deltachilimits">
-<a class="viewcode-back" href="../auto.html#precession.deltachilimits">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachilimits">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachilimits</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Limits on the weighted spin difference. The contraints considered depend on the inputs provided.</span>
@@ -3415,7 +3416,7 @@
 
 
 <div class="viewcode-block" id="deltachirescaling">
-<a class="viewcode-back" href="../auto.html#precession.deltachirescaling">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachirescaling">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachirescaling</span><span class="p">(</span><span class="n">deltachitilde</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span><span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute deltachi from the rescaled parameter 0&lt;=deltachitilde&lt;=1.</span>
@@ -3457,7 +3458,7 @@
 
 
 <div class="viewcode-block" id="deltachiresonance">
-<a class="viewcode-back" href="../auto.html#precession.deltachiresonance">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachiresonance">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachiresonance</span><span class="p">(</span><span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Assuming that the inputs correspond to a spin-orbit resonance, find the corresponding value of deltachi. There will be two roots that are coincident if not for numerical errors: for concreteness, return the mean of the real part.</span>
@@ -3510,7 +3511,7 @@
 
 
 <div class="viewcode-block" id="elliptic_parameter">
-<a class="viewcode-back" href="../auto.html#precession.elliptic_parameter">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.elliptic_parameter">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">elliptic_parameter</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameter m entering elliptic functions for the evolution of deltachi.</span>
@@ -3552,7 +3553,7 @@
 
 
 <div class="viewcode-block" id="deltachitildeav">
-<a class="viewcode-back" href="../auto.html#precession.deltachitildeav">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachitildeav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachitildeav</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Precession average of the rescaled weighted spin difference.</span>
@@ -3586,7 +3587,7 @@
 
 
 <div class="viewcode-block" id="deltachitildeav2">
-<a class="viewcode-back" href="../auto.html#precession.deltachitildeav2">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachitildeav2">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachitildeav2</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Precession average of the rescaled weighted spin difference squared.</span>
@@ -3621,7 +3622,7 @@
 
 
 <div class="viewcode-block" id="ddchidt_prefactor">
-<a class="viewcode-back" href="../auto.html#precession.ddchidt_prefactor">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.ddchidt_prefactor">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ddchidt_prefactor</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Numerical prefactor to the ddeltachi/dt derivative.</span>
@@ -3656,7 +3657,7 @@
 
 
 <div class="viewcode-block" id="dchidt2_RHS">
-<a class="viewcode-back" href="../auto.html#precession.dchidt2_RHS">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.dchidt2_RHS">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dchidt2_RHS</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">donotnormalize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Right-hand side of the (ddeltachi/dt)^2 equation. </span>
@@ -3710,7 +3711,7 @@
 
 
 <div class="viewcode-block" id="eval_tau">
-<a class="viewcode-back" href="../auto.html#precession.eval_tau">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_tau">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_tau</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_psiperiod</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">donotnormalize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evaluate the nutation period.</span>
@@ -3772,7 +3773,7 @@
 
 
 <div class="viewcode-block" id="deltachioft">
-<a class="viewcode-back" href="../auto.html#precession.deltachioft">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachioft">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachioft</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">kappa</span> <span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evolution of deltachi on the precessional timescale (without radiation reaction).</span>
@@ -3829,7 +3830,7 @@
 
 
 <div class="viewcode-block" id="tofdeltachi">
-<a class="viewcode-back" href="../auto.html#precession.tofdeltachi">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.tofdeltachi">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">tofdeltachi</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span> <span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Time as a function of deltachi on the precessional timescale (without radiation reaction).</span>
@@ -3878,7 +3879,7 @@
 
 
 <div class="viewcode-block" id="deltachisampling">
-<a class="viewcode-back" href="../auto.html#precession.deltachisampling">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.deltachisampling">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">deltachisampling</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sample N values of deltachi at fixed separation accoring to its PN-weighted distribution function.</span>
@@ -3951,7 +3952,7 @@
 
 
 <div class="viewcode-block" id="intertial_ingredients">
-<a class="viewcode-back" href="../auto.html#precession.intertial_ingredients">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.intertial_ingredients">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">intertial_ingredients</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Numerical prefactors entering the precession frequency.</span>
@@ -4032,7 +4033,7 @@
 
 
 <div class="viewcode-block" id="eval_OmegaL">
-<a class="viewcode-back" href="../auto.html#precession.eval_OmegaL">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_OmegaL">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_OmegaL</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evaluate the precession frequency OmegaL along the precession cycle.</span>
@@ -4078,7 +4079,7 @@
 
 
 <div class="viewcode-block" id="eval_phiL">
-<a class="viewcode-back" href="../auto.html#precession.eval_phiL">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_phiL">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_phiL</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evaluate the azimuthal angle of L in a plane orthogonal to J along the precession cycle.</span>
@@ -4137,7 +4138,7 @@
 
 
 <div class="viewcode-block" id="eval_alpha">
-<a class="viewcode-back" href="../auto.html#precession.eval_alpha">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_alpha">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_alpha</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evaluate the precession angle spanned by L during an entire cycle.</span>
@@ -4208,7 +4209,7 @@
 <span class="c1">################ More phenomenology ################</span>
 
 <div class="viewcode-block" id="morphology">
-<a class="viewcode-back" href="../auto.html#precession.morphology">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.morphology">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">morphology</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">simpler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Evaluate the spin morphology. Returns:</span>
@@ -4266,7 +4267,7 @@
 
 
 <div class="viewcode-block" id="chip_terms">
-<a class="viewcode-back" href="../auto.html#precession.chip_terms">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.chip_terms">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">chip_terms</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the two terms entering the effective precessing spin chip.</span>
@@ -4309,7 +4310,7 @@
 
 
 <div class="viewcode-block" id="eval_chip_heuristic">
-<a class="viewcode-back" href="../auto.html#precession.eval_chip_heuristic">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_chip_heuristic">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_chip_heuristic</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Heuristic definition of the effective precessing spin chip (Schmidt et al 2015), see arxiv:2011.11948. This definition inconsistently averages over some, but not all, variations on the precession timescale.</span>
@@ -4344,7 +4345,7 @@
 
 
 <div class="viewcode-block" id="eval_chip_generalized">
-<a class="viewcode-back" href="../auto.html#precession.eval_chip_generalized">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_chip_generalized">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_chip_generalized</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generalized definition of the effective precessing spin chip, see arxiv:2011.11948. This definition retains all variations on the precession timescale.</span>
@@ -4381,7 +4382,7 @@
 
 
 <div class="viewcode-block" id="eval_chip_averaged">
-<a class="viewcode-back" href="../auto.html#precession.eval_chip_averaged">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_chip_averaged">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_chip_averaged</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Averaged definition of the effective precessing spin, see arxiv:2011.11948.</span>
@@ -4426,7 +4427,7 @@
 
 
 <div class="viewcode-block" id="eval_chip_rms">
-<a class="viewcode-back" href="../auto.html#precession.eval_chip_rms">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_chip_rms">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_chip_rms</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Root-mean-square definition of the effective precessing spin. This is much faster to evaluate than the plain average.</span>
@@ -4501,7 +4502,7 @@
 
 
 <div class="viewcode-block" id="eval_chip">
-<a class="viewcode-back" href="../auto.html#precession.eval_chip">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_chip">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_chip</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;averaged&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the effective precessing spin. The keyword `which` one of the following definitions:</span>
@@ -4602,7 +4603,7 @@
 
 
 <div class="viewcode-block" id="eval_nutation_freq">
-<a class="viewcode-back" href="../auto.html#precession.eval_nutation_freq">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_nutation_freq">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_nutation_freq</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Nutation frequency of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-. </span>
@@ -4642,7 +4643,7 @@
 
 
 <div class="viewcode-block" id="eval_bracket_omega">
-<a class="viewcode-back" href="../auto.html#precession.eval_bracket_omega">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_bracket_omega">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_bracket_omega</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Precession average of the precession frequency deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.</span>
@@ -4683,7 +4684,7 @@
 
 
 <div class="viewcode-block" id="eval_delta_omega">
-<a class="viewcode-back" href="../auto.html#precession.eval_delta_omega">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_delta_omega">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_delta_omega</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Variation of the precession frequency of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.</span>
@@ -4728,7 +4729,7 @@
 
 
 <div class="viewcode-block" id="eval_delta_theta">
-<a class="viewcode-back" href="../auto.html#precession.eval_delta_theta">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_delta_theta">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_delta_theta</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Nutation amplitude of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.</span>
@@ -4773,7 +4774,7 @@
 
 
 <div class="viewcode-block" id="eval_bracket_theta">
-<a class="viewcode-back" href="../auto.html#precession.eval_bracket_theta">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.eval_bracket_theta">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_bracket_theta</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Precession average of precession amplitude of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.</span>
@@ -4817,7 +4818,7 @@
 
 
 <div class="viewcode-block" id="rupdown">
-<a class="viewcode-back" href="../auto.html#precession.rupdown">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.rupdown">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rupdown</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The critical separations r_ud+/- marking the region of the up-down precessional instability.</span>
@@ -4858,7 +4859,7 @@
 
 
 <div class="viewcode-block" id="updown_endpoint">
-<a class="viewcode-back" href="../auto.html#precession.updown_endpoint">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.updown_endpoint">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">updown_endpoint</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Endpoint of the up-down precessional instability.</span>
@@ -4901,7 +4902,7 @@
 
 
 <div class="viewcode-block" id="angleresonances_endpoint">
-<a class="viewcode-back" href="../auto.html#precession.angleresonances_endpoint">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.angleresonances_endpoint">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">angleresonances_endpoint</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">chieff</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Small-separation limit of the spin-orbit resonances.</span>
@@ -4965,7 +4966,7 @@
 
 
 <div class="viewcode-block" id="omegasq_aligned">
-<a class="viewcode-back" href="../auto.html#precession.omegasq_aligned">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.omegasq_aligned">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">omegasq_aligned</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">which</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Squared oscillation frequency of a given perturbed aligned-spin binary.</span>
@@ -5026,7 +5027,7 @@
 
 
 <div class="viewcode-block" id="widenutation_separation">
-<a class="viewcode-back" href="../auto.html#precession.widenutation_separation">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.widenutation_separation">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">widenutation_separation</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The critical separation r_wide below which the binary component with</span>
@@ -5062,7 +5063,7 @@
 
 
 <div class="viewcode-block" id="widenutation_condition">
-<a class="viewcode-back" href="../auto.html#precession.widenutation_condition">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.widenutation_condition">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">widenutation_condition</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Conditions for wide nutation to take place. The returned flag which is</span>
@@ -5120,7 +5121,7 @@
 
 
 <div class="viewcode-block" id="rhs_precav">
-<a class="viewcode-back" href="../auto.html#precession.rhs_precav">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.rhs_precav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rhs_precav</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Right-hand side of the dkappa/du ODE describing precession-averaged inspiral.</span>
@@ -5183,7 +5184,7 @@
 
 
 <div class="viewcode-block" id="integrator_precav">
-<a class="viewcode-back" href="../auto.html#precession.integrator_precav">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.integrator_precav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">integrator_precav</span><span class="p">(</span><span class="n">kappainitial</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Integration of ODE dkappa/du describing precession-averaged inspirals. Here u needs to be an array with lenght &gt;=1, where u[0] corresponds to the initial condition and u[1:] corresponds to the location where outputs are returned. For past time infinity use u=0.</span>
@@ -5256,7 +5257,7 @@
 
 
 <div class="viewcode-block" id="inspiral_precav">
-<a class="viewcode-back" href="../auto.html#precession.inspiral_precav">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.inspiral_precav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">inspiral_precav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">enforce</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.</span>
@@ -5414,7 +5415,7 @@
 
 
 <div class="viewcode-block" id="precession_average">
-<a class="viewcode-back" href="../auto.html#precession.precession_average">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.precession_average">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">precession_average</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;quadrature&#39;</span><span class="p">,</span> <span class="n">Nsamples</span><span class="o">=</span><span class="mf">1e4</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Average a generic function over a precession cycle. The function needs to have call: func(deltachi, *args). Keywords arguments are not supported.</span>
@@ -5501,7 +5502,7 @@
 <span class="c1">################ Orbit-averaged evolution ################</span>
 
 <div class="viewcode-block" id="rhs_orbav">
-<a class="viewcode-back" href="../auto.html#precession.rhs_orbav">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.rhs_orbav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rhs_orbav</span><span class="p">(</span><span class="n">allvars</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">PNorderrad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">3.5</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unit vectors, v is the orbital velocity, and t is time.</span>
@@ -5602,7 +5603,7 @@
 
 
 <div class="viewcode-block" id="integrator_orbav">
-<a class="viewcode-back" href="../auto.html#precession.integrator_orbav">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.integrator_orbav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">integrator_orbav</span><span class="p">(</span><span class="n">Lhinitial</span><span class="p">,</span> <span class="n">S1hinitial</span><span class="p">,</span> <span class="n">S2hinitial</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">PNorderrad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">3.5</span><span class="p">],</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Integration of the systems of ODEs describing orbit-averaged inspirals.</span>
@@ -5689,7 +5690,7 @@
 
 
 <div class="viewcode-block" id="inspiral_orbav">
-<a class="viewcode-back" href="../auto.html#precession.inspiral_orbav">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.inspiral_orbav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">inspiral_orbav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Lh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S1h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S2h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=+</span><span class="mi">1</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">PNorderrad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">3.5</span><span class="p">],</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.</span>
@@ -5868,7 +5869,7 @@
 
 
 <div class="viewcode-block" id="inspiral_hybrid">
-<a class="viewcode-back" href="../auto.html#precession.inspiral_hybrid">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.inspiral_hybrid">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">inspiral_hybrid</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rswitch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uswitch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either r or u (and not both); provide also uswitch and rswitch consistently.</span>
@@ -6009,7 +6010,7 @@
 
 
 <div class="viewcode-block" id="inspiral">
-<a class="viewcode-back" href="../auto.html#precession.inspiral">[docs]</a>
+<a class="viewcode-back" href="../eccentric.html#precession.inspiral">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">inspiral</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generic wrapper for binary inspirals. The keyword which selects between the different approximation:</span>
@@ -6058,7 +6059,7 @@
 
 
 <div class="viewcode-block" id="gwfrequency_to_pnseparation">
-<a class="viewcode-back" href="../auto.html#precession.gwfrequency_to_pnseparation">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.gwfrequency_to_pnseparation">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gwfrequency_to_pnseparation</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">fGW</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">M_msun</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.</span>
@@ -6104,13 +6105,17 @@
     <span class="n">M_msun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">M_msun</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="c1"># Prefactor is pi*Msun*G/c^3/s. It&#39;s pi and not 2pi because f is the GW frequency while Kidder&#39;s omega is the orbital angular velocity</span>
-    <span class="n">tildeomega</span> <span class="o">=</span> <span class="n">M_msun</span> <span class="o">*</span> <span class="n">fGW</span> <span class="o">*</span> <span class="mf">1.548e-5</span> 
+    <span class="n">tildeomega</span> <span class="o">=</span> <span class="n">M_msun</span> <span class="o">*</span> <span class="n">fGW</span> <span class="o">*</span> <span class="mf">1.5473886176432832e-05</span> 
 
     <span class="n">r</span> <span class="o">=</span>  <span class="n">tildeomega</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
         <span class="p">(</span><span class="mi">0</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span> 
-        <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">tildeomega</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="mi">1</span><span class="o">-</span> <span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span> 
-        <span class="o">-</span> <span class="p">(</span><span class="mf">1.5</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">tildeomega</span> <span class="o">/</span> <span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span> <span class="p">(</span><span class="mi">2</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="n">chi1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span> <span class="o">+</span> <span class="n">q</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span> <span class="p">)</span>
-        <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">tildeomega</span><span class="o">**</span><span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">19</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span>  <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">q</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">9</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span> <span class="n">chi1</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span> <span class="p">)</span> 
+        <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">tildeomega</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">+</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">q</span><span class="p">))</span> <span class="p">)</span> 
+        <span class="o">+</span> <span class="p">(</span><span class="mf">1.5</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">tildeomega</span> <span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">chi1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">chi2</span><span class="p">))</span>
+        <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">tildeomega</span><span class="o">**</span><span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">36</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">q</span> \
+        <span class="o">*</span> <span class="p">(</span><span class="mi">171</span> <span class="o">+</span> <span class="p">(</span><span class="mi">18</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">346</span> <span class="o">+</span> <span class="p">(</span><span class="mi">171</span> \
+        <span class="o">*</span> <span class="n">q</span> <span class="o">+</span> <span class="mi">9</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">18</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> \
+        <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span> <span class="o">*</span> <span class="n">chi1</span> <span class="o">*</span> <span class="n">chi2</span> <span class="o">+</span> <span class="mi">9</span> <span class="o">*</span> \
+        <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)))))))</span> 
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">r</span></div>
@@ -6118,7 +6123,7 @@
 
 
 <div class="viewcode-block" id="pnseparation_to_gwfrequency">
-<a class="viewcode-back" href="../auto.html#precession.pnseparation_to_gwfrequency">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.pnseparation_to_gwfrequency">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">pnseparation_to_gwfrequency</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">M_msun</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.</span>
@@ -6163,16 +6168,20 @@
     <span class="n">chi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">chi2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">M_msun</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">M_msun</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-
+   
     <span class="n">tildeomega</span> <span class="o">=</span> <span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
         <span class="p">(</span><span class="mi">0</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span> 
-        <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">-</span> <span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="o">-</span> <span class="p">(</span><span class="mf">1.5</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span><span class="p">(</span> <span class="p">(</span><span class="mi">2</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="n">chi1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span> <span class="o">+</span> <span class="n">q</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span> <span class="p">)</span>
-        <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">6</span> <span class="o">+</span> <span class="mi">41</span><span class="o">*</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">q</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">4</span> <span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span><span class="n">chi1</span><span class="o">*</span><span class="n">chi2</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">)))</span>
-        <span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">+</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">q</span><span class="p">)))</span>
+        <span class="o">+</span> <span class="p">(</span><span class="mf">1.5</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">chi1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">chi2</span><span class="p">))</span>
+        <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="ow">in</span> <span class="n">PNorder</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">8</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">15</span> <span class="o">+</span> <span class="p">((</span><span class="o">-</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">9</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> \
+        <span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">107</span> <span class="o">+</span> <span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="p">(</span><span class="mi">187</span> <span class="o">+</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span> \
+        <span class="p">(</span><span class="mi">107</span> <span class="o">+</span> <span class="mi">15</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">9</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> \
+        <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span> <span class="o">*</span> <span class="n">chi1</span> <span class="o">*</span> \
+        <span class="n">chi2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta2</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">chi2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)))))))))</span>
+
 
     <span class="c1"># Prefactor is pi*Msun*G/c^3/s. It&#39;s pi and not 2pi because f is the GW frequency while Kidder&#39;s omega is the orbital angular velocity</span>
-    <span class="n">fGW</span> <span class="o">=</span> <span class="n">tildeomega</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.548e-5</span>  <span class="o">*</span> <span class="n">M_msun</span><span class="p">)</span>
+    <span class="n">fGW</span> <span class="o">=</span> <span class="n">tildeomega</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.5473886176432832e-05</span>  <span class="o">*</span> <span class="n">M_msun</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fGW</span></div>
 
@@ -6183,7 +6192,7 @@
 <span class="c1">################ Remnant properties ################</span>
 
 <div class="viewcode-block" id="remnantmass">
-<a class="viewcode-back" href="../auto.html#precession.remnantmass">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.remnantmass">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">remnantmass</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimate the final mass of the post-merger renmant. We implement the fitting</span>
@@ -6238,7 +6247,7 @@
 
 
 <div class="viewcode-block" id="remnantspin">
-<a class="viewcode-back" href="../auto.html#precession.remnantspin">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.remnantspin">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">remnantspin</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;HBR16_34corr&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimate the final spin of the post-merger renmant. We implement the fitting</span>
@@ -6350,7 +6359,7 @@
 
 
 <div class="viewcode-block" id="reminantspindirection">
-<a class="viewcode-back" href="../auto.html#precession.reminantspindirection">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.reminantspindirection">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">reminantspindirection</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentum &#39;at plunge&#39;.</span>
@@ -6394,7 +6403,7 @@
     
 
 <div class="viewcode-block" id="remnantkick">
-<a class="viewcode-back" href="../auto.html#precession.remnantkick">[docs]</a>
+<a class="viewcode-back" href="../circular.html#precession.remnantkick">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">remnantkick</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">kms</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxphase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">superkick</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hangupkick</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">crosskick</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">full_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimate the kick of the merger remnant. We collect various numerical-relativity</span>

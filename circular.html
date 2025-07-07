@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Package documentation &mdash; precession 2.1.0 documentation</title>
+  <title>precession: package documentation &mdash; precession 2.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -19,7 +19,9 @@
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="precession.eccentricity: package documentation" href="eccentric.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,10 +44,127 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Readme</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="circular.html">precession: package documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">precession: package documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#precession.affine"><code class="docutils literal notranslate"><span class="pre">affine()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.angleresonances_endpoint"><code class="docutils literal notranslate"><span class="pre">angleresonances_endpoint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.angles_to_Jframe"><code class="docutils literal notranslate"><span class="pre">angles_to_Jframe()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.angles_to_Lframe"><code class="docutils literal notranslate"><span class="pre">angles_to_Lframe()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.angles_to_conserved"><code class="docutils literal notranslate"><span class="pre">angles_to_conserved()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.anglesresonances"><code class="docutils literal notranslate"><span class="pre">anglesresonances()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.chiefflimits"><code class="docutils literal notranslate"><span class="pre">chiefflimits()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.chip_terms"><code class="docutils literal notranslate"><span class="pre">chip_terms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.conserved_to_Jframe"><code class="docutils literal notranslate"><span class="pre">conserved_to_Jframe()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.conserved_to_Lframe"><code class="docutils literal notranslate"><span class="pre">conserved_to_Lframe()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.conserved_to_angles"><code class="docutils literal notranslate"><span class="pre">conserved_to_angles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.dchidt2_RHS"><code class="docutils literal notranslate"><span class="pre">dchidt2_RHS()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.ddchidt_prefactor"><code class="docutils literal notranslate"><span class="pre">ddchidt_prefactor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachicubic_coefficients"><code class="docutils literal notranslate"><span class="pre">deltachicubic_coefficients()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachicubic_rescaled_coefficients"><code class="docutils literal notranslate"><span class="pre">deltachicubic_rescaled_coefficients()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachilimits"><code class="docutils literal notranslate"><span class="pre">deltachilimits()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachilimits_definition"><code class="docutils literal notranslate"><span class="pre">deltachilimits_definition()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachilimits_plusminus"><code class="docutils literal notranslate"><span class="pre">deltachilimits_plusminus()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachilimits_rectangle"><code class="docutils literal notranslate"><span class="pre">deltachilimits_rectangle()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachioft"><code class="docutils literal notranslate"><span class="pre">deltachioft()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachirescaling"><code class="docutils literal notranslate"><span class="pre">deltachirescaling()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachiresonance"><code class="docutils literal notranslate"><span class="pre">deltachiresonance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachiroots"><code class="docutils literal notranslate"><span class="pre">deltachiroots()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachisampling"><code class="docutils literal notranslate"><span class="pre">deltachisampling()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachitildeav"><code class="docutils literal notranslate"><span class="pre">deltachitildeav()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.deltachitildeav2"><code class="docutils literal notranslate"><span class="pre">deltachitildeav2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.dot_nested"><code class="docutils literal notranslate"><span class="pre">dot_nested()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.ellippi"><code class="docutils literal notranslate"><span class="pre">ellippi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.elliptic_parameter"><code class="docutils literal notranslate"><span class="pre">elliptic_parameter()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_J"><code class="docutils literal notranslate"><span class="pre">eval_J()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_L"><code class="docutils literal notranslate"><span class="pre">eval_L()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_OmegaL"><code class="docutils literal notranslate"><span class="pre">eval_OmegaL()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_S"><code class="docutils literal notranslate"><span class="pre">eval_S()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_S1"><code class="docutils literal notranslate"><span class="pre">eval_S1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_S2"><code class="docutils literal notranslate"><span class="pre">eval_S2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_alpha"><code class="docutils literal notranslate"><span class="pre">eval_alpha()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_bracket_omega"><code class="docutils literal notranslate"><span class="pre">eval_bracket_omega()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_bracket_theta"><code class="docutils literal notranslate"><span class="pre">eval_bracket_theta()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_chi1"><code class="docutils literal notranslate"><span class="pre">eval_chi1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_chi2"><code class="docutils literal notranslate"><span class="pre">eval_chi2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_chieff"><code class="docutils literal notranslate"><span class="pre">eval_chieff()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_chip"><code class="docutils literal notranslate"><span class="pre">eval_chip()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_chip_averaged"><code class="docutils literal notranslate"><span class="pre">eval_chip_averaged()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_chip_generalized"><code class="docutils literal notranslate"><span class="pre">eval_chip_generalized()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_chip_heuristic"><code class="docutils literal notranslate"><span class="pre">eval_chip_heuristic()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_chip_rms"><code class="docutils literal notranslate"><span class="pre">eval_chip_rms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_cosdeltaphi"><code class="docutils literal notranslate"><span class="pre">eval_cosdeltaphi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_costheta1"><code class="docutils literal notranslate"><span class="pre">eval_costheta1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_costheta12"><code class="docutils literal notranslate"><span class="pre">eval_costheta12()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_costheta2"><code class="docutils literal notranslate"><span class="pre">eval_costheta2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_costhetaL"><code class="docutils literal notranslate"><span class="pre">eval_costhetaL()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_cyclesign"><code class="docutils literal notranslate"><span class="pre">eval_cyclesign()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_delta_omega"><code class="docutils literal notranslate"><span class="pre">eval_delta_omega()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_delta_theta"><code class="docutils literal notranslate"><span class="pre">eval_delta_theta()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_deltachi"><code class="docutils literal notranslate"><span class="pre">eval_deltachi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_deltachiinf"><code class="docutils literal notranslate"><span class="pre">eval_deltachiinf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_deltaphi"><code class="docutils literal notranslate"><span class="pre">eval_deltaphi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_eta"><code class="docutils literal notranslate"><span class="pre">eval_eta()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_kappa"><code class="docutils literal notranslate"><span class="pre">eval_kappa()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_m1"><code class="docutils literal notranslate"><span class="pre">eval_m1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_m2"><code class="docutils literal notranslate"><span class="pre">eval_m2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_nutation_freq"><code class="docutils literal notranslate"><span class="pre">eval_nutation_freq()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_phiL"><code class="docutils literal notranslate"><span class="pre">eval_phiL()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_q"><code class="docutils literal notranslate"><span class="pre">eval_q()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_r"><code class="docutils literal notranslate"><span class="pre">eval_r()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_tau"><code class="docutils literal notranslate"><span class="pre">eval_tau()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_theta1"><code class="docutils literal notranslate"><span class="pre">eval_theta1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_theta12"><code class="docutils literal notranslate"><span class="pre">eval_theta12()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_theta2"><code class="docutils literal notranslate"><span class="pre">eval_theta2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_thetaL"><code class="docutils literal notranslate"><span class="pre">eval_thetaL()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_u"><code class="docutils literal notranslate"><span class="pre">eval_u()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.eval_v"><code class="docutils literal notranslate"><span class="pre">eval_v()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.gwfrequency_to_pnseparation"><code class="docutils literal notranslate"><span class="pre">gwfrequency_to_pnseparation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.inspiral"><code class="docutils literal notranslate"><span class="pre">inspiral()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.inspiral_hybrid"><code class="docutils literal notranslate"><span class="pre">inspiral_hybrid()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.inspiral_orbav"><code class="docutils literal notranslate"><span class="pre">inspiral_orbav()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.inspiral_precav"><code class="docutils literal notranslate"><span class="pre">inspiral_precav()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.integrator_orbav"><code class="docutils literal notranslate"><span class="pre">integrator_orbav()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.integrator_precav"><code class="docutils literal notranslate"><span class="pre">integrator_precav()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.intertial_ingredients"><code class="docutils literal notranslate"><span class="pre">intertial_ingredients()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.inverseaffine"><code class="docutils literal notranslate"><span class="pre">inverseaffine()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.ismonotonic"><code class="docutils literal notranslate"><span class="pre">ismonotonic()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.isotropic_angles"><code class="docutils literal notranslate"><span class="pre">isotropic_angles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.kappadiscriminant_coefficients"><code class="docutils literal notranslate"><span class="pre">kappadiscriminant_coefficients()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.kappalimits"><code class="docutils literal notranslate"><span class="pre">kappalimits()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.kappalimits_geometrical"><code class="docutils literal notranslate"><span class="pre">kappalimits_geometrical()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.kapparescaling"><code class="docutils literal notranslate"><span class="pre">kapparescaling()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.kapparesonances"><code class="docutils literal notranslate"><span class="pre">kapparesonances()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.morphology"><code class="docutils literal notranslate"><span class="pre">morphology()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.norm_nested"><code class="docutils literal notranslate"><span class="pre">norm_nested()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.normalize_nested"><code class="docutils literal notranslate"><span class="pre">normalize_nested()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.omegasq_aligned"><code class="docutils literal notranslate"><span class="pre">omegasq_aligned()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.pnseparation_to_gwfrequency"><code class="docutils literal notranslate"><span class="pre">pnseparation_to_gwfrequency()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.precession_average"><code class="docutils literal notranslate"><span class="pre">precession_average()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.reminantspindirection"><code class="docutils literal notranslate"><span class="pre">reminantspindirection()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.remnantkick"><code class="docutils literal notranslate"><span class="pre">remnantkick()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.remnantmass"><code class="docutils literal notranslate"><span class="pre">remnantmass()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.remnantspin"><code class="docutils literal notranslate"><span class="pre">remnantspin()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.rhs_orbav"><code class="docutils literal notranslate"><span class="pre">rhs_orbav()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.rhs_precav"><code class="docutils literal notranslate"><span class="pre">rhs_precav()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.roots_vec"><code class="docutils literal notranslate"><span class="pre">roots_vec()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.rotate_nested"><code class="docutils literal notranslate"><span class="pre">rotate_nested()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.rupdown"><code class="docutils literal notranslate"><span class="pre">rupdown()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.sample_unitsphere"><code class="docutils literal notranslate"><span class="pre">sample_unitsphere()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.scalar_nested"><code class="docutils literal notranslate"><span class="pre">scalar_nested()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.tiler"><code class="docutils literal notranslate"><span class="pre">tiler()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.tofdeltachi"><code class="docutils literal notranslate"><span class="pre">tofdeltachi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.updown_endpoint"><code class="docutils literal notranslate"><span class="pre">updown_endpoint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.vectors_to_Jframe"><code class="docutils literal notranslate"><span class="pre">vectors_to_Jframe()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.vectors_to_Lframe"><code class="docutils literal notranslate"><span class="pre">vectors_to_Lframe()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.vectors_to_angles"><code class="docutils literal notranslate"><span class="pre">vectors_to_angles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.vectors_to_conserved"><code class="docutils literal notranslate"><span class="pre">vectors_to_conserved()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.widenutation_condition"><code class="docutils literal notranslate"><span class="pre">widenutation_condition()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.widenutation_separation"><code class="docutils literal notranslate"><span class="pre">widenutation_separation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.wraproots"><code class="docutils literal notranslate"><span class="pre">wraproots()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="eccentric.html">precession.eccentricity: package documentation</a></li>
 </ul>
 
@@ -63,7 +182,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Package documentation</li>
+      <li class="breadcrumb-item active">precession: package documentation</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -72,9 +191,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-precession">
-<span id="package-documentation"></span><h1>Package documentation<a class="headerlink" href="#module-precession" title="Link to this heading"></a></h1>
-<dl class="py function">
+  <section id="precession-package-documentation">
+<h1>precession: package documentation<a class="headerlink" href="#precession-package-documentation" title="Link to this heading"></a></h1>
+<span class="target" id="module-precession"></span><dl class="py function">
 <dt class="sig sig-object py" id="precession.affine">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">affine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">up</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#affine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.affine" title="Link to this definition"></a></dt>
 <dd><p>Perform an affine trasformation to scale a vector given upper and lower limits: rescaled = ( vec - low ) / (up - low). If these are outside the domain of the vector, the result will be in [0,1].</p>
@@ -3978,7 +4097,10 @@ smaller dimensionless spin may undergo wide nutations.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="eccentric.html" class="btn btn-neutral float-right" title="precession.eccentricity: package documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

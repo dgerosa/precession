@@ -12,9 +12,21 @@ starting point.
     >>> import numpy as np
     >>> from importlib.machinery import SourceFileLoader
     >>> precession = SourceFileLoader("precession", "../precession/precession.py").load_module()
+    >>> precession_eccentricity = SourceFileLoader("eccentricity", "../precession/eccentricity.py").load_module()
 
-(The import syntax above is to make sure the online documentation grabs
-the latest version. For you it should just be ``import precession`` )
+The import syntax above ensures that the online documentation grabs the
+latest version. For you, it should just be ``import precession``, and in
+case you want to use the eccentric version, import
+``precession.eccentricity``. *Note for the usage of the eccentric
+version of* ``precession``: The code is implemented such that almost all
+the functions available in ``precession`` can be accessed by just
+importing its eccentric extension. Some of them are exactly the same as
+for the circular counterpart; others, specifically those directly
+involving time or orbital separation, require a different input
+(briefly, all ``r`` parameters have been substituted with ``(a, e)``).
+The functions that are specific only to the circular case (like
+``eval_r`` or those related to the remnant properties) cannot be
+accessed via ``precession.eccentricity``.
 
 1. Select a binary configuration.
 ---------------------------------
@@ -166,10 +178,10 @@ Let’s now evolve that binary configuration down to r=10M. 
     >>> rvals = [r, 10] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=kappa,r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {np.str_('theta1'): array([[1.5372807 , 1.67930007]]),
-     np.str_('theta2'): array([[1.34207779, 1.23957094]]),
-     np.str_('deltaphi'): array([[ 3.10408346, -1.74053567]]),
-     np.str_('deltachi'): array([[-0.08138369, -0.16016165]]),
+    {np.str_('theta1'): array([[1.66860187, 1.85794712]]),
+     np.str_('theta2'): array([[1.24737508, 1.10774394]]),
+     np.str_('deltaphi'): array([[1.33764342, 1.47022691]]),
+     np.str_('deltachi'): array([[-0.15424982, -0.25734491]]),
      np.str_('kappa'): array([[0.04563644, 0.06977371]]),
      np.str_('r'): array([[1000,   10]]),
      np.str_('u'): array([[0.06403612, 0.64036123]]),
@@ -216,10 +228,10 @@ infinity:
     >>> rvals = [outputs['r'][0,-1], np.inf] # Specify all the outputs you want here
     >>> outputs = precession.inspiral_precav(kappa=outputs['kappa'][0,-1],r=rvals,chieff=chieff,q=q,chi1=chi1,chi2=chi2)
     >>> outputs
-    {np.str_('theta1'): array([[1.45235006, 1.66496015]]),
-     np.str_('theta2'): array([[1.4020589 , 1.25002889]]),
-     np.str_('deltaphi'): array([[ 2.04235005, -0.57399675]]),
-     np.str_('deltachi'): array([[-0.03435027, -0.15223596]]),
+    {np.str_('theta1'): array([[0.88236089, 1.66496015]]),
+     np.str_('theta2'): array([[1.76318212, 1.25002889]]),
+     np.str_('deltaphi'): array([[ 3.11102011, -0.49613035]]),
+     np.str_('deltachi'): array([[ 0.25296097, -0.15223596]]),
      np.str_('kappa'): array([[0.06865318, 0.04154245]]),
      np.str_('r'): array([[10., inf]]),
      np.str_('u'): array([[0.64036123, 0.        ]]),
@@ -267,4 +279,92 @@ Let’s check we get the same result:
 
 This is also an example of how providing the optional quantity
 ``precomputedroots`` speeds up the computation.
+
+4. Evolution of an eccentric and precessing binary
+--------------------------------------------------
+
+
+
+To evolve an eccentric and spin-precessing black hole binary from a
+larger semi-major axis (which can be thought of as a proxy for the
+orbital separation) to a smaller one, it is necessary to also state the
+initial eccentricity along with information about the masses and spins
+of the system.
+
+.. nbplot::
+
+    >>> #intial semi major axis ( in geometric units)
+    >>> np.random.seed(42)
+    >>> a0= 100
+    >>> #final semi major axis
+    >>> af= 10
+    >>> a_array= np.linspace(a0, af, 100) #array of semi-major axis values for the inspiral
+    >>> #initial eccentricity
+    >>> e0 = 0.6
+
+.. nbplot::
+
+    >>> #spin parameters
+    >>> chi1 =np.random.uniform(0.1, 1)
+    >>> chi2 =np.random.uniform(0.1, 1)
+    >>> theta1, theta2, deltaphi = precession_eccentricity.isotropic_angles(N=1)
+    >>> #mass parameters
+    >>> q = np.random.uniform(0.1, 1)
+
+
+.. nbplot::
+
+    >>> output_ecc=precession_eccentricity.inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,a=a_array,e=e0,q=q,chi1=chi1,chi2=chi2)
+
+Let’s compare it with a circular evolution (setting e=0)
+
+.. nbplot::
+
+    >>> output_circ=precession_eccentricity.inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,a=a_array,e=0,q=q,chi1=chi1,chi2=chi2)
+
+The spin angles evolve differently!
+
+.. nbplot::
+
+    >>> import pylab as plt
+    >>>
+    >>>
+    >>> plt.plot(output_ecc['a'][0], output_ecc['deltachiminus'][0],color='red')
+    >>> plt.plot(output_ecc['a'][0], output_ecc['deltachiplus'][0], color='red')
+    >>> plt.plot(output_circ['a'][0], output_circ['deltachiminus'][0],color='k')
+    >>> plt.plot(output_circ['a'][0], output_circ['deltachiplus'][0],color='k')
+    >>>
+    >>>
+    >>> plt.fill_between(
+    ...     output_ecc['a'][0],
+    ...     output_ecc['deltachiminus'][0],
+    ...     output_ecc['deltachiplus'][0],
+    ...     color='red',  
+    ...     alpha=0.3,
+    ...     label='Eccentric evolution'
+    >>> )
+    >>>
+    >>>
+    >>> plt.fill_between(
+    ...     output_circ['a'][0],
+    ...     output_circ['deltachiminus'][0],
+    ...     output_circ['deltachiplus'][0],
+    ...     color='k',  
+    ...     alpha=0.3,
+    ...     label='Circular evolution'
+    >>> )
+    >>>
+    >>> plt.xlabel('a/M')
+    >>> plt.ylabel('$\delta \chi$')
+    >>> plt.legend()
+    >>> plt.grid(True, alpha=0.3)
+    >>> plt.gca().invert_xaxis()
+    >>> plt.show()
+    >>>
+
+
+    Matplotlib is building the font cache; this may take a moment.
+
+
+
 

@@ -1,18 +1,15 @@
 Readme
 ======================================
 
-
-.. mdinclude:: README.md
+.. mdinclude:: ../README.md
 
 
 .. toctree::
    :hidden:
    :maxdepth: 2
    :caption: Contents:
-   
+
    self
-
    examples
-
-   auto
-
+   circular
+   eccentric
