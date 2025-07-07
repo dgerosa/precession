@@ -4,6 +4,9 @@ import functools
 import re
 import precession
 import numpy as np
+import scipy.optimize
+import scipy.integrate
+
 
 """
 This module dynamically wraps functions from `precession.py`, replacing the `r` parameter
