@@ -142,10 +142,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#precession.omegasq_aligned"><code class="docutils literal notranslate"><span class="pre">omegasq_aligned()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.pnseparation_to_gwfrequency"><code class="docutils literal notranslate"><span class="pre">pnseparation_to_gwfrequency()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.precession_average"><code class="docutils literal notranslate"><span class="pre">precession_average()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#precession.reminantspindirection"><code class="docutils literal notranslate"><span class="pre">reminantspindirection()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.remnantkick"><code class="docutils literal notranslate"><span class="pre">remnantkick()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.remnantmass"><code class="docutils literal notranslate"><span class="pre">remnantmass()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.remnantspin"><code class="docutils literal notranslate"><span class="pre">remnantspin()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#precession.remnantspindirection"><code class="docutils literal notranslate"><span class="pre">remnantspindirection()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.rhs_orbav"><code class="docutils literal notranslate"><span class="pre">rhs_orbav()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.rhs_precav"><code class="docutils literal notranslate"><span class="pre">rhs_precav()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#precession.roots_vec"><code class="docutils literal notranslate"><span class="pre">roots_vec()</span></code></a></li>
@@ -3415,40 +3415,6 @@ There are integration methods implemented:</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="precession.reminantspindirection">
-<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">reminantspindirection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#reminantspindirection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.reminantspindirection" title="Link to this definition"></a></dt>
-<dd><p>Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentum ‘at plunge’.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
-</dd>
-<dt><strong>theta2: float</strong></dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
-</dd>
-<dt><strong>deltaphi: float</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
-</dd>
-<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
-</dd>
-<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
-</dd>
-<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
-</dd>
-<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>thetaL: float</dt><dd><p>Angle betwen orbital angular momentum and total angular momentum.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p><code class="docutils literal notranslate"><span class="pre">thetaL</span> <span class="pre">=</span> <span class="pre">precession.reminantspindirection(theta1,theta2,deltaphi,r,q,chi1,chi2)</span></code></p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="precession.remnantkick">
 <span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">remnantkick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxphase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">superkick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hangupkick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crosskick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#remnantkick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.remnantkick" title="Link to this definition"></a></dt>
 <dd><p>Estimate the kick of the merger remnant. We collect various numerical-relativity
@@ -3580,6 +3546,40 @@ evolution to transfer binaries at r~10M.</p>
 </dl>
 <p class="rubric">Examples</p>
 <p><code class="docutils literal notranslate"><span class="pre">chifin</span> <span class="pre">=</span> <span class="pre">precession.remnantspin(theta1,theta2,deltaphi,q,chi1,chi2)</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="precession.remnantspindirection">
+<span class="sig-prename descclassname"><span class="pre">precession.</span></span><span class="sig-name descname"><span class="pre">remnantspindirection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltaphi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/precession.html#remnantspindirection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#precession.remnantspindirection" title="Link to this definition"></a></dt>
+<dd><p>Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentum ‘at plunge’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theta1: float</strong></dt><dd><p>Angle between orbital angular momentum and primary spin.</p>
+</dd>
+<dt><strong>theta2: float</strong></dt><dd><p>Angle between orbital angular momentum and secondary spin.</p>
+</dd>
+<dt><strong>deltaphi: float</strong></dt><dd><p>Angle between the projections of the two spins onto the orbital plane.</p>
+</dd>
+<dt><strong>r: float</strong></dt><dd><p>Binary separation.</p>
+</dd>
+<dt><strong>q: float</strong></dt><dd><p>Mass ratio: 0&lt;=q&lt;=1.</p>
+</dd>
+<dt><strong>chi1: float</strong></dt><dd><p>Dimensionless spin of the primary (heavier) black hole: 0&lt;=chi1&lt;=1.</p>
+</dd>
+<dt><strong>chi2: float</strong></dt><dd><p>Dimensionless spin of the secondary (lighter) black hole: 0&lt;=chi2&lt;=1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>thetaL: float</dt><dd><p>Angle betwen orbital angular momentum and total angular momentum.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><code class="docutils literal notranslate"><span class="pre">thetaL</span> <span class="pre">=</span> <span class="pre">precession.remnantspindirection(theta1,theta2,deltaphi,r,q,chi1,chi2)</span></code></p>
 </dd></dl>
 
 <dl class="py function">

@@ -6358,9 +6358,9 @@
 
 
 
-<div class="viewcode-block" id="reminantspindirection">
-<a class="viewcode-back" href="../circular.html#precession.reminantspindirection">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">reminantspindirection</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+<div class="viewcode-block" id="remnantspindirection">
+<a class="viewcode-back" href="../circular.html#precession.remnantspindirection">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">remnantspindirection</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Angle between the spin of the remnant and the binary angular momentum, assuming that the spins stays in the direction of the total angular momentum &#39;at plunge&#39;.</span>
 <span class="sd">    </span>
@@ -6388,7 +6388,7 @@
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    ``thetaL = precession.reminantspindirection(theta1,theta2,deltaphi,r,q,chi1,chi2)``</span>
+<span class="sd">    ``thetaL = precession.remnantspindirection(theta1,theta2,deltaphi,r,q,chi1,chi2)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Lvec</span><span class="p">,</span><span class="n">S1vec</span><span class="p">,</span><span class="n">S2vec</span> <span class="o">=</span> <span class="n">angles_to_Lframe</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
