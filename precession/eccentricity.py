@@ -1633,7 +1633,7 @@ def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, a,e, q, chi1, chi2, M_
 
 def gwfrequency_to_a(theta1, theta2, deltaphi, fgw,e, q, chi1, chi2, M_msun, harmonic=2, PNorder=[0,1,1.5,2]):
     """
-    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.
+    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported inin Eqs. (4a) and (B2a) of of Klein et al. 2018 arXiv:1005.2046.
     
     Parameters
     ----------

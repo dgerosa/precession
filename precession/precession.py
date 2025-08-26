@@ -5658,7 +5658,7 @@ def inspiral(*args, which=None, **kwargs):
 
 def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_msun, PNorder=[0,1,1.5,2]):
     """
-    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.
+    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022 with the addiction of the spin-induced quadrupole term taken from Klein et al. 2018 arXiv:1005.2046.
     
     Parameters
     ----------
@@ -5719,7 +5719,7 @@ def gwfrequency_to_pnseparation(theta1, theta2, deltaphi, fGW, q, chi1, chi2, M_
 
 def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, r, q, chi1, chi2, M_msun, PNorder=[0,1,1.5,2]):
     """
-    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.
+    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022  with the addiction of the spin-induced quadrupole term taken from Klein et al. 2018 arXiv:1005.2046.
     
     Parameters
     ----------
