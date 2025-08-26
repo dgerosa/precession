@@ -1535,6 +1535,23 @@ def a_to_omega(theta1, theta2, deltaphi, a, e, q, chi1, chi2, PNorder=[0,1,1.5,2
     return omega
 
 def gwfrequency_maxharmonic(e, method='W03'):
+    """
+    Compute the harmonic n_max correponging to the maximum power emission of gravitational wave for an eccentric binary
+    Parameters
+    ----------
+    e: float
+        Eccentricity: 0<=e<1.
+    method: str (default: 'W03')
+        Method to compute n_max. Options are 'W03' (Wen 2003, arXiv:astro-ph/0211492) and 'H21' (Hamers 2021, arXiv:2111.08033).
+    Returns
+    -------
+    n_max: float
+        Harmonic of maximum  gravitational wave power emission.
+    Examples
+    --------
+    ``n = precession.gwfrequency_maxharmonic(e, method='W03')
+    ``n = precession.gwfrequency_maxharmonic(e, method='H21')        
+    """    
     if method == 'W03':
         # W03: Eq. 36 in Wen 2003, arXiv:astro-ph/0211492
         n = 2*(1+e)**(1.1954)/(1-e**2)**(1.5)
@@ -1549,9 +1566,9 @@ def gwfrequency_maxharmonic(e, method='W03'):
         raise ValueError("Unknown method for computing the maximum harmonic. Use 'W03' or 'H21'.")
     return n
 
-def a_to_gwfrequency(theta1, theta2, deltaphi, a,e, q, chi1, chi2, M_msun, harmonic=2, PNorder=[0,1,1.5,2]):
+def pnseparation_to_gwfrequency(theta1, theta2, deltaphi, a,e, q, chi1, chi2, M_msun, harmonic=2, PNorder=[0,1,1.5,2]):
     """
-    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.
+    Convert PN orbital separation (here is the semi-major axis) in natural units (c=G=M=1) to GW frequency in Hz. We invert and expanded the 2PN expression reported in Eqs. (4a) and (B2a) of of Klein et al. 2018 arXiv:1005.2046.
     
     Parameters
     ----------
@@ -1585,7 +1602,7 @@ def a_to_gwfrequency(theta1, theta2, deltaphi, a,e, q, chi1, chi2, M_msun, harmo
     
     Examples
     --------
-    ``fGW = precession.pnseparation_to_gwfrequency(theta1,theta2,deltaphi,r,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``
+    ``fGW = precession.pnseparation_to_gwfrequency(theta1,theta2,deltaphi,a,e,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``
     """
 
 
@@ -1616,7 +1633,7 @@ def a_to_gwfrequency(theta1, theta2, deltaphi, a,e, q, chi1, chi2, M_msun, harmo
 
 def gwfrequency_to_a(theta1, theta2, deltaphi, fgw,e, q, chi1, chi2, M_msun, harmonic=2, PNorder=[0,1,1.5,2]):
     """
-    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.
+    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported inin Eqs. (4a) and (B2a) of of Klein et al. 2018 arXiv:1005.2046.
     
     Parameters
     ----------
@@ -1643,16 +1660,15 @@ def gwfrequency_to_a(theta1, theta2, deltaphi, fgw,e, q, chi1, chi2, M_msun, har
     PNorder: array (default: [0,1,1.5,2])
         PN orders considered.
     
-    Returns
+      Returns
     -------
-    fGW: float
-        Gravitational-wave frequency.
+    a: float
+        Binary semi-major axis separation.
     
     Examples
     --------
-    ``fGW = precession.pnseparation_to_gwfrequency(theta1,theta2,deltaphi,r,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``
+    ``a = precession.gwfrequency_to_pnseparation(theta1,theta2,deltaphi,fGW,e,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``
     """
-
 
     theta1 = np.atleast_1d(theta1).astype(float)
     theta2 = np.atleast_1d(theta2).astype(float)
