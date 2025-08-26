@@ -6062,7 +6062,7 @@
 <a class="viewcode-back" href="../circular.html#precession.gwfrequency_to_pnseparation">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gwfrequency_to_pnseparation</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">fGW</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">M_msun</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022.</span>
+<span class="sd">    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported in Eq. 4.13 of Kidder 1995, arxiv:gr-qc/9506022 with the addiction of the spin-induced quadrupole term taken from Klein et al. 2018 arXiv:1005.2046.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -6126,7 +6126,7 @@
 <a class="viewcode-back" href="../circular.html#precession.pnseparation_to_gwfrequency">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">pnseparation_to_gwfrequency</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">M_msun</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.</span>
+<span class="sd">    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022  with the addiction of the spin-induced quadrupole term taken from Klein et al. 2018 arXiv:1005.2046.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

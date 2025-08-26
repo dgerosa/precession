@@ -1640,6 +1640,23 @@
     <span class="k">return</span> <span class="n">omega</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gwfrequency_maxharmonic</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;W03&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the harmonic n_max correponging to the maximum power emission of gravitational wave for an eccentric binary</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    e: float</span>
+<span class="sd">        Eccentricity: 0&lt;=e&lt;1.</span>
+<span class="sd">    method: str (default: &#39;W03&#39;)</span>
+<span class="sd">        Method to compute n_max. Options are &#39;W03&#39; (Wen 2003, arXiv:astro-ph/0211492) and &#39;H21&#39; (Hamers 2021, arXiv:2111.08033).</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    n_max: float</span>
+<span class="sd">        Harmonic of maximum  gravitational wave power emission.</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ``n = precession.gwfrequency_maxharmonic(e, method=&#39;W03&#39;)</span>
+<span class="sd">    ``n = precession.gwfrequency_maxharmonic(e, method=&#39;H21&#39;)        </span>
+<span class="sd">    &quot;&quot;&quot;</span>    
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;W03&#39;</span><span class="p">:</span>
         <span class="c1"># W03: Eq. 36 in Wen 2003, arXiv:astro-ph/0211492</span>
         <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">1.1954</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>
@@ -1654,9 +1671,9 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown method for computing the maximum harmonic. Use &#39;W03&#39; or &#39;H21&#39;.&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">n</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">a_to_gwfrequency</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">M_msun</span><span class="p">,</span> <span class="n">harmonic</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pnseparation_to_gwfrequency</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">M_msun</span><span class="p">,</span> <span class="n">harmonic</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.</span>
+<span class="sd">    Convert PN orbital separation (here is the semi-major axis) in natural units (c=G=M=1) to GW frequency in Hz. We invert and expanded the 2PN expression reported in Eqs. (4a) and (B2a) of of Klein et al. 2018 arXiv:1005.2046.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1690,7 +1707,7 @@
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    ``fGW = precession.pnseparation_to_gwfrequency(theta1,theta2,deltaphi,r,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``</span>
+<span class="sd">    ``fGW = precession.pnseparation_to_gwfrequency(theta1,theta2,deltaphi,a,e,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
@@ -1721,7 +1738,7 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gwfrequency_to_a</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">fgw</span><span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">M_msun</span><span class="p">,</span> <span class="n">harmonic</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert PN orbital separation in natural units (c=G=M=1) to GW frequency in Hz. We use the 2PN expression reported in Eq. 4.5 of Kidder 1995, arxiv:gr-qc/9506022.</span>
+<span class="sd">    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported inin Eqs. (4a) and (B2a) of of Klein et al. 2018 arXiv:1005.2046.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1748,16 +1765,15 @@
 <span class="sd">    PNorder: array (default: [0,1,1.5,2])</span>
 <span class="sd">        PN orders considered.</span>
 <span class="sd">    </span>
-<span class="sd">    Returns</span>
+<span class="sd">      Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    fGW: float</span>
-<span class="sd">        Gravitational-wave frequency.</span>
+<span class="sd">    a: float</span>
+<span class="sd">        Binary semi-major axis separation.</span>
 <span class="sd">    </span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    ``fGW = precession.pnseparation_to_gwfrequency(theta1,theta2,deltaphi,r,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``</span>
+<span class="sd">    ``a = precession.gwfrequency_to_pnseparation(theta1,theta2,deltaphi,fGW,e,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
 
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
