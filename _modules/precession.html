@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>precession &mdash; precession 2.1.0 documentation</title>
+  <title>precession &mdash; precession 2.1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=20623aea"></script>
+      <script src="../_static/documentation_options.js?v=b3e23499"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -5394,8 +5394,8 @@
     <span class="c1"># Here I force dtype=object because the outputs have different shapes</span>
     <span class="n">allresults</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_compute</span><span class="p">,</span> <span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 
-    <span class="c1"># Return only requested outputs (in1d return boolean array)</span>
-    <span class="n">wantoutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">alloutputs</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="p">)</span>
+    <span class="c1"># Return only requested outputs (isin return boolean array)</span>
+    <span class="n">wantoutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">alloutputs</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="p">)</span>
 
     <span class="c1"># Store into a dictionary</span>
     <span class="n">outcome</span> <span class="o">=</span> <span class="p">{}</span>
@@ -5851,8 +5851,8 @@
     <span class="c1"># Return all</span>
     <span class="k">if</span> <span class="n">requested_outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">requested_outputs</span> <span class="o">=</span> <span class="n">alloutputs</span>
-    <span class="c1"># Return only those requested (in1d return boolean array)</span>
-    <span class="n">wantoutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">alloutputs</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="p">)</span>
+    <span class="c1"># Return only those requested (isin return boolean array)</span>
+    <span class="n">wantoutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">alloutputs</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="p">)</span>
 
     <span class="c1"># Store into a dictionary</span>
     <span class="n">outcome</span> <span class="o">=</span> <span class="p">{}</span>
@@ -5932,8 +5932,8 @@
     <span class="n">alloutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;theta1&#39;</span><span class="p">,</span> <span class="s1">&#39;theta2&#39;</span><span class="p">,</span> <span class="s1">&#39;deltaphi&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachi&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;chieff&#39;</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="s1">&#39;chi1&#39;</span><span class="p">,</span> <span class="s1">&#39;chi2&#39;</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">requested_outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">requested_outputs</span> <span class="o">=</span> <span class="n">alloutputs</span>
-        <span class="c1"># Return only those requested (in1d return boolean array)</span>
-    <span class="n">wantoutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">alloutputs</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="p">)</span>
+        <span class="c1"># Return only those requested (isin return boolean array)</span>
+    <span class="n">wantoutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">alloutputs</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="p">)</span>
 
     <span class="c1"># Substitute None inputs with arrays of Nones</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">rswitch</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">uswitch</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">]</span>
