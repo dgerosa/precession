@@ -5011,8 +5011,8 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
     # Here I force dtype=object because the outputs have different shapes
     allresults = np.array(list(map(_compute, theta1, theta2, deltaphi, kappa, r, u, chieff, q, chi1, chi2)), dtype=object).T
 
-    # Return only requested outputs (in1d return boolean array)
-    wantoutputs = np.in1d(alloutputs, requested_outputs)
+    # Return only requested outputs (isin return boolean array)
+    wantoutputs = np.isin(alloutputs, requested_outputs)
 
     # Store into a dictionary
     outcome = {}
@@ -5456,8 +5456,8 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
     # Return all
     if requested_outputs is None:
         requested_outputs = alloutputs
-    # Return only those requested (in1d return boolean array)
-    wantoutputs = np.in1d(alloutputs, requested_outputs)
+    # Return only those requested (isin return boolean array)
+    wantoutputs = np.isin(alloutputs, requested_outputs)
 
     # Store into a dictionary
     outcome = {}
@@ -5534,8 +5534,8 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
     alloutputs = np.array(['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'chieff', 'q', 'chi1', 'chi2'])
     if requested_outputs is None:
         requested_outputs = alloutputs
-        # Return only those requested (in1d return boolean array)
-    wantoutputs = np.intersect1d(alloutputs, requested_outputs)
+        # Return only those requested (isin return boolean array)
+    wantoutputs = np.isin(alloutputs, requested_outputs)
 
     # Substitute None inputs with arrays of Nones
     inputs = [theta1, theta2, deltaphi, deltachi, kappa, r, rswitch, u, uswitch, chieff, q, chi1, chi2]
