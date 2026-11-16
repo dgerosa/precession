@@ -4475,6 +4475,8 @@ def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, rng=None, **kwargs):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -5101,6 +5103,8 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
         Either 'quadrature' or 'montecarlo'
     Nsamples: integer, optional (default: 1e4)
         Number of Monte Carlo samples.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -5557,6 +5561,8 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     requested_outputs: list, optional (default: None)
         Set of outputs.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **odeint_kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     

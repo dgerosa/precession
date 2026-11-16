@@ -1067,6 +1067,8 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         PN orders considered in the radiation-reaction equation.
     requested_outputs: list, optional (default: None)
         Set of outputs.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **odeint_kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -1243,6 +1245,8 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     requested_outputs: list, optional (default: None)
         Set of outputs.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **odeint_kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
