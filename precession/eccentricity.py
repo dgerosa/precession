@@ -1125,7 +1125,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         # User provides deltachi, kappa, and chieff.
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and chieff is not None:
              #cyclesign=+1 by default
-            Lh, S1h, S2h = conserved_to_Lframe(deltachi, kappa, a[0], e, chieff, q, chi1, chi2, cyclesign=cyclesign)
+            Lh, S1h, S2h = conserved_to_Lframe(deltachi, kappa, a[0], e, chieff, q, chi1, chi2, cyclesign=cyclesign, rng=rng)
         else:
             raise TypeError("Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (deltachi,kappa,chieff).")
 
