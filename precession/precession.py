@@ -3960,7 +3960,7 @@ def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=
 
     deltachiminus,deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     # Pairs of booleans based on the values of deltaphi at S- and S+
-    status = np.transpose([eval_cosdeltaphi(deltachiminus, kappa, r, chieff, q, chi1, chi2, rng=rng) > 0, eval_cosdeltaphi(deltachiplus, kappa, r, chieff, q, chi1, chi2) > 0], rng=rng)
+    status = np.transpose([eval_cosdeltaphi(deltachiminus, kappa, r, chieff, q, chi1, chi2, rng=rng) > 0, eval_cosdeltaphi(deltachiplus, kappa, r, chieff, q, chi1, chi2, rng=rng) > 0])
     # Map to labels
     dictlabel = {(False, False): "Lpi", (True, True): "L0", (False, True): "C-", (True, False): "C+"}
     # Subsitute pairs with labels
@@ -4119,7 +4119,7 @@ def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, rng=None, **kwargs):
         chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
         return chip_integrand
 
-    chip = precession_average(kappa, r, chieff, q, chi1, chi2, _integrand, kappa, r, chieff, q, chi1, chi2, **kwargs)
+    chip = precession_average(kappa, r, chieff, q, chi1, chi2, _integrand, kappa, r, chieff, q, chi1, chi2, rng=rng, **kwargs)
 
     return chip
 
@@ -4455,7 +4455,7 @@ def eval_delta_theta(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
     return delta_theta
 
 
-def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, **kwargs):
+def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, rng=None, **kwargs):
     """
     Precession average of precession amplitude of deltachi as it oscillates from deltachi- to deltachi+ back to deltachi-.
     This of the five phenomenological parameters from arxiv:2103.03894. Additional keywords arguments are passed to `precession_average`.
@@ -4492,7 +4492,7 @@ def eval_bracket_theta(kappa, r, chieff, q, chi1, chi2, **kwargs):
         bracket_theta_integrand = eval_thetaL(deltachi, kappa, r, chieff, q)
         return bracket_theta_integrand
 
-    bracket_theta = precession_average(kappa, r, chieff, q, chi1, chi2, _integrand, kappa, r, chieff, q, **kwargs)
+    bracket_theta = precession_average(kappa, r, chieff, q, chi1, chi2, _integrand, kappa, r, chieff, q, rng=rng, **kwargs)
     return bracket_theta
 
 

@@ -558,13 +558,13 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa
                     
             if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi']):
                 #print(kappa, a,e,u)
-                deltachi = deltachisampling(kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+                deltachi = deltachisampling(kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), rng=rng)
                 # Compute the angles. Assign random cyclesign
                 if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi']):
                     if rng is None:
                         theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), cyclesign = np.random.choice([-1, 1], u.shape))
                     else:
-                        theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), cyclesign = rng.choice([-1, 1], u.shape))
+                        theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), rng=rng, cyclesign = rng.choice([-1, 1], u.shape))
 
         return theta1, theta2, deltaphi, deltachi, kappa, a, e, uc,u, deltachiminus, deltachiplus, deltachi3, chieff, q, chi1, chi2
     # Here I force dtype=object buse the outputs have different shapes
@@ -1012,7 +1012,7 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, delta_lambda, a ,e, q, c
 
     return ODEsolution
 
-def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, delta_lambda=0, deltachi=None, kappa=None, a=None, e=None, uc=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, **odeint_kwargs):
+def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, delta_lambda=0, deltachi=None, kappa=None, a=None, e=None, uc=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, rng=None, **odeint_kwargs):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
     The integration range must be specified using either (a,e) or (uc,u) (and not both). These need to be arrays with lenght >=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned.
