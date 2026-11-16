@@ -207,7 +207,7 @@ def rotate_nested(vec, align_zaxis, align_xzplane):
     return vecrot
 
 
-def sample_unitsphere(N=1):
+def sample_unitsphere(N=1,rng=None):
     """
     Sample points uniformly on a sphere of unit radius. Returns array of shape (N,3).
 
@@ -215,6 +215,8 @@ def sample_unitsphere(N=1):
     ----------
     N: integer, optional (default: 1)
         Number of samples.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
 
     Returns
     -------
@@ -226,12 +228,15 @@ def sample_unitsphere(N=1):
     ``vec = sample_unitsphere(N=1)``
     """
 
-    vec = np.random.randn(3, N)
+    if rng is None:
+        vec = np.random.randn(3, N)
+    else:
+        vec = rng.standard_normal((3,N))
     vec /= np.linalg.norm(vec, axis=0)
     return vec.T
 
 
-def isotropic_angles(N=1):
+def isotropic_angles(N=1,rng=None):
     """
     Sample the angles theta1, theta2, and deltaphi from an isotropic distribution.
     
@@ -239,6 +244,8 @@ def isotropic_angles(N=1):
     ----------
     N: integer, optional (default: 1)
         Number of samples.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -250,9 +257,14 @@ def isotropic_angles(N=1):
     ``vec = precession.isotropic_angles(N=1)``
     """
 
-    theta1=np.arccos(np.random.uniform(-1,1,N))
-    theta2=np.arccos(np.random.uniform(-1,1,N))
-    deltaphi=np.random.uniform(-np.pi,np.pi,N)
+    if rng is None:
+        theta1=np.arccos(np.random.uniform(-1,1,N))
+        theta2=np.arccos(np.random.uniform(-1,1,N))
+        deltaphi=np.random.uniform(-np.pi,np.pi,N)
+    else:
+        theta1=np.arccos(rng.uniform(-1,1,N))
+        theta2=np.arccos(rng.uniform(-1,1,N))
+        deltaphi=rng.uniform(-np.pi,np.pi,N)
 
     return np.stack([theta1,theta2,deltaphi])
 
@@ -1148,7 +1160,7 @@ def eval_theta12(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=N
     return theta12
 
 
-def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
+def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, rng=None):
     """
     Cosine of the angle between the projections of the two spins onto the orbital plane.
     
@@ -1168,6 +1180,8 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -1203,12 +1217,15 @@ def eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2):
         ((1 + q))**2 * (-1 * (deltachi)**2 + chieff**2)))
 
     # At infinity, the only thing I can do is putting a random number for deltaphi, unformly distributed
-    cosdeltaphi = np.where(r!=np.inf, cosdeltaphi, np.cos(np.random.uniform(0,np.pi, len(cosdeltaphi))))
+    if rng is None:
+        cosdeltaphi = np.where(r!=np.inf, cosdeltaphi, np.cos(np.random.uniform(0,np.pi, len(cosdeltaphi))))
+    else:
+        cosdeltaphi = np.where(r!=np.inf, cosdeltaphi, np.cos(rng.uniform(0,np.pi, len(cosdeltaphi))))
 
     return cosdeltaphi
 
 
-def eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1):
+def eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1, rng=None):
     """
     Angle between the projections of the two spins onto the orbital plane.
     
@@ -1230,6 +1247,8 @@ def eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1):
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: 1)
         Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -1242,7 +1261,7 @@ def eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=1):
     """
 
     cyclesign = np.atleast_1d(cyclesign)
-    cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2)
+    cosdeltaphi = eval_cosdeltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, rng=rng)
     deltaphi = np.sign(cyclesign)*np.arccos(cosdeltaphi)
 
     return deltaphi
@@ -1547,7 +1566,7 @@ def eval_cyclesign(ddeltachidt=None, deltaphi=None, Lvec=None, S1vec=None, S2vec
     return cyclesign
 
 
-def conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1):
+def conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1, rng=None):
     """
     Convert conserved quantities (deltachi,kappa,chieff) into angles (theta1,theta2,deltaphi).
     
@@ -1569,6 +1588,8 @@ def conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: +1)
         Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -1587,7 +1608,7 @@ def conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
 
     theta1= eval_theta1(deltachi, chieff, q, chi1)
     theta2 = eval_theta2(deltachi, chieff, q, chi2)
-    deltaphi = eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+    deltaphi = eval_deltaphi(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=cyclesign, rng=rng)
 
     return np.stack([theta1, theta2, deltaphi])
 
@@ -1868,7 +1889,7 @@ def angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2):
     return np.stack([Lvec, S1vec, S2vec])
 
 
-def conserved_to_Lframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1):
+def conserved_to_Lframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1, rng=None):
     """
     Convert the conserved quanties (deltachi,kappa,chieff) to angular momentum vectors (L,S1,S2) in the frame
     aligned with the orbital angular momentum. In particular, we set Lx=Ly=S1y=0.
@@ -1891,6 +1912,8 @@ def conserved_to_Lframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: +1)
         Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -1906,13 +1929,13 @@ def conserved_to_Lframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
     ``Lvec,S1vec,S2vec = precession.conserved_to_Lframe(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=+1)``
     """
 
-    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=cyclesign, rng=rng)
     Lvec, S1vec, S2vec = angles_to_Lframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
 
     return np.stack([Lvec, S1vec, S2vec])
 
 
-def conserved_to_Jframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1):
+def conserved_to_Jframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1, rng=None):
     """
     Convert the conserved quanties (deltachi,kappa,chieff) to angular momentum vectors (L,S1,S2) in the frame
     aligned with the total angular momentum. In particular, we set Jx=Jy=Ly=0.
@@ -1935,6 +1958,8 @@ def conserved_to_Jframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     cyclesign: integer, optional (default: +1)
         Sign (either +1 or -1) to cover the two halves of a precesion cycle.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -1950,7 +1975,7 @@ def conserved_to_Jframe(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=+1)
     ``Lvec,S1vec,S2vec = precession.conserved_to_Jframe(deltachi,kappa,r,chieff,q,chi1,chi2,cyclesign=+1)``
     """
 
-    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=cyclesign)
+    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, cyclesign=cyclesign, rng=rng)
     Lvec, S1vec, S2vec = angles_to_Jframe(theta1, theta2, deltaphi, r, q, chi1, chi2)
 
     return np.stack([Lvec, S1vec, S2vec])
@@ -3572,7 +3597,7 @@ def tofdeltachi(deltachi, kappa , r, chieff, q, chi1, chi2, cyclesign=1, precomp
     return t 
 
 
-def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None):
+def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None, rng=None):
     """
     Sample N values of deltachi at fixed separation accoring to its PN-weighted distribution function.
     Can only be used to sample the *same* number of configuration for each binary. If the inputs have shape (M,) the output will have shape
@@ -3598,6 +3623,8 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
         Number of samples.
     precomputedroots: array, optional (default: None)
         Pre-computed output of deltachiroots for computational efficiency.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -3618,7 +3645,10 @@ def deltachisampling(kappa, r, chieff, q, chi1, chi2, N=1, precomputedroots=None
 
     # For each binary, generate N samples between 0 and tau.
     # For r=infinity use a simple placeholder
-    t = np.random.uniform(np.zeros(len(tau)),np.where(u!=0, tau, 0),size=(N,len(tau)))
+    if rng is None:
+        t = np.random.uniform(np.zeros(len(tau)),np.where(u!=0, tau, 0),size=(N,len(tau)))
+    else:
+        t = rng.uniform(np.zeros(len(tau)),np.where(u!=0, tau, 0),size=(N,len(tau)))
 
 
     # np.squeeze is necessary to return shape (M,) instead of (M,1) if N=1
@@ -3887,7 +3917,7 @@ def eval_alpha(kappa, r, chieff, q, chi1, chi2, precomputedroots=None):
 
 ################ More phenomenology ################
 
-def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None):
+def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=None, rng=None):
     """
     Evaluate the spin morphology. Returns:
         - L0 for librating about deltaphi=0,
@@ -3914,6 +3944,8 @@ def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=
         If True simplifies output.
     precomputedroots: array, optional (default: None)
         Pre-computed output of deltachiroots for computational efficiency.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -3928,7 +3960,7 @@ def morphology(kappa, r, chieff, q, chi1, chi2, simpler=False, precomputedroots=
 
     deltachiminus,deltachiplus = deltachilimits_plusminus(kappa, r, chieff, q, chi1, chi2)
     # Pairs of booleans based on the values of deltaphi at S- and S+
-    status = np.transpose([eval_cosdeltaphi(deltachiminus, kappa, r, chieff, q, chi1, chi2) > 0, eval_cosdeltaphi(deltachiplus, kappa, r, chieff, q, chi1, chi2) > 0])
+    status = np.transpose([eval_cosdeltaphi(deltachiminus, kappa, r, chieff, q, chi1, chi2, rng=rng) > 0, eval_cosdeltaphi(deltachiplus, kappa, r, chieff, q, chi1, chi2) > 0], rng=rng)
     # Map to labels
     dictlabel = {(False, False): "Lpi", (True, True): "L0", (False, True): "C-", (True, False): "C+"}
     # Subsitute pairs with labels
@@ -4048,7 +4080,7 @@ def eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2):
     return chip
 
 
-def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs):
+def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, rng=None, **kwargs):
     """
     Averaged definition of the effective precessing spin, see arxiv:2011.11948.
     Additional keywords arguments are passed to `precession_average`.
@@ -4067,6 +4099,8 @@ def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs):
         Dimensionless spin of the primary (heavier) black hole: 0<=chi1<=1.
     chi2: float
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -4081,7 +4115,7 @@ def eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs):
     """
 
     def _integrand(deltachi, kappa, r, chieff, q, chi1, chi2):
-        theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2)
+        theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, rng=rng)
         chip_integrand = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
         return chip_integrand
 
@@ -4162,7 +4196,7 @@ def eval_chip_rms(kappa, r, chieff, q, chi1, chi2):
     return chip
 
 
-def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", **kwargs):
+def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, r=None, chieff=None, q=None, chi1=None, chi2=None, which="averaged", rng=None, **kwargs):
     """
     Compute the effective precessing spin. The keyword `which` one of the following definitions:
         - `heuristic`, as in Schmidt et al 2015. Required inputs are either
@@ -4197,6 +4231,8 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     which: string, optional (default: "averaged")
         Select function behavior.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -4227,8 +4263,8 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
     elif theta1 is None and theta2 is None and deltaphi is None and kappa is not None and chieff is not None:
         if deltachi is None: 
             if which == 'heuristic' or which == 'generalized':
-                deltachi = deltachisampling(kappa, r, chieff, q, chi1, chi2)
-        theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2)
+                deltachi = deltachisampling(kappa, r, chieff, q, chi1, chi2, rng=rng)
+        theta1, theta2, deltaphi = conserved_to_angles(deltachi, kappa, r, chieff, q, chi1, chi2, rng=rng)
      
     else:
         raise ValueError("Provide either (theta1,theta2,deltaphi), (deltachi,kappa,chieff), or (kappa,chieff).")
@@ -4241,7 +4277,7 @@ def eval_chip(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None
         chip = eval_chip_generalized(theta1, theta2, deltaphi, q, chi1, chi2)
 
     elif which == 'averaged':
-        chip_finite = eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, **kwargs)
+        chip_finite = eval_chip_averaged(kappa, r, chieff, q, chi1, chi2, rng=rng, **kwargs)
 
         term1, term2 = chip_terms(theta1, theta2, q, chi1, chi2)
         chip_infinity = 2* np.abs(term1+term2) * scipy.special.ellipe(4*term1*term2/(term1+term2)**2)/np.pi         
@@ -4875,7 +4911,7 @@ def integrator_precav(kappainitial, u, chieff, q, chi1, chi2, **odeint_kwargs):
     return ODEsolution
 
 
-def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, enforce=False, **odeint_kwargs):
+def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, enforce=False, rng=None, **odeint_kwargs):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
     The integration range must be specified using either r or u (and not both). These need to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned. For past time infinity use either u=0 or r=np.inf.
@@ -4913,6 +4949,8 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
         Set of outputs.
     enforce: boolean, optional (default: False)
         If True raise errors, if False raise warnings.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **odeint_kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -5000,11 +5038,14 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
 
             # Resample deltachi
             if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi']):
-                deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+                deltachi = deltachisampling(kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), rng=rng)
 
                 # Compute the angles. Assign random cyclesign
                 if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi']):
-                    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r), cyclesign = np.random.choice([-1, 1], r.shape))
+                    if rng is None:
+                        theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r), cyclesign = np.random.choice([-1, 1], r.shape), rng=rng)
+                    else:
+                        theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, r, tiler(chieff,r), tiler(q,r),tiler(chi1,r),tiler(chi2,r), cyclesign = rng.choice([-1, 1], r.shape), rng=rng)
 
         return theta1, theta2, deltaphi, deltachi, kappa, r, u, deltachiminus, deltachiplus, deltachi3, chieff, q, chi1, chi2
 
@@ -5030,7 +5071,7 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None, kappa=None, r=None,
     return outcome
 
 
-def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4):
+def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='quadrature', Nsamples=1e4, rng=None):
     """
     Average a generic function over a precession cycle. The function needs to have call: func(deltachi, *args). Keywords arguments are not supported.
     There are integration methods implemented:
@@ -5101,7 +5142,7 @@ def precession_average(kappa, r, chieff, q, chi1, chi2, func, *args, method='qua
 
     elif method == 'montecarlo':
 
-        deltachi = deltachisampling(kappa, r, chieff, q, chi1, chi2, N=int(Nsamples), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+        deltachi = deltachisampling(kappa, r, chieff, q, chi1, chi2, N=int(Nsamples), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), rng=rng)
         evals = func(deltachi, *args)
         func_av = np.sum(evals, axis=-1)/Nsamples
         func_av = np.atleast_1d(func_av)
@@ -5296,7 +5337,7 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, v, q, chi1, chi2, PNorde
     return ODEsolution
 
 
-def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, **odeint_kwargs):
+def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, deltachi=None, kappa=None, r=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, rng=None, **odeint_kwargs):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
     The integration range must be specified using either r or u (and not both). These need to be arrays with lenght >=1, where e.g. r[0] corresponds to the initial condition and r[1:] corresponds to the location where outputs are returned.
@@ -5347,6 +5388,8 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         PN orders considered in the radiation-reaction equation.
     requested_outputs: list, optional (default: None)
         Set of outputs.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **odeint_kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -5403,7 +5446,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         # User provides deltachi, kappa, and chieff.
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and chieff is not None:
             # cyclesign=+1 by default
-            Lh, S1h, S2h = conserved_to_Jframe(deltachi, kappa, r[0], chieff, q, chi1, chi2, cyclesign=cyclesign)
+            Lh, S1h, S2h = conserved_to_Jframe(deltachi, kappa, r[0], chieff, q, chi1, chi2, cyclesign=cyclesign, rng=rng)
         else:
             raise TypeError("Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (deltachi,kappa,chieff).")
 
@@ -5985,7 +6028,7 @@ def remnantspindirection(theta1, theta2, deltaphi, r, q, chi1, chi2):
 
     
 
-def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=False, superkick=True, hangupkick=True, crosskick=True, full_output=False):
+def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=False, superkick=True, hangupkick=True, crosskick=True, full_output=False, rng=None):
     """
     Estimate the kick of the merger remnant. We collect various numerical-relativity
     results, as described in Gerosa and Kesden 2016. Flags let you switch the
@@ -6027,6 +6070,8 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
         Switch kick terms on and off.
     full_output: boolean, optional (default: False)
         Return additional outputs.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     
     Returns
     -------
@@ -6075,7 +6120,10 @@ def remnantkick(theta1, theta2, deltaphi, q, chi1, chi2, kms=False, maxphase=Fal
     C3 = 2481 * crosskick
 
     #maxkick
-    bigTheta=np.random.uniform(0, 2*np.pi,q.shape) * (not maxphase)
+    if rng is None:
+        bigTheta=np.random.uniform(0, 2*np.pi,q.shape) * (not maxphase)
+    else:
+        bigTheta=rng.uniform(0, 2*np.pi,q.shape) * (not maxphase)
 
     vm = A * eta**2 * (1+B*eta) * (1-q)/(1+q)
     vperp = H * eta**2 * Delta_par

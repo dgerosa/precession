@@ -398,7 +398,7 @@ def implicit(u,uc):
     """
     return uc * u**(37/84) * (u**2 / uc**2 - 1 )**(121/532) * (u**2 / uc**2 -(121/425))**(145/532)
 
-def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa=None, a=None, e=None, u=None, uc=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,  enforce=False, **odeint_kwargs):
+def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa=None, a=None, e=None, u=None, uc=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,  enforce=False, rng=None, **odeint_kwargs):
     """
     The integration range must be specified using either (a,e) or (uc, u), (and not both). These need to be arrays with lenght >=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned. Do not go to past time infinity with e!=0.
     The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
@@ -435,6 +435,8 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa
         Set of outputs.
     enforce: boolean, optional (default: False)
         If True raise errors, if False raise warnings.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **odeint_kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -559,7 +561,10 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa
                 deltachi = deltachisampling(kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
                 # Compute the angles. Assign random cyclesign
                 if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi']):
-                    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), cyclesign = np.random.choice([-1, 1], u.shape))
+                    if rng is None:
+                        theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), cyclesign = np.random.choice([-1, 1], u.shape))
+                    else:
+                        theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), cyclesign = rng.choice([-1, 1], u.shape))
 
         return theta1, theta2, deltaphi, deltachi, kappa, a, e, uc,u, deltachiminus, deltachiplus, deltachi3, chieff, q, chi1, chi2
     # Here I force dtype=object buse the outputs have different shapes
