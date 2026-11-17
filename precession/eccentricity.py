@@ -398,7 +398,7 @@ def implicit(u,uc):
     """
     return uc * u**(37/84) * (u**2 / uc**2 - 1 )**(121/532) * (u**2 / uc**2 -(121/425))**(145/532)
 
-def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa=None, a=None, e=None, u=None, uc=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,  enforce=False, **odeint_kwargs):
+def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa=None, a=None, e=None, u=None, uc=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,  enforce=False, rng=None, **odeint_kwargs):
     """
     The integration range must be specified using either (a,e) or (uc, u), (and not both). These need to be arrays with lenght >=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned. Do not go to past time infinity with e!=0.
     The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).
@@ -435,6 +435,8 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa
         Set of outputs.
     enforce: boolean, optional (default: False)
         If True raise errors, if False raise warnings.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **odeint_kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -556,10 +558,13 @@ def inspiral_precav(theta1=None, theta2=None, deltaphi=None,deltachi=None, kappa
                     
             if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi', 'deltachi']):
                 #print(kappa, a,e,u)
-                deltachi = deltachisampling(kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]))
+                deltachi = deltachisampling(kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), precomputedroots=np.stack([deltachiminus,deltachiplus,deltachi3]), rng=rng)
                 # Compute the angles. Assign random cyclesign
                 if any(x in requested_outputs for x in ['theta1', 'theta2', 'deltaphi']):
-                    theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), cyclesign = np.random.choice([-1, 1], u.shape))
+                    if rng is None:
+                        theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), cyclesign = np.random.choice([-1, 1], u.shape))
+                    else:
+                        theta1,theta2,deltaphi = conserved_to_angles(deltachi, kappa, a,e, tiler(chieff,u), tiler(q,u),tiler(chi1,u),tiler(chi2,u), rng=rng, cyclesign = rng.choice([-1, 1], u.shape))
 
         return theta1, theta2, deltaphi, deltachi, kappa, a, e, uc,u, deltachiminus, deltachiplus, deltachi3, chieff, q, chi1, chi2
     # Here I force dtype=object buse the outputs have different shapes
@@ -1007,7 +1012,7 @@ def integrator_orbav(Lhinitial, S1hinitial, S2hinitial, delta_lambda, a ,e, q, c
 
     return ODEsolution
 
-def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, delta_lambda=0, deltachi=None, kappa=None, a=None, e=None, uc=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, **odeint_kwargs):
+def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S2h=None, delta_lambda=0, deltachi=None, kappa=None, a=None, e=None, uc=None, u=None, chieff=None, q=None, chi1=None, chi2=None, cyclesign=+1, PNorderpre=[0,0.5], PNorderrad=[0,1,1.5,2,2.5,3,3.5], requested_outputs=None, rng=None, **odeint_kwargs):
     """
     Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.
     The integration range must be specified using either (a,e) or (uc,u) (and not both). These need to be arrays with lenght >=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned.
@@ -1062,6 +1067,8 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         PN orders considered in the radiation-reaction equation.
     requested_outputs: list, optional (default: None)
         Set of outputs.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **odeint_kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -1120,7 +1127,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
         # User provides deltachi, kappa, and chieff.
         elif Lh is None and S1h is None and S2h is None and theta1 is None and theta2 is None and deltaphi is None and deltachi is not None and kappa is not None and chieff is not None:
              #cyclesign=+1 by default
-            Lh, S1h, S2h = conserved_to_Lframe(deltachi, kappa, a[0], e, chieff, q, chi1, chi2, cyclesign=cyclesign)
+            Lh, S1h, S2h = conserved_to_Lframe(deltachi, kappa, a[0], e, chieff, q, chi1, chi2, cyclesign=cyclesign, rng=rng)
         else:
             raise TypeError("Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (deltachi,kappa,chieff).")
 
@@ -1190,7 +1197,7 @@ def inspiral_orbav(theta1=None, theta2=None, deltaphi=None, Lh=None, S1h=None, S
 
     return outcome
 
-def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, a=None, aswitch=None, e=None, uc=None, ucswitch=None,u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None,**odeint_kwargs):
+def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kappa=None, a=None, aswitch=None, e=None, uc=None, ucswitch=None,u=None, chieff=None, q=None, chi1=None, chi2=None, requested_outputs=None, rng=None, **odeint_kwargs):
     """
     Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either a or uc (and not both); provide also ucswitch and aswitch consistently.
     Either a of uc needs to be arrays with lenght >=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned. It does not work at past time infinity if e !=0.
@@ -1238,6 +1245,8 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
         Dimensionless spin of the secondary (lighter) black hole: 0<=chi2<=1.
     requested_outputs: list, optional (default: None)
         Set of outputs.
+    rng: np.random.Generator, optional (default: None)
+        An object for random number generator calls
     **odeint_kwargs: unpacked dictionary, optional
         Additional keyword arguments.
     
@@ -1337,10 +1346,10 @@ def inspiral_hybrid(theta1=None, theta2=None, deltaphi=None, deltachi=None, kapp
             asecond = np.append(aswitch, alarge)
 
         # First chunk of the evolution
-        evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, a=afirst,e=estart, chieff=chieff, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs,**odeint_kwargs)
+        evolution_first = inspiral_first(theta1=theta1, theta2=theta2, deltaphi=deltaphi, deltachi=deltachi, kappa=kappa, a=afirst,e=estart, chieff=chieff, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs, rng=rng, **odeint_kwargs)
 
         # Second chunk of the evolution
-        evolution_second = inspiral_second(theta1=np.squeeze(evolution_first['theta1'])[-1], theta2=np.squeeze(evolution_first['theta2'])[-1], deltaphi=np.squeeze(evolution_first['deltaphi'])[-1], a=asecond,e=eswitch, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs,**odeint_kwargs)
+        evolution_second = inspiral_second(theta1=np.squeeze(evolution_first['theta1'])[-1], theta2=np.squeeze(evolution_first['theta2'])[-1], deltaphi=np.squeeze(evolution_first['deltaphi'])[-1], a=asecond,e=eswitch, q=q, chi1=chi1, chi2=chi2, requested_outputs=alloutputs, rng=rng, **odeint_kwargs)
 
         # Store outputs
         evolution_full = {}
