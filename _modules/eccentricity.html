@@ -83,21 +83,21 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.integrate</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">This module dynamically wraps functions from `precession.py`, replacing the `r` parameter</span>
 <span class="sd">with `a` (semi-major axis) and `e` (eccentricity). </span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">eccentricize</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
 
-    <span class="c1"># Replace &#39;r&#39; with &#39;a&#39; and &#39;e&#39; in the function signature</span>
+    <span class="c1"># Replace 'r' with 'a' and 'e' in the function signature</span>
     <span class="n">new_params</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">'r'</span><span class="p">:</span>
             <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span>
-            <span class="n">new_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">param</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">))</span>
-            <span class="n">new_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">param</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">))</span>
+            <span class="n">new_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s1">'a'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">param</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">))</span>
+            <span class="n">new_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s1">'e'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">param</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">new_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
     <span class="n">new_sig</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">new_params</span><span class="p">)</span>
@@ -105,39 +105,39 @@
     <span class="c1"># Update the docstring</span>
     <span class="n">old_doc</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span>
     <span class="k">if</span> <span class="n">old_doc</span><span class="p">:</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">old_doc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">old_doc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
         <span class="n">new_lines</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">skip_next</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
             <span class="n">stripped</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             
-            <span class="c1"># Replace &#39;r:&#39; parameter block with a/e</span>
-            <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;r: float, optional (default: None)&#39;</span><span class="p">):</span>
-                <span class="n">indent</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;r:&#39;</span><span class="p">)]</span>
-                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">a: float, optional (default: None)&quot;</span><span class="p">)</span>
-                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">    Semi-major axis.&quot;</span><span class="p">)</span>
-                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">e: float, optional (default: None)&quot;</span><span class="p">)</span>
-                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">    Eccentricity: 0&lt;=e&lt;1&quot;</span><span class="p">)</span>
+            <span class="c1"># Replace 'r:' parameter block with a/e</span>
+            <span class="k">if</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'r: float, optional (default: None)'</span><span class="p">):</span>
+                <span class="n">indent</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'r:'</span><span class="p">)]</span>
+                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">a: float, optional (default: None)"</span><span class="p">)</span>
+                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">    Semi-major axis."</span><span class="p">)</span>
+                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">e: float, optional (default: None)"</span><span class="p">)</span>
+                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">    Eccentricity: 0&lt;=e&lt;1"</span><span class="p">)</span>
                 <span class="n">skip_next</span> <span class="o">=</span> <span class="kc">True</span> 
                 <span class="k">continue</span>
-            <span class="k">elif</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;r: &#39;</span><span class="p">):</span>
-                <span class="n">indent</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;r:&#39;</span><span class="p">)]</span>
-                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">a: float&quot;</span><span class="p">)</span>
-                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">    Semi-major axis.&quot;</span><span class="p">)</span>
-                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">e: float&quot;</span><span class="p">)</span>
-                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">    Eccentricity: 0&lt;=e&lt;1&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'r: '</span><span class="p">):</span>
+                <span class="n">indent</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'r:'</span><span class="p">)]</span>
+                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">a: float"</span><span class="p">)</span>
+                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">    Semi-major axis."</span><span class="p">)</span>
+                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">e: float"</span><span class="p">)</span>
+                <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">indent</span><span class="si">}</span><span class="s2">    Eccentricity: 0&lt;=e&lt;1"</span><span class="p">)</span>
                 <span class="n">skip_next</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">skip_next</span><span class="p">:</span>
                 <span class="n">skip_next</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">continue</span>
 
-            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;r=r,&#39;</span><span class="p">,</span> <span class="s1">&#39;a=a,e=e,&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;,r,&#39;</span><span class="p">,</span> <span class="s1">&#39;,a,e,&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">'r=r,'</span><span class="p">,</span> <span class="s1">'a=a,e=e,'</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">',r,'</span><span class="p">,</span> <span class="s1">',a,e,'</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
             <span class="n">new_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
-        <span class="n">new_doc</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_lines</span><span class="p">)</span>
+        <span class="n">new_doc</span> <span class="o">=</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_lines</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
      <span class="n">new_doc</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -148,12 +148,12 @@
         <span class="n">bound_new</span> <span class="o">=</span> <span class="n">new_sig</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">bound_new</span><span class="o">.</span><span class="n">apply_defaults</span><span class="p">()</span>
 
-        <span class="n">a</span> <span class="o">=</span> <span class="n">bound_new</span><span class="o">.</span><span class="n">arguments</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
-        <span class="n">e</span> <span class="o">=</span> <span class="n">bound_new</span><span class="o">.</span><span class="n">arguments</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">bound_new</span><span class="o">.</span><span class="n">arguments</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">bound_new</span><span class="o">.</span><span class="n">arguments</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">'e'</span><span class="p">)</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">arguments</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bound_new</span><span class="o">.</span><span class="n">arguments</span><span class="p">)</span>
-        <span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="n">arguments</span><span class="p">[</span><span class="s1">'r'</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>
 
         <span class="n">bound_orig</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="o">**</span><span class="n">arguments</span><span class="p">)</span>
         <span class="n">bound_orig</span><span class="o">.</span><span class="n">apply_defaults</span><span class="p">()</span>
@@ -165,122 +165,122 @@
     <span class="k">return</span> <span class="n">wrapper</span>
 
 <span class="c1"># Load the original functions from precession.py</span>
-<span class="n">functions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;roots_vec&#39;</span><span class="p">,</span>
- <span class="s1">&#39;norm_nested&#39;</span><span class="p">,</span>
- <span class="s1">&#39;normalize_nested&#39;</span><span class="p">,</span>
- <span class="s1">&#39;dot_nested&#39;</span><span class="p">,</span>
- <span class="s1">&#39;scalar_nested&#39;</span><span class="p">,</span>
- <span class="s1">&#39;rotate_nested&#39;</span><span class="p">,</span>
- <span class="s1">&#39;sample_unitsphere&#39;</span><span class="p">,</span>
- <span class="s1">&#39;isotropic_angles&#39;</span><span class="p">,</span>
- <span class="s1">&#39;tiler&#39;</span><span class="p">,</span>
- <span class="s1">&#39;affine&#39;</span><span class="p">,</span>
- <span class="s1">&#39;inverseaffine&#39;</span><span class="p">,</span>
- <span class="s1">&#39;wraproots&#39;</span><span class="p">,</span>
- <span class="s1">&#39;ellippi&#39;</span><span class="p">,</span>
- <span class="s1">&#39;ismonotonic&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_m1&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_m2&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_q&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_eta&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_S1&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_S2&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_chi1&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_chi2&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_L&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_v&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_u&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_chieff&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_deltachi&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_deltachiinf&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_costheta1&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_theta1&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_costheta2&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_theta2&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_costheta12&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_theta12&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_cosdeltaphi&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_deltaphi&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_costhetaL&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_thetaL&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_J&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_kappa&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_S&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_cyclesign&#39;</span><span class="p">,</span>
- <span class="s1">&#39;conserved_to_angles&#39;</span><span class="p">,</span>
- <span class="s1">&#39;angles_to_conserved&#39;</span><span class="p">,</span>
- <span class="s1">&#39;vectors_to_angles&#39;</span><span class="p">,</span>
- <span class="s1">&#39;vectors_to_Jframe&#39;</span><span class="p">,</span>
- <span class="s1">&#39;vectors_to_Lframe&#39;</span><span class="p">,</span>
- <span class="s1">&#39;angles_to_Lframe&#39;</span><span class="p">,</span>
- <span class="s1">&#39;angles_to_Jframe&#39;</span><span class="p">,</span>
- <span class="s1">&#39;conserved_to_Lframe&#39;</span><span class="p">,</span>
- <span class="s1">&#39;conserved_to_Jframe&#39;</span><span class="p">,</span>
- <span class="s1">&#39;kappadiscriminant_coefficients&#39;</span><span class="p">,</span>
- <span class="s1">&#39;kappalimits_geometrical&#39;</span><span class="p">,</span>
- <span class="s1">&#39;kapparesonances&#39;</span><span class="p">,</span>
- <span class="s1">&#39;kapparescaling&#39;</span><span class="p">,</span>
- <span class="s1">&#39;kappalimits&#39;</span><span class="p">,</span>
- <span class="s1">&#39;chiefflimits&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachilimits_definition&#39;</span><span class="p">,</span>
- <span class="s1">&#39;anglesresonances&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachicubic_coefficients&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachicubic_rescaled_coefficients&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachiroots&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachilimits_rectangle&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachilimits_plusminus&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachilimits&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachirescaling&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachiresonance&#39;</span><span class="p">,</span>
- <span class="s1">&#39;elliptic_parameter&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachitildeav&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachitildeav2&#39;</span><span class="p">,</span>
- <span class="s1">&#39;dchidt2_RHS&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_tau&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachioft&#39;</span><span class="p">,</span>
- <span class="s1">&#39;tofdeltachi&#39;</span><span class="p">,</span>
- <span class="s1">&#39;deltachisampling&#39;</span><span class="p">,</span>
- <span class="s1">&#39;intertial_ingredients&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_OmegaL&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_phiL&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_alpha&#39;</span><span class="p">,</span>
- <span class="s1">&#39;morphology&#39;</span><span class="p">,</span>
- <span class="s1">&#39;chip_terms&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_chip_heuristic&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_chip_generalized&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_chip_averaged&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_chip_rms&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_chip&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_nutation_freq&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_bracket_omega&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_delta_omega&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_delta_theta&#39;</span><span class="p">,</span>
- <span class="s1">&#39;eval_bracket_theta&#39;</span><span class="p">,</span>
- <span class="s1">&#39;rupdown&#39;</span><span class="p">,</span>
- <span class="s1">&#39;updown_endpoint&#39;</span><span class="p">,</span>
- <span class="s1">&#39;angleresonances_endpoint&#39;</span><span class="p">,</span>
- <span class="s1">&#39;omegasq_aligned&#39;</span><span class="p">,</span>
- <span class="s1">&#39;widenutation_separation&#39;</span><span class="p">,</span>
- <span class="s1">&#39;widenutation_condition&#39;</span><span class="p">,</span>
- <span class="s1">&#39;rhs_precav&#39;</span><span class="p">,</span>
- <span class="s1">&#39;integrator_precav&#39;</span><span class="p">,</span>
- <span class="s1">&#39;precession_average&#39;</span><span class="p">,</span>
- <span class="s1">&#39;inspiral&#39;</span><span class="p">,</span>
+<span class="n">functions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'roots_vec'</span><span class="p">,</span>
+ <span class="s1">'norm_nested'</span><span class="p">,</span>
+ <span class="s1">'normalize_nested'</span><span class="p">,</span>
+ <span class="s1">'dot_nested'</span><span class="p">,</span>
+ <span class="s1">'scalar_nested'</span><span class="p">,</span>
+ <span class="s1">'rotate_nested'</span><span class="p">,</span>
+ <span class="s1">'sample_unitsphere'</span><span class="p">,</span>
+ <span class="s1">'isotropic_angles'</span><span class="p">,</span>
+ <span class="s1">'tiler'</span><span class="p">,</span>
+ <span class="s1">'affine'</span><span class="p">,</span>
+ <span class="s1">'inverseaffine'</span><span class="p">,</span>
+ <span class="s1">'wraproots'</span><span class="p">,</span>
+ <span class="s1">'ellippi'</span><span class="p">,</span>
+ <span class="s1">'ismonotonic'</span><span class="p">,</span>
+ <span class="s1">'eval_m1'</span><span class="p">,</span>
+ <span class="s1">'eval_m2'</span><span class="p">,</span>
+ <span class="s1">'eval_q'</span><span class="p">,</span>
+ <span class="s1">'eval_eta'</span><span class="p">,</span>
+ <span class="s1">'eval_S1'</span><span class="p">,</span>
+ <span class="s1">'eval_S2'</span><span class="p">,</span>
+ <span class="s1">'eval_chi1'</span><span class="p">,</span>
+ <span class="s1">'eval_chi2'</span><span class="p">,</span>
+ <span class="s1">'eval_L'</span><span class="p">,</span>
+ <span class="s1">'eval_v'</span><span class="p">,</span>
+ <span class="s1">'eval_u'</span><span class="p">,</span>
+ <span class="s1">'eval_chieff'</span><span class="p">,</span>
+ <span class="s1">'eval_deltachi'</span><span class="p">,</span>
+ <span class="s1">'eval_deltachiinf'</span><span class="p">,</span>
+ <span class="s1">'eval_costheta1'</span><span class="p">,</span>
+ <span class="s1">'eval_theta1'</span><span class="p">,</span>
+ <span class="s1">'eval_costheta2'</span><span class="p">,</span>
+ <span class="s1">'eval_theta2'</span><span class="p">,</span>
+ <span class="s1">'eval_costheta12'</span><span class="p">,</span>
+ <span class="s1">'eval_theta12'</span><span class="p">,</span>
+ <span class="s1">'eval_cosdeltaphi'</span><span class="p">,</span>
+ <span class="s1">'eval_deltaphi'</span><span class="p">,</span>
+ <span class="s1">'eval_costhetaL'</span><span class="p">,</span>
+ <span class="s1">'eval_thetaL'</span><span class="p">,</span>
+ <span class="s1">'eval_J'</span><span class="p">,</span>
+ <span class="s1">'eval_kappa'</span><span class="p">,</span>
+ <span class="s1">'eval_S'</span><span class="p">,</span>
+ <span class="s1">'eval_cyclesign'</span><span class="p">,</span>
+ <span class="s1">'conserved_to_angles'</span><span class="p">,</span>
+ <span class="s1">'angles_to_conserved'</span><span class="p">,</span>
+ <span class="s1">'vectors_to_angles'</span><span class="p">,</span>
+ <span class="s1">'vectors_to_Jframe'</span><span class="p">,</span>
+ <span class="s1">'vectors_to_Lframe'</span><span class="p">,</span>
+ <span class="s1">'angles_to_Lframe'</span><span class="p">,</span>
+ <span class="s1">'angles_to_Jframe'</span><span class="p">,</span>
+ <span class="s1">'conserved_to_Lframe'</span><span class="p">,</span>
+ <span class="s1">'conserved_to_Jframe'</span><span class="p">,</span>
+ <span class="s1">'kappadiscriminant_coefficients'</span><span class="p">,</span>
+ <span class="s1">'kappalimits_geometrical'</span><span class="p">,</span>
+ <span class="s1">'kapparesonances'</span><span class="p">,</span>
+ <span class="s1">'kapparescaling'</span><span class="p">,</span>
+ <span class="s1">'kappalimits'</span><span class="p">,</span>
+ <span class="s1">'chiefflimits'</span><span class="p">,</span>
+ <span class="s1">'deltachilimits_definition'</span><span class="p">,</span>
+ <span class="s1">'anglesresonances'</span><span class="p">,</span>
+ <span class="s1">'deltachicubic_coefficients'</span><span class="p">,</span>
+ <span class="s1">'deltachicubic_rescaled_coefficients'</span><span class="p">,</span>
+ <span class="s1">'deltachiroots'</span><span class="p">,</span>
+ <span class="s1">'deltachilimits_rectangle'</span><span class="p">,</span>
+ <span class="s1">'deltachilimits_plusminus'</span><span class="p">,</span>
+ <span class="s1">'deltachilimits'</span><span class="p">,</span>
+ <span class="s1">'deltachirescaling'</span><span class="p">,</span>
+ <span class="s1">'deltachiresonance'</span><span class="p">,</span>
+ <span class="s1">'elliptic_parameter'</span><span class="p">,</span>
+ <span class="s1">'deltachitildeav'</span><span class="p">,</span>
+ <span class="s1">'deltachitildeav2'</span><span class="p">,</span>
+ <span class="s1">'dchidt2_RHS'</span><span class="p">,</span>
+ <span class="s1">'eval_tau'</span><span class="p">,</span>
+ <span class="s1">'deltachioft'</span><span class="p">,</span>
+ <span class="s1">'tofdeltachi'</span><span class="p">,</span>
+ <span class="s1">'deltachisampling'</span><span class="p">,</span>
+ <span class="s1">'intertial_ingredients'</span><span class="p">,</span>
+ <span class="s1">'eval_OmegaL'</span><span class="p">,</span>
+ <span class="s1">'eval_phiL'</span><span class="p">,</span>
+ <span class="s1">'eval_alpha'</span><span class="p">,</span>
+ <span class="s1">'morphology'</span><span class="p">,</span>
+ <span class="s1">'chip_terms'</span><span class="p">,</span>
+ <span class="s1">'eval_chip_heuristic'</span><span class="p">,</span>
+ <span class="s1">'eval_chip_generalized'</span><span class="p">,</span>
+ <span class="s1">'eval_chip_averaged'</span><span class="p">,</span>
+ <span class="s1">'eval_chip_rms'</span><span class="p">,</span>
+ <span class="s1">'eval_chip'</span><span class="p">,</span>
+ <span class="s1">'eval_nutation_freq'</span><span class="p">,</span>
+ <span class="s1">'eval_bracket_omega'</span><span class="p">,</span>
+ <span class="s1">'eval_delta_omega'</span><span class="p">,</span>
+ <span class="s1">'eval_delta_theta'</span><span class="p">,</span>
+ <span class="s1">'eval_bracket_theta'</span><span class="p">,</span>
+ <span class="s1">'rupdown'</span><span class="p">,</span>
+ <span class="s1">'updown_endpoint'</span><span class="p">,</span>
+ <span class="s1">'angleresonances_endpoint'</span><span class="p">,</span>
+ <span class="s1">'omegasq_aligned'</span><span class="p">,</span>
+ <span class="s1">'widenutation_separation'</span><span class="p">,</span>
+ <span class="s1">'widenutation_condition'</span><span class="p">,</span>
+ <span class="s1">'rhs_precav'</span><span class="p">,</span>
+ <span class="s1">'integrator_precav'</span><span class="p">,</span>
+ <span class="s1">'precession_average'</span><span class="p">,</span>
+ <span class="s1">'inspiral'</span><span class="p">,</span>
 <span class="p">]</span>
 <span class="c1"># Apply eccentricize and expose the new functions</span>
 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">functions</span><span class="p">:</span>
     <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">precession</span> <span class="p">,</span> <span class="n">name</span><span class="p">)</span>
     <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s1">&#39;r&#39;</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s1">'r'</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
         <span class="nb">globals</span><span class="p">()[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">eccentricize</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># No &#39;r&#39; param, keep original function as is</span>
+        <span class="c1"># No 'r' param, keep original function as is</span>
         <span class="nb">globals</span><span class="p">()[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span>
 
 <div class="viewcode-block" id="eval_a">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.eval_a">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_a</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">uc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Semi-major axis of the binary. Valid inputs are either  (L,e,q) or (u,e,q) or (uc,q).</span>
 
 <span class="sd">    Call</span>
@@ -305,7 +305,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    a: float</span>
 <span class="sd">        Binary semi-major axis.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
    
     <span class="k">if</span> <span class="n">L</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">u</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
@@ -319,14 +319,14 @@
          <span class="n">eta</span><span class="o">=</span><span class="n">eval_eta</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
          <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">uc</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">eta</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Provide either  (L,e,q) or (u,e,q) or (uc, q)&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Provide either  (L,e,q) or (u,e,q) or (uc, q)"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">a</span></div>
 
 
 <div class="viewcode-block" id="eval_e">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.eval_e">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">eval_e</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">uc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Orbital eccentricity of the binary. Valid inputs are either (L,a,q) or (u,uc,q).</span>
 
 <span class="sd">    Call</span>
@@ -352,7 +352,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    e: float</span>
 <span class="sd">        Binary eccentricity.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
    
     <span class="k">if</span> <span class="n">L</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">u</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
@@ -373,7 +373,7 @@
         <span class="n">e</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">q</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">q</span><span class="o">**</span><span class="mi">3</span><span class="o">-</span><span class="n">q</span><span class="o">**</span><span class="mi">4</span><span class="o">+</span><span class="n">q</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">u</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Provide either (L,a,q) or (u, uc,q).&quot;</span><span class="p">)</span>    
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Provide either (L,a,q) or (u, uc,q)."</span><span class="p">)</span>    
     
     <span class="k">return</span> <span class="n">e</span></div>
 
@@ -381,7 +381,7 @@
 <div class="viewcode-block" id="ddchidt_prefactor">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.ddchidt_prefactor">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ddchidt_prefactor</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    etamerical prefactor to the ddeltachi/dt derivative.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -403,7 +403,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ``mathcalA = precession.ddchidt_prefactor(a,e,chieff,q)``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -418,7 +418,7 @@
 <div class="viewcode-block" id="vectors_to_conserved">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.vectors_to_conserved">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">vectors_to_conserved</span><span class="p">(</span><span class="n">Lvec</span><span class="p">,</span> <span class="n">S1vec</span><span class="p">,</span> <span class="n">S2vec</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span> <span class="p">,</span> <span class="n">q</span><span class="p">,</span><span class="n">full_output</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert vectors (L,S1,S2) to conserved quanties (deltachi,kappa,chieff).</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -449,7 +449,7 @@
 <span class="sd">    --------</span>
 <span class="sd">    ``deltachi,kappa,chieff = precession.vectors_to_conserved(Lvec,S1vec,S2vec,q)``</span>
 <span class="sd">    ``deltachi,kappa,chieff,cyclesign = precession.vectors_to_conserved(Lvec,S1vec,S2vec,q,full_output=True)``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">L</span> <span class="o">=</span> <span class="n">norm_nested</span><span class="p">(</span><span class="n">Lvec</span><span class="p">)</span>
     <span class="n">S1</span> <span class="o">=</span> <span class="n">norm_nested</span><span class="p">(</span><span class="n">S1vec</span><span class="p">)</span>
@@ -477,27 +477,27 @@
 <div class="viewcode-block" id="implicit">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.implicit">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">implicit</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">uc</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;LHS of eq. (28) in Fumagalli &amp; Gerosa, arXiv:2310.16893. This is used to compute the implicit function u(uc) in the inspiral_precav function.</span>
+<span class="w">    </span><span class="sd">"""LHS of eq. (28) in Fumagalli &amp; Gerosa, arXiv:2310.16893. This is used to compute the implicit function u(uc) in the inspiral_precav function.</span>
 <span class="sd">    Parameters </span>
 <span class="sd">    ----------</span>
 <span class="sd">    u: float</span>
 <span class="sd">        Compactified separation 1/(2L).</span>
 <span class="sd">    uc: float</span>
 <span class="sd">        Circular compactified separation 1/(2L(e=0)).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">uc</span> <span class="o">*</span> <span class="n">u</span><span class="o">**</span><span class="p">(</span><span class="mi">37</span><span class="o">/</span><span class="mi">84</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">uc</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">121</span><span class="o">/</span><span class="mi">532</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">uc</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span><span class="p">(</span><span class="mi">121</span><span class="o">/</span><span class="mi">425</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mi">145</span><span class="o">/</span><span class="mi">532</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="inspiral_precav">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.inspiral_precav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">inspiral_precav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="n">enforce</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    The integration range must be specified using either (a,e) or (uc, u), (and not both). These need to be arrays with lenght &gt;=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned. Do not go to past time infinity with e!=0.</span>
 <span class="sd">    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).</span>
 <span class="sd">    The initial conditions must be specified in terms of one an only one of the following:</span>
 <span class="sd">        - theta1,theta2, and deltaphi.</span>
 <span class="sd">        - kappa, chieff.</span>
-<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=[&#39;theta1&#39;,&#39;theta2&#39;,&#39;deltaphi&#39;]. All the available variables are returned by default. These are: [&#39;theta1&#39;, &#39;theta2&#39;, &#39;deltaphi&#39;, &#39;deltachi&#39;, &#39;kappa&#39;, &#39;a&#39;, &#39;e&#39;, &#39;u&#39;, &#39;deltachiminus&#39;, &#39;deltachiplus&#39;, &#39;deltachi3&#39;, &#39;chieff&#39;, &#39;q&#39;, &#39;chi1&#39;, &#39;chi2&#39;].</span>
+<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'a', 'e', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].</span>
 <span class="sd">    The flag enforce allows checking the consistency of the input variables.</span>
 <span class="sd">    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.</span>
 
@@ -541,7 +541,7 @@
 <span class="sd">    ``outputs = precession.inspiral_precav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,uc=uc,u=u,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    ``outputs = precession.inspiral_precav(kappa,a=a,e=e,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    ``outputs = precession.inspiral_precav(kappa,uc=uc,u=u,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Substitute None inputs with arrays of Nones</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">uc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">]</span>
@@ -556,7 +556,7 @@
                 
     <span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span>  <span class="n">kappa</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">uc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span> <span class="o">=</span> <span class="n">inputs</span>
     <span class="c1"># This array has to match the outputs of _compute (in the right order!)</span>
-    <span class="n">alloutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;theta1&#39;</span><span class="p">,</span> <span class="s1">&#39;theta2&#39;</span><span class="p">,</span> <span class="s1">&#39;deltaphi&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachi&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;uc&#39;</span><span class="p">,</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachiminus&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachiplus&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachi3&#39;</span><span class="p">,</span> <span class="s1">&#39;chieff&#39;</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="s1">&#39;chi1&#39;</span><span class="p">,</span> <span class="s1">&#39;chi2&#39;</span><span class="p">])</span>
+    <span class="n">alloutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">'theta1'</span><span class="p">,</span> <span class="s1">'theta2'</span><span class="p">,</span> <span class="s1">'deltaphi'</span><span class="p">,</span> <span class="s1">'deltachi'</span><span class="p">,</span> <span class="s1">'kappa'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">,</span> <span class="s1">'uc'</span><span class="p">,</span><span class="s1">'u'</span><span class="p">,</span> <span class="s1">'deltachiminus'</span><span class="p">,</span> <span class="s1">'deltachiplus'</span><span class="p">,</span> <span class="s1">'deltachi3'</span><span class="p">,</span> <span class="s1">'chieff'</span><span class="p">,</span> <span class="s1">'q'</span><span class="p">,</span> <span class="s1">'chi1'</span><span class="p">,</span> <span class="s1">'chi2'</span><span class="p">])</span>
     <span class="c1"># If in doubt, return everything</span>
     <span class="k">if</span> <span class="n">requested_outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">requested_outputs</span> <span class="o">=</span> <span class="n">alloutputs</span>
@@ -565,11 +565,11 @@
         
         <span class="c1"># Make sure you have q, chi1, and chi2.</span>
         <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide q, chi1, and chi2.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Please provide q, chi1, and chi2."</span><span class="p">)</span>
         <span class="c1">## User pass (a, e0) -&gt; return uc and u [from u recover e]</span>
         <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">uc</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">u</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">),</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">)),</span> <span class="s1">&#39;a must be monotonic&#39;</span>
+            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">'&lt;='</span><span class="p">),</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">'&gt;='</span><span class="p">)),</span> <span class="s1">'a must be monotonic'</span>
             <span class="k">if</span> <span class="n">e</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
                 <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
                      <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">brentq</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span> <span class="p">:</span> <span class="n">implicit</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">uc</span><span class="p">)</span> <span class="o">-</span> <span class="n">c0</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">uc</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">uc</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">)</span>
@@ -589,8 +589,8 @@
                 <span class="n">uc</span><span class="o">=</span><span class="n">u</span>
          <span class="c1">## User pass (uc, u0) -&gt; return a, e0, u [from u recover e]   </span>
         <span class="k">elif</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">e</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">uc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>  <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">uc</span><span class="p">)</span> <span class="o">&gt;</span>  <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
-           <span class="c1"># print(&#39;dentro&#39;)</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">ismonotonic</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">),</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">)),</span> <span class="s1">&#39;uc must be monotonic&#39;</span>
+           <span class="c1"># print('dentro')</span>
+            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">ismonotonic</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="s1">'&lt;='</span><span class="p">),</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="s1">'&gt;='</span><span class="p">)),</span> <span class="s1">'uc must be monotonic'</span>
             <span class="k">if</span> <span class="n">uc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">u</span><span class="p">:</span>
                 <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
                      <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">brentq</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span> <span class="p">:</span> <span class="n">implicit</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">uc</span><span class="p">)</span> <span class="o">-</span> <span class="n">c0</span><span class="p">,</span> <span class="mi">100</span><span class="o">*</span><span class="n">uc</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">uc</span><span class="p">,</span> <span class="n">xtol</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">)</span>
@@ -610,9 +610,9 @@
                <span class="n">e</span><span class="o">=</span><span class="mi">0</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide either (a,e0) or (uc, u0).  Do not work at infinity.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Please provide either (a,e0) or (uc, u0).  Do not work at infinity."</span><span class="p">)</span>
      
-        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;There can only be one a=np.inf location, either at the beginning or at the end.&quot;</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"There can only be one a=np.inf location, either at the beginning or at the end."</span>
        
         <span class="k">if</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                  <span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">chieff</span> <span class="o">=</span> <span class="n">angles_to_conserved</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="n">deltaphi</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
@@ -621,13 +621,13 @@
             <span class="k">pass</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide one and not more of the following: (theta1,theta2,deltaphi), (kappa,chieff).&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Please provide one and not more of the following: (theta1,theta2,deltaphi), (kappa,chieff)."</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">enforce</span><span class="p">:</span> <span class="c1"># Enforce limits</span>
             <span class="n">chieffmin</span><span class="p">,</span> <span class="n">chieffmax</span> <span class="o">=</span> <span class="n">chiefflimits</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="n">chieff</span> <span class="o">&gt;=</span> <span class="n">chieffmin</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="o">&lt;=</span> <span class="n">chieffmax</span><span class="p">,</span>  <span class="s2">&quot;Unphysical initial conditions [inspiral_precav].&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="n">chieffmin</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chieffmax</span> <span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">chieff</span> <span class="o">&gt;=</span> <span class="n">chieffmin</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="o">&lt;=</span> <span class="n">chieffmax</span><span class="p">,</span>  <span class="s2">"Unphysical initial conditions [inspiral_precav]."</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="n">chieffmin</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chieffmax</span> <span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span>
             <span class="n">kappamin</span><span class="p">,</span><span class="n">kappamax</span> <span class="o">=</span> <span class="n">kappalimits</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="n">kappa</span> <span class="o">&gt;=</span> <span class="n">kappamin</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="o">&lt;=</span> <span class="n">kappamax</span><span class="p">,</span> <span class="s2">&quot;kappa Unphysical initial conditions [inspiral_precav].&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappamin</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappamax</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">kappa</span> <span class="o">&gt;=</span> <span class="n">kappamin</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="o">&lt;=</span> <span class="n">kappamax</span><span class="p">,</span> <span class="s2">"kappa Unphysical initial conditions [inspiral_precav]."</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">deltaphi</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappamin</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">kappamax</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chieff</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi1</span><span class="p">)</span><span class="o">+</span><span class="s2">" "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span>
 
         <span class="c1"># Actual integration.</span>
         
@@ -643,14 +643,14 @@
             <span class="n">e</span><span class="o">=</span><span class="n">eval_e</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">tiler</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>  
 
         <span class="c1"># Roots along the evolution</span>
-        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">requested_outputs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;theta1&#39;</span><span class="p">,</span> <span class="s1">&#39;theta2&#39;</span><span class="p">,</span> <span class="s1">&#39;deltaphi&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachi&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachiminus&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachiplus&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachi3&#39;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">requested_outputs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'theta1'</span><span class="p">,</span> <span class="s1">'theta2'</span><span class="p">,</span> <span class="s1">'deltaphi'</span><span class="p">,</span> <span class="s1">'deltachi'</span><span class="p">,</span> <span class="s1">'deltachiminus'</span><span class="p">,</span> <span class="s1">'deltachiplus'</span><span class="p">,</span> <span class="s1">'deltachi3'</span><span class="p">]):</span>
             <span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">,</span><span class="n">deltachi3</span> <span class="o">=</span> <span class="n">deltachiroots</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">tiler</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span><span class="n">u</span><span class="p">),</span> <span class="n">tiler</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">u</span><span class="p">),</span><span class="n">tiler</span><span class="p">(</span><span class="n">chi1</span><span class="p">,</span><span class="n">u</span><span class="p">),</span><span class="n">tiler</span><span class="p">(</span><span class="n">chi2</span><span class="p">,</span><span class="n">u</span><span class="p">))</span>
                     
-            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">requested_outputs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;theta1&#39;</span><span class="p">,</span> <span class="s1">&#39;theta2&#39;</span><span class="p">,</span> <span class="s1">&#39;deltaphi&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachi&#39;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">requested_outputs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'theta1'</span><span class="p">,</span> <span class="s1">'theta2'</span><span class="p">,</span> <span class="s1">'deltaphi'</span><span class="p">,</span> <span class="s1">'deltachi'</span><span class="p">]):</span>
                 <span class="c1">#print(kappa, a,e,u)</span>
                 <span class="n">deltachi</span> <span class="o">=</span> <span class="n">deltachisampling</span><span class="p">(</span><span class="n">kappa</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="n">tiler</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span><span class="n">u</span><span class="p">),</span> <span class="n">tiler</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">u</span><span class="p">),</span><span class="n">tiler</span><span class="p">(</span><span class="n">chi1</span><span class="p">,</span><span class="n">u</span><span class="p">),</span><span class="n">tiler</span><span class="p">(</span><span class="n">chi2</span><span class="p">,</span><span class="n">u</span><span class="p">),</span> <span class="n">precomputedroots</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">deltachiminus</span><span class="p">,</span><span class="n">deltachiplus</span><span class="p">,</span><span class="n">deltachi3</span><span class="p">]))</span>
                 <span class="c1"># Compute the angles. Assign random cyclesign</span>
-                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">requested_outputs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;theta1&#39;</span><span class="p">,</span> <span class="s1">&#39;theta2&#39;</span><span class="p">,</span> <span class="s1">&#39;deltaphi&#39;</span><span class="p">]):</span>
+                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">requested_outputs</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'theta1'</span><span class="p">,</span> <span class="s1">'theta2'</span><span class="p">,</span> <span class="s1">'deltaphi'</span><span class="p">]):</span>
                     <span class="n">theta1</span><span class="p">,</span><span class="n">theta2</span><span class="p">,</span><span class="n">deltaphi</span> <span class="o">=</span> <span class="n">conserved_to_angles</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="n">tiler</span><span class="p">(</span><span class="n">chieff</span><span class="p">,</span><span class="n">u</span><span class="p">),</span> <span class="n">tiler</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">u</span><span class="p">),</span><span class="n">tiler</span><span class="p">(</span><span class="n">chi1</span><span class="p">,</span><span class="n">u</span><span class="p">),</span><span class="n">tiler</span><span class="p">(</span><span class="n">chi2</span><span class="p">,</span><span class="n">u</span><span class="p">),</span> <span class="n">cyclesign</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">uc</span><span class="p">,</span><span class="n">u</span><span class="p">,</span> <span class="n">deltachiminus</span><span class="p">,</span> <span class="n">deltachiplus</span><span class="p">,</span> <span class="n">deltachi3</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span>
@@ -667,7 +667,7 @@
         <span class="n">outcome</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
 
         <span class="c1"># For the constants of motion...</span>
-        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;chieff&#39;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;q&#39;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;chi1&#39;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;chi2&#39;</span><span class="p">:</span>  <span class="c1"># Constants of motion</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">'chieff'</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">'q'</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">'chi1'</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">'chi2'</span><span class="p">:</span>  <span class="c1"># Constants of motion</span>
             <span class="n">outcome</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">outcome</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
         <span class="c1">#... and everything else</span>
         <span class="k">else</span><span class="p">:</span>
@@ -679,7 +679,7 @@
 <div class="viewcode-block" id="rhs_orbav">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.rhs_orbav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">rhs_orbav</span><span class="p">(</span><span class="n">allvars</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">PNorderrad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Right-hand side of the systems of ODEs describing orbit-averaged inspiral. The equations are reported in Sec 4A of Gerosa and Kesden, arXiv:1605.01067. The format is d[allvars]/dv=RHS where allvars=[Lhx,Lhy,Lhz,S1hx,S1hy,S1hz,S2hx,S2hy,S2hz,t], h indicates unit vectors, v is the orbital velocity, and t is time.</span>
 <span class="sd">    This is an internal function used by the ODE integrator and is not array-compatible.</span>
 <span class="sd">    </span>
@@ -718,7 +718,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ``RHS = precession.rhs_orbav(allvars,a,q,m1,m2,eta,chi1,chi2,S1,S2,PNorderpre=[0,0.5],PNorderrad=[0,1,1.5,2,2.5,3])``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Unpack inputs</span>
   
@@ -773,7 +773,7 @@
     <span class="p">(</span><span class="n">ct1</span> <span class="o">*</span> <span class="n">q</span> <span class="o">*</span> <span class="n">S1</span> <span class="o">+</span> <span class="n">ct2</span> <span class="o">*</span> <span class="n">S2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">S1</span> <span class="o">*</span> <span class="n">S1h</span> <span class="o">+</span> <span class="n">S2</span> <span class="o">*</span> <span class="n">S2h</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">eta</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span><span class="o">*</span><span class="n">u</span><span class="o">**</span><span class="mi">7</span>
     <span class="n">dLhdt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">OmegaL</span><span class="p">,</span> <span class="n">Lh</span><span class="p">)</span>
 
-    <span class="c1">#pn terms for dudt :&#39;) from Klein et al. 2018  arXiv:1801.08542</span>
+    <span class="c1">#pn terms for dudt :') from Klein et al. 2018  arXiv:1801.08542</span>
     <span class="n">zero_pnterm_u</span><span class="o">=</span> <span class="mi">1024</span><span class="o">/</span><span class="mi">5</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> \
     <span class="p">(</span><span class="n">eta</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
 
@@ -898,7 +898,7 @@
     <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> \
     <span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">16</span> <span class="o">*</span> <span class="n">u</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">eta</span><span class="p">)))))))))))))))))</span>
 
-    <span class="c1">#pn terms for dedt :&#39;) from Klein et al. 2018  arXiv:1801.08542</span>
+    <span class="c1">#pn terms for dedt :') from Klein et al. 2018  arXiv:1801.08542</span>
     <span class="n">zero_pnterm_e</span><span class="o">=-</span><span class="mi">512</span><span class="o">/</span><span class="mi">15</span> <span class="o">*</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">304</span> <span class="o">+</span> <span class="mi">121</span> <span class="o">*</span> \
     <span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">eta</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
 
@@ -1019,7 +1019,7 @@
 <div class="viewcode-block" id="integrator_orbav">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.integrator_orbav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">integrator_orbav</span><span class="p">(</span><span class="n">Lhinitial</span><span class="p">,</span> <span class="n">S1hinitial</span><span class="p">,</span> <span class="n">S2hinitial</span><span class="p">,</span> <span class="n">delta_lambda</span><span class="p">,</span> <span class="n">a</span> <span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">PNorderrad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Integration of the systems of ODEs describing orbit-averaged inspirals.</span>
 <span class="sd">    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.</span>
 <span class="sd">    </span>
@@ -1056,7 +1056,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ``ODEsolution = precession.integrator_orbavintegrator_orbav(Lhinitial,S1hinitial,S2hinitial,v,q,chi1,chi2)``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">Lhinitial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">Lhinitial</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">S1hinitial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">S1hinitial</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1070,10 +1070,10 @@
     <span class="n">chi2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="c1"># Defaults for the integrators, can be changed by the user</span>
-    <span class="k">if</span> <span class="s1">&#39;mxstep&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">odeint_kwargs</span><span class="p">:</span> <span class="n">odeint_kwargs</span><span class="p">[</span><span class="s1">&#39;mxstep&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">5000000</span>
-    <span class="k">if</span> <span class="s1">&#39;rol&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">odeint_kwargs</span><span class="p">:</span> <span class="n">odeint_kwargs</span><span class="p">[</span><span class="s1">&#39;rtol&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">1e-13</span>
-    <span class="k">if</span> <span class="s1">&#39;aol&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">odeint_kwargs</span><span class="p">:</span> <span class="n">odeint_kwargs</span><span class="p">[</span><span class="s1">&#39;atol&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">1e-13</span>
-    <span class="n">odeint_kwargs</span><span class="p">[</span><span class="s1">&#39;full_output&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span> <span class="c1"># This needs to be forced for compatibility with the rest of the code</span>
+    <span class="k">if</span> <span class="s1">'mxstep'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">odeint_kwargs</span><span class="p">:</span> <span class="n">odeint_kwargs</span><span class="p">[</span><span class="s1">'mxstep'</span><span class="p">]</span><span class="o">=</span><span class="mi">5000000</span>
+    <span class="k">if</span> <span class="s1">'rol'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">odeint_kwargs</span><span class="p">:</span> <span class="n">odeint_kwargs</span><span class="p">[</span><span class="s1">'rtol'</span><span class="p">]</span><span class="o">=</span><span class="mf">1e-13</span>
+    <span class="k">if</span> <span class="s1">'aol'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">odeint_kwargs</span><span class="p">:</span> <span class="n">odeint_kwargs</span><span class="p">[</span><span class="s1">'atol'</span><span class="p">]</span><span class="o">=</span><span class="mf">1e-13</span>
+    <span class="n">odeint_kwargs</span><span class="p">[</span><span class="s1">'full_output'</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span> <span class="c1"># This needs to be forced for compatibility with the rest of the code</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_compute</span><span class="p">(</span><span class="n">Lhinitial</span><span class="p">,</span> <span class="n">S1hinitial</span><span class="p">,</span> <span class="n">S2hinitial</span><span class="p">,</span><span class="n">delta_lambda</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
 
@@ -1094,8 +1094,8 @@
         <span class="n">S2</span> <span class="o">=</span> <span class="n">eval_S2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">chi2</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
         <span class="n">eta</span> <span class="o">=</span> <span class="n">eval_eta</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
 
-        <span class="c1"># solve_ivp implementation. Didn&#39;t really work.</span>
-        <span class="c1">#ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method=&#39;LSODA&#39;, t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula),rtol=1e-12,atol=1e-12)</span>
+        <span class="c1"># solve_ivp implementation. Didn't really work.</span>
+        <span class="c1">#ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, method='LSODA', t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula),rtol=1e-12,atol=1e-12)</span>
         <span class="c1">#ODEsolution = scipy.integrate.solve_ivp(rhs_orbav, (vinitial, vfinal), ic, t_eval=(vinitial, vfinal), dense_output=True, args=(q, m1, m2, eta, chi1, chi2, S1, S2, quadrupole_formula))</span>
 
         <span class="n">ODEsolution</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">odeint</span><span class="p">(</span><span class="n">rhs_orbav</span><span class="p">,</span> <span class="n">ic</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">S1</span><span class="p">,</span> <span class="n">S2</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="p">,</span> <span class="n">PNorderrad</span><span class="p">),</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">)</span><span class="c1">#, printmessg=0,rtol=1e-10,atol=1e-10)#,tcrit=sing)</span>
@@ -1109,7 +1109,7 @@
 <div class="viewcode-block" id="inspiral_orbav">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.inspiral_orbav">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">inspiral_orbav</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Lh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S1h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">S2h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta_lambda</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=+</span><span class="mi">1</span><span class="p">,</span> <span class="n">PNorderpre</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">PNorderrad</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mf">3.5</span><span class="p">],</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Perform precession-averaged inspirals. The variables q, chi1, and chi2 must always be provided.</span>
 <span class="sd">    The integration range must be specified using either (a,e) or (uc,u) (and not both). These need to be arrays with lenght &gt;=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned.</span>
 <span class="sd">    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and uc of shape (M,N).</span>
@@ -1117,7 +1117,7 @@
 <span class="sd">        - Lh, S1h, and S2h</span>
 <span class="sd">        - theta1,theta2, and deltaphi.</span>
 <span class="sd">        - deltachi, kappa, chieff, cyclesign.</span>
-<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=[&#39;theta1&#39;,&#39;theta2&#39;,&#39;deltaphi&#39;]. All the available variables are returned by default. These are: [&#39;theta1&#39;, &#39;theta2&#39;, &#39;deltaphi&#39;, &#39;deltachi&#39;, &#39;kappa&#39;, &#39;r&#39;, &#39;u&#39;, &#39;deltachiminus&#39;, &#39;deltachiplus&#39;, &#39;deltachi3&#39;, &#39;chieff&#39;, &#39;q&#39;, &#39;chi1&#39;, &#39;chi2&#39;].</span>
+<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'r', 'u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].</span>
 <span class="sd">    The flag enforce allows checking the consistency of the input variables.</span>
 <span class="sd">    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.</span>
 <span class="sd">    </span>
@@ -1178,7 +1178,7 @@
 <span class="sd">    ``outputs = precession.inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,a=a,e=e,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    ``outputs = precession.inspiral_orbav(theta1=theta1,theta2=theta2,deltaphi=deltaphi,uc=uc,u=u,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    ``outputs = precession.inspiral_orbav(deltachi=deltachi,kappa=kappa,a=a,e=e,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     
 
     <span class="c1"># Substitute None inputs with arrays of Nones</span>
@@ -1196,17 +1196,17 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_compute</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">Lh</span><span class="p">,</span> <span class="n">S1h</span><span class="p">,</span> <span class="n">S2h</span><span class="p">,</span> <span class="n">delta_lambda</span><span class="p">,</span> <span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">uc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">q</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">chi1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">chi2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide q, chi1, and chi2.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Please provide q, chi1, and chi2."</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">uc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">),</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">)),</span> <span class="s1">&#39;a must be monotonic&#39;</span>
+            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">'&lt;='</span><span class="p">),</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">'&gt;='</span><span class="p">)),</span> <span class="s1">'a must be monotonic'</span>
             <span class="n">uc</span> <span class="o">=</span> <span class="n">eval_u</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="n">tiler</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="p">),</span> <span class="n">q</span><span class="o">=</span><span class="n">tiler</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>  <span class="c1"># Convert a in uc to uc </span>
             
         <span class="k">elif</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">uc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">ismonotonic</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">),</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">)),</span> <span class="s1">&#39;uc must be monotonic&#39;</span>
+            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">ismonotonic</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="s1">'&lt;='</span><span class="p">),</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="s1">'&gt;='</span><span class="p">)),</span> <span class="s1">'uc must be monotonic'</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">eval_a</span><span class="p">(</span><span class="n">uc</span><span class="o">=</span><span class="n">uc</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">tiler</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">uc</span><span class="p">))</span>  <span class="c1"># Convert uc in a to a </span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide either a or uc.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Please provide either a or uc."</span><span class="p">)</span>
 
         <span class="c1"># User provides Lh, S1h, and S2h</span>
         <span class="k">if</span> <span class="n">Lh</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">S1h</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">S2h</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">theta2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltaphi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">deltachi</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kappa</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">chieff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1223,7 +1223,7 @@
              <span class="c1">#cyclesign=+1 by default</span>
             <span class="n">Lh</span><span class="p">,</span> <span class="n">S1h</span><span class="p">,</span> <span class="n">S2h</span> <span class="o">=</span> <span class="n">conserved_to_Lframe</span><span class="p">(</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span><span class="o">=</span><span class="n">cyclesign</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (deltachi,kappa,chieff).&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Please provide one and not more of the following: (Lh,S1h,S2h), (theta1,theta2,deltaphi), (deltachi,kappa,chieff)."</span><span class="p">)</span>
 
         <span class="c1"># Make sure vectors are normalized</span>
         <span class="n">Lh</span> <span class="o">=</span> <span class="n">Lh</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">Lh</span><span class="p">)</span>
@@ -1263,7 +1263,7 @@
         <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">Lh</span><span class="p">,</span> <span class="n">S1h</span><span class="p">,</span> <span class="n">S2h</span><span class="p">,</span> <span class="n">delta_lambda</span> <span class="p">,</span> <span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">uc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">cyclesign</span>
 
     <span class="c1"># This array has to match the outputs of _compute (in the right order!)</span>
-    <span class="n">alloutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;theta1&#39;</span><span class="p">,</span> <span class="s1">&#39;theta2&#39;</span><span class="p">,</span> <span class="s1">&#39;deltaphi&#39;</span><span class="p">,</span> <span class="s1">&#39;Lh&#39;</span><span class="p">,</span> <span class="s1">&#39;S1h&#39;</span><span class="p">,</span> <span class="s1">&#39;S2h&#39;</span><span class="p">,</span> <span class="s1">&#39;delta_lambda&#39;</span><span class="p">,</span><span class="s1">&#39;deltachi&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="s1">&#39;uc&#39;</span><span class="p">,</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;chieff&#39;</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="s1">&#39;chi1&#39;</span><span class="p">,</span> <span class="s1">&#39;chi2&#39;</span><span class="p">,</span> <span class="s1">&#39;cyclesign&#39;</span><span class="p">])</span>
+    <span class="n">alloutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">'t'</span><span class="p">,</span> <span class="s1">'theta1'</span><span class="p">,</span> <span class="s1">'theta2'</span><span class="p">,</span> <span class="s1">'deltaphi'</span><span class="p">,</span> <span class="s1">'Lh'</span><span class="p">,</span> <span class="s1">'S1h'</span><span class="p">,</span> <span class="s1">'S2h'</span><span class="p">,</span> <span class="s1">'delta_lambda'</span><span class="p">,</span><span class="s1">'deltachi'</span><span class="p">,</span> <span class="s1">'kappa'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">,</span><span class="s1">'uc'</span><span class="p">,</span><span class="s1">'u'</span><span class="p">,</span> <span class="s1">'chieff'</span><span class="p">,</span> <span class="s1">'q'</span><span class="p">,</span> <span class="s1">'chi1'</span><span class="p">,</span> <span class="s1">'chi2'</span><span class="p">,</span> <span class="s1">'cyclesign'</span><span class="p">])</span>
 
 
     <span class="k">if</span> <span class="n">cyclesign</span> <span class="o">==+</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">cyclesign</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
@@ -1284,7 +1284,7 @@
     <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">alloutputs</span><span class="p">[</span><span class="n">wantoutputs</span><span class="p">],</span> <span class="n">allresults</span><span class="p">[</span><span class="n">wantoutputs</span><span class="p">]):</span>
         <span class="n">outcome</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;q&#39;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;chi1&#39;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">&#39;chi2&#39;</span><span class="p">:</span>  <span class="c1"># Constants of motion (chieff is not enforced!)</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">'q'</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">'chi1'</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s1">'chi2'</span><span class="p">:</span>  <span class="c1"># Constants of motion (chieff is not enforced!)</span>
             <span class="n">outcome</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">outcome</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">outcome</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">outcome</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
@@ -1295,14 +1295,14 @@
 <div class="viewcode-block" id="inspiral_hybrid">
 <a class="viewcode-back" href="../eccentric.html#eccentricity.inspiral_hybrid">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">inspiral_hybrid</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aswitch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">uc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ucswitch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Perform hybrid inspirals, i.e. evolve the binary at large separation with a pression-averaged evolution and at small separation with an orbit-averaged evolution, matching the two. The variables q, chi1, and chi2 must always be provided. The integration range must be specified using either a or uc (and not both); provide also ucswitch and aswitch consistently.</span>
 <span class="sd">    Either a of uc needs to be arrays with lenght &gt;=1, where e.g. a[0] corresponds to the initial condition and a[1:] corresponds to the location where outputs are returned. It does not work at past time infinity if e !=0.</span>
 <span class="sd">    The function is vectorized: evolving N multiple binaries with M outputs requires kappainitial, chieff, q, chi1, chi2 to be of shape (N,) and u of shape (M,N).</span>
 <span class="sd">    The initial conditions must be specified in terms of one an only one of the following:</span>
 <span class="sd">        - theta1,theta2, and deltaphi (but note that deltaphi is not necessary if integrating from infinite separation).</span>
 <span class="sd">        - kappa, chieff.</span>
-<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=[&#39;theta1&#39;,&#39;theta2&#39;,&#39;deltaphi&#39;]. All the available variables are returned by default. These are: [&#39;theta1&#39;, &#39;theta2&#39;, &#39;deltaphi&#39;, &#39;deltachi&#39;, &#39;kappa&#39;, &#39;a&#39;,&#39;e&#39;, &#39;uc&#39;,&#39;u&#39;, &#39;deltachiminus&#39;, &#39;deltachiplus&#39;, &#39;deltachi3&#39;, &#39;chieff&#39;, &#39;q&#39;, &#39;chi1&#39;, &#39;chi2&#39;].</span>
+<span class="sd">    The desired outputs can be specified with a list e.g. requested_outputs=['theta1','theta2','deltaphi']. All the available variables are returned by default. These are: ['theta1', 'theta2', 'deltaphi', 'deltachi', 'kappa', 'a','e', 'uc','u', 'deltachiminus', 'deltachiplus', 'deltachi3', 'chieff', 'q', 'chi1', 'chi2'].</span>
 <span class="sd">    The flag enforce allows checking the consistency of the input variables.</span>
 <span class="sd">    Additional keywords arguments are passed to `scipy.integrate.odeint` after some custom-made default settings.</span>
 <span class="sd">    </span>
@@ -1356,10 +1356,10 @@
 <span class="sd">    ``outputs = precession.inspiral_hybrid(theta1=theta1,theta2=theta2,deltaphi=deltaphi,uc=uc,u=u,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    ``outputs = precession.inspiral_hybrid(kappa,a=a,e=e,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
 <span class="sd">    ``outputs = precession.inspiral_hybrid(kappa,uc=uc,u=u,chieff=chieff,q=q,chi1=chi1,chi2=chi2)``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Outputs available in both orbit-averaged and precession-averaged evolutions</span>
-    <span class="n">alloutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;theta1&#39;</span><span class="p">,</span> <span class="s1">&#39;theta2&#39;</span><span class="p">,</span> <span class="s1">&#39;deltaphi&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachi&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;uc&#39;</span><span class="p">,</span><span class="s1">&#39;u&#39;</span><span class="p">,</span><span class="s1">&#39;chieff&#39;</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="s1">&#39;chi1&#39;</span><span class="p">,</span> <span class="s1">&#39;chi2&#39;</span><span class="p">])</span>
+    <span class="n">alloutputs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">'theta1'</span><span class="p">,</span> <span class="s1">'theta2'</span><span class="p">,</span> <span class="s1">'deltaphi'</span><span class="p">,</span> <span class="s1">'deltachi'</span><span class="p">,</span> <span class="s1">'kappa'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span><span class="s1">'e'</span><span class="p">,</span> <span class="s1">'uc'</span><span class="p">,</span><span class="s1">'u'</span><span class="p">,</span><span class="s1">'chieff'</span><span class="p">,</span> <span class="s1">'q'</span><span class="p">,</span> <span class="s1">'chi1'</span><span class="p">,</span> <span class="s1">'chi2'</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">requested_outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">requested_outputs</span> <span class="o">=</span> <span class="n">alloutputs</span>
         <span class="c1"># Return only those requested (in1d return boolean array)</span>
@@ -1403,7 +1403,7 @@
             <span class="n">uc0</span><span class="o">=</span><span class="n">eval_u</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
             <span class="n">ucswitch</span><span class="o">=</span> <span class="n">eval_u</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">aswitch</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Please provide either a or uc.&quot;</span><span class="p">)</span>
+             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Please provide either a or uc."</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_2_step</span><span class="p">(</span><span class="n">uc0</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">ucswitch</span><span class="p">,</span><span class="n">e0</span><span class="p">):</span>
             <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">uc</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
@@ -1414,13 +1414,13 @@
             <span class="k">return</span> <span class="n">uswitch</span><span class="p">,</span> <span class="n">eswitch</span>
         
         <span class="n">uswitch</span><span class="p">,</span> <span class="n">eswitch</span><span class="o">=</span> <span class="n">_2_step</span><span class="p">(</span><span class="n">uc0</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">ucswitch</span><span class="p">,</span><span class="n">e0</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;uswitch, eswitch&quot;</span><span class="p">,</span> <span class="n">uswitch</span><span class="p">,</span> <span class="n">eswitch</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"uswitch, eswitch"</span><span class="p">,</span> <span class="n">uswitch</span><span class="p">,</span> <span class="n">eswitch</span><span class="p">)</span>
 
-        <span class="n">forward</span> <span class="o">=</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;&gt;=&quot;</span><span class="p">)</span>
-        <span class="n">backward</span> <span class="o">=</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">)</span>
+        <span class="n">forward</span> <span class="o">=</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">"&gt;="</span><span class="p">)</span>
+        <span class="n">backward</span> <span class="o">=</span> <span class="n">ismonotonic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">"&lt;="</span><span class="p">)</span>
 
-        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span> <span class="n">backward</span><span class="p">),</span> <span class="s2">&quot;a must be monotonic&quot;</span>
-        <span class="k">assert</span> <span class="n">aswitch</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">and</span> <span class="n">aswitch</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="s2">&quot;The switching condition must to be within the range spanned by a.&quot;</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span> <span class="n">backward</span><span class="p">),</span> <span class="s2">"a must be monotonic"</span>
+        <span class="k">assert</span> <span class="n">aswitch</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">and</span> <span class="n">aswitch</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="s2">"The switching condition must to be within the range spanned by a."</span>
 
         <span class="n">alarge</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="n">aswitch</span><span class="p">]</span>
         <span class="n">asmall</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">aswitch</span><span class="p">]</span>
@@ -1444,22 +1444,22 @@
         <span class="n">evolution_first</span> <span class="o">=</span> <span class="n">inspiral_first</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="o">=</span><span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="o">=</span><span class="n">deltaphi</span><span class="p">,</span> <span class="n">deltachi</span><span class="o">=</span><span class="n">deltachi</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="n">kappa</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">afirst</span><span class="p">,</span><span class="n">e</span><span class="o">=</span><span class="n">estart</span><span class="p">,</span> <span class="n">chieff</span><span class="o">=</span><span class="n">chieff</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="n">alloutputs</span><span class="p">,</span><span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">)</span>
 
         <span class="c1"># Second chunk of the evolution</span>
-        <span class="n">evolution_second</span> <span class="o">=</span> <span class="n">inspiral_second</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">evolution_first</span><span class="p">[</span><span class="s1">&#39;theta1&#39;</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">theta2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">evolution_first</span><span class="p">[</span><span class="s1">&#39;theta2&#39;</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">deltaphi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">evolution_first</span><span class="p">[</span><span class="s1">&#39;deltaphi&#39;</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="o">=</span><span class="n">asecond</span><span class="p">,</span><span class="n">e</span><span class="o">=</span><span class="n">eswitch</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="n">alloutputs</span><span class="p">,</span><span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">)</span>
+        <span class="n">evolution_second</span> <span class="o">=</span> <span class="n">inspiral_second</span><span class="p">(</span><span class="n">theta1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">evolution_first</span><span class="p">[</span><span class="s1">'theta1'</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">theta2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">evolution_first</span><span class="p">[</span><span class="s1">'theta2'</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">deltaphi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">evolution_first</span><span class="p">[</span><span class="s1">'deltaphi'</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="o">=</span><span class="n">asecond</span><span class="p">,</span><span class="n">e</span><span class="o">=</span><span class="n">eswitch</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="o">=</span><span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="o">=</span><span class="n">chi2</span><span class="p">,</span> <span class="n">requested_outputs</span><span class="o">=</span><span class="n">alloutputs</span><span class="p">,</span><span class="o">**</span><span class="n">odeint_kwargs</span><span class="p">)</span>
 
         <span class="c1"># Store outputs</span>
         <span class="n">evolution_full</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">wantoutputs</span><span class="p">:</span>
             <span class="c1"># Quantities that vary in both the precession-averaged and the orbit-averaged evolution</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;theta1&#39;</span><span class="p">,</span> <span class="s1">&#39;theta2&#39;</span><span class="p">,</span> <span class="s1">&#39;deltaphi&#39;</span><span class="p">,</span> <span class="s1">&#39;deltachi&#39;</span><span class="p">,</span> <span class="s1">&#39;kappa&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="s1">&#39;uc&#39;</span><span class="p">,</span><span class="s1">&#39;u&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'theta1'</span><span class="p">,</span> <span class="s1">'theta2'</span><span class="p">,</span> <span class="s1">'deltaphi'</span><span class="p">,</span> <span class="s1">'deltachi'</span><span class="p">,</span> <span class="s1">'kappa'</span><span class="p">,</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">,</span><span class="s1">'uc'</span><span class="p">,</span><span class="s1">'u'</span><span class="p">]:</span>
                 <span class="n">evolution_full</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">evolution_first</span><span class="p">[</span><span class="n">k</span><span class="p">][:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">evolution_second</span><span class="p">[</span><span class="n">k</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">:]))</span>
             <span class="c1"># Quantities that vary only on the orbit-averaged evolution</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;chieff&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'chieff'</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="n">forward</span><span class="p">:</span>
                     <span class="n">evolution_full</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tiler</span><span class="p">(</span><span class="n">evolution_first</span><span class="p">[</span><span class="n">k</span><span class="p">][:],</span> <span class="n">afirst</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">evolution_second</span><span class="p">[</span><span class="n">k</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">:]))</span>
                 <span class="k">elif</span> <span class="n">backward</span><span class="p">:</span>
                     <span class="n">evolution_full</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">evolution_first</span><span class="p">[</span><span class="n">k</span><span class="p">][:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tiler</span><span class="p">(</span><span class="n">evolution_second</span><span class="p">[</span><span class="n">k</span><span class="p">][:],</span> <span class="n">asecond</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
             <span class="c1"># Quanties that do not vary</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;q&#39;</span><span class="p">,</span> <span class="s1">&#39;chi1&#39;</span><span class="p">,</span> <span class="s1">&#39;chi2&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'q'</span><span class="p">,</span> <span class="s1">'chi1'</span><span class="p">,</span> <span class="s1">'chi2'</span><span class="p">]:</span>
                 <span class="n">evolution_full</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">evolution_second</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">evolution_full</span>
@@ -1473,7 +1473,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">omega_to_a</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert orbit-avareged orbital frequency (in Hz) to semi-major axis (in natural units, c=G=M=1).</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -1505,7 +1505,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ``a = precession.omega_to_a(theta1,theta2,deltaphi,omega,e,q,chi1,chi2,PNorder=[0,1,1.5,2])``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1554,7 +1554,7 @@
 
     
 <span class="k">def</span><span class="w"> </span><span class="nf">a_to_omega</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert semi-major axis a to orbit-avareged orbital frequency (in natural units, c=G=M=1). We inverted equation B2a in Kidder et al. 2018.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -1587,7 +1587,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ``omega = precession.a_to_omega(theta1,theta2,deltaphi,a,e,q,chi1,chi2,PNorder=[0,1,1.5,2])``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1639,28 +1639,28 @@
 
     <span class="k">return</span> <span class="n">omega</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">gwfrequency_maxharmonic</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;W03&#39;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gwfrequency_maxharmonic</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">'W03'</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Compute the harmonic n_max correponging to the maximum power emission of gravitational wave for an eccentric binary</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    e: float</span>
 <span class="sd">        Eccentricity: 0&lt;=e&lt;1.</span>
-<span class="sd">    method: str (default: &#39;W03&#39;)</span>
-<span class="sd">        Method to compute n_max. Options are &#39;W03&#39; (Wen 2003, arXiv:astro-ph/0211492) and &#39;H21&#39; (Hamers 2021, arXiv:2111.08033).</span>
+<span class="sd">    method: str (default: 'W03')</span>
+<span class="sd">        Method to compute n_max. Options are 'W03' (Wen 2003, arXiv:astro-ph/0211492) and 'H21' (Hamers 2021, arXiv:2111.08033).</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    n_max: float</span>
 <span class="sd">        Harmonic of maximum  gravitational wave power emission.</span>
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    ``n = precession.gwfrequency_maxharmonic(e, method=&#39;W03&#39;)</span>
-<span class="sd">    ``n = precession.gwfrequency_maxharmonic(e, method=&#39;H21&#39;)        </span>
-<span class="sd">    &quot;&quot;&quot;</span>    
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;W03&#39;</span><span class="p">:</span>
+<span class="sd">    ``n = precession.gwfrequency_maxharmonic(e, method='W03')</span>
+<span class="sd">    ``n = precession.gwfrequency_maxharmonic(e, method='H21')        </span>
+<span class="sd">    """</span>    
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'W03'</span><span class="p">:</span>
         <span class="c1"># W03: Eq. 36 in Wen 2003, arXiv:astro-ph/0211492</span>
         <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">1.1954</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;H21&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">'H21'</span><span class="p">:</span>
         <span class="c1"># H21: Eq. 6 in Hamers 2021, arXiv:2111.08033</span>
         <span class="n">c1</span><span class="o">=-</span><span class="mf">1.01678</span>
         <span class="n">c2</span><span class="o">=</span><span class="mf">5.57372</span>
@@ -1668,11 +1668,11 @@
         <span class="n">c4</span><span class="o">=</span><span class="mf">1.68506</span>
         <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">c1</span><span class="o">*</span><span class="n">e</span><span class="o">+</span><span class="n">c2</span><span class="o">*</span><span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">c3</span><span class="o">*</span><span class="n">e</span><span class="o">**</span><span class="mi">3</span><span class="o">+</span><span class="n">c4</span><span class="o">*</span><span class="n">e</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span> 
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown method for computing the maximum harmonic. Use &#39;W03&#39; or &#39;H21&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Unknown method for computing the maximum harmonic. Use 'W03' or 'H21'."</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">n</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">pnseparation_to_gwfrequency</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">M_msun</span><span class="p">,</span> <span class="n">harmonic</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert PN orbital separation (here is the semi-major axis) in natural units (c=G=M=1) to GW frequency in Hz. We invert and expanded the 2PN expression reported in Eqs. (4a) and (B2a) of of Klein et al. 2018 arXiv:1005.2046.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -1708,7 +1708,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ``fGW = precession.pnseparation_to_gwfrequency(theta1,theta2,deltaphi,a,e,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1723,7 +1723,7 @@
 
     <span class="n">omega_geom</span> <span class="o">=</span> <span class="n">a_to_omega</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="n">PNorder</span><span class="p">)</span>
     
-    <span class="c1"># Prefactor is pi*Msun*G/c^3/s. It&#39;s pi and not 2pi because f is the GW frequency while Kidder&#39;s omega is the orbital angular velocity</span>
+    <span class="c1"># Prefactor is pi*Msun*G/c^3/s. It's pi and not 2pi because f is the GW frequency while Kidder's omega is the orbital angular velocity</span>
     <span class="c1">#c=np.float64(299792458.0)</span>
    <span class="c1"># msun=np.float64(1.988409870698051e+30) # Solar mass in kg</span>
     <span class="c1">#G=np.float64(6.6743e-11) # Gravitational constant in m^3/(kg*s^2)</span>
@@ -1737,7 +1737,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gwfrequency_to_a</span><span class="p">(</span><span class="n">theta1</span><span class="p">,</span> <span class="n">theta2</span><span class="p">,</span> <span class="n">deltaphi</span><span class="p">,</span> <span class="n">fgw</span><span class="p">,</span><span class="n">e</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">chi1</span><span class="p">,</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">M_msun</span><span class="p">,</span> <span class="n">harmonic</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">PNorder</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert GW frequency (in Hz) to PN orbital separation (in natural units, c=G=M=1). We use the 2PN expression reported inin Eqs. (4a) and (B2a) of of Klein et al. 2018 arXiv:1005.2046.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -1773,7 +1773,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ``a = precession.gwfrequency_to_pnseparation(theta1,theta2,deltaphi,fGW,e,q,chi1,chi2,M_msun,PNorder=[0,1,1.5,2])``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">theta2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">theta2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1797,7 +1797,7 @@
 
     <span class="k">return</span> <span class="n">a</span>
 
-<span class="n">all_fun</span><span class="o">=</span><span class="n">functions</span><span class="o">+</span><span class="p">[</span><span class="s1">&#39;eval_a&#39;</span><span class="p">,</span> <span class="s1">&#39;eval_e&#39;</span><span class="p">,</span> <span class="s1">&#39;ddchidt_prefactor&#39;</span><span class="p">,</span> <span class="s1">&#39;vectors_to_conserved&#39;</span><span class="p">,</span><span class="s1">&#39;inspiral_precav&#39;</span><span class="p">,</span><span class="s1">&#39;rhs_orbav&#39;</span><span class="p">,</span> <span class="s1">&#39;integrator_orbav&#39;</span><span class="p">,</span> <span class="s1">&#39;inspiral_orbav&#39;</span> <span class="p">,</span><span class="s1">&#39;inspiral_hybrid&#39;</span><span class="p">,</span><span class="s1">&#39;implicit&#39;</span><span class="p">]</span>
+<span class="n">all_fun</span><span class="o">=</span><span class="n">functions</span><span class="o">+</span><span class="p">[</span><span class="s1">'eval_a'</span><span class="p">,</span> <span class="s1">'eval_e'</span><span class="p">,</span> <span class="s1">'ddchidt_prefactor'</span><span class="p">,</span> <span class="s1">'vectors_to_conserved'</span><span class="p">,</span><span class="s1">'inspiral_precav'</span><span class="p">,</span><span class="s1">'rhs_orbav'</span><span class="p">,</span> <span class="s1">'integrator_orbav'</span><span class="p">,</span> <span class="s1">'inspiral_orbav'</span> <span class="p">,</span><span class="s1">'inspiral_hybrid'</span><span class="p">,</span><span class="s1">'implicit'</span><span class="p">]</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="n">all_fun</span>
 </pre></div>
 
